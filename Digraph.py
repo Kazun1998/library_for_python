@@ -511,7 +511,7 @@ def Find_Cycle(D):
         return P[::-1]
     else:
         return None
-    
+
 #2部グラフ?
 def Is_Bipartite_Graph(G):
     pass

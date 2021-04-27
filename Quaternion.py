@@ -1,6 +1,6 @@
 import math
 from Fraction import Fraction
-from Complex import Complex
+#from Complex import Complex
 
 class Quaternion(Complex):
     #入力定義
@@ -113,7 +113,7 @@ class Quaternion(Complex):
     #複素数から四元数に変換
     def Complex_to_Quatrarnion(self):
         if not(isinstance(self,Quaternion)):
-            if not(isinstance(self,Complex)):self=Complex.Real_to_Complex(self)
+            #if not(isinstance(self,Complex)):self=Complex.Real_to_Complex(self)
             return Quaternion(self.re,self.im,0,0)
         else:
             return self

@@ -66,7 +66,7 @@ class Coordinate_compression_2(Coordinate_compression_1):
 
     def at(self,x,y):
         return (self.X.at(x),self.Y.at(y))
-        
+
     def __len__(self):
         pass
 
@@ -89,6 +89,6 @@ class Coordinate_compression_N(Coordinate_compression_1):
     def at(self,*r):
         assert len(self.XX)==len(r)
         return tuple([self.XX[i].at(r[i]) for i in range(len(r))])
-        
+
     def __len__(self):
         pass
