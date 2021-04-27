@@ -12,6 +12,6 @@
     * Union Find
 
 * データ構造
-    * [セグメント木]()
+    * [セグメント木](./Data_Structure/Segment_Tree.md)
 
 * その他
