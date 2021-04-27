@@ -118,9 +118,9 @@ class Segment_Tree():
 
     def max_right(self,left,cond,index=1):
         """以下の2つをともに満たすxの1つを返す.\n
-        (1) r=left or cond(data[left]*data[left+1]*...*d[right-1]):True
-        (2) r=N+index or cond(data[left]*data[left+1]*...*data[right]):False
-        ※condが単調減少の時,cond(data[left]*...*data[right-1])を満たす最大のrightとなる.
+        (1) x=left or cond(data[left]*data[left+1]*...*data[x-1]):True
+        (2) x=N+index or cond(data[left]*data[left+1]*...*data[x]):False
+        ※condが単調減少の時,cond(data[left]*...*data[x-1])を満たす最大のxとなる.
 
         cond:関数(引数が同じならば結果も同じ)
         cond(unit):True
@@ -155,10 +155,10 @@ class Segment_Tree():
         return self.N+index
 
     def min_left(self,right,cond,index=1):
-        """以下の2つをともに満たすxの1つを返す.\n
-        (1) l=right or cond(data[left]*data[left+1]*...*d[right]):True
-        (2) l=index or cond(data[left-1]*data[left+1]*...*data[right]):False
-        ※condが単調減少の時,cond(data[left]*...*data[right-1])を満たす最大のrightとなる.
+        """以下の2つをともに満たすyの1つを返す.\n
+        (1) y=right or cond(data[y]*data[y+1]*...*data[right]):True
+        (2) y=index or cond(data[y-1]*data[y]*...*data[right]):False
+        ※condが単調減少の時,cond(data[y]*...*data[right-1])を満たす最大のyとなる.
 
         cond:関数(引数が同じならば結果も同じ)
         cond(unit):True
