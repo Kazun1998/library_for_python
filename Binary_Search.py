@@ -167,72 +167,98 @@ def Binary_Search_High_Value(A,x,equal=False,sort=False):
     K=len(A)-R
     return A[-K]
 
-def General_Binary_Increase_Search(L,R,cond,Integer=True,ep=1/(1<<20),Times=50):
-    """条件式が単調増加であるとき,一般的な二部探索を行う.
-    L:解の下限
-    R:解の上限
-    cond:条件(1変数関数,広義単調減少 or 広義単調減少を満たす)
-    Integer:解を整数に制限するか?
-    ep:Integer=Falseのとき,解の許容する誤差
+def General_Binary_Increase_Search_Integer(L,R,cond,default=None):
+    """条件式が単調増加であるとき, 整数上で二部探索を行う.
+    L: 解の下限
+    R: 解の上限
+    cond: 条件(1変数関数, 広義単調増加を満たす)
+    default: Lで条件を満たさないときの返り値
     """
     if not(cond(R)):
-        return None
+        return default
 
     if cond(L):
         return L
 
-    if Integer:
-        R+=1
-        while R-L>1:
-            C=L+(R-L)//2
-            if cond(C):
-                R=C
-            else:
-                L=C
-        return R
-    else:
-        while (R-L)>=ep and Times:
-            Times-=1
-            C=L+(R-L)/2
-            if cond(C):
-                R=C
-            else:
-                L=C
-        return R
+    R+=1
+    while R-L>1:
+        C=L+(R-L)//2
+        if cond(C):
+            R=C
+        else:
+            L=C
+    return R
 
-def General_Binary_Decrease_Search(L,R,cond,Integer=True,ep=1/(1<<20),Times=50):
+def General_Binary_Decrease_Search_Integer(L,R,cond,default=None):
     """条件式が単調減少であるとき,一般的な二部探索を行う.
     L:解の下限
     R:解の上限
     cond:条件(1変数関数,広義単調減少 or 広義単調減少を満たす)
-    Integer:解を整数に制限するか?
-    ep:Integer=Falseのとき,解の許容する誤差
+    default: Rで条件を満たさないときの返り値
     """
 
     if not(cond(L)):
-        return None
+        return default
 
     if cond(R):
         return R
 
-    if Integer:
-        L-=1
-        while R-L>1:
-            C=L+(R-L)//2
-            if cond(C):
-                L=C
-            else:
-                R=C
+    L-=1
+    while R-L>1:
+        C=L+(R-L)//2
+        if cond(C):
+            L=C
+        else:
+            R=C
+    return L
+
+def General_Binary_Increase_Search_Real(L,R,cond,ep=1/(1<<20),Times=50,default=None):
+    """条件式が単調増加であるとき, 実数上で一般的な二部探索を行う.
+    L: 解の下限
+    R: 解の上限
+    cond: 条件(1変数関数, 広義単調減少を満たす)
+    ep: 解の許容する誤差
+    Times: 判定回数の上限
+    default: Lで条件を満たさないときの返り値
+    """
+    if not(cond(R)):
+        return default
+
+    if cond(L):
         return L
-    else:
-        while (R-L)>=ep and Times:
-            Times-=1
-            C=L+(R-L)/2
-            if cond(C):
-                L=C
-            else:
-                R=C
-        return L
+
+    while (R-L)>=ep and Times:
+        Times-=1
+        C=L+(R-L)/2
+        if cond(C):
+            R=C
+        else:
+            L=C
+
+def General_Binary_Decrease_Search_Real(L,R,cond,ep=1/(1<<20),Times=50,default=None):
+    """条件式が単調減少であるとき, 実数上で一般的な二部探索を行う.
+    L:解の下限
+    R:解の上限
+    cond:条件(1変数関数, 広義単調減少を満たす)
+    ep: 解の許容する誤差
+    Times: 判定回数の上限
+    default: Rで条件を満たさないときの返り値
+    """
+
+    if not(cond(L)):
+        return default
+
+    if cond(R):
+        return R
+
+    while (R-L)>=ep and Times:
+        Times-=1
+        C=L+(R-L)/2
+        if cond(C):
+            L=C
+        else:
+            R=C
+    return L
 
 def Ternary_Search_Minimize(L,R,f,Integer=True,arg=False,ep=1/(1<<20),Times=50):
     """3部探索による最小値を求める.
