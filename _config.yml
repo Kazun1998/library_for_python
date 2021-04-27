@@ -1,1 +1,10 @@
+author:
+  name: Kazun
+description: Kazunが作成したライブラリです.
+lang: ja
+plugins:
+- jemoji
+- jekyll-remote-theme
 theme: jekyll-theme-minimal
+timezone: Asia/Tokyo
+title: Kazun's Library
