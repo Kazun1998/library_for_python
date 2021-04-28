@@ -61,13 +61,13 @@ def Radical(N):
             N//=3
 
     k=5
-    Flag=1
+    Flag=0
     while k*k<=N:
         if N%k==0:
             a*=k
             while N%k==0:
                 N//=k
-        k+=2 if Flag else 4
+        k+=2+2*Flag
         Flag^=1
 
     if N>1:
@@ -189,12 +189,12 @@ def Is_Prime(N):
         return False
 
     k=5
-    Flag=1
+    Flag=0
     while k*k<=N:
         if N%k==0:
             return False
 
-        k+=2 if Flag else 4
+        k+=2+2*Flag
         Flag^=1
     return True
 
@@ -349,7 +349,7 @@ def Sieve_of_Eratosthenes(N,mode=False):
         x+=6
 
     a=5
-    Flag=1
+    Flag=0
     while a*a<=N:
         if T[a]:
             b=a*a
@@ -357,7 +357,7 @@ def Sieve_of_Eratosthenes(N,mode=False):
             while b<=N:
                 T[b]=False
                 b+=c
-        a+=2 if Flag else 4
+        a+=2+2*Flag
         Flag^=1
 
     if mode:
@@ -388,7 +388,7 @@ def Smallest_Prime_Factor(N):
         x+=6
 
     x=5
-    Flag=True
+    Flag=0
     while x*x<=N:
         if L[x]==x:
             y=x*x
@@ -396,7 +396,8 @@ def Smallest_Prime_Factor(N):
                 if L[y]==y:
                     L[y]=x
                 y+=x<<1
-        x+=2 if Flag else 4
+        x+=2+2*Flag
+        Flag^=1
 
     return L
 
