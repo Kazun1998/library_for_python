@@ -650,7 +650,7 @@ class Dual_Segment_Tree:
         d=max(1,(N-1).bit_length())
         k=1<<d
 
-        self.lazy=[self.id]*k+X+[self.id]*(k-N)
+        self.lazy=[self.id]*k+L+[self.id]*(k-N)
         self.N=k
         self.depth=d
 
