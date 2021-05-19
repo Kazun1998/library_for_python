@@ -61,17 +61,17 @@ class Imos_2:
         self.list[Tx+1][Ty+1]+=C
 
     def cumulative_sum(self):
-        Y=[[0]*(self.height+1) for _ in range(self.width+1)]
+        Y=[[0]*(self.width+1) for _ in range(self.height+1)]
 
         for x in range(self.width+1):
             S=0
             for y in range(self.height+1):
-                S+=self.list[x][y]
-                Y[x][y]=S
+                S+=self.list[y][x]
+                Y[y][x]=S
 
         for y in range(self.height+1):
             S=0
             for x in range(self.width+1):
-                S+=Y[x][y]
-                Y[x][y]=S
+                S+=Y[y][x]
+                Y[y][x]=S
         return Y
