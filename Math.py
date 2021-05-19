@@ -18,7 +18,7 @@ def floor_sum(A,B,M,N):
             return T
 
         T+=(N+x//A)*y
-        A,B,M,N=M,(A-x%A)%A,A,y
+        A,B,M,N=M,x%A,A,y
 
 def Floor_Sum(A:int,B:int,M:int,N:int,K=0):
     """sum_{i=K}^N floor((A*i+B)/M) を求める.
@@ -29,6 +29,8 @@ def Floor_Sum(A:int,B:int,M:int,N:int,K=0):
     else:
         return floor_sum(A,B,M,N+1)-floor_sum(A,B,M,K)
 
+#==================================================
+#Sum系
 def Linear_Sum(a,b,L,R):
     """ Sum_{i=L}^R (ai+b) を求める.
     """
@@ -43,27 +45,11 @@ def Box_Sum_Count(P,Q,R,S,K):
 
     P,Q,R,S:int (P<=Q, R<=S)
     """
-
-    if not (P<=Q and R<=S):
-        return 0
-
-    Q-=P
-    S-=R
-    K-=P+R
-
-    if S>Q:
-        Q,S=S,Q
-
-    if K<0:
-        return 0
-    elif 0<=K<Q:
-        return K+1
-    elif Q<=K<S:
-        return Q+1
-    elif S<=K<=Q+S:
-        return Q+S+1-K
-    else:
-        return 0
+    A=max(0,K-(P  +R  )+1)
+    B=max(0,K-(Q+1+R  )+1)
+    C=max(0,K-(P  +S+1)+1)
+    D=max(0,K-(Q+1+S+1)+1)
+    return A-B-C+D
 
 def Interval_Sum_Count(L,R,X):
     """L<=x,y<=R を満たす2つの整数x,yのうち, x+y=X を満たす組(x,y) の個数を出力する.
@@ -185,3 +171,128 @@ def Linear_Min_Sum(a,b,c,d,L,R):
     L,R:int (L<=R)
     """
     return -Linear_Max_Sum(-a,-b,-c,-d,L,R)
+
+#==================================================
+#Sum_Count系
+def Range_Sum_DP(Range,S,Mod=None,Mode=0):
+    """Range=[(A_0,B_0),...,(A_{N-1}, B_{N-1})] としとたき,
+    A_i<=X_i<=B_i, X_0+...+X_{n-1}=S を満たす組の個数を動的計画法で求める.
+
+    0<=A_i<=B_i
+    0<=S
+    計算量: O(NS)
+    """
+
+    D=[0]*(S+1); D[0]=1
+    E=[1]*(S+1)
+
+    for a,b in Range:
+        assert 0<=a<=b
+
+        for i in range(S+1):
+            if i<a:
+                D[i]=0
+            elif i<=b:
+                D[i]=E[i-a]
+            else:
+                D[i]=E[i-a]-E[i-b-1]
+
+        E[0]=D[0]
+        for i in range(1,S+1):
+            E[i]=D[i]+E[i-1]
+
+        if Mod!=None:
+            E[i]%=Mod
+
+    if Mode:
+        return D
+    else:
+        return D[S]
+
+def Range_Sum_Inclusion(Range,S,Mod=None):
+    """Range=[(A_0,B_0),...,(A_{N-1}, B_{N-1})] としとたき,
+    A_i<=X_i<=B_i, X_0+...+X_{n-1}=S を満たす組の個数を包除原理で求める.
+
+    0<=A_i<=B_i
+    0<=S
+    計算量: O(N2^N)
+    """
+    from itertools import product
+
+    def nCr(n,r):
+        if n<0: return 0
+        if r<0 or n<r: return 0
+
+        a=b=1
+        r=min(r,n-r)
+
+        while r:
+            a*=n; b*=r
+
+            if Mod!=None:
+                a%=Mod; b%=Mod
+
+            n-=1; r-=1
+
+        if Mod!=None:
+            return (a*pow(b,Mod-2,Mod))%Mod
+        else:
+            return a//b
+
+    def nHr(n,r):
+        return nCr(n+r-1,n-1)
+
+    N=len(Range)
+    X=0
+    for p in product((0,1),repeat=N):
+        T=S
+        for i in range(N):
+            a,b=Range[i]
+            if p[i]:
+                T-=b+1
+            else:
+                T-=a
+
+        X+=pow(-1,sum(p))*nHr(N,T)
+
+    if Mod==None:
+        return X
+    else:
+        return X%Mod
+
+#==================================================
+#Find_Sum系
+def Find_Range_Sum(Range,S):
+    """Range=[(A_0,B_0),...,(A_{N-1}, B_{N-1})] としとたき,
+    A_i<=X_i<=B_i, X_0+...+X_{n-1}=S を満たす組の例を1つ求める.
+
+    A_i<=B_i
+    """
+
+    alpha=beta=0
+    for a,b in Range:
+        alpha+=a
+        beta +=b
+
+    if not (alpha<=S<=beta): return None
+
+    N=len(Range)
+    X=[a for a,_ in Range]
+    remain=S-sum(X)
+    for i in range(N):
+        y=min(Range[i][1],X[i]+remain)
+        remain-=y-X[i]
+        X[i]=y
+    return X
+#==================================================
+#幾何級数系
+
+def Geometric_Sequence_Sum(r,n,Mod=None):
+    """ sum_{i=0}^{n-1} r^i [(mod Mod)] """
+
+    if Mod==None:
+        if r==1: return n
+        else: return (pow(r,n)-1)/(r-1)
+    else:
+        if r==1: return n%Mod
+        else: return (pow(r,n,(r-1)*Mod)//(r-1))%Mod

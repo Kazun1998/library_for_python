@@ -1,7 +1,7 @@
 #素因数分解
 def Prime_Factorization(N):
     if N<0:
-        R=[]
+        R=[[-1,1]]
     else:
         R=[]
 
@@ -22,7 +22,7 @@ def Prime_Factorization(N):
         R.append([3,C])
 
     k=5
-    Flag=1
+    Flag=0
     while k*k<=N:
         if N%k==0:
             C=0
@@ -30,12 +30,10 @@ def Prime_Factorization(N):
                 C+=1
                 N//=k
             R.append([k,C])
-        k+=2 if Flag else 4
+        k+=2+2*Flag
         Flag^=1
 
     if N!=1:
-        R.append([N,1])
-    if not R:
         R.append([N,1])
 
     return R
@@ -73,7 +71,6 @@ def Radical(N):
     if N>1:
         a*=N
     return a
-
 
 #素因数の種類
 def Prime_Factor_List(N):
@@ -137,8 +134,7 @@ def Divisors_from_Prime_Factor(P,sorting=False):
         A.append(B)
     X=[integer_product(t) for t in product(*A)]
 
-    if sorting:
-        X.sort()
+    if sorting: X.sort()
     return X
 
 #高度合成数
@@ -178,24 +174,39 @@ def Highly_Composite_Number(N):
 #素数判定
 def Is_Prime(N):
     N=abs(N)
-    if N<=1:
-        return False
+    if N<=1: return False
 
-    if (N==2) or (N==3) or (N==5):
-        return True
+    if (N==2) or (N==3) or (N==5): return True
 
     r=N%6
-    if not(r==1 or r==5):
-        return False
+    if not(r==1 or r==5): return False
 
     k=5
     Flag=0
     while k*k<=N:
-        if N%k==0:
-            return False
+        if N%k==0: return False
 
         k+=2+2*Flag
         Flag^=1
+    return True
+
+#素数判定 for long long
+def Is_Prime_for_long_long(N):
+    if N<=1: return False
+    if N==2 or N==7 or N==61: return True
+    if N%2==0: return False
+
+    d=N-1
+    while d%2==0: d//=2
+
+    for a in (2,7,61):
+        t=d
+        y=pow(a,t,N)
+        while t!=N-1 and y!=1 and y!=N-1:
+            y=(y*y)%N
+            t<<=1
+        if y!=N-1 and t%2==0:
+            return False
     return True
 
 #Miller-Rabinの素数判定法
@@ -207,11 +218,9 @@ def Miller_Rabin_Primality_Test(N,Times=20):
     """
     from random import randint as ri
 
-    if N==2:
-        return True
+    if N==2: return True
 
-    if N==1 or N%2==0:
-        return False
+    if N==1 or N%2==0: return False
 
     q=N-1
     k=0
@@ -328,25 +337,17 @@ def Sieve_of_Eratosthenes(N,mode=False):
 
     N:自然数
     mode:False->素数のリスト,True->素数かどうかのリスト
-    (False->[2,3,5,...],True->[False,False,True,True,False,True,...])
+    (False->[2,3,5,...],True->[0,0,1,1,0,1,...])
     """
 
     if N==0:
-        return [None]
+        return [0]
 
-    T=[True]*(N+1)
-    T[0]=None
-    T[1]=False
+    T=[1]*(N+1)
+    T[0]=T[1]=0
 
-    x=4
-    while x<=N:
-        T[x]=False
-        x+=2
-
-    x=9
-    while x<=N:
-        T[x]=False
-        x+=6
+    for x in range(4,N+1,2): T[x]=0
+    for x in range(9,N+1,3): T[x]=0
 
     a=5
     Flag=0
@@ -355,7 +356,7 @@ def Sieve_of_Eratosthenes(N,mode=False):
             b=a*a
             c=2*a
             while b<=N:
-                T[b]=False
+                T[b]=0
                 b+=c
         a+=2+2*Flag
         Flag^=1
@@ -686,10 +687,8 @@ def Floor_Root(a,k):
     k:正の整数
     """
     assert 0<=a and 0<k
-    if a==0:
-        return 0
-    if k==1:
-        return a
+    if a==0: return 0
+    if k==1: return a
 
     #大体の値を求める.
     x=int(pow(a,1/k))

@@ -1,29 +1,53 @@
-"""注意:
-(1) 全て0-index
-(2) x座標正が下, y座標正が右
-"""
+class Grid:
+    def __init__(self,*F):
+        self.F=tuple(F)
+        self.dim=len(self.F)
 
-def Position_to_Number(x,y,H,W):
-    return x*W+y
+        R=[1]
+        for a in self.F[::-1]:
+            R.append(R[-1]*a)
 
-def Number_to_Position(p,H,W):
-    return divmod(p,W)
+        self.volume,*self.partition=R[::-1]
 
-def Position_Neighborhood(x,y,H,W):
-    B=[]
-    for a,b in [(1,0),(-1,0),(0,1),(0,-1)]:
-        if 0<=x+a<H and 0<=y+b<W:
-            B.append((x+a,y+b))
-    return B
+    def number_to_position(self,N):
+        assert 0<=N<self.volume
 
-def Number_Neighborhood(p,H,W):
-    B=[]
-    if 0<=p-W:
-        B.append(p-W)
-    if p+W<H*W:
-        B.append(p+W)
-    if p%W:
-        B.append(p-1)
-    if (p+1)%W:
-        B.append(p+1)
-    return B
+        pos=[0]*self.dim
+        for i in range(self.dim):
+            pos[i],N=divmod(N,self.partition[i])
+        return pos
+
+    def position_to_number(self,*pos):
+        assert len(pos)==self.dim
+
+        N=0
+        for i in range(self.dim):
+            assert 0<=pos[i]<self.F[i]
+            N+=self.partition[i]*pos[i]
+        return N
+
+    def number_neighborhood_yielder(self,N):
+        r=N
+        for i in range(self.dim):
+            q,r=divmod(r,self.partition[i])
+
+            if 0<q:
+                yield N-self.partition[i]
+
+            if q<self.F[i]-1:
+                yield N+self.partition[i]
+
+    def position_neighborhood_yielder(self,*pos):
+        assert self.dim==len(pos)
+        pos=list(pos)
+
+        for i in range(self.dim):
+            if 0<pos[i]:
+                pos[i]-=1
+                yield pos
+                pos[i]+=1
+
+            if pos[i]<self.F[i]-1:
+                pos[i]+=1
+                yield pos
+                pos[i]-=1

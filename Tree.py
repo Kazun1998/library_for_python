@@ -144,7 +144,7 @@ class Tree:
     def upper(self,x,k,over=True):
         """頂点xから見てk個親の頂点を求める.
 
-        over:(頂点xの深さ)<dのときにTrueならば根を返し, Falseならばエラーを吐く.
+        over:(頂点xの深さ)<kのときにTrueならば根を返し, Falseならばエラーを吐く.
         """
 
         assert self.__after_seal_check(x)
@@ -247,7 +247,7 @@ class Tree:
 
         y,_=bfs(self.root)
         z,d=bfs(y)
-        return y,z,d    
+        return y,z,d
 
     def path(self,u,v):
         """頂点u,v間のパスを求める.
@@ -437,6 +437,44 @@ class Tree:
             return data
         else:
             return data[self.root]
+
+    def euler_tour(self):
+        """ オイラーツアーに関する計算を行う.
+        """
+
+        assert self.__after_seal_check()
+
+        #最初
+        X=[]; X_append=X.append #X: Euler Tour のリスト
+
+        v=self.root
+
+        ch=self.children
+        pa=self.parent
+
+        R=[-1]*self.index+[len(ch[x]) for x in range(self.index,self.index+self.N)]
+        S=[0]*(self.index+self.N)
+        while True:
+            X_append(v)
+            if R[v]==S[v]:  #もし,進めないならば
+                if v==self.root:
+                    break
+                else:
+                    v=pa[v]
+            else:   #進める
+                w=v
+                v=ch[v][S[v]]
+                S[w]+=1
+
+        self.euler=X
+        self.in_time=[-1]*(self.index+self.N)
+        self.out_time=[-1]*(self.index+self.N)
+        for i in range(len(X)):
+            v=X[i]
+            if self.in_time[v]==-1:
+                self.in_time[v]=self.out_time[v]=i
+            else:
+                self.out_time[v]=i
 #=================================================
 def Making_Tree(N,E,root,index=0):
     """木を作る.
@@ -477,5 +515,62 @@ def Making_Tree(N,E,root,index=0):
     T.seal()
     return T
 
-X=[(1,2),(2,4),(2,5),(1,3),(3,6),(5,7)]
-T=Making_Tree(7,X,1,1)
+def Spanning_Tree(N,E,root,index=0,exclude=False):
+    """ 連結なグラフから全域木をつくる.
+
+    N:頂点数
+    E: 辺のリスト
+    root: 根
+    exclude: 全域木から外れた辺のリストを出力するか.
+    """
+
+    from collections import deque
+    F=[set() for _ in range(index+N)]
+    L=[]
+    for u,v in E:
+        assert index<=u<index+N
+        assert index<=v<index+N
+
+        if u==v:
+            L.append((u,u))
+            continue
+
+        if u in F[v]:
+            L.append((u,v))
+            continue
+
+        F[u].add(v)
+        F[v].add(u)
+
+    X=[-1]*(index+N)
+    X[root]=root
+
+    C=[[] for _ in range(index+N)]
+
+    Q=deque([root])
+    while Q:
+        x=Q.popleft()
+        for y in F[x]:
+            if X[y]==-1:
+                X[y]=x
+                Q.append(y)
+                C[x].append(y)
+
+    T=Tree(N,index)
+    T.root_set(root)
+    T.parent=X
+    T.children=C
+    T.seal()
+
+    if exclude==False:
+        return T
+
+    pa=T.parent
+    for u,v in E:
+        if not(pa[v]==u or pa[u]==v):
+            L.append((u,v))
+
+    return T,L
+
+X=[(1,2),(2,3),(3,4),(2,5),(1,6),(1,3),(1,3)]
+T,L=Spanning_Tree(6,X,1,1,True)

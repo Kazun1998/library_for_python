@@ -2,6 +2,8 @@ class Modulo_Error(Exception):
     pass
 
 class Modulo():
+    __slots__=["a","n"]
+
     def __init__(self,a,n):
         self.a=a%n
         self.n=n
@@ -59,6 +61,16 @@ class Modulo():
         if isinstance(other,int):
             return Modulo(self.a+other,self.n)
 
+    def __iadd__(self,other):
+        if isinstance(other,Modulo):
+            if self.n!=other.n: raise Modulo_Error("異なる法同士の演算です.")
+            self.a+=other.a
+            if self.a>=self.n: self.a-=self.n
+        elif isinstance(other,int):
+            self.a+=other
+            if self.a>=self.n: self.a-=self.n
+        return self
+
     #減法
     def __sub__(self,other):
         return self+(-other)
@@ -66,6 +78,16 @@ class Modulo():
     def __rsub__(self,other):
         if isinstance(other,int):
             return -self+other
+
+    def __isub__(self,other):
+        if isinstance(other,Modulo):
+            if self.n!=other.n: raise Modulo_Error("異なる法同士の演算です.")
+            self.a-=other.a
+            if self.a<0: self.a+=self.n
+        elif isinstance(other,int):
+            self.a-=other
+            if self.a<0: self.a+=self.n
+        return self
 
     #乗法
     def __mul__(self,other):
@@ -79,6 +101,15 @@ class Modulo():
     def __rmul__(self,other):
         if isinstance(other,int):
             return Modulo(self.a*other,self.n)
+
+    def __imul__(self,other):
+        if isinstance(other,Modulo):
+            if self.n!=other.n: raise Modulo_Error("異なる法同士の演算です.")
+            self.a*=other.a
+        elif isinstance(other,int):
+            self.a*=other
+        self.a%=self.n
+        return self
 
     #Modulo逆数
     def inverse(self):
@@ -384,7 +415,7 @@ def Discrete_Log(A,B):
     return None
 
 def Order(X):
-    """Xの位数を求める. つまり, X^k=[1] を満たす最小の正整数 k を求める. 
+    """Xの位数を求める. つまり, X^k=[1] を満たす最小の正整数 k を求める.
     """
     R=X.n
     N=X.n
@@ -428,7 +459,7 @@ def Primitive_Root(p):
         return 23
     if p==167772161:
         return 3
-    if  p==469762049:
+    if p==469762049:
         return 3
 
     fac=[]
