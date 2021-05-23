@@ -8,7 +8,7 @@ def Binary_Search_Find(A,x,sort=True):
     if sort:
         A.sort()
 
-    if x<A[0] or A[-1]<x:
+    if len(A)==0 or x<A[0] or A[-1]<x:
         return False
 
     L,R=0,len(A)
@@ -34,7 +34,7 @@ def Binary_Search_Index(A,x,sort=True,Offset=0):
     if sort:
         A.sort()
 
-    if x<A[0] or A[-1]<x:
+    if len(A)==0 or x<A[0] or A[-1]<x:
         return None
 
     L,R=0,len(A)
@@ -59,7 +59,7 @@ def Binary_Search_Small_Count(A,x,equal=False,sort=False):
     if sort:
         A.sort()
 
-    if A[0]>x or ((not equal) and A[0]==x):
+    if len(A)==0 or A[0]>x or ((not equal) and A[0]==x):
         return 0
 
     L,R=0,len(A)
@@ -84,7 +84,7 @@ def Binary_Search_Big_Count(A,x,equal=False,sort=False):
     if sort:
         A.sort()
 
-    if A[-1]<x or ((not equal) and A[-1]==x):
+    if len(A)==0 or A[-1]<x or ((not equal) and A[-1]==x):
         return 0
 
     L,R=-1,len(A)-1
@@ -108,14 +108,14 @@ def Binary_Search_Equal_Count(A,x,sort=False):
     if sort:
         A.sort()
 
-    if x<A[0] or A[-1]<x:
+    if len(A)==0 or x<A[0] or A[-1]<x:
         return 0
 
     X=Binary_Search_Small_Count(A,x,equal=True)
     Y=Binary_Search_Small_Count(A,x,equal=False)
     return X-Y
 
-def Binary_Search_Low_Value(A,x,equal=False,sort=False):
+def Binary_Search_Low_Value(A,x,equal=False,sort=False,default=None):
     """Aのx未満の要素の中で最大のものを出力する.
 
     A:リスト
@@ -128,8 +128,8 @@ def Binary_Search_Low_Value(A,x,equal=False,sort=False):
     if sort:
         A.sort()
 
-    if A[0]>x or ((not equal) and A[0]==x):
-        return None
+    if len(A)==0 or A[0]>x or ((not equal) and A[0]==x):
+        return default
 
     L,R=0,len(A)
     while R-L>1:
@@ -141,7 +141,7 @@ def Binary_Search_Low_Value(A,x,equal=False,sort=False):
 
     return A[L]
 
-def Binary_Search_High_Value(A,x,equal=False,sort=False):
+def Binary_Search_High_Value(A,x,equal=False,sort=False,default=None):
     """Aのxを超える要素の中で最小のものを出力する.
 
     A:リスト
@@ -154,8 +154,8 @@ def Binary_Search_High_Value(A,x,equal=False,sort=False):
     if sort:
         A.sort()
 
-    if A[-1]<x or ((not equal) and A[-1]==x):
-        return None
+    if len(A)==0 or A[-1]<x or ((not equal) and A[-1]==x):
+        return default
 
     L,R=-1,len(A)-1
     while R-L>1:
