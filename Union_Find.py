@@ -1,4 +1,5 @@
 class Union_Find():
+    __slots__=["n","parents","rank"]
     def __init__(self,N):
         """0,1,...,N-1を要素として初期化する.
 
