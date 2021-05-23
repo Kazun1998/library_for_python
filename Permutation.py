@@ -5,16 +5,24 @@ class Permutation():
     def __init__(self,n,p=[]):
         if p==[]:
             self.p=[i for i in range(n)]
+            self.ind=[i for i in range(n)]
         else:
-            self.p=p
+            self.p=p[:]
+            self.ind=[0]*n
+
+            for i in range(n):
+                self.ind[p[i]]=i
 
         self.n=n
+
+    def index(self,i):
+        if self.n<=i: return i
+        else: return self.ind[i]
 
     def __str__(self):
         return "["+", ".join(map(str,self.p))+"]"
 
-    def __repr__(self):
-        return self.__str__()
+    __repr__=__str__
 
     def __mul__(self,other):
         T=[]
@@ -65,6 +73,9 @@ class Permutation():
 
         self.p[a]=v
         self.p[b]=u
+
+        self.ind[a]=v
+        self.ind[b]=u
 
     def Minimum_Transposition(self):
         X=self.Cycle_Division()
