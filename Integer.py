@@ -117,22 +117,14 @@ def Divisors(N):
 
 #素因数分解の結果から, 約数を全て求める.
 def Divisors_from_Prime_Factor(P,sorting=False):
-    from itertools import product
-
-    def integer_product(t):
-        x=1
-        for a in t:x*=a
-        return x
-
-    A=[]
+    X=[1]
     for p,e in P:
-        B=[1]
-        x=1
+        q=1
+        n=len(X)
         for _ in range(e):
-            x*=p
-            B.append(x)
-        A.append(B)
-    X=[integer_product(t) for t in product(*A)]
+            q*=p
+            for j in range(n):
+                X.append(X[j]*q)
 
     if sorting: X.sort()
     return X
@@ -541,7 +533,6 @@ def Euler_Totient_List(N):
             for j in range(i,N+1,i):
                 P[j]=P[j]//i*(i-1)
     return P
-
 
 #約数のK乗和
 def Divisor_Sigma(N,K=1):
