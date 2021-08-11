@@ -2,6 +2,8 @@ class Fraction_Error(Exception):
     pass
 
 class Fraction():
+    __slots__=["a","b"]
+
     ##入力定義
     def __init__(self,Numerator=0,Denominator=1):
         """分数のオブジェクトを生成する.
