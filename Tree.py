@@ -409,13 +409,13 @@ class Tree:
             for v in E:
                 yield v
 
-    def tree_dp(self,calc,unit,f,g,Mode=False):
+    def tree_dp(self,merge,unit,f,g,Mode=False):
         """葉から木DPを行う.
 
         [input]
-        calc:モノイドを成す2項演算 M x M -> M
+        calc:可換モノイドを成す2項演算 M x M -> M
         unit:Mの単位元
-        f,g: M -> M
+        f,g: M x V -> M
         Mode: False->根の値のみ, True->全ての値
 
         [補足]
@@ -423,20 +423,84 @@ class Tree:
         dp[v]=g(f(x)*f(y)*f(z)*...)
         になる.
         """
+        assert self.__after_seal_check()
 
         data=[unit]*(self.index+self.N)
-        pa=self.parent
-        for x in self.bottom_up():
-            if x==self.root:
-                break
+        ch=self.children
 
-            data[x]=g(data[x])
-            data[pa[x]]=calc(data[pa[x]],f(data[x]))
+        for x in self.bottom_up():
+            for y in ch[x]:
+                data[x]=merge(data[x],f(data[y],y))
+            data[x]=g(data[x],x)
 
         if Mode:
             return data
         else:
             return data[self.root]
+
+    def rerooting(self,merge,unit,f,g):
+        """全方位木DPを行う.
+
+        [input]
+        calc:可換モノイドを成す2項演算 M x M -> M
+        unit:Mの単位元
+        f,g: M x V -> M
+        Mode: False->根の値のみ, True->全ての値
+
+        [補足]
+        頂点 v の子が x,y,z,...のとき, 更新式は
+        dp[v]=g(f(dp[x],x)*f(dp[y],y)*f(dp[z],z)*...)
+        になる.
+        """
+        assert self.__after_seal_check()
+
+        upper=[unit]*(self.index+self.N)
+        lower=[unit]*(self.index+self.N)
+
+        ch=self.children
+        pa=self.parent
+
+        #DFSパート
+        X=[unit]*(self.N+self.index)
+        for v in self.bottom_up():
+            for c in ch[v]:
+                lower[v]=merge(lower[v],f(X[c],c))
+            X[v]=g(lower[v],v)
+
+        #BFSパート
+        Y=[unit]*(self.N+self.index)
+        for v in self.top_down():
+            cc=ch[v]
+
+            #累積マージ
+            deg=len(cc)
+
+            L=[unit]; x=unit
+            for c in cc:
+                x=merge(x,f(X[c],c))
+                L.append(x)
+
+            R=[unit]; y=unit
+            for c in cc[::-1]:
+                y=merge(y,f(X[c],c))
+                R.append(y)
+            R=R[::-1]
+
+            for i in range(deg):
+                c=cc[i]
+                a=merge(L[i],R[i+1])
+                b=merge(a,f(Y[v],v))
+                upper[c]=b
+                Y[c]=g(upper[c],c)
+
+        A=[unit]*(self.index+self.N)
+        pa=self.parent
+        for v in range(self.index,self.index+self.N):
+            if v==self.root:
+                A[v]=g(X[v],v)
+            else:
+                A[v]=g(merge(X[v],Y[v]),v)
+        return A
 
     def euler_tour(self):
         """ オイラーツアーに関する計算を行う.
