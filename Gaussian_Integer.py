@@ -6,37 +6,26 @@ class Gaussian_Integer():
 
     #表示定義
     def __str__(self):
-        s=""
-        s=Gaussian_Integer.__strmake(s,self.re,"")
-        s=Gaussian_Integer.__strmake(s,self.im,"i")
-        if s=="":
-            return "0"
-        else:
-            return s
-
-    def __strmake(self,coefficient,axis):
-        if coefficient==0:
-            return self
-        else:
-            if self=="":
-                if axis=="":
-                    self+=str(coefficient)
-                else:
-                    if coefficient==1:self+=axis
-                    elif coefficient==-1:self+="-"+axis
-                    else:self+=str(coefficient)+axis
+        if self.re==0:
+            if self.im==0:
+                return "0"
+            elif self.im==1:
+                return "i"
+            elif self.im==-1:
+                return "-i"
             else:
-                if coefficient>0:
-                    if coefficient==1:self+="+"+axis
-                    else:self+="+"+str(coefficient)+axis
-                else:
-                    if coefficient==-1:self+="-"+axis
-                    else:self+=str(coefficient)+axis
+                return "{}i".format(self.im)
+        else:
+            if self.im==0:
+                return str(self.re)
+            elif self.im==1:
+                return "{}+i".format(self.re)
+            elif self.im==-1:
+                return "{}-i".format(self.re)
+            else:
+                return "{}{:+}i".format(self.re,self.im)
 
-        return self
-
-    def __repr__(self):
-        return self.__str__()
+    __repr__=__str__
 
     #四則演算定義
     #加法
