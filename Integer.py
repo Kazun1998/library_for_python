@@ -419,6 +419,31 @@ def Faster_Prime_Factorization(N,L):
         D.append([a,k])
     return D
 
+#K乗リスト
+def Power_List(N,K,Mod):
+    """ i=0,1,...,N における i^K (mod Mod) のリストを求める.
+    [計算量] O(N log log N+pi(N) log K)
+    N,K,Mod: int
+    """
+
+    def pow_mod(a,n):
+        b=1
+        while n:
+            if n&1: b=(b*a)%Mod
+            a=(a*a)%Mod
+            n>>=1
+        return b
+
+    S=Smallest_Prime_Factor(N)
+    A=[0]*(N+1); A[1]=pow(1,K,Mod)
+
+    for i in range(2,N+1):
+        if S[i]<i:
+            A[i]=A[S[i]]*A[i//S[i]]%Mod
+        else:
+            A[i]=pow_mod(i,K)
+    return A
+
 #平方数?
 def Is_Square_Number(N):
     if N<0:
