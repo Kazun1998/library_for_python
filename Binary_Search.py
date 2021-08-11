@@ -146,7 +146,7 @@ def Binary_Search_High_Value(A,x,equal=False,sort=False,default=None):
     K=len(A)-R
     return A[-K]
 
-def Binary_Search_High_Low_Value(A,x,low_equal=False,high_equal=False,sort=False,low_default=None,high_default=False):
+def Binary_Search_High_Low_Value(A,x,low_equal=False,high_equal=False,sort=False,low_default=None,high_default=None):
     """Aの x 未満で最大の要素 p と x を超える最小の要素 q を見つけ, (p,q) を出力する.
 
     A:リスト
@@ -160,7 +160,8 @@ def Binary_Search_High_Low_Value(A,x,low_equal=False,high_equal=False,sort=False
 
     return (
         Binary_Search_Low_Value(A,x,equal=low_equal,default=low_default),
-        Binary_Search_High_Value(A,x,equal=high_equal,default=high_default))
+        Binary_Search_High_Value(A,x,equal=high_equal,default=high_default)
+        )
 
 def General_Binary_Increase_Search_Integer(L,R,cond,default=None):
     """条件式が単調増加であるとき, 整数上で二部探索を行う.
