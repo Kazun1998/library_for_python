@@ -1,32 +1,39 @@
-from math import sqrt,sin,cos,tan,atan2,pi
+from math import sqrt,sin,cos,tan,asin,acos,atan2,pi,floor
 
-def compare(a,b,ep):
-    if a+ep<b:
-        return 1
-    elif a>b+ep:
-        return -1
-    else:
-        return 0
+def compare(x,y,ep):
+    """ x,y の大小比較をする. ただし, ep の誤差は同一視する.
 
-#===
-#点
-#===
+    [Input]
+    x,y: float
+    ep: float
+
+    [Output]
+    x>y: 1
+    x=y: 0
+    x<y: -1
+    """
+
+    if x-y>ep: return 1
+    elif x-y<-ep: return -1
+    else: return 0
+
 class Point():
+    __slots__=["x","y","id"]
     ep=1e-9
 
-    def __init__(self,x,y):
+    def __init__(self,x=0,y=0):
         self.x=x
         self.y=y
+        self.id=0
 
     def sign(self,a):
-        return compare(0,a,self.ep)
+        return compare(a,0,self.ep)
 
     #文字列
     def __str__(self):
         return "({}, {})".format(self.x,self.y)
 
-    def __repr__(self):
-        return self.__str__()
+    __repr__=__str__
 
     #Bool
     def __bool__(self):
@@ -46,7 +53,7 @@ class Point():
         if T:
             return T<0
         else:
-            return self.sign(self.y-other.y)
+            return self.sign(self.y-other.y)<0
 
     #比較(<=)
     def __le__(self,other):
@@ -60,14 +67,12 @@ class Point():
     def __ge__(self,other):
         return other<=self
 
-
     #正と負
     def __pos__(self):
         return self
 
     def __neg__(self):
         return Point(-self.x,-self.y)
-
 
     #加法
     def __add__(self,other):
@@ -97,11 +102,51 @@ class Point():
     def __abs__(self):
         return sqrt(self.x*self.x+self.y*self.y)
 
+    norm=__abs__
+
+    def norm_2(self):
+        return self.x*self.x+self.y*self.y
+
     #回転
     def rotate(self,theta):
         x,y=self.x,self.y
         s,c=sin(theta),cos(theta)
         return Point(c*x-s*y,s*x+c*y)
+
+    def __iter__(self):
+        yield self.x
+        yield self.y
+
+    def __hash__(self):
+        return hash((self.x,self.y))
+
+    def latticization(self,delta=1e-7):
+        if abs(self.x-floor(self.x+0.5))<delta and abs(self.y-floor(self.y+0.5))<delta:
+            self.x=floor(self.x+0.5)
+            self.y=floor(self.y+0.5)
+
+    def normalization(self):
+        a=abs(self)
+        self.x/=a
+        self.y/=a
+
+    def dot(self,other):
+        return self.x*other.x+self.y*other.y
+
+    def det(self,other):
+        return self.x*other.y-self.y*other.x
+
+    def arg(self):
+        return atan2(self.y,self.x)
+ 
+def Arg(P,Q=Point(0,0)):
+    """点 Q から見た点 P の偏角を求める.
+ 
+    P,Q: Point
+    """
+ 
+    R=Q-P
+    return atan2(R.y,R.x)
 
 def Inner(P,Q):
     """点P,Qの内積を求める.
