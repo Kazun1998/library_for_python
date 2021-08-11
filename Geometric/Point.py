@@ -17,6 +17,12 @@ def compare(x,y,ep):
     elif x-y<-ep: return -1
     else: return 0
 
+def max_ep(*X):
+    e=-1
+    for x in X:
+        if x.ep>e:e=x.ep
+    return e
+
 class Point():
     __slots__=["x","y","id"]
     ep=1e-9
@@ -138,13 +144,38 @@ class Point():
 
     def arg(self):
         return atan2(self.y,self.x)
- 
+
+def iSP(A,B,C):
+    """ A->B->C と進んだときの進行方向を見る. ※ Bが中心
+
+    A,B,C: Point
+
+    左折: +1
+    右折: -1
+    C->A->Bの順に並んでいる: -2
+    A->B->Cの順に並んでいる: +2
+    A->C->Bの順に並んでいる: 0
+    """
+
+    ep=max_ep(A,B,C)
+    p=compare((B-A).det(C-A),0,ep)
+    if p==1:
+        return 1
+    elif p==-1:
+        return -1
+    else:
+        if compare((B-A).dot(C-A),0,ep)==-1:
+            return -2
+        if compare((A-B).dot(C-B),0,ep)==-1:
+            return 2
+        return 0
+    
 def Arg(P,Q=Point(0,0)):
     """点 Q から見た点 P の偏角を求める.
- 
+
     P,Q: Point
     """
- 
+
     R=Q-P
     return atan2(R.y,R.x)
 
