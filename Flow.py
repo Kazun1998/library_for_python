@@ -128,7 +128,7 @@ class Bipartite_Matching:
         self.N=N
         self.Size=M+N
         self.F=F=MaxFlow(M+N+2)
-        
+
         for a in range(M):
             F.add_edge(M+N,a,1)
 
