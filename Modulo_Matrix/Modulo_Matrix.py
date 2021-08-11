@@ -41,74 +41,105 @@ class Modulo_Matrix():
 
     #加法
     def __add__(self,other):
-        A=self
-        B=other
-        if A.size!=B.size:
-            raise Modulo_Matrix_Error("2つの行列のサイズが異なります.({},{})".format(A.size,B.size))
-        M=A.ele
-        N=B.ele
+        self.__is_calculatable(other)
+        M=self.ele; N=other.ele
 
-        L=[0]*self.row
-        for i in range(A.row):
-            E,F=M[i],N[i]
-            L[i]=[(E[j]+F[j])%self.Mod for j in range(self.col)]
+        L=[[0]*self.col for _ in range(self.row)]
+        for i in range(self.row):
+            Li,Mi,Ni=L[i],M[i],N[i]
+            for j in range(self.col):
+                Li[j]=Mi[j]+Ni[j]
         return Modulo_Matrix(L,self.Mod)
+
+    def __iadd__(self,other):
+        self.__is_calculatable(other)
+        M=self.ele; N=other.ele
+
+        for i in range(self.row):
+            Mi,Ni=M[i],N[i]
+            for j in range(self.col):
+                Mi[j]+=Ni[j]
+                Mi[j]%=self.Mod
+        return self
 
     #減法
     def __sub__(self,other):
-        return self+(-other)
+        self.__is_calculatable(other)
+        M=self.ele; N=other.ele
+
+        L=[[0]*self.col for _ in range(self.row)]
+        for i in range(self.row):
+            Li,Mi,Ni=L[i],M[i],N[i]
+            for j in range(self.col):
+                Li[j]=Mi[j]-Ni[j]
+        return Modulo_Matrix(L,self.Mod)
+
+    def __isub__(self,other):
+        self.__is_calculatable(other)
+        M=self.ele; N=other.ele
+
+        for i in range(self.row):
+            Mi,Ni=M[i],N[i]
+            for j in range(self.col):
+                Mi[j]-=Ni[j]
+                Mi[j]%=self.Mod
+        return self
 
     #乗法
     def __mul__(self,other):
-        A=self
-        B=other
-        if isinstance(B,Modulo_Matrix):
-            R=A.row
-            C=B.col
+        if isinstance(other,Modulo_Matrix):
+            if self.col!=other.row:
+                raise Modulo_Matrix_Error("左側の列と右側の行が一致しません.({},{})".format(self.size,other.size))
 
-            if A.col!=B.row:
-                raise Modulo_Matrix_Error("左側の列と右側の行が一致しません.({},{})".format(A.size,B.size))
-            G=A.col
-
-            M=A.ele
-            N=B.ele
-
+            M=self.ele; N=other.ele
             E=[[0]*other.col for _ in range(self.row)]
-            for i in range(R):
-                F=M[i]
-                for k in range(G):
-                    for j in range(C):
-                        E[i][j]+=F[k]*N[k][j]
-                        E[i][j]%=self.Mod
 
+            for i in range(self.row):
+                Ei,Mi=E[i],M[i]
+                for k in range(self.col):
+                    m_ik,Nk=Mi[k],N[k]
+                    for j in range(other.col):
+                        Ei[j]+=m_ik*Nk[j]
+                        Ei[j]%=self.Mod
             return Modulo_Matrix(E,self.Mod)
-
-        elif isinstance(B,int):
-            return A.__scale__(B)
+        elif isinstance(other,int):
+            return self.__scale__(other)
 
     def __rmul__(self,other):
         if isinstance(other,int):
-            return self*other
+            return self.__scale__(other)
 
     def Inverse(self):
-        M=self
-        if  M.row!=M.col:
+        if  self.row!=self.col:
             raise Modulo_Matrix_Error("正方行列ではありません.")
 
-        R=M.row
-        I=[[1*(i==j) for j in range(R)] for i in range(R)]
-        G=M.Column_Union(Modulo_Matrix(I,self.Mod))
-        G=G.Row_Reduce()
+        M=self
+        N=M.row; Mod=M.Mod
+        R=[[int(i==j) for j in range(N)] for i in range(N)]
+        T=deepcopy(M.ele)
 
-        A,B=[None]*R,[None]*R
-        for i in range(R):
-            A[i]=G.ele[i][:R]
-            B[i]=G.ele[i][R:]
-
-        if A==I:
-            return Modulo_Matrix(B,self.Mod)
-        else:
-            raise Modulo_Matrix_Error("正則ではありません.")
+        for j in range(N):
+            if T[j][j]==0:
+                for i in range(j+1,N):
+                    if T[i][j]:
+                        break
+                else:
+                    raise Modulo_Matrix_Error("正則行列ではありません")
+                T[j],T[i]=T[i],T[j]
+                R[j],R[i]=R[i],R[j]
+            Tj,Rj=T[j],R[j]
+            inv=pow(Tj[j],Mod-2,Mod)
+            for k in range(N):
+                Tj[k]*=inv; Tj[k]%=Mod
+                Rj[k]*=inv; Rj[k]%=Mod
+            for i in range(N):
+                if i==j: continue
+                c=T[i][j]
+                Ti,Ri=T[i],R[i]
+                for k in range(N):
+                    Ti[k]-=Tj[k]*c; Ti[k]%=Mod
+                    Ri[k]-=Rj[k]*c; Ri[k]%=Mod
+        return Modulo_Matrix(R,Mod)
 
     #スカラー倍
     def __scale__(self,r):
@@ -315,37 +346,37 @@ def Trace(M):
         T%=M.Mod
     return T
 
-#行列式
-def Det(M):
+def Determinant(M):
     if not Is_Square(M):
         raise Modulo_Matrix_Error("正方行列ではありません")
 
     N=M.row
     Mod=M.Mod
-    A=deepcopy(M.ele)
-    D=1
+    T=deepcopy(M.ele)
+    det=1
 
-    for I in range(N):
-        if A[I][I]==0:
-            D*=-1
-            for i in range(I+1,N):
-                if A[i][I]:
-                    A[I],A[i]=A[i],A[I]
+    for j in range(N):
+        if T[j][j]==0:
+            for i in range(j+1,N):
+                if T[i][j]:
                     break
             else:
                 return 0
+            T[j],T[i]=T[i],T[j]
+            det*=-1
+        Tj=T[j]
+        inv=pow(Tj[j],Mod-2,Mod)
+        for i in range(j+1,N):
+            Ti=T[i]
+            c=-inv*Ti[j]%Mod
+            for k in range(N):
+                Ti[k]+=c*Tj[k]
+                Ti[k]%=Mod
 
-        u_inv=pow(A[I][I],Mod-2,Mod)
-        for i in range(I+1,N):
-            k=(u_inv*A[i][I])%Mod
-            for j in range(I+1,N):
-                A[i][j]-=k*A[I][j]
-                A[i][j]%=Mod
-
-    for I in range(N):
-        D*=A[I][I]
-        D%=Mod
-    return D%M.Mod
+    for i in range(N):
+        det*=T[i][i]
+        det%=Mod
+    return det
 
 def Linear_System_Equations(A,b,Mod):
     assert len(A)==len(b)
