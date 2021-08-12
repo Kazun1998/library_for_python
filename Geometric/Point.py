@@ -148,11 +148,12 @@ class Point():
         self.x/=a
         self.y/=a
 
-    def Normal_Unit_Vector(self):
+    def normal_unit_vector(self):
         """ 単位法線ベクトルを求める"""
 
-        u=self.normalization()
-        return Point(-u.y,u.x)
+        assert self
+        d=self.norm()
+        return Point(-self.y/d,self.x/d)
 
     def dot(self,other):
         return self.x*other.x+self.y*other.y
