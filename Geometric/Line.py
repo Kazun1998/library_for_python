@@ -152,6 +152,7 @@ def has_Intersection_between_Line_and_Line(L,M):
 
     return compare(L.vectorize().det(M.vectorize()),0,max(L.ep,M.ep))!=0
 
+#=== 交点を求める
 def Intersection_between_Line_and_Line(L,M,Mode=False):
     """ 直線 L,M の交点を求める.
 
