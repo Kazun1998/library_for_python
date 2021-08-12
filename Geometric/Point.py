@@ -137,6 +137,8 @@ class Point():
         return hash((self.x,self.y))
 
     def latticization(self,delta=1e-7):
+        """ 格子点に十分近いならば, その格子点に吸い寄せる"""
+
         if abs(self.x-floor(self.x+0.5))<delta and abs(self.y-floor(self.y+0.5))<delta:
             self.x=floor(self.x+0.5)
             self.y=floor(self.y+0.5)
@@ -145,6 +147,12 @@ class Point():
         a=abs(self)
         self.x/=a
         self.y/=a
+
+    def Normal_Unit_Vector(self):
+        """ 単位法線ベクトルを求める"""
+
+        u=self.normalization()
+        return Point(-u.y,u.x)
 
     def dot(self,other):
         return self.x*other.x+self.y*other.y
@@ -179,7 +187,7 @@ def iSP(A,B,C):
         if compare((A-B).dot(C-B),0,ep)==-1:
             return 2
         return 0
-    
+
 def Arg(P,Q=Point(0,0)):
     """点 Q から見た点 P の偏角を求める.
 
