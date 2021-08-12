@@ -84,9 +84,19 @@ class Point():
     def __add__(self,other):
         return Point(self.x+other.x,self.y+other.y)
 
+    def __iadd__(self,other):
+        self.x+=other.x
+        self.y+=other.y
+        return self
+
     #減法
     def __sub__(self,other):
         return Point(self.x-other.x,self.y-other.y)
+
+    def __isub__(self,other):
+        self.x-=other.x
+        self.y-=other.y
+        return self
 
     #乗法
     def __mul__(self,other):
@@ -146,15 +156,15 @@ class Point():
         return atan2(self.y,self.x)
 
 def iSP(A,B,C):
-    """ A->B->C と進んだときの進行方向を見る. ※ Bが中心
+    """ A->B->C と進んだときの進行方向を見る. ※ B が中心
 
     A,B,C: Point
 
-    左折: +1
-    右折: -1
-    C->A->Bの順に並んでいる: -2
-    A->B->Cの順に並んでいる: +2
-    A->C->Bの順に並んでいる: 0
+    左折 (反時計回り):+1
+    右折 (時計回り)   :-1
+    C-A-Bの順に並んでいる: -2
+    A-B-Cの順に並んでいる: 2
+    A-C-Bの順に並んでいる: 0
     """
 
     ep=max_ep(A,B,C)
@@ -178,6 +188,18 @@ def Arg(P,Q=Point(0,0)):
 
     R=Q-P
     return atan2(R.y,R.x)
+
+def Angle_Type(A,B,C):
+    """ 角ABC が鋭角か直角か鈍角かを判定する.
+
+    [Input]
+    A,B,C: Point
+
+    [Output]
+    1: 鋭角, 0: 直角, -1: 鈍角
+    """
+
+    return compare((A-B).dot(C-B),0,max_ep(A,B,C))
 
 def Inner(P,Q):
     """点P,Qの内積を求める.
