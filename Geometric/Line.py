@@ -20,10 +20,49 @@ class Segment():
     __repr__=__str__
 
     def __eq__(self,other):
-        pass
+        return (
+            (self.begin==other.begin and self.end==other.end) or
+            (self.begin==other.end) and (self.end==other.begin)
+            )
 
     def __contains__(self,point):
         return iSP(self.begin,self.end,point)==2
+
+    def vectorize(self):
+        return self.end-self.begin
+
+    def counter_vectorize(self):
+        return self.begin-self.end
+
+class Ray():
+    __slots__=["begin","end","id"]
+
+    ep=1e-9
+    def __init__(self,P,Q):
+        """ P を端点とし, Q を通る半直線を通る.
+
+        P,Q: Point
+        """
+        assert P!=Q
+        self.begin=P
+        self.end=Q
+        self.id=3
+
+    def __str__(self):
+        return "[Ray] {} -> {}".format(self.begin,self.end)
+
+    __repr__=__str__
+
+    def __eq__(self,other):
+        if self.begin!=other.begin:
+            return False
+
+        m=iSP(self.begin,self.end,other.end)
+        return m==0 or m==2
+
+
+    def __contains__(self,point):
+        pass
 
     def vectorize(self):
         return self.end-self.begin
@@ -43,7 +82,7 @@ class Line():
         assert P!=Q
         self.begin=P
         self.end=Q
-        self.id=3
+        self.id=4
 
     def __str__(self):
         return "[Line] {}, {}".format(self.begin,self.end)
@@ -63,6 +102,7 @@ class Line():
     def counter_vectorize(self):
         return self.begin-self.end
 
+#=== 生成
 def Line_from_General_Form(a,b,c):
     """ ax+by+c=0 という形の直線を生成する.
 
@@ -219,3 +259,19 @@ def Distance_betweem_Segment_and_Segment(L,M):
         Distance_betweem_Point_and_Segment(M.begin,L),
         Distance_betweem_Point_and_Segment(M.end  ,L)
         )
+
+#=== 点と直線の幾何
+def Projection(P,L):
+    """ 点 P の直線 L 上の射影を求める.
+
+    """
+
+    v=L.vectorize()
+    return L.begin-((L.begin-P).dot(v)/v.norm_2())*v
+
+def Reflection(P,L):
+    """ 点 P の直線 L による反射を求める.
+
+    """
+
+    return P+2*(Projection(P,L)-P)
