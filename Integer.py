@@ -743,7 +743,7 @@ def Ceil_Root(a,k):
         x-=1
     return x
 
-def is_kth_Power(a,k):
+def kth_Power(a,k):
     """ 整数 a が k 乗数かどうかを求め, そうならば, b^k=a を満たす k を返す.
 
     [Input]
@@ -756,9 +756,11 @@ def is_kth_Power(a,k):
     """
 
     a_abs=abs(a)
+    if a: sgn=a//a_abs
+    else: sgn=0
+
     b=Floor_Root(a_abs,k)
-    if pow(b,k)==a_abs:
-        if a>=0: return b
-        else: return -b
+    if pow(sgn*b,k)==a:
+        return sgn*b
     else:
         return None
