@@ -120,6 +120,18 @@ def Line_from_General_Form(a,b,c):
 
     return Line(Point(x,y),Point(x-b/k, y+a/k))
 
+#=== 一般形
+def General_Form_from_Line(L):
+    """ 直線 L が満たす式 ax+by+c=0 の a,b,c を求める.
+    """
+
+    s=L.begin.x; t=L.begin.y
+    v=L.vectorize(); alpha=v.x; beta=v.y
+
+    if alpha.__class__==int and beta.__class__==int:
+        g=gcd(alpha,beta)
+        alpha//=g; beta//=g
+    return (-beta,alpha,beta*s-alpha*t)
 #=== 交差判定
 def has_Intersection_between_Segment_and_Segment(L,M,endpoint=True):
     """ 線分 L,M が交わるかどうかを判定する.
