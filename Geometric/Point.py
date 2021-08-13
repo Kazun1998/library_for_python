@@ -1,4 +1,4 @@
-from math import sqrt,sin,cos,tan,asin,acos,atan2,pi,floor
+from math import sqrt,sin,cos,tan,asin,acos,atan2,pi,floor,gcd
 
 def compare(x,y,ep):
     """ x,y の大小比較をする. ただし, ep の誤差は同一視する.
