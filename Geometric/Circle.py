@@ -47,7 +47,8 @@ def has_Intersection_between_Circle_and_Line(C,L,endpoint=True):
     return compare(
         Distance_betweem_Point_and_Line(C.center,L),
         C.radius,
-        max(C.ep,L.ep))<=0
+        max(C.ep,L.ep)
+        )<=0
 
 def has_Intersection_between_Circle_and_Circle(C,D):
     """2つの円 C,D の交差判定を行う.
