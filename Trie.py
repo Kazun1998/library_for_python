@@ -7,9 +7,9 @@ class Trie_Node():
 
     def __str__(self):
         if self.terminal:
-            return "*[{} [{}]]: {}".format(self.item,self.prefix_count,self.next)
+            return "*[{} ({})]: {}".format(self.item,self.prefix_count,self.next)
         else:
-            return "[{} [{}]]: {}".format(self.item,self.prefix_count,self.next)
+            return "[{} ({})]: {}".format(self.item,self.prefix_count,self.next)
 
     __repr__=__str__
 
@@ -40,9 +40,29 @@ class Trie_Tree():
                 node_id=nodes[node_id].next[x]
         return nodes[node_id].terminal
 
+    def search_continuation(self,start_id=0,*S):
+        nodes=self.nodes
+        node_id=start_id
+        for s in S:
+            for x in s:
+                if x not in nodes[node_id].next:
+                    return False
+                node_id=nodes[node_id].next[x]
+        return nodes[node_id].terminal
+
     def search_prefix(self,*S):
         nodes=self.nodes
         node_id=0
+        for s in S:
+            for x in s:
+                if x not in nodes[node_id].next:
+                    return False
+                node_id=nodes[node_id].next[x]
+        return True
+
+    def search_prefix_continuation(self,start_id=0,*S):
+        nodes=self.nodes
+        node_id=start_id
         for s in S:
             for x in s:
                 if x not in nodes[node_id].next:
@@ -63,8 +83,28 @@ class Trie_Tree():
                 node_id=nodes[node_id].next[x]
         return nodes[node_id].prefix_count
 
+    def count_prefix_continuation(self,start_id=0,*S):
+        nodes=self.nodes
+        node_id=start_id
+        for s in S:
+            for x in s:
+                if x not in nodes[node_id].next:
+                    return 0
+                node_id=nodes[node_id].next[x]
+        return nodes[node_id].prefix_count
+
     def count(self):
-        return self.nodes[0].prefix_count()
+        return self.nodes[0].prefix_count
 
     def size(self):
         return len(self.nodes)
+
+    def prefix_node_id(self,*S):
+        nodes=self.nodes
+        node_id=0
+        for s in S:
+            for x in s:
+                if x not in nodes[node_id].next:
+                    return -1
+                node_id=nodes[node_id].next[x]
+        return node_id
