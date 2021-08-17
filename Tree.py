@@ -247,7 +247,7 @@ class Tree:
 
         y,_=bfs(self.root)
         z,d=bfs(y)
-        return y,z,d
+        return d,(y,z)
 
     def path(self,u,v):
         """頂点u,v間のパスを求める.
@@ -415,11 +415,11 @@ class Tree:
         [input]
         calc:可換モノイドを成す2項演算 M x M -> M
         unit:Mの単位元
-        f,g: M x V -> M
+        f,g: M x V -> M ※ v in V は頂点番号
         Mode: False->根の値のみ, True->全ての値
 
         [補足]
-        頂点 v の子が x,y,z,...のとき, 更新式は
+        頂点 v の子が x,y,z,...のとき, 更新式は * を merge として
         dp[v]=g(f(x)*f(y)*f(z)*...)
         になる.
         """
@@ -461,45 +461,39 @@ class Tree:
         pa=self.parent
 
         #DFSパート
-        X=[unit]*(self.N+self.index)
-        for v in self.bottom_up():
-            for c in ch[v]:
-                lower[v]=merge(lower[v],f(X[c],c))
-            X[v]=g(lower[v],v)
+        lower=self.tree_dp(merge,unit,f,g,True)
 
         #BFSパート
-        Y=[unit]*(self.N+self.index)
         for v in self.top_down():
             cc=ch[v]
 
             #累積マージ
             deg=len(cc)
 
-            L=[unit]; x=unit
+            Left=[unit]; x=unit
             for c in cc:
-                x=merge(x,f(X[c],c))
-                L.append(x)
+                x=merge(x,f(lower[c],c))
+                Left.append(x)
 
-            R=[unit]; y=unit
+            Right=[unit]; y=unit
             for c in cc[::-1]:
-                y=merge(y,f(X[c],c))
-                R.append(y)
-            R=R[::-1]
+                y=merge(y,f(lower[c],c))
+                Right.append(y)
+            Right=Right[::-1]
 
             for i in range(deg):
                 c=cc[i]
-                a=merge(L[i],R[i+1])
-                b=merge(a,f(Y[v],v))
-                upper[c]=b
-                Y[c]=g(upper[c],c)
+
+                a=merge(Left[i],Right[i+1])
+                b=merge(a,f(upper[v],v))
+                upper[c]=g(b,v)
 
         A=[unit]*(self.index+self.N)
-        pa=self.parent
         for v in range(self.index,self.index+self.N):
-            if v==self.root:
-                A[v]=g(X[v],v)
-            else:
-                A[v]=g(merge(X[v],Y[v]),v)
+            a=f(upper[v],v)
+            for c in ch[v]:
+                a=merge(a,f(lower[c],c))
+            A[v]=g(a,v)
         return A
 
     def euler_tour(self):
@@ -636,5 +630,12 @@ def Spanning_Tree(N,E,root,index=0,exclude=False):
 
     return T,L
 
-X=[(1,2),(2,3),(3,4),(2,5),(1,6),(1,3),(1,3)]
-T,L=Spanning_Tree(6,X,1,1,True)
+X=[(0,1),(0,2),(2,3),(2,4),(4,5)]
+T=Making_Tree(6,X,0,0)
+
+from operator import add
+f=lambda x,v:x+1
+g=lambda x,v:x
+merge=max
+print(T.rerooting(merge,0,f,g))
+
