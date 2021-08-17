@@ -73,6 +73,7 @@ def Suffix_Array(S,encoder=lambda x:x):
     """
 
     A=[encoder(x) for x in S]+[0]
+    assert min(A[:-1])>0,"encoder の値域が正から外れています"
     k=max(A)+1
     n=len(A)
 
