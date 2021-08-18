@@ -409,8 +409,8 @@ class Tree:
             for v in E:
                 yield v
 
-    def tree_dp(self,merge,unit,f,g,Mode=False):
-        """葉から木DPを行う.
+    def tree_dp_from_leaf(self,merge,unit,f,g,Mode=False):
+        """ 葉から木DPを行う.
 
         [input]
         merge: 可換モノイドを成す2項演算 M x M -> M
@@ -421,7 +421,7 @@ class Tree:
 
         [補足]
         頂点 v の子が x,y,z,...のとき, 更新式は * を merge として
-        dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*..., v)
+            dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*..., v)
         になる.
         """
         assert self.__after_seal_check()
@@ -438,6 +438,31 @@ class Tree:
             return data
         else:
             return data[self.root]
+
+    def tree_dp_from_root(self,f,alpha):
+        """ 根から木DPを行う.
+
+        [input]
+        merge: 可換モノイドを成す2項演算 M x M -> M
+        unit: Mの単位元
+        f: M x V x V ->M: f(x,v,w): v が親, w が子
+
+        [補足]
+        頂点 v の親が x のとき, 更新式は
+            dp[v]=f(dp[x],x,v) (x!=root), alpha (x==root)
+        になる.
+        """
+        assert self.__after_seal_check()
+
+        data=[0]*(self.index+self.N)
+        ch=self.children
+
+        data[self.root]=alpha
+        for x in self.top_down():
+            for y in ch[x]:
+                data[y]=f(data[x],x,y)
+
+        return data
 
     def rerooting(self,merge,unit,f,g):
         """全方位木DPを行う.
@@ -462,7 +487,7 @@ class Tree:
         pa=self.parent
 
         #DFSパート
-        lower=self.tree_dp(merge,unit,f,g,True)
+        lower=self.tree_dp_from_leaf(merge,unit,f,g,True)
 
         #BFSパート
         for v in self.top_down():
