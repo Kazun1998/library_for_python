@@ -413,14 +413,15 @@ class Tree:
         """葉から木DPを行う.
 
         [input]
-        calc:可換モノイドを成す2項演算 M x M -> M
-        unit:Mの単位元
-        f,g: M x V -> M ※ v in V は頂点番号
+        merge: 可換モノイドを成す2項演算 M x M -> M
+        unit: Mの単位元
+        f: M x V x V ->M: f(x,v,w): v が親, w が子
+        g: M x V -> V: v
         Mode: False->根の値のみ, True->全ての値
 
         [補足]
         頂点 v の子が x,y,z,...のとき, 更新式は * を merge として
-        dp[v]=g(f(x)*f(y)*f(z)*...)
+        dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*..., v)
         になる.
         """
         assert self.__after_seal_check()
@@ -430,7 +431,7 @@ class Tree:
 
         for x in self.bottom_up():
             for y in ch[x]:
-                data[x]=merge(data[x],f(data[y],y))
+                data[x]=merge(data[x],f(data[y],x,y))
             data[x]=g(data[x],x)
 
         if Mode:
@@ -449,7 +450,7 @@ class Tree:
 
         [補足]
         頂点 v の子が x,y,z,...のとき, 更新式は
-        dp[v]=g(f(dp[x],x)*f(dp[y],y)*f(dp[z],z)*...)
+        dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*..., v)
         になる.
         """
         assert self.__after_seal_check()
@@ -472,12 +473,12 @@ class Tree:
 
             Left=[unit]; x=unit
             for c in cc:
-                x=merge(x,f(lower[c],c))
+                x=merge(x,f(lower[c],v,c))
                 Left.append(x)
 
             Right=[unit]; y=unit
             for c in cc[::-1]:
-                y=merge(y,f(lower[c],c))
+                y=merge(y,f(lower[c],v,c))
                 Right.append(y)
             Right=Right[::-1]
 
@@ -485,14 +486,23 @@ class Tree:
                 c=cc[i]
 
                 a=merge(Left[i],Right[i+1])
-                b=merge(a,f(upper[v],v))
+
+                if v!=self.root:
+                    b=merge(a,f(upper[v],v,pa[v]))
+                else:
+                    b=a
+
                 upper[c]=g(b,v)
 
         A=[unit]*(self.index+self.N)
         for v in range(self.index,self.index+self.N):
-            a=f(upper[v],v)
+            if v!=self.root:
+                a=f(upper[v],v,pa[v])
+            else:
+                a=unit
+
             for c in ch[v]:
-                a=merge(a,f(lower[c],c))
+                a=merge(a,f(lower[c],v,c))
             A[v]=g(a,v)
         return A
 
@@ -629,13 +639,3 @@ def Spanning_Tree(N,E,root,index=0,exclude=False):
             L.append((u,v))
 
     return T,L
-
-X=[(0,1),(0,2),(2,3),(2,4),(4,5)]
-T=Making_Tree(6,X,0,0)
-
-from operator import add
-f=lambda x,v:x+1
-g=lambda x,v:x
-merge=max
-print(T.rerooting(merge,0,f,g))
-
