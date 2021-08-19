@@ -1,3 +1,36 @@
+def Lagrange_Interpolation_Point(L,X,P):
+    """ 法が P の下でのLagrange 補間を行い, x=X での値を返す.
+
+    [Input]
+    L: [(x_0,y_0), ..., (x_N, y_N)]: F(x_i)=y_i (mod P)
+    X: F(X) を返す.
+    P: 法
+
+    [Output]
+    F(X)
+
+    [Complexity]
+    O(N^2+log P)
+    """
+
+    N=len(L)-1
+
+    x=[p[0] for p in L]
+    y=[p[1] for p in L]
+
+    X%=P
+    Y=0
+    for i in range(N+1):
+        a=b=1
+        for j in range(N+1):
+            if i==j: continue
+            a*=X-x[j]; a%=P
+            b*=x[i]-x[j]; b%=P
+        c=(a*pow(b,P-2,P))%P
+        Y+=y[i]*c; Y%=P
+    return Y
+            
+
 def Lagrange_Interpolation_Point_Arithmetic(L,a,b,X,P):
     """ 法が P の下でのLagrange 補間を行い, x=X での値を返す. ただし, x_i=ai+b
 
