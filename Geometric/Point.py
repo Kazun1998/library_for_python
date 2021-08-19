@@ -224,13 +224,6 @@ def Det(P,Q):
     """
     return P.x*Q.y-P.y*Q.x
 
-def Arg(P):
-    """点Pの偏角を求める.
-
-    P:Point
-    """
-    return atan2(P.y,P.x)
-
 def Internal_Division_Point(P,Q,p,q):
     """線分PQをp:qに内分する点を求める.
 
