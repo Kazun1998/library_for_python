@@ -415,7 +415,7 @@ class Tree:
         [input]
         merge: 可換モノイドを成す2項演算 M x M -> M
         unit: Mの単位元
-        f: M x V x V ->M: f(x,v,w): v が親, w が子
+        f: M x V x V -> M: f(x,v,w): v が親, w が子
         g: M x V -> V: v
         Mode: False->根の値のみ, True->全ての値
 
