@@ -134,8 +134,57 @@ def Point_Reflection(x=0,y=0):
 
     return Affine([[-1,0],[0,-1]],[2*x,2*y])
 
+def Line_Reflection(a,b,c):
+    """ 直線 ax+by+c=0 に関する対称移動をするアフィン変換を生成する.
+    """
+
+    assert (a!=0) or (b!=0)
+
+    k=a*a+b*b
+
+    p=(-a*a+b*b)/k; q=-2*a*b/k; r=-2*c/k
+    return Affine([[p,q],[q,-p]],[a*r,b*r])
+
 def Rotation(theta,Px=0,Py=0):
     """ 点 P=(Px,Py) 周りで theta (時計回り) に回転させるアフィン変換を生成する.
     """
     c=cos(theta); s=sin(theta)
     return Affine([[c,-s],[s,c]], [(1-c)*Px+s*Py,-s*Px+(1-c)*Py])
+
+#=== アフィン変換の決定
+def Translation_and_Rotate_Affine_Determine(A,B,P,Q):
+    """ F(A)=P, F(B)=Q となるアフィン変換 F のうち, 平行移動と回転で生成されるものを生成する.
+
+    A,B,P,Q: Point
+    ※ |AB|=|PQ| でなくてはならない.
+    """
+
+    ep=max_ep(A,B,P,Q)
+
+    assert abs(B-A)==abs(Q-P)
+
+
+    return Rotation(Arg(Q,P)-Arg(B,A),*P)*Translation(*(P-A))
+
+def Affine_Determine(A,B,C,P,Q,R):
+    """ F(A)=P, F(B)=Q, F(C)=R となるアフィン変換 F を求める.
+
+    A,B,C,P,Q,R: Point
+    ※ A,B,C は同一直線上の点であってはいけない.
+    """
+
+    ep=max_ep(A,B,C,P,Q,R)
+
+    assert compare((B-A).det(C-A),0,ep)
+
+    q1,q2=Q-P; r1,r2=R-P
+    b1,b2=B-A; c1,c2=C-A; det=b1*c2-b2*c1
+
+    M=[
+        [(q1*c2-r1*b2)/det, (-q1*c1+r1*b1)/det],
+        [(q2*c2-r2*b2)/det, (-q2*c1+r2*b1)/det]
+        ]
+
+    v=[P.x-(M[0][0]*A.x+M[0][1]*A.y), P.y-(M[1][0]*A.x+M[1][1]*A.y)]
+
+    return Affine(M,v)
