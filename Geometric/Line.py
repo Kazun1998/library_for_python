@@ -6,7 +6,6 @@ class Segment():
     def __init__(self,P,Q):
         """2点 P, Q (P!=Q) を端点とする線分を生成する.
 
-
         P,Q: Point
         """
         assert P!=Q
@@ -21,7 +20,7 @@ class Segment():
 
     def __eq__(self,other):
         return (
-            (self.begin==other.begin and self.end==other.end) or
+            (self.begin==other.begin) and (self.end==other.end) or
             (self.begin==other.end) and (self.end==other.begin)
             )
 
@@ -60,9 +59,9 @@ class Ray():
         m=iSP(self.begin,self.end,other.end)
         return m==0 or m==2
 
-
     def __contains__(self,point):
-        pass
+        m=iSP(self.begin,self.end,point)
+        return m==0 or m==2
 
     def vectorize(self):
         return self.end-self.begin
@@ -132,6 +131,7 @@ def General_Form_from_Line(L):
         g=gcd(alpha,beta)
         alpha//=g; beta//=g
     return (-beta,alpha,beta*s-alpha*t)
+
 #=== 交差判定
 def has_Intersection_between_Segment_and_Segment(L,M,endpoint=True):
     """ 線分 L,M が交わるかどうかを判定する.
@@ -206,7 +206,6 @@ def is_Orthogonal(L,M):
 
     u=L.vectorize(); v=M.vectorize()
     return compare(u.dot(v),0,max(L.ep,M.ep))==0
-
 
 #=== 点との距離
 def Distance_betweem_Point_and_Segment(P,L):
