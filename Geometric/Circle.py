@@ -1,5 +1,6 @@
 from Point import *
 from Line import *
+from Affine import *
 
 class Circle():
     __slots__=["center","radius","id"]
@@ -40,7 +41,7 @@ def has_Intersection_between_Circle_and_Segment(C,L,endpoint=True):
     flag2=(compare(max(abs(c-L.begin),abs(c-L.end)),C.radius,ep)>=0)
     return flag1 and flag2
 
-def has_Intersection_between_Circle_and_Line(C,L,endpoint=True):
+def has_Intersection_between_Circle_and_Line(C,L):
     """円 C と直線 L の交差判定を行う.
 
     """
@@ -96,6 +97,7 @@ def Intersection_between_Circle_and_Circle(C,D):
     y=sqrt(max(r*r-x*x,0))
     return [C.center+x*v+y*w,C.center+x*v-y*w]
 
+#=== 接線
 def Tangent_Circle_from_Point(P,C):
     """ 点 P から引く円 C への接線を求める."""
 
@@ -103,11 +105,70 @@ def Tangent_Circle_from_Point(P,C):
     d=abs(v); v.normalization()
     r=C.radius
 
-    x=sqrt(max(d*d-C.radius*C.radius,0))
+    x=sqrt(max(d*d-r*r,0))
     theta=asin(r/d)
 
-    return [P+x*v.rotate(theta),P+x*v.rotate(-theta)]
+    return [Line(P,P+x*v.rotate(theta)),Line(P,P+x*v.rotate(-theta))]
 
+def Common_Tangent_between_Circle_and_Circle(C,D):
+    """ 円 C,D の共通接線を求める."""
+
+    ep=max(C.ep,D.ep)
+    r=C.radius; s=D.radius
+    d=abs(C.center-D.center)
+
+    X=[]
+
+    if compare(d,abs(r-s),ep)>=0:
+        a=r*(r-s)/d
+        b=sqrt(max(0,r*r-a*a))
+
+        X.append(Line_from_General_Form(a ,b,-r*r))
+        X.append(Line_from_General_Form(a,-b,-r*r))
+    if compare(d,abs(r+s),ep)>=0:
+        a=r*(r+s)/d
+        b=sqrt(max(0,r*r-a*a))
+
+        X.append(Line_from_General_Form(a ,b,-r*r))
+        X.append(Line_from_General_Form(a,-b,-r*r))
+
+    F=Translation_and_Rotate_Affine_Determine(Point(),Point(d,0),C.center,D.center)
+    return [F[l] for l in X]
+
+#=== 2つの円の位置関係を求める.
+def Relationship_between_Circle_and_Circle(C: Circle, D:Circle):
+    """ 2つの円の位置関係を求める.
+
+    [Input]
+    C,D: Circle
+
+    [Output]
+    4: 離れている
+    3: 外接
+    2: 交わっている
+    1: 内接
+    0: 含んでいる
+    """
+
+    d=abs(C.center-D.center)
+    r=C.radius; s=D.radius
+    ep=max(C.ep, D.ep)
+
+    alpha=compare(d,r+s,ep)
+    if alpha==1:
+        return 4
+    elif alpha==0:
+        return 3
+    else:
+        beta=compare(d,abs(r-s),ep)
+        if beta==1:
+            return 2
+        elif beta==0:
+            return 1
+        else:
+            return 0
+
+#=== 共通部分
 def Circles_Intersection_Area(C,D):
     """ 2つの円 C, D の共通部分の面積を求める.
 
