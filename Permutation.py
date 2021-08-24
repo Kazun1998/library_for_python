@@ -24,6 +24,9 @@ class Permutation():
 
     __repr__=__str__
 
+    def __eq__(self,other):
+        return self.p==other.p
+
     def __mul__(self,other):
         T=[]
         n=max(self.n,other.n)
