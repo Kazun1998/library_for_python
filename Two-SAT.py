@@ -1,120 +1,129 @@
+"""
+変数 X_i の否定は ~i で宣言する.
+例えば, ~0=-1 なので, X_{-1} は not X_0 を意味する.
+"""
+
 class Two_SAT:
-    """2-SATを定義する.
-
-    """
-
-    #※ i:変数 i が Trueの頂点, i+N:変数 i がFalseの頂点
-
-    #入力定義
     def __init__(self,N):
-        """N変数の2-SATを考える.
+        """ N 変数の 2-SAT を定義する.
 
+        N: int
         """
+
         self.N=N
-        self.clause_number=0
-        self.adjacent_out=[set() for k in range(2*N)] #出近傍(vが始点)
-        self.adjacent_in=[set() for k in range(2*N)] #入近傍(vが終点)
+        self.var_num=N
+        self.__cost=2*N
 
-    #節の追加
-    def add_clause(self,X,F,Y,G):
-        """(X=F) or (Y=G) という節を加える.
+        self.arc=[[] for _ in range(2*N)]
+        self.rev=[[] for _ in range(2*N)]
 
-        X,Y:変数の名前
-        F,G:真偽値(True or False)
+    def cost(self):
+        return self.__cost
+
+    def var_to_index(self,v):
+        if v>=0:
+            return 2*v
+        else:
+            return 2*(-v-1)+1
+
+    def index_to_var(self,i):
+        if i%2:
+            return -(i+1)//2
+        else:
+            return i//2
+
+    def add_variable(self,k):
+        """ 新たに変数 k 個を加える.
         """
 
-        assert 0<=X<self.N and 0<=Y<self.N
+        m=self.var_num
+        self.var_num+=k
+        self.__cost+=2*k
 
-        F=bool(F);G=bool(G)
-        (A,P)=(X,X+self.N) if F else (X+self.N,X)
-        (B,Q)=(Y,Y+self.N) if G else (Y+self.N,Y)
+        self.arc+=[[] for _ in range(2*k)]
+        self.rev+=[[] for _ in range(2*k)]
 
-        if not self.clause_exist(X,F,Y,G):
-            self.clause_number+=1
+        return list(range(m,m+k))
 
-        #(X,not F)→(Y,G)を追加
-        self.adjacent_out[P].add(B)
-        self.adjacent_in [B].add(P)
+    def __add_clause(self,i,j):
+        self.__cost+=1
+        self.arc[self.var_to_index(i)].append(self.var_to_index(j))
+        self.rev[self.var_to_index(j)].append(self.var_to_index(i))
 
-        #(Y,not G) → (X,F)を追加
-        self.adjacent_out[Q].add(A)
-        self.adjacent_in [A].add(Q)
+    def add_imply(self,i,j):
+        """ X_i -> X_j を加える.
+        """
+        self.__add_clause(i,j)
+        self.__add_clause(~j,~i)
 
-    #節を除く
-    def remove_edge(self,X,F,Y,G):
-        """(X=F) or (Y=G) という節を加える.
-
-        X,Y:変数の名前
-        F,G:真偽値(True or False)
+    def add_or(self,i,j):
+        """ X_i or X_j を加える.
         """
 
-        assert 0<=X<self.N and 0<=Y<self.N
+        self.add_imply(~i,j)
 
-        F=bool(F);G=bool(G)
-        (A,P)=(X,X+self.N) if F else (X+self.N,X)
-        (B,Q)=(Y,Y+self.N) if G else (Y+self.N,Y)
+    def add_nand(self,i,j):
+        """ not (X_i and X_j) を加える.
+        """
 
-        if not self.clause_exist(X,F,Y,G):
+        self.add_imply(i,~j)
+
+    def add_equal(self,*I):
+        """ I=[i_0, ..., i_{k-1}] に対して, X_{i_0}=...=X_{i_{k-1}} を追加する.
+        """
+
+        k=len(I)
+
+        if k<=1:
             return
 
-        self.clause_number-=1
+        for j in range(k-1):
+            self.add_imply(I[j],I[j+1])
+        self.add_imply(I[-1],I[0])
 
-        #(X,not F)→(Y,G)を追加
-        self.adjacent_out[P].remove(B)
-        self.adjacent_in [B].remove(P)
-
-        #(Y,not G) → (X,F)を追加
-        self.adjacent_out[Q].remove(A)
-        self.adjacent_in [A].remove(Q)
-
-    #グラフに節が存在するか否か
-    def clause_exist(self,X,F,Y,G):
-        """(X=F) or (Y=G) という節が存在するか?
-
-        X,Y:変数の名前
-        F,G:真偽値(True or False)
+    def add_not_equal(self,i,j):
+        """ X_i != X_j を追加する.
         """
-        assert 0<=X<self.N and 0<=Y<self.N
+        self.add_equal(i,~j)
 
-        (A,P)=(X,X+self.N) if F else (X+self.N,X)
-        (B,Q)=(Y,Y+self.N) if G else (Y+self.N,Y)
+    def set_true(self,i):
+        """ 変数 X_i を True にする.
+        """
 
-        return B in self.adjacent_out[P]
+        self.__add_clause(~i,i)
 
-    #近傍
-    def neighbohood(self,v):
-        pass
+    def set_false(self,i):
+        """ 変数 X_i を False にする.
+        """
 
-    #出次数
-    def out_degree(self,v):
-        pass
+        self.__add_clause(i,~i)
 
-    #入次数
-    def in_degree(self,v):
-        pass
+    def at_most_one(self,*I):
+        """ X_i (i in I) を満たすような i は高々1つだけという条件を追加する.
+        """
 
-    #次数
-    def degree(self,v):
-        pass
+        k=len(I)
 
-    #変数の数
-    def variable_count(self):
-        return self.N
+        if k<=1:
+            return
 
-    #節の数
-    def clause_count(self):
-        return self.clause_number
+        A=self.add_variable(k)
 
-    #充足可能?
-    def Is_Satisfy(self,Mode=0):
-        """充足可能?
+        self.add_imply(I[0],A[0])
+        for i in range(1,k):
+            self.add_imply(A[i-1],A[i])
+            self.add_imply(I[i],A[i])
+            self.add_nand(A[i-1],I[i])
+
+    def is_satisfy(self,Mode=0):
+        """ Two-SAT は充足可能?
 
         Mode:
-        0(Defalt)---充足可能?
-        1        ---充足可能ならば,その変数の割当を変える.(不可能なときはNone)
-        2        ---充足不能の原因である変数を全て挙げる.
+        0 (Defalt): 充足可能?
+        1: 充足可能ならば,その変数の割当を与える (不可能なときはNone).
+        2: 充足不能の原因である変数を全て挙げる.
         """
-        N=self.N
+        N=self.var_num
         Group=[0]*(2*N)
         Order=[]
 
@@ -126,7 +135,7 @@ class Two_SAT:
 
             while S:
                 u=S.pop()
-                for v in self.adjacent_out[u]:
+                for v in self.arc[u]:
                     if Group[v]:continue
                     Group[v]=-1
                     S.append(u);S.append(v)
@@ -143,7 +152,7 @@ class Two_SAT:
 
             while S:
                 u=S.pop()
-                for v in self.adjacent_in[u]:
+                for v in self.rev[u]:
                     if Group[v]!=-1:continue
 
                     Group[v]=K
@@ -152,16 +161,16 @@ class Two_SAT:
 
         if Mode==0:
             for i in range(N):
-                if Group[i]==Group[i+N]:
+                if Group[2*i]==Group[2*i+1]:
                     return False
             return True
         elif Mode==1:
             T=[0]*N
             for i in range(N):
-                if Group[i]>Group[i+N]:
+                if Group[2*i]>Group[2*i+1]:
                     T[i]=1
-                elif Group[i]==Group[i+N]:
+                elif Group[2*i]==Group[2*i+1]:
                     return None
-            return T
+            return T[:self.N]
         elif Mode==2:
-            return [i for i in range(N) if Group[i]==Group[i+N]]
+            return [i for i in range(self.N) if Group[2*i]==Group[2*i+1]]
