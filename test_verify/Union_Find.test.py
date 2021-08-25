@@ -1,7 +1,6 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/unionfind
 
 import sys
-sys.path.append("..")
 
 from Union_Find import Union_Find
 
