@@ -196,6 +196,16 @@ def Subdivision(X:Modulo,M:int):
     k=M//X.n
     return [Modulo(X.n*i+X.a,M) for i in range(k)]
 
+#退化
+def Degenerate(X:Modulo, M:int):
+    """ X の情報を退化させる. X=x (mod N) であるとき, mod M での情報に退化させる.
+
+    M|X.n でなくてはならない.
+    """
+
+    assert X.n%M==0,"M|X.n ではありません."
+    return Modulo(X.a%M,M)
+
 """
 線形合同方程式関連
 """
@@ -225,7 +235,7 @@ def __modulo_composite__(p:Modulo,q:Modulo):
     return Modulo(a+(n*g)*d*s,n*m*g)
 
 def Modulo_Composite(*X:Modulo):
-    """ N個の方程式 x ≡ a (mod n) を全て満たす x を全て求める.
+    """ N個の方程式 x ≡ a (mod n) を全て満たす x を mod の形で求める.
     """
     x=Modulo(0,1)
     for a in X:
