@@ -415,8 +415,8 @@ class Tree:
         [input]
         merge: 可換モノイドを成す2項演算 M x M -> M
         unit: Mの単位元
-        f: M x V x V -> M: f(x,v,w): v が親, w が子
-        g: M x V -> V: g(x,v)
+        f: X x V x V -> M: f(x,v,w): v が親, w が子
+        g: M x V -> X: g(x,v)
         Mode: False->根の値のみ, True->全ての値
 
         [補足]
@@ -443,9 +443,8 @@ class Tree:
         """ 根から木DPを行う.
 
         [input]
-        merge: 可換モノイドを成す2項演算 M x M -> M
-        unit: Mの単位元
-        f: M x V x V ->M: f(x,v,w): v が親, w が子
+        alpha: 初期値
+        f: x x V x V -> X: f(x,v,w): v が親, w が子
 
         [補足]
         頂点 v の親が x のとき, 更新式は
@@ -470,8 +469,8 @@ class Tree:
         [input]
         calc:可換モノイドを成す2項演算 M x M -> M
         unit:Mの単位元
-        f: M x V x V -> M: f(x,v,w): v が親, w が子
-        g: M x V -> V: g(x,v)
+        f: X x V x V -> M: f(x,v,w): v が親, w が子
+        g: M x V -> X: g(x,v)
         Mode: False->根の値のみ, True->全ての値
 
         [補足]
