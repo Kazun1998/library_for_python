@@ -1,36 +1,35 @@
-def Fast_Walsh_Hadamard_Transform_AND(A):
-    """ AND に関する Walsh_Hadamard_Transform を行う.
+def Superset_Zeta_Transform(A):
+    """ A の上位集合を走る Zeta 変換を求める.
 
-    A: List
+    A の長さはある整数 N を用いて, 2^N でなくてはならない.
     """
 
-    N=len(A)
-    h=(N-1).bit_length()
-    for k in range(h):
-        bit=1<<k
-        for i in range(N):
-            if i&bit==0:
-                A[i]+=A[i|bit]
+    N=(len(A)-1).bit_length()
+    assert 1<<N==len(A), "列の要素数は 2^N でなくてはなりません."
 
-        for i in range(N):
-            A[i]%=Mod
+    for i in range(N):
+        b=1<<i
+        for S in range(1<<N):
+            if not (S & b):
+                A[S]+=A[S|b]
 
-def Fast_Inverse_Walsh_Hadamard_Transform_AND(A):
-    """ AND に関する逆 Walsh_Hadamard_Transform を行う.
+        for S in range(N):
+            A[S]%=Mod
 
-    A: List
+def Superset_Mobius_Transform(A):
+    """ A の上位集合を走る Mobius 変換を求める.
+
+    A の長さはある整数 N を用いて, 2^N でなくてはならない.
     """
 
-    N=len(A)
-    h=(N-1).bit_length()
-    for k in range(h):
-        bit=1<<k
-        for i in range(N):
-            if i&bit==0:
-                A[i]-=A[i|bit]
+    N=(len(A)-1).bit_length()
+    assert 1<<N==len(A), "列の要素数は 2^N でなくてはなりません."
 
-        for i in range(N):
-            A[i]%=Mod
+    for i in range(N):
+        b=1<<i
+        for S in range(1<<N):
+            if not (S & b):
+                A[S]-=A[S|b]
 
 def Convolution_AND(A,B):
     """ AND 演算に関する畳込みを行う.
@@ -52,14 +51,14 @@ def Convolution_AND(A,B):
     A=A+[0]*(L-N)
     B=B+[0]*(L-M)
 
-    Fast_Walsh_Hadamard_Transform_AND(A)
-    Fast_Walsh_Hadamard_Transform_AND(B)
+    Superset_Zeta_Transform(A)
+    Superset_Zeta_Transform(B)
 
     for i in range(N):
         A[i]*=B[i]
         A[i]%=Mod
 
-    Fast_Inverse_Walsh_Hadamard_Transform_AND(A)
+    Superset_Zeta_Transform(A)
     return A
 
 def Convolution_Power_AND(A,k):
@@ -73,9 +72,9 @@ def Convolution_Power_AND(A,k):
 
     A=A+[0]*(L-N)
 
-    Fast_Walsh_Hadamard_Transform_AND(A)
+    Superset_Zeta_Transform(A)
 
     A=[pow(A[i],k,Mod) for i in range(L)]
 
-    Fast_Inverse_Walsh_Hadamard_Transform_AND(A)
+    Superset_Mobius_Transform(A)
     return A

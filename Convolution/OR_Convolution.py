@@ -1,36 +1,39 @@
-def Fast_Walsh_Hadamard_Transform_OR(A):
-    """ OR に関する Walsh_Hadamard_Transform を行う.
+def Subset_Zeta_Transform(A):
+    """ A の部分集合に関する Zeta 変換を求める.
 
-    A: List
+    A の長さはある整数 N を用いて, 2^N でなくてはならない.
     """
 
-    N=len(A)
-    K=(N-1).bit_length()
-    for i in range(K):
-        d=1<<i
-        for j in range(d):
-            for k in range(0,N,2*d):
-                A[j+k+d]+=A[j+k]
+    N=(len(A)-1).bit_length()
+    assert 1<<N==len(A), "列の要素数は 2^N でなくてはなりません."
 
-        for j in range(N):
-            A[j]%=Mod
+    for i in range(N):
+        b=1<<i
+        for S in range(1<<N):
+            if (S & b):
+                A[S]+=A[S^b]
 
-def Fast_Inverse_Walsh_Hadamard_Transform_OR(A):
-    """ OR に関する逆 Walsh_Hadamard_Transform を行う.
+        for S in range(1<<N):
+            A[S]%=Mod
 
-    A: List
+def Subset_Mobius_Transform(A):
+    """ A の部分集合に関する Mobius 変換を求める.
+
+    A の長さはある整数 N を用いて, 2^N でなくてはならない.
     """
 
-    N=len(A)
-    K=(N-1).bit_length()
-    for i in range(K):
-        d=1<<i
-        for j in range(d):
-            for k in range(0,N,2*d):
-                A[j+k+d]-=A[j+k]
+    N=(len(A)-1).bit_length()
+    assert 1<<N==len(A), "列の要素数は 2^N でなくてはなりません."
 
-        for j in range(N):
-            A[j]%=Mod
+    for i in range(N):
+        b=1<<i
+        for S in range(1<<N):
+            if (S & b):
+                A[S]-=A[S^b]
+
+        for S in range(1<<N):
+            A[S]%=Mod
+
 
 def Convolution_OR(A,B):
     """ OR 演算に関する畳込みを行う.
@@ -52,14 +55,14 @@ def Convolution_OR(A,B):
     A=A+[0]*(L-N)
     B=B+[0]*(L-M)
 
-    Fast_Walsh_Hadamard_Transform_OR(A)
-    Fast_Walsh_Hadamard_Transform_OR(B)
+    Subset_Zeta_Transform(A)
+    Subset_Zeta_Transform(B)
 
     for i in range(N):
         A[i]*=B[i]
         A[i]%=Mod
 
-    Fast_Inverse_Walsh_Hadamard_Transform_OR(A)
+    Subset_Mobius_Transform(A)
     return A
 
 def Convolution_Power_OR(A,k):
@@ -73,9 +76,11 @@ def Convolution_Power_OR(A,k):
 
     A=A+[0]*(L-N)
 
-    Fast_Walsh_Hadamard_Transform_OR(A)
+    Subset_Zeta_Transform(A)
 
     A=[pow(A[i],k,Mod) for i in range(L)]
 
-    Fast_Inverse_Walsh_Hadamard_Transform_OR(A)
+    Subset_Mobius_Transform(A)
     return A
+
+Mod=998244353
