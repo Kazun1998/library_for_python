@@ -73,7 +73,7 @@ def Lagrange_Interpolation_Point_Arithmetic(L,a,b,X,P):
     Y=0
     coef=pow(-a,d*(P-2),P)
     for i in range(d+1):
-        V_inv=Fact_inv[i]*Fact_inv[d-i]
+        V_inv=(Fact_inv[i]*Fact_inv[d-i])%P
         if i==0:
             S=(Right[i+1]*V_inv)%P
         elif i==d:
