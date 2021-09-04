@@ -60,3 +60,12 @@ def Convex_Hull(S,online=False):
         L.append(q)
 
     return Polygon(*(U+L[1:-1]))
+
+def is_Convex(P: Polygon,rigit=True):
+    """ 多角形 P が凸かどうかを判定する.
+
+    P: Polygon
+    right: True のとき, 辺上の点を認めない.
+    """
+
+    pass
