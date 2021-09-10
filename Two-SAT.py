@@ -68,7 +68,7 @@ class Two_SAT:
 
         self.add_imply(i,~j)
 
-    def add_equal(self,*I):
+    def add_equivalent(self,*I):
         """ I=[i_0, ..., i_{k-1}] に対して, X_{i_0}=...=X_{i_{k-1}} を追加する.
         """
 
