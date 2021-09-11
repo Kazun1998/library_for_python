@@ -234,7 +234,7 @@ def __modulo_composite__(p:Modulo,q:Modulo):
 
     return Modulo(a+(n*g)*d*s,n*m*g)
 
-def Modulo_Composite(*X:Modulo):
+def Modulo_Composite(*X: Modulo):
     """ N個の方程式 x ≡ a (mod n) を全て満たす x を mod の形で求める.
     """
     x=Modulo(0,1)
@@ -242,17 +242,17 @@ def Modulo_Composite(*X:Modulo):
         x=__modulo_composite__(x,a)
     return x
 
-def Is_Included(X:Modulo,Y:Modulo):
-    """Xを全て満たす整数はYを全て満たすか?
+def Is_Included(X: Modulo, Y: Modulo):
+    """ X を全て満たす整数は Y を全て満たすか?
 
-    X,Y:Modulo
+    X,Y: Modulo
     """
     a,p=X.a,X.n
     b,q=Y.a,Y.n
     return (a-b)%q==0 and p%q==0
 
 #拡張Euclidの互除法
-def Extended_Euclid(a:int,b:int):
+def Extended_Euclid(a: int, b: int):
     """ax+by=gcd(a,b) を満たす(x,y,gcd(a,b))を1つ求める.
 
     a,b:整数
@@ -265,7 +265,7 @@ def Extended_Euclid(a:int,b:int):
     return s,u,a
 
 #1次合同方程式を解く
-def First_Order_Congruent_Equation(a:int,b:int,m:int):
+def First_Order_Congruent_Equation(a: int, b: int, m: int):
     """1次合同方程式 ax≡b (mod m) を求める.
 
     a,b,m:整数
@@ -316,11 +316,13 @@ def Legendre(X):
         return -1
 
 #根号
-def sqrt(X,All=False):
-    """X=a (mod p)のとき,r*r=a (mod p)を満たすrを返す.
+def sqrt(X, All=False):
+    """ X=a (mod p) のとき, r*r=a (mod p) を満たす r を (存在すれば) 返す.
 
-    ※法pが素数のときのみ有効
-    ※存在しないときはNoneが返り値
+    [Input]
+    All: False ならば一方のみ, True ならば両方
+    ※ 法 p が素数のときのみ有効
+    ※ 存在しないときは None が返り値
     """
     if Legendre(X)==-1:
         return None
@@ -375,7 +377,7 @@ def sqrt(X,All=False):
 
 #離散対数
 def Discrete_Log(A,B):
-    """A^X=B (mod M)を満たす最小の非負整数Xを求める.
+    """ A^X=B (mod M) を満たす最小の非負整数 X を求める.
 
     [入力]
     A:底
@@ -384,6 +386,7 @@ def Discrete_Log(A,B):
     A^X=B (mod M)を満たす非負整数Xが存在すればその中で最小のもの
     存在しなければ-1
     """
+
     if isinstance(B,int):
         B%=A.n
     elif isinstance(B,Modulo):
@@ -425,7 +428,7 @@ def Discrete_Log(A,B):
     return None
 
 def Order(X):
-    """Xの位数を求める. つまり, X^k=[1] を満たす最小の正整数 k を求める.
+    """ Xの位数を求める. つまり, X^k=[1] を満たす最小の正整数 k を求める.
     """
     R=X.n
     N=X.n
@@ -455,9 +458,9 @@ def Order(X):
     return a
 
 def Primitive_Root(p):
-    """Z/pZ上の原始根を見つける
+    """ Z/pZ 上の原始根を見つける
 
-    p:素数
+    p: 素数
     """
     if p==2:
         return 1
@@ -512,42 +515,41 @@ Y=Modulo(193,Mod)
 """
 数え上げ関連
 """
-def Factor_Modulo(N,M,Mode=0):
+def Factor_Modulo(N,Mod,Mode=0):
     """
-    Mode=0のとき:N! (mod M) を求める.
-    Mode=1のとき:k! (mod M) (k=0,1,...,N) のリストも出力する.
+    Mode=0: N! (mod Mod) を求める.
+    Mode=1: k! (mod Mod) (k=0,1,...,N) のリストも出力する.
 
     [計算量]
     O(N)
     """
 
     if Mode==0:
-        X=Modulo(1,M)
+        X=1
         for k in range(1,N+1):
-            X*=k
-        return X
+            X*=k; X%=Mod
+        return Modulo(X,Mod)
     else:
-        L=[Modulo(1,M)]*(N+1)
+        L=[Modulo(1,Mod)]*(N+1)
         for k in range(1,N+1):
             L[k]=k*L[k-1]
         return L
 
-def Factor_Modulo_with_Inverse(N,M):
-    """
-    k=0,1,...,N に対する k! (mod M) と (k!)^(-1) (mod M) のリストを出力する.
+def Factor_Modulo_with_Inverse(N, Mod):
+    """ k=0,1,...,N に対する k! (mod Mod) と (k!)^(-1) (mod Mod) のリストを出力する.
 
     [入力]
-    N,M:整数
-    M>0
+    N, Mod: 整数
+    Mod >0
     [出力]
-    長さ N+1 のリストのタプル (F,G):F[k]=k! (mod M), G[k]=(k!)^(-1) (mod M)
+    長さ N+1 のリストのタプル (F,G): F[k]=k! (mod M), G[k]=(k!)^(-1) (mod M)
     [計算量]
-    O(N)
+    O(N+log Mod)
     """
 
-    assert M>0
+    assert Mod>0
 
-    F=Factor_Modulo(N,M,Mode=1)
+    F=Factor_Modulo(N,Mod,Mode=1)
     G=[0]*(N+1)
 
     G[-1]=F[-1].inverse()
@@ -555,48 +557,45 @@ def Factor_Modulo_with_Inverse(N,M):
         G[k-1]=k*G[k]
     return F,G
 
-def Binomial_Coefficient_Modulo(n,r,M):
-    """
-    nCr (mod M) を求める.
+def Binomial_Coefficient_Modulo(n: int, r: int, Mod:int):
+    """ nCr (mod Mod) を愚直な方法で求める.
 
     [入力]
-    n,r,M:整数
-    M>0
+    n, r, Mod: 整数
+    Mod>0
     [出力]
-    nCr (mod M)
+    nCr (mod Mod)
     [計算量]
     O(r)
     """
-    assert M>0
+    assert Mod>0
     if r<0 or n<r:
-        return Modulo(0,M)
+        return Modulo(0,Mod)
 
-    X=Modulo(1,M)
-    Y=Modulo(1,M)
+    X=Y=1
 
     r=min(r,n-r)
     for i in range(r):
-        X*=n-i
-        Y*=r-i
-    return X/Y
+        X*=n-i; X%=Mod
+        Y*=r-i; Y%=Mod
+    return Modulo(X,Mod)/Modulo(Y,Mod)
 
-def Binomial_Coefficient_Modulo_List(n,M):
-    """
-    nを固定し, r=0,1,...,n としたときの nCr (mod M) のリストを出力する.
+def Binomial_Coefficient_Modulo_List(n:int, Mod:int):
+    """ n を固定し, r=0,1,...,n としたときの nCr (mod Mod) のリストを出力する.
 
     [入力]
-    N,M:整数
-    M>0
+    n,Mod: 整数
+    Mod>0
     [出力]
-    [nC0 (mod M), nC1 (mod M),..., nCn (mod M)]
+    [nC0 (mod Mod), nC1 (mod Mod),..., nCn (mod Mod)]
     [計算量]
     O(n)
     """
 
-    assert M>0
-    L=[Modulo(1,M) for _ in range(n+1)]
+    assert Mod>0
+    L=[Modulo(1,Mod) for _ in range(n+1)]
 
-    I=Modulo_Inverse_List(M,n)
+    I=Modulo_Inverse_List(Mod,n)
     for r in range(1,n+1):
         L[r]=(n+1-r)*I[r]*L[r-1]
     return L
