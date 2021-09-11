@@ -29,7 +29,56 @@ def Lagrange_Interpolation_Point(L,X,P):
         c=(a*pow(b,P-2,P))%P
         Y+=y[i]*c; Y%=P
     return Y
-            
+
+def Lagrange_Interpolation_Polynomial(T,P):
+    """ 法が P の下でのLagrange 補間を行い, 多項式の係数リストを返す.
+
+    [Input]
+    T: [(x_0,y_0), ..., (x_N, y_N)]: F(x_n)=y_n  (i !=j => x_i != x_j (mod P))
+    P: 法
+
+    [Output]
+    [[X^0]F, [X^1]F, ..., [X^{N-1}]F ]
+
+    [Complexity]
+    O(N^2)
+
+    [Thanks]
+    hamayanhamayan
+    """
+
+    N=len(T)
+    X=[0]*N; Y=[0]*N
+    for i in range(N):
+        X[i]=T[i][0]
+        Y[i]=T[i][1]
+
+    Poly=[0]*(N+1); Poly[0]=1
+    for x,y in zip(X,Y):
+        tmp=[0]*(N+1)
+        for i in range(N):
+            tmp[i+1]=Poly[i]
+        for i in range(N):
+            tmp[i]=(tmp[i]-x*Poly[i])%P
+        Poly=tmp
+
+    res=[0]*N
+    for i,(x,y) in enumerate(zip(X,Y)):
+        if y==0:
+            continue
+
+        Q=1
+        for j in range(N):
+            if j!=i:
+                Q=Q*(x-X[j])%P
+        Q=pow(Q,P-2,P)
+
+        tmp=Poly.copy()
+
+        for j in  range(N,0,-1):
+            res[j-1]=(res[j-1]+(tmp[j]*Q)%P*y)%P
+            tmp[j-1]=(tmp[j-1]+tmp[j]*x)%P
+    return res
 
 def Lagrange_Interpolation_Point_Arithmetic(L,a,b,X,P):
     """ 法が P の下でのLagrange 補間を行い, x=X での値を返す. ただし, x_i=ai+b
@@ -72,6 +121,7 @@ def Lagrange_Interpolation_Point_Arithmetic(L,a,b,X,P):
 
     Y=0
     coef=pow(-a,d*(P-2),P)
+
     for i in range(d+1):
         V_inv=(Fact_inv[i]*Fact_inv[d-i])%P
         if i==0:
@@ -82,6 +132,7 @@ def Lagrange_Interpolation_Point_Arithmetic(L,a,b,X,P):
             u=(Left[i-1]*Right[i+1])%P
             S=(u*V_inv)%P
 
-        Y=(Y+coef*L[i]*S)%P
+        M=L[i]*S%P
+        Y=(Y+coef*M)%P
         coef=-coef
     return Y
