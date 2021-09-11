@@ -126,7 +126,9 @@ def Divisors_from_Prime_Factor(P,sorting=False):
             for j in range(n):
                 X.append(X[j]*q)
 
-    if sorting: X.sort()
+    if sorting:
+        X.sort()
+
     return X
 
 #高度合成数
@@ -203,10 +205,10 @@ def Is_Prime_for_long_long(N):
 
 #Miller-Rabinの素数判定法
 def Miller_Rabin_Primality_Test(N,Times=20):
-    """Miller-Rabinによる整数Nの素数判定を行う.
+    """ Miller-Rabin による整数 N の素数判定を行う.
 
-    N:整数
-    ※:Trueは正確にはProbably Trueである(Falseは確定False).
+    N: 整数
+    ※ True は正確には Probably True である ( False は 確定 False ).
     """
     from random import randint as ri
 
@@ -324,12 +326,14 @@ def Next_Prime(N,K=1):
     return N
 
 #エラトステネスの篩
-def Sieve_of_Eratosthenes(N,mode=False):
-    """Nまでのエラトステネスの篩を実行
+def Sieve_of_Eratosthenes(N):
+    """ N までのエラトステネスの篩を実行
 
+    [Input]
     N:自然数
-    mode:False->素数のリスト,True->素数かどうかのリスト
-    (False->[2,3,5,...],True->[0,0,1,1,0,1,...])
+
+    [Output]
+    素数かどうかのリスト ([0,0,1,1,0,1,...])
     """
 
     if N==0:
@@ -352,14 +356,50 @@ def Sieve_of_Eratosthenes(N,mode=False):
                 b+=c
         a+=2+2*Flag
         Flag^=1
+    return T
 
-    if mode:
-        return T
-    else:
-        return [k for k in range(N+1) if T[k]]
+def Prime_List(N):
+    """ N 以下の素数を列挙
+
+    [Input]
+    N: 自然数
+
+    [Output]
+    N 以下の素数を昇順に並べたリスト [2,3,5,...]
+    """
+
+    if N==0 or N==1:
+        return []
+    elif N==2:
+        return [2]
+
+    if N%2==0:
+        N-=1
+
+    M=(N+1)//2
+
+    prime=[1]*M # prime[k]:=2k+1 は素数?
+
+    for x in range(4,M,3):
+        prime[x]=0
+
+    a=5
+    Flag=0
+    while a*a<=N:
+        if prime[(a-1)>>1]:
+            ii=(a*a-1)>>1
+            for j in range(ii,M,a):
+                prime[j]=0
+        a+=2+2*Flag
+        Flag^=1
+
+    X=[(k<<1)|1 for k in range(M) if prime[k]]
+    X[0]=2
+
+    return X
 
 def Smallest_Prime_Factor(N):
-    """0,1,2,...,Nの最小の素因数のリスト(0,1については1にしている)
+    """ 0,1,2,...,N の最小の素因数のリスト (0,1 については 1 にしている)
     """
 
     if N==0:
@@ -395,9 +435,9 @@ def Smallest_Prime_Factor(N):
     return L
 
 def Faster_Prime_Factorization(N,L):
-    """
+    """ Smallest_Prime_Factors(N)で求めたリストを利用して, N を高速素因数分解する.
 
-    L:Smallest_Prime_Factors(N)で求めたリスト
+    L: Smallest_Prime_Factors(N)で求めたリスト
     """
     N=abs(N)
 
@@ -477,13 +517,8 @@ def Power_List(N,K,Mod):
     N,K,Mod: int
     """
 
-    def pow_mod(a,n):
-        b=1
-        while n:
-            if n&1: b=(b*a)%Mod
-            a=(a*a)%Mod
-            n>>=1
-        return b
+    if N==0:
+        return [0]
 
     S=Smallest_Prime_Factor(N)
     A=[0]*(N+1); A[1]=pow(1,K,Mod)
@@ -492,7 +527,7 @@ def Power_List(N,K,Mod):
         if S[i]<i:
             A[i]=A[S[i]]*A[i//S[i]]%Mod
         else:
-            A[i]=pow_mod(i,K)
+            A[i]=pow(i,K,Mod)
     return A
 
 #平方数?
@@ -629,9 +664,10 @@ def Is_Perfect(N):
 def Quotient_Range(N):
     """Nで割った商の可能性を全て列挙する.
 
-    (引数)
+    [Input]
     N:正整数
-    (返り値)
+
+    [Output]
     X:リスト
     Xの各要素(k,x,y) は x<=i<=y であることと, floor(N/i)=k が同値であることを表す.
     """
@@ -651,10 +687,10 @@ def Quotient_Range(N):
     return X
 
 def Reminder_Enumeration(N,r):
-    """Nで割った余りがrになるqを全て列挙する.
+    """ N を q 割った余りが r になる q を全て列挙する.
 
-    N:正整数
-    r:非負整数,N!=r
+    N: 正整数
+    r: 非負整数, N!=r
     """
 
     assert N!=r,"無限個あります."
@@ -806,20 +842,16 @@ def kth_Power(a,k):
     """ 整数 a が k 乗数かどうかを求め, そうならば, b^k=a を満たす k を返す.
 
     [Input]
-    a:int
-    k:int (k>0)
+    a: int
+    k: int (k>0)
 
     [Output]
     存在しない  : None
     存在する    : b^k=a を満たす b
     """
 
-    a_abs=abs(a)
-    if a: sgn=a//a_abs
-    else: sgn=0
-
-    b=Floor_Root(a_abs,k)
-    if pow(sgn*b,k)==a:
-        return sgn*b
+    b=Floor_Root(a,k)
+    if pow(b,k)==a:
+        return b
     else:
         return None
