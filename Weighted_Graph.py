@@ -1,33 +1,25 @@
 class Weigthed_Graph:
     #入力定義
-    def __init__(self,vertex=[]):
-        self.vertex=set(vertex)
-
+    def __init__(self, N):
+        self.N=N
         self.edge_number=0
-        self.adjacent={v:{} for v in vertex}
 
-    #頂点の追加
-    def add_vertex(self,*adder):
-        for v in adder:
-            if not self.vertex_exist(v):
-                self.adjacent[v]={}
-                self.vertex.add(v)
+        self.adjacent=[{} for _ in range(N)]
 
     #辺の追加
-    def add_edge(self,u,v,Weight):
-        self.add_vertex(u)
-        self.add_vertex(v)
+    def add_edge(self, u, v, weight=1):
+        """ 重さが weight の辺 uv を加える. """
+
 
         if not self.edge_exist(u,v):
             self.edge_number+=1
 
-        self.adjacent[u][v]=Weight
-        self.adjacent[v][u]=Weight
+        self.adjacent[u][v]=weight
+        self.adjacent[v][u]=weight
 
     #辺を除く
     def remove_edge(self,u,v):
-        self.add_vertex(u)
-        self.add_vertex(v)
+        """ 辺 uv が存在するならば取り除く. """
 
         if self.edge_exist(u,v):
             del self.adjacent[u][v]
@@ -35,14 +27,6 @@ class Weigthed_Graph:
             self.edge_number-=1
 
     #頂点を除く
-    def remove_vertex(self,*vertexes):
-        for v in vertexes:
-            if self.vertex_exist(v):
-                U=self.neighbohood(v)
-                for u in self.adjacent[v]:
-                    del self.adjacent[u][v]
-                    self.edge_number-=1
-                del self.adjacent[v]
 
     #Walkの追加
 
@@ -50,25 +34,22 @@ class Weigthed_Graph:
 
     #頂点の交換
 
-    #グラフに頂点が存在するか否か
-    def vertex_exist(self,v):
-        return v in self.vertex
 
     #グラフに辺が存在するか否か
-    def edge_exist(self,u,v):
-        if not (self.vertex_exist(u) and self.vertex_exist(v)):
-            return False
+    def edge_exist(self, u, v):
+        """ 辺 uv が存在するかどうかを判定する. """
+
         return v in self.adjacent[u]
 
     #近傍
     def neighbohood(self,v):
-        if not self.vertex_exist(v):
-            return []
+        """ 頂点 v の近傍を返す. """
         return list(self.adjacent[v].keys())
 
 
     #頂点数
     def vertex_count(self):
+        """ グラフの位数を求める. """
         return len(self.adjacent)
 
     #辺数
@@ -80,47 +61,42 @@ class Weigthed_Graph:
     #最短路
 
     #何かしらの頂点を選ぶ.
-    def poping_vertex(self):
-        v=self.vertex.pop()
-        self.vertex.add(v)
-        return v
 
 #Dijkstra
-def Dijkstra(G,From,To,with_path=False):
-    """Dijksta法を用いて,FromからToまでの距離を求める.
+def Dijkstra(G, From, To, with_path=False):
+    """ Dijksta 法を用いて, From から To までの距離を求める.
 
-    G:辺の重みが全て非負の無向グラフ
-    From:始点
-    To:終点
-    with_path:最短路も含めて出力するか?
+    G: 辺の重みが全て非負の無向グラフ
+    From: 始点
+    To: 終点
+    with_path: 最短路も含めて出力するか?
 
     (出力の結果)
-    with_path=True->(距離,最短経路の辿る際の前の頂点)
-    with_path=False->距離
+    with_path=True  →(距離, 最短経路の辿る際の前の頂点)
+    with_path=False →距離
     """
     from heapq import heappush,heappop
 
     inf=float("inf")
-    T={v:inf for v in G.adjacent}
-    T[From]=0
+    adj=G.adjacent
+
+    T=[inf]*G.N; T[From]=0
 
     if with_path:
-        Prev={v:None for v in G.adjacent}
+        Prev=[-1]*G.N
 
     Q=[(0,From)]
 
-    Flag=False
     while Q:
         c,u=heappop(Q)
 
         if u==To:
-            Flag=True
             break
 
         if T[u]<c:
             continue
 
-        E=G.adjacent[u]
+        E=adj[u]
         for v in E:
             p=T[u]+E[v]
             if T[v]>p:
@@ -130,7 +106,7 @@ def Dijkstra(G,From,To,with_path=False):
                 if with_path:
                     Prev[v]=u
 
-    if not Flag:
+    if T[To]==inf:
         if with_path:
             return (inf,None)
         else:
@@ -146,25 +122,26 @@ def Dijkstra(G,From,To,with_path=False):
     else:
         return T[To]
 
-def Dijkstra_All(G,From,with_path=False):
-    """Dijksta法を用いて,Fromから各頂点までの距離を求める.
+def Dijkstra_All(G, From, with_path=False):
+    """ Dijksta 法を用いて, From から各頂点までの距離を求める.
 
-    G:辺の重みが全て非負の無向グラフ
-    From:始点
-    with_path:最短路も含めて出力するか?
+    G: 辺の重みが全て非負の無向グラフ
+    From: 始点
+    with_path: 最短路も含めて出力するか?
 
     (出力の結果)
-    with_path=True->(距離,最短経路の辿る際の前の頂点)
-    with_path=False->距離
+    with_path=True  → (距離のリスト, 最短経路の辿る際の前の頂点)
+    with_path=False → 距離のリスト
     """
     from heapq import heappush,heappop
 
     inf=float("inf")
-    T={v:inf for v in G.adjacent}
-    T[From]=0
+    adj=G.adjacent
+
+    T=[inf]*G.N; T[From]=0
 
     if with_path:
-        Prev={v:None for v in G.adjacent}
+        Prev=[-1]*G.N
 
     Q=[(0,From)]
 
@@ -174,7 +151,7 @@ def Dijkstra_All(G,From,with_path=False):
         if T[u]<c:
             continue
 
-        E=G.adjacent[u]
+        E=adj[u]
         for v in E:
             p=T[u]+E[v]
             if T[v]>p:
@@ -191,35 +168,52 @@ def Dijkstra_All(G,From,with_path=False):
 
 #Warshall–Floyd
 def Warshall_Floyd(G):
-    """Warshall–Floyd法を用いて,全点間距離を求める.
+    """ Warshall–Floyd 法を用いて, 全点間距離を求める.
 
-    D:負Cycleを含まない有向グラフ
+    G: 重み付き無向グラフ
+    ※負の辺が存在する場合, -inf が発生する.
     """
-    T={v:{} for v in G.adjacent} #T[u][v]:uからvへ
 
-    inf=float("inf")
-    for u in G.adjacent:
-        for v in G.adjacent:
+    def three_loop():
+        for u in range(N):
+            Tu=T[u]
+            for v in range(N):
+                Tv=T[v]
+                for w in range(N):
+                    Tv[w]=min(Tv[w],Tv[u]+Tu[w])
+
+    inf=float("inf"); N=G.N
+
+    T=[[0]*N for _ in range(N)]
+    adj=G.adjacent
+    for u in range(N):
+        Tu=T[u]
+        E=adj[u]
+        for v in range(N):
             if v==u:
-                T[u][v]=0
-            elif v in G.adjacent[u]:
-                T[u][v]=G.adjacent[u][v]
+                Tu[v]=0
+            elif v in E:
+                Tu[v]=E[v]
             else:
-                T[u][v]=inf
+                Tu[v]=inf
 
-    for u in G.adjacent:
-        E=T[u]
-        for v in G.adjacent:
-            F=T[v]
-            for w in G.adjacent:
-                F[w]=min(F[w],F[u]+E[w])
+    three_loop()
 
-    return T
+    flag=1
+    for v in range(N):
+        if T[v][v]<0:
+            T[v][v]=-inf
+            flag=0
+
+    if flag==1:
+        return T
+    else:
+        three_loop()
+        return T
 
 #巡回セールスマン問題を解く.
-def Traveling_Salesman_Problem(D):
-    N=len(D.vertex)
-    I=list(D.vertex)
+def Traveling_Salesman_Problem(G):
+    N=G.N
 
     inf=float("inf")
     T=[[inf]*N for _ in range(1<<N)]
@@ -232,44 +226,41 @@ def Traveling_Salesman_Problem(D):
                 continue
 
             E=T[S|1<<v]
-            Dist=D.adjacent[I[v]]
+            cost=G.adjacent[v]
 
-            for w in range(N):
-                if v!=w and E[v]>F[w]+Dist[I[w]]:
-                    E[v]=F[w]+Dist[I[w]]
+            for w,c in cost.items():
+                if v!=w and G.edge_exist(v,w) and E[v]>F[w]+c:
+                    E[v]=F[w]+c
     return T[-1][0]
 
 #木の直径を求める.
-def Tree_Diameter(T,Mode=False):
-    """重み付き木Tの直径を求める.
+def Tree_Diameter(T, Mode=False):
+    """ 重み付き木 T の直径を求める.
 
-    T:木
+    T: 木
 
     (出力の結果)
-    Mode=True->(直径,(直径を成す端点1,直径を成す端点2))
-    Mode=False->直径
+    Mode=True  → (直径, (直径を成す端点1, 直径を成す端点2))
+    Mode=False → 直径
     """
     from collections import deque
 
     def bfs(x):
-        D={y:-1 for y in T.adjacent}
-        D[x]=0
+        dist=[-1]*T.N; dist[x]=0
+        adj=T.adjacent
         Q=deque([x])
+
         while Q:
             x=Q.popleft()
-
-            for y,c in T.adjacent[x].items():
-                if D[y]==-1:
-                    D[y]=D[x]+c
+            for y,c in adj[x].items():
+                if dist[y]==-1:
+                    dist[y]=dist[x]+c
                     Q.append(y)
 
-        z=max(D,key=lambda x:D[x])
-        return z,D[z]
+        z=max(range(T.N),key=lambda x:dist[x])
+        return z,dist[z]
 
-    for x in T.adjacent:
-        break
-
-    u,_=bfs(x)
+    u,_=bfs(0)
     v,d=bfs(u)
 
     if Mode:
@@ -279,14 +270,18 @@ def Tree_Diameter(T,Mode=False):
 
 #最小全域木をクラシカル法で求める.
 def Minimum_Spanning_Tree_by_Kruskal(G,Mode=0):
-    """グラフGの最小全域木をクラシカル法で求める.
+    """ グラフ G の最小全域木をクラシカル法で求める.
 
-    G:グラフ
-    Mode=0→重さのみ, 1→重さと使う辺, 2→重さと最小全域木
+    G: グラフ
+    Mode=0 → 重さのみ
+    Mode=1 → 重さと使う辺
+    Mode=2 → 重さと最小全域木
     """
+
+    N=G.N
     #Union-Findを定義する.
-    U={x:x for x in G.vertex}
-    R={x:1 for x in G.vertex}
+    U=list(range(N))
+    R=[1]*N
 
     def find(x):
         if U[x]==x:
@@ -319,22 +314,22 @@ def Minimum_Spanning_Tree_by_Kruskal(G,Mode=0):
         return find(x)==find(y)
 
     E=set()
-    for x in G.vertex:
-        X=G.adjacent[x]
-        for y in X:
-            if (y,x,X[y]) not in E:
-                E.add((x,y,X[y]))
-    E=sorted(E,key=lambda x:x[-1])[::-1]
+    adj=G.adjacent
+    for x in range(N):
+        adj_x=adj[x]
+        for y in adj_x:
+            if x<y:
+                E.add((x,y,adj_x[y]))
+    E=sorted(E,key=lambda x:x[-1])
 
     W=0
     if Mode==1:
         F=[]
     elif Mode==2:
-        T=Weigthed_Graph(G.vertex)
+        T=Weigthed_Graph(N)
 
-    count=len(G.vertex)-1
-    while count:
-        x,y,w=E.pop()
+    count=N-1
+    for x,y,w in E:
         if not same(x,y):
             count-=1
             union(x,y)
@@ -345,6 +340,9 @@ def Minimum_Spanning_Tree_by_Kruskal(G,Mode=0):
             elif Mode==2:
                 T.add_edge(x,y,w)
 
+            if count==0:
+                break
+
     if Mode==0:
         return W
     elif Mode==1:
@@ -353,26 +351,27 @@ def Minimum_Spanning_Tree_by_Kruskal(G,Mode=0):
         return W,T
 
 def Minimum_Spanning_Tree_by_Prim(G,Mode=0):
-    """グラフGの最小全域木をプリム法で求める.
+    """ グラフ G の最小全域木をプリム法で求める.
 
-    G:グラフ
-    Mode=0→重さのみ, 1→重さと使う辺, 2→重さと最小全域木
+    G: グラフ
+    Mode=0 → 重さのみ
+    Mode=1 → 重さと使う辺
+    Mode=2 → 重さと最小全域木
     """
     from heapq import heapify,heappop,heappush
+    N=G.N
 
-    start=G.poping_vertex()
-    S={x:0 for x in G.vertex}
-    S[start]=1
-    H=[(w,start,y) for y,w in G.adjacent[start].items()]
+    S=[0]*N; S[0]=1
+    H=[(w,0,y) for y,w in G.adjacent[0].items()]
     heapify(H)
 
     W=0
     if Mode==1:
         F=[]
     elif Mode==2:
-        T=Weigthed_Graph(G.vertex)
+        T=Weigthed_Graph(N)
 
-    count=len(G.vertex)-1
+    count=N-1
     while count:
         w,u,v=heappop(H)
         if S[u]==S[v]:
@@ -402,8 +401,8 @@ def Minimum_Spanning_Tree_by_Prim(G,Mode=0):
     else:
         return W,T
 
-H=Weigthed_Graph([1,2,3,4,5,6,7])
-E=[(1,2,2),(1,3,3),(1,4,5),(2,4,7),(3,5,2),(4,5,15),(4,6,1),(5,7,11),(6,7,8)]
+H=Weigthed_Graph(8)
+E=[(1,2,2),(1,3,3),(1,4,5),(2,4,7),(3,5,2),(4,5,15),(4,6,1),(5,7,11),(6,7,0)]
 
 for x,y,w in E:
     H.add_edge(x,y,w)

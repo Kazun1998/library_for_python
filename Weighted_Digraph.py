@@ -3,60 +3,28 @@ class Weigthed_Digraph:
 
     """
     #入力定義
-    def __init__(self,vertex=[]):
-        self.vertex=set(vertex)
-
+    def __init__(self, N):
+        self.N=N
         self.edge_number=0
-        self.vertex_number=len(vertex)
 
-        self.adjacent_out={v:{} for v in vertex} #出近傍(vが始点)
-        self.adjacent_in={v:{} for v in vertex} #入近傍(vが終点)
-
-    #頂点の追加
-    def add_vertex(self,*vertexes):
-        for v in vertexes:
-            if not self.vertex_exist(v):
-                self.adjacent_in[v]={}
-                self.adjacent_out[v]={}
-
-                self.vertex.add(v)
-                self.vertex_number+=1
+        self.adjacent_out=[{} for _ in range(N)] #出近傍(vが始点)
+        self.adjacent_in=[{} for _ in range(N)] #入近傍(vが終点)
 
     #辺の追加(更新)
-    def add_edge(self,From,To,weight=1):
-        self.add_vertex(From)
-        self.add_vertex(To)
-
-        if To not in self.adjacent_out[From]:
+    def add_arc(self, source, target, weight=1):
+        if target not in self.adjacent_out[source]:
             self.edge_number+=1
 
-        self.adjacent_out[From][To]=weight
-        self.adjacent_in[To][From]=weight
+        self.adjacent_out[source][target]=weight
+        self.adjacent_in[target][source]=weight
 
     #辺を除く
-    def remove_edge(self,From,To):
-        self.add_vertex(From,To)
-
-        if To in self.adjacent_out[From]:
-            del self.adjacent_out[From][To]
-            del self.adjacent_in[To][From]
-            self.edge_number-=1
+    def remove_arc(self,From,To):
+        pass
 
     #頂点を除く
     def remove_vertex(self,*vertexes):
-        for  v in vertexes:
-            if v in self.vertex:
-                self.vertex_number-=1
-
-                for u in self.adjacent_out[v]:
-                    del self.adjacent_in[u][v]
-                    self.edge_number-=1
-                del self.adjacent_out[v]
-
-                for u in self.adjacent_in[v]:
-                    del self.adjacent_out[u][v]
-                    self.edge_number-=1
-                del self.adjacent_in[v]
+        pass
 
     #Walkの追加
     def add_walk(self,*walk):
@@ -68,17 +36,11 @@ class Weigthed_Digraph:
 
     #頂点の交換
     def __vertex_swap(self,p,q):
-        self.vertex.sort()
-
-    #グラフに頂点が存在するか否か
-    def vertex_exist(self,v):
-        return v in self.vertex
+        pass
 
     #グラフに辺が存在するか否か
-    def edge_exist(self,From,To):
-        if not(self.vertex_exist(From) and self.vertex_exist(To)):
-            return False
-        return To in self.adjacent_out[From]
+    def edge_exist(self, source, target):
+        return target in self.adjacent_out[source]
 
     #近傍
     def neighbohood(self,v):
@@ -90,27 +52,24 @@ class Weigthed_Digraph:
         Output:
         (出近傍, 入近傍)
         """
-        if not self.vertex_exist(v):
-            return (set(),set())
+
         return (set(self.adjacent_out[v].keys()),set(self.adjacent_in[v].keys()))
 
     #出次数
     def out_degree(self,v):
-        if not self.vertex_exist(v):
-            return 0
         return len(self.adjacent_out[v])
 
     #入次数
     def in_degree(self,v):
-        if not self.vertex_exist(v):
-            return 0
         return len(self.adjacent_in[v])
 
     #次数
     def degree(self,v):
-        if not self.vertex_exist(v):
-            return (0,0)
         return (self.out_degree(v),self.in_degree(v))
+
+    #相対次数
+    def relative_degree(self, v):
+        return self.out_degree(v)-self.in_degree(v)
 
     #頂点数
     def vertex_count(self):
@@ -122,85 +81,78 @@ class Weigthed_Digraph:
 
     #頂点vに到達可能な頂点
     def reachable_to(self,v):
-        if not self.vertex_exist(v):
-            return []
-
         from collections import deque
-        T={v:0 for v in self.vertex}
-        T[v]=1
+        adj_in=self.adjacent_in
+        T=[0]*self.N; T[v]=1
         Q=deque([v])
         while Q:
             x=Q.popleft()
-            for y in self.adjacent_in[x]:
+            for y in adj_in[x]:
                 if not T[y]:
                     T[y]=1
                     Q.append(y)
-        return [x for x in self.vertex if T[x]]
+        return [x for x in range(self.N) if T[x]]
 
     #頂点vから到達可能な頂点
     def reachable_from(self,v):
-        if not self.vertex_exist(v):
-            return []
-
         from collections import deque
-        T={v:0 for v in self.vertex}
-        T[v]=1
+        adj_out=self.adjacent_out
+        T=[0]*self.N; T[v]=1
         Q=deque([v])
         while Q:
             x=Q.popleft()
-            for y in self.adjacent_out[x]:
-                if not T[y]:
+            for y in adj_out[x]:
+                if T[y]==0:
                     T[y]=1
                     Q.append(y)
-        return [x for x in self.vertex if T[x]]
+        return [x for x in range(self.N) if T[x]]
 
     #深いコピー
     def deepcopy(self):
         from copy import deepcopy
-        D=Weigthed_Digraph()
-        D.vertex=deepcopy(self.vertex)
+        D=Weigthed_Digraph(self.N)
         D.edge_number=self.edge_number
-        D.vertex_number=len(self.vertex)
         D.adjacent_out=deepcopy(self.adjacent_out)
         D.adjacent_in=deepcopy(self.adjacent_in)
         return D
 #================================================
 #Dijkstra
-def Dijkstra(D,From,To,with_path=False):
-    """Dijksta法を用いて,FromからToまでの距離を求める.
+def Dijkstra(D, start , goal, with_path=False):
+    """ Dijksta 法を用いて, start から goal までの距離を求める.
 
-    D:辺の重みが全て非負の有向グラフ
-    From:始点
-    To:終点
-    with_path:最短路も含めて出力するか?
+    D: "辺の重みが全て非負" の有向グラフ
+    start: 始点, goal: 終点
+    with_path: 最短路も含めて出力するか?
 
     (出力の結果)
-    with_path=True->(距離,最短経路の辿る際の前の頂点)
-    with_path=False->距離
+    with_path=True → (距離, 最短経路)
+    with_path=False → 距離
     """
+
     from heapq import heappush,heappop
 
     inf=float("inf")
-    T={v:inf for v in D.vertex}
-    T[From]=0
+    T=[inf]*D.N; T[start]=0
 
     if with_path:
-        Prev={v:None for v in D.vertex}
+        prev=[None]*D.N
+        prev[start]=start
 
-    Q=[(0,From)]
+    Q=[(0, start)]
 
-    Flag=False
+    adj_out=D.adjacent_out
+    flag=0
     while Q:
         c,u=heappop(Q)
 
-        if u==To:
-            Flag=True
+        if u==goal:
+            flag=1
             break
 
         if T[u]<c:
             continue
 
-        E=D.adjacent_out[u]
+        E=adj_out[u]
         for v in E:
             p=T[u]+E[v]
             if T[v]>p:
@@ -208,175 +160,187 @@ def Dijkstra(D,From,To,with_path=False):
                 heappush(Q,(p,v))
 
                 if with_path:
-                    Prev[v]=u
+                    prev[v]=u
 
-    if not Flag:
+    if not flag:
         if with_path:
-            return (inf,None)
+            return (inf,[])
         else:
             return inf
 
     if with_path:
-        path=[To]
-        u=To
-        while (Prev[u]!=None):
-            u=Prev[u]
+        path=[goal]
+        u=goal
+        while u!=start:
+            u=prev[u]
             path.append(u)
-        return (T[To],path[::-1])
+        return (T[goal],path[::-1])
     else:
-        return T[To]
+        return T[goal]
 
-def Dijkstra_All(D,From,with_path=False):
-    """Dijksta法を用いて,単一始点Fromからの距離を求める.
+def Dijkstra_All(D, start, with_path=False):
+    """ Dijksta 法を用いて, 単一始点 start からの距離を求める.
 
-    D:辺の重みが全て非負の有向グラフ
-    From:始点
-    To:終点
-    with_path:最短路も含めて出力するか?
+    D: 辺の重みが全て非負の有向グラフ
+    start: 始点, to: 終点
+    with_path: 最短路も含めて出力するか?
 
     (出力の結果)
-    with_path=True->(距離,最短経路の辿る際の前の頂点)
-    with_path=False->距離
+    with_path=True → (距離, 最短経路の辿る際の前の頂点)
+    with_path=False → 距離
     """	
     from heapq import heappush,heappop
 
     inf=float("inf")
-    T={v:inf for v in D.vertex}
-    C={v:0 for v in D.vertex}
-    T[From]=0
-    remain=len(D.vertex)
+    T=[inf]*D.N; T[start]=0
 
     if with_path:
-        Prev={v:None for v in D.vertex}
+        prev=[None]*D.N
+        prev[start]=start
 
-    Q=[(0,From)]
-
+    adj_out=D.adjacent_out
+    Q=[(0, start)]
     while Q:
         c,u=heappop(Q)
-        if c>T[u]:
+        if T[u]<c:
             continue
 
-        E=D.adjacent_out[u]
+        E=adj_out[u]
         for v in E:
             if T[v]>c+E[v]:
                 T[v]=c+E[v]
                 heappush(Q,(T[v],v))
 
                 if with_path:
-                    Prev[v]=u
+                    prev[v]=u
 
     if with_path:
-        return (T,Prev)
+        return (T,prev)
     else:
         return  T
 
 #Bellman_Ford
-def Bellman_Ford(D,From,To):
-    """Bellman_Ford法を用いて, FromからToまでの距離を求める. (負閉路が存在する場合, 返り値は-inf)
+def Bellman_Ford(D, start, goal):
+    """ Bellman_Ford 法を用いて, start から goal までの距離を求める (返り値が -inf になる場合がある).
 
     D:有向グラフ
+    start: 始点, goal: 終点
     """
 
     inf=float("inf")
-    T={v:inf for v in D.vertex}
-    T[From]=0
+    T=[inf]*D.N; T[start]=0
 
-    N=len(D.vertex)
-
+    adj_out=D.adjacent_out
     E=[]
-    for u in D.vertex:
-        F=D.adjacent_out[u]
-        for v in D.vertex:
-            if v in F:
-                E.append((u,v,F[v]))
+    for u in range(D.N):
+        F=adj_out[u]
+        for v,cost in F.items():
+            E.append((u,v,cost))
 
-    for k in range(N):
+    for k in range(D.N):
         update=0
         for u,v,c in E:
             if T[v]>T[u]+c:
                 T[v]=T[u]+c
                 update=1
-        if not update:
-            return T[To]
+        if update==0:
+            return T[goal]
 
-    for _ in range(N):
+    for _ in range(D.N):
         update=0
         for u,v,c in E:
             if T[v]>T[u]+c:
                 T[v]=-inf
                 update=1
-        if not update:
+        if update==0:
             break
-    return T[To]
+    return T[goal]
 
-#Bellman_Ford
-def Bellman_Ford_All(D,From):
-    """Bellman_Ford法を用いて, 単一始点Fromからの距離を求める. (負閉路が存在する場合, 返り値は-inf)
+def Bellman_Ford_All(D, start):
+    """ Bellman_Ford 法を用いて, 単一始点 start からの距離を求める (返り値が -inf になる場合がある).
 
-    D:有向グラフ
+    D: 有向グラフ
+    start: 始点
     """
 
     inf=float("inf")
-    T={v:inf for v in D.vertex}
-    T[From]=0
+    T=[inf]*D.N; T[start]=0
 
-    N=len(D.vertex)
-
+    adj_out=D.adjacent_out
     E=[]
-    for u in D.vertex:
-        F=D.adjacent_out[u]
-        for v in D.vertex:
-            if v in F:
-                E.append((u,v,F[v]))
+    for u in range(D.N):
+        F=adj_out[u]
+        for v,cost in F.items():
+            E.append((u,v,cost))
 
-    for k in range(N):
+    for k in range(D.N):
         update=0
         for u,v,c in E:
             if T[v]>T[u]+c:
                 T[v]=T[u]+c
                 update=1
-        if not update:
+        if update==0:
             return T
 
-    for _ in range(N):
+    for _ in range(D.N):
         update=0
         for u,v,c in E:
             if T[v]>T[u]+c:
                 T[v]=-inf
                 update=1
-        if not update:
+        if update==0:
             break
     return T
 
 #Warshall–Floyd
 def Warshall_Floyd(D):
-    """Warshall–Floyd法を用いて,全点間距離を求める.
+    """ Warshall–Floyd 法を用いて, 全点間距離を求める.
 
-    D:負Cycleを含まない有向グラフ
+    D: 重み付き有向グラフ
     """
 
-    inf=float("inf")
-    T={v:{} for v in D.vertex} #T[u][v]:uからvへ
-    for u in D.vertex:
-        E=D.adjacent_out[u]
-        for v in D.vertex:
-            if v==u:
-                T[u][v]=0
-            elif v in E:
-                T[u][v]=E[v]
-            else:
-                T[u][v]=inf
+    def three_loop():
+        for u in range(N):
+            Tu=T[u]
+            for v in range(N):
+                Tv=T[v]
+                for w in range(N):
+                    Tv[w]=min(Tv[w],Tv[u]+Tu[w])
 
-    for u in D.vertex:
-        for v in D.vertex:
-            for w in D.vertex:
-                T[v][w]=min(T[v][w],T[v][u]+T[u][w])
-    return T
+    inf=float("inf"); N=D.N
+
+    T=[[0]*N for _ in range(N)]
+    adj_out=D.adjacent_out
+    for u in range(N):
+        Tu=T[u]
+        E=adj_out[u]
+        for v in range(N):
+            if v==u:
+                Tu[v]=0
+            elif v in E:
+                Tu[v]=E[v]
+            else:
+                Tu[v]=inf
+
+    three_loop()
+
+    flag=1
+    for v in range(N):
+        if T[v][v]<0:
+            T[v][v]=-inf
+            flag=0
+
+    if flag==1:
+        return T
+    else:
+        three_loop()
+        return T
 
 #巡回セールスマン問題を解く.
 def Traveling_Salesman_Problem(D):
-    N=len(D.vertex)
-    I=list(D.vertex)
+    """ 巡回セールスマン問題を解く. """
+
+    N=D.N
 
     inf=float("inf")
     T=[[inf]*N for _ in range(1<<N)]
@@ -389,11 +353,11 @@ def Traveling_Salesman_Problem(D):
                 continue
 
             E=T[S|1<<v]
-            Dist=D.adjacent_out[I[v]]
+            cost=D.adjacent_out[v]
 
             for w in range(N):
-                if v!=w and E[v]>F[w]+Dist[I[w]]:
-                    E[v]=F[w]+Dist[I[w]]
+                if v!=w and E[v]>F[w]+cost[w]:
+                    E[v]=F[w]+cost[w]
     return T[-1][0]
 
 #FromからToへの(長さが丁度L or L以下の)Walkが存在するか否か
@@ -433,25 +397,30 @@ def Is_Connected(G):
 def Topological_Sort(D):
     from collections import deque
 
-    X={v:D.in_degree(v) for v in D.vertex}
-    Q=deque([v for v in D.vertex if X[v]==0])
+    X=[D.in_degree(x) for x in range(D.N)]
+    Q=deque([v for v in range(D.N) if X[v]==0])
 
+    adj_out=D.adjacent_out
     S=[]
     while Q:
         u=Q.pop()
         S.append(u)
-        for v in D.adjacent_out[u]:
+        for v in adj_out[u]:
             X[v]-=1
             if X[v]==0:
                 Q.append(v)
-    return S
+
+    if len(S)==D.N:
+        return S
+    else:
+        return None
 
 #DAG?
 def Is_Directed_Acyclic_Graph(D):
     from collections import deque
 
-    X={v:D.in_degree(v) for v in D.vertex}
-    Q=deque([v for v in D.vertex if X[v]==0])
+    X=[D.in_degree(x) for x in range(D.N)]
+    Q=deque([v for v in range(D.N) if X[v]==0])
 
     S=0
     while Q:
@@ -462,14 +431,13 @@ def Is_Directed_Acyclic_Graph(D):
             if X[v]==0:
                 Q.append(v)
 
-    return S==len(D.vertex)
+    return S==D.N
 
 #Cycleを縮約
 def Cycle_Reduction(D):
     B,C=Strongly_Connected_Component_Decomposition(D,2)
 
     R=[K[0] for K in B]
-
     E=Weigthed_Digraph(R)
     for a in D.vertex:
         for b in D.adjacent_out[a]:
@@ -679,21 +647,6 @@ def Complete_Kary_Tree(n,k=2):
 #---------------------------------------
 #フロー
 #---------------------------------------
-
-E=Weigthed_Digraph(["s","a","b","c","d","e"])
-E.add_edge("s","a",7)
-E.add_edge("s","b",5)
-E.add_edge("a","b",4)
-E.add_edge("a","c",6)
-E.add_edge("b","d",1)
-E.add_edge("b","e",2)
-E.add_edge("c","d",5)
-E.add_edge("c","t",8)
-E.add_edge("d","t",4)
-E.add_edge("e","a",3)
-E.add_edge("e","c",3)
-E.add_edge("e","d",4)
-
 def Flow_by_Ford_Fulkerson(D,source,sink,Mode=False):
     """Source sからSink tへの最大流問題をFord_Fulkerson法で解く.
 

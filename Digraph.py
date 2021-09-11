@@ -4,86 +4,42 @@ class Digraph:
     """
 
     #入力定義
-    def __init__(self,vertex=[]):
-        self.vertex=set(vertex)
+    def __init__(self, N):
+        """ N 頂点の空グラフを生成する. """
 
-        self.edge_number=0
-        self.vertex_number=len(vertex)
-
-        self.adjacent_out={v:set() for v in vertex} #出近傍(vが始点)
-        self.adjacent_in={v:set() for v in vertex} #入近傍(vが終点)
-
-    #頂点の追加
-    def add_vertex(self,*adder):
-        for v in adder:
-            if not self.vertex_exist(v):
-                self.adjacent_in[v]=set()
-                self.adjacent_out[v]=set()
-
-                self.vertex.add(v)
-                self.vertex_number+=1
+        self.N=N
+        self.arc_number=0
+        self.adjacent_out=[set() for v in range(N)]#出近傍(vが始点)
+        self.adjacent_in=[set() for v in range(N)] #入近傍(vが終点)
 
     #辺の追加
-    def add_edge(self,From,To):
-        self.add_vertex(From)
-        self.add_vertex(To)
-
-        if To not in self.adjacent_out[From]:
-            self.adjacent_out[From].add(To)
-            self.adjacent_in[To].add(From)
-            self.edge_number+=1
+    def add_arc(self, source, target):
+        if target not in self.adjacent_out[source]:
+            self.adjacent_out[source].add(target)
+            self.adjacent_in[target].add(source)
+            self.arc_number+=1
 
     #辺を除く
-    def remove_edge(self,From,To):
-        self.add_vertex(From)
-        self.add_vertex(To)
-
-        if To in self.adjacent_out[From]:
-            self.adjacent_out[From].discard(To)
-            self.adjacent_in[To].discard(From)
-            self.edge_number-=1
-
-    #頂点を除く
-    def remove_vertex(self,*vertexes):
-        for  v in vertexes:
-            if v in self.vertex:
-                self.vertex_number-=1
-
-                for u in self.adjacent_out[v]:
-                    self.adjacent_in[u].discard(v)
-                    self.edge_number-=1
-                del self.adjacent_out[v]
-
-                for u in self.adjacent_in[v]:
-                    self.adjacent_out[u].discard(v)
-                    self.edge_number-=1
-                del self.adjacent_in[v]
-                self.vertex.discard(v)
+    def remove_arc(self, source, target):
+        if target in self.adjacent_out[source]:
+            self.adjacent_out[source].discard(target)
+            self.adjacent_in[target].discard(source)
+            self.arc_number-=1
 
     #Walkの追加
     def add_walk(self,*walk):
         N=len(walk)
         for k in range(N-1):
-            self.add_edge(walk[k],walk[k+1])
+            self.add_arc(walk[k],walk[k+1])
 
     #Cycleの追加
     def add_cycle(self,*cycle):
         self.add_walk(*cycle)
-        self.add_edge(cycle[-1],cycle[0])
-
-    #頂点の交換
-    def __vertex_swap(self,p,q):
-        self.vertex.sort()
-
-    #グラフに頂点が存在するか否か
-    def vertex_exist(self,v):
-        return v in self.vertex
+        self.add_arc(cycle[-1],cycle[0])
 
     #グラフに辺が存在するか否か
-    def edge_exist(self,From,To):
-        if self.vertex_exist(From) and self.vertex_exist(To):
-            return False
-        return To in self.adjacent_out[From]
+    def arc_exist(self, source, target):
+        return target in self.adjacent_out[source]
 
     #近傍
     def neighbohood(self,v):
@@ -95,39 +51,34 @@ class Digraph:
         Output:
         (出近傍, 入近傍)
         """
-        if not self.vertex_exist(v):
-            return (set(),set())
         return (self.adjacent_out[v],self.adjacent_in[v])
 
     #出次数
     def out_degree(self,v):
-        if not self.vertex_exist(v):
-            return 0
         return len(self.adjacent_out[v])
 
     #入次数
     def in_degree(self,v):
-        if not self.vertex_exist(v):
-            return 0
         return len(self.adjacent_in[v])
 
     #次数
     def degree(self,v):
         return (self.out_degree(v),self.in_degree(v))
 
+    #相対次数
+    def relative_degree(self,v):
+        return self.out_degree(v)-self.in_degree(v)
+
     #頂点数
     def vertex_count(self):
         return self.vertex_number
 
     #辺数
-    def edge_count(self):
-        return self.edge_number
+    def arc_count(self):
+        return self.arc_number
 
     #頂点vに到達可能な頂点
     def reachable_to(self,v):
-        if not self.vertex_exist(v):
-            return []
-
         from collections import deque
         T={v:0 for v in self.vertex}
         T[v]=1
@@ -142,9 +93,6 @@ class Digraph:
 
     #頂点vから到達可能な頂点
     def reachable_from(self,v):
-        if not self.vertex_exist(v):
-            return []
-
         from collections import deque
         T={v:0 for v in self.vertex}
         T[v]=1
@@ -157,117 +105,116 @@ class Digraph:
                     Q.append(y)
         return [x for x in self.vertex if T[x]]
 
+    #頂点 u,v の距離を求める.
+    def distance(self,u,v):
+        if u==v:
+            return 0
+
+        from collections import deque
+        inf=float("inf")
+        adj_out=self.adjacent_out
+        T=[inf]*self.N; T[u]=0
+
+        Q=deque([u])
+        while Q:
+            w=Q.popleft()
+            for x in adj_out[w]:
+                if T[x]==inf:
+                    T[x]=T[w]+1
+                    Q.append(x)
+                    if x==v:
+                        return T[x]
+        return inf
+
+    #ある1点からの距離
+    def distance_all(self,u):
+        """ 頂点 u からの距離を求める."""
+
+        from collections import deque
+        inf=float("inf")
+        adj_out=self.adjacent_out
+        T=[inf]*self.N; T[u]=0
+
+        Q=deque([u])
+        while Q:
+            w=Q.popleft()
+            for x in adj_out[w]:
+                if T[x]==inf:
+                    T[x]=T[w]+1
+                    Q.append(x)
+        return T
+
+    def shortest_path(self,u,v, dist=False):
+        """ u から v への最短路を求める (存在しない場合は None).
+
+        dist: False → shortest_path のみ, True → (dist, shortest_path)"""
+
+        if u==v:
+            if dist:
+                return (0,[u])
+            else:
+                return [u]
+
+        from collections import deque
+        inf=float("inf")
+
+        adj_in=self.adjacent_in
+        T=[-1]*self.N
+
+        Q=deque([v]); T[v]=v
+        while Q:
+            w=Q.popleft()
+            for x in adj_in[w]:
+                if T[x]==-1:
+                    T[x]=w
+                    Q.append(x)
+                    if x==u:
+                        P=[u]
+                        a=u
+                        while a!=v:
+                            a=T[a]
+                            P.append(a)
+                        return (len(P)-1,P)
+        return (inf,None)
+
     #深いコピー
     def deepcopy(self):
         from copy import deepcopy
-        D=Digraph()
-        D.vertex=deepcopy(self.vertex)
-        D.edge_number=self.edge_number
-        D.vertex_number=len(self.vertex)
+        D=Digraph(self.N)
+        D.arc_number=self.arc_number
         D.adjacent_out=deepcopy(self.adjacent_out)
         D.adjacent_in=deepcopy(self.adjacent_in)
         return D
 
-D=Digraph()
-D.add_edge(1,3)
-D.add_edge(2,3)
-D.add_edge(3,4)
-D.add_edge(3,5)
-D.add_edge(4,6)
-D.add_edge(6,1)
 #================================================
 #Dijkstra
-def Dijkstra(D,From,To,with_path=False):
-    """Dijksta法を用いて,FromからToまでの距離を求める.
+def One_Point_Distance(D, From, with_path=False):
+    """ 単一始点 From からの距離を求める.
 
-    D:辺の重みが全て非負の有向グラフ
+    D: 辺の重みが全て非負の有向グラフ
     From:始点
-    To:終点
     with_path:最短路も含めて出力するか?
 
     (出力の結果)
-    with_path=True->(距離,最短経路の辿る際の前の頂点)
-    with_path=False->距離
+    with_path=True → (距離, 最短経路の辿る際の前の頂点)
+    with_path=False → 距離
     """
-    from copy import copy
-    from heapq import heappush,heappop
 
-    T={v:float("inf") for v in D.vertex}
-    T[From]=0
+    N=D.N; inf=float("inf"); adj_out=D.adjacent_out
+    T=[inf]*N; T[From]=0
 
     if with_path:
-        Prev={v:None for v in D.vertex}
+        Prev=[None]*N
 
-    Q=[(0,From)]
-
-    Flag=False
+    from collections import deque
+    Q=deque([From])
     while Q:
-        c,u=heappop(Q)
-
-        if u==To:
-            Flag=True
-            break
-
-        if T[u]<c:
-            continue
+        u=Q.popleft()
 
         for v in D.adjacent_out[u]:
-            if T[v]>T[u]+1:
+            if T[v]==inf:
                 T[v]=T[u]+1
-                heappush(Q,(T[v],v))
-
-                if with_path:
-                    Prev[v]=u
-
-    if not Flag:
-        if with_path:
-            return (float("inf"),None)
-        else:
-            return float("inf")
-
-    if with_path:
-        path=[To]
-        u=To
-        while (Prev[u]!=None):
-            u=Prev[u]
-            path.append(u)
-        return (T[To],path[::-1])
-    else:
-        return T[To]
-
-def Dijkstra_All(D,From,with_path=False):
-    """Dijksta法を用いて,単一始点Fromからの距離を求める.
-
-    D:辺の重みが全て非負の有向グラフ
-    From:始点
-    To:終点
-    with_path:最短路も含めて出力するか?
-
-    (出力の結果)
-    with_path=True->(距離,最短経路の辿る際の前の頂点)
-    with_path=False->距離
-    """
-    from copy import copy
-    from heapq import heappush,heappop
-
-    T={v:float("inf") for v in D.vertex}
-    T[From]=0
-
-    if with_path:
-        Prev={v:None for v in D.vertex}
-
-    Q=[(0,From)]
-
-    while Q:
-        c,u=heappop(Q)
-
-        if T[u]<c:
-            continue
-
-        for v in D.adjacent_out[u]:
-            if T[v]>T[u]+1:
-                T[v]=T[u]+1
-                heappush(Q,(T[v],v))
+                Q.append(v)
 
                 if with_path:
                     Prev[v]=u
@@ -281,22 +228,27 @@ def Dijkstra_All(D,From,with_path=False):
 def Warshall_Floyd(D):
     """Warshall–Floyd法を用いて,全点間距離を求める.
 
-    D:負Cycleを含まない有向グラフ
+    D: 有向グラフ
     """
-    T={v:{} for v in D.vertex} #T[u][v]:uからvへ
-    for u in D.vertex:
-        for v in D.vertex:
+    N=D.N; inf=float("inf"); adj_out=D.adjacent_out
+    T=[[0]*N for _ in range(N)]
+
+    for u in range(N):
+        for v in range(N):
+            Tu=T[u]
             if v==u:
                 T[u][v]=0
-            elif v in D.adjacent_out[u]:
+            elif v in adj_out[u]:
                 T[u][v]=1
             else:
                 T[u][v]=float("inf")
 
-    for u in D.vertex:
-        for v in D.vertex:
-            for w in D.vertex:
-                T[v][w]=min(T[v][w],T[v][u]+T[u][w])
+    for u in range(N):
+        Tu=T[u]
+        for v in range(N):
+            Tv=T[v]
+            for w in range(N):
+                Tv[w]=min(Tv[w],Tv[u]+Tu[w])
 
     return T
 
@@ -330,25 +282,31 @@ def Is_Connected(G):
 def Topological_Sort(D):
     from collections import deque
 
-    X={v:D.in_degree(v) for v in D.vertex}
-    Q=deque([v for v in D.vertex if X[v]==0])
+    X=[D.in_degree(x) for x in range(D.N)]
+    Q=deque([v for v in range(D.N) if X[v]==0])
 
+    adj_out=D.adjacent_out
     S=[]
     while Q:
         u=Q.pop()
         S.append(u)
-        for v in D.adjacent_out[u]:
+        for v in adj_out[u]:
             X[v]-=1
             if X[v]==0:
                 Q.append(v)
-    return S
+
+    if len(S)==D.N:
+        return S
+    else:
+        return None
 
 #DAG?
 def Is_Directed_Acyclic_Graph(D):
     from collections import deque
 
-    X={v:D.in_degree(v) for v in D.vertex}
-    Q=deque([v for v in D.vertex if X[v]==0])
+    X=[D.in_degree(x) for x in range(D.N)]
+    Q=deque([v for v in range(D.N) if X[v]==0])
+
     S=0
     while Q:
         u=Q.pop()
@@ -357,7 +315,8 @@ def Is_Directed_Acyclic_Graph(D):
             X[v]-=1
             if X[v]==0:
                 Q.append(v)
-    return S==len(D.vertex)
+
+    return S==D.N
 
 #Cycleを縮約
 def Cycle_Reduction(D):
@@ -368,7 +327,7 @@ def Cycle_Reduction(D):
     for a in D.vertex:
         for b in D.adjacent_out[a]:
             if C[a]!=C[b]:
-                E.add_edge(R[C[a]],R[C[b]])
+                E.add_arc(R[C[a]],R[C[b]])
     return E
 
 #強連結成分に分解
@@ -382,19 +341,25 @@ def Strongly_Connected_Component_Decomposition(D,Mode=0):
 
     ※0で帰ってくるリストは各強連結成分に関してトポロジカルソートである.
     """
-    Group={v:0 for v in D.adjacent_out}
-    Order=[]
 
-    for v in D.adjacent_out:
-        if Group[v]:continue
+    N=D.N
+    Group=[0]*N
+    Order=[]
+    adj_out=D.adjacent_out; adj_in=D.adjacent_in
+
+    for v in range(N):
+        if Group[v]==-1:
+            continue
 
         S=[v]
         Group[v]=-1
 
         while S:
             u=S.pop()
-            for w in D.adjacent_out[u]:
-                if Group[w]:continue
+            for w in adj_out[u]:
+                if Group[w]:
+                    continue
+
                 Group[w]=-1
                 S.append(u)
                 S.append(w)
@@ -412,7 +377,7 @@ def Strongly_Connected_Component_Decomposition(D,Mode=0):
 
         while S:
             u=S.pop()
-            for w in D.adjacent_in[u]:
+            for w in adj_in[u]:
                 if Group[w]!=-1:
                     continue
 
@@ -422,7 +387,7 @@ def Strongly_Connected_Component_Decomposition(D,Mode=0):
 
     if Mode==0 or Mode==2:
         T=[[] for _ in range(k)]
-        for v in D.adjacent_out:
+        for v in range(N):
             T[Group[v]].append(v)
 
     if Mode==0:
@@ -447,18 +412,24 @@ def Strongly_Connected_Component_Number(D):
 
 #誘導グラフ
 def Induced_Subgraph(D,S):
-    """D の頂点の部分集合 S から誘導される部分グラフ D[S] を出力する.
+    """ 以下を満たすようなグラフ D' を生成する.
+    V(D')=V(D), st in A(D') iff st in A(D), s,t in S
 
     D: 有向グラフ
     S: 頂点集合
     """
     S=set(S)
-    E=D.deepcopy()
+    E=Digraph(D.N); adj_out=D.adjacent_out
 
-    R=[x for x in D.vertex if x not in S]
-    for x in R:
-        E.remove_vertex(x)
+    for s in range(D.N):
+        if s not in S:
+            continue
+
+        for t in adj_out[s]:
+            if t in S:
+                E.add_arc(s,t)
     return E
+            
 
 #Cycleが存在する?
 def Is_Exist_Cycle(D):
@@ -468,30 +439,31 @@ def Is_Exist_Cycle(D):
 #参考元:https://judge.yosupo.jp/submission/23992
 def Find_Cycle(D):
     from collections import deque
-    in_deg={v:len(D.adjacent_in[v]) for v in D.vertex}
-    Q=deque([v for v in D.vertex if in_deg[v]==0])
+    in_deg=[D.in_degree(v) for v in range(D.N)]
+    adj_out=D.adjacent_out
+    Q=deque([v for v in range(D.N) if in_deg[v]==0])
 
     while Q:
         v=Q.popleft()
-        for w in D.adjacent_out[v]:
+        for w in adj_out[v]:
             in_deg[w]-=1
             if in_deg[w]==0:
                 Q.append(w)
 
-    for v in D.vertex:
+    for v in range(D.N):
         P=[]
         if in_deg[v]==0:
             continue
 
         Q=deque([v])
-        prev={x:None for x in D.vertex}
+        prev=[-1]*D.N
         while Q:
             x=Q.popleft()
-            for y in D.adjacent_out[x]:
+            for y in adj_out[x]:
                 if y==v:
                     prev[v]=x
                     break
-                if prev[y] is not None:
+                if prev[y]!=-1:
                     continue
 
                 prev[y]=x
@@ -521,20 +493,71 @@ def Bipartite_Separate(G):
     pass
 
 #オイラーグラフ?
-def Is_Eulerian_Graph(G):
+def Is_Eulerian_Graph(D):
     pass
 
-#純オイラーグラフ?
-def Is_Semi_Eulerian_Graph(G):
+#準オイラーグラフ?
+def Is_Semi_Eulerian_Graph(D):
     pass
 
 #Euler道を見つける
-def Find_Eulerian_Trail(G):
-    pass
+def Find_Eulerian_Trail(D):
+    s=-1
+    for v in range(D.N):
+        k=D.relative_degree(v)
+        if abs(k)>=2:
+            return None
+        elif k==1:
+            if s>=0:
+                return None
+            s=v
+    if s==-1:
+        return None
+
+    from copy import deepcopy
+    A=deepcopy(D.adjacent_out)
+
+    def dfs(w):
+        X=[w]
+        while A[w]:
+            u=A[w].pop()
+            A[u].discard(w)
+            X.append(u)
+            w=u
+        return X
+
+    P=sum([dfs(v) for v in dfs(s)],[])
+
+    return P
+    if len(P)-1==D.arc_count():
+        return P
+    else:
+        return None
 
 #Euler閉路を見つける
-def Find_Eulerian_Cycle(G):
-    pass
+def Find_Eulerian_Cycle(D):
+    for v in range(D.N):
+        if D.relative_degree(v)!=0:
+            return None
+
+    from copy import deepcopy
+    A=deepcopy(D.adjacent_out)
+
+    def dfs(w):
+        X=[w]
+        while A[w]:
+            u=A[w].pop()
+            A[u].discard(w)
+            X.append(u)
+            w=u
+        return X
+
+    P=sum([dfs(v) for v in dfs(0)],[])
+
+    if len(P)-1==D.arc_count():
+        return P
+    else:
+        return None
 
 #ハミルトングラフ?
 def Is_Hamiltonian_Graph(G):
@@ -543,6 +566,7 @@ def Is_Hamiltonian_Graph(G):
 #ハミルトンを探す.
 def Find_Hamiltonian_Graph(G):
     pass
+
 #-------------------------------------------------
 #特別なグラフ
 #-------------------------------------------------
@@ -555,12 +579,15 @@ def Complete_Bipartite_Graph(m,n):
     pass
 
 #グラフ作成
-def Making_Graph(V,E):
-    pass
+def Making_Graph(N, A):
+    D=Digraph(N)
+    for a in A:
+        D.add_arc(*a)
+    return D
 
 #空グラフの作成
-def Empty_Graph(n):
-    pass
+def Empty_Graph(N):
+    return Digraph(N)
 
 #ペテルセングラフ
 def Petersen_Graph(n=5,k=2):
@@ -571,12 +598,23 @@ def Grid_Graph(m,n):
     pass
 
 #Pathグラフ
-def Path_Graph(n):
-    pass
+def Path_Graph(N):
+    """ N 頂点の有向サイクルを生成する. """
+
+    P=Digraph(N)
+    for i in range(N-1):
+        P.add_arc(i,i+1)
+    return P
 
 #Cycleグラフ
-def Cycle_Graph(n):
-    pass
+def Directed_Cycle_Graph(N):
+    """ N 頂点の有向サイクルを生成する. """
+
+    C=Digraph(N)
+    for i in range(N-1):
+        C.add_arc(i,i+1)
+    C.add_arc(N-1,0)
+    return C
 
 #Starグラフ
 def Star_Graph(n):
@@ -597,52 +635,58 @@ def Complete_Kary_Tree(n,k=2):
 #---------------------------------------
 #グラフの捜査
 #---------------------------------------
-def Depth_First_Search(G,prefunc=None,postfunc=None):
+def Depth_First_Search(D, start=0, prefunc=None, postfunc=None):
     """深さ優先探索を行う.
 
-    G:グラフ
-    prefunc:頂点をStackに入れる時,その頂点vに対して実行する関数,命令.
-    postfunc:頂点をStackから出す時,その頂点vに対して実行する関数,命令.
+    D: 有向グラフ
+    prefunc: 頂点をStackに入れる時,その頂点vに対して実行する関数,命令.
+    postfunc: 頂点をStackから出す時,その頂点vに対して実行する関数,命令.
     """
     from collections import deque
-    T={v:False for v in G.vertex}
-    v=G.vertex[0]
+    T=[0]*D.N; T[start]=1
+    adj_out=D.adjacent_out
 
-    S=deque([v])
-    T[v]=True
+    S=deque([start])
+
+    if prefunc:
+        prefunc(start)
+
     while S:
         v=S.pop()
         if postfunc:
             postfunc(v)
 
-        for u in G.adjacent[v]:
-            if not T[u]:
-                T[u]=True
+        for u in adj_out[v]:
+            if T[u]==0:
+                T[u]=1
                 S.append(u)
                 if prefunc:
                     prefunc(u)
 
-def Breath_First_Search(G,prefunc=None,postfunc=None):
-    """幅優先探索を行う.
+def Breath_First_Search(D, start=0, prefunc=None, postfunc=None):
+    """ 幅優先探索を行う.
 
-    G:グラフ
-    prefunc:頂点をQueueに入れる時,その頂点vに対して実行する関数,命令.
-    postfunc:頂点をQueueから出す時,その頂点vに対して実行する関数,命令.
+    D: 有向グラフ
+    prefunc: 頂点をStackに入れる時,その頂点vに対して実行する関数,命令.
+    postfunc: 頂点をStackから出す時,その頂点vに対して実行する関数,命令.
     """
     from collections import deque
-    T={v:False for v in G.vertex}
-    v=G.vertex[0]
+    T=[0]*D.N; T[start]=1
+    adj_out=D.adjacent_out
 
-    Q=deque([v])
-    T[v]=True
+    Q=deque([start])
+
+    if prefunc:
+        prefunc(start)
+
     while Q:
         v=Q.popleft()
         if postfunc:
             postfunc(v)
 
-        for u in G.adjacent[v]:
-            if not T[u]:
-                T[u]=True
+        for u in adj_out[v]:
+            if T[u]==0:
+                T[u]=1
                 Q.append(u)
                 if prefunc:
                     prefunc(u)
