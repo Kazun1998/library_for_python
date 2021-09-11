@@ -13,7 +13,10 @@ def Increase_Decrease_Permutation(N,T,Mod):
     DP=[1]*N
 
     for i in range(1,N):
-        Cum=list(accumulate(DP,lambda x,y:(x+y)%Mod))
+        if Mod!=None:
+            Cum=list(accumulate(DP,lambda x,y:(x+y)%Mod))
+        else:
+            Cum=list(accumulate(DP))
 
         if T[i-1]==1:
             for m in range(N-i):
