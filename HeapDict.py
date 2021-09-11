@@ -21,7 +21,10 @@ class Heap_Dict:
     def __len__(self):
         return self.__length
 
-    def insert(self,x):
+    def __contains__(self, x):
+        return self.is_exist(x)
+
+    def insert(self, x):
         """ 要素 x を追加する. """
 
         if self.Mode and not self.is_exist(x):
@@ -36,7 +39,7 @@ class Heap_Dict:
 
         self.__length+=1
 
-    def erase(self,x):
+    def erase(self, x):
         """ x を消す. """
 
         assert (x in self.dict) and (self.dict[x])
@@ -51,7 +54,7 @@ class Heap_Dict:
             else:
                 break
 
-    def is_exist(self,x):
+    def is_exist(self, x):
         """ キューに x が存在するかどうかを判定する. """
 
         return (x in self.dict) and (self.dict[x])
@@ -69,6 +72,18 @@ class Heap_Dict:
         else:
             return float("inf")
 
+    def pop_min(self):
+        """ キューにある最小値を取り出す.
+        ※ Mode=True でないと使えない.
+
+        """
+
+        assert self.Mode
+
+        x=self.get_min()
+        self.erase(x)
+        return x
+         
     def get_max(self):
         """ キューにある最大値を返す.
         ※ Mode=False でないと使えない.
@@ -82,7 +97,19 @@ class Heap_Dict:
         else:
             return -float("inf")
 
-    def count(self,x):
+    def pop_max(self):
+        """ キューにある最小値を取り出す.
+        ※ Mode = False でないと使えない.
+
+        """
+
+        assert not self.Mode
+
+        x=self.get_max()
+        self.erase(x)
+        return x
+
+    def count(self, x):
         """ x の個数を求める. """
 
         if x not in self.dict:
