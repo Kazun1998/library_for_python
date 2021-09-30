@@ -25,6 +25,13 @@ class Graph:
             self.adjacent[v].discard(u)
             self.edge_number-=1
 
+    def reset_vertex(self, u):
+        """ 頂点 u に接続している辺を全て消す."""
+
+        X=self.adjacent[u].copy()
+        for v in X:
+            self.remove_edge(u,v)
+
     #Walkの追加
     def add_walk(self,*walk):
         """ walk=(w[0],...,w[n-1]) に対して, n-1 本の辺 w[i]w[i+1] を加える."""
@@ -849,8 +856,8 @@ def Warshall_Floyd(G):
     T=[[0]*N for _ in range(N)]
 
     for u in range(N):
+        Tu=T[u]
         for v in range(N):
-            Tu=T[u]
             if v==u:
                 T[u][v]=0
             elif v in adj[u]:
