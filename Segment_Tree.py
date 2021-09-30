@@ -385,7 +385,7 @@ class Lazy_Evaluation_Tree():
         return self.calc(vL,vR)
 
     def all_product(self):
-        return self.product(1,self.N,1)
+        return self.product(self.index,self.index+self.N-1)
 
     #リフレッシュ
     def refresh(self):
@@ -625,7 +625,7 @@ class Lazy_Evaluation_Proportion_Tree():
             self.lazy[m]=self.id
 
 #=================================================
-#遅延評価セグメント木
+#双対セグメント木
 class Dual_Segment_Tree:
     def __init__(self,L,comp,id,index):
         """opを作用とするリストLのDual Segment Treeを作成
