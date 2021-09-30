@@ -98,7 +98,17 @@ def Intersection_between_Circle_and_Circle(C,D):
     return [C.center+x*v+y*w,C.center+x*v-y*w]
 
 #=== 接線
-def Tangent_Circle_from_Point(P,C):
+def Tangent_to_Circle_on_Point(P,C):
+    """ 円 C 上の点 P を接点とする接線を求める.
+
+    """
+
+    assert P in C
+    v=(P-C.center)*Point(0,1)
+
+    return Line(P,P+v)
+
+def Tangent_to_Circle_from_Point(P,C):
     """ 点 P から引く円 C への接線を求める."""
 
     v=C.center-P
@@ -119,18 +129,19 @@ def Common_Tangent_between_Circle_and_Circle(C,D):
 
     X=[]
 
+    K=Circle(Point(),r)
     if compare(d,abs(r-s),ep)>=0:
         a=r*(r-s)/d
         b=sqrt(max(0,r*r-a*a))
 
-        X.append(Line_from_General_Form(a ,b,-r*r))
-        X.append(Line_from_General_Form(a,-b,-r*r))
+        X.append(Tangent_to_Circle_on_Point(Point(a,b),K))
+        X.append(Tangent_to_Circle_on_Point(Point(a,-b),K))
     if compare(d,abs(r+s),ep)>=0:
         a=r*(r+s)/d
         b=sqrt(max(0,r*r-a*a))
 
-        X.append(Line_from_General_Form(a ,b,-r*r))
-        X.append(Line_from_General_Form(a,-b,-r*r))
+        X.append(Tangent_to_Circle_on_Point(Point(a,b),K))
+        X.append(Tangent_to_Circle_on_Point(Point(a,-b),K))
 
     F=Translation_and_Rotate_Affine_Determine(Point(),Point(d,0),C.center,D.center)
     return [F[l] for l in X]
