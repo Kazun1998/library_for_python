@@ -120,17 +120,21 @@ def Line_from_General_Form(a,b,c):
     return Line(Point(x,y),Point(x-b/k, y+a/k))
 
 #=== 一般形
-def General_Form_from_Line(L):
+def General_Form_from_Line(L, lattice=False):
     """ 直線 L が満たす式 ax+by+c=0 の a,b,c を求める.
     """
 
     s=L.begin.x; t=L.begin.y
     v=L.vectorize(); alpha=v.x; beta=v.y
 
-    if alpha.__class__==int and beta.__class__==int:
-        g=gcd(alpha,beta)
+    if lattice:
+        g=gcd(alpha, beta)
         alpha//=g; beta//=g
-    return (-beta,alpha,beta*s-alpha*t)
+
+    sgn=compare(-beta,0,L.ep)
+    if sgn==0:
+        sgn=compare(alpha,0,L.ep)
+    return (sgn*(-beta),sgn*alpha,sgn*(beta*s-alpha*t))
 
 #=== 交差判定
 def has_Intersection_between_Segment_and_Segment(L,M,endpoint=True):
@@ -187,6 +191,19 @@ def Intersection_between_Line_and_Line(L,M,Mode=False):
     a=L.begin; b=L.end; c=M.begin; d=M.end
     k=(c-a).det(d-c)/(b-a).det(d-c)
     return a+k*(b-a)
+
+#=== 垂直二等分線
+def Perpendicular_Bisector(S, lattice=False):
+    """ 線分 S の垂直二等分線を求める."""
+
+    u=S.vectorize()
+
+    M=S.begin+S.end
+    if lattice:
+        M.x//=2; M.y//=2
+    else:
+        M.x/=2; M.y/=2
+    return Line(M,M+u*Point(0,1))
 
 #=== 2直線の関係
 def is_Parallel(L,M):
