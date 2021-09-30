@@ -27,14 +27,19 @@ class Union_Find():
     def union(self, x, y):
         """ 要素 x,y を同一視する.
 
+        [input]
         x,y: 要素
+
+        [output]
+        元々が非連結 → True
+        元々が連結 → False
         """
         x=self.find(x)
         y=self.find(y)
 
         if x==y:
             self.edges[x]+=1
-            return
+            return False
 
         if self.rank[x]<self.rank[y]:
             x,y=y,x
@@ -47,6 +52,7 @@ class Union_Find():
 
         if self.rank[x]==self.rank[y]:
             self.rank[x]+=1
+        return True
 
     def size(self, x):
         """ 要素 x の属している族の要素の数.
@@ -78,20 +84,20 @@ class Union_Find():
         """
         return self.edges[self.find(x)]
 
-    def is_forest(self, x):
-        """ 要素 x が属する族が森かどうかを判定する.
+    def is_tree(self, x):
+        """ 要素 x が属する族が木かどうかを判定する.
 
         x: 要素
         """
         return self.size(x)==self.edges[self.find(x)]+1
 
-    def forest_count(self):
-        """ 森になっている属の個数を求める.
+    def tree_count(self):
+        """ 木になっている属の個数を求める.
         """
 
         X=0
         for g in self.roots():
-            if self.is_forest(g):
+            if self.is_tree(g):
                 X+=1
         return X
 
@@ -103,7 +109,11 @@ class Union_Find():
     def group_count(self):
         """ 族の個数
         """
-        return len(self.roots())
+
+        K=0
+        for i in range(self.n):
+            K+=1 if self.parents[i]<0 else 0
+        return K
 
     def all_group_members(self):
         """ 全ての族の出力
