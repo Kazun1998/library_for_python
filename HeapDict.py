@@ -1,9 +1,7 @@
-import heapq
-
 """参考元
 https://tsubo.hatenablog.jp/entry/2020/06/15/124657
 """
-
+import heapq
 class Heap_Dict:
     def __init__(self, Mode=True):
         """
@@ -83,7 +81,7 @@ class Heap_Dict:
         x=self.get_min()
         self.erase(x)
         return x
-         
+
     def get_max(self):
         """ キューにある最大値を返す.
         ※ Mode=False でないと使えない.
