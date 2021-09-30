@@ -143,10 +143,7 @@ def gcd(x,y):
     x,y:Gauss整数
     """
 
-    if x.norm()<y.norm():
-        x,y=y,x
-
-    while y!=0:
+    while y:
         x,y=y,x%y
 
     return x
@@ -166,7 +163,7 @@ def Extended_Euclid(x,y):
         a0,a1=a1,a0-q*a1
         b0,b1=b1,b0-q*b1
     return a0,b0,x
-    
+
 #同伴?
 def Is_Associate(x,y):
     """x,yは同伴?
@@ -174,11 +171,11 @@ def Is_Associate(x,y):
     x,y:Gauss整数
     """
     e=Gaussian_Integer(0,1)
-    
+
     a=(x==y)
     b=(x==-y)
     c=(x==y*e)
     d=(x==y*(-e))
 
     return a|b|c|d
-        
+
