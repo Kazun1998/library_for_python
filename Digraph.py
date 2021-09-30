@@ -26,6 +26,18 @@ class Digraph:
             self.adjacent_in[target].discard(source)
             self.arc_number-=1
 
+    def reset_vertex(self, u):
+        """ 頂点 u に接続している辺を全て消す."""
+
+        X=self.adjacent_out[u].copy()
+        for v in X:
+            self.remove_arc(u,v)
+
+        X=self.adjacent_in[u].copy()
+        for w in X:
+            self.remove_arc(w,u)
+
+
     #Walkの追加
     def add_walk(self,*walk):
         N=len(walk)
