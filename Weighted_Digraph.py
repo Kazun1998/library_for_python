@@ -5,7 +5,7 @@ class Weigthed_Digraph:
     #入力定義
     def __init__(self, N):
         self.N=N
-        self.edge_number=0
+        self.arc_number=0
 
         self.adjacent_out=[{} for _ in range(N)] #出近傍(vが始点)
         self.adjacent_in=[{} for _ in range(N)] #入近傍(vが終点)
@@ -13,14 +13,17 @@ class Weigthed_Digraph:
     #辺の追加(更新)
     def add_arc(self, source, target, weight=1):
         if target not in self.adjacent_out[source]:
-            self.edge_number+=1
+            self.arc_number+=1
 
         self.adjacent_out[source][target]=weight
         self.adjacent_in[target][source]=weight
 
     #辺を除く
-    def remove_arc(self,From,To):
-        pass
+    def remove_arc(self, source, target):
+        if self.arc_exist(source, target):
+            self.arc_number+=1
+            del self.adjacent_out[source][target]
+            del self.adjacent_in[target][source]
 
     #頂点を除く
     def remove_vertex(self,*vertexes):
@@ -39,7 +42,7 @@ class Weigthed_Digraph:
         pass
 
     #グラフに辺が存在するか否か
-    def edge_exist(self, source, target):
+    def arc_exist(self, source, target):
         return target in self.adjacent_out[source]
 
     #近傍
@@ -76,8 +79,8 @@ class Weigthed_Digraph:
         return len(self.vertex)
 
     #辺数
-    def edge_count(self):
-        return self.edge_number
+    def arc_count(self):
+        return self.arc_number
 
     #頂点vに到達可能な頂点
     def reachable_to(self,v):
@@ -111,7 +114,7 @@ class Weigthed_Digraph:
     def deepcopy(self):
         from copy import deepcopy
         D=Weigthed_Digraph(self.N)
-        D.edge_number=self.edge_number
+        D.arc_number=self.arc_number
         D.adjacent_out=deepcopy(self.adjacent_out)
         D.adjacent_in=deepcopy(self.adjacent_in)
         return D
@@ -188,7 +191,7 @@ def Dijkstra_All(D, start, with_path=False):
     (出力の結果)
     with_path=True → (距離, 最短経路の辿る際の前の頂点)
     with_path=False → 距離
-    """	
+    """
     from heapq import heappush,heappop
 
     inf=float("inf")
@@ -374,7 +377,7 @@ def Inverse_Graph(D):
 
     F=Weigthed_Digraph(D.vertex)
 
-    F.edge_number=D.edge_number
+    F.arc_number=D.arc_number
     F.vertex_number=D.vertex_number
 
     F.adjacent_in=deepcopy(D.adjacent_out)
@@ -442,7 +445,7 @@ def Cycle_Reduction(D):
     for a in D.vertex:
         for b in D.adjacent_out[a]:
             if C[a]!=C[b]:
-                E.add_edge(R[C[a]],R[C[b]])
+                E.add_arc(R[C[a]],R[C[b]])
     return E
 
 #強連結成分に分解
