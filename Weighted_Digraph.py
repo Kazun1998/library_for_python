@@ -3,20 +3,28 @@ class Weigthed_Digraph:
 
     """
     #入力定義
-    def __init__(self, N):
+    def __init__(self, N, allow_multi=False, initialize=None, multi_edge=None):
         self.N=N
         self.arc_number=0
+
+        self.allow_multi=allow_multi
+        self.initialize=initialize
+        self.multi_edge=multi_edge
 
         self.adjacent_out=[{} for _ in range(N)] #出近傍(vが始点)
         self.adjacent_in=[{} for _ in range(N)] #入近傍(vが終点)
 
     #辺の追加(更新)
     def add_arc(self, source, target, weight=1):
-        if target not in self.adjacent_out[source]:
+        if self.allow_multi:
             self.arc_number+=1
-
-        self.adjacent_out[source][target]=weight
-        self.adjacent_in[target][source]=weight
+            self.adjacent_out[source][target]=self.multi_edge(self.adjacent_out[source].get(target, self.initialize), weight)
+            self.adjacent_in[target][source]=self.multi_edge(self.adjacent_in[source].get(target, self.initialize), weight)
+        else:
+            if target not in self.adjacent_out[source]:
+                self.arc_number+=1
+            self.adjacent_out[source][target]=weight
+            self.adjacent_in[target][source]=weight
 
     #辺を除く
     def remove_arc(self, source, target):

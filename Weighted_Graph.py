@@ -1,8 +1,12 @@
 class Weigthed_Graph:
     #入力定義
-    def __init__(self, N):
+    def __init__(self, N, allow_multi=False, initialize=None, multi_edge=None):
         self.N=N
         self.edge_number=0
+
+        self.allow_multi=allow_multi
+        self.initialize=initialize
+        self.multi_edge=multi_edge
 
         self.adjacent=[{} for _ in range(N)]
 
@@ -10,12 +14,15 @@ class Weigthed_Graph:
     def add_edge(self, u, v, weight=1):
         """ 重さが weight の辺 uv を加える. """
 
-
-        if not self.edge_exist(u,v):
+        if self.allow_multi:
             self.edge_number+=1
-
-        self.adjacent[u][v]=weight
-        self.adjacent[v][u]=weight
+            self.adjacent[u][v]=self.multi_edge(self.adjacent[u].get(v,self.initialize), weight)
+            self.adjacent[v][u]=self.multi_edge(self.adjacent[v].get(u,self.initialize), weight)
+        else:
+            if self.edge_exist(u,v):
+                self.edge_number+=1
+            self.adjacent[u][v]=weight
+            self.adjacent[v][u]=weight
 
     #辺を除く
     def remove_edge(self,u,v):
