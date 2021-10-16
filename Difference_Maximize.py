@@ -19,6 +19,9 @@ class Difference_Maximize:
         return self.__cost
 
     def teaching_DAG(self,mode):
+        """ 与えられる状況に対応する有向グラフが DAG 確定かどうかを教える.
+
+        """
         self.__is_DAG=mode
 
     def is_DAG(self):
