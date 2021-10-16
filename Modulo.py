@@ -2,7 +2,7 @@ class Modulo_Error(Exception):
     pass
 
 class Modulo():
-    __slots__=["a","n"]
+    __slots__=("a","n")
 
     def __init__(self,a,n):
         self.a=a%n
@@ -186,12 +186,12 @@ def Modulo_Inverse_List(M:int,K:int):
 
 #細分化
 def Subdivision(X:Modulo,M:int):
-    """Xをx (mod M) の形に細分化する.
+    """ X をx (mod M) の形に細分化する.
 
-    X.n|Mでなくてはならない.
+    X.n | Mでなくてはならない.
     """
 
-    assert M%X.n==0,"X.n|Mではありません."
+    assert M%X.n==0,"X.n | M ではありません."
 
     k=M//X.n
     return [Modulo(X.n*i+X.a,M) for i in range(k)]
@@ -200,12 +200,52 @@ def Subdivision(X:Modulo,M:int):
 def Degenerate(X:Modulo, M:int):
     """ X の情報を退化させる. X=x (mod N) であるとき, mod M での情報に退化させる.
 
-    M|X.n でなくてはならない.
+    M | X.n でなくてはならない.
     """
 
-    assert X.n%M==0,"M|X.n ではありません."
+    assert X.n%M==0,"M | X.n ではありません."
     return Modulo(X.a%M,M)
 
+def Chinese_Remainder(X: Modulo):
+    """ 中国剰余定理により, Xを分解する.
+
+    """
+
+    Y=[]
+
+    a,N=X.a,X.n
+    e=(N&(-N)).bit_length()-1
+    if e>0:
+        N>>=e
+        Y.append(Modulo(a,1<<e))
+
+    e=0
+    while N%3==0:
+        e+=1
+        N//=3
+
+    if e>0:
+        Y.append(Modulo(a,pow(3,e)))
+
+    flag=0
+    p=5
+    while p*p<=N:
+        if N%p==0:
+            e=0
+            while N%p==0:
+                e+=1
+                N//=p
+
+            Y.append(Modulo(a,pow(p,e)))
+
+        p+=2+2*flag
+        flag^=1
+
+    if N>1:
+        Y.append(Modulo(a,N))
+
+    return Y
+    
 """
 線形合同方程式関連
 """
@@ -428,33 +468,55 @@ def Discrete_Log(A,B):
     return None
 
 def Order(X):
-    """ Xの位数を求める. つまり, X^k=[1] を満たす最小の正整数 k を求める.
+    """ X の位数を求める. つまり, X^k=[1] を満たす最小の正整数 k を求める.
     """
-    R=X.n
+    phi=1
     N=X.n
-    k=2
-    while k*k<=N:
-        if N%k==0:
-            R-=R//k
-            while N%k==0:
-                N//=k
-        k+=1
+
+    e=(N&(-N)).bit_length()-1
+    if e>0:
+        phi=1<<(e-1)
+        N>>=e
+    else:
+        phi=1
+
+    e=0
+    while N%3==0:
+        e+=1
+        N//=3
+
+    if e>0:
+        phi*=pow(3,e-1)*2
+
+    flag=0
+    p=5
+    while p*p<=N:
+        if N%p==0:
+            e=0
+            while N%p==0:
+                e+=1
+                N//=p
+
+            phi*=pow(p,e-1)*(p-1)
+
+        p+=2+2*flag
+        flag^=1
 
     if N>1:
-        R-=R//N
-
-    D=[]
-    k=1
-    while k*k<=R:
-        if R%k==0:
-            D.append(k)
-            D.append(R//k)
-        k+=1
+        phi*=N-1
 
     a=float("inf")
-    for k in D:
-        if pow(X,k)==1:
-            a=min(a,k)
+    k=1
+    while k*k<=phi:
+        if phi%k==0:
+            if k<a and pow(X,k)==1:
+                a=k
+                break
+
+            if phi//k<a and pow(X,phi//k)==1:
+                a=phi//k
+        k+=1
+
     return a
 
 def Primitive_Root(p):
