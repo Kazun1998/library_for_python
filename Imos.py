@@ -31,15 +31,30 @@ class Expanded_Imos_1:
         self.dict[F]+=C
         self.dict[T+1]-=C
 
-    def cumulative_sum(self):
+    def cumulative_sum(self, since, until):
         """累積和を求める.
+
+        [Output]
+        (y, l, r) という形のリスト. ただし, (y, l, r) は l<=x<=y の範囲では y であるということを意味する.
         """
-        Y=defaultdict(int)
+        Y=[]
         S=0
+        t_old=since
         dic=self.dict
         for t in sorted(dic):
-            if dic[t]!=0:
-                Y[t]=S=S+dic[t]
+            if t>until:
+                break
+            if dic[t]==0:
+                continue
+
+            if t_old<=t-1:
+                Y.append((S, t_old,t-1))
+
+            S+=dic[t]
+            t_old=t
+
+        if t_old<=until:
+            Y.append((S, t_old,until))
         return Y
 
 #=================================================
