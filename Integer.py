@@ -592,25 +592,40 @@ def Euler_Totient(N):
     """
 
     assert N>=0,"Nが非負整数ではない."
-    R=N
 
-    if N%2==0:
-        R=N>>1
-        while N&1==0:
-            N>>=1
+    e=(N&(-N)).bit_length()-1
+    if e>0:
+        phi=1<<(e-1)
+        N>>=e
+    else:
+        phi=1
 
-    k=3
-    while k*k<=N:
-        if N%k==0:
-            R-=R//k
-            while N%k==0:
-                N//=k
-        k+=2
+    e=0
+    while N%3==0:
+        e+=1
+        N//=3
+
+    if e>0:
+        phi*=pow(3,e-1)*2
+
+    flag=0
+    p=5
+    while p*p<=N:
+        if N%p==0:
+            e=0
+            while N%p==0:
+                e+=1
+                N//=p
+
+            phi*=pow(p,e-1)*(p-1)
+
+        p+=2
+        flag^=1
 
     if N>1:
-        R-=R//N
+        phi*=N-1
 
-    return R
+    return phi
 
 #Euler's Totient関数
 def Euler_Totient_List(N):
@@ -621,12 +636,12 @@ def Euler_Totient_List(N):
 
     assert N>=0,"Nが非負整数ではない."
 
-    P=list(range(N+1))
-    for i in range(2,N+1):
-        if P[i]==i:
-            for j in range(i,N+1,i):
-                P[j]=P[j]//i*(i-1)
-    return P
+    phi=list(range(N+1))
+    for p in range(2,N+1):
+        if phi[p]==p:
+            for j in range(p,N+1,p):
+                phi[j]=phi[j]//p*(p-1)
+    return phi
 
 #約数のK乗和
 def Divisor_Sigma(N,K=1):
@@ -757,9 +772,6 @@ def Primitive_Root(p):
 def gcd(m,n):
     m=abs(m)
     n=abs(n)
-
-    if m<n:
-        m,n=n,m
 
     while n:
         m,n=n,m%n
