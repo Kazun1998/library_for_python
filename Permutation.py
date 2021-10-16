@@ -2,12 +2,12 @@ class Permutation_Error(Exception):
     pass
 
 class Permutation():
-    def __init__(self,n,p=[]):
+    def __init__(self, n, p=[]):
         if p==[]:
             self.p=[i for i in range(n)]
             self.ind=[i for i in range(n)]
         else:
-            self.p=p[:]
+            self.p=p
             self.ind=[0]*n
 
             for i in range(n):
@@ -15,73 +15,83 @@ class Permutation():
 
         self.n=n
 
-    def index(self,i):
-        if self.n<=i: return i
-        else: return self.ind[i]
+    def __getitem__(self, k):
+        return self.p[k]
 
     def __str__(self):
-        return "["+", ".join(map(str,self.p))+"]"
+        return str(self.p)
 
     __repr__=__str__
 
     def __eq__(self,other):
-        return self.p==other.p
+        return (self.n==other.n) and (self.p==other.p)
 
     def __mul__(self,other):
-        T=[]
-        n=max(self.n,other.n)
+        assert self.n==other.n
 
-        for i in range(n):
-            T.append(self.Replace(other.Replace(i)))
+        p=self.p; q=other.p
+        return Permutation(self.n,  [p[q[i]] for i in range(self.n)])
 
-        return Permutation(n,T)
+    def __pow__(self, n):
+        if n<0:
+            return pow(self,-n).inverse()
 
+        a=list(range(self.n))
+        e=self.p[:]
+
+        while n:
+            if n&1:
+                a=[a[e[i]] for i in range(self.n)]
+            e=[e[e[i]] for i in range(self.n)]
+            n>>=1
+
+        return Permutation(self.n, a)
+                
     def __truediv__(self,other):
         pass
 
-    def __sgn__(self):
+    def sgn(self):
         if self.Minimum_Transposition()%2:
             return -1
         else:
             return 1
 
-    def Inverse(self):
-        Q=list(range(self.n))
-        for k in range(self.n):
-            Q[self.p[k]]=k
-        return Permutation(self.n,Q)
+    def inverse(self):
+        return Permutation(self.n, self.ind)
 
-    def Inversion(self):
-        X=["*"]+[0]*self.n
-
-        A=0
+    def inversion(self):
+        BIT=[0]*(self.n+1)
         Y=(self.n*(self.n-1))//2
 
         for a in self.p:
             s=a
             while 1<=s:
-                Y-=X[s]
+                Y-=BIT[s]
                 s-=s&(-s)
 
             r=a+1
             while r<=self.n:
-                X[r]+=1
+                BIT[r]+=1
                 r+=r&(-r)
         return Y
 
+    def transposition(self,u,v):
+        """ u,v のある場所を交換する ※ u番目とv番目ではない"""
 
-    def Transposition(self,u,v):
-        a=self.p.index(u)
-        b=self.p.index(v)
+        
+        a=self.ind[u]
+        b=self.ind[v]
 
         self.p[a]=v
         self.p[b]=u
 
-        self.ind[a]=v
-        self.ind[b]=u
+        self.ind[u]=b
+        self.ind[v]=a
 
-    def Minimum_Transposition(self):
-        X=self.Cycle_Division()
+    def minimum_transposition(self):
+        """ 互換の最小回数を求める. """
+
+        X=self.cycle_division()
 
         T=0
         for d in X:
@@ -95,45 +105,76 @@ class Permutation():
         for i in range(N):
             self.p[X[i]]=C[(i+1)%N]
 
-    def Cycle_Division(self):
+    def cycle_division(self, mode=True):
+        """ 置換を巡回置換の積に分解する.
+
+        mode: 自己ループを入れるか否か"""
+
+        p=self.p
         T=[False]*self.n
-        k=0
-        v=0
-
         A=[]
+
         for k in range(self.n):
-            if (not T[k]) and self.p[k]!=k:
-                v=k
-                B=[k]
-                while self.p[v]!=k:
-                    v=self.p[v]
+            if not T[k]:
+                a=[k]
+
+                T[k]=True
+                v=p[k]
+                while v!=k:
                     T[v]=True
-                    B.append(v)
-                A.append(B)
+                    a.append(v)
+                    v=p[v]
+
+                if mode or len(a)>=2:
+                    A.append(a)
         return A
 
-    def Replace(self,x):
-        if x<self.n:
-            return self.p[x]
-        else:
-            return x
+    def operate_List(self, list):
+        assert self.n==len(list),"置換の長さとリストの長さが違います."
 
-    def Replace_List(self,List):
-        assert self.n==len(List),"置換の長さとリストの長さが違います."
+        return [list[self.ind[i]] for i in range(self.n)]
 
-        A=[0]*self.n
-        for i in range(self.n):
-            A[self.p[i]]=List[i]
-        return A
 
-    def Order(self):
-        L=self.Cycle_Division()
-        C=[]
-        for K in L:
-            C.append(len(K))
-        return LCM(*C)
+    def order(self):
+        from math import gcd
 
-#-------------------------------------------------
+        x=1
+        for m in self.cycle_division():
+            g=gcd(x,len(m))
+            x=(x//g)*len(m)
+        return x
+
+#=================================================
+def Permutation_Inversion(P,Q):
+    """ P から Q へ隣接項同士の入れ替えのみの最小回数を求める.
+    """
+    R=Q*(P.inverse())
+    return R.inversion()
+
+def List_Inversion(A,B):
+    """長さが等しいリスト A,B に対して, 以下の操作の最小回数を求める.
+    列 A[i] と A[i+1] を入れ替え, B と一致させる.
+    """
+
+    from collections import defaultdict
+
+    if len(A)!=len(B):
+        return -1
+
+    N=len(A)
+    D=defaultdict(list)
+
+    for i in range(N):
+        D[A[i]].append(i)
+
+    for lis in D:
+        D[lis].reverse()
+
+    try:
+        return Permutation(N,[D[B[i]].pop() for i in range(N)]).inversion()
+    except:
+        return -1
+#=================================================
 #ランダムに置換を生成する.
 def Random_Permutation(N):
     from random import shuffle
@@ -146,27 +187,3 @@ def Is_Identity(P):
         if k!=a:
             return False
     return True
-
-#以下Orderを用いる時に必要
-#最大公約数
-def gcd(m,n):
-    x,y=max(m,n),min(m,n)
-    if x%y==0:
-        return y
-    else:
-        while x%y!=0:
-            z=x%y
-            x,y=y,z
-        else:
-            return z
-
-from functools import reduce
-def GCD(*X):
-    return reduce(gcd,X)
-
-#最小公倍数
-def lcm(m,n):
-    return (m//gcd(m,n))*n
-
-def LCM(*X):
-    return reduce(lcm,X)
