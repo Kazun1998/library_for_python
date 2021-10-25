@@ -104,6 +104,9 @@ class Point():
         u,v=other.x,other.y
         return Point(x*u-y*v,x*v+y*u)
 
+    def __imul__(self, other):
+        return other*self
+
     def __rmul__(self,other):
         if isinstance(other,(int,float)):
             return Point(other*self.x,other*self.y)
@@ -195,7 +198,7 @@ def Arg(P,Q=Point(0,0)):
     P,Q: Point
     """
 
-    R=Q-P
+    R=P-Q
     return atan2(R.y,R.x)
 
 def Angle_Type(A,B,C):
