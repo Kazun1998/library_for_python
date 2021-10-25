@@ -686,9 +686,10 @@ def Complete_Graph(N):
     """ N 頂点の完全グラフを生成する. """
 
     G=Graph(N)
-    V=set(range(N))
     for u in range(N):
-        G.adjacent[u]=V-{u}
+        for v in range(N):
+            if u!=v:
+                G.add_edge(u,v)
     return G
 
 #完全2部グラフ
@@ -737,7 +738,25 @@ def Grid_Graph(M, N):
         if p<(M-1)*N:
             G.add_edge(p,p+N)
     return G
-        
+
+#トーラス
+def Torus_Graph(M, N):
+    """ M x N のトーラスグラフを生成する. """
+
+    G=Graph(M*N)
+    for i in range(M):
+        for j in range(N):
+            p=i*N+j
+            q=i*N+(j+1)%N
+            r=((i+1)%M)*N+j
+
+            G.add_edge(p,q)
+            G.add_edge(p,r)
+    return G
+
+T=Torus_Graph(10,10)
+X=Find_Eulerian_Cycle(T)
+assert 1
 
 #Pathグラフ
 def Path_Graph(N):
