@@ -46,12 +46,12 @@ class Permutation():
             n>>=1
 
         return Permutation(self.n, a)
-                
+
     def __truediv__(self,other):
         pass
 
     def sgn(self):
-        if self.Minimum_Transposition()%2:
+        if self.minimum_transposition()%2:
             return -1
         else:
             return 1
@@ -75,10 +75,17 @@ class Permutation():
                 r+=r&(-r)
         return Y
 
-    def transposition(self,u,v):
+    def swap(self, i, j):
+        """ i 番目と j 番目を交換する ※ i と j を交換ではない"""
+
+        u=self.p[i]; v=self.p[j]
+
+        self.p[i]=v; self.p[j]=u
+        self.ind[v]=i; self.ind[u]=j
+
+    def transposition(self, u, v):
         """ u,v のある場所を交換する ※ u番目とv番目ではない"""
 
-        
         a=self.ind[u]
         b=self.ind[v]
 
@@ -97,13 +104,6 @@ class Permutation():
         for d in X:
             T+=len(d)-1
         return T
-
-    def Cycle_Multiplication(self,*C):
-        X=[self.p.index(k) for k in C]
-
-        N=len(C)
-        for i in range(N):
-            self.p[X[i]]=C[(i+1)%N]
 
     def cycle_division(self, mode=True):
         """ 置換を巡回置換の積に分解する.
@@ -129,7 +129,7 @@ class Permutation():
                     A.append(a)
         return A
 
-    def operate_List(self, list):
+    def operate_list(self, list):
         assert self.n==len(list),"置換の長さとリストの長さが違います."
 
         return [list[self.ind[i]] for i in range(self.n)]
