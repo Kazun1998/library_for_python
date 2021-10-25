@@ -2,40 +2,52 @@ class Dijkstra_Heap:
     inf=float("inf")
 
     def __init__(self,N):
-        self.N=m=N
-        self.remain=m
+        """ ダイクストラ専用のヒープを生成する.
+        """
 
-        self.value=[self.inf]*m
-        self.dist=[-1]*m
-        self.index=list(range(m))
-        self.inverse=list(range(m))
+        self.N=N
+        self.remain=N
+
+        self.value=[Dijkstra_Heap.inf]*N
+        self.dist=[-1]*N
+        self.tree=list(range(N))
+        self.inverse=list(range(N))
+
+    def __bool__(self):
+        return bool(self.remain)
+
+    def __swap(self, i, j):
+        """ ヒープ木の第 i 要素と第 j 要素を交換する. """
+
+        self.value[i],self.value[j]=self.value[j],self.value[i]
+
+        p=self.tree[i]; q=self.tree[j]
+
+        self.tree[i],self.tree[j]=q,p
+        self.inverse[p],self.inverse[q]=j,i
 
     def pop(self):
-        x=self.index[0]
+        assert bool(self.remain)
+
+        p=self.tree[0]
         d=self.value[0]
 
+        self.dist[p]=d
         self.remain-=1
 
-        y=self.index[self.remain]
+        self.__swap(0,self.remain)
+        self.value[self.remain]=Dijkstra_Heap.inf
 
         V=self.value
-        self.dist[x]=d
-        V[0],V[self.remain]=V[self.remain],self.inf
-        self.index[0],self.index[self.remain]=y,x
-        self.inverse[x],self.inverse[y]=self.remain,0
-
         k=0
         while True:
             if 2*k+1>=self.N:
                 break
 
-            if self.N==2*k+2:
-                u=V[2*k+1]
-
-                if V[k]<=u:
+            if 2*k+2==self.N:
+                if V[k]<=V[2*k+1]:
                     break
-
-                b=2*k+1
+                j=2*k+1
             else:
                 u=V[2*k+1]; v=V[2*k+2]
 
@@ -43,39 +55,29 @@ class Dijkstra_Heap:
                     break
 
                 if u<=v:
-                    b=2*k+1
+                    j=2*k+1
                 else:
-                    b=2*k+2
+                    j=2*k+2
+            self.__swap(k,j)
+            k=j
 
-            V[k],V[b]=V[b],V[k]
-
-            s,t=self.index[k],self.index[b]
-            self.index[k],self.index[b]=t,s
-            self.inverse[s],self.inverse[t]=b,k
-
-            k=b
-
-        return (x,d)
+        return (p,d)
 
     def __setitem__(self,index,value):
         if self.dist[index]!=-1:
             return
 
         V=self.value
-        k=self.inverse[index]
-        V[k]=min(V[k],value)
+        i=self.inverse[index]
 
-        while k>0 and V[(k-1)>>1]>V[k]:
-            s=(k-1)>>1
-            V[k],V[s]=V[s],V[k]
+        if V[i]<=value:
+            return
 
-            a=self.index[k]
-            b=self.index[s]
-
-            self.index[k],self.index[s]=b,a
-            self.inverse[a],self.inverse[b]=s,k
-
-            k=s
+        V[i]=value
+        while i>0 and V[(i-1)>>1]>V[i]:
+            j=(i-1)>>1
+            self.__swap(i,j)
+            i=j
 
     def __getitem__(self,index):
-        return self.dist[index] if self.dist[index]>=0 else self.value[index]
+        return self.dist[index] if self.dist[index]>=0 else self.value[self.inverse[index]]
