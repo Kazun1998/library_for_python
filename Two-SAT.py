@@ -174,3 +174,6 @@ class Two_SAT:
             return T[:self.N]
         elif Mode==2:
             return [i for i in range(self.N) if Group[2*i]==Group[2*i+1]]
+
+    def solve(self):
+        return self.is_satisfy(1)
