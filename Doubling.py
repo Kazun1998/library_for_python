@@ -1,5 +1,5 @@
 class Doubling():
-    def __init__(self,A,Max_Level=1):
+    def __init__(self, A, Max_Level=1):
         """ N=len(A), X={0,1,...,N-1} とする. f:X→X を f(x):=A[x] としたとき, f^k(x) を求める.
 
         A: f を表すリスト, 任意の x in X に対して, f(x) in X でなければならない.
@@ -34,7 +34,7 @@ class Doubling():
                 break
         return x
 
-    def evaluate_List(self,k):
+    def evaluate_list(self,k):
         """ [f^k(0), f^k(1), ..., f^k(N-1)] を求める.
 
         """
