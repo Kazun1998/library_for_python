@@ -3,14 +3,14 @@ https://tsubo.hatenablog.jp/entry/2020/06/15/124657
 """
 import heapq
 class Heap_Dict:
-    def __init__(self, Mode=True):
-        """
+    def __init__(self, mode=True):
+        """ Heap Dict クラスの作成.
 
         Mode: True → 最小値, False → 最大値
         """
         self.heap=[]
         self.dict={}
-        self.Mode=Mode
+        self.__mode=bool(mode)
         self.__length=0
 
     def __bool__(self):
@@ -25,9 +25,9 @@ class Heap_Dict:
     def insert(self, x):
         """ 要素 x を追加する. """
 
-        if self.Mode and not self.is_exist(x):
+        if self.__mode and not self.is_exist(x):
             heapq.heappush(self.heap,x)
-        elif not self.Mode and not self.is_exist(x):
+        elif not self.__mode and not self.is_exist(x):
             heapq.heappush(self.heap,-x)
 
         if x in self.dict:
@@ -38,15 +38,32 @@ class Heap_Dict:
         self.__length+=1
 
     def erase(self, x):
-        """ x を消す. """
+        """ x を消す (存在しない場合は KeyError) . """
 
-        assert (x in self.dict) and (self.dict[x])
+        if x not in self:
+            raise KeyError(x)
 
         self.dict[x]-=1
         self.__length-=1
         while self.heap:
             y=self.heap[0]
-            if not self.Mode:y=-y
+            if not self.__mode:y=-y
+            if self.dict[y]==0:
+                heapq.heappop(self.heap)
+            else:
+                break
+
+    def discard(self, x):
+        """ x を消す (存在しない場合は何もしない). """
+
+        if x not in self:
+            return
+
+        self.dict[x]-=1
+        self.__length-=1
+        while self.heap:
+            y=self.heap[0]
+            if not self.__mode:y=-y
             if self.dict[y]==0:
                 heapq.heappop(self.heap)
             else:
@@ -55,20 +72,20 @@ class Heap_Dict:
     def is_exist(self, x):
         """ キューに x が存在するかどうかを判定する. """
 
-        return (x in self.dict) and (self.dict[x])
+        return bool(self.dict.get(x,0))
 
-    def get_min(self):
+    def get_min(self, default=float("inf")):
         """ キューにある最小値を返す.
         ※ Mode=True でないと使えない.
 
         """
 
-        assert self.Mode
+        assert self.__mode
 
         if self.heap:
             return self.heap[0]
         else:
-            return float("inf")
+            return default
 
     def pop_min(self):
         """ キューにある最小値を取り出す.
@@ -76,24 +93,24 @@ class Heap_Dict:
 
         """
 
-        assert self.Mode
+        assert self.__mode and bool(self)
 
         x=self.get_min()
         self.erase(x)
         return x
 
-    def get_max(self):
+    def get_max(self, default=-float("inf")):
         """ キューにある最大値を返す.
         ※ Mode=False でないと使えない.
 
         """
 
-        assert not self.Mode
+        assert not self.__mode
 
         if self.heap:
             return -self.heap[0]
         else:
-            return -float("inf")
+            return default
 
     def pop_max(self):
         """ キューにある最小値を取り出す.
@@ -101,7 +118,7 @@ class Heap_Dict:
 
         """
 
-        assert not self.Mode
+        assert (not self.__mode) and bool(self)
 
         x=self.get_max()
         self.erase(x)
@@ -110,7 +127,4 @@ class Heap_Dict:
     def count(self, x):
         """ x の個数を求める. """
 
-        if x not in self.dict:
-            return 0
-        else:
-            return self.dict[x]
+        return self.dict.get(x,0)
