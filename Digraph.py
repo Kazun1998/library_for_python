@@ -92,30 +92,28 @@ class Digraph:
     #頂点vに到達可能な頂点
     def reachable_to(self,v):
         from collections import deque
-        T={v:0 for v in self.vertex}
-        T[v]=1
+        T=[0]*self.N; T[v]=1
         Q=deque([v])
         while Q:
-            x=Q.popleft()
+            x=Q.pop()
             for y in self.adjacent_in[x]:
                 if not T[y]:
                     T[y]=1
                     Q.append(y)
-        return [x for x in self.vertex if T[x]]
+        return [x for x in range(self.N) if T[x]]
 
     #頂点vから到達可能な頂点
     def reachable_from(self,v):
         from collections import deque
-        T={v:0 for v in self.vertex}
-        T[v]=1
+        T=[0]*self.N; T[v]=1
         Q=deque([v])
         while Q:
-            x=Q.popleft()
+            x=Q.pop()
             for y in self.adjacent_out[x]:
                 if not T[y]:
                     T[y]=1
                     Q.append(y)
-        return [x for x in self.vertex if T[x]]
+        return [x for x in range(self.N) if T[x]]
 
     #頂点 u,v の距離を求める.
     def distance(self,u,v):
