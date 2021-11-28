@@ -1,14 +1,26 @@
 ##と.で表されたグリッドを01に変換する.
-def Black_White_Grid(H:int,W:int) -> list:
-    """H:縦のマス数, W:横のマス数
+def Black_White_Grid(H:int, W:int, wall=False):
+    """H: 縦のマス数, W: 横のマス数
+
+    ※通れるところが1
     """
 
-    f=lambda s:1 if s=="#" else 0
-    S=[]
+    f=lambda s:1 if s=="." else 0
+
+    if wall:
+        S=[[0]*(W+2)]
+    else:
+        S=[]
+
     for _ in range(H):
-        T=input()
-        assert len(T)==W
-        S.append(list(map(f,T)))
+        if wall:
+            S.append([0]+list(map(f,input()))+[0])
+        else:
+            S.append(list(map(f,input())))
+
+    if wall:
+        S.append([0]*(W+2))
+
     return S
 
 #小数点以下第k位まで与えられる小数を10^k倍する.
