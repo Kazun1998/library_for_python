@@ -1,5 +1,5 @@
 class Union_Find():
-    __slots__=["n","parents","rank","edges"]
+    __slots__=["n","parents","rank","edges","__group_number"]
     def __init__(self,N):
         """ 0,1,...,N-1 を要素として初期化する.
 
@@ -9,6 +9,7 @@ class Union_Find():
         self.parents=[-1]*N
         self.rank=[0]*N
         self.edges=[0]*N
+        self.__group_number=N
 
     def find(self, x):
         """ 要素 x の属している族を調べる.
@@ -43,6 +44,8 @@ class Union_Find():
 
         if self.rank[x]<self.rank[y]:
             x,y=y,x
+
+        self.__group_number-=1
 
         self.edges[x]+=self.edges[y]+1
         self.edges[y]=0
@@ -96,13 +99,13 @@ class Union_Find():
         """
 
         X=0
-        for g in self.roots():
+        for g in self.representative():
             if self.is_tree(g):
                 X+=1
         return X
 
-    def roots(self):
-        """ 族の名前のリスト
+    def representative(self):
+        """ 代表元のリスト
         """
         return [i for i, x in enumerate(self.parents) if x < 0]
 
@@ -110,15 +113,12 @@ class Union_Find():
         """ 族の個数
         """
 
-        K=0
-        for i in range(self.n):
-            K+=1 if self.parents[i]<0 else 0
-        return K
+        return self.__group_number
 
     def all_group_members(self):
         """ 全ての族の出力
         """
-        X={r:[] for r in self.roots()}
+        X={r:[] for r in self.representative()}
         for k in range(self.n):
             X[self.find(k)].append(k)
         return X
@@ -128,7 +128,7 @@ class Union_Find():
             _=self.find(i)
 
     def __str__(self):
-        return '\n'.join('{}: {}'.format(r, self.members(r)) for r in self.roots())
+        return '\n'.join('{}: {}'.format(r, self.members(r)) for r in self.representative())
 
     def __repr__(self):
         return self.__str__()
