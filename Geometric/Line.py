@@ -1,4 +1,5 @@
 from Point import *
+
 class Segment():
     __slots__=["begin","end","id"]
 
@@ -127,14 +128,16 @@ def General_Form_from_Line(L, lattice=False):
     s=L.begin.x; t=L.begin.y
     v=L.vectorize(); alpha=v.x; beta=v.y
 
-    if lattice:
-        g=gcd(alpha, beta)
-        alpha//=g; beta//=g
-
-    sgn=compare(-beta,0,L.ep)
+    sgn=compare(beta,0,L.ep)
     if sgn==0:
-        sgn=compare(alpha,0,L.ep)
-    return (sgn*(-beta),sgn*alpha,sgn*(beta*s-alpha*t))
+        sgn=compare(-alpha,0,L.ep)
+
+    k=alpha*t-beta*s
+    if lattice:
+        g=gcd(gcd(alpha,beta),k)
+        alpha//=g; beta//=g; k//=g
+
+    return (sgn*beta,sgn*(-alpha),sgn*k)
 
 #=== 交差判定
 def has_Intersection_between_Segment_and_Segment(L,M,endpoint=True):
