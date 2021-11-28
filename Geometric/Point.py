@@ -254,6 +254,10 @@ def MidPoint(P,Q):
     b=(P.y+Q.y)/2
     return Point(a,b)
 
+def Argument_Compare(P,Q):
+    """ OQ が OP からみて反時計回りかどうかを判定する."""
+    return compare(Q.det(P),0,max(P.ep,Q.ep))
+
 def Argument_Sort(L):
     """ 点を偏角ソートする.
 
@@ -278,4 +282,41 @@ def Argument_Sort(L):
         elif a>b: return 1
         else:return -compare(P.det(Q),0,ep)
 
+
     L.sort(key=cmp_to_key(cmp))
+
+def Argument_Sort_by_Index(L):
+    """ 点を偏角ソートする (返り値は添字).
+
+    L: 点のリスト
+    """
+
+    def merge(a,b):
+        I=[]
+
+        la=len(a); lb=len(b)
+        ia=0; ib=0
+
+        while (ia<la) and (ib<lb):
+            if Argument_Compare(L[a[ia]],L[b[ib]])<=0:
+                I.append(a[ia])
+                ia+=1
+            else:
+                I.append(b[ib])
+                ib+=1
+
+        for i in range(ia,la):
+            I.append(a[i])
+
+        for i in range(ib,lb):
+            I.append(b[i])
+
+        return I
+
+    def sorting(a):
+        if len(a)==1:
+            return a
+        else:
+            return merge(sorting(a[:len(a)//2]),sorting(a[len(a)//2:]))
+
+    return sorting(list(range(len(L))))
