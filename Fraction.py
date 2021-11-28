@@ -1,17 +1,16 @@
-class Fraction_Error(Exception):
-    pass
+from math import gcd
 
 class Fraction():
     __slots__=["a","b"]
 
     ##入力定義
-    def __init__(self,Numerator=0,Denominator=1):
+    def __init__(self, Numerator=0, Denominator=1, expanded=False, reduction=False):
         """分数のオブジェクトを生成する.
 
-        Numerator:分子
-        Denominator:分母 (!=0)
+        Numerator: 分子
+        Denominator: 分母 (!=0)
         """
-        assert Denominator,"分母が0"
+        assert Denominator or expanded,"分母が0"
 
         if Denominator<0:
             Numerator*=-1
@@ -19,7 +18,10 @@ class Fraction():
 
         self.a=Numerator
         self.b=Denominator
-        self.__reduce()
+        if reduction:
+            g=gcd(Numerator, Denominator)
+            self.a=Numerator//g
+            self.b=Denominator//g
 
     #表示定義
     def __str__(self):
@@ -28,8 +30,7 @@ class Fraction():
         else:
             return "{}/{}".format(self.a,self.b)
 
-    def __repr__(self):
-        return self.__str__()
+    __repr__=__str__
 
     #四則演算定義
     def __add__(self,other):
@@ -41,10 +42,7 @@ class Fraction():
             y=self.b
         else:
             assert 0,"型が違う"
-
-        C=Fraction(x,y)
-        C.__reduce()
-        return C
+        return Fraction(x,y)
 
     def __radd__(self,other):
         return self+other
@@ -58,10 +56,7 @@ class Fraction():
             y=self.b
         else:
             assert 0,"型が違う"
-
-        C=Fraction(x,y)
-        C.__reduce()
-        return C
+        return Fraction(x,y)
 
     def __rsub__(self,other):
         return -self+other
@@ -76,9 +71,7 @@ class Fraction():
         else:
             assert 0,"型が違う"
 
-        C=Fraction(x,y)
-        C.__reduce()
-        return C
+        return Fraction(x,y)
 
     def __rmul__(self,other):
         return self*other
@@ -109,9 +102,7 @@ class Fraction():
         else:
             assert 0,"型が違う"
 
-        C=Fraction(x,y)
-        C.__reduce()
-        return C
+        return Fraction(x,y)
 
     def __rtruediv__(self,other):
         assert self,"除数が0"
@@ -126,8 +117,6 @@ class Fraction():
         return Fraction(x,y)
 
     def __pow__(self,m):
-        self.__reduce()
-
         alpha,beta=self.a,self.b
         if m<0:
             alpha,beta=beta,alpha
@@ -137,11 +126,9 @@ class Fraction():
 
     #丸め
     def __floor__(self):
-        self.__reduce()
         return self.a//self.b
 
     def __ceil__(self):
-        self.__reduce()
         return (self.a+self.b-1)//self.b
 
     #真偽値
@@ -164,9 +151,7 @@ class Fraction():
         return self<=other and self!=other
 
     def __le__(self,other):
-        self.__reduce()
         if other.__class__==Fraction:
-            other.__reduce()
             return self.a*other.b<=self.b*other.a
         elif other.__class__==int:
             return self.a<=self.b*other
@@ -189,17 +174,6 @@ class Fraction():
         elif s==0:return 0
         else:return -1
 
-    def __reduce(self):
-        a,b=self.a,self.b
-        x=abs(a)
-        y=b
-
-        while y:
-            x,y=y,x%y
-
-        self.a//=x
-        self.b//=x
-
     #符号
     def __pos__(self):
         return self
@@ -215,8 +189,7 @@ class Fraction():
 
     #その他
     def is_unit(self):
-        self.__reduce()
         return self.a==1
 
     def __hash__(self):
-        return hash((self.a,self.b))
+        return hash(10**9*self.a+self.b)
