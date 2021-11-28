@@ -1,7 +1,7 @@
 class Tree:
     __slots__=("N", "index", "parent", "__mutable",
             "root", "children", "depth", "tower", "upper_list", "deg", "des_count", "preorder_number",
-            "euler", "in_time", "out_time")
+            "euler_vertex", "euler_edge", "in_time", "out_time")
 
     def __init__(self,N,index=0):
         """ N 頂点 (index, index+1, ..., N-1+index) の根付き木を生成する. """
@@ -277,6 +277,18 @@ class Tree:
             Y.append(v)
         return X+Y[-2::-1]
 
+    def is_parent(self, u, v):
+        """ u は v の親か? """
+
+        assert self.__after_seal_check(u,v)
+        return v!=self.root and u==self.parent[v]
+
+    def is_children(self, u, v):
+        """ u は v の子か? """
+
+        assert self.__after_seal_check(u,v)
+        return self.is_parent(v,u)
+        
     def is_brother(self,u,v):
         """ 2つの頂点 u, v は兄弟 (親が同じ) か?  """
 
@@ -367,8 +379,13 @@ class Tree:
     def dfs_yielder(self):
         """ DFS における頂点の出入りを yield する.
 
-        (v,1): 頂点 v に入る
-        (v,0): 頂点 v を出る
+        以下のような関数を (仮想的に) 実行する.
+
+        def dfs(v):
+            yield (v,1) #頂点 v に入る
+            for w in self.children[v]:
+                dfs(w) #頂点 v を出る.
+            yield (v,0)
         """
         assert self.__after_seal_check()
 
@@ -453,7 +470,7 @@ class Tree:
 
         [input]
         alpha: 初期値
-        f: X x V x V -> X: f(x,v,w): v が親, w が子
+        f: X x V x V → X: f(x,v,w): v が親, w が子
 
         [補足]
         頂点 v の親が x のとき, 更新式は
@@ -476,10 +493,10 @@ class Tree:
         """ 全方位木 DP を行う.
 
         [input]
-        calc:可換モノイドを成す2項演算 M x M -> M
-        unit:Mの単位元
-        f: X x V x V -> M: f(x,v,w): v が親, w が子
-        g: M x V -> X: g(x,v)
+        merge: 可換モノイドを成す2項演算 M x M -> M
+        unit: M の単位元
+        f: X x V x V → M: f(x,v,w): v が親, w が子
+        g: M x V → X: g(x,v)
 
         ※ tree_dp_from_leaf と同じ形式
 
@@ -541,15 +558,15 @@ class Tree:
             A[v]=g(a,v)
         return A
 
-    def euler_tour(self):
-        """ オイラーツアーに関する計算を行う. """
+    def euler_tour_vertex(self):
+        """ オイラーツアー (vertex) に関する計算を行う. """
 
         assert self.__after_seal_check()
-        if hasattr(self,"euler"):
+        if hasattr(self,"euler_vertex"):
             return
 
         #最初
-        X=[]; X_append=X.append #X: Euler Tour のリスト
+        X=[]; X_append=X.append #X: Euler Tour (vertex) のリスト
 
         v=self.root
 
@@ -570,7 +587,7 @@ class Tree:
                 v=ch[v][S[v]]
                 S[w]+=1
 
-        self.euler=X
+        self.euler_vertex=X
         self.in_time=[-1]*(self.index+self.N)
         self.out_time=[-1]*(self.index+self.N)
         for i in range(len(X)):
@@ -579,6 +596,31 @@ class Tree:
                 self.in_time[v]=self.out_time[v]=i
             else:
                 self.out_time[v]=i
+
+    def euler_tour_edge(self):
+        """ オイラーツアー (edge) に関する計算を行う.
+
+        (u,v,k): u から v へ向かう (k=+1 のときは葉へ進む向き, k=-1 のときは根へ進む向き)
+        """
+
+        assert self.__after_seal_check()
+        if hasattr(self,"euler_edge"):
+            return
+
+        if not hasattr(self, "euler_vertex"):
+            self.euler_tour_vertex()
+
+        self.euler_edge=[]
+        euler=self.euler_vertex
+        for t in range(2*(self.N-1)):
+            u=euler[t]; v=euler[t+1]
+
+            if self.is_parent(u,v):
+                k=1
+            else:
+                k=-1
+
+            self.euler_edge.append((u,v,k))
 
     def centroid(self, all=False):
         """ 木の重心を求める
