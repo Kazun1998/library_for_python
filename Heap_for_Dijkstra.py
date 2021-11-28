@@ -14,7 +14,7 @@ class Dijkstra_Heap:
         self.inverse=list(range(N))
 
     def __bool__(self):
-        return bool(self.remain)
+        return self.value[0]<Dijkstra_Heap.inf
 
     def __swap(self, i, j):
         """ ヒープ木の第 i 要素と第 j 要素を交換する. """
@@ -63,7 +63,7 @@ class Dijkstra_Heap:
 
         return (p,d)
 
-    def __setitem__(self,index,value):
+    def __setitem__(self, index, value):
         if self.dist[index]!=-1:
             return
 
@@ -79,5 +79,8 @@ class Dijkstra_Heap:
             self.__swap(i,j)
             i=j
 
-    def __getitem__(self,index):
+    def __getitem__(self, index):
         return self.dist[index] if self.dist[index]>=0 else self.value[self.inverse[index]]
+
+    def final_answer(self, index,default):
+        return self.dist[index] if self.dist[index]>=0 else default
