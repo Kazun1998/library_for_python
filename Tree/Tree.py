@@ -288,7 +288,7 @@ class Tree:
 
         assert self.__after_seal_check(u,v)
         return self.is_parent(v,u)
-        
+
     def is_brother(self,u,v):
         """ 2つの頂点 u, v は兄弟 (親が同じ) か?  """
 
@@ -376,7 +376,7 @@ class Tree:
         self.preorder_number=T
         return T[v]
 
-    def dfs_yielder(self):
+    def dfs_yielder(self, order=None):
         """ DFS における頂点の出入りを yield する.
 
         以下のような関数を (仮想的に) 実行する.
@@ -386,6 +386,8 @@ class Tree:
             for w in self.children[v]:
                 dfs(w) #頂点 v を出る.
             yield (v,0)
+
+        order (1変数関数): for w in self.children[v] の順番を指定する (昇順) (※ 無い場合は任意, 破壊的)
         """
         assert self.__after_seal_check()
 
@@ -399,6 +401,10 @@ class Tree:
 
         R=[-1]*self.index+[len(ch[x]) for x in range(self.index,self.index+self.N)]
         S=[0]*(self.index+self.N)
+
+        if order!=None:
+            for w in range(self.index,self.index+self.N):
+                ch[w].sort(key=order)
 
         while True:
             if R[v]==S[v]:  #もし,進めないならば
@@ -558,30 +564,35 @@ class Tree:
             A[v]=g(a,v)
         return A
 
-    def euler_tour_vertex(self):
-        """ オイラーツアー (vertex) に関する計算を行う. """
+    def euler_tour_vertex(self, order=None):
+        """ オイラーツアー (vertex) に関する計算を行う.
+
+        order: 頂点の順番を指定する (破壊的)
+        """
 
         assert self.__after_seal_check()
         if hasattr(self,"euler_vertex"):
             return
 
         #最初
-        X=[]; X_append=X.append #X: Euler Tour (vertex) のリスト
+        X=[-1]*(2*self.N-1) #X: Euler Tour (vertex) のリスト
 
         v=self.root
 
         ch=self.children
+        if order!=None:
+            for i in range(self.index,self.index+self.N):
+                ch[i].sort(key=order)
+
         pa=self.parent
 
         R=[-1]*self.index+[len(ch[x]) for x in range(self.index,self.index+self.N)]
         S=[0]*(self.index+self.N)
-        while True:
-            X_append(v)
-            if R[v]==S[v]:  #もし,進めないならば
-                if v==self.root:
-                    break
-                else:
-                    v=pa[v]
+
+        for t in  range(2*self.N-1):
+            X[t]=v
+            if R[v]==S[v]:
+                v=pa[v]
             else:   #進める
                 w=v
                 v=ch[v][S[v]]
@@ -590,12 +601,12 @@ class Tree:
         self.euler_vertex=X
         self.in_time=[-1]*(self.index+self.N)
         self.out_time=[-1]*(self.index+self.N)
-        for i in range(len(X)):
-            v=X[i]
+        for t in range(2*self.N-1):
+            v=X[t]
             if self.in_time[v]==-1:
-                self.in_time[v]=self.out_time[v]=i
+                self.in_time[v]=self.out_time[v]=t
             else:
-                self.out_time[v]=i
+                self.out_time[v]=t
 
     def euler_tour_edge(self):
         """ オイラーツアー (edge) に関する計算を行う.
@@ -610,17 +621,13 @@ class Tree:
         if not hasattr(self, "euler_vertex"):
             self.euler_tour_vertex()
 
-        self.euler_edge=[]
+        self.euler_edge=[0]*(2*(self.N-1))
         euler=self.euler_vertex
+        pa=self.parent
         for t in range(2*(self.N-1)):
             u=euler[t]; v=euler[t+1]
-
-            if self.is_parent(u,v):
-                k=1
-            else:
-                k=-1
-
-            self.euler_edge.append((u,v,k))
+            k=1 if u==pa[v] else -1
+            self.euler_edge[t]=(u,v,k)
 
     def centroid(self, all=False):
         """ 木の重心を求める
@@ -652,6 +659,37 @@ class Tree:
                 else:
                     return v
         return G
+
+    def generated_subtree(self,S):
+        """ S を含む最小の部分木の頂点を求める. """
+        assert self.__after_seal_check(*S)
+
+        if not hasattr(self, "in_time"):
+            self.euler_tour_vertex()
+
+        S=sorted(set(S),key=lambda i:self.in_time[i])
+        K=len(S)
+
+        T=set()
+        for i in range(K-1):
+            for a in self.path(S[i],S[i+1]):
+                T.add(a)
+        return sorted(T)
+
+    def generated_subtree_size(self,S):
+        """ S を含む最小の部分木のサイズを求める. """
+        assert self.__after_seal_check(*S)
+
+        if not hasattr(self, "in_time"):
+            self.euler_tour_vertex()
+
+        S=sorted(set(S),key=lambda i:self.in_time[i])
+        K=len(S)
+
+        X=0
+        for i in range(K-1):
+            X+=self.distance(S[i],S[i+1])
+        return (X+self.distance(S[-1],S[0]))//2
 
 #=================================================
 def Making_Tree(N,E,root,index=0):
