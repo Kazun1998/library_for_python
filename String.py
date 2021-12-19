@@ -6,18 +6,15 @@ def Run_Length_Encoding(S):
     if not S:
         return []
 
-    T=[]
+    R=[[S[0],1]]
 
-    b,k=S[0],1
-    for s in S[1:]:
-        if s==b:
-            k+=1
+    for i in range(1,len(S)):
+        if R[-1][0]==S[i]:
+            R[-1][1]+=1
         else:
-            T.append((b,k))
-            b,k=s,1
+            R.append([S[i],1])
 
-    T.append((b,k))
-    return T
+    return R
 
 def Substring_Count(S,Mod=None):
     """文字列Sの異なる部分列の個数を求める.
@@ -239,7 +236,7 @@ def Levenshtein_Distance(S:str,T:str,example=False) ->int:
                 D[j]=min(D[j-1],E[j],E[j-1])+1
 
     return D[-1]
-                
+
 #最長部分列
 def Longest_Common_Subsequence(S:str, T:str, example=False):
     """文字列 S,T における最長部分列の長さを求める.
@@ -266,12 +263,12 @@ def Longest_Common_Subsequence(S:str, T:str, example=False):
     if not example:
         return D[-1]
 
-    X=""
+    X=[]
     I,J=M,N
     D=DP[I];E=DP[I-1]
     while D[J]:
         if S[I-1]==T[J-1]:
-            X+=S[I-1]
+            X.append(S[I-1])
             I-=1
             J-=1
             D=DP[I]
@@ -284,4 +281,4 @@ def Longest_Common_Subsequence(S:str, T:str, example=False):
                 D=DP[I]
                 E=DP[I-1]
 
-    return DP[-1][-1],X[::-1]
+    return DP[-1][-1]," ".join(X[::-1])
