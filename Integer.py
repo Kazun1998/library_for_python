@@ -1,5 +1,8 @@
 #素因数分解
 def Prime_Factorization(N):
+    if N==0:
+        return [[0,1]]
+
     if N<0:
         R=[[-1,1]]
     else:
@@ -398,6 +401,34 @@ def Prime_List(N):
 
     return X
 
+def Interval_Sieve_of_Eratosthenes(L,R):
+    """ L 以上 R 以下のエラトステネスの篩を実行
+
+    [Input]
+    N:自然数
+
+    [Output]
+    素数かどうかのリスト ([0,0,1,1,0,1,...])
+    """
+
+    M=1
+    while True:
+        if (M+1)*(M+1)>R:
+            break
+        M+=1
+
+    X=[1]*(R-L+1)
+
+    if L<=0<=R:
+        X[0-L]=0
+    if L<=1<=R:
+        X[1-L]=0
+
+    for p in Prime_List(M):
+        for x in range(max((L+p-1)//p*p,p*p),R+1,p):
+            X[x-L]=0
+    return X
+
 def Smallest_Prime_Factor(N):
     """ 0,1,2,...,N の最小の素因数のリスト (0,1 については 1 にしている)
     """
@@ -439,9 +470,14 @@ def Faster_Prime_Factorization(N,L):
 
     L: Smallest_Prime_Factors(N)で求めたリスト
     """
-    N=abs(N)
+    if N==0:
+        return [[0,1]]
+    elif N>0:
+        D=[]
+    else:
+        D=[[-1,1]]
+        N=abs(N)
 
-    D=[]
     while N>1:
         a=L[N]
         k=0
@@ -450,6 +486,45 @@ def Faster_Prime_Factorization(N,L):
             N//=a
         D.append([a,k])
     return D
+
+def Interval_Prime_Factorization(L,R):
+    """ x=L,L+1,...,R に対して素因数分解を行う.
+
+    """
+
+    assert 0<=L<=R
+
+    M=1
+    while True:
+        if (M+1)*(M+1)>R:
+            break
+        M+=1
+
+    if L==0:
+        flag=1
+        L=1
+    else:
+        flag=0
+
+    A=list(range(L,R+1))
+    X=[[] for _ in range(R-L+1)]
+
+    for p in Prime_List(M):
+        for x in range((L+p-1)//p*p,R+1,p):
+            k=0
+            while A[x-L]%p==0:
+                A[x-L]//=p
+                k+=1
+            X[x-L].append((p,k))
+
+    for x in range(L,R+1):
+        if A[x-L]!=1:
+            X[x-L].append((A[x-L],1))
+
+    if flag:
+        return [(0,1)]+X
+    else:
+        return  X
 
 #素数の個数
 #Thanks for pyranine
