@@ -1,6 +1,6 @@
 class Coloring_Union_Find():
-    __slots__=["n","parents","rank","data","merge"]
-    def __init__(self,N,merge,e):
+    __slots__=["n","parents","rank","data","merge","__group_number"]
+    def __init__(self,N,merge,unit):
         """ 0,1,...,N-1 を要素として初期化する.
 
         N: 要素数
@@ -9,9 +9,10 @@ class Coloring_Union_Find():
         """
         self.n=N
         self.parents=[-1]*N
-        self.data=[e]*N
+        self.data=[unit]*N
         self.rank=[0]*N
         self.merge=merge
+        self.__group_number=N
 
     def find(self, x):
         """ 要素 x の属している族を調べる.
@@ -37,6 +38,8 @@ class Coloring_Union_Find():
 
         if x==y:
             return
+
+        self.__group_number-=1
 
         self.data[x]=self.data[y]=self.merge(self.data[x],self.data[y])
 
@@ -95,7 +98,7 @@ class Coloring_Union_Find():
     def group_count(self):
         """ 族の個数
         """
-        return len(self.roots())
+        return self.__group_number
 
     def all_group_members(self):
         """ 全ての族の出力
@@ -112,7 +115,7 @@ class Coloring_Union_Find():
         return {x:self.look(x) for x in self.roots()}
 
     def __str__(self):
-        return '\n'.join('{} [color:{}]: {}'.format(r,self.look(r),self.members(r)) for r in self.roots())
+        return '\n'.join('{} [color: {}]: {}'.format(r,self.look(r),self.members(r)) for r in self.roots())
 
     def __repr__(self):
         return self.__str__()
