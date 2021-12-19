@@ -1,6 +1,3 @@
-class Binary_Indexed_Tree_Exception(Exception):
-    pass
-
 """
 Note:各群演算に関する関数と単位元
 [和]
@@ -88,7 +85,9 @@ class Binary_Indexed_Tree():
         alpha=max(1,From+(1-index))
         beta=min(self.num,To+(1-index))
 
-        if alpha==1:
+        if alpha>beta:
+            return self.unit
+        elif alpha==1:
             return self.__section(beta)
         else:
             return self.calc(self.inv(self.__section(alpha-1)),self.__section(beta))
@@ -141,6 +140,7 @@ class Binary_Indexed_Tree():
     def __setitem__(self,index,val):
         self.update(index,val,self.index)
 
+#==================================================
 class Range_Binary_Indexed_Tree():
     def __init__(self, L, calc, unit, inv, index=1):
         """ calc を演算とする N 項の Binary Indexed Tree (区間作用付き) を作成
@@ -242,6 +242,7 @@ class Range_Binary_Indexed_Tree():
     def __setitem__(self,index,val):
         self.update(index,val,self.index)
 
+#==================================================
 class Compact_Binary_Indexed_Tree():
     def __init__(self, N, calc, unit, inv, index=1):
         """ calc を演算とする最高の添字が N になるような Compact Binary Indexed Tree を作成
@@ -301,7 +302,9 @@ class Compact_Binary_Indexed_Tree():
         alpha=max(1,From+(1-index))
         beta=min(self.num,To+(1-index))
 
-        if alpha==1:
+        if alpha>beta:
+            return self.unit
+        elif alpha==1:
             return self.__section(beta)
         else:
             return self.calc(self.inv(self.__section(alpha-1)),self.__section(beta))
