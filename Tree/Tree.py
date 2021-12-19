@@ -316,6 +316,19 @@ class Tree:
         assert self.__after_seal_check(u,v)
         return self.is_ancestor(v,u)
 
+    def direction(self, u, v):
+        """ 頂点 u から頂点 v へ向かうパスが頂点 u の次に通る頂点"""
+
+        assert self.__after_seal_check(u,v)
+        assert u!=v
+
+        if self.is_ancestor(u,v):
+            du=self.vertex_depth(u)
+            dv=self.vertex_depth(v)
+            return self.upper(v,dv-(du+1))
+        else:
+            return self.parent[u]
+
     def is_leaf(self,v):
         """ 頂点 v は葉? """
 
