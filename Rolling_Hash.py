@@ -87,3 +87,28 @@ class Rolling_Hash():
 
     def __len__(self):
         return len(self.string)
+
+#=================================================
+class Hasher():
+    def __init__(self, length, base, mod):
+        self.length=length
+        self.base=base
+        self.mod=mod
+
+        self.power=pw=[1]*length
+        for i in range(1,length):
+            pw[i]=(base*pw[i-1])%mod
+
+    def __repr__(self):
+        return "length: {}\nbase: {}\nmod: {}".format(self.length, self.base, self.mod)
+
+    def encode(self, S):
+        code=0; N=len(S)
+        for i in range(N):
+            code+=ord(S[i])*self.power[N-1-i]%self.mod
+            #code+=S[i]*self.power[N-1-i]%self.mod
+
+        return code%self.mod
+
+    def decode(self, S):
+        pass
