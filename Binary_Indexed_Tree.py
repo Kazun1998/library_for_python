@@ -108,7 +108,7 @@ class Binary_Indexed_Tree():
 
         cond: 単調増加
 
-        ※ cond(uint)=True の場合の返り値は index-1
+        ※ cond(unit)=True の場合の返り値は index-1
         ※ cond(B[1]+...+B[k]) なる k が存在しない場合の返り値は self.num+index
         """
 
