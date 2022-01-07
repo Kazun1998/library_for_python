@@ -187,17 +187,15 @@ def Is_Connected(G):
     Q_popleft=Q.popleft
     Q_append=Q.append
     adj=G.adjacent
-    K=0
 
     while Q:
         u=Q_popleft()
-        K+=1
         for v in adj[u]:
             if T[v]==0:
                 T[v]=1
                 Q_append(v)
 
-    return K==N
+    return all(T)
 
 #橋列挙
 def Bridge(G):
@@ -687,9 +685,8 @@ def Complete_Graph(N):
 
     G=Graph(N)
     for u in range(N):
-        for v in range(N):
-            if u!=v:
-                G.add_edge(u,v)
+        for v in range(u+1,N):
+            G.add_edge(u,v)
     return G
 
 #完全2部グラフ
@@ -867,7 +864,7 @@ def One_Point_Distance(G,From,with_path=False):
 
 #Warshall–Floyd
 def Warshall_Floyd(G):
-    """ Warshall–Floyd 法を用いて, 全点間距離を求める.
+    """ Warshall-Floyd 法を用いて, 全点間距離を求める.
 
     """
 
