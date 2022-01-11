@@ -1,13 +1,20 @@
-from copy import copy,deepcopy
+from copy import deepcopy
 
 class Modulo_Matrix_Error(Exception):
     pass
 
 class Modulo_Matrix():
+    __slots__=("ele","row","col","size")
+
     #入力
-    def __init__(self,M,Mod):
+    def __init__(self,M):
+        """ 行列 M の定義
+
+        M: 行列
+        ※ Mod: 法はグローバル変数から指定
+        """
+
         self.ele=[[x%Mod for x in X] for X in M]
-        self.Mod=Mod
         R=len(M)
         if R!=0:
             C=len(M[0])
@@ -41,7 +48,6 @@ class Modulo_Matrix():
 
     #加法
     def __add__(self,other):
-        self.__is_calculatable(other)
         M=self.ele; N=other.ele
 
         L=[[0]*self.col for _ in range(self.row)]
@@ -49,22 +55,20 @@ class Modulo_Matrix():
             Li,Mi,Ni=L[i],M[i],N[i]
             for j in range(self.col):
                 Li[j]=Mi[j]+Ni[j]
-        return Modulo_Matrix(L,self.Mod)
+        return Modulo_Matrix(L)
 
     def __iadd__(self,other):
-        self.__is_calculatable(other)
         M=self.ele; N=other.ele
 
         for i in range(self.row):
             Mi,Ni=M[i],N[i]
             for j in range(self.col):
                 Mi[j]+=Ni[j]
-                Mi[j]%=self.Mod
+                Mi[j]%=Mod
         return self
 
     #減法
     def __sub__(self,other):
-        self.__is_calculatable(other)
         M=self.ele; N=other.ele
 
         L=[[0]*self.col for _ in range(self.row)]
@@ -72,17 +76,16 @@ class Modulo_Matrix():
             Li,Mi,Ni=L[i],M[i],N[i]
             for j in range(self.col):
                 Li[j]=Mi[j]-Ni[j]
-        return Modulo_Matrix(L,self.Mod)
+        return Modulo_Matrix(L)
 
     def __isub__(self,other):
-        self.__is_calculatable(other)
         M=self.ele; N=other.ele
 
         for i in range(self.row):
             Mi,Ni=M[i],N[i]
             for j in range(self.col):
                 Mi[j]-=Ni[j]
-                Mi[j]%=self.Mod
+                Mi[j]%=Mod
         return self
 
     #乗法
@@ -100,8 +103,8 @@ class Modulo_Matrix():
                     m_ik,Nk=Mi[k],N[k]
                     for j in range(other.col):
                         Ei[j]+=m_ik*Nk[j]
-                        Ei[j]%=self.Mod
-            return Modulo_Matrix(E,self.Mod)
+                        Ei[j]%=Mod
+            return Modulo_Matrix(E)
         elif isinstance(other,int):
             return self.__scale__(other)
 
@@ -114,7 +117,7 @@ class Modulo_Matrix():
             raise Modulo_Matrix_Error("正方行列ではありません.")
 
         M=self
-        N=M.row; Mod=M.Mod
+        N=M.row
         R=[[int(i==j) for j in range(N)] for i in range(N)]
         T=deepcopy(M.ele)
 
@@ -139,33 +142,51 @@ class Modulo_Matrix():
                 for k in range(N):
                     Ti[k]-=Tj[k]*c; Ti[k]%=Mod
                     Ri[k]-=Rj[k]*c; Ri[k]%=Mod
-        return Modulo_Matrix(R,Mod)
+        return Modulo_Matrix(R)
 
     #スカラー倍
     def __scale__(self,r):
         M=self.ele
-        L=[[(r*M[i][j])%self.Mod for j in range(self.col)] for i in range(self.row)]
-        return Modulo_Matrix(L,self.Mod)
+        L=[[(r*M[i][j])%Mod for j in range(self.col)] for i in range(self.row)]
+        return Modulo_Matrix(L)
 
     #累乗
     def __pow__(self,n):
-        A=self
-        if A.row!=A.col:
+        if self.row!=self.col:
             raise Modulo_Matrix_Error("正方行列ではありません.")
 
-        if n<0:
-            return (A**(-n)).Inverse()
+        r=self.col
 
-        R=Modulo_Matrix([[1*(i==j) for j in range(A.row)] for i in range(A.row)],self.Mod)
-        D=A
+        def __mat_mul(A,B):
+            E=[[0]*r for _ in range(r)]
+            for i in range(r):
+                a=A[i]; e=E[i]
+                for k in range(r):
+                    b=B[k]
+                    for j in range(r):
+                        e[j]+=a[k]*b[j]
+                        e[j]%=Mod
+            return E
 
-        while n>0:
-            if n%2==1:
-                R*=D
-            D*=D
-            n=n>>1
+        X=deepcopy(self.ele)
+        E=[[1 if i==j else 0 for j in range(r)] for i in range(r)]
 
-        return R
+        sgn=1 if n>=0 else -1
+        n=abs(n)
+
+        while True:
+            if n&1:
+                E=__mat_mul(E,X)
+            n>>=1
+            if n:
+                X=__mat_mul(X,X)
+            else:
+                break
+
+        if sgn==1:
+            return Modulo_Matrix(E)
+        else:
+            return Modulo_Matrix(E).Inverse()
 
     #等号
     def __eq__(self,other):
@@ -212,22 +233,22 @@ class Modulo_Matrix():
 
             if T[I][J]!=0:
                 u=T[I][J]
-                u_inv=pow(u,self.Mod-2,self.Mod)
+                u_inv=pow(u,Mod-2,Mod)
                 for j in range(C):
                     T[I][j]*=u_inv
-                    T[I][j]%=self.Mod
+                    T[I][j]%=Mod
 
                 for i in range(R):
                     if i!=I:
                         v=T[i][J]
                         for j in range(C):
                             T[i][j]-=v*T[I][j]
-                            T[i][j]%=self.Mod
+                            T[i][j]%=Mod
                 I+=1
                 if I==R:
                     break
 
-        return Modulo_Matrix(T,self.Mod)
+        return Modulo_Matrix(T)
 
     #列基本変形
     def Column_Reduce(self):
@@ -252,22 +273,22 @@ class Modulo_Matrix():
 
             if T[I][J]!=0:
                 u=T[I][J]
-                u_inv=pow(u,self.Mod-2,self.Mod)
+                u_inv=pow(u,Mod-2,Mod)
                 for i in range(R):
                     T[i][J]*=u_inv
-                    T[i][J]%=self.Mod
+                    T[i][J]%=Mod
 
                 for j in range(C):
                     if j!=J:
                         v=T[I][j]
                         for i in range(R):
                             T[i][j]-=v*T[i][J]
-                            T[i][j]%=self.Mod
+                            T[i][j]%=Mod
                 J+=1
                 if J==C:
                     break
 
-        return Modulo_Matrix(T,self.Mod)
+        return Modulo_Matrix(T)
 
     #行列の階数
     def Rank(self):
@@ -292,7 +313,7 @@ class Modulo_Matrix():
 
     #行の結合
     def Row_Union(self,other):
-        return Modulo_Matrix(self.ele+other.ele,self.Mod)
+        return Modulo_Matrix(self.ele+other.ele,Mod)
 
     #列の結合
     def Column_Union(self,other):
@@ -300,7 +321,7 @@ class Modulo_Matrix():
         for i in range(self.row):
             E.append(self.ele[i]+other.ele[i])
 
-        return Modulo_Matrix(E,self.Mod)
+        return Modulo_Matrix(E)
 
     def __getitem__(self,index):
         assert isinstance(index,tuple) and len(index)==2
@@ -309,21 +330,22 @@ class Modulo_Matrix():
     def __setitem__(self,index,val):
         assert isinstance(index,tuple) and len(index)==2
         self.ele[index[0]][index[1]]=val
+
 #=================================================
 #単位行列
-def Identity_Matrix(n,Mod):
-    return Modulo_Matrix([[1*(i==j) for j in range(n)] for i in range(n)],Mod)
+def Identity_Matrix(n):
+    return Modulo_Matrix([[1*(i==j) for j in range(n)] for i in range(n)])
 
 #零行列
-def Zero_Matrix(r,c,Mod):
-    return Modulo_Matrix([[0]*c for i in range(r)],Mod)
+def Zero_Matrix(r,c):
+    return Modulo_Matrix([[0]*c for i in range(r)])
 
 #正方行列?
 def Is_Square(M):
     return M.row==M.col
 
 #対角行列
-def Diagonal_Matrix(A,Mod):
+def Diagonal_Matrix(A):
     """Aの第i要素が(i,i)成分である対角行列を生成する.
 
     A:リスト
@@ -333,7 +355,7 @@ def Diagonal_Matrix(A,Mod):
     T=[[0]*N for _ in range(N)]
     for i in range(N):
         T[i][i]=A[i]
-    return Modulo_Matrix(T,Mod)
+    return Modulo_Matrix(T)
 
 #跡
 def Trace(M):
@@ -341,9 +363,9 @@ def Trace(M):
         raise Modulo_Matrix_Error("正方行列ではありません")
 
     T=0
-    for i in range(len(M)):
+    for i in range(len(M.ele)):
         T+=M.ele[i][i]
-        T%=M.Mod
+        T%=Mod
     return T
 
 def Determinant(M):
@@ -351,7 +373,6 @@ def Determinant(M):
         raise Modulo_Matrix_Error("正方行列ではありません")
 
     N=M.row
-    Mod=M.Mod
     T=deepcopy(M.ele)
     det=1
 
@@ -378,14 +399,14 @@ def Determinant(M):
         det%=Mod
     return det
 
-def Linear_System_Equations(A,b,Mod):
+def Linear_System_Equations(A,b):
     assert len(A)==len(b)
 
     X=[]
     for i in range(len(A)):
         X.append(A[i]+[b[i]])
 
-    Y=Modulo_Matrix(X,Mod)
+    Y=Modulo_Matrix(X)
     Y=Y.Row_Reduce()
 
     T=[]
@@ -420,3 +441,5 @@ def Linear_System_Equations(A,b,Mod):
     B=[B[i] for i in range(M) if Flag[i]!=1]
     return v,B
 
+#===
+Mod=998244353
