@@ -167,6 +167,9 @@ class Point():
     def arg(self):
         return atan2(self.y,self.x)
 
+    def copy(self):
+        return Point(self.x,self.y)
+
 def iSP(A,B,C):
     """ A->B->C と進んだときの進行方向を見る. ※ B が中心
 
@@ -281,7 +284,6 @@ def Argument_Sort(L):
         if a<b: return -1
         elif a>b: return 1
         else:return -compare(P.det(Q),0,ep)
-
 
     L.sort(key=cmp_to_key(cmp))
 
