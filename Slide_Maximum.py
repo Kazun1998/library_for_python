@@ -14,7 +14,7 @@ def Slide_Maximum_Index(A,k):
     N=len(A)
     index=[0]*N
     Q=deque()
-    
+
     for i in range(N):
         while Q and Q[0]<=i-k:
             Q.popleft()
@@ -39,7 +39,7 @@ def Slide_Maximum_Value(A,k):
     N=len(A)
     res=[0]*N
     Q=deque()
-    
+
     for i in range(N):
         while Q and Q[0]<=i-k:
             Q.popleft()
