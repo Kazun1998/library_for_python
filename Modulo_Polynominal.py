@@ -1,5 +1,7 @@
 class Modulo_Polynominal():
-    def __init__(self,Poly,Max_Degree=2*10**5,Char="X"):
+    __slots__=("Poly", "Max_Degree")
+
+    def __init__(self,Poly,Max_Degree=2*10**5):
         from itertools import zip_longest
         """多項式の定義
 
@@ -10,43 +12,19 @@ class Modulo_Polynominal():
         ※Mod:法はグローバル変数から指定
         """
         self.Poly=[p%Mod for p in Poly[:Max_Degree]]
-        self.Char=Char
         self.Max_Degree=Max_Degree
-        self.minus=10**7
 
     def __str__(self):
-        if bool(self):
-            M=[(k,a) for k,a in enumerate(self.Poly) if a]
-            for i in range(len(M)):
-                k,a=M[i]
-                if Mod-a<=self.minus:
-                    M[i]=(k,a-Mod)
-
-
-            A=["{} {} ^ {} ".format(a,self.Char,k) for k,a in M]
-            S=" "+" + ".join(A)
-            S=S.replace(" + -"," - ")
-            S=S.replace(" {} ^ 0 ".format(self.Char),"")
-            S=S.replace(" {} ^ 1 ".format(self.Char)," "+self.Char+" ")
-            S=S.replace(" 1 {} ".format(self.Char),self.Char+" ")
-            S=S.replace(" -1 {} ".format(self.Char),"-"+self.Char+" ") 
-            S=S.replace(" ","")
-        else:
-            S="0"
-
-        S+=" (mod (Z/ {0} Z)[{1}]/ ({1}^{2}))".format(Mod,self.Char,self.Max_Degree)
-        return S.strip()
+        return str(self.Poly)
 
     def __repr__(self):
         return self.__str__()
 
     #=
     def __eq__(self,other):
-        if self.Max_Degree!=other.Max_Degree:
-            return False
-
         from itertools import zip_longest
         return all([a==b for a,b in zip_longest(self.Poly,other.Poly,fillvalue=0)])
+
     #+,-
     def __pos__(self):
         return self
@@ -54,25 +32,39 @@ class Modulo_Polynominal():
     def __neg__(self):
         return self.scale(-1)
 
+    #items
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            return Modulo_Polynominal(self.Poly[index], self.Max_Degree)
+        else:
+            if index<0:
+                raise IndexError("index is negative (index: {})".format(index))
+            elif index>=len(self.Poly):
+                return 0
+            else:
+                return self.Poly[index]
+
+    def __setitem__(self, index, value):
+        if index<0:
+            raise IndexError("index is negative (index: {})".format(index))
+        elif index>=self.Max_Degree:
+            return
+
+        if index>=len(self.Poly):
+            self.Poly+=[0]*(index-len(self.Poly)+1)
+        self.Poly[index]=value%Mod
+
     #Boole
     def __bool__(self):
         return any(self.Poly)
 
     #簡略化
     def reduce(self):
-        P_deg=self.degree()
-
-        if not(P_deg>=0):
-            self.Poly=[0]
-            self.censor(self.Max_Degree)
-            return
-
-        for i in range(self.degree(),-1,-1):
-            if self.Poly[i]:
-                self.Poly=self.Poly[:i+1]
-                self.censor(self.Max_Degree)
-                return
-        self.Poly=[]
+        P=self.Poly
+        for d in range(len(P)-1,-1,-1):
+            if P[d]:
+                break
+        self.resize(d+1)
         return
 
     #シフト
@@ -81,24 +73,23 @@ class Modulo_Polynominal():
             return self>>(-other)
 
         if other>self.Max_Degree:
-            return Modulo_Polynominal([0],self.Max_Degree,self.Char)
+            return Modulo_Polynominal([0],self.Max_Degree)
 
         G=[0]*other+self.Poly
-        return Modulo_Polynominal(G,self.Max_Degree,self.Char)
+        return Modulo_Polynominal(G,self.Max_Degree)
 
     def __rshift__(self,other):
         if other<0:
             return  self<<(-other)
 
-        return Modulo_Polynominal(self.Poly[other:],self.Max_Degree,self.Char)
+        return Modulo_Polynominal(self.Poly[other:],self.Max_Degree)
 
     #次数
     def degree(self):
-        d=len(self.Poly)-1
-        for y in self.Poly[::-1]:
-            if y:
+        P=self.Poly
+        for d in range(len(self.Poly)-1,-1,-1):
+            if P[d]:
                 return d
-            d-=1
         return -float("inf")
 
     #加法
@@ -110,7 +101,7 @@ class Modulo_Polynominal():
             from itertools import zip_longest
             N=min(P.Max_Degree,Q.Max_Degree)
             R=[(a+b)%Mod for (a,b) in zip_longest(P.Poly,Q.Poly,fillvalue=0)]
-            return Modulo_Polynominal(R,N,P.Char)
+            return Modulo_Polynominal(R,N)
         else:
             P_deg=P.degree()
             if P_deg<0:P_deg=0
@@ -119,7 +110,7 @@ class Modulo_Polynominal():
             R=[p for p in P.Poly]
             R[0]=(R[0]+Q)%Mod
 
-            R=Modulo_Polynominal(R,P.Max_Degree,P.Char)
+            R=Modulo_Polynominal(R,P.Max_Degree)
             R.reduce()
             return R
 
@@ -162,7 +153,7 @@ class Modulo_Polynominal():
                                 B[i+j]-=Mod
             else:
                 B=Convolution_Mod(U,V)[:M]
-            B=Modulo_Polynominal(B,M,self.Char)
+            B=Modulo_Polynominal(B,M)
             B.reduce()
             return B
         else:
@@ -184,24 +175,24 @@ class Modulo_Polynominal():
         G_deg=G.degree()
 
         if F_deg<G_deg:
-            A=Modulo_Polynominal([0],N,self.Char)
+            A=Modulo_Polynominal([0],N)
             A.reduce()
             return A
 
         G.reduce()
-        F_inv=Modulo_Polynominal(F.Poly[::-1],F.Max_Degree,F.Char)
-        G_inv=Modulo_Polynominal(G.Poly[::-1],F.Max_Degree,F.Char)
+        F_inv=Modulo_Polynominal(F.Poly[::-1],F.Max_Degree)
+        G_inv=Modulo_Polynominal(G.Poly[::-1],F.Max_Degree)
 
         H=F_inv/G_inv
         H.censor(F_deg-G_deg+1)
-        return Modulo_Polynominal(H.Poly[::-1],N,self.Char)
+        return Modulo_Polynominal(H.Poly[::-1],N)
 
     def __rfloordiv__(self,other):
         if not self:
             raise ZeroDivisionError
 
         if isinstance(other,int):
-            return Modulo_Polynominal([0],self.Max_Degree,self.Char)
+            return Modulo_Polynominal([0],self.Max_Degree)
 
     #剰余
     def __mod__(self,other):
@@ -225,7 +216,7 @@ class Modulo_Polynominal():
             m=abs(n)
 
             Q=self
-            A=Modulo_Polynominal([1],self.Max_Degree,self.Char)
+            A=Modulo_Polynominal([1],self.Max_Degree)
             while m>0:
                 if m&1:
                     A*=Q
@@ -235,13 +226,13 @@ class Modulo_Polynominal():
             if n>=0:
                 return A
             else:
-                return A.__inv__()
+                return A.inverse()
         else:
             P=Log(self)
             return Exp(P*other)
 
     #逆元
-    def __inv__(self,deg=None):
+    def inverse(self, deg=None):
         assert self.Poly[0],"定数項が0"
 
         P=self
@@ -270,11 +261,13 @@ class Modulo_Polynominal():
                 Q=Q[1:]
 
             G=[c_inv*g%Mod for g in G]
-            return Modulo_Polynominal(G,P.Max_Degree,P.Char)
+            return Modulo_Polynominal(G,P.Max_Degree)
         else:
             """
             FFTの理論を応用して求める.
-            計算量:求めたい項の個数をNとして, O(N log N)
+            計算量: 求めたい項の個数をNとして, O(N log N)
+
+            Reference: https://judge.yosupo.jp/submission/42413
             """
             if deg==None:
                 deg=P.Max_Degree
@@ -288,45 +281,42 @@ class Modulo_Polynominal():
             m=1
             G=[r]
             while m<deg:
-                T=F[:m<<1]
-                H=Convolution_Mod(T,G)[m:m<<1]
+                A=F[:min(N, 2*m)]; A+=[0]*(2*m-len(A))
+                B=G.copy(); B+=[0]*(2*m-len(B))
 
-                L=Convolution_Mod(H,G)[:m]
-                for a in L:
-                    G.append(Mod-a)
+                NTT(A); NTT(B)
+                for i in range(2*m):
+                    A[i]=A[i]*B[i]%Mod
+
+                Inverse_NTT(A)
+                A=A[m:]+[0]*m
+                NTT(A)
+                for i in range(2*m):
+                    A[i]=-A[i]*B[i]%Mod
+                Inverse_NTT(A)
+
+                G.extend(A[:m])
                 m<<=1
-            return Modulo_Polynominal(G[:deg],P.Max_Degree,P.Char)
+            return Modulo_Polynominal(G[:deg], self.Max_Degree)
 
     #除法
     def __truediv__(self,other):
-        if isinstance(other,Modulo_Polynominal):
-            return self*other.__inv__()
+        if isinstance(other, Modulo_Polynominal):
+            return self*other.inverse()
         else:
             return pow(other,Mod-2,Mod)*self
 
     def __rtruediv__(self,other):
-        return other*self.__inv__()
+        return other*self.inverse()
 
     #スカラー倍
-    def scale(self,s):
+    def scale(self, s):
         P=self
         s%=Mod
         A=[(s*p)%Mod for p in P.Poly]
-        A=Modulo_Polynominal(A,P.Max_Degree,P.Char)
+        A=Modulo_Polynominal(A,P.Max_Degree)
         A.reduce()
         return A
-
-    #係数
-    def coefficient(self,n):
-        try:
-            if n<0:
-                raise IndexError
-
-            return self.Poly[n]
-        except IndexError:
-            return  0
-        except TypeError:
-            return 0
 
     #最高次の係数
     def leading_coefficient(self):
@@ -335,32 +325,59 @@ class Modulo_Polynominal():
                 return x
         return 0
 
-    def censor(self,n,Return=False):
-        """ n次以上の係数をカット
+    def censor(self, N=-1, Return=False):
+        """ N 次以上の係数をカット
         """
-        if Return:
-            return Modulo_Polynominal(self.Poly[:n],self.Max_Degree,self.Char)
-        else:
-            self.Poly=self.Poly[:n]
 
-    def resize(self,n,Return=False):
+        if N==-1:
+            N=self.Max_Degree
+
+        N=min(N, self.Max_Degree)
+
+        if Return:
+            return Modulo_Polynominal(self.Poly[:N],self.Max_Degree)
+        else:
+            self.Poly=self.Poly[:N]
+
+    def resize(self, N, Return=False):
+        """ 強制的に Poly の配列の長さを N にする.
+
+        """
+
+        N=min(N, self.Max_Degree)
         P=self
         if Return:
-            if len(P.Poly)>n:
-                E=P.Poly[:n]
+            if len(P.Poly)>N:
+                E=P.Poly[:N]
             else:
-                E=P.Poly+[0]*(n-P.Poly)
-            return Modulo_Polynominal(E,P.Max_Degree,P.Char)
+                E=P.Poly+[0]*(N-len(P.Poly))
+            return Modulo_Polynominal(E,P.Max_Degree)
         else:
-            if len(P.Poly)>n:
-                del P.Poly[n:]
+            if len(P.Poly)>N:
+                del P.Poly[N:]
             else:
-                P.Poly+=[0]*(n-len(P.Poly))
+                P.Poly+=[0]*(N-len(P.Poly))
+
+    #代入
+    def substitution(self, a):
+        """ a を (形式的に) 代入した値を求める.
+
+        a: int
+        """
+
+        y=0
+        t=1
+        for p in self.Poly:
+            y=(y+p*t)%Mod
+            t=(t*a)%Mod
+        return y
+
+
 #=================================================
 def Primitive_Root(p):
     """Z/pZ上の原始根を見つける
 
-    p:素数
+    p: 素数
     """
     if p==2:
         return 1
@@ -410,9 +427,9 @@ def Primitive_Root(p):
 
 #参考元 https://atcoder.jp/contests/practice2/submissions/16789717
 def NTT(A):
-    """AをMod を法とする数論変換を施す
+    """A を Mod を法とする数論変換を施す
 
-    ※Modはグローバル変数から指定
+    ※ Mod はグローバル変数から指定
     """
     primitive=Primitive_Root(Mod)
 
@@ -450,9 +467,9 @@ def NTT(A):
 
 #参考元 https://atcoder.jp/contests/practice2/submissions/16789717
 def Inverse_NTT(A):
-    """AをMod を法とする逆数論変換を施す
+    """A を Mod を法とする逆数論変換を施す
 
-    ※Modはグローバル変数から指定
+    ※ Mod はグローバル変数から指定
     """
     primitive=Primitive_Root(Mod)
 
@@ -491,9 +508,9 @@ def Inverse_NTT(A):
 
 #参考元 https://atcoder.jp/contests/practice2/submissions/16789717
 def Convolution_Mod(A,B):
-    """A,BをMod を法とする畳み込みを求める.
+    """ A, B を Mod を法とする畳み込みを求める.
 
-    ※Modはグローバル変数から指定
+    ※ Mod はグローバル変数から指定
     """
     if not A or not B:
         return []
@@ -530,9 +547,9 @@ def Convolution_Mod(A,B):
     return A[:L]
 
 def Autocorrelation_Mod(A):
-    """A自身に対して,Mod を法とする畳み込みを求める.
+    """ A 自身に対して,Mod を法とする畳み込みを求める.
 
-    ※Modはグローバル変数から指定
+    ※ Mod はグローバル変数から指定
     """
     N=len(A)
     L=2*N-1
@@ -571,9 +588,8 @@ def inverse(F):
     return G[:N]
 
 def Differentiate(P):
-    F=P.Poly
-    G=[(k*a)%Mod for k,a in enumerate(F[1:],1)]+[0]
-    return Modulo_Polynominal(G,P.Max_Degree,P.Char)
+    G=[(k*a)%Mod for k,a in enumerate(P.Poly[1:],1)]+[0]
+    return Modulo_Polynominal(G,P.Max_Degree)
 
 def Integrate(P):
     F=P.Poly
@@ -587,7 +603,7 @@ def Integrate(P):
             Inv[i]=(-q*Inv[r])%Mod
 
     G=[0]+[(Inv[k]*a)%Mod for k,a in enumerate(F,1)]
-    return Modulo_Polynominal(G,P.Max_Degree,P.Char)
+    return Modulo_Polynominal(G,P.Max_Degree)
 
 def Add(a, b):
     return [(va + vb) % Mod for va, vb in zip(a, b)]
@@ -654,10 +670,10 @@ def Exp(P):
         #2.g'
         V=Convolution_Mod(F,U)[:m]
         #2.h'
-        F+=V
+        F.extend(V)
         #2.i'
         m<<=1
-    return Modulo_Polynominal(F[:N],P.Max_Degree,P.Char)
+    return Modulo_Polynominal(F[:N],P.Max_Degree)
 
 def Root(P,k):
     assert P.Poly[0]==1,"定数項が1ではない"
@@ -724,18 +740,18 @@ def Power(P,k):
         if p:
             break
     else:
-        return Modulo_Polynominal([0],P.Max_Degree,P.Char)
+        return Modulo_Polynominal([0],P.Max_Degree)
 
     if d*k>P.Max_Degree:
-        return Modulo_Polynominal([0],P.Max_Degree,P.Char)
+        return Modulo_Polynominal([0],P.Max_Degree)
 
     p_inv=pow(p,Mod-2,Mod)
-    Q=Modulo_Polynominal([(p_inv*a)%Mod for a in F[d:]],P.Max_Degree,P.Char)
+    Q=Modulo_Polynominal([(p_inv*a)%Mod for a in F[d:]],P.Max_Degree)
 
     G=Exp(k*Log(Q)).Poly
     pk=pow(p,k,Mod)
     G=[0]*(d*k)+[(pk*a)%Mod for a in G]
-    return Modulo_Polynominal(G,P.Max_Degree,P.Char)
+    return Modulo_Polynominal(G,P.Max_Degree)
 
 #ルジャンドル記号
 def Legendre(X):
@@ -815,7 +831,7 @@ def Sqrt(P):
     for d,p in enumerate(F):
         if p:break
     else:
-        return Modulo_Polynominal([0],P.Max_Degree,P.Char)
+        return Modulo_Polynominal([0],P.Max_Degree)
 
     if d&1:return
     E=__sqrt(F[d:],N-d//2)
@@ -823,7 +839,7 @@ def Sqrt(P):
     if E==None:return
     if d>0:
         E=[0]*(d//2)+E
-    return Modulo_Polynominal(E,P.Max_Degree,P.Char)
+    return Modulo_Polynominal(E,P.Max_Degree)
 
 def Taylor_Shift(P,a):
     """与えられた多項式 P に対して, P(X+a) を求める.
@@ -860,29 +876,24 @@ def Taylor_Shift(P,a):
     for i in range(len(H)):
         H[i]=(H[i]*fact_inv[i])%Mod
 
-    return Modulo_Polynominal(H,P.Max_Degree,P.Char)
+    return Modulo_Polynominal(H,P.Max_Degree)
 
 """
 形式的ベキ級数を用いた応用的な内容
 """
 #Bernoulli
 def Bernoulli(N):
-    """ベルヌーイ数 B_0,B_1,...,B_Nの(mod Mod)での値を求める.
+    """ベルヌーイ数 B_0,B_1,...,B_N の (mod Mod) での値を求める.
     """
 
-    if N==0:
-        return [1]
-
-    X=Modulo_Polynominal([0,1],N+2)
-    P=Exp(X)>>1
-    F=(1/P).Poly
+    P=Exp(Modulo_Polynominal([0,1],N+2))[1:]
+    F=P.inverse().Poly[:-1]
 
     fact=1
     for i in range(N+1):
         F[i]=(F[i]*fact)%Mod
         fact=(fact*(i+1))%Mod
 
-    del F[-1]
     return F
 
 def Partition(N):
@@ -902,7 +913,7 @@ def Partition(N):
             F[k*(3*k+1)//2]+=m
         k+=1
 
-    return (1/Modulo_Polynominal(F,N+1)).Poly
+    return Modulo_Polynominal(F,N+1).inverse().Poly
 
 def Subset_Sum(X,K):
     """Xの要素のうち,任意個を用いて, 和がk=0,1,...,Kになる組み合わせの総数をModで割った余りを求める.
