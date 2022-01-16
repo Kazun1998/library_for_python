@@ -98,7 +98,9 @@ def Binary_Search_Range_Count(A,x,y,sort=False,left_close=True,right_close=True)
     if len(A)==0 or x<A[0] or A[-1]<x:
         return 0
 
-    return Binary_Search_Small_Count(A,y,equal=right_close)-Binary_Search_Small_Count(A,x,equal=not left_close)
+    alpha=Binary_Search_Small_Count(A,y,equal=right_close)
+    beta =Binary_Search_Small_Count(A,x,equal=not left_close)
+    return alpha-beta
 
 def Binary_Search_Low_Value(A,x,equal=False,sort=False,default=None):
     """Aのx未満の要素の中で最大のものを出力する.
