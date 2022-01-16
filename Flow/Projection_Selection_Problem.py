@@ -163,29 +163,29 @@ class Project_Selection_Problem:
         F=MaxFlow(self.ver_num)
         base=self.base
         for i in range(self.N):
-            F.add_edge(self.source,i,0)
-            F.add_edge(i,self.target,0)
+            F.add_arc(self.source,i,0)
+            F.add_arc(i,self.target,0)
 
             if self.indivi[i][0]>=0:
                 base+=self.indivi[i][0]
-                F.add_edge(self.source,i,self.indivi[i][0])
+                F.add_arc(self.source,i,self.indivi[i][0])
             else:
-                F.add_edge(i,self.target,-self.indivi[i][0])
+                F.add_arc(i,self.target,-self.indivi[i][0])
 
             if self.indivi[i][1]>=0:
                 base+=self.indivi[i][1]
-                F.add_edge(i,self.target,self.indivi[i][1])
+                F.add_arc(i,self.target,self.indivi[i][1])
             else:
-                F.add_edge(self.source,i,-self.indivi[i][1])
+                F.add_arc(self.source,i,-self.indivi[i][1])
 
         for i in range(self.target+1,self.ver_num):
             if self.indivi[i][0]!=None:
-                F.add_edge(self.source,i,-self.indivi[i][0])
+                F.add_arc(self.source,i,-self.indivi[i][0])
             if self.indivi[i][1]!=None:
-                F.add_edge(i,self.target,-self.indivi[i][1])
+                F.add_arc(i,self.target,-self.indivi[i][1])
 
         for x,y,c in self.mutual:
-            F.add_edge(x,y,c)
+            F.add_arc(x,y,c)
 
         alpha=F.max_flow(self.source,self.target)
         if Mode==0:
