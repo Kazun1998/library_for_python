@@ -2,29 +2,29 @@ from Union_Find import Union_Find
 
 class Bipartite_Check():
     __slots__=["N","__Union"]
- 
+
     def __init__(self,N):
         self.N=N
         self.__Union=Union_Find(2*N)
- 
+
     def add_edge(self,u,v):
         self.__Union.union(u,v+self.N)
         self.__Union.union(u+self.N,v)
- 
+
     def check(self):
         U=self.__Union
         for x in range(self.N):
             if U.same(x,x+self.N):
                 return False
         return True
- 
+
     def bipart(self, Mode=False):
         X=[-1]*self.N
         G=self.__Union.all_group_members()
         for x in range(self.N):
             if X[x]!=-1:
                 continue
- 
+
             z=self.__Union.find(x)
             for y in G[z]:
                 if y<self.N:
@@ -58,5 +58,3 @@ class Bipartite_Check():
             for u in U:
                 S.add(self.__Union.find(u))
             return pow(2,len(S),Mod)
-    
-        
