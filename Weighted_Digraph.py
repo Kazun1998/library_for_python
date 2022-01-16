@@ -3,7 +3,15 @@ class Weigthed_Digraph:
 
     """
     #入力定義
-    def __init__(self, N, allow_multi=False, initialize=None, multi_edge=None):
+    def __init__(self, N, allow_multi=False, multi_edge=None, initialize=None):
+        """ 重み[付き]有向グラフを生成する.
+
+        N: 頂点数
+        allow_multi: 多重辺を認めるか?
+        multi_edge: 多重辺における重みのまとめ方 (重みに関する2変数関数)
+        initilize: multi_edge の単位元
+        """
+
         self.N=N
         self.arc_number=0
 
