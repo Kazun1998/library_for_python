@@ -860,7 +860,11 @@ def GCD(*X):
 def Extend_Euclid(a:int,b:int):
     """gcd(a,b) と ax+by=gcd(a,b) を満たす整数 x,y の例を挙げる.
 
-    a,b:整数
+    [Input]
+    a,b: 整数
+
+    [Output]
+    (x,y,gcd(a,b))
     """
     s,t,u,v=1,0,0,1
     while b:
