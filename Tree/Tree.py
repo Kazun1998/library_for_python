@@ -433,7 +433,7 @@ class Tree:
                 yield (v,1)
 
     def top_down(self):
-        """ 木の頂点から yield する. """
+        """ 木の根から yield する. """
 
         assert self.__after_seal_check()
         if not hasattr(self,"tower"):
@@ -444,7 +444,7 @@ class Tree:
                 yield v
 
     def bottom_up(self):
-        """ 木の根から yield する. """
+        """ 木の葉から yield する. """
 
         assert self.__after_seal_check()
         if not hasattr(self,"tower"):
