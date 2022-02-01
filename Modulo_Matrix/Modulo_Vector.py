@@ -15,6 +15,9 @@ class Modulo_Vector:
     def __repr__(self):
         return str(self)
 
+    def __bool__(self):
+        return any(self.vec)
+
     #+,-
     def __pos__(self):
         return self
@@ -129,6 +132,22 @@ def Matrix_Action(A,v):
             w[i]+=a[j]*v[j]
             w[i]%=Mod
     return Modulo_Vector(w)
+
+def Row_Vector(A):
+    """ 行列 A の行ベクトルを生成する.
+
+    A: Modulo_Matrix
+    """
+
+    return [Modulo_Vector(v) for v in A.ele]
+
+def Column_Vector(A):
+    """ 行列 A の列ベクトルを生成する.
+
+    A: Modulo_Matrix
+    """
+
+    return [Modulo_Vector(v) for v in zip(*A.ele)]
 
 def Tensor_Product(u,v):
     """ u,v のテンソル積 u (x) v を表すベクトルを求める.
