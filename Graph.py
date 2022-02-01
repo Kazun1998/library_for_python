@@ -1,4 +1,6 @@
 class Graph:
+    __slots__=("N", "edge_number", "adjacent")
+
     #入力定義
     def __init__(self,N):
         """ N 頂点の空グラフ (多重辺なし) を生成する."""
@@ -400,8 +402,8 @@ def Tree_Diameter(T,Mode=False):
     """
     from collections import deque
 
-    def bfs(x):
-        D={y:-1 for y in T.adjacent}
+    def __bfs(x):
+        D=[-1]*T.N
         D[x]=0
         Q=deque([x])
         while Q:
@@ -415,11 +417,8 @@ def Tree_Diameter(T,Mode=False):
         z=max(D,key=lambda x:D[x])
         return z,D[z]
 
-    for x in T.adjacent:
-        break
-
-    u,_=bfs(x)
-    v,d=bfs(u)
+    u,_=__bfs(0)
+    v,d=__bfs(u)
 
     if Mode:
         return (d,(u,v))
