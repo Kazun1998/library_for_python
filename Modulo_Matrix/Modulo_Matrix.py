@@ -143,6 +143,7 @@ class Modulo_Matrix():
     #スカラー倍
     def __scale__(self,r):
         M=self.ele
+        r%=Mod
         L=[[(r*M[i][j])%Mod for j in range(self.col)] for i in range(self.row)]
         return Modulo_Matrix(L)
 
@@ -380,48 +381,6 @@ def Determinant(M):
         det*=T[i][i]
         det%=Mod
     return det
-
-def Linear_System_Equations(A,b):
-    assert len(A)==len(b)
-
-    X=[]
-    for i in range(len(A)):
-        X.append(A[i]+[b[i]])
-
-    Y=Modulo_Matrix(X)
-    Y=Y.row_reduce()
-
-    T=[]
-    M=len(A[0])
-
-    B=[[0]*M for _ in range(M)]
-    v=[0]*M
-
-    Flag=[0]*M
-    C=[]
-    for i in range(len(A)):
-        E=Y.ele[i]
-        j=0
-        while j<M and E[j]==0:
-            j+=1
-        if j==M:
-            if E[-1]!=0:
-                return None
-            continue
-
-        Flag[j]=1
-        v[j]=E[-1]
-        C.append(i)
-        for k in range(j+1,M):
-            if E[k]%Mod!=0:
-                B[k][j]=(-E[k])%Mod
-                Flag[k]=-1
-
-    for i in range(M):
-        if Flag[i]!=1:
-            B[i][i]=1
-    B=[B[i] for i in range(M) if Flag[i]!=1]
-    return v,B
 
 #===
 Mod=998244353
