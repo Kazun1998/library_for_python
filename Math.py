@@ -3,13 +3,11 @@ def floor_sum(A,B,M,N):
     """
     T=0
     while True:
-        if A>=M:
-            T+=(N-1)*N*(A//M)//2
-            A%=M
+        T+=((N-1)*N//2)*(A//M)
+        A%=M
 
-        if B>=M:
-            T+=N*(B//M)
-            B%=M
+        T+=N*(B//M)
+        B%=M
 
         y=(A*N+B)//M
         x=B-y*M
