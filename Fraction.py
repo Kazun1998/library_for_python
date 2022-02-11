@@ -1,10 +1,10 @@
 from math import gcd
 
 class Fraction():
-    __slots__=["a","b"]
+    __slots__=("a","b")
 
     ##入力定義
-    def __init__(self, Numerator=0, Denominator=1, expanded=False, reduction=False):
+    def __init__(self, Numerator=0, Denominator=1, reduction=True, expanded=False):
         """分数のオブジェクトを生成する.
 
         Numerator: 分子
@@ -38,7 +38,7 @@ class Fraction():
             x=self.a*other.b+self.b*other.a
             y=self.b*other.b
         elif other.__class__==int:
-            x=self.a-self.b*other
+            x=self.a+self.b*other
             y=self.b
         else:
             assert 0,"型が違う"
@@ -52,7 +52,7 @@ class Fraction():
             x=self.a*other.b-self.b*other.a
             y=self.b*other.b
         elif other.__class__==int:
-            x=self.a+self.b*other
+            x=self.a-self.b*other
             y=self.b
         else:
             assert 0,"型が違う"
