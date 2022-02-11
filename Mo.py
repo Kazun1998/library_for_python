@@ -1,0 +1,47 @@
+class Mo:
+    def __init__(self, N):
+        """ 範囲が 0 以上 N "未満" の Mo's Algorithm の準備をする.
+
+        """
+        self.N=N
+        self.sq=int(N**0.5+0.5)
+        self.Q=0
+        self.left=[]
+        self.right=[]
+
+    def add_query(self, l, r):
+        """ 閉区間 [l,r] に対するクエリを追加する.
+        """
+
+        self.left.append(l)
+        self.right.append(r+1)
+        self.Q+=1
+
+    def calculate(self, add, delete, rem):
+        """ クエリを処理する.
+
+        """
+        from operator import itemgetter
+
+        sq=self.sq
+        t=(self.N+sq-1)//sq
+        B=[[] for __ in range(t)]
+
+        for q,(l,r) in enumerate(zip(self.left, self.right)):
+            B[l//sq].append((l,r,q))
+
+        for i in range(t):
+            B[i].sort(key=itemgetter(1))
+            if i%2:
+                B[i].reverse()
+
+        x=y=0
+        for b in B:
+            for l,r,q in b:
+                for i in range(x, l): delete(i)
+                for i in range(x-1, l-1, -1): add(i)
+                for j in range(y, r):  add(j)
+                for j in range(y-1, r-1, -1): delete(j)
+                x=l; y=r
+                rem(q)
+        return
