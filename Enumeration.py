@@ -76,6 +76,19 @@ def nHr(n,r):
     else:
         return nCr(n+r-1,r)
 
+def Multinomial_Coefficient(*K):
+    """ K=[k_0,...,k_{r-1}] に対して, k_0, ..., k_{r-1} に対する多項係数を求める.
+
+    k_i: int
+    """
+
+    N=0;
+    g_inv=1
+    for k in K:
+        N+=k
+        g_inv*=G[k]; g_inv%=Mod
+    return (F[N]*g_inv)%Mod
+
 def Binomial_Coefficient_Modulo_List(n: int):
     """ n を固定し, r=0,1,...,n としたときの nCr (mod Mod) のリストを出力する.
 
@@ -116,3 +129,55 @@ def Pascal_Triangle(N: int):
         X=Y
         L.append(Y)
     return L
+
+"""
+等比数列
+"""
+
+def Geometric_Sequence(a, r, N):
+    """ k=0,1,...,N に対する a*r^k を出力する.
+
+    a,r,N: int
+    """
+
+    a%=Mod; r%=Mod
+    X=[0]*(N+1); X[0]=a
+    for k in range(1,N+1):
+        X[k]=r*X[k-1]%Mod
+    return X
+
+def Geometric_Inverse_Sequence(a, r, N):
+    """ k=0,1,...,N に対する a/r^k を出力する.
+
+    a,r,N: int
+    """
+
+    a%=Mod; r_inv=pow(r, Mod-2, Mod)
+    X=[0]*(N+1); X[0]=a
+    for k in range(1,N+1):
+        X[k]=r_inv*X[k-1]%Mod
+    return X
+
+"""
+積和
+"""
+def Sum_of_Product(*X):
+    """ 長さが等しいリスト X_1, X_2, ..., X_k に対して, sum(X_1[i]*X_2[i]*...*X_k[i]) を求める.
+    """
+
+    S=0
+    for alpha in zip(*X):
+        S+=product_modulo(*alpha)
+    return S%Mod
+
+def Sum_of_Product_Yielder(N,*Y):
+    S=0
+    M=len(Y)
+    for _ in range(N+1):
+        x=1
+        for j in range(M):
+            x*=next(Y[j]); x%=Mod
+        S+=x
+    return S%Mod
+#==================================================
+Mod=998244353
