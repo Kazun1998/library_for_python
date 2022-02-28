@@ -14,7 +14,10 @@ class MaxFlow:
             self.direction=direction
 
         def __repr__(self):
-            return str((self.to, "{} / {}".format(self.cap,self.base), self.direction))
+            if self.direction==1:
+                return "[Source] (To: {}) {} / {}".format(self.to, self.cap,self.base)
+            else:
+                return "[Target] (From: {}) {} / {}".format(self.to, self.cap,self.base)
 
     def __init__(self, N):
         """ N 頂点のフロー場を生成する.
@@ -33,6 +36,11 @@ class MaxFlow:
         a2.rev = a
         self.arc[v].append(a)
         self.arc[w].append(a2)
+
+    def add_edge(self, v, w, cap):
+        """ 容量 cap の無向辺 v → w を加える."""
+        self.add_arc(v,w,cap)
+        self.add_arc(w,v,cap)
 
     def __bfs(self, s, t):
         level = self.level = [self.N]*self.N
@@ -96,6 +104,10 @@ class MaxFlow:
         return flow
 
     def flow(self):
+        """ 現在の フロー場に流れている各辺の流量を求める.
+
+        """
+
         F=[{} for _ in range(self.N)]
         arc=self.arc
         for v in range(self.N):
