@@ -1,6 +1,3 @@
-class Permutation_Error(Exception):
-    pass
-
 class Permutation():
     def __init__(self, n, p=[]):
         if p==[]:
@@ -84,16 +81,12 @@ class Permutation():
         self.ind[v]=i; self.ind[u]=j
 
     def transposition(self, u, v):
-        """ u,v のある場所を交換する ※ u番目とv番目ではない"""
+        """ u,v のある場所を交換する ※ u 番目とv 番目ではない"""
 
-        a=self.ind[u]
-        b=self.ind[v]
+        a=self.ind[u]; b=self.ind[v]
 
-        self.p[a]=v
-        self.p[b]=u
-
-        self.ind[u]=b
-        self.ind[v]=a
+        self.p[a]=v; self.p[b]=u
+        self.ind[u]=b; self.ind[v]=a
 
     def minimum_transposition(self):
         """ 互換の最小回数を求める. """
@@ -151,7 +144,7 @@ def Permutation_Inversion(P,Q):
     R=Q*(P.inverse())
     return R.inversion()
 
-def List_Inversion(A,B):
+def List_Inversion(A,B,default=-1):
     """長さが等しいリスト A,B に対して, 以下の操作の最小回数を求める.
     列 A[i] と A[i+1] を入れ替え, B と一致させる.
     """
@@ -173,7 +166,8 @@ def List_Inversion(A,B):
     try:
         return Permutation(N,[D[B[i]].pop() for i in range(N)]).inversion()
     except:
-        return -1
+        return default
+
 #=================================================
 #ランダムに置換を生成する.
 def Random_Permutation(N):
