@@ -1,7 +1,7 @@
 class Rolling_Hash():
-    def __init__(self,S,Base,Mod):
-        self.Mod=Mod
-        self.Base=Base
+    def __init__(self,S,base,mod):
+        self.mod=mod
+        self.base=base
         self.string=S
         self.power=power=[1]*(len(S)+1)
 
@@ -10,20 +10,20 @@ class Rolling_Hash():
 
         v=0
         for i in range(L):
-            #h[i+1]=v=(v*Base+ord(S[i]))%Mod
-            h[i+1]=v=(v*Base+S[i])%Mod
+            h[i+1]=v=(v*base+ord(S[i]))%mod
+            #h[i+1]=v=(v*base+S[i])%mod
 
         v=1
         for i in range(L):
-            power[i+1]=v=(v*Base)%Mod
+            power[i+1]=v=(v*base)%mod
 
     def get(self,l,r):
-        return (self.hash[r]-self.hash[l]*self.power[r-l])%self.Mod
+        return (self.hash[r]-self.hash[l]*self.power[r-l])%self.mod
 
     def count(self,T,start=0):
         alpha=0
         for t in T:
-            alpha=(alpha*self.Base+ord(t))%self.Mod
+            alpha=(alpha*self.base+ord(t))%self.mod
 
         K=0
         for i in range(start,len(self)-len(T)+1):
@@ -34,7 +34,7 @@ class Rolling_Hash():
     def find(self,T,start=0):
         alpha=0
         for t in T:
-            alpha=(alpha*self.Base+ord(t))%self.Mod
+            alpha=(alpha*self.base+ord(t))%self.mod
 
         for i in range(start,len(self)-len(T)+1):
             if alpha==self[i:i+len(T)]:
@@ -44,7 +44,7 @@ class Rolling_Hash():
     def rfind(self,T,start=0):
         alpha=0
         for t in T:
-            alpha=(alpha*self.Base+ord(t))%self.Mod
+            alpha=(alpha*self.base+ord(t))%self.mod
 
         for i in range(len(self)-len(T),start-1):
             if alpha==self[i:i+len(T)]:
@@ -54,7 +54,7 @@ class Rolling_Hash():
     def index(self,T,start=0):
         alpha=0
         for t in T:
-            alpha=(alpha*self.Base+ord(t))%self.Mod
+            alpha=(alpha*self.base+ord(t))%self.mod
 
         for i in range(start,len(self)-len(T)+1):
             if alpha==self[i:i+len(T)]:
@@ -64,7 +64,7 @@ class Rolling_Hash():
     def index(self,T,start=0):
         alpha=0
         for t in T:
-            alpha=(alpha*self.Base+ord(t))%self.Mod
+            alpha=(alpha*self.base+ord(t))%self.mod
 
         for i in range(len(self)-len(T),start-1):
             if alpha==self[i:i+len(T)]:
@@ -105,8 +105,8 @@ class Hasher():
     def encode(self, S):
         code=0; N=len(S)
         for i in range(N):
-            code+=ord(S[i])*self.power[N-1-i]%self.mod
-            #code+=S[i]*self.power[N-1-i]%self.mod
+            #code+=ord(S[i])*self.power[N-1-i]%self.mod
+            code+=S[i]*self.power[N-1-i]%self.mod
 
         return code%self.mod
 
