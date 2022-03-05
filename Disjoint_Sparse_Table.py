@@ -2,6 +2,12 @@ class Disjoint_Sparse_Table:
     """ 参考: https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html"""
 
     def __init__(self, L, calc):
+        """ L の演算 calc に対する Disjoint Sparse Table を生成する.
+
+        L: list
+        calc: 二項演算
+        """
+
         self.b=0
         self.calc=calc
         self.size=N=len(L)
@@ -31,7 +37,11 @@ class Disjoint_Sparse_Table:
                 for k in range(t+1,r):
                     tab[k]=calc(tab[k-1],L[k])
 
-    def product(self, l, r, left_close=True, right_close=True, default=None):
+    def product(self, l, r, default=None, left_close=True, right_close=True):
+        """ l<=i<=r に対する積を生成する.
+
+        """
+
         if not left_close: l+=1
         if not right_close: r-=1
 
