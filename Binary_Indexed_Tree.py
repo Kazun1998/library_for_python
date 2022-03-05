@@ -22,7 +22,7 @@ class Binary_Indexed_Tree():
         """ calc を演算とする N 項の Binary Indexed Tree を作成
         calc: 演算 (2変数関数, 可換群)
         unit: 群 calc の単位元 (x+e=e+x=xを満たすe)
-        inv : 群 calc の逆元 (1変数関数, x+y(x)=y(x)+x=e をみたす y(x))
+        inv : 群 calc の逆元 (1変数関数, x+inv(x)=inv(x)+x=e をみたす inv(x))
         """
         self.calc=calc
         self.unit=unit
@@ -146,7 +146,7 @@ class Range_Binary_Indexed_Tree():
         """ calc を演算とする N 項の Binary Indexed Tree (区間作用付き) を作成
         calc: 演算 (2変数関数, 可換群)
         unit: 群 calc の単位元 (x+e=e+x=xを満たすe)
-        inv : 群 calc の逆元 (1変数関数, x+y(x)=y(x)+x=e をみたす y(x))
+        inv : 群 calc の逆元 (1変数関数, x+inv(x)=inv(x)+x=e をみたす inv(x))
         """
 
         self.bit0=Binary_Indexed_Tree(L, calc, unit, inv, 1)
@@ -248,7 +248,7 @@ class Compact_Binary_Indexed_Tree():
         """ calc を演算とする最高の添字が N になるような Compact Binary Indexed Tree を作成
         calc: 演算 (2変数関数, 可換群)
         unit: 群 calc の単位元 (x+e=e+x=xを満たすe)
-        inv : 群 calc の逆元 (1変数関数, x+y(x)=y(x)+x=e をみたす y(x))
+        inv : 群 calc の逆元 (1変数関数, x+inv(x)=inv(x)+x=e をみたす inv(x))
         """
         self.calc=calc
         self.unit=unit
