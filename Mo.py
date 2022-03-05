@@ -4,7 +4,6 @@ class Mo:
 
         """
         self.N=N
-        self.sq=int(N**0.5+0.5)
         self.Q=0
         self.left=[]
         self.right=[]
@@ -21,23 +20,24 @@ class Mo:
         """ クエリを処理する.
 
         """
-        from operator import itemgetter
 
-        sq=self.sq
-        t=(self.N+sq-1)//sq
+        block_size=self.N//(min(self.N, int(self.Q**0.5+0.5)))
+        t=(self.N+block_size-1)//block_size
         B=[[] for __ in range(t)]
 
         for q,(l,r) in enumerate(zip(self.left, self.right)):
-            B[l//sq].append((l,r,q))
+            B[l//block_size].append(q)
 
+        left=self.left; right=self.right
         for i in range(t):
-            B[i].sort(key=itemgetter(1))
+            B[i].sort(key=lambda q:right[q])
             if i%2:
                 B[i].reverse()
 
         x=y=0
         for b in B:
-            for l,r,q in b:
+            for q in b:
+                l=left[q]; r=right[q]
                 for i in range(x, l): delete(i)
                 for i in range(x-1, l-1, -1): add(i)
                 for j in range(y, r):  add(j)
