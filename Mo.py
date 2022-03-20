@@ -25,14 +25,13 @@ class Mo:
         t=(self.N+block_size-1)//block_size
         B=[[] for __ in range(t)]
 
-        for q,(l,r) in enumerate(zip(self.left, self.right)):
-            B[l//block_size].append(q)
-
         left=self.left; right=self.right
+
+        for q in range(self.Q):
+            B[left[q]//block_size].append(q)
+
         for i in range(t):
-            B[i].sort(key=lambda q:right[q])
-            if i%2:
-                B[i].reverse()
+            B[i].sort(key=lambda q: right[q], reverse=i%2)
 
         x=y=0
         for b in B:
@@ -40,8 +39,33 @@ class Mo:
                 l=left[q]; r=right[q]
                 for i in range(x, l): delete(i)
                 for i in range(x-1, l-1, -1): add(i)
-                for j in range(y, r):  add(j)
+                for j in range(y, r): add(j)
                 for j in range(y-1, r-1, -1): delete(j)
+                x=l; y=r
+                rem(q)
+        return
+
+    def calculate_noncommutative(self, add_left, add_right, delete_left, delete_right, rem):
+        block_size=self.N//(min(self.N, int(self.Q**0.5+0.5)))
+        t=(self.N+block_size-1)//block_size
+        B=[[] for __ in range(t)]
+
+        left=self.left; right=self.right
+
+        for q in range(self.Q):
+            B[left[q]//block_size].append(q)
+
+        for i in range(t):
+            B[i].sort(key=lambda q: right[q], reverse=i%2)
+
+        x=y=0
+        for b in B:
+            for q in b:
+                l=left[q]; r=right[q]
+                for i in range(x, l): delete_left(i)
+                for i in range(x-1, l-1, -1): add_left(i)
+                for j in range(y, r): add_right(j)
+                for j in range(y-1, r-1, -1): delete_right(j)
                 x=l; y=r
                 rem(q)
         return
