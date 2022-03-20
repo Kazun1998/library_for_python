@@ -16,14 +16,16 @@ class Union_Find():
 
         x: 要素
         """
-        V=[]
+
+        a=x
+        while self.parents[a]>=0:
+            a=self.parents[a]
+
         while self.parents[x]>=0:
-            V.append(x)
+            self.parents[x]=a
             x=self.parents[x]
 
-        for v in V:
-            self.parents[v]=x
-        return x
+        return a
 
     def union(self, x, y):
         """ 要素 x,y を同一視する.
