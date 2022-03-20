@@ -184,7 +184,7 @@ def General_Binary_Increase_Search_Integer(L,R,cond,default=None):
     return R
 
 def General_Binary_Decrease_Search_Integer(L,R,cond,default=None):
-    """条件式が単調減少であるとき,一般的な二部探索を行う.
+    """条件式が単調減少であるとき, 整数上で二部探索を行う.
     L:解の下限
     R:解の上限
     cond:条件(1変数関数,広義単調減少 or 広義単調減少を満たす)
