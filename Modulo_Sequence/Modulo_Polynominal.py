@@ -1006,7 +1006,6 @@ def Composition(P,Q):
         Z=Calc.Convolution(Z,x)[:deg+1]
     return Modulo_Polynominal(F, deg)
 
-    
 def Taylor_Shift(P,a):
     """与えられた多項式 P に対して, P(X+a) を求める.
 
