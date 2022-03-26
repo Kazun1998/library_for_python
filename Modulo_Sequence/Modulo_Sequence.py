@@ -149,8 +149,28 @@ def PartitionsQ(N, mode=0):
     """ 各項が相異なる N の分割の数を求める.
 
     """
-    pass
 
+    Inv=[0]*(N+1)
+    Inv[1]=1
+    for i in range(2,N+1):
+        Inv[i]=(-(Mod//i)*Inv[Mod%i])%Mod
+
+    F=[0]*(N+1)
+    for i in range(1,N+1):
+        j=i
+        k=1
+        c=1
+        while j<=N:
+            F[j]=(F[j]+c*Inv[k])%Mod
+            c*=-1
+            j+=i
+            k+=1
+    P=Modulo_Polynominal(F,N+1)
+
+    if mode==0:
+        return Exp(P).Poly[N]
+    else:
+        return Exp(P)
 
 def Stirling_1st(N):
     """ k=0,1, ..., N に対する第 I 種 Stirling 数を求める.
