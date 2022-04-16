@@ -331,19 +331,40 @@ def Is_Square(M):
 
 #対角行列
 def Diagonal_Matrix(A):
-    """Aの第i要素が(i,i)成分である対角行列を生成する.
+    """ Aの第 i 要素が (i,i) 成分である対角行列を生成する.
 
-    A:リスト
-    M:整数
+    A: リスト
     """
     N=len(A)
     T=[[A[i] if i==j else 0 for j in range(N)] for i in range(N)]
     return Modulo_Matrix(T)
 
+#行列の直和
+def Direct_Sum(*A):
+    """ A=[A_0, A_1, ..., A_{N-1}] に対する直和行列を求める.
+
+    """
+
+    r=c=0
+    for a in A:
+        r+=a.row
+        c+=a.col
+
+    M=[[0]*c for _ in range(r)]
+    x=y=0
+    for p in range(len(A)):
+        a=A[p]
+        for i in range(a.row):
+            b=A[p].ele[i]
+            m=M[x+i]
+            for j in range(a.col):
+                m[y+j]=b[j]
+        x+=a.row; y+=a.col
+    return Modulo_Matrix(M)
+
 #跡
 def Trace(M):
-    if not Is_Square(M):
-        raise Modulo_Matrix_Error("正方行列ではありません")
+    assert Is_Square(M)
 
     T=0
     for i in range(len(M.ele)):
@@ -352,8 +373,7 @@ def Trace(M):
     return T
 
 def Determinant(M):
-    if not Is_Square(M):
-        raise Modulo_Matrix_Error("正方行列ではありません")
+    assert Is_Square(M)
 
     N=M.row
     T=deepcopy(M.ele)
@@ -381,6 +401,62 @@ def Determinant(M):
         det*=T[i][i]
         det%=Mod
     return det
+
+def Characteristic_Polynomial(M):
+    """ M の固有多項式を sum(P[i] X^i) としたとき, P を求める.
+
+    M: Modulo Matrix
+    """
+
+    T=deepcopy(M.ele)
+    N=M.row
+
+    for j in range(N-2):
+        for i in range(j+1, N):
+            if T[i][j]:
+                break
+        else:
+            continue
+
+        T[j+1],T[i]=T[i],T[j+1]
+        for k in range(N):
+            T[k][j+1],T[k][i]=T[k][i],T[k][j+1]
+
+        if T[j+1][j]:
+            Tjj=T[j+1]
+            inv=pow(Tjj[j], Mod-2,Mod)
+            for i in range(j+2, N):
+                Ti=T[i]
+                c=inv*Ti[j]%Mod
+                for k in range(j,N):
+                    Ti[k]-=c*Tjj[k]
+                    Ti[k]%=Mod
+
+                for k in range(N):
+                    T[k][j+1]+=c*T[k][i]
+                    T[k][j+1]%=Mod
+
+    dp=[[0]*(i+1) for i in range(N+1)]; dp[0][0]=1
+    for i in range(N):
+        P=dp[i+1]
+        for k in range(i+1):
+            P[k+1]=dp[i][k]
+        for k in range(i+1):
+            P[k]+=T[i][i]*dp[i][k]
+            P[k]%=Mod
+
+        p=1
+        for j in range(i-1,-1,-1):
+            p*=-T[j+1][j]; p%=Mod
+            c=p*T[j][i]%Mod
+            for k in range(j+1):
+                P[k]+=c*dp[j][k]
+                P[k]%=Mod
+    P=dp[-1]
+    for i in range(N+1):
+        if i%2:
+            P[~i]*=-1; P[~i]%=Mod
+    return P
 
 #===
 Mod=998244353
