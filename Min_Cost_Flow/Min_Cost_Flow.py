@@ -23,25 +23,23 @@ class Min_Cost_Flow:
             else:
                 return "id: {}, {} <- {}, {} / {}, cost: {}".format(self.id, self.target, self.source, self.cap, self.base, self.cost)
 
-        def flow_push(self, f):
-            assert 0<=f<=self.cap
-            self.cap-=f
-            self.rev.cap+=f
-
-        def refresh(self):
-            b=self.rev
-            return b.flow_push(b.cap)
-
-    def __init__(self, N):
+    def __init__(self, N=0):
         """ 頂点数 N の Min Cost Flow 場を生成する.
 
         N: int
         """
-
-        self.N=N
-        self.arc=[[] for i in range(N)]
+        self.arc=[[] for _ in range(N)]
         self.__arc_list=[]
         self.__is_DAG=None
+
+    def add_vertex(self):
+        self.arc.append([])
+        return self.vertex_count()-1
+
+    def add_vertices(self, k):
+        n=self.vertex_count()
+        self.arc.extend([[] for _ in range(k)])
+        return list(range(n,n+k))
 
     def add_arc(self, v, w, cap, cost):
         """ 頂点  v から頂点 w へ容量 cap, 費用 cost の有向辺を加える (返り値: 加えた辺の番号).
@@ -77,6 +75,9 @@ class Min_Cost_Flow:
     def get_all_arcs(self):
         return [self.get_arc(i) for i in range(len(self.__arc_list))]
 
+    def vertex_count(self):
+        return len(self.arc)
+
     def arc_count(self):
         return len(self.__arc_list)
 
@@ -99,10 +100,10 @@ class Min_Cost_Flow:
         """
 
         inf=Min_Cost_Flow.inf
-
-        self.__pre_v=[-1]*self.N
-        self.__pre_e=[None]*self.N
-        self.__dist=[inf]*self.N; self.__dist[s]=0
+        N=self.vertex_count()
+        self.__pre_v=[-1]*N
+        self.__pre_e=[None]*N
+        self.__dist=[inf]*N; self.__dist[s]=0
 
         Q=[(0,s)]
         while Q:
@@ -127,10 +128,11 @@ class Min_Cost_Flow:
         """
 
         inf=Min_Cost_Flow.inf
+        N=self.vertex_count()
 
-        self.__pre_v=[-1]*self.N
-        self.__pre_e=[None]*self.N
-        self.__dist=[inf]*self.N; self.__dist[s]=0
+        self.__pre_v=[-1]*N
+        self.__pre_e=[None]*N
+        self.__dist=[inf]*N; self.__dist[s]=0
 
         for v in self.__top_sort:
             for a in self.arc[v]:
@@ -141,11 +143,12 @@ class Min_Cost_Flow:
                     self.__pre_e[w]=a
 
     def __topological_sort(self):
-        in_deg=[0]*self.N
+        N=self.vertex_count()
+        in_deg=[0]*N
         for i in range(self.arc_count()):
             in_deg[self.__arc_list[i].target]+=1
 
-        Q=[v for v in range(self.N) if in_deg[v]==0]
+        Q=[v for v in range(N) if in_deg[v]==0]
         T=[]
         while Q:
             v=Q.pop()
@@ -158,7 +161,7 @@ class Min_Cost_Flow:
                     if in_deg[w]==0:
                         Q.append(w)
 
-        if len(T)==self.N:
+        if len(T)==N:
             self.__is_DAG=True
             self.__top_sort=T
         else:
@@ -199,12 +202,12 @@ class Min_Cost_Flow:
         flow: 流量
         """
 
-        assert 0<=source<self.N
-        assert 0<=target<self.N
+        assert 0<=source<self.vertex_count()
+        assert 0<=target<self.vertex_count()
         assert source!=target
 
 
-        N=self.N; inf=Min_Cost_Flow.inf
+        N=self.vertex_count(); inf=Min_Cost_Flow.inf
         self.__pot=[0]*N
 
         g=[0]
@@ -221,19 +224,20 @@ class Min_Cost_Flow:
             for v in range(N):
                 self.__pot[v]+=self.__dist[v]
 
-            use=flow; u=target
+            push=flow; u=target
             while u!=source:
-                use=min(use, self.__pre_e[u].cap)
+                push=min(push, self.__pre_e[u].cap)
                 u=self.__pre_v[u]
 
-            flow-=use
+            flow-=push
 
-            for _ in range(use):
+            for _ in range(push):
                 g.append(g[-1]+self.__pot[target])
 
             u=target
             while u!=source:
-                self.__pre_e[u].flow_push(use)
+                a=self.__pre_e[u]
+                a.cap-=push; a.rev.cap+=push
                 u=self.__pre_v[u]
         return g
 
@@ -241,11 +245,12 @@ class Min_Cost_Flow:
         if mode==0:
             return [a.base-a.cap for a in self.__arc_list]
         else:
-            F=[[] for _ in range(self.N)]
+            F=[[] for _ in range(self.vertex_count())]
             for i,a in enumerate(self.__arc_list):
                 F[a.source].append((i,a.target,a.base-a.cap))
             return F
 
     def refresh(self):
         for a in self.__arc_list:
-            a.refresh()
+            a.cap=a.base
+            a.rev.cap=0
