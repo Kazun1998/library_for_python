@@ -125,6 +125,12 @@ class Union_Find():
             X[self.find(k)].append(k)
         return X
 
+    def group_list(self):
+        """ 各要素が属している族のリストを出力する.
+
+        """
+        return [self.find(x) for x in range(self.n)]
+
     def refresh(self):
         for i in range(self.n):
             _=self.find(i)
