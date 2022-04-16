@@ -634,7 +634,7 @@ class Calculator:
         while len(Q)>1:
             m,a=heappop(Q)
             n,b=heappop(Q)
-            heappush(Q, (m+n, self.Convolution(a,b)))
+            heappush(Q, (m+n-1, self.Convolution(a,b)))
         return Q[0][1]
 
     def Inverse(self, F, length=None):
