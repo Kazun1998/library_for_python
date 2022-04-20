@@ -7,7 +7,7 @@ def Nth_Term_of_Linearly_Recurrent_Sequence(A,C,N,offset=0):
     A=(A[0], ..., A[d-1]): 最初の d 項
     C=(C[0], ..., C[d-1]): 線形漸化式
     N: 求める項数
-    offset: ずらす項数
+    offset: ずらす項数 (初項が第 offset 項になる)
     """
 
     assert len(A)==len(C)
@@ -67,7 +67,7 @@ def Lucas(N):
     return Nth_Term_of_Linearly_Recurrent_Sequence([2,1],[1,1],N)
 
 def Cumulative(A,N):
-    """ d:=|A| として, 漸化式 A[i]=A[i-1]+...+A[i-d] で表される列 T の第 N 項を求める.
+    """ d:=|A| として, 漸化式 A[i]=A[i-1]+...+A[i-d] で表される列 A の第 N 項を求める.
 
     """
 
@@ -82,17 +82,15 @@ def Factorial_Modulo(N):
     if N==0:
         return 1
 
+    if N>=Mod:
+        return 0
+
     M=0
     while (M+1)*(M+1)<=N:
         M+=1
 
-    Q=deque([[i,1] for i in range(1,M+1)])
-    while len(Q)>1:
-        A=Q.popleft()
-        B=Q.popleft()
-        Q.append(Calc.Convolution(A,B))
-
-    H=Multipoint_Evaluation(Modulo_Polynominal(Q[0],M+1),
+    A=Calc.Multiple_Convolution(*[[i,1] for i in range(1,M+1)])
+    H=Multipoint_Evaluation(Modulo_Polynominal(A,M+1),
                             [i*M for i in range(M)])
 
     X=1
@@ -168,7 +166,7 @@ def PartitionsQ(N, mode=0):
     P=Modulo_Polynominal(F,N+1)
 
     if mode==0:
-        return Exp(P).Poly[N]
+        return Exp(P)[N]
     else:
         return Exp(P)
 
@@ -206,6 +204,21 @@ def Stirling_2nd(N):
     A=[pow(i,N,Mod)*fact_inv[i]%Mod for i in range(N+1)]
     B=[fact_inv[i] if i&1==0 else -fact_inv[i] for i in range(N+1)]
     return Calc.Convolution(A,B)[:N+1]
+
+def Bell(N, mode=0):
+    """ Bell 数 B[N] を求める.
+
+    """
+    F=Exp(Exp(Modulo_Polynominal([0,1],N+1))-1).Poly
+    fact=1
+    for i in range(1,N+1):
+        fact=(i*fact)%Mod
+        F[i]=(fact*F[i])%Mod
+
+    if mode:
+        return F
+    else:
+        return F[N]
 
 #===
 def Subset_Sum(X,K):
