@@ -65,6 +65,10 @@ def Overall(dim):
     return V
 
 def Kernel_Space(A):
+    """ 行列 A の核空間 Ker A (Ax=0 となる x の空間) を求める.
+
+    """
+
     row,col=A.size
     T=deepcopy(A.ele)
 
@@ -113,6 +117,10 @@ def Kernel_Space(A):
     return Ker
 
 def Image_Space(A):
+    """ A の像空間 Im A を求める.
+
+    """
+
     V=Modulo_Vector_Space(A.row)
     V.add_vectors(*Column_Vector(A))
     return V
