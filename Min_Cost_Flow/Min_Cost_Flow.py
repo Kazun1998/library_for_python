@@ -23,14 +23,17 @@ class Min_Cost_Flow:
             else:
                 return "id: {}, {} <- {}, {} / {}, cost: {}".format(self.id, self.target, self.source, self.cap, self.base, self.cost)
 
-    def __init__(self, N=0):
+    def __init__(self, N=0, objective=1):
         """ 頂点数 N の Min Cost Flow 場を生成する.
 
         N: int
+        objective: -1 のとき, 最大値になる.
         """
         self.arc=[[] for _ in range(N)]
         self.__arc_list=[]
+        self.__objective=objective
         self.__is_DAG=None
+        self.__has_negative=False
 
     def add_vertex(self):
         self.arc.append([])
@@ -51,8 +54,8 @@ class Min_Cost_Flow:
         """
 
         m=len(self.__arc_list)
-        a=self.Arc(v, w, cap, cap, cost, 1, m)
-        b=self.Arc(w, v, 0, cap, -cost, -1, m)
+        a=self.Arc(v, w, cap, cap, self.__objective*cost, 1, m)
+        b=self.Arc(w, v, 0, cap, -self.__objective*cost, -1, m)
         a.rev=b
         b.rev=a
         self.arc[v].append(a)
@@ -232,7 +235,7 @@ class Min_Cost_Flow:
             flow-=push
 
             for _ in range(push):
-                g.append(g[-1]+self.__pot[target])
+                g.append(g[-1]+self.__objective*self.__pot[target])
 
             u=target
             while u!=source:
@@ -254,3 +257,7 @@ class Min_Cost_Flow:
         for a in self.__arc_list:
             a.cap=a.base
             a.rev.cap=0
+
+class Max_Gain_Flow(Min_Cost_Flow):
+    def __init__(self, N=0):
+        Min_Cost_Flow.__init__(self, N, -1)
