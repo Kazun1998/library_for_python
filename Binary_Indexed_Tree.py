@@ -59,9 +59,10 @@ class Binary_Indexed_Tree():
         x    : 加える値
         index: 先頭の要素の番号
         """
+        data=self.data; calc=self.calc
         p=k+(1-index)
         while p<=self.num:
-            self.data[p]=self.calc(self.data[p],x)
+            data[p]=calc(self.data[p],x)
             p+=p&(-p)
 
     def update(self, k, x, index=1):
@@ -94,9 +95,10 @@ class Binary_Indexed_Tree():
 
     def __section(self,x):
         """ B[1]+...+B[x] を求める. """
+        data=self.data; calc=self.calc
         S=self.unit
         while x>0:
-            S=self.calc(self.data[x],S)
+            S=calc(data[x],S)
             x-=x&(-x)
         return S
 
@@ -118,12 +120,12 @@ class Binary_Indexed_Tree():
         j=0
         r=self.num
         t=r
-        data=self.data
+        data=self.data; calc=self.calc
         alpha=self.unit
 
         for _ in range(self.depth+1):
             if j+t<=self.num:
-                beta=self.calc(alpha,data[j+t])
+                beta=calc(alpha,data[j+t])
                 if not cond(beta):
                     alpha=beta
                     j+=t
