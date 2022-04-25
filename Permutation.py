@@ -48,10 +48,10 @@ class Permutation():
         pass
 
     def sgn(self):
-        if self.minimum_transposition()%2:
-            return -1
-        else:
-            return 1
+        """ 置換の符号を求める (偶置換 → 1, 奇置換 → -1)
+
+        """
+        return -1 if self.minimum_transposition()%2 else 1
 
     def inverse(self):
         return Permutation(self.n, self.ind)
@@ -91,12 +91,7 @@ class Permutation():
     def minimum_transposition(self):
         """ 互換の最小回数を求める. """
 
-        X=self.cycle_division()
-
-        T=0
-        for d in X:
-            T+=len(d)-1
-        return T
+        return self.n-len(self.cycle_division())
 
     def cycle_division(self, mode=True):
         """ 置換を巡回置換の積に分解する.
@@ -152,7 +147,7 @@ def List_Inversion(A,B,default=-1):
     from collections import defaultdict
 
     if len(A)!=len(B):
-        return -1
+        return default
 
     N=len(A)
     D=defaultdict(list)
@@ -181,3 +176,14 @@ def Is_Identity(P):
         if k!=a:
             return False
     return True
+
+def Generate_Permutation(P, Q):
+    """ P を Q にする変換を表す置換を生成する.
+
+    """
+    assert len(P)==len(Q)
+    N=len(P)
+    X=[-1]*N
+    for i in range(N):
+        X[P[i]]=Q[i]
+    return Permutation(N, X)
