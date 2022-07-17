@@ -26,19 +26,37 @@ from Flow import *
 
 inf=float("inf")
 class Project_Selection_Problem:
-    def __init__(self,N):
+    def __init__(self,N=0):
         """ N 要素の Project Selection Problem を生成する.
 
-        N:int
+        N: int
         """
 
         self.N=N
         self.ver_num=N+2
-        self.source=N
         self.base=0
+        self.source=N
         self.target=N+1
         self.indivi=[[0,0] for _ in range(N+2)]
         self.mutual=[]
+
+    def add_vertex(self):
+        n=self.ver_num
+        self.indivi.append([0,0])
+        self.ver_num+=1
+        return n
+
+    def __add_vertex_inner(self):
+        n=self.ver_num
+        self.indivi.append([None,None])
+        self.ver_num+=1
+        return n
+
+    def add_vertices(self, k):
+        n=self.ver_num
+        self.indivi.extend([[0,0] for _ in range(k)])
+        self.ver_num+=k
+        return list(range(n,n+k))
 
     def set_zero_one(self,x,y,a):
         """ h(x)=0,  h(y)=1 のとき, a (<=0) 点を得るという条件を追加する.
@@ -80,15 +98,13 @@ class Project_Selection_Problem:
 
         assert a>=0
 
-        self.indivi.append([None,None])
-        self.ver_num+=1
+        k=self.__add_vertex_inner()
         self.base+=a
 
-        self.indivi[-1][0]=-a
+        self.indivi[k][0]=-a
         for x in X:
             assert 0<=x<self.N
-            self.mutual.append((self.ver_num-1,x,inf))
-
+            self.mutual.append((k,x,inf))
 
     def set_all_one(self,X,a):
         """ h(x)=1 (forall x in X) のとき, a (>=0) 点を得るという条件を追加する.
@@ -99,14 +115,13 @@ class Project_Selection_Problem:
 
         assert a>=0
 
-        self.indivi.append([None,None])
-        self.ver_num+=1
+        k=self.__add_vertex_inner()
         self.base+=a
 
-        self.indivi[-1][1]=-a
+        self.indivi[k][1]=-a
         for x in X:
             assert 0<=x<self.N
-            self.mutual.append((x,self.ver_num-1,inf))
+            self.mutual.append((x,k,inf))
 
     def set_not_equal(self,x,y,a):
         """ h(x)!=h(y) ならば, a (<=0) 点を得るという条件を追加する.
@@ -191,4 +206,4 @@ class Project_Selection_Problem:
         if Mode==0:
             return base-alpha
         else:
-            return base-alpha,F.min_cut(self.source)[:self.N]
+            return base-alpha, F.min_cut(self.source), self.source, self. target
