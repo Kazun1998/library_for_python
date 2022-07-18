@@ -2,7 +2,7 @@ class Imos_1:
     def __init__(self, N):
         """ 区間 0<=t<N に対する Imos 法を準備する.
         """
-
+        self.__N=N
         self.list=[0]*(N+1)
 
     def __len__(self):
@@ -14,30 +14,35 @@ class Imos_1:
         F,T : int
         C: int
         """
+        assert 0<=F<self.__N
+        assert 0<=T<self.__N
 
-        self.list[F]+=C
-        self.list[T+1]-=C
+        if F<=T:
+            self.list[F]+=C
+            self.list[T+1]-=C
 
     def cumulative_sum(self):
         """累積和を求める.
         """
-        Y=[0]*len(self)
-        S=0
+        X=self.list
+        Y=[0]*self.__N; Y[0]=X[0]
         for i in range(1,len(self)):
-            Y[i]=Y[i-1]+self.list[i]
+            Y[i]=Y[i-1]+X[i]
         return Y
 
 #=================================================
 from collections import defaultdict
-class Expanded_Imos_1:
+class Extended_Imos_1:
     def __init__(self):
         self.dict=defaultdict(int)
 
     def add(self,F,T,C=1):
         """閉区間 [F,T] に C を加算する.
         """
-        self.dict[F]+=C
-        self.dict[T+1]-=C
+
+        if F<=T:
+            self.dict[F]+=C
+            self.dict[T+1]-=C
 
     def cumulative_sum(self, since, until):
         """累積和を求める.
