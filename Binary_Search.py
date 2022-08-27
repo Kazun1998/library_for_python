@@ -112,7 +112,7 @@ def Binary_Search_Range_Count(A, x, y, sort=False, left_close=True, right_close=
 
     alpha=Binary_Search_Small_Count(A, y, equal=right_close)
     beta =Binary_Search_Small_Count(A, x, equal=not left_close)
-    return alpha-beta
+    return max(alpha-beta,0)
 
 def Binary_Search_Low_Value(A, x, equal=False, sort=False, default=None):
     """ A の x 未満の要素の中で最大のものを出力する.
@@ -192,6 +192,7 @@ def General_Binary_Increase_Search_Integer(L, R, cond, default=None):
     cond: 条件(1変数関数, 広義単調増加を満たす)
     default: Lで条件を満たさないときの返り値
     """
+
     if not(cond(R)):
         return default
 
