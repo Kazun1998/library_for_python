@@ -113,7 +113,8 @@ class Graph:
         """ 頂点 v を含む連結成分を出力する."""
 
         from collections import deque
-        T=[0]*self.N; T[v]=1
+        N=len(self.adjacent)
+        T=[0]*N; T[v]=1
         Q=deque([v])
         while Q:
             u=Q.popleft()
@@ -121,7 +122,7 @@ class Graph:
                 if T[w]==0:
                     T[w]=1
                     Q.append(w)
-        return [x for x in range(self.N) if T[x]]
+        return [x for x in range(N) if T[x]]
 
     #距離
     def distance(self,u,v):
@@ -132,7 +133,8 @@ class Graph:
 
         from collections import deque
         inf=float("inf")
-        T=[inf]*self.N; T[u]=0
+        N=len(self.adjacent)
+        T=[inf]*N; T[u]=0
 
         Q=deque([u])
         while Q:
@@ -151,7 +153,8 @@ class Graph:
 
         from collections import deque
         inf=float("inf")
-        T=[inf]*self.N; T[u]=0
+        N=len(self.adjacent)
+        T=[inf]*N; T[u]=0
 
         Q=deque([u])
         while Q:
@@ -171,7 +174,7 @@ class Graph:
 
         from collections import deque
         inf=float("inf")
-        T=[-1]*self.N
+        T=[-1]*len(self.adjacent)
 
         Q=deque([u]); T[u]=u
         while Q:
@@ -755,9 +758,132 @@ def Find_Hamiltonian_Graph(G):
     else:
         return None
 
-#-------------------------------------------------
+#クリーク
+def Clique(G: Graph, calc, merge, unit, empty=False):
+    """
+    グラフ G に対する Clique C 全てに対する calc (C) を計算し, merge でマージする.
+
+    G: Graph
+    calc: calc(C) Clique である部分集合 C に対する値
+    merge: merge(x,y) x,y のマージの方法
+    empty: 空集合を Clique とするか?
+
+    計算量: O(2^{sqrt(2M)} N)
+    """
+
+    N=G.order(); M=G.size()
+    deg=[G.degree(v) for v in range(N)]; V=[1]*N
+
+    M_sqrt=0
+    while (M_sqrt+1)**2<=2*M:
+        M_sqrt+=1
+
+    X=unit
+    while True:
+        A=[]
+        for u in range(N):
+            if V[u] and deg[u]<M_sqrt:
+                for v in range(N):
+                    if u!=v and V[v] and G.edge_exist(u,v):
+                        A.append(v)
+                A.append(u)
+                break
+
+        if not A:
+            break
+
+        K=len(A)-1
+        bit=[0]*K
+        for i in range(K):
+            for j in range(i):
+                if not G.edge_exist(A[i],A[j]):
+                    bit[i]|=1<<j
+                    bit[j]|=1<<i
+
+        for S in range(1<<K):
+            flag=1
+            for i in range(K):
+                if (S>>i)&1:
+                    flag&=(S&bit[i]==0)
+
+            if flag:
+                B=[A[-1]]
+                for i in range(K):
+                    if (S>>i)&1:
+                        B.append(A[i])
+
+                X=merge(X,calc(B))
+
+        V[A[-1]]=0; deg[A[-1]]=0
+        for v in range(N):
+            if A[-1]!=v and V[v] and G.edge_exist(A[-1],v):
+                deg[v]-=1
+
+    A=[]
+    for u in range(N):
+        if V[u]:
+            A.append(u)
+
+    K=len(A)
+    bit=[0]*K
+    for i in range(K):
+        for j in range(i):
+            if not G.edge_exist(A[i], A[j]):
+                bit[i]|=1<<j
+                bit[j]|=1<<i
+
+    for S in range(1<<K):
+        flag=1
+        for i in range(K):
+            if (S>>i)&1:
+                flag&=(S&bit[i]==0)
+
+        if flag and (S or empty):
+            B=[]
+            for i in range(K):
+                if (S>>i)&1:
+                    B.append(A[i])
+
+            X=merge(X,calc(B))
+
+    return X
+
+# 三角形
+def Triangle(G: Graph , calc, merge, unit):
+    """
+    calc: calc(i,j,k) 3頂点 i,j,k からなる頂点に対する値
+    merge: merge(x,y) x,y のマージの方法
+    unit: 単位元
+
+    計算量: O(M sqrt(2M))
+    """
+
+    N=G.order()
+    A=[[] for _ in range(N)]
+
+    deg=G.degree; adj=G.adjacent
+    for i in range(N):
+        for j in adj[i]:
+            if (deg(i)>deg(j)) or (deg(i)==deg(j) and i>j):
+                A[i].append(j)
+
+    X=unit
+    used=[False]*N
+    for i in range(N):
+        for k in A[i]:
+            used[k]=True
+
+        for j in A[i]:
+            for k in A[j]:
+                if used[k]:
+                    X=merge(X,calc(i,j,k))
+        for k in A[i]:
+            used[k]=False
+    return X
+
+#=================================================
 #特別なグラフ
-#-------------------------------------------------
+#=================================================
 #完全グラフの作成
 def Complete_Graph(N):
     """ N 頂点の完全グラフを生成する. """
