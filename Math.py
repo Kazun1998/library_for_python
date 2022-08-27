@@ -238,7 +238,10 @@ def Range_Sum_Inclusion(Range,S,Mod=None):
             return a//b
 
     def nHr(n,r):
-        return nCr(n+r-1,n-1)
+        if n==r==0:
+            return 1
+        else:
+            return nCr(n+r-1,n-1)
 
     N=len(Range)
     X=0
