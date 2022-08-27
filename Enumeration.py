@@ -37,6 +37,20 @@ def Factor_with_inverse(N):
         G[k]=((k+1)*G[k+1])%Mod
     return F,G
 
+def Double_Factor(N):
+    """ 0!!, 1!!, ..., N!! (mod Mod) を出力する.
+
+    N: int
+    """
+
+    if N==0:
+        return [1]
+
+    F=[1]*(N+1)
+    for i in range(2,N+1):
+        F[i]=i*F[i-2]%Mod
+    return F
+
 """
 組み合わせの数
 Factor_with_inverse で F, G を既に求めていることが前提
