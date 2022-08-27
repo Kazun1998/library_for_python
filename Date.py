@@ -40,7 +40,7 @@ class Date():
     def __gt__(self,other):
         return other<self
 
-    def Is_Leap_Year(self):
+    def is_leap_year(self):
         Y=self.Y
         if Y%4:
             return False
@@ -51,7 +51,7 @@ class Date():
         else:
             return True
 
-    def Next_Day(self,Day=1):
+    def next_day(self, day=1):
         Y,M,D=self.Y,self.M,self.D
 
         x=400*365+97
@@ -84,7 +84,7 @@ class Date():
                 M,D=3,1
         return Date(Y,M,D)
 
-    def Day_of_Week(self):
+    def day_of_week(self):
         """曜日を求める.
 
         ※紀元後4年~紀元後1582年はユリウス歴での計算
