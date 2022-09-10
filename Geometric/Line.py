@@ -228,7 +228,7 @@ def is_Orthogonal(L,M):
     return compare(u.dot(v),0,max(L.ep,M.ep))==0
 
 #=== 点との距離
-def Distance_betweem_Point_and_Segment(P,L):
+def Distance_between_Point_and_Segment(P,L):
     """ 点 P と線分 L の距離を求める.
 
     """
@@ -240,9 +240,9 @@ def Distance_betweem_Point_and_Segment(P,L):
         return abs(P-B)
     else:
         v=L.vectorize()
-        return abs((P-L.begin).det(v)/abs(v)) 
+        return abs((P-L.begin).det(v)/abs(v))
 
-def Distance_betweem_Point_and_Line(P,L):
+def Distance_between_Point_and_Line(P,L):
     """ 点 P と直線 L の距離を求める.
 
     """
@@ -251,18 +251,18 @@ def Distance_betweem_Point_and_Line(P,L):
     return abs((P-L.begin).det(v)/abs(v))
 
 #=== 線同士の距離
-def Distance_betweem_Line_and_Line(L,M):
+def Distance_between_Line_and_Line(L,M):
     """ 2直線 L,M の距離を求める.
 
     L,M: 直線
     """
 
     if is_Parallel(L,M):
-        return Distance_betweem_Point_and_Line(L.begin,M)
+        return Distance_between_Point_and_Line(L.begin,M)
     else:
         return 0
 
-def Distance_betweem_Line_and_Segment(L,M):
+def Distance_between_Line_and_Segment(L,M):
     """ 直線 L と線分 M の距離を求める.
 
     L: 直線, M: 線分
@@ -272,11 +272,11 @@ def Distance_betweem_Line_and_Segment(L,M):
         return 0
     else:
         return min(
-            Distance_betweem_Point_and_Line(M.begin, L),
-            Distance_betweem_Point_and_Line(M.end, L)
+            Distance_between_Point_and_Line(M.begin, L),
+            Distance_between_Point_and_Line(M.end, L)
             )
 
-def Distance_betweem_Segment_and_Segment(L,M):
+def Distance_between_Segment_and_Segment(L,M):
     """ 2線分 L,M の距離を求める.
 
     L,M: 線分
@@ -286,10 +286,10 @@ def Distance_betweem_Segment_and_Segment(L,M):
         return 0
 
     return min(
-        Distance_betweem_Point_and_Segment(L.begin,M),
-        Distance_betweem_Point_and_Segment(L.end  ,M),
-        Distance_betweem_Point_and_Segment(M.begin,L),
-        Distance_betweem_Point_and_Segment(M.end  ,L)
+        Distance_between_Point_and_Segment(L.begin,M),
+        Distance_between_Point_and_Segment(L.end  ,M),
+        Distance_between_Point_and_Segment(M.begin,L),
+        Distance_between_Point_and_Segment(M.end  ,L)
         )
 
 #=== 点と直線の幾何
