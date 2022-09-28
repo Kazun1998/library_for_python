@@ -19,10 +19,10 @@ def Factor(N):
 
     N: int
     """
-    F=[1]*(N+1)
+    f=[1]*(N+1)
     for k in range(1,N+1):
-        F[k]=(k*F[k-1])%Mod
-    return F
+        f[k]=(k*f[k-1])%Mod
+    return f
 
 def Factor_with_inverse(N):
     """ 0!, 1!, ..., N!, (0!)^-1, (1!)^-1, ..., (N!)^-1 を出力する.
@@ -30,30 +30,42 @@ def Factor_with_inverse(N):
     N: int
     """
 
-    F=Factor(N)
-    G=[1]*(N+1); G[-1]=pow(F[-1],Mod-2,Mod)
+    f=Factor(N)
+    g=[1]*(N+1); g[-1]=pow(f[-1],Mod-2,Mod)
 
     for k in range(N-1,-1,-1):
-        G[k]=((k+1)*G[k+1])%Mod
-    return F,G
+        g[k]=((k+1)*g[k+1])%Mod
+    return f,g
 
 def Double_Factor(N):
     """ 0!!, 1!!, ..., N!! (mod Mod) を出力する.
 
     N: int
     """
-
-    if N==0:
-        return [1]
-
-    F=[1]*(N+1)
+    f=[1]*(N+1)
     for i in range(2,N+1):
-        F[i]=i*F[i-2]%Mod
-    return F
+        f[i]=i*f[i-2]%Mod
+    return f
 
+def Modular_Inverse(N):
+    """ 1^(-1), 2^(-1), ..., N^(-1) (mod Mod) を出力する.
+
+    [Input]
+    N:int
+
+    [Output]
+    [-1, 1^(-1), 2^(-1), ..., N^(-1)] (第 0 要素に注意!!)
+    """
+
+    inv=[1]*(N+1); inv[0]=-1
+    for k in range(2, N+1):
+        q,r=divmod(Mod,k)
+        inv[k]=(-q*inv[r])%Mod
+    return inv    
+    
 """
 組み合わせの数
-Factor_with_inverse で F, G を既に求めていることが前提
+Factor_with_inverse で fact, fact_inv を既に求めていることが前提 (グローバル変数)
 """
 
 def nCr(n,r):
@@ -63,7 +75,7 @@ def nCr(n,r):
     """
 
     if 0<=r<=n:
-        return F[n]*(G[r]*G[n-r]%Mod)%Mod
+        return fact[n]*(fact_inv[r]*fact_inv[n-r]%Mod)%Mod
     else:
         return 0
 
@@ -74,7 +86,7 @@ def nPr(n,r):
     """
 
     if 0<=r<=n:
-        return (F[n]*G[n-r])%Mod
+        return (fact[n]*fact_inv[n-r])%Mod
     else:
         return 0
 
@@ -82,7 +94,7 @@ def nHr(n,r):
     """ nHr (1,2,...,n から重複を許して r 個の整数を選ぶ方法) を求める.
 
     n,r: int
-    ※ F,G は第 n+r-1 項まで必要
+    ※ fact, fact_inv は第 n+r-1 項まで必要
     """
 
     if n==r==0:
@@ -96,12 +108,12 @@ def Multinomial_Coefficient(*K):
     k_i: int
     """
 
-    N=0;
+    N=0
     g_inv=1
     for k in K:
         N+=k
-        g_inv*=G[k]; g_inv%=Mod
-    return (F[N]*g_inv)%Mod
+        g_inv*=fact_inv[k]; g_inv%=Mod
+    return (fact[N]*g_inv)%Mod
 
 def Binomial_Coefficient_Modulo_List(n: int):
     """ n を固定し, r=0,1,...,n としたときの nCr (mod Mod) のリストを出力する.
@@ -113,14 +125,9 @@ def Binomial_Coefficient_Modulo_List(n: int):
     """
 
     L=[1]*(n+1)
-
-    I=[1]*(n+1)
-    for k in range(2,n+1):
-        q,r=divmod(Mod,k)
-        I[k]=(-q*I[r])%Mod
-
-    for r in range(1,n+1):
-        L[r]=((n+1-r)*I[r]%Mod)*L[r-1]%Mod
+    inv=Modular_Inverse(n+1)
+    for r in range(1, n+1):
+        L[r]=((n+1-r)*inv[r]%Mod)*L[r-1]%Mod
     return L
 
 def Pascal_Triangle(N: int):
@@ -195,3 +202,4 @@ def Sum_of_Product_Yielder(N,*Y):
     return S%Mod
 #==================================================
 Mod=998244353
+fact, fact_inv=Factor_with_inverse(100)
