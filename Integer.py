@@ -43,9 +43,9 @@ def Prime_Factorization(N):
 
 #根基
 def Radical(N):
-    """Nが素因数分解 N=p^a*q^b*r^c ...となるとき, pqr...を返す.
+    """ N が素因数分解 N=p^a*q^b*r^c ... となるとき, pqr... を返す.
 
-    N:非負整数
+    N: 非負整数
     """
 
     assert N>=0,"Nは非負整数ではない."
@@ -137,7 +137,7 @@ def Divisors_from_Prime_Factor(P,sorting=False):
 #高度合成数
 #参考元:https://qiita.com/convexineq/items/e3d599cb9f91a73f936d
 def Highly_Composite_Number(N):
-    """N以下の高度合成数を求める.
+    """ N 以下の高度合成数を求める.
     """
 
     from heapq import heappop,heappush
@@ -154,7 +154,7 @@ def Highly_Composite_Number(N):
             res.append((n,val,lst[:]))
         L = len(lst)
         e0 = lst[0]
-        #全部１なら新しい素数で横に伸ばせる
+        #全部1なら新しい素数で横に伸ばせる
         if e0 == 1:
             heappush(q,(n*prime[L],val*2,[1]*(L+1)))
         #最上段の上を横方向に積む
@@ -181,7 +181,8 @@ def Is_Prime(N):
     k=5
     Flag=0
     while k*k<=N:
-        if N%k==0: return False
+        if N%k==0:
+            return False
 
         k+=2+2*Flag
         Flag^=1
@@ -312,9 +313,9 @@ def Pollard_Rho_Prime_Factorization(N):
 #次の素数
 def Next_Prime(N,K=1):
     """
-    Nを上回る自然数のうち,K番目に小さい素数
+    N を上回る自然数のうち, K 番目に小さい素数
 
-    N:自然数
+    N: 自然数
     """
     if K>0:
         while K>0:
@@ -345,8 +346,11 @@ def Sieve_of_Eratosthenes(N):
     T=[1]*(N+1)
     T[0]=T[1]=0
 
-    for x in range(4,N+1,2): T[x]=0
-    for x in range(9,N+1,3): T[x]=0
+    for x in range(4,N+1,2):
+        T[x]=0
+
+    for x in range(9,N+1,3):
+        T[x]=0
 
     a=5
     Flag=0
@@ -661,9 +665,13 @@ def Is_Cubic_Number(N):
 
 #Euler's Totient関数
 def Euler_Totient(N):
-    """1以上N以下の整数のうち, Nと互いに素な整数の個数 φ(N) を求める.
+    """ 1 以上 N 以下の整数のうち, N と互いに素な整数の個数 phi (N) を求める.
 
-    N:正の整数
+    Args:
+        N (int): 正の整数
+
+    Returns:
+        int: varphi (N)
     """
 
     assert N>=0,"Nが非負整数ではない."
@@ -797,7 +805,27 @@ def Reminder_Enumeration(N,r):
         k+=1
     return X+Y[::-1]
 
-#法pの原始根
+def Next_Remainder(x, p, r):
+    """ x 以上で p で割って r 余る整数のうち, 最小の整数を求める.
+
+    """
+
+    if x%p<=r:
+        return (x//p)*p+r
+    else:
+        return (x//p+1)*p+r
+
+def Previous_Remainder(x, p, r):
+    """ x 以下で p で割って r 余る整数のうち, 最大の整数を求める.
+
+    """
+
+    if r<=x%p:
+        return (x//p)*p+r
+    else:
+        return (x//p-1)*p+r
+
+#法 p の原始根
 def Primitive_Root(p):
     """Z/pZ上の原始根を見つける
 
@@ -857,8 +885,8 @@ def GCD(*X):
     return reduce(gcd,X)
 
 #拡張ユークリッドの互除法
-def Extend_Euclid(a:int,b:int):
-    """gcd(a,b) と ax+by=gcd(a,b) を満たす整数 x,y の例を挙げる.
+def Extend_Euclid(a: int, b: int):
+    """ gcd(a,b) と ax+by=gcd(a,b) を満たす整数 x,y の例を挙げる.
 
     [Input]
     a,b: 整数
@@ -872,6 +900,20 @@ def Extend_Euclid(a:int,b:int):
         s,t=t,s-q*t
         u,v=v,u-q*v
     return s,u,a
+
+def Modulo_Inverse(a, m):
+    """ (mod m) における逆元を求める.
+
+    Args:
+        a (int): mod m の元
+        m (int): 法
+
+    Returns:
+        int: 可逆元が存在するならばその値, 存在しないのであれば -1
+    """
+
+    h=Extend_Euclid(a,m)
+    return h[0]%m if h[2]==1 else -1
 
 #最小公倍数
 def lcm(m,n):
