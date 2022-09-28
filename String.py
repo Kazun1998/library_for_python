@@ -1,7 +1,7 @@
 def Run_Length_Encoding(S):
-    """ランレングス圧縮
+    """ Run Length 圧縮
 
-    S:文字列
+    S: 列
     """
     if not S:
         return []
@@ -16,10 +16,10 @@ def Run_Length_Encoding(S):
 
     return R
 
-def Substring_Count(S,Mod=None):
-    """文字列Sの異なる部分列の個数を求める.
+def Substring_Count(S, Mod=None):
+    """文字列 S の異なる部分列の個数を求める.
 
-    Mod:余り
+    Mod: 余り
     """
 
     #前処理
@@ -62,8 +62,8 @@ def Substring_Count(S,Mod=None):
                 T%=Mod
             return T
 
-def Suffix_Array(S,encoder=lambda x:x):
-    """ S の Suffix Array (接尾辞配列) を SA-IS によって求める.
+def Suffix_Array(S, encoder=lambda x:x):
+    """ S の Suffix Array (接尾辞配列) (S[0...], S[1...],... を辞書式に並べた時の開始インデックスの列) を SA-IS によって求める.
 
     S: 列
     encoder: 正の整数への順序埋め込み (※ max encoder(S) が小さいほど計算量がよい)
@@ -181,6 +181,10 @@ def Longest_Commom_Prefix(S, encoder=lambda x:x,with_SA=False):
 
 #Z-Algorithm
 def Z_Algorithm(S):
+    """ i=0,1,...,|S|-1 に対して, S[i...] と S の先頭何文字が一致しているかを表すリストを返す.
+
+    S: string
+    """
     N=len(S)
     Z=[0]*N
     i,j=1,0
@@ -203,8 +207,8 @@ def Z_Algorithm(S):
     return Z
 
 #ハミング距離
-def Hamming_Distance(S:str,T:str) -> int:
-    """文字列の長さが等しいS,Tにおけるハミング距離を求める.
+def Hamming_Distance(S: str, T: str):
+    """文字列の長さが等しい S, T におけるハミング距離を求める.
 
     S,T:string (|S|=|T| を満たしていなければならない)
     """
@@ -218,8 +222,8 @@ def Hamming_Distance(S:str,T:str) -> int:
     return x
 
 #レーベンシュタイン距離
-def Levenshtein_Distance(S:str,T:str,example=False) ->int:
-    """文字列S,Tにおけるレーベンシュタイン距離(編集距離) を求める.
+def Levenshtein_Distance(S: str, T: str):
+    """文字列 S,T におけるレーベンシュタイン距離 (編集距離) を求める.
 
     S,T: string
     """
@@ -242,7 +246,7 @@ def Longest_Common_Subsequence(S:str, T:str, example=False):
     """文字列 S,T における最長部分列の長さを求める.
 
     S,T: string
-    example: Trueであるとき,LCSを満たす例を1つ返す.
+    example: True であるとき, LCS を満たす例を1つ返す.
     """
 
     M=len(S);N=len(T)
