@@ -50,14 +50,16 @@ class Slide_Window():
         x: value
         k: 回数
         """
-        self.__cnt+=1
 
-        self.__back.append(x)
+        for _ in range(k):
+            self.__cnt+=1
 
-        if self.__right:
-            self.__right.append(self.calc(self.__right[-1],x))
-        else:
-            self.__right.append(x)
+            self.__back.append(x)
+
+            if self.__right:
+                self.__right.append(self.calc(self.__right[-1],x))
+            else:
+                self.__right.append(x)
 
     def pop(self, k=1):
         """ k 回 push する.
