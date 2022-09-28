@@ -1100,65 +1100,48 @@ def Warshall_Floyd(G):
                 Tv[w]=min(Tv[w],Tv[u]+Tu[w])
 
     return T
-#---------------------------------------
-#グラフの捜査
-#---------------------------------------
-def Depth_First_Search(G,start=0,prefunc=None,postfunc=None):
-    """深さ優先探索を行う.
+#==========
+# グラフの走査
+#==========
+def Depth_First_Search_yielder(G):
+    """ 深さ優先探索を行う.
 
-    G:グラフ
-    prefunc:頂点をStackに入れる時,その頂点vに対して実行する関数,命令.
-    postfunc:頂点をStackから出す時,その頂点vに対して実行する関数,命令.
+    [Input]
+    G: グラフ
+
+    [Output]
+    (-1, v, 1): v が探索開始の頂点である.
+    (u,v,1): u から v へ向かう辺で, DFS 木で葉に進む向きになる辺
+    (u,v,0): u から v へ向かう辺で後退辺 (DFS 木には不採用)
+    (u,v,-1): u から v へ向かう辺で, DFS 木では根に進む向きになる辺
+    (u,-1,-1): u から始まった DFS が終了
     """
 
     from collections import deque
 
-    N=G.vertex_count(); adj=G.adjacent
-    T=[0]*N; T[start]=1
+    N=G.vertex_count(); adj=[list(a) for a in G.adjacent]
+    T=[0]*N; R=[0]*N; parent=[-1]*N
 
-    S=deque([start])
+    for x in range(N):
+        if T[x]==0:
+            S=deque([x])
 
-    if prefunc:
-        prefunc(start)
+            yield (-1, x, 1)
+            while S:
+                x=S.pop()
+                T[x]=1
 
-    while S:
-        v=S.pop()
-        if postfunc:
-            postfunc(v)
+                while R[x]<len(adj[x]):
+                    y=adj[x][R[x]]
+                    R[x]+=1
 
-        for u in adj[v]:
-            if not T[u]:
-                T[u]=1
-                S.append(u)
-                if prefunc:
-                    prefunc(u)
-
-def Breath_First_Search(G,start=0,prefunc=None,postfunc=None):
-    """幅優先探索を行う.
-
-    G:グラフ
-    prefunc:頂点をQueueに入れる時,その頂点vに対して実行する関数,命令.
-    postfunc:頂点をQueueから出す時,その頂点vに対して実行する関数,命令.
-    """
-
-    from collections import deque
-
-    N=G.vertex_count(); adj=G.adjacent
-    T=[0]*N; T[start]=1
-
-    Q=deque([start])
-
-    if prefunc:
-        prefunc(start)
-
-    while Q:
-        v=Q.popleft()
-        if postfunc:
-            postfunc(v)
-
-        for u in adj[v]:
-            if not T[u]:
-                T[u]=1
-                Q.append(u)
-                if prefunc:
-                    prefunc(u)
+                    if T[y]==0:
+                        S.append(x); S.append(y)
+                        parent[y]=x
+                        yield (x,y,1)
+                        break
+                    else:
+                        yield (x,y,0)
+                else:
+                    yield (x, parent[x], -1)
+            yield (x, -1, -1)
