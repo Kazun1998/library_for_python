@@ -21,31 +21,28 @@ class Binary_Indexed_Tree():
     def __init__(self, L, calc, unit, inv):
         """ calc を演算とする N 項の Binary Indexed Tree を作成
         calc: 演算 (2変数関数, 可換群)
-        unit: 群 calc の単位元 (x+e=e+x=xを満たすe)
+        unit: 群 calc の単位元 (x+e=e+x=x を満たす e)
         inv : 群 calc の逆元 (1変数関数, x+inv(x)=inv(x)+x=e をみたす inv(x))
         """
         self.calc=calc
         self.unit=unit
         self.inv=inv
+        self.N=N=len(L)
+        self.log=N.bit_length()-1
 
-        N=len(L)
-        d=max(1, (N-1).bit_length())
-        k=2**d
-
-        X=[None]+[unit]*k
-
-        self.num=k
-        self.depth=d
+        X=[unit]*(N+1)
 
         for i in range(N):
             p=i+1
-            while p<=k:
-                X[p]=self.calc(X[p],L[i])
-                p+=p&(-p)
+            X[p]=calc(X[p],L[i])
+            q=p+(p&(-p))
+            if q<=N:
+                X[q]=calc(X[q], X[p])
         self.data=X
 
     def get(self, k):
         """ 第 k 要素の値を出力する.
+
         k    : 数列の要素
         index: 先頭の要素の番号
         """
@@ -53,18 +50,19 @@ class Binary_Indexed_Tree():
 
     def add(self, k, x):
         """ 第 k 要素に x を加え, 更新を行う.
+
         k    : 数列の要素
         x    : 加える値
-        index: 先頭の要素の番号
         """
         data=self.data; calc=self.calc
         p=k+1
-        while p<=self.num:
+        while p<=self.N:
             data[p]=calc(self.data[p],x)
             p+=p&(-p)
 
     def update(self, k, x):
         """ 第 k 要素を x に変え, 更新を行う.
+
         k: 数列の要素
         x: 更新後の値
         """
@@ -80,8 +78,8 @@ class Binary_Indexed_Tree():
         l: 始まり
         r: 終わり
         """
-        l=max(1, l+1)
-        r=min(self.num, r+1)
+        l=l+1 if 0<=l else 1
+        r=r+1 if r<self.N else self.N
 
         if l>r:
             return self.unit
@@ -100,7 +98,7 @@ class Binary_Indexed_Tree():
         return S
 
     def all_sum(self):
-        return self.data[-1]
+        return self.sum(0,self.N-1)
 
     def binary_search(self, cond):
         """ cond(B[0]+...+B[k]) を満たす最小の k を返す.
@@ -108,20 +106,20 @@ class Binary_Indexed_Tree():
         cond: 単調増加
 
         ※ cond(unit)=True の場合の返り値は -1
-        ※ cond(B[1]+...+B[k]) なる k が存在しない場合の返り値は self.num
+        ※ cond(B[0]+...+B[k]) なる k が (0<=k<N に) 存在しない場合の返り値は N
         """
 
         if cond(self.unit):
             return -1
 
         j=0
-        r=self.num
-        t=r
+        r=self.N
+        t=1<<self.log
         data=self.data; calc=self.calc
         alpha=self.unit
 
-        for _ in range(self.depth+1):
-            if j+t<=self.num:
+        while t>0:
+            if j+t<=self.N:
                 beta=calc(alpha,data[j+t])
                 if not cond(beta):
                     alpha=beta
@@ -140,5 +138,5 @@ class Binary_Indexed_Tree():
         self.update(index,val)
 
     def __iter__(self):
-        for k in range(self.num):
+        for k in range(self.N):
             yield self.sum(k,k)

@@ -1,22 +1,22 @@
 class Dual_Segment_Tree:
-    def __init__(self,L,comp,id,index):
+    def __init__(self, L, comp, id):
         """opを作用とするリストLのDual Segment Treeを作成
 
         op:作用素
         id:恒等写像
 
-        [条件] M:Monoid,F={f:F x M→ M:作用素}に対して,以下が成立する.
-        Fは恒等写像 id を含む.つまり,任意の x in M に対して id(x)=x
-        Fは写像の合成に閉じている.つまり,任意の f,g in F に対して, comp(f,g) in F
-        任意の f in F, x,y in M に対して,f(xy)=f(x)f(y)である.
+        [条件]
+        M:Monoid, F={f: F x M→ M: 作用素} に対して,以下が成立する.
+        F は恒等写像 id を含む. つまり, 任意の x in M に対して id(x)=x
+        F は写像の合成に閉じている. つまり,任意の f,g in F に対して, comp(f,g) in F
+        任意の f in F, x,y in M に対して, f(xy)=f(x)f(y)である.
 
         [注記]
-        更新は左から.
+        更新は左から. つまり, comp(new, old) となる.
         """
 
         self.comp=comp
         self.id=id
-        self.index=index
 
         N=len(L)
         d=max(1,(N-1).bit_length())
@@ -41,9 +41,9 @@ class Dual_Segment_Tree:
             self._propagate_at(m>>h)
 
     #作用
-    def operate(self,From,To,alpha,left_closed=True,right_closed=True):
-        L=(From-self.index)+self.N+(not left_closed)
-        R=(To-self.index)+self.N+(right_closed)
+    def operate(self, l, r, alpha, left_closed=True, right_closed=True):
+        L=l+self.N+(not left_closed)
+        R=r+self.N+(right_closed)
 
         L0=R0=-1
         X,Y=L,R-1
@@ -65,14 +65,15 @@ class Dual_Segment_Tree:
         self._propagate_above(L0)
         self._propagate_above(R0)
 
+        lazy=self.lazy; comp=self.comp
         while L<R:
             if L&1:
-                self.lazy[L]=self.comp(alpha,self.lazy[L])
+                lazy[L]=comp(alpha, lazy[L])
                 L+=1
 
             if R&1:
                 R-=1
-                self.lazy[R]=self.comp(alpha,self.lazy[R])
+                lazy[R]=comp(alpha, lazy[R])
 
             L>>=1
             R>>=1
@@ -84,14 +85,14 @@ class Dual_Segment_Tree:
 
     #取得
     def get(self,k):
-        m=k-self.index+self.N
+        m=k+self.N
         self._propagate_above(m)
         return self.lazy[m]
 
     def __getitem__(self,index):
-        m=index-self.index+self.N
+        m=index+self.N
         self._propagate_above(m)
         return self.lazy[m]
 
     def __setitem__(self,index,value):
-        self.operate(index,index,value)
+        self.operate(index, index, value)
