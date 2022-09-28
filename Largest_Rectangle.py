@@ -7,7 +7,7 @@ def Largest_Rectangle(H, mode=0):
     from collections import deque
     H.append(0)
     S=deque([])
-    X=-1
+    X=H[0]
     l=r=-1
     for i in range(len(H)):
         if (not S) or H[S[-1]]<H[i]:
