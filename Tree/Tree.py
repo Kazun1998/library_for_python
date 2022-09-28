@@ -1,16 +1,17 @@
 class Tree:
     __slots__=("N", "index", "parent", "__mutable",
-            "root", "children", "depth", "tower", "upper_list", "deg", "des_count", "preorder_number",
-            "euler_vertex", "euler_edge", "in_time", "out_time")
+            "root", "children", "depth", "tower", "upper_list", "des_count", "preorder_number",
+            "euler_vertex", "euler_edge", "in_time", "out_time", "lca_dst",
+            "hld_hedge")
 
-    def __init__(self,N,index=0):
+    def __init__(self, N, index=0):
         """ N 頂点 (index, index+1, ..., N-1+index) の根付き木を生成する. """
         self.N=N
         self.index=index
         self.parent=[-1]*(N+index)
         self.__mutable=True
 
-    def vertex_exist(self,x):
+    def vertex_exist(self, x):
         """ 頂点 x が存在するかどうかを判定する. """
 
         return self.index<=x<self.index+self.N
@@ -31,8 +32,8 @@ class Tree:
         return self.__mutable
 
     #設定パート
-    def root_set(self,root):
-        """ 頂点 x を根に設定する."""
+    def root_set(self, root):
+        """ 頂点 root を根に設定する."""
 
         assert self.vertex_exist(root)
         assert self.__mutable
@@ -48,8 +49,8 @@ class Tree:
 
         self.parent[x]=y
 
-    def child_set(self,x,y):
-        """ 頂点 x の子の一つに y を設定する."""
+    def child_set(self, x, y):
+        """ 頂点 x の子の一つに y を設定する (頂点 x の方が親)."""
 
         assert self.vertex_exist(x)
         assert self.vertex_exist(y)
@@ -58,10 +59,10 @@ class Tree:
         self.parent[y]=x
 
     def seal(self):
-        """ 木の情報を確定させる."""
+        """ 木の情報を確定させる (これ以降, 情報の変更は禁止)."""
 
         assert self.__mutable
-        assert hasattr(self,"root")
+        assert hasattr(self, "root")
 
         a=self.index
         b=self.index+self.N
@@ -78,13 +79,15 @@ class Tree:
         self.children=C
 
     #データを求める.
-    def depth_search(self,Mode=True):
-        """ 木の深さを求める. """
+    def depth_search(self, mode=True):
+        """ 木の深さを求める.
+
+        mode=True ならば, 各頂点の深さが記録されたリストを返す."""
 
         assert self.__after_seal_check()
 
-        if hasattr(self,"depth"):
-            if Mode:
+        if hasattr(self, "depth"):
+            if mode:
                 return self.depth
             else:
                 return
@@ -109,22 +112,22 @@ class Tree:
         self.depth=D
         self.tower=E
 
-        if Mode:
+        if mode:
             return D
 
-    def vertex_depth(self,x):
+    def vertex_depth(self, x):
         """ 頂点 x の深さを求める."""
 
         assert self.__after_seal_check(x)
 
-        if not hasattr(self,"depth"):
-            self.depth_search(Mode=False)
+        if not hasattr(self, "depth"):
+            self.depth_search(mode=False)
         return self.depth[x]
 
     def __upper_list(self):
         assert self.__after_seal_check()
 
-        if hasattr(self,"upper_list"):
+        if hasattr(self, "upper_list"):
             return
 
         if not hasattr(self,"depth"):
@@ -135,9 +138,8 @@ class Tree:
 
         Y=X[0]
         p=self.parent
-        rg=range(self.index,self.index+self.N)
 
-        for x in rg:
+        for x in range(self.index,self.index+self.N):
             if x!=self.root:
                 Y[x]=p[x]
             else:
@@ -147,11 +149,11 @@ class Tree:
             Y=X[k-1]
             Z=X[k]
 
-            for x in rg:
+            for x in range(self.index,self.index+self.N):
                 Z[x]=Y[Y[x]]
         self.upper_list=X
 
-    def upper(self,x,k,over=True):
+    def upper(self, x, k, over=True):
         """ 頂点 x から見て k 個親の頂点を求める.
 
         over: (頂点 x の深さ)<k のときに True ならば根を返し, False ならばエラーを吐く.
@@ -177,55 +179,98 @@ class Tree:
             i+=1
         return x
 
-    def lowest_common_ancestor(self,x,y):
-        """ 頂点 x, y の最小共通先祖 (x,yに共通する先祖で最も深いもの) を求める. """
+    def lowest_common_ancestor_greedy(self, x, y):
+        """頂点 x, y の最小共通先祖 (x,yに共通する先祖で最も深いもの) を "愚直に" 求める."""
 
         assert self.__after_seal_check(x,y)
+        dx=self.vertex_depth(x); dy=self.vertex_depth(y)
 
-        dd=self.vertex_depth(y)-self.vertex_depth(x)
-        if dd<0:
+        if dx<dy:
+            dx,dy=dy,dx
             x,y=y,x
-            dd=-dd
 
-        y=self.upper(y,dd)
-        if x==self.root:
-            return x
-        if x==y:
-            return x
+        pa=self.parent
+        while dx>dy:
+            x=pa[x]
+            dx-=1
 
-        d=self.vertex_depth(x)
-        b=d.bit_length()
+        while x!=y:
+            x=pa[x]
+            y=pa[y]
 
-        X=self.upper_list
-        for k in range(b-1,-1,-1):
-            px=X[k][x];py=X[k][y]
-            if px!=py:
-                x=px;y=py
+        return x
 
-        return self.upper(x,1)
-
-    def __degree_count(self):
+    def __lca_prepare(self):
         assert self.__after_seal_check()
 
-        if hasattr(self,"deg"):
-            return
+        N=self.N
 
-        self.deg=[0]*(self.index+self.N)
-        for v in range(self.index,self.index+self.N):
-            d=len(self.children[v])+1
-            if d==self.root:
-                d-=1
-            self.deg[v]=d
+        bit=((2*N-1)-1).bit_length()
+        D=[[0]*(2*N-1) for _ in range(bit)]
+
+        self.euler_tour_vertex()
+        tour=self.euler_vertex
+        D[0]=tour.copy()
+        dep=self.depth_search(True)
+
+        for i in range(1, bit):
+            shift=1<<i
+            tab=D[i]
+
+            for j in range(0, 2*N-1, 2*shift):
+                t=min(j+shift, 2*N-1)
+                tab[t-1]=tour[t-1]
+
+                for k in range(t-2, j-1, -1):
+                    if dep[tour[k]]<dep[tab[k+1]]:
+                        tab[k]=tour[k]
+                    else:
+                        tab[k]=tab[k+1]
+
+                if 2*N-1<=t:
+                    break
+
+                tab[t]=tour[t]
+                r=min(t+shift, 2*N-1)
+
+                for k in range(t+1, r):
+                    if dep[tab[k-1]]<dep[tour[k]]:
+                        tab[k]=tab[k-1]
+                    else:
+                        tab[k]=tour[k]
+
+        self.lca_dst=D
         return
+
+    def lowest_common_ancestor(self, x, y):
+        """頂点 x, y の最小共通先祖 (x,yに共通する先祖で最も深いもの) を "高速に" 求める. """
+
+        assert self.__after_seal_check(x,y)
+        if not hasattr(self, "lca_dst"):
+            self.__lca_prepare()
+
+        a=self.in_time[x]; b=self.in_time[y]
+        if a>b:
+            x,y=y,x
+            a,b=b,a
+
+        if a==b:
+            return self.lca_dst[0][a]
+
+        p=(a^b).bit_length()-1
+        tab=self.lca_dst[p]
+        u=tab[a]; v=tab[b]
+
+        return u if self.vertex_depth(u)<self.vertex_depth(v) else v
 
     def degree(self,v):
         """ 頂点 v の次数を求める. """
 
         assert self.__after_seal_check(v)
-
-        if not hasattr(self,"deg"):
-            self.__degree_count()
-        return self.deg[v]
+        if v==self.root:
+            return len(self.children[v])
+        else:
+            return len(self.children[v])+1
 
     def diameter(self):
         """ 木の直径を求める."""
@@ -251,21 +296,24 @@ class Tree:
                     if X[y]==-1:
                         Q.append(y)
                         X[y]=X[x]+1
-            y=max(range(self.index,self.index+self.N),key=lambda x:X[x])
+            y=max(range(self.index,self.index+self.N), key=lambda x:X[x])
             return y,X[y]
 
         y,_=bfs(self.root)
         z,d=bfs(y)
         return d,(y,z)
 
-    def path(self,u,v):
+    def path(self, u, v, faster=False):
         """ 頂点 u, v 間のパスを求める. """
 
         assert self.__after_seal_check(u,v)
 
-        w=self.lowest_common_ancestor(u,v)
-        pa=self.parent
+        if faster:
+            w=self.lowest_common_ancestor(u,v)
+        else:
+            w=self.lowest_common_ancestor_greedy(u,v)
 
+        pa=self.parent
         X=[u]
         while u!=w:
             u=pa[u]
@@ -317,7 +365,7 @@ class Tree:
         return self.is_ancestor(v,u)
 
     def direction(self, u, v):
-        """ 頂点 u から頂点 v へ向かうパスが頂点 u の次に通る頂点"""
+        """ 頂点 u から頂点 v (u!=v) へ向かうパスが頂点 u の次に通る頂点"""
 
         assert self.__after_seal_check(u,v)
         assert u!=v
@@ -329,18 +377,66 @@ class Tree:
         else:
             return self.parent[u]
 
+    def jump(self, u, v, k, default=-1):
+        """ 頂点 u から頂点 v へ向かうパスにおいて k 番目 (0-indexed) に通る頂点 (パスの長さが k より大きい場合は default)
+
+        u: int
+        v: int
+        k: int
+        default=-1: int
+        """
+
+        assert self.__after_seal_check(u,v)
+
+        if k==0:
+            return u
+
+        # lca を求める.
+        x=u; y=v
+        dx=self.vertex_depth(x); dy=self.vertex_depth(y)
+        if dx>dy:
+            x,y=y,x
+            dx,dy=dy,dx
+        y=self.upper(y, dy-dx)
+
+        if x==self.root or x==y:
+            w=x
+        else:
+            bit=dx.bit_length()
+
+            X=self.upper_list
+            for t in range(bit-1,-1,-1):
+                px=X[t][x]; py=X[t][y]
+                if px!=py:
+                    x=px; y=py
+            w=self.parent[x]
+
+        dist_uw=self.vertex_depth(u)-self.vertex_depth(w)
+        dist_wv=self.vertex_depth(v)-self.vertex_depth(w)
+
+        if dist_uw+dist_wv<k:
+            return default
+        elif k<=dist_uw:
+            return self.upper(u, k)
+        else:
+            return self.upper(v, (dist_uw+dist_wv)-k)
+
     def is_leaf(self,v):
         """ 頂点 v は葉? """
 
         return not bool(self.children[v])
 
-    def distance(self,u,v):
+    def distance(self, u, v, faster=True):
         """ 2頂点 u, v 間の距離を求める. """
 
         assert self.__after_seal_check(u,v)
 
         dep=self.vertex_depth
-        return dep(u)+dep(v)-2*dep(self.lowest_common_ancestor(u,v))
+
+        if faster:
+            return dep(u)+dep(v)-2*dep(self.lowest_common_ancestor(u,v))
+        else:
+            return dep(u)+dep(v)-2*dep(self.lowest_common_ancestor_greedy(u,v))
 
     def __descendant_count(self):
         assert self.__after_seal_check()
@@ -370,7 +466,7 @@ class Tree:
     def preorder(self,v):
         """ 頂点 v の行きがけ順を求める. """
         assert self.__after_seal_check(v)
-        if hasattr(self,"preorder_number"):
+        if hasattr(self, "preorder_number"):
             self.preorder_number[v]
 
         from collections import deque
@@ -398,14 +494,14 @@ class Tree:
             yield (v,1) #頂点 v に入る
             for w in self.children[v]:
                 dfs(w) #頂点 v を出る.
-            yield (v,0)
+            yield (v,-1)
 
         order (1変数関数): for w in self.children[v] の順番を指定する (昇順) (※ 無い場合は任意, 破壊的)
         """
         assert self.__after_seal_check()
 
         #最初
-        yield (self.root,1)
+        yield (self.root, 1)
 
         v=self.root
 
@@ -416,12 +512,12 @@ class Tree:
         S=[0]*(self.index+self.N)
 
         if order!=None:
-            for w in range(self.index,self.index+self.N):
+            for w in range(self.index, self.index+self.N):
                 ch[w].sort(key=order)
 
         while True:
-            if R[v]==S[v]:  #もし,進めないならば
-                yield (v,0) #頂点vを出る
+            if R[v]==S[v]:  #もし, 進めないならば
+                yield (v,-1) #頂点vを出る
                 if v==self.root:
                     break
                 else:
@@ -430,7 +526,7 @@ class Tree:
                 w=v
                 v=ch[v][S[v]]
                 S[w]+=1
-                yield (v,1)
+                yield (v, 1)
 
     def top_down(self):
         """ 木の根から yield する. """
@@ -459,14 +555,14 @@ class Tree:
 
         [input]
         merge: 可換モノイドを成す2項演算 M x M -> M
-        unit: Mの単位元
+        unit: M の単位元
         f: X x V x V → M: f(x,v,w): v が親, w が子
         g: M x V → X: g(x,v)
         Mode: False → 根の値のみ, True → 全ての値
 
         [補足]
-        頂点 v の子が x,y,z,...のとき, 更新式は * を merge として
-            dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*..., v)
+        頂点 v の子が x,y,z,..., w のとき, 更新式は * を merge として
+            dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*...*f(dp[w],v,w), v)
         になる.
         """
         assert self.__after_seal_check()
@@ -476,15 +572,15 @@ class Tree:
 
         for x in self.bottom_up():
             for y in ch[x]:
-                data[x]=merge(data[x],f(data[y],x,y))
-            data[x]=g(data[x],x)
+                data[x]=merge(data[x], f(data[y], x, y))
+            data[x]=g(data[x], x)
 
         if Mode:
             return data
         else:
             return data[self.root]
 
-    def tree_dp_from_root(self,f,alpha):
+    def tree_dp_from_root(self, f, alpha):
         """ 根から木 DP を行う.
 
         [input]
@@ -508,7 +604,7 @@ class Tree:
 
         return data
 
-    def rerooting(self,merge,unit,f,g):
+    def rerooting(self, merge, unit, f, g):
         """ 全方位木 DP を行う.
 
         [input]
@@ -520,8 +616,8 @@ class Tree:
         ※ tree_dp_from_leaf と同じ形式
 
         [補足]
-        頂点 v の子が x,y,z,...のとき, 更新式は
-        dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*..., v)
+        頂点 v の子が x,y,z,..., w のとき, 更新式は * を merge として
+            dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*...*f(dp[w],v,w), v)
         になる.
         """
         assert self.__after_seal_check()
@@ -533,7 +629,7 @@ class Tree:
         pa=self.parent
 
         #DFSパート
-        lower=self.tree_dp_from_leaf(merge,unit,f,g,True)
+        lower=self.tree_dp_from_leaf(merge, unit, f, g, True)
 
         #BFSパート
         for v in self.top_down():
@@ -544,37 +640,37 @@ class Tree:
 
             Left=[unit]; x=unit
             for c in cc:
-                x=merge(x,f(lower[c],v,c))
+                x=merge(x, f(lower[c], v, c))
                 Left.append(x)
 
             Right=[unit]; y=unit
             for c in cc[::-1]:
-                y=merge(y,f(lower[c],v,c))
+                y=merge(y, f(lower[c], v, c))
                 Right.append(y)
             Right=Right[::-1]
 
             for i in range(deg):
                 c=cc[i]
 
-                a=merge(Left[i],Right[i+1])
+                a=merge(Left[i], Right[i+1])
 
                 if v!=self.root:
-                    b=merge(a,f(upper[v],v,pa[v]))
+                    b=merge(a, f(upper[v], v, pa[v]))
                 else:
                     b=a
 
-                upper[c]=g(b,v)
+                upper[c]=g(b, v)
 
         A=[unit]*(self.index+self.N)
         for v in range(self.index,self.index+self.N):
             if v!=self.root:
-                a=f(upper[v],v,pa[v])
+                a=f(upper[v], v, pa[v])
             else:
                 a=unit
 
             for c in ch[v]:
-                a=merge(a,f(lower[c],v,c))
-            A[v]=g(a,v)
+                a=merge(a, f(lower[c], v, c))
+            A[v]=g(a, v)
         return A
 
     def euler_tour_vertex(self, order=None):
@@ -624,7 +720,7 @@ class Tree:
     def euler_tour_edge(self):
         """ オイラーツアー (edge) に関する計算を行う.
 
-        (u,v,k): u から v へ向かう (k=+1 のときは葉へ進む向き, k=-1 のときは根へ進む向き)
+        (u, v, k): u から v へ向かう (k=+1 のときは葉へ進む向き, k=-1 のときは根へ進む向き)
         """
 
         assert self.__after_seal_check()
@@ -705,42 +801,55 @@ class Tree:
         return (X+self.distance(S[-1],S[0]))//2
 
 #=================================================
-def Making_Tree(N,E,root,index=0):
-    """木を作る.
+def Making_Tree_from_Adjacent_List(N, A, root, index=0):
+    """ 隣接リストから木を作る."""
 
-    N:頂点数
-    E: 辺のリスト
+    from collections import deque
+
+    T=Tree(N, index)
+    T.root_set(root)
+
+    S=[False]*(N+index); S[root]=True
+    Q=deque([root])
+    while Q:
+        v=Q.popleft()
+        for w in A[v]:
+            if not S[w]:
+                S[w]=True
+                T.parent_set(w,v)
+                Q.append(w)
+
+    T.seal()
+    return T
+
+def Making_Tree_from_Edges(N, E, root, index=0):
+    """ 辺のリストから木を作る.
+
+    N: 頂点数
+    E: 辺のリスト E=[(u[0],v[0]), ..., (u[N-2], v[N-2]) ]
     root: 根
     """
 
     from collections import deque
-    F=[[] for _ in range(index+N)]
+
+    A=[[] for _ in range(N+index)]
     for u,v in E:
-        assert index<=u<index+N
-        assert index<=v<index+N
-        assert u!=v
+        A[u].append(v)
+        A[v].append(u)
 
-        F[u].append(v)
-        F[v].append(u)
+    T=Tree(N, index)
+    T.root_set(root)
 
-    X=[-1]*(index+N)
-    X[root]=root
-
-    C=[[] for _ in range(index+N)]
-
+    S=[False]*(N+index); S[root]=True
     Q=deque([root])
     while Q:
-        x=Q.popleft()
-        for y in F[x]:
-            if X[y]==-1:
-                X[y]=x
-                Q.append(y)
-                C[x].append(y)
+        v=Q.popleft()
+        for w in A[v]:
+            if not S[w]:
+                S[w]=True
+                T.parent_set(w,v)
+                Q.append(w)
 
-    T=Tree(N,index)
-    T.root_set(root)
-    T.parent=X
-    T.children=C
     T.seal()
     return T
 
