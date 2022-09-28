@@ -8,11 +8,9 @@ class Disjoint_Sparse_Table:
         calc: 二項演算
         """
 
-        self.b=0
         self.calc=calc
         self.size=N=len(L)
-        while (1<<self.b)<=self.size:
-            self.b+=1
+        self.b=(N-1).bit_length()
 
         self.table=[[0]*self.size for _ in range(self.b)]
 
@@ -24,16 +22,20 @@ class Disjoint_Sparse_Table:
         for i in range(1,self.b):
             shift<<=1
             tab=self.table[i]
+
             for j in range(0,N,2*shift):
                 t=min(j+shift,N)
                 tab[t-1]=L[t-1]
+
                 for k in range(t-2,j-1,-1):
                     tab[k]=calc(L[k],tab[k+1])
+
                 if N<=t:
                     break
 
                 tab[t]=L[t]
                 r=min(t+shift,N)
+
                 for k in range(t+1,r):
                     tab[k]=calc(tab[k-1],L[k])
 
@@ -42,8 +44,11 @@ class Disjoint_Sparse_Table:
 
         """
 
-        if not left_close: l+=1
-        if not right_close: r-=1
+        if not left_close:
+            l+=1
+
+        if not right_close:
+            r-=1
 
         if l==r:
             return self.table[0][l]
@@ -51,7 +56,8 @@ class Disjoint_Sparse_Table:
             return default
 
         p=(l^r).bit_length()-1
-        return self.calc(self.table[p][l],self.table[p][r])
+        tab=self.table[p]
+        return self.calc(tab[l], tab[r])
 
 from operator import add
-D=Disjoint_Sparse_Table("0123456789",add)
+D=Disjoint_Sparse_Table("01234567",add)
