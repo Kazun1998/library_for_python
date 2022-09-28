@@ -8,7 +8,7 @@ class Slide_Window():
         """スライドプロダクトクラスを生成する.
 
         calc: 2項演算 (半群)
-        ※calcについて, 左から新しい項を加えること.
+        ※calcについて, 右から新しい項を加えること.
         """
         from collections import deque
         self.calc=calc
@@ -73,7 +73,7 @@ class Slide_Window():
 
         self.__cnt-=min(k,self.__cnt)
 
-    def product(self,default=None):
+    def product(self, default=None):
         """ 積を求める.
 
         default: 空のときの返り値を設定する.
