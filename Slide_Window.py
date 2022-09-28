@@ -18,6 +18,15 @@ class Slide_Window():
         self.__right=deque()
         self.__cnt=0
 
+        for x in X:
+            if self.__right:
+                self.__right.append(self.calc(self.__right[-1], x))
+            else:
+                self.__right.append(x)
+
+            self.__cnt+=1
+            self.__back.append(x)
+
     def __str__(self):
         if self.__front:
             if self.__back:
