@@ -1,6 +1,7 @@
 class Coloring_Union_Find():
-    __slots__=["n","parents","rank","data","merge","__group_number"]
-    def __init__(self,N,merge,unit):
+    __slots__=("n", "parents", "rank", "data", "merge", "__group_number")
+
+    def __init__(self, N, merge, unit):
         """ 0,1,...,N-1 を要素として初期化する.
 
         N: 要素数
@@ -41,7 +42,7 @@ class Coloring_Union_Find():
 
         self.__group_number-=1
 
-        self.data[x]=self.data[y]=self.merge(self.data[x],self.data[y])
+        self.data[x]=self.data[y]=self.merge(self.data[x], self.data[y])
 
         if self.rank[x]<self.rank[y]:
             x,y=y,x
@@ -66,16 +67,16 @@ class Coloring_Union_Find():
         """
         return self.find(x) == self.find(y)
 
-    def set(self,x,c):
-        """ 要素 x の属する族の色を c に変更する.
+    def update(self, x, color):
+        """ 要素 x の属する族の色を color に変更する.
 
         x: 要素
-        c: 色
+        color: 色
         """
-        self.data[self.find(x)]=c
+        self.data[self.find(x)]=color
 
-    def look(self,x):
-        """ 要素 x の属する成分の色
+    def get(self, x):
+        """ 要素 x の属する属の色を求める.
 
         x: 要素
         """
@@ -108,14 +109,14 @@ class Coloring_Union_Find():
             X[self.find(k)].append(k)
         return X
 
-    def color_list(self):
-        return [self.look(x) for x in range(self.n)]
+    def list(self):
+        return [self.get(x) for x in range(self.n)]
 
-    def color_map(self):
-        return {x:self.look(x) for x in self.roots()}
+    def map(self):
+        return {x:self.get(x) for x in self.roots()}
 
     def __str__(self):
-        return '\n'.join('{} [color: {}]: {}'.format(r,self.look(r),self.members(r)) for r in self.roots())
+        return '\n'.join('{} [color: {}]: {}'.format(r,self.get(r),self.members(r)) for r in self.roots())
 
     def __repr__(self):
         return self.__str__()
