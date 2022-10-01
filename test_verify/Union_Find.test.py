@@ -7,6 +7,7 @@ from  Union_Find import Union_Find
 
 input=sys.stdin.readline
 write=sys.stdout.write
+
 #==================================================
 def verify():
     N,Q=map(int,input().split())
@@ -20,5 +21,6 @@ def verify():
             X.append(1 if U.same(u,v) else 0)
 
     write("\n".join(map(str,X)))
+
 #==================================================
 verify()
