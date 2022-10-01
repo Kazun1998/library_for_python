@@ -1,4 +1,4 @@
-# verification-helper: PROBLEM https://judge.yosupo.jp/problem/unionfind
+# verification-helper: PROBLEM https://judge.yosupo.jp/problem/point_add_range_sum
 
 #==================================================
 import sys
