@@ -41,7 +41,7 @@ data:
   isVerificationFile: false
   path: Union_Find/Bipartite_Checker.py
   requiredBy: []
-  timestamp: '2022-04-16 12:03:37+09:00'
+  timestamp: '2022-10-01 20:22:51+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Union_Find/Bipartite_Checker.py

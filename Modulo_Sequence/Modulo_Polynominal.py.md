@@ -23,26 +23,25 @@ data:
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "class Modulo_Polynominal():\n    __slots__=(\"Poly\", \"max_degree\")\n\n\
-    \    def __init__(self, Poly=[], max_degree=2*10**5):\n        from itertools\
-    \ import zip_longest\n        \"\"\"\u591A\u9805\u5F0F\u306E\u5B9A\u7FA9\n\n \
-    \       P:\u4FC2\u6570\u306E\u30EA\u30B9\u30C8\n        max_degree\n\n       \
-    \ \u203BMod:\u6CD5\u306F\u30B0\u30ED\u30FC\u30D0\u30EB\u5909\u6570\u304B\u3089\
-    \u6307\u5B9A\n        \"\"\"\n\n        if Poly:\n            self.Poly=[p%Mod\
-    \ for p in Poly[:max_degree]]\n        else:\n            self.Poly=[0]\n    \
-    \    self.max_degree=max_degree\n\n    def __str__(self):\n        return str(self.Poly)\n\
-    \n    def __repr__(self):\n        return self.__str__()\n\n    def __iter__(self):\n\
-    \        yield from self.Poly\n\n    #=\n    def __eq__(self,other):\n       \
-    \ from itertools import zip_longest\n        return all([a==b for a,b in zip_longest(self.Poly,other.Poly,fillvalue=0)])\n\
-    \n    #+,-\n    def __pos__(self):\n        return self\n\n    def __neg__(self):\n\
-    \        return self.scale(-1)\n\n    #items\n    def __getitem__(self, index):\n\
-    \        if isinstance(index, slice):\n            return Modulo_Polynominal(self.Poly[index],\
-    \ self.max_degree)\n        else:\n            if index<0:\n                raise\
-    \ IndexError(\"index is negative (index: {})\".format(index))\n            elif\
-    \ index>=len(self.Poly):\n                return 0\n            else:\n      \
-    \          return self.Poly[index]\n\n    def __setitem__(self, index, value):\n\
-    \        if index<0:\n            raise IndexError(\"index is negative (index:\
-    \ {})\".format(index))\n        elif index>=self.max_degree:\n            return\n\
-    \n        if index>=len(self.Poly):\n            self.Poly+=[0]*(index-len(self.Poly)+1)\n\
+    \    def __init__(self, Poly=[], max_degree=2*10**5):\n        \"\"\" \u591A\u9805\
+    \u5F0F\u306E\u5B9A\u7FA9\n\n        P: \u4FC2\u6570\u306E\u30EA\u30B9\u30C8\n\
+    \        max_degree\n\n        \u203BMod: \u6CD5\u306F\u30B0\u30ED\u30FC\u30D0\
+    \u30EB\u5909\u6570\u304B\u3089\u6307\u5B9A\n        \"\"\"\n\n        if Poly:\n\
+    \            self.Poly=[p%Mod for p in Poly[:max_degree]]\n        else:\n   \
+    \         self.Poly=[0]\n        self.max_degree=max_degree\n\n    def __str__(self):\n\
+    \        return str(self.Poly)\n\n    def __repr__(self):\n        return self.__str__()\n\
+    \n    def __iter__(self):\n        yield from self.Poly\n\n    #=\n    def __eq__(self,other):\n\
+    \        from itertools import zip_longest\n        return all([a==b for a,b in\
+    \ zip_longest(self.Poly,other.Poly,fillvalue=0)])\n\n    #+,-\n    def __pos__(self):\n\
+    \        return self\n\n    def __neg__(self):\n        return self.scale(-1)\n\
+    \n    #items\n    def __getitem__(self, index):\n        if isinstance(index,\
+    \ slice):\n            return Modulo_Polynominal(self.Poly[index], self.max_degree)\n\
+    \        else:\n            if index<0:\n                raise IndexError(\"index\
+    \ is negative (index: {})\".format(index))\n            elif index>=len(self.Poly):\n\
+    \                return 0\n            else:\n                return self.Poly[index]\n\
+    \n    def __setitem__(self, index, value):\n        if index<0:\n            raise\
+    \ IndexError(\"index is negative (index: {})\".format(index))\n        elif index>=self.max_degree:\n\
+    \            return\n\n        if index>=len(self.Poly):\n            self.Poly+=[0]*(index-len(self.Poly)+1)\n\
     \        self.Poly[index]=value%Mod\n\n    #Boole\n    def __bool__(self):\n \
     \       return any(self.Poly)\n\n    #\u7C21\u7565\u5316\n    def reduce(self):\n\
     \        \"\"\" \u9AD8\u6B21\u306E 0 \u3092\u5207\u308A\u6368\u3066\n\n      \
@@ -100,12 +99,21 @@ data:
     \               m>>=1\n                Q*=Q\n\n            if n>=0:\n        \
     \        return A\n            else:\n                return A.inverse()\n   \
     \     else:\n            P=Log(self)\n            return Exp(P*other)\n\n    #\u9006\
-    \u5143\n    def inverse(self, deg=None):\n        assert self.Poly[0],\"\u5B9A\
+    \u5143\n    def inverse(self, deg=None):\n        assert self.Poly[0], \"\u5B9A\
     \u6570\u9805\u304C0\"\n\n        if deg==None:\n            deg=self.max_degree\n\
     \n        return Modulo_Polynominal(Calc.Inverse(self.Poly, deg), self.max_degree)\n\
     \n    #\u9664\u6CD5\n    def __truediv__(self,other):\n        if isinstance(other,\
-    \ Modulo_Polynominal):\n            return self*other.inverse()\n        else:\n\
-    \            return pow(other,Mod-2,Mod)*self\n\n    def __rtruediv__(self,other):\n\
+    \ Modulo_Polynominal):\n            if Calc.is_sparse(other.Poly):\n         \
+    \       d,f=Calc.coefficients_list(other.Poly)\n                K=len(d)\n   \
+    \             H=[0]*self.max_degree\n\n                alpha=pow(other[0], Mod-2,\
+    \ Mod)\n                H[0]=alpha*self[0]%Mod\n\n                for i in range(1,\
+    \ self.max_degree):\n                    c=0\n                    for j in range(1,\
+    \ K):\n                        if d[j]<=i:\n                            c+=f[j]*H[i-d[j]]%Mod\n\
+    \                        else:\n                            break\n          \
+    \          c%=Mod\n                    H[i]=alpha*(self[i]-c)%Mod\n          \
+    \      H=Modulo_Polynominal(H, min(self.max_degree, other.max_degree))\n     \
+    \           return H\n            else:\n                return self*other.inverse()\n\
+    \        else:\n            return pow(other,Mod-2,Mod)*self\n\n    def __rtruediv__(self,other):\n\
     \        return other*self.inverse()\n\n    #\u30B9\u30AB\u30E9\u30FC\u500D\n\
     \    def scale(self, s):\n        return Modulo_Polynominal(Calc.Times(self.Poly,s),self.max_degree)\n\
     \n    #\u6700\u9AD8\u6B21\u306E\u4FC2\u6570\n    def leading_coefficient(self):\n\
@@ -153,24 +161,23 @@ data:
     \  irate3[i]=iroot[i + 3]*iprod%Mod\n            prod*=iroot[i + 3]; prod%=Mod\n\
     \            iprod*=root[i + 3]; iprod%=Mod\n\n        self.root=root; self.iroot=iroot\n\
     \        self.rate2=rate2; self.irate2=irate2\n        self.rate3=rate3; self.irate3=irate3\n\
-    \n    def Add(self, A,B):\n        \"\"\" \u5FC5\u8981\u306A\u3089\u3070\u672B\
+    \n    def Add(self, A, B):\n        \"\"\" \u5FC5\u8981\u306A\u3089\u3070\u672B\
     \u5C3E\u306B\u5143\u3092\u8FFD\u52A0\u3057\u3066, [A[i]+B[i]] \u3092\u6C42\u3081\
     \u308B.\n\n        \"\"\"\n        if type(A)==int:\n            A=[A]\n\n   \
     \     if type(B)==int:\n            B=[B]\n\n        m=min(len(A), len(B))\n \
-    \       C=[0]*m\n        for i in range(m):\n            C[i]=(A[i]+B[i])%Mod\n\
-    \        C.extend(A[m:])\n        C.extend(B[m:])\n        return C\n\n    def\
-    \ Sub(self, A,B):\n        \"\"\" \u5FC5\u8981\u306A\u3089\u3070\u672B\u5C3E\u306B\
-    \u5143\u3092\u8FFD\u52A0\u3057\u3066, [A[i]-B[i]] \u3092\u6C42\u3081\u308B.\n\n\
-    \        \"\"\"\n        if type(A)==int:\n            A=[A]\n\n        if type(B)==int:\n\
-    \            B=[B]\n\n        m=min(len(A), len(B))\n        C=[0]*m\n       \
-    \ for i in range(m):\n            C[i]=(A[i]-B[i])%Mod\n        C.extend(A[m:])\n\
-    \        C.extend([-b%Mod for b in B[m:]])\n        return C\n\n    def Times(self,A,k):\n\
-    \        \"\"\" [k*A[i]] \u3092\u6C42\u3081\u308B.\n\n        \"\"\"\n       \
-    \ return [k*a%Mod for a in A]\n\n    #\u53C2\u8003\u5143 https://judge.yosupo.jp/submission/72676\n\
-    \    def NTT(self,A):\n        \"\"\"A \u306B Mod \u3092\u6CD5\u3068\u3059\u308B\
-    \u6570\u8AD6\u5909\u63DB\u3092\u65BD\u3059\n\n        \u203B Mod \u306F\u30B0\u30ED\
-    \u30FC\u30D0\u30EB\u5909\u6570\u304B\u3089\u6307\u5B9A\n\n        References:\n\
-    \        https://github.com/atcoder/ac-library/blob/master/atcoder/convolution.hpp\n\
+    \       C=[(A[i]+B[i])%Mod for i in range(m)]\n        C.extend(A[m:])\n     \
+    \   C.extend(B[m:])\n        return C\n\n    def Sub(self, A, B):\n        \"\"\
+    \" \u5FC5\u8981\u306A\u3089\u3070\u672B\u5C3E\u306B\u5143\u3092\u8FFD\u52A0\u3057\
+    \u3066, [A[i]-B[i]] \u3092\u6C42\u3081\u308B.\n\n        \"\"\"\n        if type(A)==int:\n\
+    \            A=[A]\n\n        if type(B)==int:\n            B=[B]\n\n        m=min(len(A),\
+    \ len(B))\n        C=[0]*m\n        C=[(A[i]-B[i])%Mod for i in range(m)]\n  \
+    \      C.extend(A[m:])\n        C.extend([-b%Mod for b in B[m:]])\n        return\
+    \ C\n\n    def Times(self,A, k):\n        \"\"\" [k*A[i]] \u3092\u6C42\u3081\u308B\
+    .\n\n        \"\"\"\n        return [k*a%Mod for a in A]\n\n    #\u53C2\u8003\u5143\
+    \ https://judge.yosupo.jp/submission/72676\n    def NTT(self, A):\n        \"\"\
+    \" A \u306B Mod \u3092\u6CD5\u3068\u3059\u308B\u6570\u8AD6\u5909\u63DB\u3092\u65BD\
+    \u3059\n\n        \u203B Mod \u306F\u30B0\u30ED\u30FC\u30D0\u30EB\u5909\u6570\u304B\
+    \u3089\u6307\u5B9A\n\n        References:\n        https://github.com/atcoder/ac-library/blob/master/atcoder/convolution.hpp\n\
     \        https://judge.yosupo.jp/submission/72676\n        \"\"\"\n\n        N=len(A)\n\
     \        H=(N-1).bit_length()\n        l=0\n\n        I=self.root[2]\n       \
     \ rate2=self.rate2; rate3=self.rate3\n\n        while l<H:\n            if H-l==1:\n\
@@ -191,7 +198,7 @@ data:
     \n                    if s+1!=1<<l:\n                        rot*=rate3[(~s&-~s).bit_length()-1]\n\
     \                        rot%=Mod\n                l+=2\n\n    #\u53C2\u8003\u5143\
     \ https://judge.yosupo.jp/submission/72676\n    def Inverse_NTT(self, A):\n  \
-    \      \"\"\"A \u3092 Mod \u3092\u6CD5\u3068\u3059\u308B\u9006\u6570\u8AD6\u5909\
+    \      \"\"\" A \u3092 Mod \u3092\u6CD5\u3068\u3059\u308B\u9006\u6570\u8AD6\u5909\
     \u63DB\u3092\u65BD\u3059\n\n        \u203B Mod \u306F\u30B0\u30ED\u30FC\u30D0\u30EB\
     \u5909\u6570\u304B\u3089\u6307\u5B9A\n\n        References:\n        https://github.com/atcoder/ac-library/blob/master/atcoder/convolution.hpp\n\
     \        https://judge.yosupo.jp/submission/72676\n        \"\"\"\n        N=len(A)\n\
@@ -214,15 +221,26 @@ data:
     \                        A[i+offset+3*p]=(a0-a1-beta)*irot3%Mod\n\n          \
     \          if s+1!=1<<(l-2):\n                        irot*=irate3[(~s&-~s).bit_length()-1]\n\
     \                        irot%=Mod\n                l-=2\n        N_inv=pow(N,Mod-2,Mod)\n\
-    \        for i in range(N):\n            A[i]=N_inv*A[i]%Mod\n\n    def Convolution(self,\
-    \ A, B):\n        \"\"\" A, B \u3067 Mod \u3092\u6CD5\u3068\u3059\u308B\u7573\u307F\
-    \u8FBC\u307F\u3092\u6C42\u3081\u308B.\n\n        \u203B Mod \u306F\u30B0\u30ED\
-    \u30FC\u30D0\u30EB\u5909\u6570\u304B\u3089\u6307\u5B9A\n        \"\"\"\n     \
-    \   if not A or not B:\n            return []\n\n        N=len(A)\n        M=len(B)\n\
-    \        L=M+N-1\n\n        if min(N,M)<=50:\n            if N<M:\n          \
-    \      N,M=M,N\n                A,B=B,A\n            C=[0]*L\n            for\
-    \ i in range(N):\n                for j in range(M):\n                    C[i+j]+=A[i]*B[j]\n\
-    \                    C[i+j]%=Mod\n\n            return C\n\n        H=L.bit_length()\n\
+    \        for i in range(N):\n            A[i]=N_inv*A[i]%Mod\n\n    def non_zero_count(self,\
+    \ A):\n        \"\"\" A \u306B\u3042\u308B\u975E\u96F6\u306E\u6570\u3092\u6C42\
+    \u3081\u308B. \"\"\"\n        return len(A)-A.count(0)\n\n    def is_sparse(self,\
+    \ A, K=None):\n        \"\"\" A \u304C\u758E\u304B\u3069\u3046\u304B\u3092\u5224\
+    \u5B9A\u3059\u308B. \"\"\"\n\n        if K==None:\n            K=25\n\n      \
+    \  return self.non_zero_count(A)<=K\n\n    def coefficients_list(self, A):\n \
+    \       \"\"\" A \u306B\u3042\u308B\u975E\u96F6\u306E\u30EA\u30B9\u30C8\u3092\u6C42\
+    \u3081\u308B.\n\n\n        output: ( [d[0], ..., d[k-1] ], [f[0], ..., f[k-1]\
+    \ ]) : a[d[j]]=f[j] \u3067\u3042\u308B\u3053\u3068\u3092\u8868\u3057\u3066\u3044\
+    \u308B.\n        \"\"\"\n\n        f=[]; d=[]\n        for i in range(len(A)):\n\
+    \            if A[i]:\n                d.append(i)\n                f.append(A[i])\n\
+    \        return d,f\n\n    def Convolution(self, A, B):\n        \"\"\" A, B \u3067\
+    \ Mod \u3092\u6CD5\u3068\u3059\u308B\u7573\u307F\u8FBC\u307F\u3092\u6C42\u3081\
+    \u308B.\n\n        \u203B Mod \u306F\u30B0\u30ED\u30FC\u30D0\u30EB\u5909\u6570\
+    \u304B\u3089\u6307\u5B9A\n        \"\"\"\n        if not A or not B:\n       \
+    \     return []\n\n        N=len(A)\n        M=len(B)\n        L=M+N-1\n\n   \
+    \     if min(N,M)<=50:\n            if N<M:\n                N,M=M,N\n       \
+    \         A,B=B,A\n            C=[0]*L\n            for i in range(N):\n     \
+    \           for j in range(M):\n                    C[i+j]+=A[i]*B[j]\n      \
+    \              C[i+j]%=Mod\n            return C\n\n        H=L.bit_length()\n\
     \        K=1<<H\n\n        A=A+[0]*(K-N)\n        B=B+[0]*(K-M)\n\n        self.NTT(A)\n\
     \        self.NTT(B)\n\n        for i in range(K):\n            A[i]=A[i]*B[i]%Mod\n\
     \n        self.Inverse_NTT(A)\n\n        return A[:L]\n\n    def Autocorrelation(self,\
@@ -242,16 +260,17 @@ data:
     \            n,b=heappop(Q)\n            heappush(Q, (m+n-1, self.Convolution(a,b)))\n\
     \        return Q[0][1]\n\n    def Inverse(self, F, length=None):\n        if\
     \ length==None:\n            M=len(F)\n        else:\n            M=length\n\n\
-    \        if len(F)<=M.bit_length():\n            \"\"\"\n            \u611A\u76F4\
-    \u306B\u6F38\u5316\u5F0F\u3092\u7528\u3044\u3066\u6C42\u3081\u308B.\n        \
-    \    \u8A08\u7B97\u91CF:P\u306E\u6B21\u6570\u3092K, \u6C42\u3081\u305F\u3044\u9805\
-    \u306E\u500B\u6570\u3092N\u3068\u3057\u3066, O(NK)\n            \"\"\"\n     \
-    \       c=F[0]\n            c_inv=pow(c,Mod-2,Mod)\n\n            N=len(F)\n \
-    \           R=[-c_inv*a%Mod for a in F[1:]][::-1]\n            G=[0]*M\n     \
-    \       G[0]=1\n            Q=[0]*(N-2)+[1]\n\n            for k in range(1,M):\n\
-    \                a=0\n                for x,y in zip(Q,R):\n                 \
-    \   a+=x*y\n                a%=Mod\n                G[k]=a\n                Q.append(a)\n\
-    \                Q=Q[1:]\n\n            G=[c_inv*g%Mod for g in G]\n        else:\n\
+    \        if length<=0:\n            return []\n\n        if self.is_sparse(F):\n\
+    \            \"\"\"\n            \u611A\u76F4\u306B\u6F38\u5316\u5F0F\u3092\u7528\
+    \u3044\u3066\u6C42\u3081\u308B.\n            \u8A08\u7B97\u91CF: F \u306B\u3042\
+    \u308B\u4FC2\u6570\u304C\u975E\u96F6\u306E\u9805\u306E\u500B\u6570\u3092 K, \u6C42\
+    \u3081\u308B\u6700\u5927\u6B21\u6570\u3092 N \u3068\u3057\u3066, O(NK) \u6642\u9593\
+    \n            \"\"\"\n            d,f=self.coefficients_list(F)\n\n          \
+    \  G=[0]*M\n            alpha=pow(F[0], Mod-2, Mod)\n            G[0]=alpha\n\n\
+    \            for i in range(1, M):\n                for j in range(1, len(d)):\n\
+    \                    if d[j]<=i:\n                        G[i]+=f[j]*G[i-d[j]]%Mod\n\
+    \                    else:\n                        break\n\n                G[i]%=Mod\n\
+    \                G[i]=(-alpha*G[i])%Mod\n            del G[M:]\n        else:\n\
     \            \"\"\"\n            FFT\u306E\u7406\u8AD6\u3092\u5FDC\u7528\u3057\
     \u3066\u6C42\u3081\u308B.\n            \u8A08\u7B97\u91CF: \u6C42\u3081\u305F\u3044\
     \u9805\u306E\u500B\u6570\u3092N\u3068\u3057\u3066, O(N log N)\n\n            Reference:\
@@ -264,40 +283,48 @@ data:
     \         Calc.NTT(A)\n                for i in range(2*m):\n                \
     \    A[i]=-A[i]*B[i]%Mod\n                Calc.Inverse_NTT(A)\n\n            \
     \    G.extend(A[:m])\n                m<<=1\n            G=G[:M]\n        return\
-    \ G\n\n    def Floor_Div(self, F,G):\n        assert F[-1]\n        assert G[-1]\n\
+    \ G\n\n    def Floor_Div(self, F, G):\n        assert F[-1]\n        assert G[-1]\n\
     \n        F_deg=len(F)-1\n        G_deg=len(G)-1\n\n        if F_deg<G_deg:\n\
     \            return []\n\n        m=F_deg-G_deg+1\n        return self.Convolution(F[::-1],\
-    \ Calc.Inverse(G[::-1],m))[m-1::-1]\n\n    def Mod(self, F,G):\n        while\
-    \ F and F[-1]==0: F.pop()\n        while G and G[-1]==0: G.pop()\n\n        if\
-    \ not F:\n            return []\n\n        return Calc.Sub(F, Calc.Convolution(Calc.Floor_Div(F,G),G))\n\
-    \n#\u4EE5\u4E0B \u53C2\u8003\u5143https://judge.yosupo.jp/submission/28304\ndef\
-    \ Differentiate(P):\n    G=[(k*a)%Mod for k,a in enumerate(P.Poly[1:],1)]+[0]\n\
-    \    return Modulo_Polynominal(G,P.max_degree)\n\ndef Integrate(P):\n    F=P.Poly\n\
-    \    N=len(F)\n\n    Inv=[0]*(N+1)\n    if N:\n        Inv[1]=1\n        for i\
-    \ in range(2,N+1):\n            q,r=divmod(Mod,i)\n            Inv[i]=(-q*Inv[r])%Mod\n\
-    \n    G=[0]+[(Inv[k]*a)%Mod for k,a in enumerate(F,1)]\n    return Modulo_Polynominal(G,P.max_degree)\n\
-    \n\"\"\"\n\u7D2F\u4E57,\u6307\u6570,\u5BFE\u6570\n\"\"\"\ndef Log(P):\n    assert\
-    \ P.Poly[0]==1,\"\u5B9A\u6570\u9805\u304C1\u3067\u306F\u306A\u3044\"\n    return\
-    \ Integrate(Differentiate(P)/P)\n\ndef Exp(P):\n    #\u53C2\u8003\u51431:https://arxiv.org/pdf/1301.5804.pdf\n\
-    \    #\u53C2\u8003\u51432:https://opt-cp.com/fps-fast-algorithms/\n    from itertools\
+    \ Calc.Inverse(G[::-1],m))[m-1::-1]\n\n    def Mod(self, F, G):\n        while\
+    \ F and F[-1]==0:\n            F.pop()\n\n        while G and G[-1]==0:\n    \
+    \        G.pop()\n\n        if not F:\n            return []\n\n        return\
+    \ Calc.Sub(F, Calc.Convolution(Calc.Floor_Div(F,G),G))\n\n#\u4EE5\u4E0B \u53C2\
+    \u8003\u5143https://judge.yosupo.jp/submission/28304\ndef Differentiate(P):\n\
+    \    G=[(k*a)%Mod for k,a in enumerate(P.Poly[1:],1)]+[0]\n    return Modulo_Polynominal(G,P.max_degree)\n\
+    \ndef Integrate(P):\n    F=P.Poly\n    N=len(F)\n\n    Inv=[0]*(N+1)\n    if N:\n\
+    \        Inv[1]=1\n        for i in range(2,N+1):\n            q,r=divmod(Mod,i)\n\
+    \            Inv[i]=(-q*Inv[r])%Mod\n\n    G=[0]+[(Inv[k]*a)%Mod for k,a in enumerate(F,1)]\n\
+    \    return Modulo_Polynominal(G,P.max_degree)\n\n\"\"\"\n\u7D2F\u4E57,\u6307\u6570\
+    ,\u5BFE\u6570\n\"\"\"\ndef Log(P):\n    assert P.Poly[0]==1,\"\u5B9A\u6570\u9805\
+    \u304C1\u3067\u306F\u306A\u3044\"\n    return Integrate(Differentiate(P)/P)\n\n\
+    def Exp(P):\n    #\u53C2\u8003\u51431:https://arxiv.org/pdf/1301.5804.pdf\n  \
+    \  #\u53C2\u8003\u51432:https://opt-cp.com/fps-fast-algorithms/\n    from itertools\
     \ import zip_longest\n    N=P.max_degree\n\n    Inv=[0]*(2*N+1)\n    Inv[1]=1\n\
     \    for i in range(2,2*N+1):\n        q,r=divmod(Mod,i)\n        Inv[i]=(-q*Inv[r])%Mod\n\
-    \n    H=P.Poly\n    assert (not H) or H[0]==0,\"\u5B9A\u6570\u9805\u304C0\u3067\
-    \u306A\u3044\"\n\n    H+=[0]*(N-len(H))\n    dH=[(k*a)%Mod for k,a in enumerate(H[1:],1)]\n\
-    \    F,G,m=[1],[1],1\n\n    while m<=N:\n        #2.a'\n        if m>1:\n    \
-    \        E=Calc.Convolution(F,Calc.Autocorrelation(G)[:m])[:m]\n            G=[(2*a-b)%Mod\
-    \ for a,b in zip_longest(G,E,fillvalue=0)]\n        #2.b', 2.c'\n        C=Calc.Convolution(F,dH[:m-1])\n\
-    \        R=[0]*m\n        for i,a in enumerate(C):\n            R[i%m]+=a\n  \
-    \      R=[a%Mod for a in R]\n        #2.d'\n        dF=[(k*a)%Mod for k,a in enumerate(F[1:],1)]\n\
-    \        D=[0]+[(a-b)%Mod for a,b in zip_longest(dF,R,fillvalue=0)]\n        S=[0]*m\n\
-    \        for i,a in enumerate(D):\n            S[i%m]+=a\n        S=[a%Mod for\
-    \ a in S]\n        #2.e'\n        T=Calc.Convolution(G,S)[:m]\n        #2.f'\n\
-    \        E=[0]*(m-1)+T\n        E=[0]+[(Inv[k]*a)%Mod for k,a in enumerate(E,1)]\n\
-    \        U=[(a-b)%Mod for a,b in zip_longest(H[:2*m],E,fillvalue=0)][m:]\n   \
-    \     #2.g'\n        V=Calc.Convolution(F,U)[:m]\n        #2.h'\n        F.extend(V)\n\
-    \        #2.i'\n        m<<=1\n    return Modulo_Polynominal(F[:N],P.max_degree)\n\
-    \ndef Root(P,k):\n    assert P.Poly[0]==1,\"\u5B9A\u6570\u9805\u304C1\u3067\u306F\
-    \u306A\u3044\"\n    k%=Mod\n    assert k,\"k\u304C\u7279\u7570\"\n    k_inv=pow(k,Mod-2,Mod)\n\
+    \n    H=P.Poly; H+=[0]*(N-len(H))\n    assert (not H) or H[0]==0,\"\u5B9A\u6570\
+    \u9805\u304C0\u3067\u306A\u3044\"\n\n    if Calc.is_sparse(H):\n        # \u758E\
+    \u3060\u3063\u305F\u5834\u5408\n        F=[0]*N; F[0]=1\n        d,f=Calc.coefficients_list(H)\n\
+    \        K=len(d)\n\n        for t in range(K):\n            f[t]=(d[t]*f[t])%Mod\n\
+    \            d[t]-=1\n\n        for i in range(1,N):\n            a=0\n      \
+    \      for j in range(K):\n                if d[j]<=i-1:\n                   \
+    \ a+=f[j]*F[(i-1)-d[j]]%Mod\n                else:\n                    break\n\
+    \            a%=Mod\n            F[i]=a*Inv[i]%Mod\n    else:\n        dH=[(k*a)%Mod\
+    \ for k,a in enumerate(H[1:],1)]\n        F,G,m=[1],[1],1\n\n        while m<=N:\n\
+    \            #2.a'\n            if m>1:\n                E=Calc.Convolution(F,Calc.Autocorrelation(G)[:m])[:m]\n\
+    \                G=[(2*a-b)%Mod for a,b in zip_longest(G,E,fillvalue=0)]\n   \
+    \         #2.b', 2.c'\n            C=Calc.Convolution(F,dH[:m-1])\n          \
+    \  R=[0]*m\n            for i,a in enumerate(C):\n                R[i%m]+=a\n\
+    \            R=[a%Mod for a in R]\n            #2.d'\n            dF=[(k*a)%Mod\
+    \ for k,a in enumerate(F[1:],1)]\n            D=[0]+[(a-b)%Mod for a,b in zip_longest(dF,R,fillvalue=0)]\n\
+    \            S=[0]*m\n            for i,a in enumerate(D):\n                S[i%m]+=a\n\
+    \            S=[a%Mod for a in S]\n            #2.e'\n            T=Calc.Convolution(G,S)[:m]\n\
+    \            #2.f'\n            E=[0]*(m-1)+T\n            E=[0]+[(Inv[k]*a)%Mod\
+    \ for k,a in enumerate(E,1)]\n            U=[(a-b)%Mod for a,b in zip_longest(H[:2*m],E,fillvalue=0)][m:]\n\
+    \            #2.g'\n            V=Calc.Convolution(F,U)[:m]\n            #2.h'\n\
+    \            F.extend(V)\n            #2.i'\n            m<<=1\n    return Modulo_Polynominal(F[:N],P.max_degree)\n\
+    \ndef Root(P,k):\n    assert P.Poly[0]==1, \"\u5B9A\u6570\u9805\u304C1\u3067\u306F\
+    \u306A\u3044\"\n    k%=Mod\n    assert k, \"k\u304C\u7279\u7570\"\n    k_inv=pow(k,Mod-2,Mod)\n\
     \    return Power(P,k_inv)\n\n\"\"\"\n\u4E09\u89D2\u95A2\u6570\n\"\"\"\n#\u6B63\
     \u5F26\ndef Sin(P):\n    I=Tonelli_Shanks(-1)\n    B=I*P\n    C=Exp(B)-Exp(-B)\n\
     \    return C*pow(2*I,Mod-2,Mod)\n\n#\u4F59\u5F26\ndef Cos(P):\n    I=Tonelli_Shanks(-1)\n\
@@ -313,42 +340,63 @@ data:
     \n#\u9006\u6B63\u63A5\ndef ArcTan(P):\n    #\u7A4D\u5206\u7248\n    return Integrate(Differentiate(P)/(1+P*P))\n\
     \n    #\u4E09\u89D2\u95A2\u6570\u3068\u6307\u6570\u95A2\u6570\u306E\u76F8\u4E92\
     \u95A2\u4FC2\u7248\n    I=Tonelli_Shanks(-1)\n    return I*pow(2,Mod-2,Mod)*Log((I+P)/(I-P))\n\
-    \ndef Power(P,k):\n    assert k>=0\n    N=P.max_degree\n    F=P.Poly\n    F+=[0]*(N-len(F))\n\
-    \    for (d,p) in enumerate(F):\n        if p:\n            break\n    else:\n\
-    \        return Modulo_Polynominal([0],P.max_degree)\n\n    if d*k>P.max_degree:\n\
-    \        return Modulo_Polynominal([0],P.max_degree)\n\n    p_inv=pow(p,Mod-2,Mod)\n\
-    \    Q=Modulo_Polynominal([(p_inv*a)%Mod for a in F[d:]],P.max_degree)\n\n   \
-    \ G=Exp(k*Log(Q)).Poly\n    pk=pow(p,k,Mod)\n    G=[0]*(d*k)+[(pk*a)%Mod for a\
-    \ in G]\n    return Modulo_Polynominal(G,P.max_degree)\n\n#\u30EB\u30B8\u30E3\u30F3\
-    \u30C9\u30EB\u8A18\u53F7\ndef Legendre(X):\n    \"\"\"\u30EB\u30B8\u30E3\u30F3\
-    \u30C9\u30EB\u8A18\u53F7 (a/Mod) \u3092\u8FD4\u3059.\n\n    \u203B\u6CD5\u304C\
-    \u7D20\u6570\u306E\u3068\u304D\u306E\u307F\u6210\u7ACB\u3059\u308B.\n    \"\"\"\
-    \n\n    if X==0:\n        return 0\n    elif pow(X,(Mod-1)//2,Mod)==1:\n     \
-    \   return 1\n    else:\n        return -1\n\n#\u6839\u53F7\ndef Tonelli_Shanks(X):\n\
-    \    \"\"\"X=a (mod Mod) \u306E\u3068\u304D, r*r=a (mod Mod) \u3092\u6E80\u305F\
-    \u3059 r \u3092\u8FD4\u3059.\n\n    \u203B\u6CD5p\u304C\u7D20\u6570\u306E\u3068\
-    \u304D\u306E\u307F\u6709\u52B9\n    \u203B\u5B58\u5728\u3057\u306A\u3044\u3068\
-    \u304D\u306FNone\u304C\u8FD4\u308A\u5024\n    \"\"\"\n    X%=Mod\n    if Legendre(X)==-1:\n\
-    \        return None\n\n    from random import randint as ri\n    if X==0:\n \
-    \       return X\n    elif Mod==2:\n        return X\n    elif Mod%4==3:\n   \
-    \     return pow(X,(Mod+1)//4,Mod)\n\n    u=2\n    s=1\n    while (Mod-1)%(2*u)==0:\n\
-    \        u*=2\n        s+=1\n    q=(Mod-1)//u\n\n    z=0\n    while pow(z,(Mod-1)//2,Mod)!=Mod-1:\n\
-    \        z=ri(1,Mod-1)\n\n    m,c,t,r=s,pow(z,q,Mod),pow(X,q,Mod),pow(X,(q+1)//2,Mod)\n\
-    \    while m>1:\n        if pow(t,2**(m-2),Mod)==1:\n            c=(c*c)%Mod\n\
-    \            m=m-1\n        else:\n            c,t,r,m=(c*c)%Mod,(c*c*t)%Mod,(c*r)%Mod,m-1\n\
-    \    return r\n\n#\u591A\u9805\u5F0F\u306E\u6839\u53F7\ndef __sqrt(F,N):\n   \
-    \ F+=[0]*(N-len(F))\n    s=Tonelli_Shanks(F[0])\n    if s==None:return None\n\n\
-    \    m=1\n    G=[min(s,Mod-s)]\n    two_inv=pow(2,Mod-2,Mod)\n\n    while m<N:\n\
-    \        G+=[0]*m\n        m<<=1\n        H=Calc.Convolution(F[:m],Calc.Inverse(G))\n\
-    \        G=[two_inv*(a+b)%Mod for a,b in zip(G,H)]\n    return G[:N]\n\ndef Sqrt(P):\n\
-    \    N=P.max_degree\n    F=P.Poly\n    F+=[0]*(N-len(F))\n\n    for d,p in enumerate(F):\n\
-    \        if p:break\n    else:\n        return Modulo_Polynominal([0],P.max_degree)\n\
-    \n    if d&1:return\n    E=__sqrt(F[d:],N-d//2)\n\n    if E==None:return\n   \
-    \ if d>0:\n        E=[0]*(d//2)+E\n    return Modulo_Polynominal(E,P.max_degree)\n\
-    \n\"\"\"\n\u5F62\u5F0F\u7684\u30D9\u30AD\u7D1A\u6570\u306B\u5BFE\u3059\u308B\u7279\
-    \u5225\u306A\u64CD\u4F5C\n\"\"\"\ndef Composition(P,Q):\n    \"\"\" P o Q=P(Q)\
-    \ \u3092\u6C42\u3081\u308B (\u203B \u9806\u756A\u6CE8\u610F) ([X^0]Q=0 \u3067\u306A\
-    \u304F\u3066\u306F\u306A\u3089\u306A\u3044).\n\n    Reference: https://judge.yosupo.jp/submission/42372\n\
+    \ndef Power(P, M):\n    \"\"\" P \u306E M \u4E57\u3092\u6C42\u3081\u308B.\n\n\
+    \    \"\"\"\n\n    assert M>=0\n    N=P.max_degree\n    F=P.Poly\n    F+=[0]*((N+1)-len(F))\n\
+    \    for (deg,p) in enumerate(F):\n        if p:\n            break\n    else:\n\
+    \        if M==0:\n            return Modulo_Polynominal([1], P.max_degree)\n\
+    \        else:\n            return Modulo_Polynominal([0] ,P.max_degree)\n\n \
+    \   if deg*M>N:\n        return Modulo_Polynominal([0], P.max_degree)\n\n    p_inv=pow(p,\
+    \ Mod-2, Mod)\n    M_mod=M%Mod\n\n    if Calc.is_sparse(F):\n        # P \u304C\
+    \u758E\u306A\u5834\u5408\n        H=[(p_inv*a)%Mod for a in F[deg:]]+[0]\n   \
+    \     Nh=len(H)-1\n        d,h=Calc.coefficients_list(H); K=len(d)\n\n       \
+    \ Inv=[0]*(Nh+1); Inv[1]=1\n        for i in range(2, Nh+1):\n            q,r=divmod(Mod,\
+    \ i)\n            Inv[i]=(-q*Inv[r])%Mod\n\n        G=[0]*Nh; G[0]=1\n       \
+    \ for i in range(Nh-1):\n            g=(M_mod*(i+1)%Mod)*H[i+1]%Mod\n        \
+    \    for j in range(K):\n                if 1<=d[j]<=i:\n                    alpha=(d[j]*M_mod-(i-d[j]+1))%Mod\n\
+    \                    beta=G[i+1-d[j]]*H[d[j]]%Mod\n                    g+=alpha*beta\n\
+    \            g%=Mod\n            G[i+1]=g*Inv[i+1]%Mod\n    else:\n        Q=Modulo_Polynominal([(p_inv*a)%Mod\
+    \ for a in F[deg:]],P.max_degree)\n        G=Exp(M_mod*Log(Q)).Poly\n\n    pk=pow(p,\
+    \ M, Mod)\n    G=[0]*(deg*M)+[(pk*a)%Mod for a in G]\n    return Modulo_Polynominal(G,\
+    \ P.max_degree)\n\n#\u6839\u53F7\ndef Tonelli_Shanks(X, default=-1):\n    \"\"\
+    \" X=a (mod Mod) \u306E\u3068\u304D, r*r=a (mod Mod) \u3092\u6E80\u305F\u3059\
+    \ r \u3092\u8FD4\u3059.\n\n    \u203B\u6CD5p\u304C\u7D20\u6570\u306E\u3068\u304D\
+    \u306E\u307F\u6709\u52B9\n    \u203B\u5B58\u5728\u3057\u306A\u3044\u3068\u304D\
+    \u306F default \u304C\u8FD4\u308A\u5024\n    \"\"\"\n    #\u30EB\u30B8\u30E3\u30F3\
+    \u30C9\u30EB\u8A18\u53F7\n    def Legendre(X):\n        \"\"\"\u30EB\u30B8\u30E3\
+    \u30F3\u30C9\u30EB\u8A18\u53F7 (a/Mod) \u3092\u8FD4\u3059.\n\n        \u203B\u6CD5\
+    \u304C\u7D20\u6570\u306E\u3068\u304D\u306E\u307F\u6210\u7ACB\u3059\u308B.\n  \
+    \      \"\"\"\n\n        if X%Mod==0:\n            return 0\n        elif pow(X,(Mod-1)//2,Mod)==1:\n\
+    \            return 1\n        else:\n            return -1\n\n    X%=Mod\n  \
+    \  if Legendre(X)==-1:\n        return default\n\n    from random import randint\
+    \ as ri\n    if X==0:\n        return X\n    elif Mod==2:\n        return X\n\
+    \    elif Mod%4==3:\n        return pow(X,(Mod+1)//4,Mod)\n\n    u=2\n    s=1\n\
+    \    while (Mod-1)%(2*u)==0:\n        u*=2\n        s+=1\n    q=(Mod-1)//u\n\n\
+    \    z=0\n    while pow(z,(Mod-1)//2,Mod)!=Mod-1:\n        z=ri(1,Mod-1)\n\n \
+    \   m,c,t,r=s,pow(z,q,Mod),pow(X,q,Mod),pow(X,(q+1)//2,Mod)\n    while m>1:\n\
+    \        if pow(t,2**(m-2),Mod)==1:\n            c=(c*c)%Mod\n            m=m-1\n\
+    \        else:\n            c,t,r,m=(c*c)%Mod,(c*c*t)%Mod,(c*r)%Mod,m-1\n    return\
+    \ r\n\n#\u591A\u9805\u5F0F\u306E\u6839\u53F7\ndef __sqrt(F, N):\n    F+=[0]*(N-len(F))\n\
+    \    s=Tonelli_Shanks(F[0])\n    if s==-1:\n        return None\n\n    two_inv=pow(2,\
+    \ Mod-2, Mod)\n\n    if not Calc.is_sparse(F):\n        # P \u304C\u758E\u306A\
+    \u5834\u5408\n        F.append(0)\n        d,f=Calc.coefficients_list(F); K=len(d)\n\
+    \n        Inv=[0]*(N+1); Inv[1]=1\n        for i in range(2, N+1):\n         \
+    \   q,r=divmod(Mod, i)\n            Inv[i]=(-q*Inv[r])%Mod\n\n        G=[0]*N;\
+    \ G[0]=1\n        for i in range(N):\n            g=(two_inv*(i+1)%Mod)*F[i+1]%Mod\n\
+    \            for j in range(K):\n                if 1<=d[j]<=i:\n            \
+    \        alpha=(d[j]*two_inv-(i-d[j]+1))%Mod\n                    beta=G[i+1-d[j]]*F[d[j]]%Mod\n\
+    \                    g+=alpha*beta\n            g%=Mod\n            G[i+1]=g*Inv[i+1]%Mod\n\
+    \    else:\n        m=1\n        G=[min(s,Mod-s)]\n\n        while m<N:\n    \
+    \        G+=[0]*m\n            m<<=1\n            H=Calc.Convolution(F[:m], Calc.Inverse(G))\n\
+    \            G=[two_inv*(a+b)%Mod for a,b in zip(G,H)]\n    return G[:N]\n\ndef\
+    \ Sqrt(P):\n    N=P.max_degree\n    F=P.Poly\n    F+=[0]*(N-len(F))\n\n    for\
+    \ d,p in enumerate(F):\n        if p:\n            break\n    else:\n        return\
+    \ Modulo_Polynominal([0],P.max_degree)\n\n    if d%2==1:\n        return\n\n \
+    \   E=__sqrt(F[d:],N-d//2)\n\n    if E==None:\n        return\n\n    if d>0:\n\
+    \        E=[0]*(d//2)+E\n    return Modulo_Polynominal(E,P.max_degree)\n\n\"\"\
+    \"\n\u5F62\u5F0F\u7684\u30D9\u30AD\u7D1A\u6570\u306B\u5BFE\u3059\u308B\u7279\u5225\
+    \u306A\u64CD\u4F5C\n\"\"\"\ndef Composition(P,Q):\n    \"\"\" P o Q=P(Q) \u3092\
+    \u6C42\u3081\u308B (\u203B \u9806\u756A\u6CE8\u610F) ([X^0]Q=0 \u3067\u306A\u304F\
+    \u3066\u306F\u306A\u3089\u306A\u3044).\n\n    Reference: https://judge.yosupo.jp/submission/42372\n\
     \    \"\"\"\n\n    assert Q[0]==0\n\n    deg=min(P.max_degree, Q.max_degree)\n\
     \    k=int(deg**0.5+1)\n    d=(deg+k)//k\n\n    X=[[1]]\n    for i in range(k):\n\
     \        X.append(Calc.Convolution(X[-1],Q.Poly)[:deg+1])\n\n    Y=[[0]*len(X[k])\
@@ -358,7 +406,7 @@ data:
     \ t<len(y):\n                    y[t]+=x[t]*P[i*d+j]%Mod\n\n    F=[0]*(deg+1)\n\
     \    Z=[1]\n    x=X[d]\n    for i in range(k):\n        Y[i]=Calc.Convolution(Y[i],Z)[:deg+1]\n\
     \        for j in range(len(Y[i])):\n            F[j]+=Y[i][j]\n        Z=Calc.Convolution(Z,x)[:deg+1]\n\
-    \    return Modulo_Polynominal(F, deg)\n\ndef Taylor_Shift(P,a):\n    \"\"\"\u4E0E\
+    \    return Modulo_Polynominal(F, deg)\n\ndef Taylor_Shift(P, a):\n    \"\"\"\u4E0E\
     \u3048\u3089\u308C\u305F\u591A\u9805\u5F0F P \u306B\u5BFE\u3057\u3066, P(X+a)\
     \ \u3092\u6C42\u3081\u308B.\n\n    P: Polynominal\n    a: int\n    \"\"\"\n\n\
     \    N=len(P.Poly)-1\n\n    fact=[0]*(N+1)\n    fact[0]=1\n    for i in range(1,N+1):\n\
@@ -381,11 +429,13 @@ data:
     \              P[i]=P[2*i+1]\n\n        for i in range(m):\n            Q[i]=Q[2*i]\n\
     \n        for i in range(m,2*m):\n            P[i]=Q[i]=0\n\n        N>>=1\n\n\
     \    if Q[0]==1:\n        return P[0]\n    else:\n        return P[0]*pow(Q[0],Mod-2,Mod)%Mod\n\
-    \ndef Multipoint_Evaluation(P, X):\n    N=len(X)\n    size=1<<(N-1).bit_length()\n\
+    \ndef Multipoint_Evaluation(P, X):\n    \"\"\" \u591A\u9805\u5F0F P \u306B\u5BFE\
+    \u3057\u3066, X=[x[0], ..., x[N-1]] \u3068\u3057\u305F\u3068\u304D, [P(x[0]),\
+    \ ..., P(x[N-1])] \u3092\u6C42\u3081\u308B.\n    \"\"\"\n\n    N=len(X)\n    size=1<<(N-1).bit_length()\n\
     \n    G=[[1] for _ in range(2*size)]\n\n    for i in range(N):\n        G[i+size]=[-X[i],1]\n\
     \n    for i in range(size-1,0,-1):\n        G[i]=Calc.Convolution(G[2*i],G[2*i+1])\n\
-    \n    for i in range(1,2*size):\n        A=P.Poly if i==1 else G[i>>1]\n\n   \
-    \     m=len(A)-len(G[i])+1\n        v=Calc.Convolution(A[::-1][:m],Calc.Inverse(G[i][::-1],m))[m-1::-1]\n\
+    \n    for i in range(1, 2*size):\n        A=P.Poly if i==1 else G[i>>1]\n    \
+    \    m=len(A)-len(G[i])+1\n        v=Calc.Convolution(A[::-1][:m], Calc.Inverse(G[i][::-1],m))[m-1::-1]\n\
     \        w=Calc.Convolution(v,G[i])\n\n        G[i]=A.copy()\n        g=G[i]\n\
     \n        for j in range(len(w)):\n            g[j]-=w[j]; g[j]%=Mod\n\n     \
     \   while len(g)>1 and g[-1]==0:\n            g.pop()\n\n    return [G[i+size][0]\

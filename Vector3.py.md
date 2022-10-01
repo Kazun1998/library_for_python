@@ -1,15 +1,6 @@
 ---
 data:
-  _extendedDependsOn:
-  - icon: ':warning:'
-    path: Complex.py
-    title: Complex.py
-  - icon: ':warning:'
-    path: Fraction.py
-    title: Fraction.py
-  - icon: ':warning:'
-    path: Quaternion.py
-    title: Quaternion.py
+  _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -60,14 +51,11 @@ data:
     \       if self.z!=0:v.z=1/self.z\n        else:v.z=0\n\n        return v\n\n\
     \    #\u7B26\u53F7\n    def __pos__(self):\n        return self\n\n    def __neg__(self):\n\
     \        return Vector3(-self.x,-self.y,-self.z)\n\n\n\n\n"
-  dependsOn:
-  - Complex.py
-  - Fraction.py
-  - Quaternion.py
+  dependsOn: []
   isVerificationFile: false
   path: Vector3.py
   requiredBy: []
-  timestamp: '2022-02-12 00:31:19+09:00'
+  timestamp: '1970-01-01 00:00:00+00:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Vector3.py

@@ -334,6 +334,9 @@ data:
     - icon: ':warning:'
       path: Union_Find/Potentialized_Union_Find.py
       title: Union_Find/Potentialized_Union_Find.py
+    - icon: ':warning:'
+      path: Union_Find/RollBack_Union_Find.py
+      title: Union_Find/RollBack_Union_Find.py
     - icon: ':x:'
       path: Union_Find/Union_Find.py
       title: Union_Find/Union_Find.py
