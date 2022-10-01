@@ -122,8 +122,8 @@ title: Segment_Tree/Segment_Tree.py
 - `all_product()`: $S_0 \* S_1 \* \dots \* S_{N-1}$ を求める.
 - `max_right(self, left, cond)` :
     - 以下の2条件をみたす $r$ を求める.
-    - $r={\rm left}$ または $\operatorname{cond}(S_{{\rm left}} \* S_{{\rm left}+1} \* \cdots \* S_{r-1})$ は真である.
-    - $r=N$ または $\operatorname{cond}(S_{{\rm left}} \* S_{{\rm left}+1} \* \cdots \* S_r)$ は偽である.
+    - $r={\rm left}$ または $\operatorname{cond}(S_{ {\rm left}} \* S_{{\rm left}+1} \* \cdots \* S_{r-1})$ は真である.
+    - $r=N$ または $\operatorname{cond}(S_{ {\rm left}} \* S_{{\rm left}+1} \* \cdots \* S_r)$ は偽である.
 - `min_left(self, right, cond)` :
     - 以下の2条件をみたす $l$ を求める.
     - $l={\rm right}$ または $\operatorname{cond}(S_l \* S_{l+1} \* \cdots \* S_{{\rm right}-1})$ は真である.
