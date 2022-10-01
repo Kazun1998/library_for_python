@@ -3,15 +3,14 @@
 #==================================================
 import sys
 sys.path.append('../Union_Find/')
-import Union_Find
+from  Union_Find import Union_Find
 
 input=sys.stdin.readline
 write=sys.stdout.write
-
 #==================================================
 def verify():
     N,Q=map(int,input().split())
-    U=Union_Find.Union_Find(N)
+    U=Union_Find(N)
     X=[]
     for _ in range(Q):
         t,u,v=map(int,input().split())
@@ -21,6 +20,5 @@ def verify():
             X.append(1 if U.same(u,v) else 0)
 
     write("\n".join(map(str,X)))
-
 #==================================================
 verify()
