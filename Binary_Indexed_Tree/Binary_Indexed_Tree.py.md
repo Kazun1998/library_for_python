@@ -79,3 +79,6 @@ redirect_from:
 - /library/Binary_Indexed_Tree/Binary_Indexed_Tree.py.html
 title: Binary_Indexed_Tree/Binary_Indexed_Tree.py
 ---
+
+#### 概要
+可換群 $G=(G, +, 0_G)$ の列に対して, 1点加算と区間和取得を得意とするデータ構造
