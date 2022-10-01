@@ -1,5 +1,5 @@
 class Union_Find():
-    __slots__=["n","parents","rank","edges","__group_number"]
+    __slots__=("n","parents","rank","edges","__group_number")
     def __init__(self,N):
         """ 0,1,...,N-1 を要素として初期化する.
 
@@ -22,8 +22,9 @@ class Union_Find():
             a=self.parents[a]
 
         while self.parents[x]>=0:
+            y=self.parents[x]
             self.parents[x]=a
-            x=self.parents[x]
+            x=y
 
         return a
 
