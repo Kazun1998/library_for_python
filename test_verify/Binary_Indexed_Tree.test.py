@@ -2,7 +2,7 @@
 
 #==================================================
 import sys
-sys.path.append('../Binary_Indexed_Tree/')
+sys.path.append('Binary_Indexed_Tree/')
 from Binary_Indexed_Tree import Binary_Indexed_Tree
 
 input=sys.stdin.readline
