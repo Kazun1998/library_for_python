@@ -2,7 +2,7 @@
 
 #==================================================
 import sys
-sys.path.append('../Union_Find/')
+sys.path.append('Union_Find/')
 from  Union_Find import Union_Find
 
 input=sys.stdin.readline
