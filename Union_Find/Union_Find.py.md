@@ -6,12 +6,12 @@ data:
     path: Union_Find/Bipartite_Checker.py
     title: Union_Find/Bipartite_Checker.py
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test_verify/Union_Find.test.py
     title: test_verify/Union_Find.test.py
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -77,7 +77,7 @@ data:
   requiredBy:
   - Union_Find/Bipartite_Checker.py
   timestamp: '2022-10-01 20:22:51+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/Union_Find.test.py
 documentation_of: Union_Find/Union_Find.py

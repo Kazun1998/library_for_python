@@ -337,13 +337,13 @@ data:
     - icon: ':warning:'
       path: Union_Find/RollBack_Union_Find.py
       title: Union_Find/RollBack_Union_Find.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: Union_Find/Union_Find.py
       title: Union_Find/Union_Find.py
   verificationCategories:
   - name: test_verify
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/Union_Find.test.py
       title: test_verify/Union_Find.test.py
 layout: toppage
