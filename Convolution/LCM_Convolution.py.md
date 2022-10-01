@@ -1,0 +1,53 @@
+---
+data:
+  _extendedDependsOn: []
+  _extendedRequiredBy: []
+  _extendedVerifiedWith: []
+  _isVerificationFailed: false
+  _pathExtension: py
+  _verificationStatusIcon: ':warning:'
+  attributes:
+    links: []
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
+    , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
+    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
+    , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
+  code: "def Divisor_Zeta_Transform(A):\n    \"\"\" A \u306E\u7D04\u6570\u3092\u8D70\
+    \u308B Zeta \u5909\u63DB\u3092\u884C\u3046.\n\n    \u203B A[0] \u306E\u5024\u306F\
+    \u7121\u8996\u3055\u308C\u308B.\n    \"\"\"\n\n    N=len(A)-1\n    S=[1]*(N+1)\n\
+    \n    for p in range(2,N+1):\n        if S[p]:\n            for k in range(1,N//p+1):\n\
+    \                S[k*p]=0\n                A[k*p]+=A[k]\n\n    for i in range(1,N+1):\n\
+    \        A[i]%=Mod\n\ndef Divisor_Mobius_Transform(A):\n    \"\"\" A \u306E\u7D04\
+    \u6570\u3092\u8D70\u308B\u306B\u304A\u3051\u308B Mobius \u5909\u63DB\u3092\u884C\
+    \u3046.\n\n    \u203B A[0] \u306E\u5024\u306F\u7121\u8996\u3055\u308C\u308B.\n\
+    \    \"\"\"\n\n    N=len(A)-1\n    S=[1]*(N+1)\n\n    for p in range(2,N+1):\n\
+    \        if S[p]:\n            for k in range(N//p,0,-1):\n                S[k*p]=0\n\
+    \                A[k*p]-=A[k]\n\n    for i in range(1,N+1):\n        A[i]%=Mod\n\
+    \ndef Convolution_LCM(A,B,L=None):\n    \"\"\" A,B \u306E lcm \u306B\u304A\u3051\
+    \u308B\u7573\u307F\u8FBC\u307F\u3092\u884C\u3046.\n\n    L: \u7D50\u679C\u306E\
+    \u9577\u3055\u306E\u6700\u5927\u5024 (\u4E00\u822C\u7684\u306B, lcm(n,m)<=nm \u306A\
+    \u305F\u3081)\n    \u203B A[0], B[0] \u306E\u5024\u306F\u7121\u8996\u3055\u308C\
+    \u308B.\n    \"\"\"\n\n    N=len(A)-1; M=len(B)-1; K=max(N,M)\n    if L==None:\n\
+    \        L=K*(K-1)\n\n    A=A+[0]*(L-N)\n    B=B+[0]*(L-M)\n\n    Divisor_Zeta_Transform(A)\n\
+    \    Divisor_Zeta_Transform(B)\n\n    for i in range(1,L+1):\n        A[i]*=B[i]\n\
+    \        A[i]%=Mod\n\n    Divisor_Mobius_Transform(A)\n    return A\n\ndef Convolution_Power_LCM(A,k,L):\n\
+    \    \"\"\" A \u306E lcm \u306B\u304A\u3051\u308B k \u56DE\u306E\u7573\u307F\u8FBC\
+    \u307F\u3092\u884C\u3046.\n    \u305F\u3060\u3057, \u6700\u5927\u3067\u3082 L\
+    \ \u307E\u3067\u306B\u5236\u9650\u3059\u308B.\n\n    \u203B A[0] \u306E\u5024\u306F\
+    \u7121\u8996\u3055\u308C\u308B.\n    \"\"\"\n\n    A=A+[0]*(L+1-len(A))\n    Divisor_Zeta_Transform(A)\n\
+    \    A=[pow(a,k,Mod) for a in A]\n    Divisor_Mobius_Transform(A)\n    return\
+    \ A\n\nMod=998244353\n"
+  dependsOn: []
+  isVerificationFile: false
+  path: Convolution/LCM_Convolution.py
+  requiredBy: []
+  timestamp: '2021-08-29 23:22:42+09:00'
+  verificationStatus: LIBRARY_NO_TESTS
+  verifiedWith: []
+documentation_of: Convolution/LCM_Convolution.py
+layout: document
+redirect_from:
+- /library/Convolution/LCM_Convolution.py
+- /library/Convolution/LCM_Convolution.py.html
+title: Convolution/LCM_Convolution.py
+---
