@@ -2,13 +2,12 @@ class Modulo_Polynominal():
     __slots__=("Poly", "max_degree")
 
     def __init__(self, Poly=[], max_degree=2*10**5):
-        from itertools import zip_longest
-        """多項式の定義
+        """ 多項式の定義
 
-        P:係数のリスト
+        P: 係数のリスト
         max_degree
 
-        ※Mod:法はグローバル変数から指定
+        ※Mod: 法はグローバル変数から指定
         """
 
         if Poly:
@@ -235,7 +234,7 @@ class Modulo_Polynominal():
 
     #逆元
     def inverse(self, deg=None):
-        assert self.Poly[0],"定数項が0"
+        assert self.Poly[0], "定数項が0"
 
         if deg==None:
             deg=self.max_degree
@@ -245,7 +244,27 @@ class Modulo_Polynominal():
     #除法
     def __truediv__(self,other):
         if isinstance(other, Modulo_Polynominal):
-            return self*other.inverse()
+            if Calc.is_sparse(other.Poly):
+                d,f=Calc.coefficients_list(other.Poly)
+                K=len(d)
+                H=[0]*self.max_degree
+
+                alpha=pow(other[0], Mod-2, Mod)
+                H[0]=alpha*self[0]%Mod
+
+                for i in range(1, self.max_degree):
+                    c=0
+                    for j in range(1, K):
+                        if d[j]<=i:
+                            c+=f[j]*H[i-d[j]]%Mod
+                        else:
+                            break
+                    c%=Mod
+                    H[i]=alpha*(self[i]-c)%Mod
+                H=Modulo_Polynominal(H, min(self.max_degree, other.max_degree))
+                return H
+            else:
+                return self*other.inverse()
         else:
             return pow(other,Mod-2,Mod)*self
 
@@ -395,7 +414,7 @@ class Calculator:
         self.rate2=rate2; self.irate2=irate2
         self.rate3=rate3; self.irate3=irate3
 
-    def Add(self, A,B):
+    def Add(self, A, B):
         """ 必要ならば末尾に元を追加して, [A[i]+B[i]] を求める.
 
         """
@@ -406,14 +425,12 @@ class Calculator:
             B=[B]
 
         m=min(len(A), len(B))
-        C=[0]*m
-        for i in range(m):
-            C[i]=(A[i]+B[i])%Mod
+        C=[(A[i]+B[i])%Mod for i in range(m)]
         C.extend(A[m:])
         C.extend(B[m:])
         return C
 
-    def Sub(self, A,B):
+    def Sub(self, A, B):
         """ 必要ならば末尾に元を追加して, [A[i]-B[i]] を求める.
 
         """
@@ -425,21 +442,20 @@ class Calculator:
 
         m=min(len(A), len(B))
         C=[0]*m
-        for i in range(m):
-            C[i]=(A[i]-B[i])%Mod
+        C=[(A[i]-B[i])%Mod for i in range(m)]
         C.extend(A[m:])
         C.extend([-b%Mod for b in B[m:]])
         return C
 
-    def Times(self,A,k):
+    def Times(self,A, k):
         """ [k*A[i]] を求める.
 
         """
         return [k*a%Mod for a in A]
 
     #参考元 https://judge.yosupo.jp/submission/72676
-    def NTT(self,A):
-        """A に Mod を法とする数論変換を施す
+    def NTT(self, A):
+        """ A に Mod を法とする数論変換を施す
 
         ※ Mod はグローバル変数から指定
 
@@ -497,7 +513,7 @@ class Calculator:
 
     #参考元 https://judge.yosupo.jp/submission/72676
     def Inverse_NTT(self, A):
-        """A を Mod を法とする逆数論変換を施す
+        """ A を Mod を法とする逆数論変換を施す
 
         ※ Mod はグローバル変数から指定
 
@@ -555,6 +571,32 @@ class Calculator:
         for i in range(N):
             A[i]=N_inv*A[i]%Mod
 
+    def non_zero_count(self, A):
+        """ A にある非零の数を求める. """
+        return len(A)-A.count(0)
+
+    def is_sparse(self, A, K=None):
+        """ A が疎かどうかを判定する. """
+
+        if K==None:
+            K=25
+
+        return self.non_zero_count(A)<=K
+
+    def coefficients_list(self, A):
+        """ A にある非零のリストを求める.
+
+
+        output: ( [d[0], ..., d[k-1] ], [f[0], ..., f[k-1] ]) : a[d[j]]=f[j] であることを表している.
+        """
+
+        f=[]; d=[]
+        for i in range(len(A)):
+            if A[i]:
+                d.append(i)
+                f.append(A[i])
+        return d,f
+
     def Convolution(self, A, B):
         """ A, B で Mod を法とする畳み込みを求める.
 
@@ -576,7 +618,6 @@ class Calculator:
                 for j in range(M):
                     C[i+j]+=A[i]*B[j]
                     C[i+j]%=Mod
-
             return C
 
         H=L.bit_length()
@@ -643,30 +684,30 @@ class Calculator:
         else:
             M=length
 
-        if len(F)<=M.bit_length():
+        if length<=0:
+            return []
+
+        if self.is_sparse(F):
             """
             愚直に漸化式を用いて求める.
-            計算量:Pの次数をK, 求めたい項の個数をNとして, O(NK)
+            計算量: F にある係数が非零の項の個数を K, 求める最大次数を N として, O(NK) 時間
             """
-            c=F[0]
-            c_inv=pow(c,Mod-2,Mod)
+            d,f=self.coefficients_list(F)
 
-            N=len(F)
-            R=[-c_inv*a%Mod for a in F[1:]][::-1]
             G=[0]*M
-            G[0]=1
-            Q=[0]*(N-2)+[1]
+            alpha=pow(F[0], Mod-2, Mod)
+            G[0]=alpha
 
-            for k in range(1,M):
-                a=0
-                for x,y in zip(Q,R):
-                    a+=x*y
-                a%=Mod
-                G[k]=a
-                Q.append(a)
-                Q=Q[1:]
+            for i in range(1, M):
+                for j in range(1, len(d)):
+                    if d[j]<=i:
+                        G[i]+=f[j]*G[i-d[j]]%Mod
+                    else:
+                        break
 
-            G=[c_inv*g%Mod for g in G]
+                G[i]%=Mod
+                G[i]=(-alpha*G[i])%Mod
+            del G[M:]
         else:
             """
             FFTの理論を応用して求める.
@@ -700,7 +741,7 @@ class Calculator:
             G=G[:M]
         return G
 
-    def Floor_Div(self, F,G):
+    def Floor_Div(self, F, G):
         assert F[-1]
         assert G[-1]
 
@@ -713,9 +754,12 @@ class Calculator:
         m=F_deg-G_deg+1
         return self.Convolution(F[::-1], Calc.Inverse(G[::-1],m))[m-1::-1]
 
-    def Mod(self, F,G):
-        while F and F[-1]==0: F.pop()
-        while G and G[-1]==0: G.pop()
+    def Mod(self, F, G):
+        while F and F[-1]==0:
+            F.pop()
+
+        while G and G[-1]==0:
+            G.pop()
 
         if not F:
             return []
@@ -760,49 +804,68 @@ def Exp(P):
         q,r=divmod(Mod,i)
         Inv[i]=(-q*Inv[r])%Mod
 
-    H=P.Poly
+    H=P.Poly; H+=[0]*(N-len(H))
     assert (not H) or H[0]==0,"定数項が0でない"
 
-    H+=[0]*(N-len(H))
-    dH=[(k*a)%Mod for k,a in enumerate(H[1:],1)]
-    F,G,m=[1],[1],1
+    if Calc.is_sparse(H):
+        # 疎だった場合
+        F=[0]*N; F[0]=1
+        d,f=Calc.coefficients_list(H)
+        K=len(d)
 
-    while m<=N:
-        #2.a'
-        if m>1:
-            E=Calc.Convolution(F,Calc.Autocorrelation(G)[:m])[:m]
-            G=[(2*a-b)%Mod for a,b in zip_longest(G,E,fillvalue=0)]
-        #2.b', 2.c'
-        C=Calc.Convolution(F,dH[:m-1])
-        R=[0]*m
-        for i,a in enumerate(C):
-            R[i%m]+=a
-        R=[a%Mod for a in R]
-        #2.d'
-        dF=[(k*a)%Mod for k,a in enumerate(F[1:],1)]
-        D=[0]+[(a-b)%Mod for a,b in zip_longest(dF,R,fillvalue=0)]
-        S=[0]*m
-        for i,a in enumerate(D):
-            S[i%m]+=a
-        S=[a%Mod for a in S]
-        #2.e'
-        T=Calc.Convolution(G,S)[:m]
-        #2.f'
-        E=[0]*(m-1)+T
-        E=[0]+[(Inv[k]*a)%Mod for k,a in enumerate(E,1)]
-        U=[(a-b)%Mod for a,b in zip_longest(H[:2*m],E,fillvalue=0)][m:]
-        #2.g'
-        V=Calc.Convolution(F,U)[:m]
-        #2.h'
-        F.extend(V)
-        #2.i'
-        m<<=1
+        for t in range(K):
+            f[t]=(d[t]*f[t])%Mod
+            d[t]-=1
+
+        for i in range(1,N):
+            a=0
+            for j in range(K):
+                if d[j]<=i-1:
+                    a+=f[j]*F[(i-1)-d[j]]%Mod
+                else:
+                    break
+            a%=Mod
+            F[i]=a*Inv[i]%Mod
+    else:
+        dH=[(k*a)%Mod for k,a in enumerate(H[1:],1)]
+        F,G,m=[1],[1],1
+
+        while m<=N:
+            #2.a'
+            if m>1:
+                E=Calc.Convolution(F,Calc.Autocorrelation(G)[:m])[:m]
+                G=[(2*a-b)%Mod for a,b in zip_longest(G,E,fillvalue=0)]
+            #2.b', 2.c'
+            C=Calc.Convolution(F,dH[:m-1])
+            R=[0]*m
+            for i,a in enumerate(C):
+                R[i%m]+=a
+            R=[a%Mod for a in R]
+            #2.d'
+            dF=[(k*a)%Mod for k,a in enumerate(F[1:],1)]
+            D=[0]+[(a-b)%Mod for a,b in zip_longest(dF,R,fillvalue=0)]
+            S=[0]*m
+            for i,a in enumerate(D):
+                S[i%m]+=a
+            S=[a%Mod for a in S]
+            #2.e'
+            T=Calc.Convolution(G,S)[:m]
+            #2.f'
+            E=[0]*(m-1)+T
+            E=[0]+[(Inv[k]*a)%Mod for k,a in enumerate(E,1)]
+            U=[(a-b)%Mod for a,b in zip_longest(H[:2*m],E,fillvalue=0)][m:]
+            #2.g'
+            V=Calc.Convolution(F,U)[:m]
+            #2.h'
+            F.extend(V)
+            #2.i'
+            m<<=1
     return Modulo_Polynominal(F[:N],P.max_degree)
 
 def Root(P,k):
-    assert P.Poly[0]==1,"定数項が1ではない"
+    assert P.Poly[0]==1, "定数項が1ではない"
     k%=Mod
-    assert k,"kが特異"
+    assert k, "kが特異"
     k_inv=pow(k,Mod-2,Mod)
     return Power(P,k_inv)
 
@@ -855,52 +918,83 @@ def ArcTan(P):
     I=Tonelli_Shanks(-1)
     return I*pow(2,Mod-2,Mod)*Log((I+P)/(I-P))
 
-def Power(P,k):
-    assert k>=0
+def Power(P, M):
+    """ P の M 乗を求める.
+
+    """
+
+    assert M>=0
     N=P.max_degree
     F=P.Poly
-    F+=[0]*(N-len(F))
-    for (d,p) in enumerate(F):
+    F+=[0]*((N+1)-len(F))
+    for (deg,p) in enumerate(F):
         if p:
             break
     else:
-        return Modulo_Polynominal([0],P.max_degree)
+        if M==0:
+            return Modulo_Polynominal([1], P.max_degree)
+        else:
+            return Modulo_Polynominal([0] ,P.max_degree)
 
-    if d*k>P.max_degree:
-        return Modulo_Polynominal([0],P.max_degree)
+    if deg*M>N:
+        return Modulo_Polynominal([0], P.max_degree)
 
-    p_inv=pow(p,Mod-2,Mod)
-    Q=Modulo_Polynominal([(p_inv*a)%Mod for a in F[d:]],P.max_degree)
+    p_inv=pow(p, Mod-2, Mod)
+    M_mod=M%Mod
 
-    G=Exp(k*Log(Q)).Poly
-    pk=pow(p,k,Mod)
-    G=[0]*(d*k)+[(pk*a)%Mod for a in G]
-    return Modulo_Polynominal(G,P.max_degree)
+    if Calc.is_sparse(F):
+        # P が疎な場合
+        H=[(p_inv*a)%Mod for a in F[deg:]]+[0]
+        Nh=len(H)-1
+        d,h=Calc.coefficients_list(H); K=len(d)
 
-#ルジャンドル記号
-def Legendre(X):
-    """ルジャンドル記号 (a/Mod) を返す.
+        Inv=[0]*(Nh+1); Inv[1]=1
+        for i in range(2, Nh+1):
+            q,r=divmod(Mod, i)
+            Inv[i]=(-q*Inv[r])%Mod
 
-    ※法が素数のときのみ成立する.
-    """
-
-    if X==0:
-        return 0
-    elif pow(X,(Mod-1)//2,Mod)==1:
-        return 1
+        G=[0]*Nh; G[0]=1
+        for i in range(Nh-1):
+            g=(M_mod*(i+1)%Mod)*H[i+1]%Mod
+            for j in range(K):
+                if 1<=d[j]<=i:
+                    alpha=(d[j]*M_mod-(i-d[j]+1))%Mod
+                    beta=G[i+1-d[j]]*H[d[j]]%Mod
+                    g+=alpha*beta
+            g%=Mod
+            G[i+1]=g*Inv[i+1]%Mod
     else:
-        return -1
+        Q=Modulo_Polynominal([(p_inv*a)%Mod for a in F[deg:]],P.max_degree)
+        G=Exp(M_mod*Log(Q)).Poly
+
+    pk=pow(p, M, Mod)
+    G=[0]*(deg*M)+[(pk*a)%Mod for a in G]
+    return Modulo_Polynominal(G, P.max_degree)
 
 #根号
-def Tonelli_Shanks(X):
-    """X=a (mod Mod) のとき, r*r=a (mod Mod) を満たす r を返す.
+def Tonelli_Shanks(X, default=-1):
+    """ X=a (mod Mod) のとき, r*r=a (mod Mod) を満たす r を返す.
 
     ※法pが素数のときのみ有効
-    ※存在しないときはNoneが返り値
+    ※存在しないときは default が返り値
     """
+    #ルジャンドル記号
+    def Legendre(X):
+        """ルジャンドル記号 (a/Mod) を返す.
+
+        ※法が素数のときのみ成立する.
+        """
+
+        if X%Mod==0:
+            return 0
+        elif pow(X,(Mod-1)//2,Mod)==1:
+            return 1
+        else:
+            return -1
+
     X%=Mod
     if Legendre(X)==-1:
-        return None
+        return default
 
     from random import randint as ri
     if X==0:
@@ -931,20 +1025,43 @@ def Tonelli_Shanks(X):
     return r
 
 #多項式の根号
-def __sqrt(F,N):
+def __sqrt(F, N):
     F+=[0]*(N-len(F))
     s=Tonelli_Shanks(F[0])
-    if s==None:return None
+    if s==-1:
+        return None
 
-    m=1
-    G=[min(s,Mod-s)]
-    two_inv=pow(2,Mod-2,Mod)
+    two_inv=pow(2, Mod-2, Mod)
 
-    while m<N:
-        G+=[0]*m
-        m<<=1
-        H=Calc.Convolution(F[:m],Calc.Inverse(G))
-        G=[two_inv*(a+b)%Mod for a,b in zip(G,H)]
+    if not Calc.is_sparse(F):
+        # P が疎な場合
+        F.append(0)
+        d,f=Calc.coefficients_list(F); K=len(d)
+
+        Inv=[0]*(N+1); Inv[1]=1
+        for i in range(2, N+1):
+            q,r=divmod(Mod, i)
+            Inv[i]=(-q*Inv[r])%Mod
+
+        G=[0]*N; G[0]=1
+        for i in range(N):
+            g=(two_inv*(i+1)%Mod)*F[i+1]%Mod
+            for j in range(K):
+                if 1<=d[j]<=i:
+                    alpha=(d[j]*two_inv-(i-d[j]+1))%Mod
+                    beta=G[i+1-d[j]]*F[d[j]]%Mod
+                    g+=alpha*beta
+            g%=Mod
+            G[i+1]=g*Inv[i+1]%Mod
+    else:
+        m=1
+        G=[min(s,Mod-s)]
+
+        while m<N:
+            G+=[0]*m
+            m<<=1
+            H=Calc.Convolution(F[:m], Calc.Inverse(G))
+            G=[two_inv*(a+b)%Mod for a,b in zip(G,H)]
     return G[:N]
 
 def Sqrt(P):
@@ -953,14 +1070,19 @@ def Sqrt(P):
     F+=[0]*(N-len(F))
 
     for d,p in enumerate(F):
-        if p:break
+        if p:
+            break
     else:
         return Modulo_Polynominal([0],P.max_degree)
 
-    if d&1:return
+    if d%2==1:
+        return
+
     E=__sqrt(F[d:],N-d//2)
 
-    if E==None:return
+    if E==None:
+        return
+
     if d>0:
         E=[0]*(d//2)+E
     return Modulo_Polynominal(E,P.max_degree)
@@ -1006,7 +1128,7 @@ def Composition(P,Q):
         Z=Calc.Convolution(Z,x)[:deg+1]
     return Modulo_Polynominal(F, deg)
 
-def Taylor_Shift(P,a):
+def Taylor_Shift(P, a):
     """与えられた多項式 P に対して, P(X+a) を求める.
 
     P: Polynominal
@@ -1087,6 +1209,9 @@ def Polynominal_Coefficient(P,Q,N):
         return P[0]*pow(Q[0],Mod-2,Mod)%Mod
 
 def Multipoint_Evaluation(P, X):
+    """ 多項式 P に対して, X=[x[0], ..., x[N-1]] としたとき, [P(x[0]), ..., P(x[N-1])] を求める.
+    """
+
     N=len(X)
     size=1<<(N-1).bit_length()
 
@@ -1098,11 +1223,10 @@ def Multipoint_Evaluation(P, X):
     for i in range(size-1,0,-1):
         G[i]=Calc.Convolution(G[2*i],G[2*i+1])
 
-    for i in range(1,2*size):
+    for i in range(1, 2*size):
         A=P.Poly if i==1 else G[i>>1]
-
         m=len(A)-len(G[i])+1
-        v=Calc.Convolution(A[::-1][:m],Calc.Inverse(G[i][::-1],m))[m-1::-1]
+        v=Calc.Convolution(A[::-1][:m], Calc.Inverse(G[i][::-1],m))[m-1::-1]
         w=Calc.Convolution(v,G[i])
 
         G[i]=A.copy()
