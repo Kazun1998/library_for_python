@@ -46,7 +46,7 @@ def General_Binary_Decrease_Search_Integer(L, R, cond, default=None):
             R=C
     return L
 
-def General_Binary_Increase_Search_Real(L, R, cond,ep=1/(1<<20), Times=50, default=None):
+def General_Binary_Increase_Search_Real(L, R, cond,ep=1/(1<<20), Times=30, default=None):
     """ 条件式が単調増加であるとき, 実数上で一般的な二部探索を行う.
 
     L: 解の下限
@@ -71,7 +71,7 @@ def General_Binary_Increase_Search_Real(L, R, cond,ep=1/(1<<20), Times=50, defau
             L=C
     return (L+R)/2
 
-def General_Binary_Decrease_Search_Real(L, R, cond, ep=1/(1<<20), Times=50, default=None):
+def General_Binary_Decrease_Search_Real(L, R, cond, ep=1/(1<<20), Times=30, default=None):
     """ 条件式が単調減少であるとき, 実数上で一般的な二部探索を行う.
 
     L:解の下限
