@@ -93,7 +93,7 @@ B=Binary_Indexed_Tree(L, calc, unit, inv)
 
 - $L$ : $G$ の列
 
-以下, $N=\left| L \right|$ とする.
+以下, $N=\left \| L \right\|$ とする.
 
 - $\operatorname{calc} : G \times G \to G; (x,y) \mapsto x+y$ 二項演算.
 - $\mathrm{unit}$ : $G$  の単位元 $0_G$.
