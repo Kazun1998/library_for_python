@@ -21,9 +21,11 @@ def verify():
         mode,*query=map(int,input().split())
 
         if mode==0:
-            B.add(query[0],query[1])
+            p,x=query
+            B.add(p, x)
         else:
-            Ans.append(B.sum(query[0],query[1]-1))
+            l,r=query
+            Ans.append(B.sum(l, r-1))
 
     write("\n".join(map(str,Ans)))
 
