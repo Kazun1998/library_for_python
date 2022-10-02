@@ -12,11 +12,7 @@ data:
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "\"\"\"\nNote:\u5404\u7FA4\u6F14\u7B97\u306B\u95A2\u3059\u308B\u95A2\u6570\
-    \u3068\u5358\u4F4D\u5143\n[\u548C]\ncalc=lambda x,y:x+y\nunit=0\n\n[\u7A4D (\u7FA4\
-    )]\ncalc=lambda x,y:x*y\nunit=1\n\n[Bit Xor]\ncalc=lambda x,y:x^y\nunit=0\n\n\
-    [\u96C6\u5408\u306E\u5BFE\u79F0\u5DEE]\ncalc=lambda x,y:x^y\nunit=set()\n\"\"\"\
-    \n\nclass Binary_Indexed_Tree():\n    def __init__(self, L, calc, unit, inv):\n\
+  code: "class Binary_Indexed_Tree():\n    def __init__(self, L, calc, unit, inv):\n\
     \        \"\"\" calc \u3092\u6F14\u7B97\u3068\u3059\u308B N \u9805\u306E Binary\
     \ Indexed Tree \u3092\u4F5C\u6210\n        calc: \u6F14\u7B97 (2\u5909\u6570\u95A2\
     \u6570, \u53EF\u63DB\u7FA4)\n        unit: \u7FA4 calc \u306E\u5358\u4F4D\u5143\
@@ -69,7 +65,7 @@ data:
   isVerificationFile: false
   path: Binary_Indexed_Tree/Binary_Indexed_Tree.py
   requiredBy: []
-  timestamp: '2022-09-28 10:55:10+09:00'
+  timestamp: '2022-10-02 18:20:23+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Binary_Indexed_Tree/Binary_Indexed_Tree.py
@@ -93,7 +89,7 @@ B=Binary_Indexed_Tree(L, calc, unit, inv)
 
 - $L$ : $G$ の列
 
-以下, $N=\left \| L \right\|$ とする.
+以下, $N=|L|$ とする.
 
 - $\operatorname{calc} : G \times G \to G; (x,y) \mapsto x+y$ 二項演算.
 - $\mathrm{unit}$ : $G$  の単位元 $0_G$.
@@ -182,4 +178,3 @@ B.binary_search(cond)
 - **制約**
   - $\operatorname{cond}: G \to \{\mathbb{T}, \mathbb{F} \}$ : 単調増加
 - **計算量** : $O(\log N)$ Time.
-

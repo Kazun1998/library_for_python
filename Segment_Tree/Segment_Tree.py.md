@@ -12,22 +12,11 @@ data:
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "\"\"\"\nNote:\u5404\u6F14\u7B97\u306B\u95A2\u3059\u308B\u95A2\u6570\u3068\
-    \u5358\u4F4D\u5143\n\n[\u548C]\ncalc=lambda x,y:x+y\nunit=0\n\n[\u7A4D]\ncalc=lambda\
-    \ x,y:x*y\nunit=1\n\n[Bit Or]\ncalc=lambda x,y:x|y\nunit=0\n\n[Bit And]\ncalc=lambda\
-    \ x,y:x&y\nunit=(\u203B\u4EFB\u610F\u306E\u8981\u7D20x\u3067x<2**k\u304C\u4FDD\
-    \u8A3C\u3055\u308C\u3066\u3044\u308B\u3068\u304D,\u5358\u4F4D\u5143\u3068\u3057\
-    \u30662**k-1\u304C\u53D6\u308C\u308B.)\n\n[Bit Xor]\ncalc=lambda x,y:x^y\nunit=0\n\
-    \n[\u6700\u5C0F\u5024]\ncalc=lambda x,y:min(x,y)\nunit=float(\"inf\")\n\n[\u6700\
-    \u5927\u5024]\ncalc=lambda x,y:max(x,y)\nunit=-float(\"inf\")\n\n[\u96C6\u5408\
-    \u306E\u548C]\ncalc=lambda x,y:x|y\nunit=set()\n\n[\u96C6\u5408\u306E\u7A4D]\n\
-    calc=lambda x,y:x&y\nunit=(\u5168\u4F53\u306E\u96C6\u5408(\u5834\u5408\u306B\u3088\
-    \u308B))\n\n[\u96C6\u5408\u306E\u5BFE\u79F0\u5DEE]\ncalc=lambda x,y:x^y\nunit=set()\n\
-    \"\"\"\n\nclass Segment_Tree():\n    def __init__(self, L, calc, unit):\n    \
-    \    \"\"\" calc \u3092\u6F14\u7B97\u3068\u3059\u308B\u30EA\u30B9\u30C8 L \u306E\
-    \ Segment Tree \u3092\u4F5C\u6210\n\n        calc: \u6F14\u7B97 (2\u5909\u6570\
-    \u95A2\u6570, Monoid)\n        unit: Monoid calc \u306E\u5358\u4F4D\u5143 (xe=ex=x\u3092\
-    \u6E80\u305F\u3059e)\n        \"\"\"\n        self.calc=calc\n        self.unit=unit\n\
+  code: "class Segment_Tree():\n    def __init__(self, L, calc, unit):\n        \"\
+    \"\" calc \u3092\u6F14\u7B97\u3068\u3059\u308B\u30EA\u30B9\u30C8 L \u306E Segment\
+    \ Tree \u3092\u4F5C\u6210\n\n        calc: \u6F14\u7B97 (2\u5909\u6570\u95A2\u6570\
+    , Monoid)\n        unit: Monoid calc \u306E\u5358\u4F4D\u5143 (xe=ex=x\u3092\u6E80\
+    \u305F\u3059e)\n        \"\"\"\n        self.calc=calc\n        self.unit=unit\n\
     \n        N=len(L)\n        d=max(1,(N-1).bit_length())\n        k=1<<d\n\n  \
     \      self.data=data=[unit]*k+L+[unit]*(k-len(L))\n        self.N=k\n       \
     \ self.depth=d\n\n        for i in range(k-1,0,-1):\n            data[i]=calc(data[i<<1],\
@@ -89,7 +78,7 @@ data:
   isVerificationFile: false
   path: Segment_Tree/Segment_Tree.py
   requiredBy: []
-  timestamp: '2022-09-28 10:55:10+09:00'
+  timestamp: '2022-10-02 18:22:42+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Segment_Tree/Segment_Tree.py
