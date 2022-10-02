@@ -1,22 +1,3 @@
-"""
-Note:各群演算に関する関数と単位元
-[和]
-calc=lambda x,y:x+y
-unit=0
-
-[積 (群)]
-calc=lambda x,y:x*y
-unit=1
-
-[Bit Xor]
-calc=lambda x,y:x^y
-unit=0
-
-[集合の対称差]
-calc=lambda x,y:x^y
-unit=set()
-"""
-
 class Binary_Indexed_Tree():
     def __init__(self, L, calc, unit, inv):
         """ calc を演算とする N 項の Binary Indexed Tree を作成
