@@ -309,7 +309,7 @@ data:
     - icon: ':warning:'
       path: Segment_Tree/Lazy_Segment_Tree.py
       title: Segment_Tree/Lazy_Segment_Tree.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: Segment_Tree/Segment_Tree.py
       title: Segment_Tree/Segment_Tree.py
   - name: Tree
@@ -346,7 +346,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/Binary_Indexed_Tree.test.py
       title: test_verify/Binary_Indexed_Tree.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/Segment_Tree.test.py
       title: test_verify/Segment_Tree.test.py
     - icon: ':heavy_check_mark:'

@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: Segment_Tree/Segment_Tree.py
     title: Segment_Tree/Segment_Tree.py
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/point_set_range_composite
     links:
@@ -25,7 +25,7 @@ data:
     \        A[i]=(a,b)\n\n    calc=lambda p,q:((p[0]*q[0])%Mod,(p[1]*q[0]+q[1])%Mod)\n\
     \    S=Segment_Tree(A,calc,(1,0))\n\n    Ans=[]\n    for _ in range(Q):\n    \
     \    m,s,t,u=map(int,input().split())\n        if m==0:\n            S.update(s,(t,u))\n\
-    \        else:\n            (alpha,beta)=S.product(s,t-1)\n        Ans.append((alpha*u+beta)%Mod)\n\
+    \        else:\n            (alpha,beta)=S.product(s,t-1)\n            Ans.append((alpha*u+beta)%Mod)\n\
     \n    write(\"\\n\".join(map(str,Ans)))\n\n#==================================================\n\
     verify()\n"
   dependsOn:
@@ -33,8 +33,8 @@ data:
   isVerificationFile: true
   path: test_verify/Segment_Tree.test.py
   requiredBy: []
-  timestamp: '2022-10-02 19:30:38+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2022-10-02 19:56:33+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/Segment_Tree.test.py
 layout: document
