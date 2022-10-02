@@ -18,7 +18,7 @@ U=Union_Find(N)
 ```
 
 - $N$ 頂点の空グラフを生成する.
-- **計算量** : Amortized $O(N)$ Time.
+- **計算量** : $O(N)$ Time.
 
 ---
 
