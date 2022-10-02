@@ -19,7 +19,7 @@ B=Binary_Indexed_Tree(L, calc, unit, inv)
 
 - $L$ : $G$ の列
 
-以下, $N=\left| L \right|$ とする.
+以下, $N=|L|$ とする.
 
 - $\operatorname{calc} : G \times G \to G; (x,y) \mapsto x+y$ 二項演算.
 - $\mathrm{unit}$ : $G$  の単位元 $0_G$.
@@ -108,4 +108,3 @@ B.binary_search(cond)
 - **制約**
   - $\operatorname{cond}: G \to \{\mathbb{T}, \mathbb{F} \}$ : 単調増加
 - **計算量** : $O(\log N)$ Time.
-
