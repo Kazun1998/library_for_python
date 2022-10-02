@@ -2,7 +2,7 @@
 
 #==================================================
 import sys
-sys.path.append('Segment_Tree/')
+sys.path.append('../Segment_Tree/')
 from Segment_Tree import Segment_Tree
 
 input=sys.stdin.readline
@@ -28,7 +28,7 @@ def verify():
             S.update(s,(t,u))
         else:
             (alpha,beta)=S.product(s,t-1)
-        Ans.append((alpha*u+beta)%Mod)
+            Ans.append((alpha*u+beta)%Mod)
 
     write("\n".join(map(str,Ans)))
 
