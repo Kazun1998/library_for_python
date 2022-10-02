@@ -5,7 +5,7 @@ data:
     pages:
     - icon: ':warning:'
       path: Binary_Indexed_Tree/Binary_Indexed_Tree.py
-      title: Binary_Indexed_Tree/Binary_Indexed_Tree.py
+      title: Binary Indexed Tree (Fenwick Tree)
     - icon: ':warning:'
       path: Binary_Indexed_Tree/Binary_Indexed_Tree_2D.py
       title: Binary_Indexed_Tree/Binary_Indexed_Tree_2D.py
