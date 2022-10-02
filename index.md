@@ -339,10 +339,13 @@ data:
       title: Union_Find/RollBack_Union_Find.py
     - icon: ':heavy_check_mark:'
       path: Union_Find/Union_Find.py
-      title: Union_Find/Union_Find.py
+      title: Union Find (Disjoint Set Union)
   verificationCategories:
   - name: test_verify
     pages:
+    - icon: ':heavy_check_mark:'
+      path: test_verify/Binary_Indexed_Tree.test.py
+      title: test_verify/Binary_Indexed_Tree.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/Union_Find.test.py
       title: test_verify/Union_Find.test.py

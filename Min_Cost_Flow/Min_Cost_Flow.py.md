@@ -123,5 +123,5 @@ layout: document
 redirect_from:
 - /library/Min_Cost_Flow/Min_Cost_Flow.py
 - /library/Min_Cost_Flow/Min_Cost_Flow.py.html
-title: 最小費用流
+title: Min_Cost_Flow/Min_Cost_Flow.py
 ---

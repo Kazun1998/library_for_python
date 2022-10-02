@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: Union_Find/Union_Find.py
-    title: Union_Find/Union_Find.py
+    title: Union Find (Disjoint Set Union)
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
