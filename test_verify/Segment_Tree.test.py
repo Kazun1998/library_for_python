@@ -2,7 +2,7 @@
 
 #==================================================
 import sys
-sys.path.append('../Segment_Tree/')
+sys.path.append('Segment_Tree/')
 from Segment_Tree import Segment_Tree
 
 input=sys.stdin.readline
