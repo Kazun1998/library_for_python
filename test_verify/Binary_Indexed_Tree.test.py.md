@@ -21,9 +21,10 @@ data:
     def verify():\n    from operator import add,neg\n\n    N,Q=map(int,input().split())\n\
     \    A=list(map(int,input().split()))\n    B=Binary_Indexed_Tree(A,add,0,neg)\n\
     \n    Ans=[]\n    for q in range(Q):\n        mode,*query=map(int,input().split())\n\
-    \n        if mode==0:\n            B.add(query[0],query[1])\n        else:\n \
-    \           Ans.append(B.sum(query[0],query[1]-1))\n\n    write(\"\\n\".join(map(str,Ans)))\n\
-    \n#==================================================\nverify()\n"
+    \n        if mode==0:\n            p,x=query\n            B.add(p, x)\n      \
+    \  else:\n            l,r=query\n            Ans.append(B.sum(l, r-1))\n\n   \
+    \ write(\"\\n\".join(map(str,Ans)))\n\n#==================================================\n\
+    verify()\n"
   dependsOn: []
   isVerificationFile: true
   path: test_verify/Binary_Indexed_Tree.test.py
