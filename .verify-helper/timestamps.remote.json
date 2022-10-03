@@ -1,7 +1,11 @@
 {
 "test_verify/Binary_Indexed_Tree.test.py": "1970-01-01 00:00:00 +0000",
+"test_verify/Bitwise_And_Convolution.test.py": "2022-10-03 22:55:40 +0900",
+"test_verify/Bitwise_Xor_Convolution.test.py": "2022-10-03 22:54:29 +0900",
 "test_verify/Dual_Segment_Tree.test.py": "2022-10-03 03:51:00 +0900",
+"test_verify/Gcd_Convolution.test.py": "2022-10-03 22:57:34 +0900",
 "test_verify/Jump_on_Tree.test.py": "1970-01-01 00:00:00 +0000",
+"test_verify/Lcm_Convolution.test.py": "2022-10-03 22:56:35 +0900",
 "test_verify/Lowest_Common_Ancestor.test.py": "1970-01-01 00:00:00 +0000",
 "test_verify/Segment_Tree.test.py": "2022-10-02 19:56:33 +0900",
 "test_verify/Union_Find.test.py": "2022-10-02 03:52:14 +0900"
