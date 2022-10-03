@@ -1,10 +1,7 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy:
-  - icon: ':warning:'
-    path: Vector3.py
-    title: Vector3.py
+  _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: py
@@ -60,8 +57,7 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: Complex.py
-  requiredBy:
-  - Vector3.py
+  requiredBy: []
   timestamp: '2021-04-27 14:48:27+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
