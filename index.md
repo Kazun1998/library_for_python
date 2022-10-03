@@ -347,11 +347,23 @@ data:
       path: test_verify/Binary_Indexed_Tree.test.py
       title: test_verify/Binary_Indexed_Tree.test.py
     - icon: ':heavy_check_mark:'
+      path: test_verify/Bitwise_And_Convolution.test.py
+      title: test_verify/Bitwise_And_Convolution.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/Bitwise_Xor_Convolution.test.py
+      title: test_verify/Bitwise_Xor_Convolution.test.py
+    - icon: ':heavy_check_mark:'
       path: test_verify/Dual_Segment_Tree.test.py
       title: test_verify/Dual_Segment_Tree.test.py
     - icon: ':heavy_check_mark:'
+      path: test_verify/Gcd_Convolution.test.py
+      title: test_verify/Gcd_Convolution.test.py
+    - icon: ':heavy_check_mark:'
       path: test_verify/Jump_on_Tree.test.py
       title: test_verify/Jump_on_Tree.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/Lcm_Convolution.test.py
+      title: test_verify/Lcm_Convolution.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/Lowest_Common_Ancestor.test.py
       title: test_verify/Lowest_Common_Ancestor.test.py
