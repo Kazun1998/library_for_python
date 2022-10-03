@@ -44,7 +44,7 @@ B.get(k)
 ### add
 
 ```Pyhon
-B.add(k)
+B.add(k, x)
 ```
 
 - 第 $k$ 要素に $x$ を加算する.
