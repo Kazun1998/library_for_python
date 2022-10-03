@@ -2,7 +2,7 @@
 
 #==================================================
 import sys
-sys.path.append('../Convolution/')
+sys.path.append('Convolution/')
 from XOR_Convolution import *
 
 input=sys.stdin.readline
