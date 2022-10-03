@@ -12,10 +12,8 @@ def Fast_Walsh_Hadamard_Transform_XOR(A):
             if i&bit==0:
                 x=A[i]
                 y=A[i|bit]
-                A[i]=x+y
-                A[i|bit]=x-y
-        for i in range(N):
-            A[i]%=Mod
+                A[i]=(x+y)%Mod
+                A[i|bit]=(x-y)%Mod
 
 def Fast_Inverse_Walsh_Hadamard_Transform_XOR(A):
     """ XOR に関する逆 Walsh_Hadamard_Transform を行う.
@@ -75,3 +73,5 @@ def Convolution_Power_XOR(A,k):
 
     Fast_Inverse_Walsh_Hadamard_Transform_XOR(A)
     return A
+
+Mod=998244353

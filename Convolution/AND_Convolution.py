@@ -3,18 +3,15 @@ def Superset_Zeta_Transform(A):
 
     A の長さはある整数 N を用いて, 2^N でなくてはならない.
     """
-
     N=(len(A)-1).bit_length()
     assert 1<<N==len(A), "列の要素数は 2^N でなくてはなりません."
 
     for i in range(N):
-        b=1<<i
+        bit=1<<i
         for S in range(1<<N):
-            if not (S & b):
-                A[S]+=A[S|b]
-
-        for S in range(N):
-            A[S]%=Mod
+            if not(S & bit):
+                A[S]+=A[S|bit]
+                A[S]%=Mod
 
 def Superset_Mobius_Transform(A):
     """ A の上位集合を走る Mobius 変換を求める.
@@ -26,10 +23,11 @@ def Superset_Mobius_Transform(A):
     assert 1<<N==len(A), "列の要素数は 2^N でなくてはなりません."
 
     for i in range(N):
-        b=1<<i
+        bit=1<<i
         for S in range(1<<N):
-            if not (S & b):
-                A[S]-=A[S|b]
+            if not (S & bit):
+                A[S]-=A[S|bit]
+                A[S]%=Mod
 
 def Convolution_AND(A,B):
     """ AND 演算に関する畳込みを行う.
@@ -58,7 +56,7 @@ def Convolution_AND(A,B):
         A[i]*=B[i]
         A[i]%=Mod
 
-    Superset_Zeta_Transform(A)
+    Superset_Mobius_Transform(A)
     return A
 
 def Convolution_Power_AND(A,k):
@@ -78,3 +76,5 @@ def Convolution_Power_AND(A,k):
 
     Superset_Mobius_Transform(A)
     return A
+
+Mod=998244353
