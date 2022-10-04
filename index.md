@@ -63,7 +63,7 @@ data:
       title: Dijkstra_Heap.py
     - icon: ':warning:'
       path: Disjoint_Sparse_Table.py
-      title: Disjoint_Sparse_Table.py
+      title: Disjoint Sparse Table
     - icon: ':warning:'
       path: Doubling.py
       title: Doubling.py
@@ -222,7 +222,7 @@ data:
     pages:
     - icon: ':warning:'
       path: Flow/Flow.py
-      title: Flow/Flow.py
+      title: Flow
     - icon: ':warning:'
       path: Flow/Projection_Selection_Problem.py
       title: Flow/Projection_Selection_Problem.py
