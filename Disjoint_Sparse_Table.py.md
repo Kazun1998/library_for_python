@@ -8,13 +8,13 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links:
-    - https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html"""
+    - https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Disjoint_Sparse_Table:\n    \"\"\" \u53C2\u8003: https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html\"\
-    \"\"\n\n    def __init__(self, L, calc):\n        \"\"\" L \u306E\u6F14\u7B97\
+  code: "class Disjoint_Sparse_Table:\n    \"\"\" \u53C2\u8003: https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html\
+    \ \"\"\"\n\n    def __init__(self, L, calc):\n        \"\"\" L \u306E\u6F14\u7B97\
     \ calc \u306B\u5BFE\u3059\u308B Disjoint Sparse Table \u3092\u751F\u6210\u3059\
     \u308B.\n\n        L: list\n        calc: \u4E8C\u9805\u6F14\u7B97\n        \"\
     \"\"\n\n        self.calc=calc\n        self.size=N=len(L)\n        self.b=(N-1).bit_length()\n\
@@ -47,7 +47,7 @@ title: Disjoint Sparse Table
 
 ## Outline
 
-半群 $S=(S, *)$ の列 $A=(A_0, A_1, \dots, A_{N-1})$ に対して, 区間積 $A_L* \dots *A_R$ の計算を $O(1)$ Time で行うことができるデータ構造.
+半群 $S=(S, \*)$ の列 $A=(A_0, A_1, \dots, A_{N-1})$ に対して, 区間積 $A_L \* \dots \* A_R$ の計算を $O(1)$ Time で行うことができるデータ構造.
 
 ただし, 区間積を $O(1)$ Time で計算できる代償として, 更新ができない.
 
@@ -61,7 +61,7 @@ T=Disjoint_Sparse_Table(A, calc)
 
 以下, $N={|}A{|}$ とする.
 
-- $\operatorname{calc} : S \times S \to S; (x,y) \mapsto x*y$ : 二項演算
+- $\operatorname{calc} : S \times S \to S; (x,y) \mapsto x \* y$ : 二項演算
 - **計算量** : $O(N \log N)$ Time.
 
 ---
@@ -72,7 +72,7 @@ T=Disjoint_Sparse_Table(A, calc)
 T.product(l, r, default=None)
 ```
 
-- 区間積 $A_L*A_{L+1}* \dots* A_R$  を求める. なお, $L \gt R$ の場合は `default` を返す.
+- 区間積 $A_L \* A_{L+1} \* \dots \* A_R$  を求める. なお, $L>R$ の場合は `default` を返す.
 - **制約**
   - $0 \leq L \lt N$
   - $0 \leq R \lt N$
