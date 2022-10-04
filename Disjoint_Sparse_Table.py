@@ -1,5 +1,5 @@
 class Disjoint_Sparse_Table:
-    """ 参考: https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html"""
+    """ 参考: https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html """
 
     def __init__(self, L, calc):
         """ L の演算 calc に対する Disjoint Sparse Table を生成する.
