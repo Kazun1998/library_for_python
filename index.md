@@ -194,25 +194,25 @@ data:
     pages:
     - icon: ':warning:'
       path: Convolution/AND_Convolution.py
-      title: Convolution/AND_Convolution.py
+      title: And Convolution
     - icon: ':warning:'
       path: Convolution/GCD_Convolution.py
-      title: Convolution/GCD_Convolution.py
+      title: Gcd Convolution
     - icon: ':warning:'
       path: Convolution/LCM_Convolution.py
-      title: Convolution/LCM_Convolution.py
+      title: Lcm Convolution
     - icon: ':warning:'
       path: Convolution/MAX_Convolution.py
-      title: Convolution/MAX_Convolution.py
+      title: Max Convolution
     - icon: ':warning:'
       path: Convolution/MIN_Convolution.py
       title: Convolution/MIN_Convolution.py
     - icon: ':warning:'
       path: Convolution/OR_Convolution.py
-      title: Convolution/OR_Convolution.py
+      title: Or Convolution
     - icon: ':warning:'
       path: Convolution/XOR_Convolution.py
-      title: Convolution/XOR_Convolution.py
+      title: Xor Convolution
   - name: Dynamic Programming
     pages:
     - icon: ':warning:'
