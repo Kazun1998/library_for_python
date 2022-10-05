@@ -311,7 +311,7 @@ data:
       title: Segment_Tree/Lazy_Segment_Tree.py
     - icon: ':heavy_check_mark:'
       path: Segment_Tree/Segment_Tree.py
-      title: Segment_Tree/Segment_Tree.py
+      title: Segment Tree
   - name: Tree
     pages:
     - icon: ':warning:'
