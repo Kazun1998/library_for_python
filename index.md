@@ -206,7 +206,7 @@ data:
       title: Max Convolution
     - icon: ':warning:'
       path: Convolution/MIN_Convolution.py
-      title: Convolution/MIN_Convolution.py
+      title: Min Convolution
     - icon: ':warning:'
       path: Convolution/OR_Convolution.py
       title: Or Convolution

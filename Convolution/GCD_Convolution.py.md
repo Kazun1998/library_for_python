@@ -47,9 +47,9 @@ title: Gcd Convolution
 
 ## Outline
 
-長さ $N$ の数列, $A=(A_i)_{1 \leq i \leq N}, B=(B_j)_{1 \leq j \leq N}$ に対し, $A,B$ の Gcd Convolution $A \oplus B$ を
+数列 $A=(A_i)_{1 \leq i}, B=(B_j)_{1 \leq j}$ に対し, $A,B$ の Gcd Convolution $A \oplus B$ を
 
-$$A \oplus B:=\left(\sum_{\substack{1 \leq i,j \leq N \\ \gcd(i,j)=k}} A_i B_j \right)_{1 \leq k \leq N}$$
+$$A \oplus B:=\left(\sum_{\substack{1 \leq i,j \\ \gcd(i,j)=k}} A_i B_j \right)_{1 \leq k}$$
 
 と定義する.
 
