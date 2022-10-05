@@ -173,9 +173,9 @@ B.max_right(left, cond)
 ```
 
 - 以下の2条件を共に満たすような $r$ のうちの1つを返す.
-  1. $r={\rm left}$ または $\operatorname{cond}(B_{{\rm left}} \* B_{{\rm left}+1} \* \dots \* B_{r-1})=\mathbb{T}$
-  1. $r=N$ または $\operatorname{cond}(B_{{\rm left}} \* B_{{\rm left}+1} \* \dots \* B_r)=\mathbb{F}$
-- 特に, $\operatorname{cond}$ が単調減少のときは, 整数 $r$ は $\operatorname{cond}(B_{{\rm left}} \* B_{{\rm left}+1} \* \dots \* B_{r-1})=\mathbb{T}$ を満たす最大の整数となる.
+  1. $r={\rm left}$ または $\operatorname{cond}(B_{ {\rm left}} \* B_{ {\rm left}+1} \* \dots \* B_{r-1})=\mathbb{T}$
+  1. $r=N$ または $\operatorname{cond}(B_{ {\rm left}} \* B_{ {\rm left}+1} \* \dots \* B_r)=\mathbb{F}$
+- 特に, $\operatorname{cond}$ が単調減少のときは, 整数 $r$ は $\operatorname{cond}(B_{ {\rm left}} \* B_{ {\rm left}+1} \* \dots \* B_{r-1})=\mathbb{T}$ を満たす最大の整数となる.
 - **制約**
   - $0 \leq {\rm left} \leq N$
   - $\operatorname{cond}: G \to \\{\mathbb{T}, \mathbb{F} \\}$
@@ -188,9 +188,9 @@ B.min_left(right, cond)
 ```
 
 - 以下の2条件を共に満たすような $l$ のうちの1つを返す.
-  1. $l={\rm right}$ または $\operatorname{cond}(B_l \* B_{l+1} \* \dots \* B_{{\rm right}-1})=\mathbb{T}$
-  1. $l=0$ または $\operatorname{cond}(B_{l-1} \* B_l \* \dots \* B_{{\rm right}-1})=\mathbb{F}$
-- 特に, $\operatorname{cond}$ が単調増加のときは, 整数 $l$ は $\operatorname{cond}(B_l \* B_{l+1} \* \dots * B_{{\rm right}-1})=\mathbb{T}$ を満たす最小の整数となる.
+  1. $l={\rm right}$ または $\operatorname{cond}(B_l \* B_{l+1} \* \dots \* B_{ {\rm right}-1})=\mathbb{T}$
+  1. $l=0$ または $\operatorname{cond}(B_{l-1} \* B_l \* \dots \* B_{ {\rm right}-1})=\mathbb{F}$
+- 特に, $\operatorname{cond}$ が単調増加のときは, 整数 $l$ は $\operatorname{cond}(B_l \* B_{l+1} \* \dots * B_{ {\rm right}-1})=\mathbb{T}$ を満たす最小の整数となる.
 - **制約**
   - $0 \leq {\rm right} \leq N$
   - $\operatorname{cond}: G \to \\{\mathbb{T}, \mathbb{F} \\}$
