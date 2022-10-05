@@ -117,7 +117,7 @@ data:
       title: Median.py
     - icon: ':warning:'
       path: Mo.py
-      title: Mo.py
+      title: Mo
     - icon: ':warning:'
       path: Modulo.py
       title: Modulo.py
