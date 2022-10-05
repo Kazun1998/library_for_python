@@ -308,7 +308,7 @@ data:
       title: Segment_Tree/Lazy_Evaluation_Proportion_Tree.py
     - icon: ':warning:'
       path: Segment_Tree/Lazy_Segment_Tree.py
-      title: Segment_Tree/Lazy_Segment_Tree.py
+      title: Lazy Segment Tree
     - icon: ':heavy_check_mark:'
       path: Segment_Tree/Segment_Tree.py
       title: Segment Tree

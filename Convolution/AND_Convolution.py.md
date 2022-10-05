@@ -70,5 +70,7 @@ $$\operatorname{bit}(S):=\sum_{a \in S} 2^a$$
 
 $A,B$ は添字集合が $\mathcal{P}((\\!(N)\\!))$ である列であるとする.
 このとき, $A=(A_S)\_{S \in \mathcal{P}((\\!(N)\\!))}, B=(B_T)\_{T \in \mathcal{P}((\\!(N)\\!))}$ の And Convolution $A \oplus B$ を
+
 $$A \oplus B:=\left(\sum_{\substack{S,T \in \mathcal{P}((\\!(N)\\!)) \\ S \cap T=U}} A_S B_T \right)\_{U \in \mathcal{P}((\\!(N)\\!))}$$
+
 と定義する.
