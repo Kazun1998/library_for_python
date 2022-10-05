@@ -63,10 +63,12 @@ $$A \oplus B:=\left(\sum_{\substack{0 \leq i,j \lt 2^N \\ i ~\land~ j=k}} A_i B_
 と定義する.
 
 なお, 写像 $\operatorname{bit}: \mathcal{P}((\\!(N)\\!)) \to (\\!(2^N)\\!)$ を
+
 $$\operatorname{bit}(S):=\sum_{a \in S} 2^a$$
+
 と定義すると, $\operatorname{bit}$ はこの2つモノイド $((\\!(2^N)\\!), \land), (\mathcal{P}((\\!(N)\\!)), \cap)$ 間の同型写像になることから, 次のような言い換えができる.
 
-> $A,B$ は添字集合が $\mathcal{P}((\\!(N)\\!))$ である列であるとする.
-> このとき, $A=(A_S)\_{S \in \mathcal{P}((\\!(N)\\!))}, B=(B_T)\_{T \in \mathcal{P}((\\!(N)\\!))}$ の And Convolution $A \oplus B$ を
-> $$A \oplus B:=\left(\sum_{\substack{S,T \in \mathcal{P}((\\!(N)\\!)) \\ S ~\cap~ T=U}} A_S B_T \right)\_{U \in \mathcal{P}((\\!(N)\\!))}$$
-> と定義する.
+$A,B$ は添字集合が $\mathcal{P}((\\!(N)\\!))$ である列であるとする.
+このとき, $A=(A_S)\_{S \in \mathcal{P}((\\!(N)\\!))}, B=(B_T)\_{T \in \mathcal{P}((\\!(N)\\!))}$ の And Convolution $A \oplus B$ を
+$$A \oplus B:=\left(\sum_{\substack{S,T \in \mathcal{P}((\\!(N)\\!)) \\ S \cap T=U}} A_S B_T \right)\_{U \in \mathcal{P}((\\!(N)\\!))}$$
+と定義する.
