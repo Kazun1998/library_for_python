@@ -1,6 +1,6 @@
 ---
 title: Mo
-documentation_of: //Mo
+documentation_of: //Mo.py
 ---
 
 ## Outline
