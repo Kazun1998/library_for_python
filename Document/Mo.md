@@ -17,4 +17,5 @@ documentation_of: //Mo
 - $Q$ 個のクエリが先読みできる.
 - $F(L,R)$ が求まっているとき, $F(L \pm 1, R), F(L, R \pm 1)$ が容易に求める.
 
-このとき, $F(L_1, R_1), \dots, F(L_Q, R_Q)$ を合計 $O(N \sqrt{Q})$ Time で求めることが出来る.
+このとき, $F(L_1, R_1), \dots, F(L_Q, R_Q)$ を合計
+で $O(N \sqrt{Q})$ Time で求めることが出来る.
