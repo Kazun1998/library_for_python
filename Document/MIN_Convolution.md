@@ -1,6 +1,6 @@
 ---
 title: Min Convolution
-documentation_of: //Convolution/Min_Convolution.py
+documentation_of: //Convolution/MIN_Convolution.py
 ---
 
 ## Outline
