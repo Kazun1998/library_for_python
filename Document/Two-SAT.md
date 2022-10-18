@@ -19,7 +19,7 @@ SATISFIABILITY (SAT) とは, 次のような問題である.
 
 つまり, 2-SAT とは次のような問題である.
 
-> リテラル全体の集合を $\mathcal{X}:=\{X_1, \ldots, X_N, \lnot X_1, \dots, \lnot X_N\}$ とする.
+> リテラル全体の集合を $\mathcal{X}:=\\{X_1, \ldots, X_N, \lnot X_1, \dots, \lnot X_N\\}$ とする.
 >
 > $j=1,2, \dots, M$ に対して, $F_j, G_j \in \mathcal{X}$ とする.
 >
@@ -31,7 +31,7 @@ SATISFIABILITY (SAT) とは, 次のような問題である.
 
 $2N$ 頂点, $2M$ 辺の有向グラフ $D=(\mathcal{X}, A)$ を次のように定める.
 
-- $A:=\{\lnot F_j \Rightarrow G_j \mid 1 \leq j \leq M\} \cup \{\lnot G_j \Rightarrow F_j \mid 1 \leq j \leq M\}$
+- $A:=\\{\lnot F_j \Rightarrow G_j \mid 1 \leq j \leq M\\} \cup \\{\lnot G_j \Rightarrow F_j \mid 1 \leq j \leq M\\}$
 
 このとき, 以下は同値である.
 
@@ -136,7 +136,7 @@ T.add_nand(i, j)
 T.add_equivalent(*I)
 ```
 
-- $I=[I_0, \dots, I_{n-1}]$ に対して, 以下の $n$ 個の節を追加する.
+- $I=(I_0, \dots, I_{n-1})$ に対して, 以下の $n$ 個の節を追加する.
   - $X_{I_0} \Rightarrow X_{I_1}$
   - $X_{I_1} \Rightarrow X_{I_2}$
   - $\vdots$
