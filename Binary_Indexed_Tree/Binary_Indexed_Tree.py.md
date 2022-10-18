@@ -89,9 +89,9 @@ B=Binary_Indexed_Tree(L, calc, unit, inv)
 
 - $L$ : $G$ の列
 
-以下, $N=\\|L\\|$ とする.
+以下, $N$ を $L$ の長さとする.
 
-- $\operatorname{calc} : G \times G \to G; (x,y) \mapsto x+y$ 二項演算.
+- $\operatorname{calc} : G \times G \to G; (x,y) \mapsto x+y$ : 二項演算.
 - $\mathrm{unit}$ : $G$  の単位元 $0_G$.
 - $\operatorname{inv}$ : $G \to G; x \mapsto -x$ : $x$ の逆元.
 - **計算量** : $O(N)$ Time.

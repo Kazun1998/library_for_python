@@ -122,6 +122,9 @@ data:
       path: Modulo.py
       title: Modulo.py
     - icon: ':warning:'
+      path: Monoided_Functional_Graph.py
+      title: Monoided_Functional_Graph.py
+    - icon: ':warning:'
       path: MultiSet.py
       title: MultiSet.py
     - icon: ':warning:'
@@ -130,6 +133,9 @@ data:
     - icon: ':warning:'
       path: Number.py
       title: Number.py
+    - icon: ':warning:'
+      path: Partial_Persistent_List.py
+      title: Partial_Persistent_List.py
     - icon: ':warning:'
       path: Partition.py
       title: Partition.py
@@ -177,7 +183,7 @@ data:
       title: Trie.py
     - icon: ':warning:'
       path: Two-SAT.py
-      title: Two-SAT.py
+      title: 2-SAT
     - icon: ':warning:'
       path: Vector.py
       title: Vector.py
