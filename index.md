@@ -295,7 +295,7 @@ data:
     pages:
     - icon: ':warning:'
       path: Modulo_Sequence/Modulo_Polynominal.py
-      title: Modulo_Sequence/Modulo_Polynominal.py
+      title: Modulo Polynominal
     - icon: ':warning:'
       path: Modulo_Sequence/Modulo_Sequence.py
       title: Modulo_Sequence/Modulo_Sequence.py
