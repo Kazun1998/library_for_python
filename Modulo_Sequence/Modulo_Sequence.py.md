@@ -9,9 +9,9 @@ data:
   attributes:
     links:
     - https://judge.yosupo.jp/submission/28692
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
-    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
+    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "from Modulo_Polynominal import *\n\n#===\u6F38\u5316\u5F0F\ndef Nth_Term_of_Linearly_Recurrent_Sequence(A,C,N,offset=0):\n\
     \    \"\"\" A[i]=C[0]*A[i-1]+C[1]*A[i-2]+...+C[d-1]*A[i-d] \u3067\u8868\u3055\u308C\

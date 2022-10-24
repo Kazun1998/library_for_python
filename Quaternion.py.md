@@ -4,16 +4,19 @@ data:
   - icon: ':warning:'
     path: Fraction.py
     title: Fraction.py
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: Vector3.py
+    title: Vector3.py
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: py
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
-    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
+    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "import math\nfrom Fraction import Fraction\n#from Complex import Complex\n\
     \nclass Quaternion(Complex):\n    #\u5165\u529B\u5B9A\u7FA9\n    def __init__(self,Real_part=0,Imaginary_part_i=0,Imaginary_part_j=0,Imaginary_part_k=0):\n\
@@ -67,7 +70,8 @@ data:
   - Fraction.py
   isVerificationFile: false
   path: Quaternion.py
-  requiredBy: []
+  requiredBy:
+  - Vector3.py
   timestamp: '2022-02-12 00:31:19+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

@@ -10,12 +10,13 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/point_add_range_sum
     links:
     - https://judge.yosupo.jp/problem/point_add_range_sum
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
-    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.7/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
+    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/point_add_range_sum\n\
-    \n#==================================================\nimport sys\nsys.path.append('Binary_Indexed_Tree/')\n\
+    \n#==================================================\n# Note\n# verify of BIT\n\
+    #==================================================\n\nimport sys\nsys.path.append('Binary_Indexed_Tree/')\n\
     from Binary_Indexed_Tree import Binary_Indexed_Tree\n\ninput=sys.stdin.readline\n\
     write=sys.stdout.write\n\n#==================================================\n\
     def verify():\n    from operator import add,neg\n\n    N,Q=map(int,input().split())\n\
