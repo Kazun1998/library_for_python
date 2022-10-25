@@ -11,7 +11,7 @@ documentation_of: //Modulo_Sequence/Modulo_Polynominal.py
 
 ### 解析
 
-$f \in F_p[\![X]\!]$ に対する形式的積分 $\displaystyle \int f(X)~dX$ , 形式的微分 $f'(X)$ をそれぞれ
+$f \in \mathbb{F}_p[\\![X]\\!]$ に対する形式的積分 $\displaystyle \int f(X)~dX$ , 形式的微分 $f'(X)$ をそれぞれ
 
 - $\displaystyle f'(X)=\sum_{n=0}^{\infty} (n+1) f_{n+1} X^n$
 - $\displaystyle \int f(X) dX=\sum_{n=0}^{\infty} \dfrac{f_n}{n+1} X^{n+1}$
@@ -20,7 +20,7 @@ $f \in F_p[\![X]\!]$ に対する形式的積分 $\displaystyle \int f(X)~dX$ , 
 
 ### Newton 法
 
-線形部分空間 $D \subset \mathbb{F}_p[\![X]\!]$ に対して, $T: D \to \mathbb{F}_p[\![X]\!]$ が与えられているとする. このとき, $f \in \mathbb{F}_p$ に対して, $T(g)=f$ となる $g \in D$ を求めたい.
+線形部分空間 $D \subset \mathbb{F}_p[\\![X]\\!]$ に対して, $T: D \to \mathbb{F}_p[\\![X]\\!]$ が与えられているとする. このとき, $f \in \mathbb{F}_p$ に対して, $T(g)=f$ となる $g \in D$ を求めたい.
 
 $T(\beta)=f_0$ となる $\beta \in F_p$ を何かしらの方法で求め, $g^{(1)}=\beta$ とする.
 
@@ -40,9 +40,9 @@ $$g \equiv g^{(N)}+\dfrac{f-T(g^{(N)})}{T'(g^{(N)})} \pmod{X^{2N}}$$
 
 ### 逆元
 
-$f \in \mathbb{F}_p[\![X]\!]$ に対して, $f_0 \neq 0$ ならば, $fg=1$ となる $g \in \mathbb{F}_p[\![X]\!]$ が存在する.
+$f \in \mathbb{F}_p[\\![X]\\!]$ に対して, $f_0 \neq 0$ ならば, $fg=1$ となる $g \in \mathbb{F}_p[\\![X]\\!]$ が存在する.
 
-$D$ を $f_0 \neq 0$ となる $f \in \mathbb{F}_p[\![X]\!]$ 全体の集合とする. $T: D \to \mathbb{F}_p[\![X]\!]$ を $T(g):=g^{-1}$ と定める.
+$D$ を $f_0 \neq 0$ となる $f \in \mathbb{F}_p[\![X]\!]$ 全体の集合とする. $T: D \to \mathbb{F}_p[\\![X]\\!]$ を $T(g):=g^{-1}$ と定める.
 
 Newton 法で求める. $g^{(0)}=f_0^{-1}$ である. また, $T'(g)=-\dfrac{1}{g^2}$ であるから,
 
@@ -52,11 +52,11 @@ $$g^{(2N)}=g^{(N)}+\dfrac{f-(1/g^{(N)})}{-(1/{g^{(N)}}^2)}=g^{(N)}(2-fg^{(N)})$$
 
 ### 対数関数
 
-$f \in F_p[\![X]\!]$ に対して, $\displaystyle \log f:=\int \dfrac{f(X)}{f'(X)}~dX$ と定義する.
+$f \in F_p[\\![X]\\!]$ に対して, $\displaystyle \log f:=\int \dfrac{f(X)}{f'(X)}~dX$ と定義する.
 
 ### 指数関数
 
-$f_0=0$ となる $f \in \mathbb{F}_p[\![X]\!]$ に対して, $\displaystyle \exp f:=\sum_{n=0}^\infty \dfrac{f_n}{n!} X^n$ と定義する.
+$f_0=0$ となる $f \in \mathbb{F}_p[\\![X]\\!]$ に対して, $\displaystyle \exp f:=\sum_{n=0}^{\infty} \dfrac{f_n}{n!} X^n$ と定義する.
 
 このとき, $\exp (\log f)=\log(\exp f)=f$ が成り立つ. よって, $g=\exp f \iff f=\log g$ である.
 
@@ -68,14 +68,14 @@ $$g^{(N)}+\dfrac{f-\log g^{(N)}}{\log'g^{(N)}}=g^{(N)}(1+f-\log g^{(N)})$$
 
 ### 累乗
 
-$f \in F_p[\![X]\!]$ に対して, $f \neq 0$ ならば, $f=\alpha X^d g, g_0=1$ となる $\alpha \in F_p^\times, d \geq 0, g \in F[\![X]\!]$ が唯一存在する. ここで, $g=\exp(\log g)$ であるから, $g^M=\exp(M \log g)$ である. これを利用することによって, $f^M=\alpha^M X^{Md} \exp(M \log g)$ となる.
+$f \in \mathbb{F}_p[\\![X]\\!]$ に対して, $f \neq 0$ ならば, $f=\alpha X^d g, g_0=1$ となる $\alpha \in F_p^\times, d \geq 0, g \in \mathbb{F}_p[\\![X]\\!]$ が唯一存在する. ここで, $g=\exp(\log g)$ であるから, $g^M=\exp(M \log g)$ である. これを利用することによって, $f^M=\alpha^M X^{Md} \exp(M \log g)$ となる.
 
 ### 平方根
 
-$f \in F_p[\![X]\!]$ に対して, $h^2=f$ となる $f_p[\![X]\!]$ となる $h$ が存在することと, 以下の2条件のうち, どちらか一方が成り立つことは同値である.
+$f \in \mathbb{F}_p[\\![X]\\!]$ に対して, $h^2=f$ となる $\mathbb{F}_p[\\![X]\\!]$ となる $h$ が存在することと, 以下の2条件のうち, どちらか一方が成り立つことは同値である.
 
 - $f=0$
-- $f=\alpha X^d g, g_0=1$ となる $\alpha \in F_p$, 非負整数 $d$, $g_0 \in F[\![X]\!]$ は唯一存在するが, $\alpha$ が平方剰余で, $d$ が偶数.
+- $f=\alpha X^d g, g_0=1$ となる $\alpha \in F_p$, 非負整数 $d$, $g_0 \in \mathbb{F}_p[\\![X]\\!]$ は唯一存在するが, $\alpha$ が平方剰余で, $d$ が偶数.
 
 $g_0=1$ とする. このとき, $T(h):=h^2$ として, $T(h)=g$ となる $h$ を Newton 法で求めることにする.
 
@@ -100,3 +100,39 @@ $$\widetilde{f}=\widetilde{g} \widetilde{q}+\widetilde{r} X^{N-(M-1)} \equiv \wi
 $$\widetilde{q}=\dfrac{\widetilde{f}}{\widetilde{g}} \pmod{X^{N-M+1}}$$
 
 であり, $q=\widetilde{\widetilde{q}}$ によって $q$ を求めることが出来る. これにより, $r=f-pg$ で $r$ も求められる.
+
+### 除算における $N$ 次の係数
+
+$P$ は高々 $(d-1)$ 次未満の多項式, $Q$ は $d$ 次の多項式であるとする. このとき,
+
+$$\left[X^N \right] \dfrac{P(X)}{Q(X)}$$
+
+を求めたい.
+
+$\left[X^0 \right] Q \in \mathbb{F}_p^\times$ とする.
+
+分子と分母の両方に $Q(-X)$ を掛けると, $Q(X)Q(-X)$ が偶多項式になるので, $V(X^2)=Q(X)Q(-X)$ となる多項式 $V$ が存在する.
+
+また, 多項式 $P(X)Q(-X)$ を $P(X)Q(-X)=S_{{\rm even}}(X^2)+XS_{{\rm odd}}(X^2)$ と分解する.
+
+このとき, 分母が偶多項式であるから, $N$ が偶数のときは
+
+$$\left[X^N \right] \dfrac{P(X)}{Q(X)}=\left[X^N \right] \dfrac{S_{{\rm even}}(X^2)}{V(X^2)}=\left[X^{N/2} \right] \dfrac{S_{{\rm even}}(X)}{V(X)}\$$
+
+が成り立つ. $N$ が奇数のときも同様にして,
+
+$$\left[X^N \right] \dfrac{P(X)}{Q(X)}=\left[X^N \right] \dfrac{XS_{{\rm odd}}(X^2)}{V(X^2)}=\left[X^{(N-1)/2} \right] \dfrac{S_{{\rm odd}}(X)}{V(X)}\$$
+
+が成り立つ.
+
+これにより, 1回関係式を利用することにより, 求める指数をが $1/2$ に落とすことが出来る.
+
+また, 自明な場合として,
+
+$$\left[X^0 \right] \dfrac{P(X)}{Q(X)}=\dfrac{\left[X^0 \right] P}{\left[X^0 \right] Q}$$
+
+が成り立つ.
+
+よって, $d$ 次の多項式の積を $O(\log N)$ 回求めることによって, $\displaystyle \left[X^N \right] \dfrac{P(X)}{Q(X)}$ を求めることができる.
+
+この多項式の積を求めるパートがボトルネックになるから, 計算量は $O(d \log d \log N)$ Time である.
