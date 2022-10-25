@@ -42,7 +42,7 @@ $$g \equiv g^{(N)}+\dfrac{f-T(g^{(N)})}{T'(g^{(N)})} \pmod{X^{2N}}$$
 
 $f \in \mathbb{F}_p[\\![X]\\!]$ に対して, $f_0 \neq 0$ ならば, $fg=1$ となる $g \in \mathbb{F}_p[\\![X]\\!]$ が存在する.
 
-$D$ を $f_0 \neq 0$ となる $f \in \mathbb{F}_p[\![X]\!]$ 全体の集合とする. $T: D \to \mathbb{F}_p[\\![X]\\!]$ を $T(g):=g^{-1}$ と定める.
+$D$ を $f_0 \neq 0$ となる $f \in \mathbb{F}_p[\\![X]\\!]$ 全体の集合とする. $T: D \to \mathbb{F}_p[\\![X]\\!]$ を $T(g):=g^{-1}$ と定める.
 
 Newton 法で求める. $g^{(0)}=f_0^{-1}$ である. また, $T'(g)=-\dfrac{1}{g^2}$ であるから,
 
@@ -56,7 +56,7 @@ $f \in F_p[\\![X]\\!]$ に対して, $\displaystyle \log f:=\int \dfrac{f(X)}{f'
 
 ### 指数関数
 
-$f_0=0$ となる $f \in \mathbb{F}_p[\\![X]\\!]$ に対して, $\displaystyle \exp f:=\sum_{n=0}^{\infty} \dfrac{f_n}{n!} X^n$ と定義する.
+$f_0=0$ となる $f \in \mathbb{F}\_p[\\![X]\\!]$ に対して, $\displaystyle \exp f:=\sum\_{n=0}^{\infty} \dfrac{f_n}{n!} X^n$ と定義する.
 
 このとき, $\exp (\log f)=\log(\exp f)=f$ が成り立つ. よって, $g=\exp f \iff f=\log g$ である.
 
@@ -117,11 +117,11 @@ $\left[X^0 \right] Q \in \mathbb{F}_p^\times$ とする.
 
 このとき, 分母が偶多項式であるから, $N$ が偶数のときは
 
-$$\left[X^N \right] \dfrac{P(X)}{Q(X)}=\left[X^N \right] \dfrac{S_{{\rm even}}(X^2)}{V(X^2)}=\left[X^{N/2} \right] \dfrac{S_{{\rm even}}(X)}{V(X)}\$$
+$$\left[X^N \right] \dfrac{P(X)}{Q(X)}=\left[X^N \right] \dfrac{S_{{\rm even}}(X^2)}{V(X^2)}=\left[X^{N/2} \right] \dfrac{S_{{\rm even}}(X)}{V(X)}$$
 
 が成り立つ. $N$ が奇数のときも同様にして,
 
-$$\left[X^N \right] \dfrac{P(X)}{Q(X)}=\left[X^N \right] \dfrac{XS_{{\rm odd}}(X^2)}{V(X^2)}=\left[X^{(N-1)/2} \right] \dfrac{S_{{\rm odd}}(X)}{V(X)}\$$
+$$\left[X^N \right] \dfrac{P(X)}{Q(X)}=\left[X^N \right] \dfrac{XS_{{\rm odd}}(X^2)}{V(X^2)}=\left[X^{(N-1)/2} \right] \dfrac{S_{{\rm odd}}(X)}{V(X)}$$
 
 が成り立つ.
 
