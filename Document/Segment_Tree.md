@@ -19,7 +19,7 @@ S=Segment_Tree(L, calc, unit)
 
 - $L$ : $M$ の列
 
-以下, $L$ の長さを $N$ とする.
+以下, $N:=\lvert L \rvert$ とする.
 
 - $\operatorname{calc} : M \times M \to M; (x,y) \mapsto x \* y$ : 二項演算.
 - $\mathrm{unit}$ : $M$  の単位元 $e_M$.

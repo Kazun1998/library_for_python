@@ -5,7 +5,7 @@ documentation_of: //Segment_Tree/Lazy_Segment_Tree.py
 
 ## Outline
 
-$M=(M, \*, e_M), F=(F, \circ, 1_F)$ はそれぞれモノイドであり, $F$ は $M$ に左から作用するとし, この作用を $F \times M \to M; (f,x) \mapsto f(x)$ と書くことにする.
+$M=(M, \*, e_M), F=(F, \circ, 1_F)$ はそれぞれモノイドであり, $F$ は $M$ に左から作用するとし, この作用を $F \times M \to M; (\alpha,x) \mapsto \alpha(x)$ と書くことにする.
 
 また, この作用は各 $\alpha \in F$ に対して準同型であるとする.
 
@@ -29,7 +29,7 @@ S=Lazy_Evaluation_Tree(L, calc, unit, op, comp, id)
 
 - $L$ : $M$ の列
 
-以下, $L$ の長さを $N$ とする.
+以下, $N:=\lvert L \rvert$ とする.
 
 - $\operatorname{calc} : M \times M \to M; (x,y) \mapsto x \* y$ : 二項演算.
 - $\mathrm{unit}$ : $M$  の単位元 $e_M$.
