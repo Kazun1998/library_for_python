@@ -120,7 +120,7 @@ data:
       title: Mo
     - icon: ':warning:'
       path: Modulo.py
-      title: Modulo.py
+      title: Modulo
     - icon: ':warning:'
       path: Monoided_Functional_Graph.py
       title: Monoided_Functional_Graph.py
@@ -245,10 +245,10 @@ data:
       title: Geometric/Circle.py
     - icon: ':warning:'
       path: Geometric/Line.py
-      title: Geometric/Line.py
+      title: Line
     - icon: ':warning:'
       path: Geometric/Point.py
-      title: Geometric/Point.py
+      title: Point
     - icon: ':warning:'
       path: Geometric/Polygon.py
       title: Geometric/Polygon.py
