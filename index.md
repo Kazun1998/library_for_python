@@ -242,7 +242,7 @@ data:
       title: Geometric/Affine.py
     - icon: ':warning:'
       path: Geometric/Circle.py
-      title: Geometric/Circle.py
+      title: Circle
     - icon: ':warning:'
       path: Geometric/Line.py
       title: Line
