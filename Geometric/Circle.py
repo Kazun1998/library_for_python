@@ -35,7 +35,7 @@ def has_Intersection_between_Circle_and_Segment(C,L,endpoint=True):
     c=C.center
     ep=max(C.ep,L.ep)
     flag1=(compare(
-        Distance_betweem_Point_and_Segment(c,L),
+        Distance_between_Point_and_Segment(c,L),
         C.radius,
         ep)<=0)
     flag2=(compare(max(abs(c-L.begin),abs(c-L.end)),C.radius,ep)>=0)
@@ -46,7 +46,7 @@ def has_Intersection_between_Circle_and_Line(C,L):
 
     """
     return compare(
-        Distance_betweem_Point_and_Line(C.center,L),
+        Distance_between_Point_and_Line(C.center,L),
         C.radius,
         max(C.ep,L.ep)
         )<=0
@@ -72,7 +72,7 @@ def Intersection_between_Circle_and_Line(C,L):
         return []
 
     H=Projection(C.Center,L)
-    d=Distance_betweem_Point_and_Line(C.Center,L)
+    d=Distance_between_Point_and_Line(C.Center,L)
     x=sqrt(max(C.radius*C.radius-d*d,0))
     v=L.vectorize(); v.normalization()
 
