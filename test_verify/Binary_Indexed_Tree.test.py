@@ -21,10 +21,10 @@ def verify():
 
         if mode==0:
             p,x=query
-            B.add(p, x)
+            B.add(p,x)
         else:
             l,r=query
-            Ans.append(B.sum(l, r-1))
+            Ans.append(B.sum(l,r-1))
 
     write("\n".join(map(str,Ans)))
 
