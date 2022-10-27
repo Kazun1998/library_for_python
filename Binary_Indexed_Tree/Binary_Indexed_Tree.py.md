@@ -46,26 +46,26 @@ data:
     . \"\"\"\n        data=self.data; calc=self.calc\n        S=self.unit\n      \
     \  while x>0:\n            S=calc(data[x],S)\n            x-=x&(-x)\n        return\
     \ S\n\n    def all_sum(self):\n        return self.sum(0,self.N-1)\n\n    def\
-    \ binary_search(self, cond):\n        \"\"\" cond(B[0]+...+B[k]) \u3092\u6E80\u305F\
-    \u3059\u6700\u5C0F\u306E k \u3092\u8FD4\u3059.\n\n        cond: \u5358\u8ABF\u5897\
-    \u52A0\n\n        \u203B cond(unit)=True \u306E\u5834\u5408\u306E\u8FD4\u308A\u5024\
-    \u306F -1\n        \u203B cond(B[0]+...+B[k]) \u306A\u308B k \u304C (0<=k<N \u306B\
-    ) \u5B58\u5728\u3057\u306A\u3044\u5834\u5408\u306E\u8FD4\u308A\u5024\u306F N\n\
-    \        \"\"\"\n\n        if cond(self.unit):\n            return -1\n\n    \
-    \    j=0\n        r=self.N\n        t=1<<self.log\n        data=self.data; calc=self.calc\n\
-    \        alpha=self.unit\n\n        while t>0:\n            if j+t<=self.N:\n\
-    \                beta=calc(alpha,data[j+t])\n                if not cond(beta):\n\
-    \                    alpha=beta\n                    j+=t\n            t>>=1\n\
-    \n        return j\n\n    def __getitem__(self,index):\n        if isinstance(index,int):\n\
-    \            return self.get(index)\n        else:\n            return [self.get(t)\
-    \ for t in index]\n\n    def __setitem__(self,index,val):\n        self.update(index,val)\n\
-    \n    def __iter__(self):\n        for k in range(self.N):\n            yield\
-    \ self.sum(k,k)\n"
+    \ binary_search(self, cond):\n        \"\"\" cond(B[0]+...+B[k]) \u304C True \u3068\
+    \u306A\u308B\u3088\u3046\u306A\u6700\u5C0F\u306E k \u3092\u8FD4\u3059.\n\n   \
+    \     cond: \u5358\u8ABF\u5897\u52A0\n\n        \u203B cond(unit)=True \u306E\u5834\
+    \u5408\u306E\u8FD4\u308A\u5024\u306F -1 \u3068\u3059\u308B.\n        \u203B cond(B[0]+...+B[k])\
+    \ \u306A\u308B k \u304C (0<=k<N \u306B) \u5B58\u5728\u3057\u306A\u3044\u5834\u5408\
+    \u306E\u8FD4\u308A\u5024\u306F N \u3068\u3059\u308B.\n        \"\"\"\n\n     \
+    \   if cond(self.unit):\n            return -1\n\n        j=0\n        r=self.N\n\
+    \        t=1<<self.log\n        data=self.data; calc=self.calc\n        alpha=self.unit\n\
+    \n        while t>0:\n            if j+t<=self.N:\n                beta=calc(alpha,data[j+t])\n\
+    \                if not cond(beta):\n                    alpha=beta\n        \
+    \            j+=t\n            t>>=1\n\n        return j\n\n    def __getitem__(self,index):\n\
+    \        if isinstance(index,int):\n            return self.get(index)\n     \
+    \   else:\n            return [self.get(t) for t in index]\n\n    def __setitem__(self,index,val):\n\
+    \        self.update(index,val)\n\n    def __iter__(self):\n        for k in range(self.N):\n\
+    \            yield self.sum(k,k)\n"
   dependsOn: []
   isVerificationFile: false
   path: Binary_Indexed_Tree/Binary_Indexed_Tree.py
   requiredBy: []
-  timestamp: '2022-10-02 18:20:23+09:00'
+  timestamp: '2022-10-27 19:47:20+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Binary_Indexed_Tree/Binary_Indexed_Tree.py
