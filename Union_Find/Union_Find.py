@@ -137,10 +137,10 @@ class Union_Find():
             _=self.find(i)
 
     def __str__(self):
-        return '\n'.join('{}: {}'.format(r, self.members(r)) for r in self.representative())
+        return str(self.all_group_members().values())[13:-2]
 
     def __repr__(self):
-        return self.__str__()
+        return "Union Find : "+str(self)
 
     def __getitem__(self,index):
         return self.find(index)
