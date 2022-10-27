@@ -21,8 +21,8 @@ data:
     \ operator import add,neg\n\n    N,Q=map(int,input().split())\n    A=list(map(int,input().split()))\n\
     \    B=Binary_Indexed_Tree(A,add,0,neg)\n\n    Ans=[]\n    for q in range(Q):\n\
     \        mode,*query=map(int,input().split())\n\n        if mode==0:\n       \
-    \     p,x=query\n            B.add(p, x)\n        else:\n            l,r=query\n\
-    \            Ans.append(B.sum(l, r-1))\n\n    write(\"\\n\".join(map(str,Ans)))\n\
+    \     p,x=query\n            B.add(p,x)\n        else:\n            l,r=query\n\
+    \            Ans.append(B.sum(l,r-1))\n\n    write(\"\\n\".join(map(str,Ans)))\n\
     \n#==================================================\nverify()\n"
   dependsOn: []
   isVerificationFile: true
