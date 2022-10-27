@@ -10,7 +10,9 @@ documentation_of: //Geometric/Point.py
 ただし, このライブラリ及び, ドキュメント内では座標平面内の点 $\mathrm{A}=(x,y)$ と2次元実ベクトル $\boldsymbol{a}=(x,y)$ を同一視する.
 
 また, 2次元ベクトル $\boldsymbol{a}=(a_x, a_y), \boldsymbol{b}=(b_x, b_y)$ に対する外積 $\boldsymbol{a} \times \boldsymbol{b}$ を
+
 $$\boldsymbol{a} \times \boldsymbol{b}:=\det (\boldsymbol{a}, \boldsymbol{b})=a_x b_y-b_x a_y$$
+
 とする.
 
 ## Theory
