@@ -133,9 +133,17 @@ title: Line
 
 $\mathrm{A}, \mathrm{B}$ を相異なる2点とする.
 
-* $\mathrm{A}, \mathrm{B}$ を端点とする線分 (Segment) $s$ は以下のようにして定義される. $$s:=\{t \mathrm{A}+(1-t) \mathrm{B} \mid 0 \leq t \leq 1\}$$
-* $\mathrm{A}$ を端点とし, $\mathrm{B}$ を通る半直線 (Ray) $r$ は以下のようにして定義される. $$r:=\{t \mathrm{A}+(1-t) \mathrm{B} \mid 0 \leq t\}$$
-* $\mathrm{A}, \mathrm{B}$ を通る直線 (Line) $\ell$ は以下のようにして定義される. $$\ell:=\{t \mathrm{A}+(1-t) \mathrm{B} \mid t \in \mathbb{R} \}$$
+* $\mathrm{A}, \mathrm{B}$ を端点とする線分 (Segment) $s$ は以下のようにして定義される.
+
+$$s:=\{t \mathrm{A}+(1-t) \mathrm{B} \mid 0 \leq t \leq 1\}$$
+
+* $\mathrm{A}$ を端点とし, $\mathrm{B}$ を通る半直線 (Ray) $r$ は以下のようにして定義される.
+
+$$r:=\{t \mathrm{A}+(1-t) \mathrm{B} \mid 0 \leq t\}$$
+
+* $\mathrm{A}, \mathrm{B}$ を通る直線 (Line) $\ell$ は以下のようにして定義される.
+
+$$\ell:=\{t \mathrm{A}+(1-t) \mathrm{B} \mid t \in \mathbb{R} \}$$
 
 どの場合でも $\overrightarrow{\mathrm{AB}}$ が方向ベクトルになる.
 
