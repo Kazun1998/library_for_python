@@ -9,9 +9,9 @@ documentation_of: //Geometric/Line.py
 
 $\mathrm{A}, \mathrm{B}$ を相異なる2点とする.
 
-* $\mathrm{A}, \mathrm{B}$ を端点とする線分 (Segment) $s$ は以下のようにして定義される. $$s:=\\{t \mathrm{A}+(1-t) \mathrm{B} \mid 0 \leq t \leq 1\\}$$
-* $\mathrm{A}$ を端点とし, $\mathrm{B}$ を通る半直線 (Ray) $r$ は以下のようにして定義される. $$r:=\\{t \mathrm{A}+(1-t) \mathrm{B} \mid 0 \leq t\\}$$
-* $\mathrm{A}, \mathrm{B}$ を通る直線 (Line) $\ell$ は以下のようにして定義される. $$\ell:=\\{t \mathrm{A}+(1-t) \mathrm{B} \mid t \in \mathbb{R} \\}$$
+* $\mathrm{A}, \mathrm{B}$ を端点とする線分 (Segment) $s$ は以下のようにして定義される. $$s:=\{t \mathrm{A}+(1-t) \mathrm{B} \mid 0 \leq t \leq 1\}$$
+* $\mathrm{A}$ を端点とし, $\mathrm{B}$ を通る半直線 (Ray) $r$ は以下のようにして定義される. $$r:=\{t \mathrm{A}+(1-t) \mathrm{B} \mid 0 \leq t\}$$
+* $\mathrm{A}, \mathrm{B}$ を通る直線 (Line) $\ell$ は以下のようにして定義される. $$\ell:=\{t \mathrm{A}+(1-t) \mathrm{B} \mid t \in \mathbb{R} \}$$
 
 どの場合でも $\overrightarrow{\mathrm{AB}}$ が方向ベクトルになる.
 
@@ -50,14 +50,14 @@ $$\mathrm{P} \in \ell \iff \overrightarrow{\mathrm{PA}} \times \overrightarrow{\
 
 2つの直線 $\ell, m$ はそれぞれ次のようになっているとする.
 
-* $\ell$ : 点 $\mathrm{A}$ を通り, 方向ベクトルが $\bm{u}$ である.
-* $m$ : 点 $\mathrm{B}$ を通り, 方向ベクトルが $\bm{v}$ であるとする.
+* $\ell$ : 点 $\mathrm{A}$ を通り, 方向ベクトルが $\boldsymbol{u}$ である.
+* $m$ : 点 $\mathrm{B}$ を通り, 方向ベクトルが $\boldsymbol{v}$ であるとする.
 
 このとき, $\ell, m$ の関係は交差, 平行 (かつ 非一致), 一致のどれかである.
 
-* 一致 $\iff \bm{u} \times \bm{v}=0$ かつ $\mathrm{B} \in \ell$
-* 平行かつ不一致 $\iff \bm{u} \times \bm{v}=0$ かつ $B \not \in \ell$
-* 交差 $\iff \bm{u} \times \bm{v} \neq 0$
+* 一致 $\iff \boldsymbol{u} \times \boldsymbol{v}=0$ かつ $\mathrm{B} \in \ell$
+* 平行かつ不一致 $\iff \boldsymbol{u} \times \boldsymbol{v}=0$ かつ $\mathrm{B} \not \in \ell$
+* 交差 $\iff \boldsymbol{u} \times \boldsymbol{v} \neq 0$
 
 ### 直線と直線の交点
 

@@ -9,7 +9,7 @@ documentation_of: //Geometric/Circle.py
 
 点 $\mathrm{P}$ と正の実数 $r$ に対して, 点 $\mathrm{P}$ からの距離が $r$ であるような座標平面の部分集合を円という. つまり, この円を $\mathrm{C}$ とすると,
 
-$$\mathrm{C}:=\\{\mathrm{X} \in \mathbb{R}^2 \mid \operatorname{dist}(\mathrm{P}, \mathrm{X})=r \\}$$
+$$\mathrm{C}:=\{\mathrm{X} \in \mathbb{R}^2 \mid \operatorname{dist}(\mathrm{P}, \mathrm{X})=r \}$$
 
 である. このとき, $\mathrm{P}$ を円 $\mathrm{C}$ の中心, $r$ を $\mathrm{C}$ の半径という.
 
@@ -61,4 +61,14 @@ $$\mathrm{HX}=\sqrt{\mathrm{PX}^2-\mathrm{PH}^2}=\sqrt{r^2-\mathrm{PH}^2} =:y$$
 
 $$\overrightarrow{\mathrm{OX}}=\overrightarrow{\mathrm{OP}}+\overrightarrow{\mathrm{PH}}+\overrightarrow{\mathrm{HX}}=\overrightarrow{\mathrm{OP}}+x \boldsymbol{e}+y \boldsymbol{n}$$
 
+である. また, $\mathrm{X}'$ は線分 $\mathrm{PQ}$ に関して $\mathrm{X}$ の線対称な位置にあり, $\boldsymbol{n}$ は $\boldsymbol{e}$ の単位法線ベクトルであったので,
+
+$$\overrightarrow{\mathrm{OX}'}==\overrightarrow{\mathrm{OP}}+x \boldsymbol{e}-y \boldsymbol{n}$$
+
 である.
+
+以上から, 交点は
+
+$$\overrightarrow{\mathrm{OP}}+x \boldsymbol{e} \pm y \boldsymbol{n}$$
+
+であることがわかった.
