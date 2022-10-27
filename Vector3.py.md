@@ -61,8 +61,8 @@ data:
     \    #\u7B26\u53F7\n    def __pos__(self):\n        return self\n\n    def __neg__(self):\n\
     \        return Vector3(-self.x,-self.y,-self.z)\n\n\n\n\n"
   dependsOn:
-  - Fraction.py
   - Quaternion.py
+  - Fraction.py
   - Complex.py
   isVerificationFile: false
   path: Vector3.py
