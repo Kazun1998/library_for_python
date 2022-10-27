@@ -366,6 +366,9 @@ data:
       path: test_verify/Binary_Indexed_Tree.test.py
       title: test_verify/Binary_Indexed_Tree.test.py
     - icon: ':heavy_check_mark:'
+      path: test_verify/Gcd_Convolution.test.py
+      title: test_verify/Gcd_Convolution.test.py
+    - icon: ':heavy_check_mark:'
       path: test_verify/Segment_Tree.test.py
       title: test_verify/Segment_Tree.test.py
     - icon: ':heavy_check_mark:'
