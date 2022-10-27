@@ -82,7 +82,7 @@ class Binary_Indexed_Tree():
         return self.sum(0,self.N-1)
 
     def binary_search(self, cond):
-        """ cond(B[0]+...+B[k]) を満たす最小の k を返す.
+        """ cond(B[0]+...+B[k]) が True となるような最小の k を返す.
 
         cond: 単調増加
 
