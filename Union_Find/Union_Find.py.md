@@ -67,16 +67,16 @@ data:
     \u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\u30EA\u30B9\u30C8\u3092\u51FA\u529B\
     \u3059\u308B.\n\n        \"\"\"\n        return [self.find(x) for x in range(self.n)]\n\
     \n    def refresh(self):\n        for i in range(self.n):\n            _=self.find(i)\n\
-    \n    def __str__(self):\n        return '\\n'.join('{}: {}'.format(r, self.members(r))\
-    \ for r in self.representative())\n\n    def __repr__(self):\n        return self.__str__()\n\
-    \n    def __getitem__(self,index):\n        return self.find(index)\n\n    def\
-    \ __setitem__(self,x,y):\n        self.union(x,y)\n"
+    \n    def __str__(self):\n        return str(self.all_group_members().values())[13:-2]\n\
+    \n    def __repr__(self):\n        return \"Union Find : \"+str(self)\n\n    def\
+    \ __getitem__(self,index):\n        return self.find(index)\n\n    def __setitem__(self,x,y):\n\
+    \        self.union(x,y)\n"
   dependsOn: []
   isVerificationFile: false
   path: Union_Find/Union_Find.py
   requiredBy:
   - Union_Find/Bipartite_Checker.py
-  timestamp: '2022-10-01 20:22:51+09:00'
+  timestamp: '2022-10-27 18:39:37+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/Union_Find.test.py

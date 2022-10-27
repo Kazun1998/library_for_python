@@ -30,7 +30,7 @@ data:
   isVerificationFile: true
   path: test_verify/Union_Find.test.py
   requiredBy: []
-  timestamp: '2022-10-02 03:52:14+09:00'
+  timestamp: '2022-10-27 18:39:37+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/Union_Find.test.py

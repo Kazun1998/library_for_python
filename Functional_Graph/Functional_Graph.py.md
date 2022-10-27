@@ -74,15 +74,15 @@ data:
     \n    def get_inverse(self):\n        return self.__F_inv\n"
   dependsOn: []
   isVerificationFile: false
-  path: Functional_Graph.py
+  path: Functional_Graph/Functional_Graph.py
   requiredBy: []
   timestamp: '1970-01-01 00:00:00+00:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
-documentation_of: Functional_Graph.py
+documentation_of: Functional_Graph/Functional_Graph.py
 layout: document
 redirect_from:
-- /library/Functional_Graph.py
-- /library/Functional_Graph.py.html
-title: Functional_Graph.py
+- /library/Functional_Graph/Functional_Graph.py
+- /library/Functional_Graph/Functional_Graph.py.html
+title: Functional_Graph/Functional_Graph.py
 ---

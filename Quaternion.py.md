@@ -4,10 +4,7 @@ data:
   - icon: ':warning:'
     path: Fraction.py
     title: Fraction.py
-  _extendedRequiredBy:
-  - icon: ':warning:'
-    path: Vector3.py
-    title: Vector3.py
+  _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: py
@@ -70,8 +67,7 @@ data:
   - Fraction.py
   isVerificationFile: false
   path: Quaternion.py
-  requiredBy:
-  - Vector3.py
+  requiredBy: []
   timestamp: '2022-02-12 00:31:19+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

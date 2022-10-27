@@ -44,6 +44,9 @@ data:
       path: Bipart_Matching.py
       title: Bipart_Matching.py
     - icon: ':warning:'
+      path: Bitset.py
+      title: Bitset.py
+    - icon: ':warning:'
       path: Complex.py
       title: Complex.py
     - icon: ':warning:'
@@ -73,9 +76,6 @@ data:
     - icon: ':warning:'
       path: Fraction.py
       title: Fraction.py
-    - icon: ':warning:'
-      path: Functional_Graph.py
-      title: Functional_Graph.py
     - icon: ':warning:'
       path: Gaussian_Integer.py
       title: Gaussian_Integer.py
@@ -121,9 +121,6 @@ data:
     - icon: ':warning:'
       path: Modulo.py
       title: Modulo
-    - icon: ':warning:'
-      path: Monoided_Functional_Graph.py
-      title: Monoided_Functional_Graph.py
     - icon: ':warning:'
       path: MultiSet.py
       title: MultiSet.py
@@ -232,6 +229,17 @@ data:
     - icon: ':warning:'
       path: Flow/Projection_Selection_Problem.py
       title: Flow/Projection_Selection_Problem.py
+  - name: Functional_Graph
+    pages:
+    - icon: ':warning:'
+      path: Functional_Graph/Functional_Graph.py
+      title: Functional_Graph/Functional_Graph.py
+    - icon: ':warning:'
+      path: Functional_Graph/Functional_Graph_Single_Source.py
+      title: Functional_Graph/Functional_Graph_Single_Source.py
+    - icon: ':warning:'
+      path: Functional_Graph/Monoided_Functional_Graph.py
+      title: Functional_Graph/Monoided_Functional_Graph.py
   - name: Geometric
     pages:
     - icon: ':warning:'
@@ -318,6 +326,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: Segment_Tree/Segment_Tree.py
       title: Segment Tree
+  - name: Sorted_Set
+    pages:
+    - icon: ':warning:'
+      path: Sorted_Set/Sorted_Set.py
+      title: Sorted_Set/Sorted_Set.py
   - name: Tree
     pages:
     - icon: ':warning:'

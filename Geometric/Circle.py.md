@@ -23,11 +23,11 @@ data:
     \n#=== \u4EA4\u5DEE\u5224\u5B9A\ndef has_Intersection_between_Circle_and_Segment(C,L,endpoint=True):\n\
     \    \"\"\"\u5186 C \u3068\u7DDA\u5206 L \u306E\u4EA4\u5DEE\u5224\u5B9A\u3092\u884C\
     \u3046.\n\n    \"\"\"\n\n    c=C.center\n    ep=max(C.ep,L.ep)\n    flag1=(compare(\n\
-    \        Distance_betweem_Point_and_Segment(c,L),\n        C.radius,\n       \
+    \        Distance_between_Point_and_Segment(c,L),\n        C.radius,\n       \
     \ ep)<=0)\n    flag2=(compare(max(abs(c-L.begin),abs(c-L.end)),C.radius,ep)>=0)\n\
     \    return flag1 and flag2\n\ndef has_Intersection_between_Circle_and_Line(C,L):\n\
     \    \"\"\"\u5186 C \u3068\u76F4\u7DDA L \u306E\u4EA4\u5DEE\u5224\u5B9A\u3092\u884C\
-    \u3046.\n\n    \"\"\"\n    return compare(\n        Distance_betweem_Point_and_Line(C.center,L),\n\
+    \u3046.\n\n    \"\"\"\n    return compare(\n        Distance_between_Point_and_Line(C.center,L),\n\
     \        C.radius,\n        max(C.ep,L.ep)\n        )<=0\n\ndef has_Intersection_between_Circle_and_Circle(C,D):\n\
     \    \"\"\"2\u3064\u306E\u5186 C,D \u306E\u4EA4\u5DEE\u5224\u5B9A\u3092\u884C\u3046\
     .\n\n    \"\"\"\n\n    r=C.radius; s=D.radius;\n    d=abs(C.center-D.center)\n\
@@ -35,7 +35,7 @@ data:
     \n#=== \u4EA4\u70B9\u3092\u6C42\u3081\u308B\ndef Intersection_between_Circle_and_Line(C,L):\n\
     \    \"\"\" \u5186 C \u3068\u76F4\u7DDA L \u306E\u4EA4\u70B9\u3092\u6C42\u3081\
     \u308B.\n\n    \"\"\"\n\n    if not has_Intersection_between_Circle_and_Line(C,L):\n\
-    \        return []\n\n    H=Projection(C.Center,L)\n    d=Distance_betweem_Point_and_Line(C.Center,L)\n\
+    \        return []\n\n    H=Projection(C.Center,L)\n    d=Distance_between_Point_and_Line(C.Center,L)\n\
     \    x=sqrt(max(C.radius*C.radius-d*d,0))\n    v=L.vectorize(); v.normalization()\n\
     \n    return [H+x*v,H-x*v]\n\ndef Intersection_between_Circle_and_Circle(C,D):\n\
     \    \"\"\" 2\u3064\u306E\u5186 C,D \u306E\u4EA4\u70B9\u3092\u6C42\u3081\u308B\
@@ -80,7 +80,7 @@ data:
   isVerificationFile: false
   path: Geometric/Circle.py
   requiredBy: []
-  timestamp: '2021-10-01 03:13:23+09:00'
+  timestamp: '2022-10-27 18:35:31+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Geometric/Circle.py

@@ -28,15 +28,15 @@ data:
     \n"
   dependsOn: []
   isVerificationFile: false
-  path: Monoided_Functional_Graph.py
+  path: Functional_Graph/Monoided_Functional_Graph.py
   requiredBy: []
-  timestamp: '2022-10-19 02:00:06+09:00'
+  timestamp: '2022-10-27 18:36:50+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
-documentation_of: Monoided_Functional_Graph.py
+documentation_of: Functional_Graph/Monoided_Functional_Graph.py
 layout: document
 redirect_from:
-- /library/Monoided_Functional_Graph.py
-- /library/Monoided_Functional_Graph.py.html
-title: Monoided_Functional_Graph.py
+- /library/Functional_Graph/Monoided_Functional_Graph.py
+- /library/Functional_Graph/Monoided_Functional_Graph.py.html
+title: Functional_Graph/Monoided_Functional_Graph.py
 ---
