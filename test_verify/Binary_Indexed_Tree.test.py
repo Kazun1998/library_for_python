@@ -1,10 +1,5 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/point_add_range_sum
 
-#==================================================
-# Note
-# verify of BIT
-#==================================================
-
 import sys
 sys.path.append('Binary_Indexed_Tree/')
 from Binary_Indexed_Tree import Binary_Indexed_Tree
