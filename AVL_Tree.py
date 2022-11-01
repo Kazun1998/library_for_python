@@ -1,65 +1,24 @@
-""" Referecnces
+"""
+Reference:
 https://yottagin.com/?p=4157
-
-[insert]
-10^5 queries: 500 [ms]
-2 x 10^5 queries: 1000 [ms]
-3 x 10^5 queries: 1200 [ms]
-4 x 10^5 queries: 1600 [ms]
-5 x 10^5 queries: 2000 [ms]
 """
 
+class AVL_Node:
+    def __init__(self, key, value):
+        self.key=key
+        self.value=value
+        self.left=None
+        self.right=None
+        self.height=1
+        self.size=1
+
+    def __str__(self):
+        return "key: {}, value: {}".format(self.key, self.value)
+
+    def __repr__(self):
+        return "[AVL Node]: "+str(self)
+
 class Adelson_Velsky_and_Landis_Tree:
-    class  AVL_Node:
-        def __init__(self, key, value):
-            self.key=key
-            self.value=value
-            self.parent=None
-            self.left=None
-            self.right=None
-            self.height=1
-
-        def __str__(self):
-            return "key: {}, value: {}".format(self.key ,self.value)
-
-        def __repr__(self):
-            return "[AVL Node] "+str(self)
-
-        def get_bias(self):
-            if self is None:
-                return 0
-
-            left=self.left.height if self.left is not None else 0
-            right=self.right.height if self.right is not None else 0
-            return left-right
-
-        def set_height(self):
-            left=self.left.height if self.left is not None else 0
-            right=self.right.height if self.right is not None else 0
-            self.height=1+max(left, right)
-            return
-
-        def set_root(self, T):
-            """ 根を self に設定する (T には AVL Tree を設定) """
-
-            T.root=self
-            if self is not None:
-                self.parent=None
-
-        def set_left(self, node):
-            """ self の左の子に node を設定する. """
-
-            self.left=node
-            if node is not None:
-                node.parent=self
-
-        def set_right(self, node):
-            """ self の右の子に node を設定する. """
-
-            self.right=node
-            if node is not None:
-                node.parent=self
-
     def __init__(self):
         self.root=None
         self.__length=0
@@ -67,223 +26,145 @@ class Adelson_Velsky_and_Landis_Tree:
     def __len__(self):
         return self.__length
 
-    def left_rotation(self, v):
-        p=v.parent
-        a=v.right
-        b=a.left
-
-        if p is not None:
-            if p.key<v.key:
-                p.set_right(a)
-            else:
-                p.set_left(a)
-        else:
-            self.root=a
-            a.parent=None
-
-        a.set_left(v)
-        v.set_right(b)
-
-        if b is not None:
-            b.set_height()
-
-        v.set_height()
-        a.set_height()
-
-    def right_rotation(self, v):
-        p=v.parent
-        a=v.left
-        b=a.right
-
-        if p is not None:
-            if p.key<v.key:
-                p.set_right(a)
-            else:
-                p.set_left(a)
-        else:
-            self.root=a
-            a.parent=None
-
-        a.set_right(v)
-        v.set_left(b)
-
-        if b is not None:
-            b.set_height()
-
-        v.set_height()
-        a.set_height()
-
     def insert(self, key, value=None):
-        if not self.root:
-            self.root=self.AVL_Node(key, value)
+        self.root=self.__insert(self.root, key, value)
+
+    def __insert(self, root, key, value):
+        if not root:
             self.__length+=1
-            return
-
-        history=[]
-        node=self.root
-        while node:
-            history.append(node)
-            if key==node.key:
-                node.value=value
-                return
-            elif key<node.key:
-                node=node.left
-            else:
-                node=node.right
-
-        self.__length+=1
-        new_node=self.AVL_Node(key, value)
-        new_node.parent=history[-1]
-        if key<history[-1].key:
-            history[-1].left=new_node
+            return AVL_Node(key, value)
+        elif key==root.key:
+            root.value=value
+            return root
+        elif key<root.key:
+            root.left=self.__insert(root.left, key, value)
         else:
-            history[-1].right=new_node
+            root.right=self.__insert(root.right, key, value)
 
-        for node in history[::-1]:
-            node.set_height()
-            bias=node.get_bias()
+        root.height=1+max(self.get_height(root.left), self.get_height(root.right))
+        root.size=1+self.get_size(root.left)+self.get_size(root.right)
 
-            flag=0
-            if bias>1:
-                if key<node.left.key:
-                    # Case I : Left Left -> Right Rotation
-                    self.right_rotation(node)
-                else:
-                    # Case II : Left Right -> Left Right Rotation
-                    self.left_rotation(node.left)
-                    self.right_rotation(node)
-                flag=1
-            if bias<-1:
-                if node.right.key<key:
-                    # Case III : Right Right -> Left Rotation
-                    self.left_rotation(node)
-                else:
-                    # Case IV : Right Left -> Right Left Rotation
-                    self.right_rotation(node.right)
-                    self.left_rotation(node)
-                flag=1
+        bias=self.get_bias(root)
 
-            if flag:
-                break
-        return
+        # Case I : Left Left
+        if bias>1 and key<root.left.key:
+            return self.right_rotation(root)
 
-    def discard(self, key):
-        history=[]
-        node=self.root
-        while node:
-            history.append(node)
-            if key==node.key:
-                break
-            elif key<node.key:
-                node=node.left
-            else:
-                node=node.right
+        # Case II : Right Right
+        if bias<-1 and key>root.right.key:
+            return self.left_rotation(root)
 
-        if node is None:
-            return
+        # Case III : Left Right
+        if bias>1 and key>root.left.key:
+            root.left=self.left_rotation(root.left)
+            return self.right_rotation(root)
 
-        par=node.parent
-        if (node.left is None) and (node.right is None):
-            if par is not None:
-                if key<par.key:
-                    par.set_left(None)
-                else:
-                    par.set_right(None)
-            else:
-                self.root=None
-            history.pop()
-        elif node.right is None:
-            if par is not None:
-                if key<par.key:
-                    par.set_left(node.left)
-                else:
-                    par.set_right(node.left)
-            else:
-                node.left.set_root(self)
-            history.pop()
-        elif node.left is None:
-            if par is not None:
-                if key<par.key:
-                    par.set_left(node.right)
-                else:
-                    par.set_right(node.right)
-            else:
-                node.right.set_root(self)
-            history.pop()
+        # Case IV : Right Left
+        if bias<-1 and key<root.right.key:
+            root.right=self.right_rotation(root.right)
+            return self.left_rotation(root)
+
+        return root
+
+    def delete(self, key):
+        self.root=self.__delete(self.root, key)
+
+    def __delete(self, root, key, mode=1):
+        if not root:
+            return root
+        elif key<root.key:
+            root.left=self.__delete(root.left, key, mode)
+        elif key>root.key:
+            root.right=self.__delete(root.right, key, mode)
         else:
-            count=0
-            temp=node.right
-            while temp:
-                history.append(temp)
+            self.__length-=mode
+            if root.left is None:
+                temp=root.right
+                root=None
+                return temp
+            elif root.right is None:
+                temp=root.left
+                root=None
+                return temp
+
+            while temp.left:
                 temp=temp.left
-                count+=1
+            root.key=temp.key
+            root.value=temp.value
+            root.right=self.__delete(root.right, temp.key, mode=0)
 
-            temp=history[-1]
-            if count>1:
-                node.key=temp.key
-                node.value=temp.value
+        if root is None:
+            return root
 
-                temp.parent.set_left(temp.right)
-                history.pop()
-            else:
-                # temp=node.right
-                if par is not None:
-                    if key<par.key:
-                        par.set_left(temp)
-                    else:
-                        par.set_right(temp)
-                else:
-                    temp.set_root(self)
-                temp.set_left(node.left)
+        root.height=1+max(self.get_height(root.left), self.get_height(root.right))
+        root.size=1+self.get_size(root.left)+self.get_size(root.right)
 
-        if not history:
-            return
+        bias=self.get_bias(root)
 
-        node=history[-1]
-        while node:
-            node.set_height()
-            bias=node.get_bias()
+        # Case I : Left Left
+        if bias>1 and self.get_bias(root.left)>=0:
+            return self.right_rotation(root)
 
-            flag=0
-            if bias>1:
-                if node.left.get_bias()>=0:
-                    # Case I : Left Left -> Right Rotation
-                    self.right_rotation(node)
-                else:
-                    # Case II : Left Right -> Left Right Rotation
-                    self.left_rotation(node.left)
-                    self.right_rotation(node)
-                flag=1
-            if bias<-1:
-                if node.right.get_bias()<=0:
-                    # Case III : Right Right -> Left Rotation
-                    self.left_rotation(node)
-                else:
-                    # Case IV : Right Left -> Right Left Rotation
-                    self.right_rotation(node.right)
-                    self.left_rotation(node)
-                flag=1
+        # Case II : Right Right
+        if bias<-1 and self.get_bias(root.right)<=0:
+            return self.left_rotation(root)
 
-            if flag:
-                break
-            node=node.parent
-        return
+        # Case III : Left Right
+        if bias>1 and self.get_bias(root.left)<0:
+            root.left=self.left_rotation(root.left)
+            return self.right_rotation(root)
 
-    def get_min(self):
-        node=self.root
-        while node.left:
-            node=node.left
-        return node.key
+        # Case IV : Right Left
+        if bias<-1 and self.get_bias(root.right)>0:
+            root.right=self.right_rotation(root.right)
+            return self.left_rotation(root)
+        return root
 
-    def get_max(self):
-        node=self.root
-        while node.right:
-            node=node.right
-        return node.key
+    def left_rotation(self, x):
+        y=x.right
+        z=y.left
 
-    def __yield__(self):
-        if self.root is None:
-            return
+        y.left=x
+        x.right=z
+
+        x.height=1+max(self.get_height(x.left), self.get_height(x.right))
+        y.height=1+max(self.get_height(y.left), self.get_height(y.right))
+
+        x.size=1+self.get_size(x.left)+self.get_size(x.right)
+        y.size=1+self.get_size(y.left)+self.get_size(y.right)
+
+        return y
+
+    def right_rotation(self, x):
+        y=x.left
+        z=y.right
+
+        y.right=x
+        x.left=z
+
+        x.height=1+max(self.get_height(x.left), self.get_height(x.right))
+        y.height=1+max(self.get_height(y.left), self.get_height(y.right))
+
+        x.size=1+self.get_size(x.left)+self.get_size(x.right)
+        y.size=1+self.get_size(y.left)+self.get_size(y.right)
+
+        return y
+
+    def get_height(self, root):
+        if not root:
+            return 0
+        return root.height
+
+    def get_bias(self, root):
+        if not root:
+            return 0
+        return self.get_height(root.left)-self.get_height(root.right)
+
+    def get_size(self, node):
+        if not node:
+            return 0
+        else:
+            return node.size
 
     def next(self, key, equal=True, default=None):
         """ key 以上で最小のキーを探す. """
@@ -299,7 +180,7 @@ class Adelson_Velsky_and_Landis_Tree:
                 return key
             if key<node.key:
                 if flag:
-                    x=min(x,node.key)
+                    x=min(x, node.key)
                 else:
                     x=node.key
                     flag=1
@@ -322,7 +203,7 @@ class Adelson_Velsky_and_Landis_Tree:
                 return key
             if node.key<key:
                 if flag:
-                    x=max(x,node.key)
+                    x=max(x, node.key)
                 else:
                     x=node.key
                     flag=1
@@ -331,14 +212,102 @@ class Adelson_Velsky_and_Landis_Tree:
                 node=node.left
         return x
 
+    def kth_element(self, k):
+        """ k (0-indexed) 番目に小さいキー (k<0 のときは (-k)-1 番目に大きいキー (リストのインデックスと同様))"""
+
+        if k<0:
+            k+=len(self)
+
+        assert 0<=k<len(self)
+
+        node=self.root
+        while True:
+            t=self.get_size(node.left)
+            if t==k:
+                return node.key
+            elif k<t:
+                node=node.left
+            else:
+                k-=t+1
+                node=node.right
+
+    def __setitem__(self, key, value):
+        self.insert(key, value)
+
+    def __getitem__(self, key):
+        node=self.root
+        while node:
+            if key==node.key:
+                return node.value
+            if key<node.key:
+                node=node.left
+            else:
+                node=node.right
+        raise KeyError(key)
+
+    def get(self, key, default=None):
+        node=self.root
+        while node:
+            if key==node.key:
+                return node.value
+            if key<node.key:
+                node=node.left
+            else:
+                node=node.right
+        return default
+
     def __contains__(self, key):
         node=self.root
-
         while node:
-            if node.key==key:
+            if key==node.key:
                 return True
-            elif key<node.key:
+            if key<node.key:
                 node=node.left
             else:
                 node=node.right
         return False
+
+    def get_min(self, default=None):
+        if self.root is None:
+            return default
+
+        node=self.root
+        while node.left:
+            node=node.left
+        return node.key
+
+    def get_max(self, default=None):
+        if self.root is None:
+            return default
+
+        node=self.root
+        while node.right:
+            node=node.right
+        return node.key
+
+    def keys(self):
+        def dfs(node):
+            if node is None:
+                return
+            dfs(node.left)
+            X.append(node.key)
+            dfs(node.right)
+
+        X=[]
+        dfs(self.root)
+        return X
+
+def debug(T):
+    def print_node(node, n=0):
+        if not node:
+            return
+
+        print_node(node.right, n+1)
+        print(" "*(4*n), node.key, "(", node.size, ")", )
+        print_node(node.left, n+1)
+
+    print_node(T.root)
+
+T=Adelson_Velsky_and_Landis_Tree()
+for a in range(30):
+    T.insert(a)
