@@ -3,6 +3,7 @@
 #==================================================
 from Binary_Indexed_Tree.Binary_Indexed_Tree import Binary_Indexed_Tree
 
+import sys
 input=sys.stdin.readline
 write=sys.stdout.write
 #==================================================
