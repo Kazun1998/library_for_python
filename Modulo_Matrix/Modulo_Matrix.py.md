@@ -8,9 +8,11 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
-    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
+    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
+    \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "from copy import deepcopy\n\nclass Modulo_Matrix():\n    __slots__=(\"ele\"\
     ,\"row\",\"col\",\"size\")\n\n    #\u5165\u529B\n    def __init__(self,M):\n \
@@ -19,16 +21,14 @@ data:
     \u3089\u6307\u5B9A\n        \"\"\"\n\n        self.ele=[[x%Mod for x in X] for\
     \ X in M]\n        R=len(M)\n        if R!=0:\n            C=len(M[0])\n     \
     \   else:\n            C=0\n        self.row=R\n        self.col=C\n        self.size=(R,C)\n\
-    \n    #\u51FA\u529B\n    def __str__(self):\n        T=\"\"\n        (r,c)=self.size\n\
-    \        for i in range(r):\n            U=\"[\"\n            for j in range(c):\n\
-    \                U+=str(self.ele[i][j])+\" \"\n            T+=U[:-1]+\"]\\n\"\n\
-    \n        return \"[\"+T[:-1]+\"]\"\n\n    def __repr__(self):\n        return\
-    \ str(self)\n\n    #+,-\n    def __pos__(self):\n        return self\n\n    def\
-    \ __neg__(self):\n        return self.__scale__(-1)\n\n    #\u52A0\u6CD5\n   \
-    \ def __add__(self,other):\n        M=self.ele; N=other.ele\n\n        L=[[0]*self.col\
-    \ for _ in range(self.row)]\n        for i in range(self.row):\n            Li,Mi,Ni=L[i],M[i],N[i]\n\
-    \            for j in range(self.col):\n                Li[j]=Mi[j]+Ni[j]\n  \
-    \      return Modulo_Matrix(L)\n\n    def __iadd__(self,other):\n        M=self.ele;\
+    \n    #\u51FA\u529B\n    def __str__(self):\n        return \"[\"+\"\\n\".join(map(str,self.ele))+\"\
+    ]\"\n\n    def __repr__(self):\n        return str(self)\n\n    #+,-\n    def\
+    \ __pos__(self):\n        return self\n\n    def __neg__(self):\n        return\
+    \ self.__scale__(-1)\n\n    #\u52A0\u6CD5\n    def __add__(self,other):\n    \
+    \    M=self.ele; N=other.ele\n\n        L=[[0]*self.col for _ in range(self.row)]\n\
+    \        for i in range(self.row):\n            Li,Mi,Ni=L[i],M[i],N[i]\n    \
+    \        for j in range(self.col):\n                Li[j]=Mi[j]+Ni[j]\n      \
+    \  return Modulo_Matrix(L)\n\n    def __iadd__(self,other):\n        M=self.ele;\
     \ N=other.ele\n\n        for i in range(self.row):\n            Mi,Ni=M[i],N[i]\n\
     \            for j in range(self.col):\n                Mi[j]+=Ni[j]\n       \
     \         Mi[j]%=Mod\n        return self\n\n    #\u6E1B\u6CD5\n    def __sub__(self,other):\n\
@@ -118,41 +118,61 @@ data:
     \n    #\u5217\u306E\u7D50\u5408\n    def column_union(self,other):\n        E=[]\n\
     \        for i in range(self.row):\n            E.append(self.ele[i]+other.ele[i])\n\
     \n        return Modulo_Matrix(E)\n\n    def __getitem__(self,index):\n      \
-    \  assert isinstance(index,tuple) and len(index)==2\n        return self.ele[index[0]][index[1]]\n\
-    \n    def __setitem__(self,index,val):\n        assert isinstance(index,tuple)\
-    \ and len(index)==2\n        self.ele[index[0]][index[1]]=val\n\n#=================================================\n\
-    #\u5358\u4F4D\u884C\u5217\ndef Identity_Matrix(n):\n    return Modulo_Matrix([[1*(i==j)\
-    \ for j in range(n)] for i in range(n)])\n\n#\u96F6\u884C\u5217\ndef Zero_Matrix(r,c):\n\
-    \    return Modulo_Matrix([[0]*c for i in range(r)])\n\n#\u6B63\u65B9\u884C\u5217\
-    ?\ndef Is_Square(M):\n    return M.row==M.col\n\n#\u5BFE\u89D2\u884C\u5217\ndef\
-    \ Diagonal_Matrix(A):\n    \"\"\" A\u306E\u7B2C i \u8981\u7D20\u304C (i,i) \u6210\
-    \u5206\u3067\u3042\u308B\u5BFE\u89D2\u884C\u5217\u3092\u751F\u6210\u3059\u308B\
-    .\n\n    A: \u30EA\u30B9\u30C8\n    \"\"\"\n    N=len(A)\n    T=[[A[i] if i==j\
-    \ else 0 for j in range(N)] for i in range(N)]\n    return Modulo_Matrix(T)\n\n\
-    #\u884C\u5217\u306E\u76F4\u548C\ndef Direct_Sum(*A):\n    \"\"\" A=[A_0, A_1,\
+    \  if isinstance(index, int):\n            return self.ele[index]\n        else:\n\
+    \            return self.ele[index[0]][index[1]]\n\n    def __setitem__(self,index,val):\n\
+    \        assert isinstance(index,tuple) and len(index)==2\n        self.ele[index[0]][index[1]]=val\n\
+    \n#=================================================\n#\u5358\u4F4D\u884C\u5217\
+    \ndef Identity_Matrix(N):\n    \"\"\" N \u6B21\u5358\u4F4D\u884C\u5217\u3092\u4F5C\
+    \u6210\u3059\u308B. \"\"\"\n\n    return Modulo_Matrix([[1 if i==j else 0 for\
+    \ j in range(N)] for i in range(N)])\n\n#\u96F6\u884C\u5217\ndef Zero_Matrix(row,\
+    \ col):\n    \"\"\" row \u884C col \u5217\u306E\u30BC\u30ED\u884C\u5217\u3092\u4F5C\
+    \u6210\u3059\u308B. \"\"\"\n\n    return Modulo_Matrix([[0]*col for i in range(row)])\n\
+    \n#\u6B63\u65B9\u884C\u5217?\ndef Is_Square(M):\n    return M.row==M.col\n\n#\u5BFE\
+    \u89D2\u884C\u5217\ndef Diagonal_Matrix(D):\n    \"\"\" D \u306E\u7B2C i \u8981\
+    \u7D20\u304C (i,i) \u6210\u5206\u3067\u3042\u308B\u5BFE\u89D2\u884C\u5217\u3092\
+    \u751F\u6210\u3059\u308B.\n\n    D: \u30EA\u30B9\u30C8\n    \"\"\"\n\n    N=len(D)\n\
+    \    return Modulo_Matrix([[D[i] if i==j else 0 for j in range(N)] for i in range(N)])\n\
+    \n#\u884C\u5217\u306E\u76F4\u548C\ndef Direct_Sum(*A):\n    \"\"\" A=[A_0, A_1,\
     \ ..., A_{N-1}] \u306B\u5BFE\u3059\u308B\u76F4\u548C\u884C\u5217\u3092\u6C42\u3081\
     \u308B.\n\n    \"\"\"\n\n    r=c=0\n    for a in A:\n        r+=a.row\n      \
     \  c+=a.col\n\n    M=[[0]*c for _ in range(r)]\n    x=y=0\n    for p in range(len(A)):\n\
     \        a=A[p]\n        for i in range(a.row):\n            b=A[p].ele[i]\n \
     \           m=M[x+i]\n            for j in range(a.col):\n                m[y+j]=b[j]\n\
-    \        x+=a.row; y+=a.col\n    return Modulo_Matrix(M)\n\n#\u8DE1\ndef Trace(M):\n\
-    \    assert Is_Square(M)\n\n    T=0\n    for i in range(len(M.ele)):\n       \
-    \ T+=M.ele[i][i]\n        T%=Mod\n    return T\n\ndef Determinant(M):\n    assert\
-    \ Is_Square(M)\n\n    N=M.row\n    T=deepcopy(M.ele)\n    det=1\n\n    for j in\
-    \ range(N):\n        if T[j][j]==0:\n            for i in range(j+1,N):\n    \
-    \            if T[i][j]:\n                    break\n            else:\n     \
-    \           return 0\n            T[j],T[i]=T[i],T[j]\n            det=-det\n\
-    \        Tj=T[j]\n        inv=pow(Tj[j],Mod-2,Mod)\n        for i in range(j+1,N):\n\
-    \            Ti=T[i]\n            c=-inv*Ti[j]%Mod\n            for k in range(N):\n\
-    \                Ti[k]+=c*Tj[k]\n                Ti[k]%=Mod\n\n    for i in range(N):\n\
-    \        det*=T[i][i]\n        det%=Mod\n    return det\n\ndef Characteristic_Polynomial(M):\n\
-    \    \"\"\" M \u306E\u56FA\u6709\u591A\u9805\u5F0F\u3092 sum(P[i] X^i) \u3068\u3057\
-    \u305F\u3068\u304D, P \u3092\u6C42\u3081\u308B.\n\n    M: Modulo Matrix\n    \"\
-    \"\"\n\n    T=deepcopy(M.ele)\n    N=M.row\n\n    for j in range(N-2):\n     \
-    \   for i in range(j+1, N):\n            if T[i][j]:\n                break\n\
-    \        else:\n            continue\n\n        T[j+1],T[i]=T[i],T[j+1]\n    \
-    \    for k in range(N):\n            T[k][j+1],T[k][i]=T[k][i],T[k][j+1]\n\n \
-    \       if T[j+1][j]:\n            Tjj=T[j+1]\n            inv=pow(Tjj[j], Mod-2,Mod)\n\
+    \        x+=a.row; y+=a.col\n    return Modulo_Matrix(M)\n\n#\u30AF\u30ED\u30CD\
+    \u30C3\u30AB\u30FC\u7A4D\ndef Kronecker_Product(*X):\n    A=[[1]]\n    for B in\
+    \ X:\n        A=[[A[i//B.row][j//B.col]*B[i%B.row][j%B.col]%Mod for j in range(len(A[0])*B.col)]\
+    \ for i in range(len(A)*B.row)]\n    return Modulo_Matrix(A)\n\n#\u30AF\u30ED\u30CD\
+    \u30C3\u30AB\u30FC\u548C\ndef Kronecker_Sum(*X):\n    A=Modulo_Matrix([[0]])\n\
+    \    for B in X:\n        A=Kronecker_Product(A, Identity_Matrix(B.row))+Kronecker_Product(Identity_Matrix(A.row),B)\n\
+    \    return A\n\n#\u8DE1\ndef Trace(M):\n    \"\"\" \u6B63\u65B9\u884C\u5217 M\
+    \ \u306E\u8DE1 (=\u5BFE\u89D2\u6210\u5206\u306E\u548C) \u3092\u6C42\u3081\u308B\
+    . \"\"\"\n\n    assert Is_Square(M)\n\n    T=0\n    for i in range(M.row):\n \
+    \       T+=M.ele[i][i]\n        T%=Mod\n    return T\n\ndef Determinant(M):\n\
+    \    \"\"\" \u6B63\u65B9\u884C\u5217 M \u306E\u884C\u5217\u5F0F (\u7D20\u6570\
+    \ mod) \u3092\u6C42\u3081\u308B.\"\"\"\n\n    assert Is_Square(M)\n\n    N=M.row\n\
+    \    T=deepcopy(M.ele)\n    det=1\n\n    for j in range(N):\n        if T[j][j]==0:\n\
+    \            for i in range(j+1,N):\n                if T[i][j]:\n           \
+    \         break\n            else:\n                return 0\n            T[j],T[i]=T[i],T[j]\n\
+    \            det=-det\n        Tj=T[j]\n        inv=pow(Tj[j],Mod-2,Mod)\n   \
+    \     for i in range(j+1,N):\n            Ti=T[i]\n            c=-inv*Ti[j]%Mod\n\
+    \            for k in range(N):\n                Ti[k]+=c*Tj[k]\n            \
+    \    Ti[k]%=Mod\n\n    for i in range(N):\n        det*=T[i][i]\n        det%=Mod\n\
+    \    return det\n\ndef Determinant_Arbitrary_Mod(A):\n    \"\"\" \u6B63\u65B9\u884C\
+    \u5217 M \u306E\u884C\u5217\u5F0F (\u4EFB\u610F mod) \u3092\u6C42\u3081\u308B\
+    .\"\"\"\n\n    N=A.row\n    A=deepcopy(A.ele)\n    det=1\n\n    for i in range(N):\n\
+    \        Ai=A[i]\n        for j in range(i+1, N):\n            Aj=A[j]\n     \
+    \       while Aj[i]:\n                alpha=Ai[i]//Aj[i]\n                if alpha:\n\
+    \                    for k in range(i, N):\n                        Ai[k]-=alpha*Aj[k]\n\
+    \                        Ai[k]%=Mod\n                A[i], A[j]=A[j], A[i]\n \
+    \               Ai=A[i]; Aj=A[j]\n                det*=-1\n        det*=Ai[i]\n\
+    \        det%=Mod\n        if det==0:\n            break\n    return det\n\ndef\
+    \ Characteristic_Polynomial(M):\n    \"\"\" M \u306E\u56FA\u6709\u591A\u9805\u5F0F\
+    \u3092 sum(P[i] X^i) \u3068\u3057\u305F\u3068\u304D, P \u3092\u6C42\u3081\u308B\
+    .\n\n    M: Modulo Matrix\n    \"\"\"\n\n    T=deepcopy(M.ele)\n    N=M.row\n\n\
+    \    for j in range(N-2):\n        for i in range(j+1, N):\n            if T[i][j]:\n\
+    \                break\n        else:\n            continue\n\n        T[j+1],T[i]=T[i],T[j+1]\n\
+    \        for k in range(N):\n            T[k][j+1],T[k][i]=T[k][i],T[k][j+1]\n\
+    \n        if T[j+1][j]:\n            Tjj=T[j+1]\n            inv=pow(Tjj[j], Mod-2,Mod)\n\
     \            for i in range(j+2, N):\n                Ti=T[i]\n              \
     \  c=inv*Ti[j]%Mod\n                for k in range(j,N):\n                   \
     \ Ti[k]-=c*Tjj[k]\n                    Ti[k]%=Mod\n\n                for k in\
@@ -164,7 +184,8 @@ data:
     \ p%=Mod\n            c=p*T[j][i]%Mod\n            for k in range(j+1):\n    \
     \            P[k]+=c*dp[j][k]\n                P[k]%=Mod\n    P=dp[-1]\n    for\
     \ i in range(N+1):\n        if i%2:\n            P[~i]*=-1; P[~i]%=Mod\n    return\
-    \ P\n\n#===\nMod=998244353\n"
+    \ P\n\n#===\nMod=998244353\nA=[\n    [1,0,0,0],\n    [0,1,0,0],\n    [1,0,1,1],\n\
+    \    [0,1,0,0],\n    [0,0,1,0]]\nA=Modulo_Matrix(A)\nprint(A.row_reduce())\n"
   dependsOn: []
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py

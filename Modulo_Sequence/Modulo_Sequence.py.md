@@ -9,9 +9,11 @@ data:
   attributes:
     links:
     - https://judge.yosupo.jp/submission/28692
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
-    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
+    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
+    \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "from Modulo_Polynominal import *\n\n#===\u6F38\u5316\u5F0F\ndef Nth_Term_of_Linearly_Recurrent_Sequence(A,C,N,offset=0):\n\
     \    \"\"\" A[i]=C[0]*A[i-1]+C[1]*A[i-2]+...+C[d-1]*A[i-d] \u3067\u8868\u3055\u308C\
@@ -114,8 +116,187 @@ data:
   verifiedWith: []
 documentation_of: Modulo_Sequence/Modulo_Sequence.py
 layout: document
-redirect_from:
-- /library/Modulo_Sequence/Modulo_Sequence.py
-- /library/Modulo_Sequence/Modulo_Sequence.py.html
-title: Modulo_Sequence/Modulo_Sequence.py
+title: Modulo Sequence
 ---
+
+## Outline
+
+線形漸化式で表された数列に関する計算を行う.
+
+## Theory
+
+### 線形漸化式の第 $N$ 項
+
+数列 $A=(A_n)$ は漸化式
+
+$$A_n=\sum_{k=0}^{d-1} C_k A_{n-k-1} \quad (n \geq d)$$
+
+を満たしているとする.
+
+このとき, 形式的ベキ級数 $Q$, 多項式 $P$ をそれぞれ
+
+- $Q(X)=1-C_0 X-C_1 X^2-\dots-C_{d-1} X^d$
+- $P(X)=(A_0+A_1 X+\dots+A_{d-1} X^{d-1}) Q(X) \pmod{X^d}$
+
+とすると, 任意の非負整数 $n$ において,
+
+$$A_n=\left[X^n \right] \dfrac{P(X)}{Q(X)}$$
+
+となる.
+
+## Contents
+
+---
+
+### Nth_Term_of_Linearly_Recurrent_Sequence
+
+```Pyhon
+Nth_Term_of_Linearly_Recurrent_Sequence(A, C, N, offset=0)
+```
+
+- $A,C$ の長さを $d$ とする.
+- 線形漸化式 $\displaystyle A_n=\sum_{k=0}^{d-1} C_k A_{n-k-1} \quad (n \geq d)$ で表される整数列 $A=(A_i)$ の第 $N$ 項 $A_N$ を求める.
+- **制約**
+  - $A$ と $C$ の長さは等しい.
+- **計算量** : $O(d \log d \log N)$ Time.
+
+---
+
+### Find_Linear_Recurrence
+
+```Python
+Find_Linear_Recurrence(A)
+```
+
+- 整数列 $A=(A_0, \dots, A_{N-1})$ が見たす最小の次数の漸化式を求める.
+
+---
+
+### Fibonacci
+
+```Python
+Fibonacci(N)
+```
+
+- 以下で定義される Fibonacci 数列 $F=(F_n)$ の第 $N$ 項を求める.
+  - $F_0=0, F_1=1$
+  - $F_n=F_{n-1}+F_{n-2} \quad (n \geq 2)$
+- **計算量** : $O(\log N)$ Time.
+
+---
+
+### Lucas
+
+```Python
+Lucas(N)
+```
+
+- 以下で定義される Lucas 数列 $L=(L_n)$ の第 $N$ 項を求める.
+  - $L_0=2, L_1=1$
+  - $L_n=L_{n-1}+L_{n-2} \quad (n \geq 2)$
+- **計算量** : $O(\log N)$ Time.
+
+---
+
+### Cumulative
+
+```Python
+Cumulative(A,N)
+```
+
+- $A$ の長さを $d$ とする. 以下で定義される数列 $B=(B_n)$ の第 $N$ 項を求める.
+  - $B_n=A_n \quad (0 \leq n \leq d-1)$
+  - $B_n=B_{n-1}+B_{n-2}+\dots+B_{n-d} \quad (n \geq d)$
+- **計算量** : $A$ の長さを $d$ として, $O(d \log d \log N)$ Time.
+
+---
+
+### Factorial_Modulo
+
+```Python
+Factorial_Modulo(N)
+```
+
+- $N! \pmod{{\rm mod}}$ を求める.
+
+- **計算量** : $O(\sqrt{N} (\log N)^2)$ Time.
+
+---
+
+### Bernoulli
+
+```Python
+Bernoulli(N, mode=0)
+```
+
+- Bernoulli 数を求める.
+- ${\rm mode}=0$ ならば, $B_N$ のみ, ${\rm mode}=1$ ならば, $B_0, \dots, B_N$ からなるリスト.
+- **計算量** : $O(N \log N)$ TIme.
+
+---
+
+### PartitionsP
+
+```Python
+PartitionsP(N, mode=0)
+```
+
+- 以下で定義される $P_k$ を求める.
+  - 整数 $k$ を順番を考慮せずに自然数の和にわける場合の数
+- ${\rm mode}=0$ ならば, $P_N$ のみ, ${\rm mode}=1$ ならば, $P_0, \dots, P_N$ からなるリスト.
+- **計算量** : $O(N \log N)$ TIme.
+
+---
+
+### PartitionsQ
+
+```Python
+PartitionsQ(N, mode=0)
+```
+
+- 以下で定義される $Q_k$ を求める.
+  - 整数 $k$ を相異なる自然数の和にわける場合の数
+- ${\rm mode}=0$ ならば, $Q_N$ のみ, ${\rm mode}=1$ ならば, $Q_0, \dots, Q_N$ からなるリスト.
+- **計算量** : $O(N \log N)$ TIme.
+
+---
+
+### Stirling_1st
+
+``` Python
+Stirling_1st(N)
+```
+
+- $k=0,1,\dots,N$ に対する第 I 種スターリング数 $\begin{bmatrix} n \\ k \end{bmatrix}$ を求める.
+- **計算量** : $O(N (\log N)^2)$ Time ?
+
+### Stirling_2nd
+
+``` Python
+Stirling_2nd(N)
+```
+
+- $k=0,1,\dots,N$ に対する第 II 種スターリング数 $\begin{Bmatrix} n \\ k \end{Bmatrix}$ を求める.
+- **計算量** : $O(N \log N)$ Time.
+
+### Bell
+
+```Pythoon
+Bell(N, mode=0)
+```
+
+- 次の式で定義される Bell 数 $B_n$ を求める. $$\displaystyle \sum_{n=0}^\infty B_n x^n=\exp(\exp(x)-1)$$
+
+- ${\rm mode}=0$ ならば, $B_N$ のみ, ${\rm mode}=1$ ならば, $B_0, \dots, B_N$ からなるリスト.
+- **計算量** : $O(N \log N)$ TIme.
+
+### Motzkin
+
+```Pythoon
+Motzkin(N, mode=0)
+```
+
+- 次の式で定義される Motzkin 数 $M_n$ を求める. $$\displaystyle \sum_{n=0}^\infty M_n x^n=\dfrac{1-x-\sqrt{1-2x-3x^2}}{2x^2}$$
+
+- ${\rm mode}=0$ ならば, $M_N$ のみ, ${\rm mode}=1$ ならば, $M_0, \dots, M_N$ からなるリスト.
+- **計算量** : $O(N \log N)$ TIme.

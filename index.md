@@ -1,42 +1,11 @@
 ---
 data:
   libraryCategories:
-  - name: Binary_Indexed_Tree
-    pages:
-    - icon: ':warning:'
-      path: Binary_Indexed_Tree/Binary_Indexed_Tree.py
-      title: Binary Indexed Tree (Fenwick Tree)
-    - icon: ':warning:'
-      path: Binary_Indexed_Tree/Binary_Indexed_Tree_2D.py
-      title: Binary_Indexed_Tree/Binary_Indexed_Tree_2D.py
-    - icon: ':warning:'
-      path: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
-      title: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
-    - icon: ':warning:'
-      path: Binary_Indexed_Tree/Sparse_Binary_Indexed_Tree.py
-      title: Binary_Indexed_Tree/Sparse_Binary_Indexed_Tree.py
-  - name: Binary_Search
-    pages:
-    - icon: ':warning:'
-      path: Binary_Search/Count.py
-      title: Binary_Search/Count.py
-    - icon: ':warning:'
-      path: Binary_Search/Find.py
-      title: Binary_Search/Find.py
-    - icon: ':warning:'
-      path: Binary_Search/General.py
-      title: Binary_Search/General.py
-    - icon: ':warning:'
-      path: Binary_Search/Index.py
-      title: Binary_Search/Index.py
-    - icon: ':warning:'
-      path: Binary_Search/Ternary.py
-      title: Binary_Search/Ternary.py
-    - icon: ':warning:'
-      path: Binary_Search/Value.py
-      title: Binary_Search/Value.py
   - name: .
     pages:
+    - icon: ':warning:'
+      path: AVL_Tree.py
+      title: AVL_Tree.py
     - icon: ':warning:'
       path: Binary_Trie.py
       title: Binary_Trie.py
@@ -193,6 +162,40 @@ data:
     - icon: ':warning:'
       path: XOR_Vector_Space.py
       title: XOR_Vector_Space.py
+  - name: Binary_Indexed_Tree
+    pages:
+    - icon: ':warning:'
+      path: Binary_Indexed_Tree/Binary_Indexed_Tree.py
+      title: Binary Indexed Tree (Fenwick Tree)
+    - icon: ':warning:'
+      path: Binary_Indexed_Tree/Binary_Indexed_Tree_2D.py
+      title: Binary_Indexed_Tree/Binary_Indexed_Tree_2D.py
+    - icon: ':warning:'
+      path: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
+      title: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
+    - icon: ':warning:'
+      path: Binary_Indexed_Tree/Sparse_Binary_Indexed_Tree.py
+      title: Binary_Indexed_Tree/Sparse_Binary_Indexed_Tree.py
+  - name: Binary_Search
+    pages:
+    - icon: ':warning:'
+      path: Binary_Search/Count.py
+      title: Binary_Search/Count.py
+    - icon: ':warning:'
+      path: Binary_Search/Find.py
+      title: Binary_Search/Find.py
+    - icon: ':warning:'
+      path: Binary_Search/General.py
+      title: Binary_Search/General.py
+    - icon: ':warning:'
+      path: Binary_Search/Index.py
+      title: Binary_Search/Index.py
+    - icon: ':warning:'
+      path: Binary_Search/Ternary.py
+      title: Binary_Search/Ternary.py
+    - icon: ':warning:'
+      path: Binary_Search/Value.py
+      title: Binary_Search/Value.py
   - name: Convolution
     pages:
     - icon: ':warning:'
@@ -247,7 +250,7 @@ data:
       title: Geometric/Advance.py
     - icon: ':warning:'
       path: Geometric/Affine.py
-      title: Geometric/Affine.py
+      title: Affine
     - icon: ':warning:'
       path: Geometric/Circle.py
       title: Circle
@@ -306,7 +309,7 @@ data:
       title: Modulo Polynominal
     - icon: ':warning:'
       path: Modulo_Sequence/Modulo_Sequence.py
-      title: Modulo_Sequence/Modulo_Sequence.py
+      title: Modulo Sequence
   - name: Ordered_Set
     pages:
     - icon: ':warning:'

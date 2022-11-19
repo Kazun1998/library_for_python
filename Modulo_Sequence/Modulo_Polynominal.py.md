@@ -18,9 +18,11 @@ data:
     - https://judge.yosupo.jp/submission/42413
     - https://judge.yosupo.jp/submission/72676
     - https://opt-cp.com/fps-fast-algorithms/
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
-    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n  File \"/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/onlinejudge_verify/languages/python.py\"\
+    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
+    \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "class Modulo_Polynominal():\n    __slots__=(\"Poly\", \"max_degree\")\n\n\
     \    def __init__(self, Poly=[], max_degree=2*10**5):\n        \"\"\" \u591A\u9805\
@@ -610,3 +612,33 @@ $$\left[X^0 \right] \dfrac{P(X)}{Q(X)}=\dfrac{\left[X^0 \right] P}{\left[X^0 \ri
 よって, $d$ 次の多項式の積を $O(\log N)$ 回求めることによって, $\displaystyle \left[X^N \right] \dfrac{P(X)}{Q(X)}$ を求めることができる.
 
 この多項式の積を求めるパートがボトルネックになるから, 計算量は $O(d \log d \log N)$ Time である.
+
+### 多点評価
+
+$N$ 次の多項式 $P \in \mathbb{F}_p[X]$ と $M$ 個の整数 $\alpha_1, \dots, \alpha_M$ に対して, $P(\alpha_1), \dots, P(\alpha_M)$ を求める.
+
+次の2つの定理を利用して求めることにする.
+
+> 剰余の定理
+>
+> $R$ を可換環とする. 多項式 $P \in R[X]$ と $\alpha$ に対して,
+> $$P(\alpha)=P(X) \pmod {(X-\alpha)}$$
+> が成り立つ.
+
+> 中国剰余定理
+>
+> $R$ を環, $I_1, \dots, I_k \subset R$ は $R$ のイデアルで, どの2つも互いに素であるとする. このとき,
+> $$\displaystyle \prod_{i=1}^k R/I_i \simeq R/(I_1 \cap \dots \cap I_k)$$
+> である.
+>
+> なお, $R$ が可換環の場合は
+> $$I_1 \cap \dots \cap I_k=I_1 \dots I_k$$
+> である.
+
+これらの定理から,
+$$P(X) \pmod{(X-\alpha_1) \dots (X-\alpha_M)}$$
+を求め,
+
+$$(F \pmod{GH}) \pmod{H}=F \pmod{H}$$
+
+を利用して除式の次数を半分にしながら最終的に $P(X) \pmod{(X-\alpha_j)}$ を求める.
