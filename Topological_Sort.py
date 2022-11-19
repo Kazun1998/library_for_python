@@ -1,27 +1,45 @@
 class Topological_Sort:
     __slots__=("N","__arc","__rev")
     def __init__(self, N: int):
-        """ N 頂点からなる空グラフを用意する.
+        """ N 頂点からなる空グラフを生成する.
 
-        N: int
+        N: 頂点数
         """
+
         self.N=N
         self.__arc=[[] for _ in  range(N)]
         self.__rev=[[] for _ in range(N)]
 
     def add_arc(self, source: int, target: int):
-        """ 有向辺 source → taeget を追加する.
+        """ 有向辺 source -> target を追加する.
 
+        source: 始点
+        target: 終点
         """
         self.__arc[source].append(target)
         self.__rev[target].append(source)
 
-    def sort(self):
-        """ トポロジカルソートを求める.
+    def add_vertex(self):
+        res=self.N
+        self.N+=1
+        self.__arc.append([])
+        self.__rev.append([])
+        return res
 
-        [Ouput]
-        存在する → トポロジカルソート (source 側がリストの先頭)
-        存在しない → None
+    def add_arc_multiple(self, sources, targets):
+        v=self.add_vertex()
+        for u in sources:
+            self.add_arc(u,v)
+
+        for w in targets:
+            self.add_arc(v,w)
+
+        return v
+
+    def sort(self):
+        """ トポロジカルソートを求める
+
+        存在するならばトポロジカルソートをしたリスト, 存在しないならば None
         """
 
         in_deg=[len(self.__rev[x]) for x in range(self.N)]
@@ -40,8 +58,11 @@ class Topological_Sort:
         return S if len(S)==self.N else None
 
     def is_DAG(self):
-        """ DAG かどうかを判定する.
+        """ DAG がどうかを判定する
+
+        DAG ならば True, 非 DAG ならば False
         """
+
         in_deg=[len(self.__rev[x]) for x in range(self.N)]
         Q=[x for x in range(self.N) if in_deg[x]==0]
 
