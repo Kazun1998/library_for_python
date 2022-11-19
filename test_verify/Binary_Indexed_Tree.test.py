@@ -1,11 +1,12 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/point_add_range_sum
 
-from Binary_Indexed_Tree.Binary_Indexed_Tree import Binary_Indexed_Tree
-
+#==================================================
 import sys
+sys.path.append('Binary_Indexed_Tree/')
+from  Binary_Indexed_Tree import Binary_Indexed_Tree
+
 input=sys.stdin.readline
 write=sys.stdout.write
-
 #==================================================
 def verify():
     from operator import add,neg
