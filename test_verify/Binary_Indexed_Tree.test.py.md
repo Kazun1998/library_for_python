@@ -17,8 +17,9 @@ data:
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/point_add_range_sum\n\
-    \nfrom Binary_Indexed_Tree.Binary_Indexed_Tree import Binary_Indexed_Tree\n\n\
-    import sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n#==================================================\n\
+    \n#==================================================\nimport sys\nsys.path.append('Binary_Indexed_Tree/')\n\
+    from  Binary_Indexed_Tree import Binary_Indexed_Tree\n\ninput=sys.stdin.readline\n\
+    write=sys.stdout.write\n#==================================================\n\
     def verify():\n    from operator import add,neg\n\n    N,Q=map(int,input().split())\n\
     \    A=list(map(int,input().split()))\n    B=Binary_Indexed_Tree(A,add,0,neg)\n\
     \n    Ans=[]\n    for q in range(Q):\n        mode,*query=map(int,input().split())\n\
