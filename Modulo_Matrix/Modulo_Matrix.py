@@ -23,15 +23,7 @@ class Modulo_Matrix():
 
     #出力
     def __str__(self):
-        T=""
-        (r,c)=self.size
-        for i in range(r):
-            U="["
-            for j in range(c):
-                U+=str(self.ele[i][j])+" "
-            T+=U[:-1]+"]\n"
-
-        return "["+T[:-1]+"]"
+        return "["+"\n".join(map(str,self.ele))+"]"
 
     def __repr__(self):
         return str(self)
@@ -309,8 +301,10 @@ class Modulo_Matrix():
         return Modulo_Matrix(E)
 
     def __getitem__(self,index):
-        assert isinstance(index,tuple) and len(index)==2
-        return self.ele[index[0]][index[1]]
+        if isinstance(index, int):
+            return self.ele[index]
+        else:
+            return self.ele[index[0]][index[1]]
 
     def __setitem__(self,index,val):
         assert isinstance(index,tuple) and len(index)==2
@@ -318,26 +312,30 @@ class Modulo_Matrix():
 
 #=================================================
 #単位行列
-def Identity_Matrix(n):
-    return Modulo_Matrix([[1*(i==j) for j in range(n)] for i in range(n)])
+def Identity_Matrix(N):
+    """ N 次単位行列を作成する. """
+
+    return Modulo_Matrix([[1 if i==j else 0 for j in range(N)] for i in range(N)])
 
 #零行列
-def Zero_Matrix(r,c):
-    return Modulo_Matrix([[0]*c for i in range(r)])
+def Zero_Matrix(row, col):
+    """ row 行 col 列のゼロ行列を作成する. """
+
+    return Modulo_Matrix([[0]*col for i in range(row)])
 
 #正方行列?
 def Is_Square(M):
     return M.row==M.col
 
 #対角行列
-def Diagonal_Matrix(A):
-    """ Aの第 i 要素が (i,i) 成分である対角行列を生成する.
+def Diagonal_Matrix(D):
+    """ D の第 i 要素が (i,i) 成分である対角行列を生成する.
 
-    A: リスト
+    D: リスト
     """
-    N=len(A)
-    T=[[A[i] if i==j else 0 for j in range(N)] for i in range(N)]
-    return Modulo_Matrix(T)
+
+    N=len(D)
+    return Modulo_Matrix([[D[i] if i==j else 0 for j in range(N)] for i in range(N)])
 
 #行列の直和
 def Direct_Sum(*A):
@@ -362,17 +360,35 @@ def Direct_Sum(*A):
         x+=a.row; y+=a.col
     return Modulo_Matrix(M)
 
+#クロネッカー積
+def Kronecker_Product(*X):
+    A=[[1]]
+    for B in X:
+        A=[[A[i//B.row][j//B.col]*B[i%B.row][j%B.col]%Mod for j in range(len(A[0])*B.col)] for i in range(len(A)*B.row)]
+    return Modulo_Matrix(A)
+
+#クロネッカー和
+def Kronecker_Sum(*X):
+    A=Modulo_Matrix([[0]])
+    for B in X:
+        A=Kronecker_Product(A, Identity_Matrix(B.row))+Kronecker_Product(Identity_Matrix(A.row),B)
+    return A
+
 #跡
 def Trace(M):
+    """ 正方行列 M の跡 (=対角成分の和) を求める. """
+
     assert Is_Square(M)
 
     T=0
-    for i in range(len(M.ele)):
+    for i in range(M.row):
         T+=M.ele[i][i]
         T%=Mod
     return T
 
 def Determinant(M):
+    """ 正方行列 M の行列式 (素数 mod) を求める."""
+
     assert Is_Square(M)
 
     N=M.row
@@ -400,6 +416,32 @@ def Determinant(M):
     for i in range(N):
         det*=T[i][i]
         det%=Mod
+    return det
+
+def Determinant_Arbitrary_Mod(A):
+    """ 正方行列 M の行列式 (任意 mod) を求める."""
+
+    N=A.row
+    A=deepcopy(A.ele)
+    det=1
+
+    for i in range(N):
+        Ai=A[i]
+        for j in range(i+1, N):
+            Aj=A[j]
+            while Aj[i]:
+                alpha=Ai[i]//Aj[i]
+                if alpha:
+                    for k in range(i, N):
+                        Ai[k]-=alpha*Aj[k]
+                        Ai[k]%=Mod
+                A[i], A[j]=A[j], A[i]
+                Ai=A[i]; Aj=A[j]
+                det*=-1
+        det*=Ai[i]
+        det%=Mod
+        if det==0:
+            break
     return det
 
 def Characteristic_Polynomial(M):
@@ -460,3 +502,11 @@ def Characteristic_Polynomial(M):
 
 #===
 Mod=998244353
+A=[
+    [1,0,0,0],
+    [0,1,0,0],
+    [1,0,1,1],
+    [0,1,0,0],
+    [0,0,1,0]]
+A=Modulo_Matrix(A)
+print(A.row_reduce())
