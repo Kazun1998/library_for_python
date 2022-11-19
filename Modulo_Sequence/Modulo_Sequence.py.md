@@ -217,7 +217,7 @@ Cumulative(A,N)
 Factorial_Modulo(N)
 ```
 
-- $N! \pmod{{\rm mod}}$ を求める.
+- $N! \pmod{\mathrm{mod}}$ を求める.
 
 - **計算量** : $O(\sqrt{N} (\log N)^2)$ Time.
 
@@ -285,7 +285,7 @@ Stirling_2nd(N)
 Bell(N, mode=0)
 ```
 
-- 次の式で定義される Bell 数 $B_n$ を求める. $$\displaystyle \sum_{n=0}^\infty B_n x^n=\exp(\exp(x)-1)$$
+- 次の式で定義される Bell 数 $B_n$ を求める. $\displaystyle \sum_{n=0}^\infty B_n x^n=\exp(\exp(x)-1)$
 
 - ${\rm mode}=0$ ならば, $B_N$ のみ, ${\rm mode}=1$ ならば, $B_0, \dots, B_N$ からなるリスト.
 - **計算量** : $O(N \log N)$ TIme.
@@ -296,7 +296,7 @@ Bell(N, mode=0)
 Motzkin(N, mode=0)
 ```
 
-- 次の式で定義される Motzkin 数 $M_n$ を求める. $$\displaystyle \sum_{n=0}^\infty M_n x^n=\dfrac{1-x-\sqrt{1-2x-3x^2}}{2x^2}$$
+- 次の式で定義される Motzkin 数 $M_n$ を求める. $\displaystyle \sum_{n=0}^\infty M_n x^n=\dfrac{1-x-\sqrt{1-2x-3x^2}}{2x^2}$
 
 - ${\rm mode}=0$ ならば, $M_N$ のみ, ${\rm mode}=1$ ならば, $M_0, \dots, M_N$ からなるリスト.
 - **計算量** : $O(N \log N)$ TIme.

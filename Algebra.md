@@ -58,8 +58,8 @@ $\circ, \bullet$ を演算とする.
 - 環
   - $\mathbb{Z}$
   - $m \in \mathbb{Z}$ としたときの $\mathbb{Z}/m \mathbb{Z}$
-  - $R$ を可換環としたときの $n$ 次行列環 $M_n(R)$ ($n \geq 2$ ならば可換ではない!!)
+  - $R$ を可換環としたときの $n$ 次行列環 $M_n(R)$ ( $n \geq 2$ ならば可換ではない!!)
   - $R$ を可換環としたときの多項式環 $R[X]$ (こちらは可換環).
 - 体
   - $\mathbb{Q}, \mathbb{R}, \mathbb{C}$
-  - $p$ を素数としたときの $\mathbb{F}_p:=\mathbb{Z}/p \mathbb{Z}$
+  - $p$ を素数としたときの $\mathbb{F}\_p:=\mathbb{Z}/p \mathbb{Z}$
