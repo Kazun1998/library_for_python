@@ -49,7 +49,7 @@ title: Gcd Convolution
 
 ## Outline
 
-数列 $A=(A_i)_{1 \leq i}, B=(B_j)_{1 \leq j}$ に対し, $A,B$ の Gcd Convolution $A \oplus B$ を
+数列 $A=(A_i)\_{1 \leq i}, B=(B_j)\_{1 \leq j}$ に対し, $A,B$ の Gcd Convolution $A \oplus B$ を
 
 $$A \oplus B:=\left(\sum_{\substack{1 \leq i,j \\ \gcd(i,j)=k}} A_i B_j \right)_{1 \leq k}$$
 
