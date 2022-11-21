@@ -1,7 +1,9 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/gcd_convolution
 
 #==================================================
-from Convolution.GCD_Convolution import *
+import sys
+sys.path.append('Convolution/')
+from GCD_Convolution import *
 
 import sys
 input=sys.stdin.readline
