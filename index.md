@@ -201,7 +201,7 @@ data:
     - icon: ':warning:'
       path: Convolution/AND_Convolution.py
       title: And Convolution
-    - icon: ':x:'
+    - icon: ':warning:'
       path: Convolution/GCD_Convolution.py
       title: Gcd Convolution
     - icon: ':warning:'
@@ -368,7 +368,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/Binary_Indexed_Tree.test.py
       title: test_verify/Binary_Indexed_Tree.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/Gcd_Convolution.test.py
       title: test_verify/Gcd_Convolution.test.py
     - icon: ':heavy_check_mark:'
