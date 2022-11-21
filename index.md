@@ -339,7 +339,7 @@ data:
     - icon: ':warning:'
       path: Tree/Forest.py
       title: Tree/Forest.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Tree/Tree.py
       title: Tree
   - name: Union_Find
@@ -371,6 +371,9 @@ data:
     - icon: ':x:'
       path: test_verify/Gcd_Convolution.test.py
       title: test_verify/Gcd_Convolution.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/Lowest_Common_Ancestor.test.py
+      title: test_verify/Lowest_Common_Ancestor.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/Segment_Tree.test.py
       title: test_verify/Segment_Tree.test.py
