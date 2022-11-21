@@ -42,12 +42,12 @@ data:
     \        K+=1\n\n        if Mode==0 or Mode==2:\n            R=[[] for _ in range(K)]\n\
     \            for i in range(self.N):\n                R[G[i]].append(i)\n\n  \
     \      if Mode==0:\n            return R\n        elif Mode==1:\n            return\
-    \ G\n        else:\n            return R,G"
+    \ G\n        else:\n            return R,G\n"
   dependsOn: []
   isVerificationFile: false
   path: Strongly_Connected_Components.py
   requiredBy: []
-  timestamp: '2021-05-01 02:39:52+09:00'
+  timestamp: '2022-11-22 01:17:17+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Strongly_Connected_Components.py
