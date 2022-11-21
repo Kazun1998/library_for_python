@@ -2,8 +2,7 @@
 
 #==================================================
 import sys
-sys.path.append('Segment_Tree/')
-from  Dual_Segment_Tree import Dual_Segment_Tree
+from  Segment_Tree.Dual_Segment_Tree import Dual_Segment_Tree
 
 input=sys.stdin.readline
 write=sys.stdout.write
