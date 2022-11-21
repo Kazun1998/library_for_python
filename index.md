@@ -317,7 +317,7 @@ data:
       title: Ordered_Set/Ordered_Set.py
   - name: Segment_Tree
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Segment_Tree/Dual_Segment_Tree.py
       title: Dual Segment Tree
     - icon: ':warning:'
