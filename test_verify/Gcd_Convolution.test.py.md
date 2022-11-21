@@ -19,8 +19,7 @@ data:
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/gcd_convolution\n\
     \n#==================================================\nimport sys\nsys.path.append('Convolution/')\n\
     from GCD_Convolution import *\n\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\
-    \n#==================================================\ndef verify():\n    import\
-    \ sys\n    input=sys.stdin.readline\n    write=sys.stdout.write\n\n    N=int(input())\n\
+    \n#==================================================\ndef verify():\n    N=int(input())\n\
     \    A=[0]+list(map(int,input().split()))\n    B=[0]+list(map(int,input().split()))\n\
     \n    write(\" \".join(map(str,Convolution_GCD(A,B)[1:])))\n\n#==================================================\n\
     verify()\n"
@@ -28,7 +27,7 @@ data:
   isVerificationFile: true
   path: test_verify/Gcd_Convolution.test.py
   requiredBy: []
-  timestamp: '2022-10-28 01:45:52+09:00'
+  timestamp: '2022-11-22 03:06:03+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/Gcd_Convolution.test.py
