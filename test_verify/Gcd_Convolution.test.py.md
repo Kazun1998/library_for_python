@@ -1,11 +1,14 @@
 ---
 data:
-  _extendedDependsOn: []
+  _extendedDependsOn:
+  - icon: ':x:'
+    path: Convolution/GCD_Convolution.py
+    title: Gcd Convolution
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/gcd_convolution
     links:
@@ -17,18 +20,19 @@ data:
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/gcd_convolution\n\
-    \n#==================================================\nimport sys\nsys.path.append('Convolution/')\n\
-    from GCD_Convolution import Convolution_GCD\n\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\
+    \n#==================================================\nfrom Convolution.GCD_Convolution\
+    \ import Convolution_GCD\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\
     \n#==================================================\ndef verify():\n    N=int(input())\n\
     \    A=[0]+list(map(int,input().split()))\n    B=[0]+list(map(int,input().split()))\n\
     \n    write(\" \".join(map(str,Convolution_GCD(A,B)[1:])))\n\n#==================================================\n\
     verify()\n"
-  dependsOn: []
+  dependsOn:
+  - Convolution/GCD_Convolution.py
   isVerificationFile: true
   path: test_verify/Gcd_Convolution.test.py
   requiredBy: []
-  timestamp: '2022-11-22 03:52:55+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2022-11-22 04:53:09+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/Gcd_Convolution.test.py
 layout: document

@@ -201,7 +201,7 @@ data:
     - icon: ':warning:'
       path: Convolution/AND_Convolution.py
       title: And Convolution
-    - icon: ':warning:'
+    - icon: ':x:'
       path: Convolution/GCD_Convolution.py
       title: Gcd Convolution
     - icon: ':warning:'
@@ -374,7 +374,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/Dual_Segment_Tree.test.py
       title: test_verify/Dual_Segment_Tree.test.py
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test_verify/Gcd_Convolution.test.py
       title: test_verify/Gcd_Convolution.test.py
     - icon: ':heavy_check_mark:'
