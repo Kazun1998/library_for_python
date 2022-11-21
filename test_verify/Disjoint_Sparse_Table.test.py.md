@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: Disjoint_Sparse_Table.py
     title: Disjoint Sparse Table
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/staticrmq
     links:
@@ -33,8 +33,8 @@ data:
   isVerificationFile: true
   path: test_verify/Disjoint_Sparse_Table.test.py
   requiredBy: []
-  timestamp: '2022-11-22 04:31:41+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2022-11-22 04:38:45+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/Disjoint_Sparse_Table.test.py
 layout: document

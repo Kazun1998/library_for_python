@@ -3,12 +3,12 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test_verify/Disjoint_Sparse_Table.test.py
     title: test_verify/Disjoint_Sparse_Table.test.py
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links:
     - https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html
@@ -22,7 +22,7 @@ data:
     \ \"\"\"\n\n    def __init__(self, L, calc):\n        \"\"\" L \u306E\u6F14\u7B97\
     \ calc \u306B\u5BFE\u3059\u308B Disjoint Sparse Table \u3092\u751F\u6210\u3059\
     \u308B.\n\n        L: list\n        calc: \u4E8C\u9805\u6F14\u7B97\n        \"\
-    \"\"\n\n        self.calc=calc\n        self.size=N=len(L)\n        self.b=(N-1).bit_length()\n\
+    \"\"\n\n        self.calc=calc\n        self.size=N=len(L)\n        self.b=max(1,(N-1).bit_length())\n\
     \n        self.table=[[0]*self.size for _ in range(self.b)]\n\n        tab=self.table[0]\n\
     \        for i in range(self.size):\n            tab[i]=L[i]\n\n        shift=1\n\
     \        for i in range(1,self.b):\n            shift<<=1\n            tab=self.table[i]\n\
@@ -37,13 +37,13 @@ data:
     \        if not right_close:\n            r-=1\n\n        if l==r:\n         \
     \   return self.table[0][l]\n        elif l>r:\n            return default\n\n\
     \        p=(l^r).bit_length()-1\n        tab=self.table[p]\n        return self.calc(tab[l],\
-    \ tab[r])\n\nfrom operator import add\nD=Disjoint_Sparse_Table(\"01234567\",add)\n"
+    \ tab[r])\n"
   dependsOn: []
   isVerificationFile: false
   path: Disjoint_Sparse_Table.py
   requiredBy: []
-  timestamp: '2022-10-05 01:31:42+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  timestamp: '2022-11-22 04:38:45+09:00'
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/Disjoint_Sparse_Table.test.py
 documentation_of: Disjoint_Sparse_Table.py

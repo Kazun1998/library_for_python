@@ -33,7 +33,7 @@ data:
     - icon: ':warning:'
       path: Dijkstra_Heap.py
       title: Dijkstra_Heap.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: Disjoint_Sparse_Table.py
       title: Disjoint Sparse Table
     - icon: ':warning:'
@@ -368,7 +368,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/Binary_Indexed_Tree.test.py
       title: test_verify/Binary_Indexed_Tree.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/Disjoint_Sparse_Table.test.py
       title: test_verify/Disjoint_Sparse_Table.test.py
     - icon: ':heavy_check_mark:'
