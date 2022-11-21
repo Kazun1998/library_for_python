@@ -319,7 +319,7 @@ data:
     pages:
     - icon: ':warning:'
       path: Segment_Tree/Dual_Segment_Tree.py
-      title: Segment_Tree/Dual_Segment_Tree.py
+      title: Dual Segment Tree
     - icon: ':warning:'
       path: Segment_Tree/Lazy_Evaluation_Proportion_Tree.py
       title: Segment_Tree/Lazy_Evaluation_Proportion_Tree.py
