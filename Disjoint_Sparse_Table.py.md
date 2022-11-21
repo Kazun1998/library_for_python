@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _extendedVerifiedWith:
+  - icon: ':x:'
+    path: test_verify/Disjoint_Sparse_Table.test.py
+    title: test_verify/Disjoint_Sparse_Table.test.py
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links:
     - https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html
@@ -40,8 +43,9 @@ data:
   path: Disjoint_Sparse_Table.py
   requiredBy: []
   timestamp: '2022-10-05 01:31:42+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_WA
+  verifiedWith:
+  - test_verify/Disjoint_Sparse_Table.test.py
 documentation_of: Disjoint_Sparse_Table.py
 layout: document
 title: Disjoint Sparse Table
