@@ -17,17 +17,17 @@ data:
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/gcd_convolution\n\
-    \n#==================================================\nimport sys\nsys.path.append(\"\
-    Convolution/\")\nfrom GCD_Convolution import Convolution_GCD\n\ninput=sys.stdin.readline\n\
-    write=sys.stdout.write\n\n#==================================================\n\
-    def verify():\n    N=int(input())\n    A=[0]+list(map(int,input().split()))\n\
-    \    B=[0]+list(map(int,input().split()))\n\n    write(\" \".join(map(str,Convolution_GCD(A,B)[1:])))\n\
-    \n#==================================================\nverify()\n"
+    \n#==================================================\nimport sys\nsys.path.append('Convolution/')\n\
+    from GCD_Convolution import Convolution_GCD\n\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\
+    \n#==================================================\ndef verify():\n    N=int(input())\n\
+    \    A=[0]+list(map(int,input().split()))\n    B=[0]+list(map(int,input().split()))\n\
+    \n    write(\" \".join(map(str,Convolution_GCD(A,B)[1:])))\n\n#==================================================\n\
+    verify()\n"
   dependsOn: []
   isVerificationFile: true
   path: test_verify/Gcd_Convolution.test.py
   requiredBy: []
-  timestamp: '2022-11-22 03:41:21+09:00'
+  timestamp: '2022-11-22 03:52:55+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/Gcd_Convolution.test.py

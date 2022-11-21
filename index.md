@@ -371,7 +371,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/Gcd_Convolution.test.py
       title: test_verify/Gcd_Convolution.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/Lcm_Convolution.test.py
       title: test_verify/Lcm_Convolution.test.py
     - icon: ':heavy_check_mark:'
