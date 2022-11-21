@@ -2,7 +2,7 @@
 
 #==================================================
 import sys
-sys.path.append("Convolution/")
+sys.path.append('Convolution/')
 from GCD_Convolution import Convolution_GCD
 
 input=sys.stdin.readline
