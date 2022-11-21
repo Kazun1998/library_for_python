@@ -2,13 +2,10 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith:
-  - icon: ':x:'
-    path: test_verify/Gcd_Convolution.test.py
-    title: test_verify/Gcd_Convolution.test.py
-  _isVerificationFailed: true
+  _extendedVerifiedWith: []
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':warning:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -43,9 +40,8 @@ data:
   path: Convolution/GCD_Convolution.py
   requiredBy: []
   timestamp: '2021-08-29 23:22:42+09:00'
-  verificationStatus: LIBRARY_ALL_WA
-  verifiedWith:
-  - test_verify/Gcd_Convolution.test.py
+  verificationStatus: LIBRARY_NO_TESTS
+  verifiedWith: []
 documentation_of: Convolution/GCD_Convolution.py
 layout: document
 title: Gcd Convolution
