@@ -1,5 +1,6 @@
 {
 "test_verify/Binary_Indexed_Tree.test.py": "2022-11-19 16:51:42 +0900",
+"test_verify/Dual_Segment_Tree.test.py": "2022-11-22 04:02:37 +0900",
 "test_verify/Gcd_Convolution.test.py": "2022-11-22 03:52:55 +0900",
 "test_verify/Lcm_Convolution.test.py": "2022-11-22 03:52:20 +0900",
 "test_verify/Lowest_Common_Ancestor.test.py": "2022-11-22 03:29:38 +0900",
