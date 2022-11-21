@@ -10,7 +10,7 @@ class Disjoint_Sparse_Table:
 
         self.calc=calc
         self.size=N=len(L)
-        self.b=(N-1).bit_length()
+        self.b=max(1,(N-1).bit_length())
 
         self.table=[[0]*self.size for _ in range(self.b)]
 
@@ -58,6 +58,3 @@ class Disjoint_Sparse_Table:
         p=(l^r).bit_length()-1
         tab=self.table[p]
         return self.calc(tab[l], tab[r])
-
-from operator import add
-D=Disjoint_Sparse_Table("01234567",add)
