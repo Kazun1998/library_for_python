@@ -1,7 +1,10 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: Median.py
+    title: Median.py
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: py
@@ -64,7 +67,8 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: HeapDict.py
-  requiredBy: []
+  requiredBy:
+  - Median.py
   timestamp: '1970-01-01 00:00:00+00:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

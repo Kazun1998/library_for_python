@@ -1,6 +1,9 @@
 ---
 data:
-  _extendedDependsOn: []
+  _extendedDependsOn:
+  - icon: ':warning:'
+    path: HeapDict.py
+    title: HeapDict.py
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -48,11 +51,12 @@ data:
     \                b=self.right.get_min()\n\n                if mode==0:\n     \
     \               return (a+b)/2\n                else:\n                    return\
     \ func(a,b)\n"
-  dependsOn: []
+  dependsOn:
+  - HeapDict.py
   isVerificationFile: false
   path: Median.py
   requiredBy: []
-  timestamp: '1970-01-01 00:00:00+00:00'
+  timestamp: '2021-11-28 16:19:53+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Median.py
