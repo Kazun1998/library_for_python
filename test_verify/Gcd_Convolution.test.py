@@ -10,10 +10,6 @@ write=sys.stdout.write
 
 #==================================================
 def verify():
-    import sys
-    input=sys.stdin.readline
-    write=sys.stdout.write
-
     N=int(input())
     A=[0]+list(map(int,input().split()))
     B=[0]+list(map(int,input().split()))
