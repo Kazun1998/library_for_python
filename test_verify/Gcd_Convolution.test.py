@@ -1,9 +1,9 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/gcd_convolution
 
 #==================================================
-import sys
 from Convolution.GCD_Convolution import Convolution_GCD
 
+import sys
 input=sys.stdin.readline
 write=sys.stdout.write
 
