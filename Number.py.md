@@ -1,7 +1,10 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: Root.py
+    title: Root.py
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: py
@@ -18,7 +21,8 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: Number.py
-  requiredBy: []
+  requiredBy:
+  - Root.py
   timestamp: '2021-04-27 14:48:27+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

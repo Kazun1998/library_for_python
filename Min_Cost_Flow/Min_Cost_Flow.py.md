@@ -117,7 +117,7 @@ data:
   isVerificationFile: false
   path: Min_Cost_Flow/Min_Cost_Flow.py
   requiredBy: []
-  timestamp: '1970-01-01 00:00:00+00:00'
+  timestamp: '2022-04-20 15:00:17+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Min_Cost_Flow/Min_Cost_Flow.py

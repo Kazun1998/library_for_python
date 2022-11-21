@@ -1,6 +1,9 @@
 ---
 data:
-  _extendedDependsOn: []
+  _extendedDependsOn:
+  - icon: ':heavy_check_mark:'
+    path: Binary_Indexed_Tree/Binary_Indexed_Tree.py
+    title: Binary Indexed Tree (Fenwick Tree)
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -26,11 +29,12 @@ data:
     \     p,x=query\n            B.add(p,x)\n        else:\n            l,r=query\n\
     \            Ans.append(B.sum(l,r-1))\n\n    write(\"\\n\".join(map(str,Ans)))\n\
     \n#==================================================\nverify()\n"
-  dependsOn: []
+  dependsOn:
+  - Binary_Indexed_Tree/Binary_Indexed_Tree.py
   isVerificationFile: true
   path: test_verify/Binary_Indexed_Tree.test.py
   requiredBy: []
-  timestamp: '1970-01-01 00:00:00+00:00'
+  timestamp: '2022-11-19 16:51:42+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/Binary_Indexed_Tree.test.py

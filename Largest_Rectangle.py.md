@@ -29,7 +29,7 @@ data:
   isVerificationFile: false
   path: Largest_Rectangle.py
   requiredBy: []
-  timestamp: '1970-01-01 00:00:00+00:00'
+  timestamp: '2022-09-28 10:59:08+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Largest_Rectangle.py

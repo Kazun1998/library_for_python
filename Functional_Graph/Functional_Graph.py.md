@@ -78,7 +78,7 @@ data:
   isVerificationFile: false
   path: Functional_Graph/Functional_Graph.py
   requiredBy: []
-  timestamp: '1970-01-01 00:00:00+00:00'
+  timestamp: '2022-10-27 18:36:50+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Functional_Graph/Functional_Graph.py

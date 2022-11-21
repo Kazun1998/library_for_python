@@ -39,7 +39,7 @@ data:
   isVerificationFile: false
   path: Geometric/Polygon.py
   requiredBy: []
-  timestamp: '1970-01-01 00:00:00+00:00'
+  timestamp: '2021-09-04 16:56:37+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Geometric/Polygon.py

@@ -1,6 +1,9 @@
 ---
 data:
-  _extendedDependsOn: []
+  _extendedDependsOn:
+  - icon: ':heavy_check_mark:'
+    path: Binary_Indexed_Tree/Binary_Indexed_Tree.py
+    title: Binary Indexed Tree (Fenwick Tree)
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -68,11 +71,12 @@ data:
     \n    def __setitem__(self,index,val):\n        self.update(index,val,self.index)\n\
     \nfrom operator import add,neg,mul\nB=Range_Binary_Indexed_Tree([0]*10, add, 0,\
     \ neg, mul ,1)\n\n"
-  dependsOn: []
+  dependsOn:
+  - Binary_Indexed_Tree/Binary_Indexed_Tree.py
   isVerificationFile: false
   path: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
   requiredBy: []
-  timestamp: '1970-01-01 00:00:00+00:00'
+  timestamp: '2022-10-27 19:47:20+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py

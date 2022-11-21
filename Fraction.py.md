@@ -6,6 +6,9 @@ data:
     path: Quaternion.py
     title: Quaternion.py
   - icon: ':warning:'
+    path: Root.py
+    title: Root.py
+  - icon: ':warning:'
     path: Vector3.py
     title: Vector3.py
   _extendedVerifiedWith: []
@@ -86,6 +89,7 @@ data:
   path: Fraction.py
   requiredBy:
   - Quaternion.py
+  - Root.py
   - Vector3.py
   timestamp: '2022-02-12 00:31:19+09:00'
   verificationStatus: LIBRARY_NO_TESTS

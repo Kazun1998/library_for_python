@@ -1,6 +1,12 @@
 ---
 data:
-  _extendedDependsOn: []
+  _extendedDependsOn:
+  - icon: ':warning:'
+    path: Fraction.py
+    title: Fraction.py
+  - icon: ':warning:'
+    path: Number.py
+    title: Number.py
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -86,11 +92,13 @@ data:
     \        r=Root()\n        r.term=[]\n        for t in self.term:\n          \
     \  r.term+=[-t]\n        return r\n\n    def __abs__(self):\n        if self>=0:return\
     \ self\n        else:return -self\n\n    def __len__(self):\n        return len(self.term)\n"
-  dependsOn: []
+  dependsOn:
+  - Number.py
+  - Fraction.py
   isVerificationFile: false
   path: Root.py
   requiredBy: []
-  timestamp: '1970-01-01 00:00:00+00:00'
+  timestamp: '2022-02-12 00:31:19+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Root.py

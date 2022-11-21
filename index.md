@@ -164,7 +164,7 @@ data:
       title: XOR_Vector_Space.py
   - name: Binary_Indexed_Tree
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Binary_Indexed_Tree/Binary_Indexed_Tree.py
       title: Binary Indexed Tree (Fenwick Tree)
     - icon: ':warning:'
