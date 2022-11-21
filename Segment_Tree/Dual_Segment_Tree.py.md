@@ -15,24 +15,17 @@ data:
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "class Dual_Segment_Tree:\n    def __init__(self, L, comp, id):\n        \"\
-    \"\"op\u3092\u4F5C\u7528\u3068\u3059\u308B\u30EA\u30B9\u30C8L\u306EDual Segment\
-    \ Tree\u3092\u4F5C\u6210\n\n        op:\u4F5C\u7528\u7D20\n        id:\u6052\u7B49\
-    \u5199\u50CF\n\n        [\u6761\u4EF6]\n        M:Monoid, F={f: F x M\u2192 M:\
-    \ \u4F5C\u7528\u7D20} \u306B\u5BFE\u3057\u3066,\u4EE5\u4E0B\u304C\u6210\u7ACB\u3059\
-    \u308B.\n        F \u306F\u6052\u7B49\u5199\u50CF id \u3092\u542B\u3080. \u3064\
-    \u307E\u308A, \u4EFB\u610F\u306E x in M \u306B\u5BFE\u3057\u3066 id(x)=x\n   \
-    \     F \u306F\u5199\u50CF\u306E\u5408\u6210\u306B\u9589\u3058\u3066\u3044\u308B\
-    . \u3064\u307E\u308A,\u4EFB\u610F\u306E f,g in F \u306B\u5BFE\u3057\u3066, comp(f,g)\
-    \ in F\n        \u4EFB\u610F\u306E f in F, x,y in M \u306B\u5BFE\u3057\u3066,\
-    \ f(xy)=f(x)f(y)\u3067\u3042\u308B.\n\n        [\u6CE8\u8A18]\n        \u66F4\u65B0\
-    \u306F\u5DE6\u304B\u3089. \u3064\u307E\u308A, comp(new, old) \u3068\u306A\u308B\
-    .\n        \"\"\"\n\n        self.comp=comp\n        self.id=id\n\n        N=len(L)\n\
+    \"\" comp \u3092\u6F14\u7B97\u3068\u3059\u308B\u30EA\u30B9\u30C8 L \u306E Dual\
+    \ Segment Tree \u3092\u4F5C\u6210\n\n        comp : \u4F5C\u7528\u7D20\n     \
+    \   id : \u5358\u4F4D\u5143\n\n        [\u6CE8\u8A18]\n        \u66F4\u65B0\u306F\
+    \u5DE6\u304B\u3089. \u3064\u307E\u308A, comp(new, old) \u3068\u306A\u308B.\n \
+    \       \"\"\"\n\n        self.comp=comp\n        self.id=id\n\n        N=len(L)\n\
     \        d=max(1,(N-1).bit_length())\n        k=1<<d\n\n        self.lazy=[self.id]*k+L+[self.id]*(k-N)\n\
-    \        self.N=k\n        self.depth=d\n\n    #\u914D\u5217\u306E\u7B2Cm\u8981\
+    \        self.N=k\n        self.depth=d\n\n    #\u914D\u5217\u306E\u7B2C m \u8981\
     \u7D20\u3092\u4E0B\u306B\u4F1D\u642C\n    def _propagate_at(self,m):\n       \
     \ lazy=self.lazy\n        if lazy[m]!=self.id:\n            lazy[(m<<1)|0]=self.comp(lazy[m],lazy[(m<<1)|0])\n\
     \            lazy[(m<<1)|1]=self.comp(lazy[m],lazy[(m<<1)|1])\n            lazy[m]=self.id\n\
-    \n    #\u914D\u5217\u306E\u7B2Cm\u8981\u7D20\u3088\u308A\u4E0A\u3092\u5168\u3066\
+    \n    #\u914D\u5217\u306E\u7B2C m \u8981\u7D20\u3088\u308A\u4E0A\u3092\u5168\u3066\
     \u4F1D\u642C\n    def _propagate_above(self,m):\n        H=m.bit_length()\n  \
     \      for h in range(H-1,0,-1):\n            self._propagate_at(m>>h)\n\n   \
     \ #\u4F5C\u7528\n    def operate(self, l, r, alpha, left_closed=True, right_closed=True):\n\
@@ -55,7 +48,7 @@ data:
   isVerificationFile: false
   path: Segment_Tree/Dual_Segment_Tree.py
   requiredBy: []
-  timestamp: '2022-09-28 10:55:10+09:00'
+  timestamp: '2022-11-22 04:21:42+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Segment_Tree/Dual_Segment_Tree.py
