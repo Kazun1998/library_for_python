@@ -1,15 +1,9 @@
 class Dual_Segment_Tree:
     def __init__(self, L, comp, id):
-        """opを作用とするリストLのDual Segment Treeを作成
+        """ comp を演算とするリスト L の Dual Segment Tree を作成
 
-        op:作用素
-        id:恒等写像
-
-        [条件]
-        M:Monoid, F={f: F x M→ M: 作用素} に対して,以下が成立する.
-        F は恒等写像 id を含む. つまり, 任意の x in M に対して id(x)=x
-        F は写像の合成に閉じている. つまり,任意の f,g in F に対して, comp(f,g) in F
-        任意の f in F, x,y in M に対して, f(xy)=f(x)f(y)である.
+        comp : 作用素
+        id : 単位元
 
         [注記]
         更新は左から. つまり, comp(new, old) となる.
@@ -26,7 +20,7 @@ class Dual_Segment_Tree:
         self.N=k
         self.depth=d
 
-    #配列の第m要素を下に伝搬
+    #配列の第 m 要素を下に伝搬
     def _propagate_at(self,m):
         lazy=self.lazy
         if lazy[m]!=self.id:
@@ -34,7 +28,7 @@ class Dual_Segment_Tree:
             lazy[(m<<1)|1]=self.comp(lazy[m],lazy[(m<<1)|1])
             lazy[m]=self.id
 
-    #配列の第m要素より上を全て伝搬
+    #配列の第 m 要素より上を全て伝搬
     def _propagate_above(self,m):
         H=m.bit_length()
         for h in range(H-1,0,-1):
