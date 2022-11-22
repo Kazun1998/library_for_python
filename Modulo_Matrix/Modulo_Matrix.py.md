@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _extendedVerifiedWith:
+  - icon: ':x:'
+    path: test_verify/yosupo_library_checker/Matrix/Product.test.py
+    title: test_verify/yosupo_library_checker/Matrix/Product.test.py
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -184,15 +187,15 @@ data:
     \ p%=Mod\n            c=p*T[j][i]%Mod\n            for k in range(j+1):\n    \
     \            P[k]+=c*dp[j][k]\n                P[k]%=Mod\n    P=dp[-1]\n    for\
     \ i in range(N+1):\n        if i%2:\n            P[~i]*=-1; P[~i]%=Mod\n    return\
-    \ P\n\n#===\nMod=998244353\nA=[\n    [1,0,0,0],\n    [0,1,0,0],\n    [1,0,1,1],\n\
-    \    [0,1,0,0],\n    [0,0,1,0]]\nA=Modulo_Matrix(A)\nprint(A.row_reduce())\n"
+    \ P\n\n#===\nMod=998244353\n"
   dependsOn: []
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py
   requiredBy: []
-  timestamp: '2022-11-19 15:46:45+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  timestamp: '2022-11-23 02:22:59+09:00'
+  verificationStatus: LIBRARY_ALL_WA
+  verifiedWith:
+  - test_verify/yosupo_library_checker/Matrix/Product.test.py
 documentation_of: Modulo_Matrix/Modulo_Matrix.py
 layout: document
 redirect_from:

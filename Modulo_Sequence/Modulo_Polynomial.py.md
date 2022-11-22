@@ -3,15 +3,18 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
+  - icon: ':x:'
+    path: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
+    title: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Polynomial/Log.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Log.test.py
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links:
     - http://q.c.titech.ac.jp/docs/progs/polynomial_division.html
@@ -476,10 +479,11 @@ data:
   path: Modulo_Sequence/Modulo_Polynomial.py
   requiredBy: []
   timestamp: '2022-11-23 00:05:10+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
-  - test_verify/yosupo_library_checker/Polynomial/Log.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Exp.test.py
   - test_verify/yosupo_library_checker/Polynomial/Inv.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Log.test.py
 documentation_of: Modulo_Sequence/Modulo_Polynomial.py
 layout: document
 redirect_from:

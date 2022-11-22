@@ -290,7 +290,7 @@ data:
       title: Min_Cost_Flow/Min_Cost_Flow.py
   - name: Modulo_Matrix
     pages:
-    - icon: ':warning:'
+    - icon: ':x:'
       path: Modulo_Matrix/Modulo_Matrix.py
       title: Modulo_Matrix/Modulo_Matrix.py
     - icon: ':warning:'
@@ -304,7 +304,7 @@ data:
       title: Modulo_Matrix/Modulo_Vector_Space.py
   - name: Modulo_Sequence
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: Modulo_Sequence/Modulo_Polynomial.py
       title: Modulo_Sequence/Modulo_Polynomial.py
     - icon: ':warning:'
@@ -394,8 +394,16 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
+  - name: test_verify/yosupo_library_checker/Matrix
+    pages:
+    - icon: ':x:'
+      path: test_verify/yosupo_library_checker/Matrix/Product.test.py
+      title: test_verify/yosupo_library_checker/Matrix/Product.test.py
   - name: test_verify/yosupo_library_checker/Polynomial
     pages:
+    - icon: ':x:'
+      path: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
+      title: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
