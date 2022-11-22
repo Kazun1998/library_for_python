@@ -1,6 +1,9 @@
 ---
 data:
-  _extendedDependsOn: []
+  _extendedDependsOn:
+  - icon: ':heavy_check_mark:'
+    path: Convolution/LCM_Convolution.py
+    title: Lcm Convolution
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -17,17 +20,18 @@ data:
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/lcm_convolution\n\
-    \n#==================================================\nimport sys\nsys.path.append('Convolution/')\n\
-    from  LCM_Convolution import *\n\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\
+    \n#==================================================\nfrom Convolution.LCM_Convolution\
+    \ import Convolution_LCM\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\
     \n#==================================================\ndef verify():\n    N=int(input())\n\
     \    A=[0]+list(map(int,input().split()))\n    B=[0]+list(map(int,input().split()))\n\
     \    write(\" \".join(map(str,Convolution_LCM(A,B,N)[1:])))\n\n#==================================================\n\
     verify()"
-  dependsOn: []
+  dependsOn:
+  - Convolution/LCM_Convolution.py
   isVerificationFile: true
   path: test_verify/Lcm_Convolution.test.py
   requiredBy: []
-  timestamp: '2022-11-22 22:36:06+09:00'
+  timestamp: '2022-11-22 22:40:17+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/Lcm_Convolution.test.py

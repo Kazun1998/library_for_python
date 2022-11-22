@@ -204,7 +204,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: Convolution/GCD_Convolution.py
       title: Gcd Convolution
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Convolution/LCM_Convolution.py
       title: Lcm Convolution
     - icon: ':warning:'
