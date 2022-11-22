@@ -1,8 +1,6 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/matrix_product
 
 #==================================================
-import sys
-sys.path.append("../../../")
 from Modulo_Matrix.Modulo_Matrix import Modulo_Matrix
 
 import sys
