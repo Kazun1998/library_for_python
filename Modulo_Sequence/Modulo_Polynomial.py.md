@@ -482,8 +482,8 @@ data:
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test_verify/yosupo_library_checker/Polynomial/Exp.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Inv.test.py
   - test_verify/yosupo_library_checker/Polynomial/Log.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Inv.test.py
 documentation_of: Modulo_Sequence/Modulo_Polynomial.py
 layout: document
 redirect_from:

@@ -3,12 +3,12 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Matrix/Product.test.py
     title: test_verify/yosupo_library_checker/Matrix/Product.test.py
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -193,7 +193,7 @@ data:
   path: Modulo_Matrix/Modulo_Matrix.py
   requiredBy: []
   timestamp: '2022-11-23 02:22:59+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Product.test.py
 documentation_of: Modulo_Matrix/Modulo_Matrix.py
