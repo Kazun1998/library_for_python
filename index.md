@@ -323,7 +323,7 @@ data:
     - icon: ':warning:'
       path: Segment_Tree/Lazy_Evaluation_Proportion_Tree.py
       title: Segment_Tree/Lazy_Evaluation_Proportion_Tree.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Segment_Tree/Lazy_Segment_Tree.py
       title: Lazy Segment Tree
     - icon: ':heavy_check_mark:'
@@ -385,6 +385,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
