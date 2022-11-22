@@ -73,9 +73,6 @@ data:
       path: Largest_Rectangle.py
       title: Largest_Rectangle.py
     - icon: ':warning:'
-      path: Math.py
-      title: Math.py
-    - icon: ':warning:'
       path: Matrix.py
       title: Matrix.py
     - icon: ':warning:'
@@ -334,6 +331,14 @@ data:
     - icon: ':warning:'
       path: Sorted_Set/Sorted_Set.py
       title: Sorted_Set/Sorted_Set.py
+  - name: Summation
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: Summation/Floor_Sum.py
+      title: Summation/Floor_Sum.py
+    - icon: ':warning:'
+      path: Summation/Math.py
+      title: Summation/Math.py
   - name: Tree
     pages:
     - icon: ':warning:'
@@ -394,6 +399,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
+  - name: test_verify/yosupo_library_checker/Math
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
+      title: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
   - name: test_verify/yosupo_library_checker/Matrix
     pages:
     - icon: ':heavy_check_mark:'
