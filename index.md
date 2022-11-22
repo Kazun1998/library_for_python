@@ -304,9 +304,9 @@ data:
       title: Modulo_Matrix/Modulo_Vector_Space.py
   - name: Modulo_Sequence
     pages:
-    - icon: ':heavy_check_mark:'
-      path: Modulo_Sequence/Modulo_Polynominal.py
-      title: Modulo Polynominal
+    - icon: ':x:'
+      path: Modulo_Sequence/Modulo_Polynomial.py
+      title: Modulo_Sequence/Modulo_Polynomial.py
     - icon: ':warning:'
       path: Modulo_Sequence/Modulo_Sequence.py
       title: Modulo Sequence
@@ -393,9 +393,18 @@ data:
       title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
   - name: test_verify/yosupo_library_checker/Polynomial
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
+      path: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
+      title: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
+    - icon: ':x:'
       path: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
+    - icon: ':x:'
+      path: test_verify/yosupo_library_checker/Polynomial/Log.test.py
+      title: test_verify/yosupo_library_checker/Polynomial/Log.test.py
+    - icon: ':x:'
+      path: test_verify/yosupo_library_checker/Polynomial/Power.test.py
+      title: test_verify/yosupo_library_checker/Polynomial/Power.test.py
   - name: test_verify/yosupo_library_checker/Tree
     pages:
     - icon: ':heavy_check_mark:'

@@ -3,15 +3,21 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
-    path: test_verify/yosupo_library_checker/Convolution/Convolution.test.py
-    title: test_verify/yosupo_library_checker/Convolution/Convolution.test.py
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
+    title: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
+  - icon: ':x:'
     path: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
-  _isVerificationFailed: false
+  - icon: ':x:'
+    path: test_verify/yosupo_library_checker/Polynomial/Log.test.py
+    title: test_verify/yosupo_library_checker/Polynomial/Log.test.py
+  - icon: ':x:'
+    path: test_verify/yosupo_library_checker/Polynomial/Power.test.py
+    title: test_verify/yosupo_library_checker/Polynomial/Power.test.py
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links:
     - http://q.c.titech.ac.jp/docs/progs/polynomial_division.html
@@ -30,7 +36,7 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Modulo_Polynominal():\n    __slots__=(\"Poly\", \"max_degree\")\n\n\
+  code: "class Modulo_Polynomial():\n    __slots__=(\"Poly\", \"max_degree\")\n\n\
     \    def __init__(self, Poly=[], max_degree=2*10**5):\n        \"\"\" \u591A\u9805\
     \u5F0F\u306E\u5B9A\u7FA9\n\n        P: \u4FC2\u6570\u306E\u30EA\u30B9\u30C8\n\
     \        max_degree\n\n        \u203BMod: \u6CD5\u306F\u30B0\u30ED\u30FC\u30D0\
@@ -43,7 +49,7 @@ data:
     \ zip_longest(self.Poly,other.Poly,fillvalue=0)])\n\n    #+,-\n    def __pos__(self):\n\
     \        return self\n\n    def __neg__(self):\n        return self.scale(-1)\n\
     \n    #items\n    def __getitem__(self, index):\n        if isinstance(index,\
-    \ slice):\n            return Modulo_Polynominal(self.Poly[index], self.max_degree)\n\
+    \ slice):\n            return Modulo_Polynomial(self.Poly[index], self.max_degree)\n\
     \        else:\n            if index<0:\n                raise IndexError(\"index\
     \ is negative (index: {})\".format(index))\n            elif index>=len(self.Poly):\n\
     \                return 0\n            else:\n                return self.Poly[index]\n\
@@ -57,23 +63,22 @@ data:
     \          if P[d]:\n                break\n        self.resize(d+1)\n       \
     \ return\n\n    #\u30B7\u30D5\u30C8\n    def __lshift__(self,other):\n       \
     \ if other<0:\n            return self>>(-other)\n\n        if other>self.max_degree:\n\
-    \            return Modulo_Polynominal([0],self.max_degree)\n\n        G=[0]*other+self.Poly\n\
-    \        return Modulo_Polynominal(G,self.max_degree)\n\n    def __rshift__(self,other):\n\
-    \        if other<0:\n            return  self<<(-other)\n\n        return Modulo_Polynominal(self.Poly[other:],self.max_degree)\n\
+    \            return Modulo_Polynomial([0],self.max_degree)\n\n        G=[0]*other+self.Poly\n\
+    \        return Modulo_Polynomial(G,self.max_degree)\n\n    def __rshift__(self,other):\n\
+    \        if other<0:\n            return  self<<(-other)\n\n        return Modulo_Polynomial(self.Poly[other:],self.max_degree)\n\
     \n    #\u6B21\u6570\n    def degree(self):\n        P=self.Poly\n        for d\
     \ in range(len(self.Poly)-1,-1,-1):\n            if P[d]:\n                return\
     \ d\n        return -float(\"inf\")\n\n    #\u52A0\u6CD5\n    def __add__(self,other):\n\
-    \        P=self; Q=other\n\n        if Q.__class__==Modulo_Polynominal:\n    \
-    \        N=min(P.max_degree,Q.max_degree)\n            A=P.Poly; B=Q.Poly\n  \
-    \      else:\n            N=P.max_degree\n            A=P.Poly; B=Q\n        return\
-    \ Modulo_Polynominal(Calc.Add(A,B),N)\n\n    def __radd__(self,other):\n     \
-    \   return self+other\n\n    #\u6E1B\u6CD5\n    def __sub__(self,other):\n   \
-    \     P=self; Q=other\n        if Q.__class__==Modulo_Polynominal:\n         \
-    \   N=min(P.max_degree,Q.max_degree)\n            A=P.Poly; B=Q.Poly\n       \
-    \ else:\n            N=P.max_degree\n            A=P.Poly; B=Q\n        return\
-    \ Modulo_Polynominal(Calc.Sub(A,B),N)\n\n    def __rsub__(self,other):\n     \
-    \   return (-self)+other\n\n    #\u4E57\u6CD5\n    def __mul__(self,other):\n\
-    \        P=self\n        Q=other\n        if Q.__class__==Modulo_Polynominal:\n\
+    \        P=self; Q=other\n\n        if Q.__class__==Modulo_Polynomial:\n     \
+    \       N=min(P.max_degree,Q.max_degree)\n            A=P.Poly; B=Q.Poly\n   \
+    \     else:\n            N=P.max_degree\n            A=P.Poly; B=Q\n        return\
+    \ Modulo_Polynomial(Calc.Add(A,B),N)\n\n    def __radd__(self,other):\n      \
+    \  return self+other\n\n    #\u6E1B\u6CD5\n    def __sub__(self,other):\n    \
+    \    P=self; Q=other\n        if Q.__class__==Modulo_Polynomial:\n           \
+    \ N=min(P.max_degree,Q.max_degree)\n            A=P.Poly; B=Q.Poly\n        else:\n\
+    \            N=P.max_degree\n            A=P.Poly; B=Q\n        return Modulo_Polynomial(Calc.Sub(A,B),N)\n\
+    \n    def __rsub__(self,other):\n        return (-self)+other\n\n    #\u4E57\u6CD5\
+    \n    def __mul__(self,other):\n        P=self\n        Q=other\n        if Q.__class__==Modulo_Polynomial:\n\
     \            a=b=0\n            for x in P.Poly:\n                if x:\n    \
     \                a+=1\n            for y in Q.Poly:\n                if y:\n \
     \                   b+=1\n\n            if a>b:\n                P,Q=Q,P\n\n \
@@ -83,61 +88,61 @@ data:
     \                    if U[i]:\n                        for j in range(len(V)):\n\
     \                            B[i+j]+=U[i]*V[j]\n                            if\
     \ B[i+j]>Mod:\n                                B[i+j]-=Mod\n            else:\n\
-    \                B=Calc.Convolution(U,V)[:M]\n            B=Modulo_Polynominal(B,M)\n\
+    \                B=Calc.Convolution(U,V)[:M]\n            B=Modulo_Polynomial(B,M)\n\
     \            B.reduce()\n            return B\n        else:\n            return\
     \ self.scale(other)\n\n    def __rmul__(self,other):\n        return self.scale(other)\n\
     \n    #\u9664\u6CD5\n    def __floordiv__(self,other):\n        if not other:\n\
     \            raise ZeroDivisionError\n        if isinstance(other,int):\n    \
     \        return self/other\n\n        self.reduce()\n        other.reduce()\n\n\
-    \        return Modulo_Polynominal(Calc.Floor_Div(self.Poly, other.Poly),\n  \
-    \                              max(self.max_degree, other.max_degree))\n\n   \
-    \ def __rfloordiv__(self,other):\n        if not self:\n            raise ZeroDivisionError\n\
-    \n        if isinstance(other,int):\n            return Modulo_Polynominal([],self.max_degree)\n\
+    \        return Modulo_Polynomial(Calc.Floor_Div(self.Poly, other.Poly),\n   \
+    \                             max(self.max_degree, other.max_degree))\n\n    def\
+    \ __rfloordiv__(self,other):\n        if not self:\n            raise ZeroDivisionError\n\
+    \n        if isinstance(other,int):\n            return Modulo_Polynomial([],self.max_degree)\n\
     \n    #\u5270\u4F59\n    def __mod__(self,other):\n        if not other:\n   \
     \         return ZeroDivisionError\n        self.reduce(); other.reduce()\n  \
-    \      r=Modulo_Polynominal(Calc.Mod(self.Poly, other.Poly),\n               \
-    \             min(self.max_degree, other.max_degree))\n        r.reduce()\n  \
-    \      return r\n\n    def __rmod__(self,other):\n        if not self:\n     \
-    \       raise ZeroDivisionError\n        r=other-(other//self)*self\n        r.reduce()\n\
+    \      r=Modulo_Polynomial(Calc.Mod(self.Poly, other.Poly),\n                \
+    \            min(self.max_degree, other.max_degree))\n        r.reduce()\n   \
+    \     return r\n\n    def __rmod__(self,other):\n        if not self:\n      \
+    \      raise ZeroDivisionError\n        r=other-(other//self)*self\n        r.reduce()\n\
     \        return r\n\n    def __divmod__(self,other):\n        q=self//other\n\
     \        r=self-q*other; r.reduce()\n        return (q,r)\n\n    #\u7D2F\u4E57\
     \n    def __pow__(self,other):\n        if other.__class__==int:\n           \
-    \ n=other\n            m=abs(n)\n\n            Q=self\n            A=Modulo_Polynominal([1],self.max_degree)\n\
+    \ n=other\n            m=abs(n)\n\n            Q=self\n            A=Modulo_Polynomial([1],self.max_degree)\n\
     \            while m>0:\n                if m&1:\n                    A*=Q\n \
     \               m>>=1\n                Q*=Q\n\n            if n>=0:\n        \
     \        return A\n            else:\n                return A.inverse()\n   \
     \     else:\n            P=Log(self)\n            return Exp(P*other)\n\n    #\u9006\
     \u5143\n    def inverse(self, deg=None):\n        assert self.Poly[0], \"\u5B9A\
     \u6570\u9805\u304C0\"\n\n        if deg==None:\n            deg=self.max_degree\n\
-    \n        return Modulo_Polynominal(Calc.Inverse(self.Poly, deg), self.max_degree)\n\
+    \n        return Modulo_Polynomial(Calc.Inverse(self.Poly, deg), self.max_degree)\n\
     \n    #\u9664\u6CD5\n    def __truediv__(self,other):\n        if isinstance(other,\
-    \ Modulo_Polynominal):\n            if Calc.is_sparse(other.Poly):\n         \
-    \       d,f=Calc.coefficients_list(other.Poly)\n                K=len(d)\n   \
-    \             H=[0]*self.max_degree\n\n                alpha=pow(other[0], Mod-2,\
+    \ Modulo_Polynomial):\n            if Calc.is_sparse(other.Poly):\n          \
+    \      d,f=Calc.coefficients_list(other.Poly)\n                K=len(d)\n    \
+    \            H=[0]*self.max_degree\n\n                alpha=pow(other[0], Mod-2,\
     \ Mod)\n                H[0]=alpha*self[0]%Mod\n\n                for i in range(1,\
     \ self.max_degree):\n                    c=0\n                    for j in range(1,\
     \ K):\n                        if d[j]<=i:\n                            c+=f[j]*H[i-d[j]]%Mod\n\
     \                        else:\n                            break\n          \
     \          c%=Mod\n                    H[i]=alpha*(self[i]-c)%Mod\n          \
-    \      H=Modulo_Polynominal(H, min(self.max_degree, other.max_degree))\n     \
-    \           return H\n            else:\n                return self*other.inverse()\n\
+    \      H=Modulo_Polynomial(H, min(self.max_degree, other.max_degree))\n      \
+    \          return H\n            else:\n                return self*other.inverse()\n\
     \        else:\n            return pow(other,Mod-2,Mod)*self\n\n    def __rtruediv__(self,other):\n\
     \        return other*self.inverse()\n\n    #\u30B9\u30AB\u30E9\u30FC\u500D\n\
-    \    def scale(self, s):\n        return Modulo_Polynominal(Calc.Times(self.Poly,s),self.max_degree)\n\
+    \    def scale(self, s):\n        return Modulo_Polynomial(Calc.Times(self.Poly,s),self.max_degree)\n\
     \n    #\u6700\u9AD8\u6B21\u306E\u4FC2\u6570\n    def leading_coefficient(self):\n\
     \        for x in self.Poly[::-1]:\n            if x:\n                return\
     \ x\n        return 0\n\n    def censor(self, N=-1, Return=False):\n        \"\
     \"\" N \u6B21\u4EE5\u4E0A\u306E\u4FC2\u6570\u3092\u30AB\u30C3\u30C8\n        \"\
     \"\"\n\n        if N==-1:\n            N=self.max_degree\n\n        N=min(N, self.max_degree)\n\
-    \n        if Return:\n            return Modulo_Polynominal(self.Poly[:N],self.max_degree)\n\
+    \n        if Return:\n            return Modulo_Polynomial(self.Poly[:N],self.max_degree)\n\
     \        else:\n            self.Poly=self.Poly[:N]\n\n    def resize(self, N,\
     \ Return=False):\n        \"\"\" \u5F37\u5236\u7684\u306B Poly \u306E\u914D\u5217\
     \u306E\u9577\u3055\u3092 N \u306B\u3059\u308B.\n\n        \"\"\"\n\n        N=min(N,\
     \ self.max_degree)\n        P=self\n        if Return:\n            if len(P.Poly)>N:\n\
     \                E=P.Poly[:N]\n            else:\n                E=P.Poly+[0]*(N-len(P.Poly))\n\
-    \            return Modulo_Polynominal(E,P.max_degree)\n        else:\n      \
-    \      if len(P.Poly)>N:\n                del P.Poly[N:]\n            else:\n\
-    \                P.Poly+=[0]*(N-len(P.Poly))\n\n    #\u4EE3\u5165\n    def substitution(self,\
+    \            return Modulo_Polynomial(E,P.max_degree)\n        else:\n       \
+    \     if len(P.Poly)>N:\n                del P.Poly[N:]\n            else:\n \
+    \               P.Poly+=[0]*(N-len(P.Poly))\n\n    #\u4EE3\u5165\n    def substitution(self,\
     \ a):\n        \"\"\" a \u3092 (\u5F62\u5F0F\u7684\u306B) \u4EE3\u5165\u3057\u305F\
     \u5024\u3092\u6C42\u3081\u308B.\n\n        a: int\n        \"\"\"\n\n        y=0\n\
     \        t=1\n        for p in self.Poly:\n            y=(y+p*t)%Mod\n       \
@@ -299,11 +304,11 @@ data:
     \        G.pop()\n\n        if not F:\n            return []\n\n        return\
     \ Calc.Sub(F, Calc.Convolution(Calc.Floor_Div(F,G),G))\n\n#\u4EE5\u4E0B \u53C2\
     \u8003\u5143https://judge.yosupo.jp/submission/28304\ndef Differentiate(P):\n\
-    \    G=[(k*a)%Mod for k,a in enumerate(P.Poly[1:],1)]+[0]\n    return Modulo_Polynominal(G,P.max_degree)\n\
+    \    G=[(k*a)%Mod for k,a in enumerate(P.Poly[1:],1)]+[0]\n    return Modulo_Polynomial(G,P.max_degree)\n\
     \ndef Integrate(P):\n    F=P.Poly\n    N=len(F)\n\n    Inv=[0]*(N+1)\n    if N:\n\
     \        Inv[1]=1\n        for i in range(2,N+1):\n            q,r=divmod(Mod,i)\n\
     \            Inv[i]=(-q*Inv[r])%Mod\n\n    G=[0]+[(Inv[k]*a)%Mod for k,a in enumerate(F,1)]\n\
-    \    return Modulo_Polynominal(G,P.max_degree)\n\n\"\"\"\n\u7D2F\u4E57,\u6307\u6570\
+    \    return Modulo_Polynomial(G,P.max_degree)\n\n\"\"\"\n\u7D2F\u4E57,\u6307\u6570\
     ,\u5BFE\u6570\n\"\"\"\ndef Log(P):\n    assert P.Poly[0]==1,\"\u5B9A\u6570\u9805\
     \u304C1\u3067\u306F\u306A\u3044\"\n    return Integrate(Differentiate(P)/P)\n\n\
     def Exp(P):\n    #\u53C2\u8003\u51431:https://arxiv.org/pdf/1301.5804.pdf\n  \
@@ -330,7 +335,7 @@ data:
     \            #2.f'\n            E=[0]*(m-1)+T\n            E=[0]+[(Inv[k]*a)%Mod\
     \ for k,a in enumerate(E,1)]\n            U=[(a-b)%Mod for a,b in zip_longest(H[:2*m],E,fillvalue=0)][m:]\n\
     \            #2.g'\n            V=Calc.Convolution(F,U)[:m]\n            #2.h'\n\
-    \            F.extend(V)\n            #2.i'\n            m<<=1\n    return Modulo_Polynominal(F[:N],P.max_degree)\n\
+    \            F.extend(V)\n            #2.i'\n            m<<=1\n    return Modulo_Polynomial(F[:N],P.max_degree)\n\
     \ndef Root(P,k):\n    assert P.Poly[0]==1, \"\u5B9A\u6570\u9805\u304C1\u3067\u306F\
     \u306A\u3044\"\n    k%=Mod\n    assert k, \"k\u304C\u7279\u7570\"\n    k_inv=pow(k,Mod-2,Mod)\n\
     \    return Power(P,k_inv)\n\n\"\"\"\n\u4E09\u89D2\u95A2\u6570\n\"\"\"\n#\u6B63\
@@ -351,9 +356,9 @@ data:
     \ndef Power(P, M):\n    \"\"\" P \u306E M \u4E57\u3092\u6C42\u3081\u308B.\n\n\
     \    \"\"\"\n\n    assert M>=0\n    N=P.max_degree\n    F=P.Poly\n    F+=[0]*((N+1)-len(F))\n\
     \    for (deg,p) in enumerate(F):\n        if p:\n            break\n    else:\n\
-    \        if M==0:\n            return Modulo_Polynominal([1], P.max_degree)\n\
-    \        else:\n            return Modulo_Polynominal([0] ,P.max_degree)\n\n \
-    \   if deg*M>N:\n        return Modulo_Polynominal([0], P.max_degree)\n\n    p_inv=pow(p,\
+    \        if M==0:\n            return Modulo_Polynomial([1], P.max_degree)\n \
+    \       else:\n            return Modulo_Polynomial([0] ,P.max_degree)\n\n   \
+    \ if deg*M>N:\n        return Modulo_Polynomial([0], P.max_degree)\n\n    p_inv=pow(p,\
     \ Mod-2, Mod)\n    M_mod=M%Mod\n\n    if Calc.is_sparse(F):\n        # P \u304C\
     \u758E\u306A\u5834\u5408\n        H=[(p_inv*a)%Mod for a in F[deg:]]+[0]\n   \
     \     Nh=len(H)-1\n        d,h=Calc.coefficients_list(H); K=len(d)\n\n       \
@@ -362,9 +367,9 @@ data:
     \ for i in range(Nh-1):\n            g=(M_mod*(i+1)%Mod)*H[i+1]%Mod\n        \
     \    for j in range(K):\n                if 1<=d[j]<=i:\n                    alpha=(d[j]*M_mod-(i-d[j]+1))%Mod\n\
     \                    beta=G[i+1-d[j]]*H[d[j]]%Mod\n                    g+=alpha*beta\n\
-    \            g%=Mod\n            G[i+1]=g*Inv[i+1]%Mod\n    else:\n        Q=Modulo_Polynominal([(p_inv*a)%Mod\
+    \            g%=Mod\n            G[i+1]=g*Inv[i+1]%Mod\n    else:\n        Q=Modulo_Polynomial([(p_inv*a)%Mod\
     \ for a in F[deg:]],P.max_degree)\n        G=Exp(M_mod*Log(Q)).Poly\n\n    pk=pow(p,\
-    \ M, Mod)\n    G=[0]*(deg*M)+[(pk*a)%Mod for a in G]\n    return Modulo_Polynominal(G,\
+    \ M, Mod)\n    G=[0]*(deg*M)+[(pk*a)%Mod for a in G]\n    return Modulo_Polynomial(G,\
     \ P.max_degree)\n\n#\u6839\u53F7\ndef Tonelli_Shanks(X, default=-1):\n    \"\"\
     \" X=a (mod Mod) \u306E\u3068\u304D, r*r=a (mod Mod) \u3092\u6E80\u305F\u3059\
     \ r \u3092\u8FD4\u3059.\n\n    \u203B\u6CD5p\u304C\u7D20\u6570\u306E\u3068\u304D\
@@ -398,10 +403,10 @@ data:
     \            G=[two_inv*(a+b)%Mod for a,b in zip(G,H)]\n    return G[:N]\n\ndef\
     \ Sqrt(P):\n    N=P.max_degree\n    F=P.Poly\n    F+=[0]*(N-len(F))\n\n    for\
     \ d,p in enumerate(F):\n        if p:\n            break\n    else:\n        return\
-    \ Modulo_Polynominal([0],P.max_degree)\n\n    if d%2==1:\n        return\n\n \
-    \   E=__sqrt(F[d:],N-d//2)\n\n    if E==None:\n        return\n\n    if d>0:\n\
-    \        E=[0]*(d//2)+E\n    return Modulo_Polynominal(E,P.max_degree)\n\n\"\"\
-    \"\n\u5F62\u5F0F\u7684\u30D9\u30AD\u7D1A\u6570\u306B\u5BFE\u3059\u308B\u7279\u5225\
+    \ Modulo_Polynomial([0],P.max_degree)\n\n    if d%2==1:\n        return\n\n  \
+    \  E=__sqrt(F[d:],N-d//2)\n\n    if E==None:\n        return\n\n    if d>0:\n\
+    \        E=[0]*(d//2)+E\n    return Modulo_Polynomial(E,P.max_degree)\n\n\"\"\"\
+    \n\u5F62\u5F0F\u7684\u30D9\u30AD\u7D1A\u6570\u306B\u5BFE\u3059\u308B\u7279\u5225\
     \u306A\u64CD\u4F5C\n\"\"\"\ndef Composition(P,Q):\n    \"\"\" P o Q=P(Q) \u3092\
     \u6C42\u3081\u308B (\u203B \u9806\u756A\u6CE8\u610F) ([X^0]Q=0 \u3067\u306A\u304F\
     \u3066\u306F\u306A\u3089\u306A\u3044).\n\n    Reference: https://judge.yosupo.jp/submission/42372\n\
@@ -414,7 +419,7 @@ data:
     \ t<len(y):\n                    y[t]+=x[t]*P[i*d+j]%Mod\n\n    F=[0]*(deg+1)\n\
     \    Z=[1]\n    x=X[d]\n    for i in range(k):\n        Y[i]=Calc.Convolution(Y[i],Z)[:deg+1]\n\
     \        for j in range(len(Y[i])):\n            F[j]+=Y[i][j]\n        Z=Calc.Convolution(Z,x)[:deg+1]\n\
-    \    return Modulo_Polynominal(F, deg)\n\ndef Taylor_Shift(P, a):\n    \"\"\"\u4E0E\
+    \    return Modulo_Polynomial(F, deg)\n\ndef Taylor_Shift(P, a):\n    \"\"\"\u4E0E\
     \u3048\u3089\u308C\u305F\u591A\u9805\u5F0F P \u306B\u5BFE\u3057\u3066, P(X+a)\
     \ \u3092\u6C42\u3081\u308B.\n\n    P: Polynominal\n    a: int\n    \"\"\"\n\n\
     \    N=len(P.Poly)-1\n\n    fact=[0]*(N+1)\n    fact[0]=1\n    for i in range(1,N+1):\n\
@@ -423,7 +428,7 @@ data:
     \n    F=P.Poly.copy()\n    for i in range(N+1):\n        F[i]=(F[i]*fact[i])%Mod\n\
     \n    G=[0]*(N+1)\n    c=1\n    for i in range(N+1):\n        G[i]=(c*fact_inv[i])%Mod\n\
     \        c=(c*a)%Mod\n    G.reverse()\n\n    H=Calc.Convolution(F,G)[N:]\n   \
-    \ for i in range(len(H)):\n        H[i]=(H[i]*fact_inv[i])%Mod\n\n    return Modulo_Polynominal(H,P.max_degree)\n\
+    \ for i in range(len(H)):\n        H[i]=(H[i]*fact_inv[i])%Mod\n\n    return Modulo_Polynomial(H,P.max_degree)\n\
     \ndef Polynominal_Coefficient(P,Q,N):\n    \"\"\" [X^N] P/Q \u3092\u6C42\u3081\
     \u308B.\n\n    References:\n    http://q.c.titech.ac.jp/docs/progs/polynomial_division.html\n\
     \    https://arxiv.org/abs/2008.08822\n    https://arxiv.org/pdf/2008.08822.pdf\n\
@@ -462,9 +467,9 @@ data:
     \        A=Calc.Convolution(U[2*i], T[2*i+1])\n        B=Calc.Convolution(T[2*i],\
     \ U[2*i+1])\n\n        m=min(len(A), len(B))\n\n        u=[0]*m\n        for j\
     \ in range(m):\n            u[j]=(A[j]+B[j])%Mod\n        u.extend(A[m:])\n  \
-    \      u.extend(B[m:])\n        U[i]=u\n\n    return Modulo_Polynominal(U[1],\
-    \ N)\n\n#\u591A\u9805\u5F0F\u540C\u58EB\u306E\u6700\u5927\u516C\u7D04\u6570\n\
-    def _gcd(F,G):\n    while G:\n        F,G=G,F%G\n\n    a_inv=pow(F.leading_coefficient(),Mod-2,Mod)\n\
+    \      u.extend(B[m:])\n        U[i]=u\n\n    return Modulo_Polynomial(U[1], N)\n\
+    \n#\u591A\u9805\u5F0F\u540C\u58EB\u306E\u6700\u5927\u516C\u7D04\u6570\ndef _gcd(F,G):\n\
+    \    while G:\n        F,G=G,F%G\n\n    a_inv=pow(F.leading_coefficient(),Mod-2,Mod)\n\
     \    X=F.Poly\n    for i in range(len(X)):\n        X[i]=(a_inv*X[i])%Mod\n  \
     \  return F\n\ndef gcd(*X):\n    from functools import reduce\n    return reduce(_gcd,X)\n\
     \n#\u591A\u9805\u5F0F\u540C\u58EB\u306E\u6700\u5C0F\u516C\u500D\u6570\ndef _lcm(F,G):\n\
@@ -474,178 +479,19 @@ data:
     #=================================================\nMod=998244353\nCalc=Calculator()\n"
   dependsOn: []
   isVerificationFile: false
-  path: Modulo_Sequence/Modulo_Polynominal.py
+  path: Modulo_Sequence/Modulo_Polynomial.py
   requiredBy: []
-  timestamp: '2022-11-22 23:08:11+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2022-11-23 00:05:10+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
+  - test_verify/yosupo_library_checker/Polynomial/Power.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Exp.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Log.test.py
   - test_verify/yosupo_library_checker/Polynomial/Inv.test.py
-  - test_verify/yosupo_library_checker/Convolution/Convolution.test.py
-documentation_of: Modulo_Sequence/Modulo_Polynominal.py
+documentation_of: Modulo_Sequence/Modulo_Polynomial.py
 layout: document
-title: Modulo Polynominal
+redirect_from:
+- /library/Modulo_Sequence/Modulo_Polynomial.py
+- /library/Modulo_Sequence/Modulo_Polynomial.py.html
+title: Modulo_Sequence/Modulo_Polynomial.py
 ---
-
-## Outline
-
-多項式, 形式的ベキ級数に関する計算を行う.
-
-## Theory
-
-### 解析
-
-$f \in \mathbb{F}_p[\\![X]\\!]$ に対する形式的積分 $\displaystyle \int f(X)~dX$ , 形式的微分 $f'(X)$ をそれぞれ
-
-- $\displaystyle f'(X)=\sum_{n=0}^{\infty} (n+1) f_{n+1} X^n$
-- $\displaystyle \int f(X) dX=\sum_{n=0}^{\infty} \dfrac{f_n}{n+1} X^{n+1}$
-
-と定義する.
-
-### Newton 法
-
-線形部分空間 $D \subset \mathbb{F}_p[\\![X]\\!]$ に対して, $T: D \to \mathbb{F}_p[\\![X]\\!]$ が与えられているとする. このとき, $f \in \mathbb{F}_p$ に対して, $T(g)=f$ となる $g \in D$ を求めたい.
-
-$T(\beta)=f_0$ となる $\beta \in F_p$ を何かしらの方法で求め, $g^{(1)}=\beta$ とする.
-
-$T(g^{(N)}) \equiv f \pmod{X^N}$ となる多項式 $g^{(N)}$ が求まっているとする. Taylor 展開から
-
-$$f=T(g)=T(g^{(N)})+T'(g^{(N)})(g-g^{(N)})+O((g-g^{(N)})^2)$$
-
-となる. $\pmod{X^{2N}}$ での剰余を考えることによって,
-
-$$f \equiv T(g^{(N)})+T'(g^{(N)})(g-g^{(N)}) \pmod{X^{2N}}$$
-
-となる. これを整理することによって,
-
-$$g \equiv g^{(N)}+\dfrac{f-T(g^{(N)})}{T'(g^{(N)})} \pmod{X^{2N}}$$
-
-となる. よって, $g^{(2N)}:=g^{(N)}+\dfrac{f-T(g^{(N)})}{T'(g^{(N)})} \pmod{X^{2N}}$ とすればよい.
-
-### 逆元
-
-$f \in \mathbb{F}_p[\\![X]\\!]$ に対して, $f_0 \neq 0$ ならば, $fg=1$ となる $g \in \mathbb{F}_p[\\![X]\\!]$ が存在する.
-
-$D$ を $f_0 \neq 0$ となる $f \in \mathbb{F}_p[\\![X]\\!]$ 全体の集合とする. $T: D \to \mathbb{F}_p[\\![X]\\!]$ を $T(g):=g^{-1}$ と定める.
-
-Newton 法で求める. $g^{(0)}=f_0^{-1}$ である. また, $T'(g)=-\dfrac{1}{g^2}$ であるから,
-
-$$g^{(2N)}=g^{(N)}+\dfrac{f-(1/g^{(N)})}{-(1/{g^{(N)}}^2)}=g^{(N)}(2-fg^{(N)})$$
-
-となる.
-
-### 対数関数
-
-$f \in F_p[\\![X]\\!]$ に対して, $\displaystyle \log f:=\int \dfrac{f(X)}{f'(X)}~dX$ と定義する.
-
-### 指数関数
-
-$f_0=0$ となる $f \in \mathbb{F}\_p[\\![X]\\!]$ に対して, $\displaystyle \exp f:=\sum\_{n=0}^{\infty} \dfrac{f_n}{n!} X^n$ と定義する.
-
-このとき, $\exp (\log f)=\log(\exp f)=f$ が成り立つ. よって, $g=\exp f \iff f=\log g$ である.
-
-Newton 法において, $T(g):=\log g$ とすると, $T'(g)=\dfrac{1}{g}$ であるから, $g^{(1)}=1$ 及び,
-
-$$g^{(N)}+\dfrac{f-\log g^{(N)}}{\log'g^{(N)}}=g^{(N)}(1+f-\log g^{(N)})$$
-
-となるから, $g^{(2N)}=g^{(N)}(1+f-\log g^{(N)}) \pmod{X^{2N}}$ である.
-
-### 累乗
-
-$f \in \mathbb{F}_p[\\![X]\\!]$ に対して, $f \neq 0$ ならば, $f=\alpha X^d g, g_0=1$ となる $\alpha \in F_p^\times, d \geq 0, g \in \mathbb{F}_p[\\![X]\\!]$ が唯一存在する. ここで, $g=\exp(\log g)$ であるから, $g^M=\exp(M \log g)$ である. これを利用することによって, $f^M=\alpha^M X^{Md} \exp(M \log g)$ となる.
-
-### 平方根
-
-$f \in \mathbb{F}_p[\\![X]\\!]$ に対して, $h^2=f$ となる $\mathbb{F}_p[\\![X]\\!]$ となる $h$ が存在することと, 以下の2条件のうち, どちらか一方が成り立つことは同値である.
-
-- $f=0$
-- $f=\alpha X^d g, g_0=1$ となる $\alpha \in F_p$, 非負整数 $d$, $g_0 \in \mathbb{F}_p[\\![X]\\!]$ は唯一存在するが, $\alpha$ が平方剰余で, $d$ が偶数.
-
-$g_0=1$ とする. このとき, $T(h):=h^2$ として, $T(h)=g$ となる $h$ を Newton 法で求めることにする.
-
-まず, $h^{(1)}=1$ である. また, $T'(h)=2hh'$ であるから,
-
-$$g^{(N)}+\dfrac{f-{g^{(N)}}^2}{2g^{(N)}}=\dfrac{1}{2}\left(g^{(N)}+\dfrac{f}{g^{(N)}} \right)$$
-
-より, $g^{(2N)}=\dfrac{1}{2}\left(g^{(N)}+\dfrac{f}{g^{(N)}} \right) \pmod{X^{2N}}$ である.
-
-### 多項式の商と剰余
-
-$f,g \in \mathbb{F}_p[X]$ は多項式で, $g \neq 0$ であるとする. このとき, $f=q g+r, \deg r < \deg g$ となる多項式の組 $(q,r)$ が唯一存在する. このとき, $q,r$ をそれぞれ多項式 $f$ を多項式 $g$ で割った商, 余りという.
-
-多項式 $h$ が高々 $K$ 次になるとき, $\widetilde{h}(X):=h(X^{-1}) X^K$ は多項式になる. なお, $h(X)=\alpha_0+\alpha_1 X+\dots+\alpha_K X^K$ のとき, $h(X)=\alpha_K+\dots+\alpha_1 X^{K-1}+\alpha_0 X^K$ である.
-
-$\deg f=N, \deg g=M$ とすると, $\deg q=N-M, \deg r<M$ となる. $f=q g+r$ の両辺に $X^N$ を掛けると,
-
-$$\widetilde{f}=\widetilde{g} \widetilde{q}+\widetilde{r} X^{N-(M-1)} \equiv \widetilde{g} \widetilde{q} \pmod{X^{N-M+1}}$$
-
-である. $g \neq 0$ から, $\left(\widetilde{g} \right)_0 \neq 0$ なので,
-
-$$\widetilde{q}=\dfrac{\widetilde{f}}{\widetilde{g}} \pmod{X^{N-M+1}}$$
-
-であり, $q=\widetilde{\widetilde{q}}$ によって $q$ を求めることが出来る. これにより, $r=f-pg$ で $r$ も求められる.
-
-### 除算における $N$ 次の係数
-
-$P$ は高々 $(d-1)$ 次未満の多項式, $Q$ は $d$ 次の多項式であるとする. このとき,
-
-$$\left[X^N \right] \dfrac{P(X)}{Q(X)}$$
-
-を求めたい.
-
-$\left[X^0 \right] Q \in \mathbb{F}_p^\times$ とする.
-
-分子と分母の両方に $Q(-X)$ を掛けると, $Q(X)Q(-X)$ が偶多項式になるので, $V(X^2)=Q(X)Q(-X)$ となる多項式 $V$ が存在する.
-
-また, 多項式 $P(X)Q(-X)$ を $P(X)Q(-X)=S_{{\rm even}}(X^2)+XS_{{\rm odd}}(X^2)$ と分解する.
-
-このとき, 分母が偶多項式であるから, $N$ が偶数のときは
-
-$$\left[X^N \right] \dfrac{P(X)}{Q(X)}=\left[X^N \right] \dfrac{S_{{\rm even}}(X^2)}{V(X^2)}=\left[X^{N/2} \right] \dfrac{S_{{\rm even}}(X)}{V(X)}$$
-
-が成り立つ. $N$ が奇数のときも同様にして,
-
-$$\left[X^N \right] \dfrac{P(X)}{Q(X)}=\left[X^N \right] \dfrac{XS_{{\rm odd}}(X^2)}{V(X^2)}=\left[X^{(N-1)/2} \right] \dfrac{S_{{\rm odd}}(X)}{V(X)}$$
-
-が成り立つ.
-
-これにより, 1回関係式を利用することにより, 求める指数をが $1/2$ に落とすことが出来る.
-
-また, 自明な場合として,
-
-$$\left[X^0 \right] \dfrac{P(X)}{Q(X)}=\dfrac{\left[X^0 \right] P}{\left[X^0 \right] Q}$$
-
-が成り立つ.
-
-よって, $d$ 次の多項式の積を $O(\log N)$ 回求めることによって, $\displaystyle \left[X^N \right] \dfrac{P(X)}{Q(X)}$ を求めることができる.
-
-この多項式の積を求めるパートがボトルネックになるから, 計算量は $O(d \log d \log N)$ Time である.
-
-### 多点評価
-
-$N$ 次の多項式 $P \in \mathbb{F}_p[X]$ と $M$ 個の整数 $\alpha_1, \dots, \alpha_M$ に対して, $P(\alpha_1), \dots, P(\alpha_M)$ を求める.
-
-次の2つの定理を利用して求めることにする.
-
-> 剰余の定理
->
-> $R$ を可換環とする. 多項式 $P \in R[X]$ と $\alpha$ に対して,
-> $$P(\alpha)=P(X) \pmod {(X-\alpha)}$$
-> が成り立つ.
-
-> 中国剰余定理
->
-> $R$ を環, $I_1, \dots, I_k \subset R$ は $R$ のイデアルで, どの2つも互いに素であるとする. このとき,
-> $$\displaystyle \prod_{i=1}^k R/I_i \simeq R/(I_1 \cap \dots \cap I_k)$$
-> である.
->
-> なお, $R$ が可換環の場合は
-> $$I_1 \cap \dots \cap I_k=I_1 \dots I_k$$
-> である.
-
-これらの定理から,
-$$P(X) \pmod{(X-\alpha_1) \dots (X-\alpha_M)}$$
-を求め,
-
-$$(F \pmod{GH}) \pmod{H}=F \pmod{H}$$
-
-を利用して除式の次数を半分にしながら最終的に $P(X) \pmod{(X-\alpha_j)}$ を求める.

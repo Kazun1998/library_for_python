@@ -1,9 +1,6 @@
 ---
 data:
-  _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
-    path: Modulo_Sequence/Modulo_Polynominal.py
-    title: Modulo Polynominal
+  _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -26,8 +23,7 @@ data:
     \    A=list(map(int,input().split()))\n    B=list(map(int,input().split()))\n\
     \    write(\" \".join(map(str,Calc.Convolution(A,B))))\n\n#==================================================\n\
     verify()"
-  dependsOn:
-  - Modulo_Sequence/Modulo_Polynominal.py
+  dependsOn: []
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Convolution/Convolution.test.py
   requiredBy: []
