@@ -1,10 +1,9 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/lcm_convolution
 
 #==================================================
-import sys
-sys.path.append('Convolution/')
-from  LCM_Convolution import *
+from Convolution.LCM_Convolution import Convolution_LCM
 
+import sys
 input=sys.stdin.readline
 write=sys.stdout.write
 
