@@ -304,7 +304,7 @@ data:
       title: Modulo_Matrix/Modulo_Vector_Space.py
   - name: Modulo_Sequence
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: Modulo_Sequence/Modulo_Polynominal.py
       title: Modulo Polynominal
     - icon: ':warning:'
@@ -380,6 +380,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/Gcd_Convolution.test.py
       title: test_verify/Gcd_Convolution.test.py
+    - icon: ':x:'
+      path: test_verify/Inv.test.py
+      title: test_verify/Inv.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/Jump_on_Tree.test.py
       title: test_verify/Jump_on_Tree.test.py

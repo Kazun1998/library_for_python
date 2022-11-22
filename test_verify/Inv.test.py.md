@@ -6,9 +6,9 @@ data:
     title: Modulo Polynominal
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/convolution_mod
     links:
@@ -22,22 +22,21 @@ data:
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/convolution_mod\n\
     \n#==================================================\nfrom Modulo_Sequence.Modulo_Polynominal\
     \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
-    #==================================================\ndef verify():\n    N,M=map(int,input().split())\n\
-    \    A=list(map(int,input().split()))\n    B=list(map(int,input().split()))\n\
-    \    write(\" \".join(map(str,Calc.Convolution(A,B))))\n\n#==================================================\n\
-    verify()"
+    #==================================================\ndef verify():\n    N=int(input())\n\
+    \    A=list(map(int,input().split()))\n    write(\" \".join(map(str,Calc.Inverse(A))))\n\
+    \n#==================================================\nverify()"
   dependsOn:
   - Modulo_Sequence/Modulo_Polynominal.py
   isVerificationFile: true
-  path: test_verify/Convolution.test.py
+  path: test_verify/Inv.test.py
   requiredBy: []
-  timestamp: '2022-11-22 22:49:12+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2022-11-22 22:57:02+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
-documentation_of: test_verify/Convolution.test.py
+documentation_of: test_verify/Inv.test.py
 layout: document
 redirect_from:
-- /verify/test_verify/Convolution.test.py
-- /verify/test_verify/Convolution.test.py.html
-title: test_verify/Convolution.test.py
+- /verify/test_verify/Inv.test.py
+- /verify/test_verify/Inv.test.py.html
+title: test_verify/Inv.test.py
 ---

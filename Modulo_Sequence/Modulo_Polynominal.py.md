@@ -6,9 +6,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: test_verify/Convolution.test.py
     title: test_verify/Convolution.test.py
-  _isVerificationFailed: false
+  - icon: ':x:'
+    path: test_verify/Inv.test.py
+    title: test_verify/Inv.test.py
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links:
     - http://q.c.titech.ac.jp/docs/progs/polynomial_division.html
@@ -475,9 +478,10 @@ data:
   path: Modulo_Sequence/Modulo_Polynominal.py
   requiredBy: []
   timestamp: '2022-10-01 20:27:36+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test_verify/Convolution.test.py
+  - test_verify/Inv.test.py
 documentation_of: Modulo_Sequence/Modulo_Polynominal.py
 layout: document
 title: Modulo Polynominal
