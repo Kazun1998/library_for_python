@@ -684,7 +684,7 @@ class Calculator:
         else:
             M=length
 
-        if length<=0:
+        if M<=0:
             return []
 
         if self.is_sparse(F):
@@ -978,6 +978,7 @@ def Tonelli_Shanks(X, default=-1):
     ※法pが素数のときのみ有効
     ※存在しないときは default が返り値
     """
+
     #ルジャンドル記号
     def Legendre(X):
         """ルジャンドル記号 (a/Mod) を返す.
@@ -1323,6 +1324,3 @@ def lcm(*X):
 #=================================================
 Mod=998244353
 Calc=Calculator()
-X=Modulo_Polynominal([0,1],15)
-F=Modulo_Polynominal([1],15)
-G=1-2*X+X*X*X
