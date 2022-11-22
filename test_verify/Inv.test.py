@@ -1,4 +1,4 @@
-# verification-helper: PROBLEM https://judge.yosupo.jp/problem/convolution_mod
+# verification-helper: PROBLEM https://judge.yosupo.jp/problem/inv_of_formal_power_series
 
 #==================================================
 from Modulo_Sequence.Modulo_Polynominal import *
