@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: Tree/Tree.py
     title: Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/lca
     links:
@@ -33,7 +33,7 @@ data:
   path: test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
   requiredBy: []
   timestamp: '2022-11-22 23:25:26+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
 layout: document

@@ -339,7 +339,7 @@ data:
     - icon: ':warning:'
       path: Tree/Forest.py
       title: Tree/Forest.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: Tree/Tree.py
       title: Tree
   - name: Union_Find
@@ -398,10 +398,10 @@ data:
       title: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
   - name: test_verify/yosupo_library_checker/Tree
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
       title: test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
       title: test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
 layout: toppage
