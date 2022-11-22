@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: Modulo_Sequence/Modulo_Polynominal.py
     title: Modulo Polynominal
   _extendedRequiredBy: []
@@ -31,7 +31,7 @@ data:
   isVerificationFile: true
   path: test_verify/Convolution.test.py
   requiredBy: []
-  timestamp: '2022-11-22 22:49:12+09:00'
+  timestamp: '2022-11-22 23:08:11+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/Convolution.test.py

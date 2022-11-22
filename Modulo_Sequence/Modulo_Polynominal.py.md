@@ -6,12 +6,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: test_verify/Convolution.test.py
     title: test_verify/Convolution.test.py
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test_verify/Inv.test.py
     title: test_verify/Inv.test.py
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links:
     - http://q.c.titech.ac.jp/docs/progs/polynomial_division.html
@@ -268,8 +268,8 @@ data:
     \            n,b=heappop(Q)\n            heappush(Q, (m+n-1, self.Convolution(a,b)))\n\
     \        return Q[0][1]\n\n    def Inverse(self, F, length=None):\n        if\
     \ length==None:\n            M=len(F)\n        else:\n            M=length\n\n\
-    \        if length<=0:\n            return []\n\n        if self.is_sparse(F):\n\
-    \            \"\"\"\n            \u611A\u76F4\u306B\u6F38\u5316\u5F0F\u3092\u7528\
+    \        if M<=0:\n            return []\n\n        if self.is_sparse(F):\n  \
+    \          \"\"\"\n            \u611A\u76F4\u306B\u6F38\u5316\u5F0F\u3092\u7528\
     \u3044\u3066\u6C42\u3081\u308B.\n            \u8A08\u7B97\u91CF: F \u306B\u3042\
     \u308B\u4FC2\u6570\u304C\u975E\u96F6\u306E\u9805\u306E\u500B\u6570\u3092 K, \u6C42\
     \u3081\u308B\u6700\u5927\u6B21\u6570\u3092 N \u3068\u3057\u3066, O(NK) \u6642\u9593\
@@ -369,27 +369,27 @@ data:
     \" X=a (mod Mod) \u306E\u3068\u304D, r*r=a (mod Mod) \u3092\u6E80\u305F\u3059\
     \ r \u3092\u8FD4\u3059.\n\n    \u203B\u6CD5p\u304C\u7D20\u6570\u306E\u3068\u304D\
     \u306E\u307F\u6709\u52B9\n    \u203B\u5B58\u5728\u3057\u306A\u3044\u3068\u304D\
-    \u306F default \u304C\u8FD4\u308A\u5024\n    \"\"\"\n    #\u30EB\u30B8\u30E3\u30F3\
-    \u30C9\u30EB\u8A18\u53F7\n    def Legendre(X):\n        \"\"\"\u30EB\u30B8\u30E3\
-    \u30F3\u30C9\u30EB\u8A18\u53F7 (a/Mod) \u3092\u8FD4\u3059.\n\n        \u203B\u6CD5\
-    \u304C\u7D20\u6570\u306E\u3068\u304D\u306E\u307F\u6210\u7ACB\u3059\u308B.\n  \
-    \      \"\"\"\n\n        if X%Mod==0:\n            return 0\n        elif pow(X,(Mod-1)//2,Mod)==1:\n\
-    \            return 1\n        else:\n            return -1\n\n    X%=Mod\n  \
-    \  if Legendre(X)==-1:\n        return default\n\n    from random import randint\
-    \ as ri\n    if X==0:\n        return X\n    elif Mod==2:\n        return X\n\
-    \    elif Mod%4==3:\n        return pow(X,(Mod+1)//4,Mod)\n\n    u=2\n    s=1\n\
-    \    while (Mod-1)%(2*u)==0:\n        u*=2\n        s+=1\n    q=(Mod-1)//u\n\n\
-    \    z=0\n    while pow(z,(Mod-1)//2,Mod)!=Mod-1:\n        z=ri(1,Mod-1)\n\n \
-    \   m,c,t,r=s,pow(z,q,Mod),pow(X,q,Mod),pow(X,(q+1)//2,Mod)\n    while m>1:\n\
-    \        if pow(t,2**(m-2),Mod)==1:\n            c=(c*c)%Mod\n            m=m-1\n\
-    \        else:\n            c,t,r,m=(c*c)%Mod,(c*c*t)%Mod,(c*r)%Mod,m-1\n    return\
-    \ r\n\n#\u591A\u9805\u5F0F\u306E\u6839\u53F7\ndef __sqrt(F, N):\n    F+=[0]*(N-len(F))\n\
-    \    s=Tonelli_Shanks(F[0])\n    if s==-1:\n        return None\n\n    two_inv=pow(2,\
-    \ Mod-2, Mod)\n\n    if not Calc.is_sparse(F):\n        # P \u304C\u758E\u306A\
-    \u5834\u5408\n        F.append(0)\n        d,f=Calc.coefficients_list(F); K=len(d)\n\
-    \n        Inv=[0]*(N+1); Inv[1]=1\n        for i in range(2, N+1):\n         \
-    \   q,r=divmod(Mod, i)\n            Inv[i]=(-q*Inv[r])%Mod\n\n        G=[0]*N;\
-    \ G[0]=1\n        for i in range(N):\n            g=(two_inv*(i+1)%Mod)*F[i+1]%Mod\n\
+    \u306F default \u304C\u8FD4\u308A\u5024\n    \"\"\"\n\n    #\u30EB\u30B8\u30E3\
+    \u30F3\u30C9\u30EB\u8A18\u53F7\n    def Legendre(X):\n        \"\"\"\u30EB\u30B8\
+    \u30E3\u30F3\u30C9\u30EB\u8A18\u53F7 (a/Mod) \u3092\u8FD4\u3059.\n\n        \u203B\
+    \u6CD5\u304C\u7D20\u6570\u306E\u3068\u304D\u306E\u307F\u6210\u7ACB\u3059\u308B\
+    .\n        \"\"\"\n\n        if X%Mod==0:\n            return 0\n        elif\
+    \ pow(X,(Mod-1)//2,Mod)==1:\n            return 1\n        else:\n           \
+    \ return -1\n\n    X%=Mod\n    if Legendre(X)==-1:\n        return default\n\n\
+    \    from random import randint as ri\n    if X==0:\n        return X\n    elif\
+    \ Mod==2:\n        return X\n    elif Mod%4==3:\n        return pow(X,(Mod+1)//4,Mod)\n\
+    \n    u=2\n    s=1\n    while (Mod-1)%(2*u)==0:\n        u*=2\n        s+=1\n\
+    \    q=(Mod-1)//u\n\n    z=0\n    while pow(z,(Mod-1)//2,Mod)!=Mod-1:\n      \
+    \  z=ri(1,Mod-1)\n\n    m,c,t,r=s,pow(z,q,Mod),pow(X,q,Mod),pow(X,(q+1)//2,Mod)\n\
+    \    while m>1:\n        if pow(t,2**(m-2),Mod)==1:\n            c=(c*c)%Mod\n\
+    \            m=m-1\n        else:\n            c,t,r,m=(c*c)%Mod,(c*c*t)%Mod,(c*r)%Mod,m-1\n\
+    \    return r\n\n#\u591A\u9805\u5F0F\u306E\u6839\u53F7\ndef __sqrt(F, N):\n  \
+    \  F+=[0]*(N-len(F))\n    s=Tonelli_Shanks(F[0])\n    if s==-1:\n        return\
+    \ None\n\n    two_inv=pow(2, Mod-2, Mod)\n\n    if not Calc.is_sparse(F):\n  \
+    \      # P \u304C\u758E\u306A\u5834\u5408\n        F.append(0)\n        d,f=Calc.coefficients_list(F);\
+    \ K=len(d)\n\n        Inv=[0]*(N+1); Inv[1]=1\n        for i in range(2, N+1):\n\
+    \            q,r=divmod(Mod, i)\n            Inv[i]=(-q*Inv[r])%Mod\n\n      \
+    \  G=[0]*N; G[0]=1\n        for i in range(N):\n            g=(two_inv*(i+1)%Mod)*F[i+1]%Mod\n\
     \            for j in range(K):\n                if 1<=d[j]<=i:\n            \
     \        alpha=(d[j]*two_inv-(i-d[j]+1))%Mod\n                    beta=G[i+1-d[j]]*F[d[j]]%Mod\n\
     \                    g+=alpha*beta\n            g%=Mod\n            G[i+1]=g*Inv[i+1]%Mod\n\
@@ -471,14 +471,13 @@ data:
     \    return (F//gcd(F,G))*G\n\ndef lcm(*X):\n    from functools import reduce\n\
     \    L=reduce(_lcm,X)\n    a_inv=pow(L.leading_coefficient(),Mod-2,Mod)\n    X=L.Poly\n\
     \    for i in range(len(X)):\n        X[i]=(a_inv*X[i])%Mod\n    return L\n\n\
-    #=================================================\nMod=998244353\nCalc=Calculator()\n\
-    X=Modulo_Polynominal([0,1],15)\nF=Modulo_Polynominal([1],15)\nG=1-2*X+X*X*X\n"
+    #=================================================\nMod=998244353\nCalc=Calculator()\n"
   dependsOn: []
   isVerificationFile: false
   path: Modulo_Sequence/Modulo_Polynominal.py
   requiredBy: []
-  timestamp: '2022-10-01 20:27:36+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  timestamp: '2022-11-22 23:08:11+09:00'
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/Convolution.test.py
   - test_verify/Inv.test.py

@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: Modulo_Sequence/Modulo_Polynominal.py
     title: Modulo Polynominal
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/inv_of_formal_power_series
     links:
@@ -30,8 +30,8 @@ data:
   isVerificationFile: true
   path: test_verify/Inv.test.py
   requiredBy: []
-  timestamp: '2022-11-22 23:04:09+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2022-11-22 23:08:11+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/Inv.test.py
 layout: document
