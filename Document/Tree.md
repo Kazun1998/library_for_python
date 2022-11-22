@@ -171,7 +171,7 @@ T.diameter()
 
 ---
 
-### Path
+### path
 
 ```Python
 T.path(u, v, falser=False)
@@ -186,4 +186,134 @@ T.path(u, v, falser=False)
   - ${\rm faster}=$ `True` のとき, 1回でも `lowest_common_ansector` を使っていれば前計算がかからずに $O(N)$ Time. 使っていなければ初回のみ $O(N \log N)$ Time で, 2回目以降は $O(N)$ Time.
 
 ---
+
+### is_parent
+
+```Python
+T.is_parent(u, v)
+```
+
+- 頂点 $u$ が頂点 $v$ の親かどうかを判定する.
+- **制約**
+  - ${\rm index} \leq u \lt {\rm index}+N$
+  - ${\rm index} \leq v \lt {\rm index}+N$
+- **計算量** : $O(1)$ Time.
+
+---
+
+### is_children
+
+```Python
+T.is_children(u, v)
+```
+
+- 頂点 $u$ が頂点 $v$ の子 (のうちの1つ) かどうかを判定する.
+- **制約**
+  - ${\rm index} \leq u \lt {\rm index}+N$
+  - ${\rm index} \leq v \lt {\rm index}+N$
+- **計算量** : $O(1)$ Time.
+
+---
+
+### is_brother
+
+```Python
+T.is_brother(u, v)
+```
+
+- 頂点 $u$ と頂点 $v$ が兄弟かどうかを判定する.
+- **制約**
+  - ${\rm index} \leq u \lt {\rm index}+N$
+  - ${\rm index} \leq v \lt {\rm index}+N$
+- **計算量** : $O(1)$ Time.
+
+---
+
+### is_ancestor
+
+```Python
+T.is_ancestor(u, v)
+```
+
+- 頂点 $u$ が頂点 $v$ の先祖かどうかを判定する.
+- **制約**
+  - ${\rm index} \leq u \lt {\rm index}+N$
+  - ${\rm index} \leq v \lt {\rm index}+N$
+- **計算量** : $O(\log N)$ Time.
+
+---
+
+### is_descendant
+
+```Python
+T.is_descendant(u, v)
+```
+
+- 頂点 $u$ が頂点 $v$ の子孫かどうかを判定する.
+- **制約**
+  - ${\rm index} \leq u \lt {\rm index}+N$
+  - ${\rm index} \leq v \lt {\rm index}+N$
+- **計算量** : $O(\log N)$ Time.
+
+---
+
+### direction
+
+```Python
+T.direction(u, v)
+```
+
+- 頂点 $u$ から頂点 $v$ へ向うパスが頂点 $u$ の次に通る頂点を求める.
+- **制約**
+  - ${\rm index} \leq u \lt {\rm index}+N$
+  - ${\rm index} \leq v \lt {\rm index}+N$
+  - $u \neq v$
+- **計算量** : $O(\log N)$ Time.
+
+---
+
+### jump
+
+```Python
+T.jump(u, v, k, default=-1)
+```
+
+- 頂点 $u$ から頂点 $v$ へ向うパスを $u=p\_0 p\_1 \dots p\_l=v$ としたとき, $p\_k$ を求める. ただし, $k \gt l$ ならば `default` を返す.
+- **制約**
+  - ${\rm index} \leq u \lt {\rm index}+N$
+  - ${\rm index} \leq v \lt {\rm index}+N$
+  - $0 \leq k$
+- **計算量** : $O(\log N)$ Time.
+
+---
+
+### is_leaf
+
+```Python
+T.jump(v)
+```
+
+- 頂点 $v$ が葉かどうかを判定する.
+- **制約**
+  - ${\rm index} \leq v \lt {\rm index}+N$
+- **計算量** : $O(1)$ Time.
+
+---
+
+### distance
+
+```Python
+T.distance(u, v, faster=True)
+```
+
+- 2頂点 $u,v$ 間の距離を求める.
+- **制約**
+  - ${\rm index} \leq u \lt {\rm index}+N$
+  - ${\rm index} \leq v \lt {\rm index}+N$
+- **計算量**
+  - ${\rm faster}=$ `False` のとき, $O(N)$ Time.
+  - ${\rm faster}=$ `True` のとき, 1回でも `lowest_common_ansector` を使っていれば前計算がかからずに $O(1)$ Time. 使っていなければ初回のみ $O(N \log N)$ Time で, 2回目以降は $O(1)$ Time.
+
+---
+
 (作成途中)
