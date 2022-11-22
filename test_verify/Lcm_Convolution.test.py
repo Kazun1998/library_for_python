@@ -3,7 +3,7 @@
 #==================================================
 import sys
 sys.path.append('Convolution/')
-from LCM_Convolution import *
+from  LCM_Convolution import *
 
 input=sys.stdin.readline
 write=sys.stdout.write
