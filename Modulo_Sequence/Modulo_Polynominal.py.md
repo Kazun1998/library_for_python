@@ -4,11 +4,11 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: test_verify/Convolution.test.py
-    title: test_verify/Convolution.test.py
+    path: test_verify/yosupo_library_checker/Convolution/Convolution.test.py
+    title: test_verify/yosupo_library_checker/Convolution/Convolution.test.py
   - icon: ':heavy_check_mark:'
-    path: test_verify/Inv.test.py
-    title: test_verify/Inv.test.py
+    path: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
+    title: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
   _isVerificationFailed: false
   _pathExtension: py
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -479,8 +479,8 @@ data:
   timestamp: '2022-11-22 23:08:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/Convolution.test.py
-  - test_verify/Inv.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Inv.test.py
+  - test_verify/yosupo_library_checker/Convolution/Convolution.test.py
 documentation_of: Modulo_Sequence/Modulo_Polynominal.py
 layout: document
 title: Modulo Polynominal

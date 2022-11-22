@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: Tree/Tree.py
     title: Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/jump_on_tree
     links:
@@ -31,15 +31,15 @@ data:
   dependsOn:
   - Tree/Tree.py
   isVerificationFile: true
-  path: test_verify/Jump_on_Tree.test.py
+  path: test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
   requiredBy: []
-  timestamp: '2022-11-22 15:54:13+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2022-11-22 23:25:26+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
-documentation_of: test_verify/Jump_on_Tree.test.py
+documentation_of: test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
 layout: document
 redirect_from:
-- /verify/test_verify/Jump_on_Tree.test.py
-- /verify/test_verify/Jump_on_Tree.test.py.html
-title: test_verify/Jump_on_Tree.test.py
+- /verify/test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
+- /verify/test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py.html
+title: test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
 ---

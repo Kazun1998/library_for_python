@@ -29,15 +29,15 @@ data:
   dependsOn:
   - Convolution/LCM_Convolution.py
   isVerificationFile: true
-  path: test_verify/Lcm_Convolution.test.py
+  path: test_verify/yosupo_library_checker/Convolution/Lcm_Convolution.test.py
   requiredBy: []
-  timestamp: '2022-11-22 22:40:17+09:00'
+  timestamp: '2022-11-22 23:25:26+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: test_verify/Lcm_Convolution.test.py
+documentation_of: test_verify/yosupo_library_checker/Convolution/Lcm_Convolution.test.py
 layout: document
 redirect_from:
-- /verify/test_verify/Lcm_Convolution.test.py
-- /verify/test_verify/Lcm_Convolution.test.py.html
-title: test_verify/Lcm_Convolution.test.py
+- /verify/test_verify/yosupo_library_checker/Convolution/Lcm_Convolution.test.py
+- /verify/test_verify/yosupo_library_checker/Convolution/Lcm_Convolution.test.py.html
+title: test_verify/yosupo_library_checker/Convolution/Lcm_Convolution.test.py
 ---

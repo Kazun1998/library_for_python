@@ -20,8 +20,8 @@ data:
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/unionfind\n\
-    \n#==================================================\nimport sys\nsys.path.append('Union_Find/')\n\
-    from  Union_Find import Union_Find\n\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\
+    \n#==================================================\nfrom Union_Find.Union_Find\
+    \ import Union_Find\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\
     #==================================================\ndef verify():\n    N,Q=map(int,input().split())\n\
     \    U=Union_Find(N)\n    X=[]\n    for _ in range(Q):\n        t,u,v=map(int,input().split())\n\
     \        if t==0:\n            U.union(u,v)\n        else:\n            X.append(1\
@@ -30,15 +30,15 @@ data:
   dependsOn:
   - Union_Find/Union_Find.py
   isVerificationFile: true
-  path: test_verify/Union_Find.test.py
+  path: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
   requiredBy: []
-  timestamp: '2022-10-27 18:39:37+09:00'
+  timestamp: '2022-11-22 23:25:26+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: test_verify/Union_Find.test.py
+documentation_of: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
 layout: document
 redirect_from:
-- /verify/test_verify/Union_Find.test.py
-- /verify/test_verify/Union_Find.test.py.html
-title: test_verify/Union_Find.test.py
+- /verify/test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
+- /verify/test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py.html
+title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
 ---

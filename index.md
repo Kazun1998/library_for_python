@@ -339,7 +339,7 @@ data:
     - icon: ':warning:'
       path: Tree/Forest.py
       title: Tree/Forest.py
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: Tree/Tree.py
       title: Tree
   - name: Union_Find
@@ -363,40 +363,46 @@ data:
       path: Union_Find/Union_Find.py
       title: Union Find (Disjoint Set Union)
   verificationCategories:
-  - name: test_verify
+  - name: test_verify/yosupo_library_checker/Convolution
     pages:
     - icon: ':heavy_check_mark:'
-      path: test_verify/Binary_Indexed_Tree.test.py
-      title: test_verify/Binary_Indexed_Tree.test.py
+      path: test_verify/yosupo_library_checker/Convolution/Convolution.test.py
+      title: test_verify/yosupo_library_checker/Convolution/Convolution.test.py
     - icon: ':heavy_check_mark:'
-      path: test_verify/Convolution.test.py
-      title: test_verify/Convolution.test.py
+      path: test_verify/yosupo_library_checker/Convolution/Gcd_Convolution.test.py
+      title: test_verify/yosupo_library_checker/Convolution/Gcd_Convolution.test.py
     - icon: ':heavy_check_mark:'
-      path: test_verify/Disjoint_Sparse_Table.test.py
-      title: test_verify/Disjoint_Sparse_Table.test.py
+      path: test_verify/yosupo_library_checker/Convolution/Lcm_Convolution.test.py
+      title: test_verify/yosupo_library_checker/Convolution/Lcm_Convolution.test.py
+  - name: test_verify/yosupo_library_checker/Data_Structure
+    pages:
     - icon: ':heavy_check_mark:'
-      path: test_verify/Dual_Segment_Tree.test.py
-      title: test_verify/Dual_Segment_Tree.test.py
+      path: test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py
     - icon: ':heavy_check_mark:'
-      path: test_verify/Gcd_Convolution.test.py
-      title: test_verify/Gcd_Convolution.test.py
+      path: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
     - icon: ':heavy_check_mark:'
-      path: test_verify/Inv.test.py
-      title: test_verify/Inv.test.py
+      path: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
     - icon: ':heavy_check_mark:'
-      path: test_verify/Jump_on_Tree.test.py
-      title: test_verify/Jump_on_Tree.test.py
+      path: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
     - icon: ':heavy_check_mark:'
-      path: test_verify/Lcm_Convolution.test.py
-      title: test_verify/Lcm_Convolution.test.py
+      path: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
+  - name: test_verify/yosupo_library_checker/Polynomial
+    pages:
     - icon: ':heavy_check_mark:'
-      path: test_verify/Lowest_Common_Ancestor.test.py
-      title: test_verify/Lowest_Common_Ancestor.test.py
-    - icon: ':heavy_check_mark:'
-      path: test_verify/Segment_Tree.test.py
-      title: test_verify/Segment_Tree.test.py
-    - icon: ':heavy_check_mark:'
-      path: test_verify/Union_Find.test.py
-      title: test_verify/Union_Find.test.py
+      path: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
+      title: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
+  - name: test_verify/yosupo_library_checker/Tree
+    pages:
+    - icon: ':x:'
+      path: test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
+      title: test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
+    - icon: ':x:'
+      path: test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
+      title: test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
 layout: toppage
 ---

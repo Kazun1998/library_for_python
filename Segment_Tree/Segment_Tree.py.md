@@ -4,8 +4,8 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: test_verify/Segment_Tree.test.py
-    title: test_verify/Segment_Tree.test.py
+    path: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
+    title: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
   _isVerificationFailed: false
   _pathExtension: py
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -86,7 +86,7 @@ data:
   timestamp: '2022-10-02 18:22:42+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/Segment_Tree.test.py
+  - test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
 documentation_of: Segment_Tree/Segment_Tree.py
 layout: document
 title: Segment Tree

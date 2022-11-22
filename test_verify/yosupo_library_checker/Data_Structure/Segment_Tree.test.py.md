@@ -20,8 +20,8 @@ data:
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/point_set_range_composite\n\
-    \n#==================================================\nimport sys\nsys.path.append('Segment_Tree/')\n\
-    from Segment_Tree import Segment_Tree\n\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\
+    \n#==================================================\nfrom Segment_Tree.Segment_Tree\
+    \ import Segment_Tree\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\
     \n#==================================================\ndef verify():\n    N,Q=map(int,input().split())\n\
     \    Mod=998244353\n\n    A=[0]*N\n    for i in range(N):\n        a,b=map(int,input().split())\n\
     \        A[i]=(a,b)\n\n    calc=lambda p,q:((p[0]*q[0])%Mod,(p[1]*q[0]+q[1])%Mod)\n\
@@ -33,15 +33,15 @@ data:
   dependsOn:
   - Segment_Tree/Segment_Tree.py
   isVerificationFile: true
-  path: test_verify/Segment_Tree.test.py
+  path: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
   requiredBy: []
-  timestamp: '2022-10-02 19:56:33+09:00'
+  timestamp: '2022-11-22 23:25:26+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: test_verify/Segment_Tree.test.py
+documentation_of: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
 layout: document
 redirect_from:
-- /verify/test_verify/Segment_Tree.test.py
-- /verify/test_verify/Segment_Tree.test.py.html
-title: test_verify/Segment_Tree.test.py
+- /verify/test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
+- /verify/test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py.html
+title: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
 ---

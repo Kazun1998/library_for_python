@@ -4,8 +4,8 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: test_verify/Gcd_Convolution.test.py
-    title: test_verify/Gcd_Convolution.test.py
+    path: test_verify/yosupo_library_checker/Convolution/Gcd_Convolution.test.py
+    title: test_verify/yosupo_library_checker/Convolution/Gcd_Convolution.test.py
   _isVerificationFailed: false
   _pathExtension: py
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -45,7 +45,7 @@ data:
   timestamp: '2021-08-29 23:22:42+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/Gcd_Convolution.test.py
+  - test_verify/yosupo_library_checker/Convolution/Gcd_Convolution.test.py
 documentation_of: Convolution/GCD_Convolution.py
 layout: document
 title: Gcd Convolution

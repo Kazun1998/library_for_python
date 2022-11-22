@@ -7,8 +7,8 @@ data:
     title: Union_Find/Bipartite_Checker.py
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: test_verify/Union_Find.test.py
-    title: test_verify/Union_Find.test.py
+    path: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
+    title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
   _isVerificationFailed: false
   _pathExtension: py
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -81,7 +81,7 @@ data:
   timestamp: '2022-10-27 18:39:37+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/Union_Find.test.py
+  - test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
 documentation_of: Union_Find/Union_Find.py
 layout: document
 title: Union Find (Disjoint Set Union)

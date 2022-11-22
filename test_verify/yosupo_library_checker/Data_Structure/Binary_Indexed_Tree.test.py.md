@@ -32,15 +32,15 @@ data:
   dependsOn:
   - Binary_Indexed_Tree/Binary_Indexed_Tree.py
   isVerificationFile: true
-  path: test_verify/Binary_Indexed_Tree.test.py
+  path: test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py
   requiredBy: []
-  timestamp: '2022-11-19 16:51:42+09:00'
+  timestamp: '2022-11-22 23:25:26+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: test_verify/Binary_Indexed_Tree.test.py
+documentation_of: test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py
 layout: document
 redirect_from:
-- /verify/test_verify/Binary_Indexed_Tree.test.py
-- /verify/test_verify/Binary_Indexed_Tree.test.py.html
-title: test_verify/Binary_Indexed_Tree.test.py
+- /verify/test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py
+- /verify/test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py.html
+title: test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py
 ---

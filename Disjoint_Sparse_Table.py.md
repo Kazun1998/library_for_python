@@ -4,8 +4,8 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: test_verify/Disjoint_Sparse_Table.test.py
-    title: test_verify/Disjoint_Sparse_Table.test.py
+    path: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
+    title: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
   _isVerificationFailed: false
   _pathExtension: py
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -45,7 +45,7 @@ data:
   timestamp: '2022-11-22 04:38:45+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/Disjoint_Sparse_Table.test.py
+  - test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
 documentation_of: Disjoint_Sparse_Table.py
 layout: document
 title: Disjoint Sparse Table

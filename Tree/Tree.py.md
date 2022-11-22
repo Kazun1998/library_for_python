@@ -3,15 +3,15 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
-    path: test_verify/Jump_on_Tree.test.py
-    title: test_verify/Jump_on_Tree.test.py
-  - icon: ':heavy_check_mark:'
-    path: test_verify/Lowest_Common_Ancestor.test.py
-    title: test_verify/Lowest_Common_Ancestor.test.py
-  _isVerificationFailed: false
+  - icon: ':x:'
+    path: test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
+    title: test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
+  - icon: ':x:'
+    path: test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
+    title: test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -363,10 +363,10 @@ data:
   path: Tree/Tree.py
   requiredBy: []
   timestamp: '2022-09-28 11:04:34+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
-  - test_verify/Lowest_Common_Ancestor.test.py
-  - test_verify/Jump_on_Tree.test.py
+  - test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
+  - test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
 documentation_of: Tree/Tree.py
 layout: document
 title: Tree
