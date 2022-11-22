@@ -1,0 +1,43 @@
+---
+data:
+  _extendedDependsOn:
+  - icon: ':heavy_check_mark:'
+    path: Modulo_Sequence/Modulo_Polynominal.py
+    title: Modulo Polynominal
+  _extendedRequiredBy: []
+  _extendedVerifiedWith: []
+  _isVerificationFailed: false
+  _pathExtension: py
+  _verificationStatusIcon: ':heavy_check_mark:'
+  attributes:
+    PROBLEM: https://judge.yosupo.jp/problem/convolution_mod
+    links:
+    - https://judge.yosupo.jp/problem/convolution_mod
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
+    , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
+    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
+    \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
+    , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
+  code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/convolution_mod\n\
+    \n#==================================================\nfrom Modulo_Sequence.Modulo_Polynominal\
+    \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
+    #==================================================\ndef verify():\n    N,M=map(int,input().split())\n\
+    \    A=list(map(int,input().split()))\n    B=list(map(int,input().split()))\n\
+    \    write(\" \".join(map(str,Calc.Convolution(A,B))))\n\n#==================================================\n\
+    verify()"
+  dependsOn:
+  - Modulo_Sequence/Modulo_Polynominal.py
+  isVerificationFile: true
+  path: test_verify/Convolution.test.py
+  requiredBy: []
+  timestamp: '2022-11-22 22:49:12+09:00'
+  verificationStatus: TEST_ACCEPTED
+  verifiedWith: []
+documentation_of: test_verify/Convolution.test.py
+layout: document
+redirect_from:
+- /verify/test_verify/Convolution.test.py
+- /verify/test_verify/Convolution.test.py.html
+title: test_verify/Convolution.test.py
+---

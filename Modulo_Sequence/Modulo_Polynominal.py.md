@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: test_verify/Convolution.test.py
+    title: test_verify/Convolution.test.py
   _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links:
     - http://q.c.titech.ac.jp/docs/progs/polynomial_division.html
@@ -472,8 +475,9 @@ data:
   path: Modulo_Sequence/Modulo_Polynominal.py
   requiredBy: []
   timestamp: '2022-10-01 20:27:36+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - test_verify/Convolution.test.py
 documentation_of: Modulo_Sequence/Modulo_Polynominal.py
 layout: document
 title: Modulo Polynominal

@@ -304,7 +304,7 @@ data:
       title: Modulo_Matrix/Modulo_Vector_Space.py
   - name: Modulo_Sequence
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Modulo_Sequence/Modulo_Polynominal.py
       title: Modulo Polynominal
     - icon: ':warning:'
@@ -368,6 +368,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/Binary_Indexed_Tree.test.py
       title: test_verify/Binary_Indexed_Tree.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/Convolution.test.py
+      title: test_verify/Convolution.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/Disjoint_Sparse_Table.test.py
       title: test_verify/Disjoint_Sparse_Table.test.py
