@@ -1,10 +1,9 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/unionfind
 
 #==================================================
-import sys
-sys.path.append('Union_Find/')
-from  Union_Find import Union_Find
+from Union_Find.Union_Find import Union_Find
 
+import sys
 input=sys.stdin.readline
 write=sys.stdout.write
 #==================================================

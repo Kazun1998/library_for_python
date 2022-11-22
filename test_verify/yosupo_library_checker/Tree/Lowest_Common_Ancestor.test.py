@@ -1,10 +1,9 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/lca
 
 #==================================================
-import sys
-sys.path.append('Tree/')
-from Tree import Tree
+from Tree.Tree import Tree
 
+import sys
 input=sys.stdin.readline
 write=sys.stdout.write
 #==================================================
