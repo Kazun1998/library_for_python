@@ -19,9 +19,6 @@ data:
       path: Complex.py
       title: Complex.py
     - icon: ':warning:'
-      path: Convolution.py
-      title: Convolution.py
-    - icon: ':warning:'
       path: Coordinate_Compression.py
       title: Coordinate_Compression.py
     - icon: ':warning:'
@@ -199,9 +196,12 @@ data:
   - name: Convolution
     pages:
     - icon: ':warning:'
+      path: Convolution/ADD_Convolution.py
+      title: Convolution/ADD_Convolution.py
+    - icon: ':warning:'
       path: Convolution/AND_Convolution.py
       title: And Convolution
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: Convolution/GCD_Convolution.py
       title: Gcd Convolution
     - icon: ':warning:'
@@ -374,7 +374,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/Dual_Segment_Tree.test.py
       title: test_verify/Dual_Segment_Tree.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/Gcd_Convolution.test.py
       title: test_verify/Gcd_Convolution.test.py
     - icon: ':heavy_check_mark:'

@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: Convolution/GCD_Convolution.py
     title: Gcd Convolution
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/gcd_convolution
     links:
@@ -32,7 +32,7 @@ data:
   path: test_verify/Gcd_Convolution.test.py
   requiredBy: []
   timestamp: '2022-11-22 04:53:09+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/Gcd_Convolution.test.py
 layout: document
