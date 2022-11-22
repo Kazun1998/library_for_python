@@ -1,35 +1,6 @@
-def floor_sum(A,B,M,N):
-    """sum_{i=0}^{N-1} floor((A*i+B)/M) を求める.
-    """
-    T=0
-    while True:
-        T+=((N-1)*N//2)*(A//M)
-        A%=M
-
-        T+=N*(B//M)
-        B%=M
-
-        y=(A*N+B)//M
-        x=B-y*M
-
-        if y==0:
-            return T
-
-        T+=(N+x//A)*y
-        A,B,M,N=M,x%A,A,y
-
-def Floor_Sum(A:int,B:int,M:int,N:int,K=0):
-    """sum_{i=K}^N floor((A*i+B)/M) を求める.
-    """
-
-    if K==0:
-        return floor_sum(A,B,M,N+1)
-    else:
-        return floor_sum(A,B,M,N+1)-floor_sum(A,B,M,K)
-
 #==================================================
 #Sum系
-def Linear_Sum(a,b,L,R):
+def Linear_Sum(a, b, L, R):
     """ Sum_{i=L}^R (ai+b) を求める.
     """
 
@@ -38,7 +9,7 @@ def Linear_Sum(a,b,L,R):
     else:
         return 0
 
-def Box_Sum_Count(P,Q,R,S,K):
+def Box_Sum_Count(P, Q, R, S, K):
     """P<=X<=Q, R<=Y<=S, X+Y=K を満たす整数の組 (X,Y) の個数を出力する.
 
     P,Q,R,S:int (P<=Q, R<=S)
@@ -49,7 +20,7 @@ def Box_Sum_Count(P,Q,R,S,K):
     D=max(0,K-(Q+1+S+1)+1)
     return A-B-C+D
 
-def Interval_Sum_Count(L,R,X):
+def Interval_Sum_Count(L, R, X):
     """L<=x,y<=R を満たす2つの整数x,yのうち, x+y=X を満たす組(x,y) の個数を出力する.
 
     L,R:Int (L<=R)
@@ -66,7 +37,7 @@ def Interval_Sum_Count(L,R,X):
     else:
         return 0
 
-def Interval_Sum_Count_Sum(L,R,A,B):
+def Interval_Sum_Count_Sum(L, R, A, B):
     """L<=x,y<=R を満たす2つの整数x,yのうち, A<=x+y<=B を満たす組(x,y) の個数を出力する.
 
     L,R:Int (L<=R)
@@ -89,7 +60,7 @@ def Interval_Sum_Count_Sum(L,R,A,B):
         else:
             return Linear_Sum(-1,2*R+1,A,B)
 
-def Bound_Sum(a,b,D,U,L,R):
+def Bound_Sum(a, b, D, U, L, R):
     """ p[k]:=max(D,min(ak+b,U)) としたとき, Sum_{k=L}^R p[k] を求める.
 
     a,b :int
@@ -138,7 +109,7 @@ def Bound_Sum(a,b,D,U,L,R):
     X+=Linear_Sum(a,b,L,R)
     return X
 
-def Linear_Max_Sum(a,b,c,d,L,R):
+def Linear_Max_Sum(a, b, c, d, L, R):
     """ sum_{k=L}^R max(ak+b,ck+d) を求める.
 
     a,b,c,d:int
@@ -162,7 +133,7 @@ def Linear_Max_Sum(a,b,c,d,L,R):
     m=(d-b)//(a-c)
     return Linear_Sum(c,d,L,m)+Linear_Sum(a,b,m+1,R)
 
-def Linear_Min_Sum(a,b,c,d,L,R):
+def Linear_Min_Sum(a, b, c, d, L, R):
     """ sum_{k=L}^R min(ak+b,ck+d) を求める.
 
     a,b,c,d:int
@@ -172,7 +143,7 @@ def Linear_Min_Sum(a,b,c,d,L,R):
 
 #==================================================
 #Sum_Count系
-def Range_Sum_DP(Range,S,Mod=None,Mode=0):
+def Range_Sum_DP(Range, S, Mod=None, Mode=0):
     """Range=[(A_0,B_0),...,(A_{N-1}, B_{N-1})] としとたき,
     A_i<=X_i<=B_i, X_0+...+X_{n-1}=S を満たす組の個数を動的計画法で求める.
 
@@ -207,7 +178,7 @@ def Range_Sum_DP(Range,S,Mod=None,Mode=0):
     else:
         return D[S]
 
-def Range_Sum_Inclusion(Range,S,Mod=None):
+def Range_Sum_Inclusion(Range, S, Mod=None):
     """Range=[(A_0,B_0),...,(A_{N-1}, B_{N-1})] としとたき,
     A_i<=X_i<=B_i, X_0+...+X_{n-1}=S を満たす組の個数を包除原理で求める.
 
@@ -263,7 +234,7 @@ def Range_Sum_Inclusion(Range,S,Mod=None):
 
 #==================================================
 #Find_Sum系
-def Find_Range_Sum(Range,S):
+def Find_Range_Sum(Range, S):
     """Range=[(A_0,B_0),...,(A_{N-1}, B_{N-1})] としとたき,
     A_i<=X_i<=B_i, X_0+...+X_{n-1}=S を満たす組の例を1つ求める.
 
@@ -288,7 +259,7 @@ def Find_Range_Sum(Range,S):
 #==================================================
 #幾何級数系
 
-def Geometric_Sequence_Sum(r,n,Mod=None):
+def Geometric_Sequence_Sum(r, n, Mod=None):
     """ sum_{i=0}^{n-1} r^i [(mod Mod)] """
 
     if Mod==None:
