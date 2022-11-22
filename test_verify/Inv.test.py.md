@@ -10,16 +10,16 @@ data:
   _pathExtension: py
   _verificationStatusIcon: ':x:'
   attributes:
-    PROBLEM: https://judge.yosupo.jp/problem/convolution_mod
+    PROBLEM: https://judge.yosupo.jp/problem/inv_of_formal_power_series
     links:
-    - https://judge.yosupo.jp/problem/convolution_mod
+    - https://judge.yosupo.jp/problem/inv_of_formal_power_series
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/convolution_mod\n\
+  code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/inv_of_formal_power_series\n\
     \n#==================================================\nfrom Modulo_Sequence.Modulo_Polynominal\
     \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
     #==================================================\ndef verify():\n    N=int(input())\n\
@@ -30,7 +30,7 @@ data:
   isVerificationFile: true
   path: test_verify/Inv.test.py
   requiredBy: []
-  timestamp: '2022-11-22 22:57:02+09:00'
+  timestamp: '2022-11-22 23:04:09+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/Inv.test.py
