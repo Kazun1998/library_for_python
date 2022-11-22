@@ -4,6 +4,9 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: test_verify/Jump_on_Tree.test.py
+    title: test_verify/Jump_on_Tree.test.py
+  - icon: ':heavy_check_mark:'
     path: test_verify/Lowest_Common_Ancestor.test.py
     title: test_verify/Lowest_Common_Ancestor.test.py
   _isVerificationFailed: false
@@ -363,6 +366,7 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/Lowest_Common_Ancestor.test.py
+  - test_verify/Jump_on_Tree.test.py
 documentation_of: Tree/Tree.py
 layout: document
 title: Tree
