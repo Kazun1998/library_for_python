@@ -5,6 +5,7 @@
 "test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py": "2022-11-22 23:25:26 +0900",
 "test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py": "2022-11-22 23:25:26 +0900",
 "test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py": "2022-11-22 23:25:26 +0900",
+"test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py": "2022-11-23 02:07:00 +0900",
 "test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py": "2022-11-22 23:25:26 +0900",
 "test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py": "2022-11-22 23:25:26 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Inv.test.py": "2022-11-23 00:09:05 +0900",
