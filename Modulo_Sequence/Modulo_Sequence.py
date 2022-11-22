@@ -1,7 +1,7 @@
-from Modulo_Polynominal import *
+from Modulo_Polynomial import *
 
 #===漸化式
-def Nth_Term_of_Linearly_Recurrent_Sequence(A,C,N,offset=0):
+def Nth_Term_of_Linearly_Recurrent_Sequence(A, C, N, offset=0):
     """ A[i]=C[0]*A[i-1]+C[1]*A[i-2]+...+C[d-1]*A[i-d] で表される数列 (A[i]) の第 N 項を求める.
 
     A=(A[0], ..., A[d-1]): 最初の d 項
@@ -13,14 +13,16 @@ def Nth_Term_of_Linearly_Recurrent_Sequence(A,C,N,offset=0):
     assert len(A)==len(C)
     d=len(A)
 
+    N-=offset
+
     if N<d:
         return A[N]%Mod
 
-    A=Modulo_Polynominal(A,d+1)
-    Q=Modulo_Polynominal([-C[i-1] if i else 1  for i in range(d+1)], d+1)
+    A=Modulo_Polynomial(A,d+1)
+    Q=Modulo_Polynomial([-C[i-1] if i else 1  for i in range(d+1)], d+1)
 
     P=A*Q; P[d]=0
-    return Polynominal_Coefficient(P,Q,N-offset)
+    return Polynominal_Coefficient(P,Q,N)
 
 def Find_Linear_Recurrence(A):
     """ A から推定される最小の長さの関係式を求める.
@@ -90,7 +92,7 @@ def Factorial_Modulo(N):
         M+=1
 
     A=Calc.Multiple_Convolution(*[[i,1] for i in range(1,M+1)])
-    H=Multipoint_Evaluation(Modulo_Polynominal(A,M+1),
+    H=Multipoint_Evaluation(Modulo_Polynomial(A,M+1),
                             [i*M for i in range(M)])
 
     X=1
@@ -106,7 +108,7 @@ def Bernoulli(N, mode=0):
     """ベルヌーイ数 B_0,B_1,...,B_N の (mod Mod) での値を求める.
     """
 
-    P=Exp(Modulo_Polynominal([0,1],N+2))[1:]
+    P=Exp(Modulo_Polynomial([0,1],N+2))[1:]
     F=P.inverse().Poly[:-1]
 
     if mode==0:
@@ -163,12 +165,12 @@ def PartitionsQ(N, mode=0):
             c*=-1
             j+=i
             k+=1
-    P=Modulo_Polynominal(F,N+1)
+    P=Modulo_Polynomial(F,N+1)
 
     if mode==0:
         return Exp(P)[N]
     else:
-        return Exp(P)
+        return Exp(P).Poly
 
 def Stirling_1st(N):
     """ k=0,1, ..., N に対する第 I 種 Stirling 数を求める.
@@ -177,11 +179,11 @@ def Stirling_1st(N):
 
     def g(n):
         if n==0:
-            return Modulo_Polynominal([1],N+1)
+            return Modulo_Polynomial([1],N+1)
         elif n==1:
-            return Modulo_Polynominal([0,1], N+1)
+            return Modulo_Polynomial([0,1], N+1)
         elif n&1:
-            return Modulo_Polynominal([-n+1, 1],N+1)*g(n-1)
+            return Modulo_Polynomial([-n+1, 1],N+1)*g(n-1)
         else:
             P=g(n//2)
             return P*Taylor_Shift(P, -n//2)
@@ -189,7 +191,7 @@ def Stirling_1st(N):
     return g(N).Poly
 
 def Stirling_2nd(N):
-    """ k=0,1, ..., N に対する第 II 種 Stirling 数を求める.
+    """ k=0,1, ..., N に対する第 II 種 Stirling 数 (区別のできる N 個のものを区別できない K 個のグループ (空グループ禁止) に分割する方法) を求める.
 
     """
 
@@ -206,10 +208,10 @@ def Stirling_2nd(N):
     return Calc.Convolution(A,B)[:N+1]
 
 def Bell(N, mode=0):
-    """ Bell 数 B[N] を求める.
+    """ Bell 数 (集合 {1,2,...,N} の分割の方法) B[N] を求める.
 
     """
-    F=Exp(Exp(Modulo_Polynominal([0,1],N+1))-1).Poly
+    F=Exp(Exp(Modulo_Polynomial([0,1],N+1))-1).Poly
     fact=1
     for i in range(1,N+1):
         fact=(i*fact)%Mod
@@ -220,8 +222,21 @@ def Bell(N, mode=0):
     else:
         return F[N]
 
+def Motzkin(N, mode=0):
+    """ Motzkin 数 (円周上の区別がつく相異なる N 点を線分をどの2つも共通部分がない (N 点で共有も禁止) で結ぶ方法 (結ばれない点があってもよい) の数.
+
+    """
+
+    two_inv=pow(2, Mod-2, Mod)
+    F=((Modulo_Polynomial([1,-1], N+3)-Sqrt(Modulo_Polynomial([1,-2,-3], N+3)))*two_inv)>>2
+
+    if mode:
+        return F.poly[:N+1]
+    else:
+        return F[N]
+
 #===
-def Subset_Sum(X,K):
+def Subset_Sum(X, K):
     """ X の要素のうち, 任意個を用いて, 和が k=0,1,...,K になる組み合わせの総数を Mod で割った余りを求める.
 
     X: リスト
@@ -239,16 +254,47 @@ def Subset_Sum(X,K):
 
     F=[0]*(K+1)
     for i in range(1,K+1):
-        j=i
-        k=1
-        c=1
-        while j<=K:
-            F[j]=(F[j]+c*Inv[k]*A[i])%Mod
-            c*=-1
-            j+=i
-            k+=1
-    P=Modulo_Polynominal(F,K+1)
+        if A[i]:
+            j=i
+            k=1
+            c=1
+            while j<=K:
+                F[j]=(F[j]+c*Inv[k]*A[i])%Mod
+                c*=-1
+                j+=i
+                k+=1
+    P=Modulo_Polynomial(F,K+1)
     return Exp(P).Poly
+
+#===
+def Two_Term_Product(S, K, alpha):
+    """ S=[s[0], ..., s[N-1]] としたとき, prod(1+alpha X^s[i]) を K 次まで求める.
+
+    """
+
+    A=[0]*(K+1)
+    for x in S:
+        if x<=K:
+            A[x]+=1
+
+    Inv=[0]*(K+1)
+    Inv[1]=1
+    for i in range(2,K+1):
+        Inv[i]=(-(Mod//i)*Inv[Mod%i])%Mod
+
+    F=[0]*(K+1)
+    for i in range(1,K+1):
+        if A[i]:
+            j=i
+            k=1
+            c=alpha
+            while j<=K:
+                m=c*Inv[k]%Mod
+                F[j]=(F[j]+m*A[i])%Mod
+                c*=-alpha; c%=Mod
+                j+=i
+                k+=1
+    return Exp(Modulo_Polynomial(F,K+1))
 
 #===
 #多項式和
@@ -289,4 +335,4 @@ def Differences(P, k=1):
             sgn*=-1
             P=Taylor_Shift(P,1)
 
-    return Modulo_Polynominal(Q,P.max_degree)
+    return Modulo_Polynomial(Q,P.max_degree)
