@@ -502,11 +502,3 @@ def Characteristic_Polynomial(M):
 
 #===
 Mod=998244353
-A=[
-    [1,0,0,0],
-    [0,1,0,0],
-    [1,0,1,1],
-    [0,1,0,0],
-    [0,0,1,0]]
-A=Modulo_Matrix(A)
-print(A.row_reduce())
