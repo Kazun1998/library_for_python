@@ -4,7 +4,7 @@
 """
 
 class Two_SAT:
-    def __init__(self,N):
+    def __init__(self, N=0):
         """ N 変数の 2-SAT を定義する.
 
         N: int
@@ -20,19 +20,19 @@ class Two_SAT:
     def cost(self):
         return self.__cost
 
-    def var_to_index(self,v):
+    def var_to_index(self, v):
         if v>=0:
             return 2*v
         else:
             return 2*(-v-1)+1
 
-    def index_to_var(self,i):
+    def index_to_var(self, i):
         if i%2:
             return -(i+1)//2
         else:
             return i//2
 
-    def add_variable(self,k):
+    def add_variable(self, k=1):
         """ 新たに変数 k 個を加える.
         """
 
@@ -43,32 +43,44 @@ class Two_SAT:
         self.arc+=[[] for _ in range(2*k)]
         self.rev+=[[] for _ in range(2*k)]
 
-        return list(range(m,m+k))
+        return list(range(m, m+k))
 
     def __add_clause(self,i,j):
         self.__cost+=1
         self.arc[self.var_to_index(i)].append(self.var_to_index(j))
         self.rev[self.var_to_index(j)].append(self.var_to_index(i))
 
-    def add_imply(self,i,j):
+    def add_imply(self, i, j):
         """ X_i -> X_j を加える.
         """
-        self.__add_clause(i,j)
-        self.__add_clause(~j,~i)
+        self.__add_clause(i, j)
+        self.__add_clause(~j, ~i)
 
-    def add_or(self,i,j):
+    def add_or(self, i, j):
         """ X_i or X_j を加える.
         """
 
-        self.add_imply(~i,j)
+        self.add_imply(~i, j)
 
-    def add_nand(self,i,j):
+    def add_nand(self, i, j):
         """ not (X_i and X_j) を加える.
         """
 
-        self.add_imply(i,~j)
+        self.add_imply(i, ~j)
 
-    def add_equivalent(self,*I):
+    def add_equal(self, i, j):
+        """ X_i=X_j を追加する.
+        """
+
+        self.add_imply(i, j)
+        self.add_imply(~i, ~j)
+
+    def add_not_equal(self, i, j):
+        """ X_i != X_j を追加する.
+        """
+        self.add_equal(i, ~j)
+
+    def add_equivalent(self, *I):
         """ I=[i_0, ..., i_{k-1}] に対して, X_{i_0}=...=X_{i_{k-1}} を追加する.
         """
 
@@ -81,24 +93,19 @@ class Two_SAT:
             self.add_imply(I[j],I[j+1])
         self.add_imply(I[-1],I[0])
 
-    def add_not_equal(self,i,j):
-        """ X_i != X_j を追加する.
-        """
-        self.add_equal(i,~j)
-
-    def set_true(self,i):
+    def set_true(self, i):
         """ 変数 X_i を True にする.
         """
 
-        self.__add_clause(~i,i)
+        self.__add_clause(~i, i)
 
-    def set_false(self,i):
+    def set_false(self, i):
         """ 変数 X_i を False にする.
         """
 
-        self.__add_clause(i,~i)
+        self.__add_clause(i, ~i)
 
-    def at_most_one(self,*I):
+    def at_most_one(self, *I):
         """ X_i (i in I) を満たすような i は高々1つだけという条件を追加する.
         """
 
@@ -115,7 +122,7 @@ class Two_SAT:
             self.add_imply(I[i],A[i])
             self.add_nand(A[i-1],I[i])
 
-    def is_satisfy(self,Mode=0):
+    def is_satisfy(self, Mode=0):
         """ Two-SAT は充足可能?
 
         Mode:
@@ -171,9 +178,9 @@ class Two_SAT:
                     T[i]=1
                 elif Group[2*i]==Group[2*i+1]:
                     return None
-            return T[:self.N]
+            return T
         elif Mode==2:
-            return [i for i in range(self.N) if Group[2*i]==Group[2*i+1]]
+            return [i for i in range(self.var_num) if Group[2*i]==Group[2*i+1]]
 
     def solve(self):
         return self.is_satisfy(1)
