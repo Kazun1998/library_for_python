@@ -301,7 +301,7 @@ data:
       title: Modulo_Matrix/Modulo_Vector_Space.py
   - name: Modulo_Sequence
     pages:
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: Modulo_Sequence/Modulo_Polynomial.py
       title: Modulo_Sequence/Modulo_Polynomial.py
     - icon: ':warning:'
@@ -428,9 +428,6 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Power.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Power.test.py
-    - icon: ':x:'
-      path: test_verify/yosupo_library_checker/Polynomial/Sqrt.test.py
-      title: test_verify/yosupo_library_checker/Polynomial/Sqrt.test.py
   - name: test_verify/yosupo_library_checker/Tree
     pages:
     - icon: ':heavy_check_mark:'
