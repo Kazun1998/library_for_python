@@ -28,6 +28,7 @@ def verify():
         return "{} {}".format(x[0],x[1])
 
     write("\n".join(map(string,H)))
+    print()
 
 #==================================================
 verify()
