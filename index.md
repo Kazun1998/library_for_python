@@ -464,6 +464,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Power.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Power.test.py
+    - icon: ':x:'
+      path: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
+      title: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
   - name: test_verify/yosupo_library_checker/Tree
     pages:
     - icon: ':heavy_check_mark:'
