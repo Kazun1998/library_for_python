@@ -143,7 +143,7 @@ data:
       title: Trie.py
     - icon: ':heavy_check_mark:'
       path: Two_SAT.py
-      title: Two_SAT.py
+      title: 2-SAT
     - icon: ':warning:'
       path: Vector.py
       title: Vector.py

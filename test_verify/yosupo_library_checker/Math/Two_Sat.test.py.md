@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: Two_SAT.py
-    title: Two_SAT.py
+    title: 2-SAT
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
