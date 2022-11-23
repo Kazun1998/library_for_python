@@ -1,6 +1,6 @@
 ---
 title: 2-SAT
-documentation_of: //Two-SAT.py
+documentation_of: //Two_SAT.py
 ---
 
 ## Outline
