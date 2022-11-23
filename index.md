@@ -413,6 +413,9 @@ data:
   - name: test_verify/yosupo_library_checker/Math
     pages:
     - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
+      title: test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
       title: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
     - icon: ':heavy_check_mark:'

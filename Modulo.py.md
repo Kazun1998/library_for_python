@@ -4,6 +4,9 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
+    title: test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
+  - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
     title: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
   _isVerificationFailed: false
@@ -243,6 +246,7 @@ data:
   timestamp: '2022-11-23 16:09:09+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
   - test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
 documentation_of: Modulo.py
 layout: document
