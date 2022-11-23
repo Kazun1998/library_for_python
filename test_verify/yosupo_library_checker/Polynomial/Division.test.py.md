@@ -10,34 +10,37 @@ data:
   _pathExtension: py
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
-    PROBLEM: https://judge.yosupo.jp/problem/polynomial_taylor_shift
+    PROBLEM: https://judge.yosupo.jp/problem/division_of_polynomials
     links:
-    - https://judge.yosupo.jp/problem/polynomial_taylor_shift
+    - https://judge.yosupo.jp/problem/division_of_polynomials
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/polynomial_taylor_shift\n\
+  code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/division_of_polynomials\n\
     \n#==================================================\nfrom Modulo_Sequence.Modulo_Polynomial\
     \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
-    #==================================================\ndef verify():\n    N,c=map(int,input().split())\n\
-    \    A=list(map(int,input().split()))\n    A=Modulo_Polynomial(A,N)\n\n    write(\"\
-    \ \".join(map(str,Taylor_Shift(A,c).Poly)))\n\n#==================================================\n\
-    verify()"
+    #==================================================\ndef verify():\n    N,M=map(int,input().split())\n\
+    \    F=list(map(int,input().split()))\n    G=list(map(int,input().split()))\n\n\
+    \    F=Modulo_Polynomial(F,N)\n    G=Modulo_Polynomial(G,M)\n\n    Q,R=divmod(F,G)\n\
+    \n    Q.reduce(); R.reduce()\n    Q=Q.Poly if Q.Poly!=[0] else []\n    R=R.Poly\
+    \ if R.Poly!=[0] else []\n\n    print(len(Q), len(R))\n    write(\" \".join(map(str,Q)));\
+    \ print()\n    write(\" \".join(map(str,R)))\n\n#==================================================\n\
+    verify()\n"
   dependsOn:
   - Modulo_Sequence/Modulo_Polynomial.py
   isVerificationFile: true
-  path: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
+  path: test_verify/yosupo_library_checker/Polynomial/Division.test.py
   requiredBy: []
-  timestamp: '2022-11-23 17:51:29+09:00'
+  timestamp: '2022-11-23 17:53:40+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
+documentation_of: test_verify/yosupo_library_checker/Polynomial/Division.test.py
 layout: document
 redirect_from:
-- /verify/test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
-- /verify/test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py.html
-title: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
+- /verify/test_verify/yosupo_library_checker/Polynomial/Division.test.py
+- /verify/test_verify/yosupo_library_checker/Polynomial/Division.test.py.html
+title: test_verify/yosupo_library_checker/Polynomial/Division.test.py
 ---
