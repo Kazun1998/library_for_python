@@ -132,7 +132,7 @@ data:
     - icon: ':warning:'
       path: String.py
       title: String.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Strongly_Connected_Components.py
       title: Strongly_Connected_Components.py
     - icon: ':warning:'
@@ -422,6 +422,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
       title: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py
+      title: test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py
   - name: test_verify/yosupo_library_checker/Math
     pages:
     - icon: ':heavy_check_mark:'
