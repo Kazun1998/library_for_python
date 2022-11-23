@@ -27,13 +27,13 @@ data:
     \n    K,(A,B)=G.max_matching(1)\n\n    H=[]\n    for i in range(L):\n        if\
     \ A[i]!=-1:\n            H.append((i,A[i]))\n\n    print(K)\n    def string(x):\n\
     \        return \"{} {}\".format(x[0],x[1])\n\n    write(\"\\n\".join(map(string,H)))\n\
-    \n#==================================================\nverify()\n"
+    \    print()\n\n#==================================================\nverify()\n"
   dependsOn:
   - Bipart_Matching.py
   isVerificationFile: false
   path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
   requiredBy: []
-  timestamp: '2022-11-23 15:41:44+09:00'
+  timestamp: '2022-11-23 15:54:05+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
