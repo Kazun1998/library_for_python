@@ -1,6 +1,6 @@
 ---
-title: Modulo Polynominal
-documentation_of: //Modulo_Sequence/Modulo_Polynominal.py
+title: Modulo Polynomial
+documentation_of: //Modulo_Sequence/Modulo_Polynomial.py
 ---
 
 ## Outline
