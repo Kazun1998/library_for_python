@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy:
-  - icon: ':warning:'
-    path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
-    title: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
-  _extendedVerifiedWith: []
+  _extendedRequiredBy: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
+    title: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
   _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links:
     - https://snuke.hatenablog.com/entry/2019/05/07/013609
@@ -46,11 +46,11 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: Bipart_Matching.py
-  requiredBy:
-  - test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
+  requiredBy: []
   timestamp: '2022-11-23 15:40:18+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
 documentation_of: Bipart_Matching.py
 layout: document
 redirect_from:

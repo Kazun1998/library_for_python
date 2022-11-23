@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: Bipart_Matching.py
     title: Bipart_Matching.py
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/bipartitematching
     links:
@@ -30,16 +30,16 @@ data:
     \    print()\n\n#==================================================\nverify()\n"
   dependsOn:
   - Bipart_Matching.py
-  isVerificationFile: false
-  path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
+  isVerificationFile: true
+  path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
   requiredBy: []
-  timestamp: '2022-11-23 15:54:05+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
+  timestamp: '2022-11-23 15:56:15+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
+documentation_of: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
 layout: document
 redirect_from:
-- /library/test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
-- /library/test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py.html
-title: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
+- /verify/test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
+- /verify/test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py.html
+title: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
 ---

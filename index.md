@@ -9,7 +9,7 @@ data:
     - icon: ':warning:'
       path: Binary_Trie.py
       title: Binary_Trie.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Bipart_Matching.py
       title: Bipart_Matching.py
     - icon: ':warning:'
@@ -367,11 +367,6 @@ data:
     - icon: ':heavy_check_mark:'
       path: Union_Find/Union_Find.py
       title: Union Find (Disjoint Set Union)
-  - name: test_verify/yosupo_library_checker/Graph
-    pages:
-    - icon: ':warning:'
-      path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
-      title: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
   verificationCategories:
   - name: test_verify/yosupo_library_checker/Convolution
     pages:
@@ -404,6 +399,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
+  - name: test_verify/yosupo_library_checker/Graph
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
+      title: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
   - name: test_verify/yosupo_library_checker/Math
     pages:
     - icon: ':heavy_check_mark:'
