@@ -328,6 +328,9 @@ data:
       title: Segment Tree
   - name: Sorted_Set
     pages:
+    - icon: ':heavy_check_mark:'
+      path: Sorted_Set/Sorted_Multiset.py
+      title: Sorted_Set/Sorted_Multiset.py
     - icon: ':warning:'
       path: Sorted_Set/Sorted_Set.py
       title: Sorted_Set/Sorted_Set.py
@@ -393,6 +396,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Sorted_Multiset.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Sorted_Multiset.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
