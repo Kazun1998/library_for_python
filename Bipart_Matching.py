@@ -1,4 +1,4 @@
-# Thank you Snuke !!
+# 参考 URL
 # https://snuke.hatenablog.com/entry/2019/05/07/013609
 
 class Bipartite_Matching:
