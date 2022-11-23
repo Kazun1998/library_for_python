@@ -120,7 +120,7 @@ data:
     - icon: ':warning:'
       path: Slide_Maximum.py
       title: Slide_Maximum.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Slide_Window.py
       title: Slide_Window.py
     - icon: ':warning:'
@@ -399,6 +399,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Queue_Operate_All_Composite.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Queue_Operate_All_Composite.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Range_Kth_Smallest.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Range_Kth_Smallest.test.py
