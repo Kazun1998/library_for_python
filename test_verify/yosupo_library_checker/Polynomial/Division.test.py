@@ -1,8 +1,6 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/division_of_polynomials
 
 #==================================================
-import sys
-sys.path.append("../../../")
 from Modulo_Sequence.Modulo_Polynomial import *
 
 import sys
