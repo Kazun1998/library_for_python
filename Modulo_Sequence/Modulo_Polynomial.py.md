@@ -484,10 +484,10 @@ data:
   timestamp: '2022-11-23 00:05:10+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/yosupo_library_checker/Polynomial/Exp.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Inv.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Log.test.py
   - test_verify/yosupo_library_checker/Polynomial/Power.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Exp.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Log.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Inv.test.py
 documentation_of: Modulo_Sequence/Modulo_Polynomial.py
 layout: document
 redirect_from:

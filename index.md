@@ -141,9 +141,9 @@ data:
     - icon: ':warning:'
       path: Trie.py
       title: Trie.py
-    - icon: ':warning:'
-      path: Two-SAT.py
-      title: 2-SAT
+    - icon: ':heavy_check_mark:'
+      path: Two_SAT.py
+      title: Two_SAT.py
     - icon: ':warning:'
       path: Vector.py
       title: Vector.py
@@ -421,11 +421,17 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
       title: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Math/Two_Sat.test.py
+      title: test_verify/yosupo_library_checker/Math/Two_Sat.test.py
   - name: test_verify/yosupo_library_checker/Matrix
     pages:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Matrix/Determinant.test.py
       title: test_verify/yosupo_library_checker/Matrix/Determinant.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Matrix/Inverse.test.py
+      title: test_verify/yosupo_library_checker/Matrix/Inverse.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Matrix/Product.test.py
       title: test_verify/yosupo_library_checker/Matrix/Product.test.py
