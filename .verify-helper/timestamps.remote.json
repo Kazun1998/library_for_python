@@ -22,10 +22,12 @@
 "test_verify/yosupo_library_checker/Matrix/Determinant.test.py": "2022-11-23 16:24:18 +0900",
 "test_verify/yosupo_library_checker/Matrix/Inverse.test.py": "2022-11-23 16:28:32 +0900",
 "test_verify/yosupo_library_checker/Matrix/Product.test.py": "2022-11-23 02:23:22 +0900",
+"test_verify/yosupo_library_checker/Polynomial/Division.test.py": "2022-11-23 17:53:40 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Exp.test.py": "2022-11-23 03:06:27 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Inv.test.py": "2022-11-23 00:09:05 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Log.test.py": "2022-11-23 00:10:41 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Power.test.py": "2022-11-23 04:00:21 +0900",
+"test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py": "2022-11-23 17:51:29 +0900",
 "test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py": "2022-11-22 23:25:26 +0900",
 "test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py": "2022-11-22 23:25:26 +0900"
 }
