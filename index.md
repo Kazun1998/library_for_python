@@ -424,6 +424,9 @@ data:
   - name: test_verify/yosupo_library_checker/Matrix
     pages:
     - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Matrix/Determinant.test.py
+      title: test_verify/yosupo_library_checker/Matrix/Determinant.test.py
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Matrix/Product.test.py
       title: test_verify/yosupo_library_checker/Matrix/Product.test.py
   - name: test_verify/yosupo_library_checker/Polynomial
