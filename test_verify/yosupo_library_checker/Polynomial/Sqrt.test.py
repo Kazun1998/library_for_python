@@ -1,4 +1,5 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/sqrt_of_formal_power_series
+# verification-helper: IGNORE
 
 #==================================================
 import sys
