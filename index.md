@@ -195,7 +195,7 @@ data:
     - icon: ':warning:'
       path: Convolution/ADD_Convolution.py
       title: Convolution/ADD_Convolution.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Convolution/AND_Convolution.py
       title: And Convolution
     - icon: ':heavy_check_mark:'
@@ -213,7 +213,7 @@ data:
     - icon: ':warning:'
       path: Convolution/OR_Convolution.py
       title: Or Convolution
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Convolution/XOR_Convolution.py
       title: Xor Convolution
   - name: Dynamic Programming
@@ -370,6 +370,12 @@ data:
   verificationCategories:
   - name: test_verify/yosupo_library_checker/Convolution
     pages:
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Convolution/Bitwise_And_Convolution.test.py
+      title: test_verify/yosupo_library_checker/Convolution/Bitwise_And_Convolution.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Convolution/Bitwise_Xor_Convolution.test.py
+      title: test_verify/yosupo_library_checker/Convolution/Bitwise_Xor_Convolution.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Convolution/Convolution.test.py
       title: test_verify/yosupo_library_checker/Convolution/Convolution.test.py
