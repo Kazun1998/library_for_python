@@ -1,15 +1,15 @@
-class Modulo_Error(Exception):
-    pass
-
 class Modulo():
     __slots__=("a","n")
 
-    def __init__(self,a,n):
-        self.a=a%n
+    def __init__(self, a, n, mode=True):
+        if mode:
+            a%=n
+
+        self.a=a
         self.n=n
 
     def __str__(self):
-        return "{} (mod {})".format(self.a,self.n)
+        return "{} (mod {})".format(self.a, self.n)
 
     def __repr__(self):
         return self.__str__()
@@ -19,14 +19,17 @@ class Modulo():
         return self
 
     def __neg__(self):
-        return  Modulo(-self.a,self.n)
+        if self.a:
+            return Modulo(self.n-self.a, self.n,False)
+        else:
+            return  Modulo(0, self.n, False)
 
     #等号,不等号
-    def __eq__(self,other):
-        if isinstance(other,Modulo):
+    def __eq__(self, other):
+        if isinstance(other, Modulo):
             return (self.a==other.a) and (self.n==other.n)
         elif isinstance(other,int):
-            return (self-other).a==0
+            return (self.a-other)%self.n==0
 
     def __neq__(self,other):
         return not(self==other)
@@ -51,105 +54,128 @@ class Modulo():
     #加法
     def __add__(self,other):
         if isinstance(other,Modulo):
-            if self.n!=other.n:
-                raise Modulo_Error("異なる法同士の演算です.")
-            return Modulo(self.a+other.a,self.n)
+            assert self.n==other.n, "異なる法同士の演算です."
+            y=other.a
         elif isinstance(other,int):
-            return Modulo(self.a+other,self.n)
+            y=other%self.n
+
+        b=self.a+y
+        if self.n<=b:
+            b-=self.n
+        return Modulo(b,self.n, False)
 
     def __radd__(self,other):
         if isinstance(other,int):
-            return Modulo(self.a+other,self.n)
+            b=self.a+(other%self.n)
+            if b>=self.n:
+                b-=self.n
+            return Modulo(b,self.n, False)
 
     def __iadd__(self,other):
         if isinstance(other,Modulo):
-            if self.n!=other.n: raise Modulo_Error("異なる法同士の演算です.")
-            self.a+=other.a
-            if self.a>=self.n: self.a-=self.n
+            assert self.n==other.n, "異なる法同士の演算です."
+            y=other.a
         elif isinstance(other,int):
-            self.a+=other
-            if self.a>=self.n: self.a-=self.n
+            y=other%self.n
+
+        self.a+=y
+        if self.a>=self.n:
+            self.a-=self.n
         return self
 
     #減法
     def __sub__(self,other):
-        return self+(-other)
+        if isinstance(other,Modulo):
+            assert self.n==other.n, "異なる法同士の演算です."
+            y=other.a
+        elif isinstance(other,int):
+            y=other%self.n
+
+        b=self.a-y
+        if b<0:
+            b+=self.n
+        return Modulo(b,self.n, False)
 
     def __rsub__(self,other):
         if isinstance(other,int):
-            return -self+other
+            b=other%self.n-self.a
+            if b<0:
+                b+=self.n
+            return Modulo(b,self.n, False)
 
     def __isub__(self,other):
         if isinstance(other,Modulo):
-            if self.n!=other.n: raise Modulo_Error("異なる法同士の演算です.")
-            self.a-=other.a
-            if self.a<0: self.a+=self.n
+            assert self.n==other.n, "異なる法同士の演算です."
+            y=other.a
         elif isinstance(other,int):
-            self.a-=other
-            if self.a<0: self.a+=self.n
+            y=other%self.n
+
+        self.a-=y
+        if self.a<0:
+            self.a+=self.n
         return self
 
     #乗法
     def __mul__(self,other):
         if isinstance(other,Modulo):
-            if self.n!=other.n:
-                raise Modulo_Error("異なる法同士の演算です.")
-            return Modulo(self.a*other.a,self.n)
+            assert self.n==other.n, "異なる法同士の演算です."
+            y=other.a
         elif isinstance(other,int):
-            return Modulo(self.a*other,self.n)
+            y=other%self.n
+
+        return Modulo((self.a*y)%self.n, self.n, False)
 
     def __rmul__(self,other):
         if isinstance(other,int):
-            return Modulo(self.a*other,self.n)
+            return Modulo((self.a*other)%self.n, self.n, False)
 
     def __imul__(self,other):
         if isinstance(other,Modulo):
-            if self.n!=other.n: raise Modulo_Error("異なる法同士の演算です.")
-            self.a*=other.a
+            assert self.n==other.n, "異なる法同士の演算です."
+            y=other.a
         elif isinstance(other,int):
-            self.a*=other
+            y=other%self.n
+
+        self.a*=y
         self.a%=self.n
         return self
 
     #Modulo逆数
     def inverse(self):
-        return self.Modulo_Inverse()
+        return self.modulo_inverse()
 
-    def Modulo_Inverse(self):
+    def modulo_inverse(self):
         s,t=1,0
         a,b=self.a,self.n
         while b:
             q,a,b=a//b,b,a%b
             s,t=t,s-q*t
 
-        if a!=1:
-            raise Modulo_Error("{}の逆数が存在しません".format(self))
-        else:
-            return Modulo(s,self.n)
+        assert a==1,"{}の逆数が存在しません".format(self)
+        s%=self.n
+        return Modulo(s,self.n, False)
 
     #除法
     def __truediv__(self,other):
-        return self*(other.Modulo_Inverse())
+        return self*(other.modulo_inverse())
 
     def __rtruediv__(self,other):
-        return other*(self.Modulo_Inverse())
+        return other*(self.modulo_inverse())
 
     #累乗
     def __pow__(self,other):
         if isinstance(other,int):
             u=abs(other)
 
-            r=Modulo(pow(self.a,u,self.n),self.n)
+            r=Modulo(pow(self.a,u,self.n),self.n, False)
             if other>=0:
                 return r
             else:
-                return r.Modulo_Inverse()
+                return r.modulo_inverse()
         else:
             b,n=other.a,other.n
-            if pow(self.a,n,self.n)!=1:
-                raise Modulo_Error("矛盾なく定義できません.")
-            else:
-                return self**b
+            assert pow(self.a,n,self.n)==1, "矛盾なく定義できません."
+            return self**b
 
 """
 初等的
@@ -245,12 +271,12 @@ def Chinese_Remainder(X: Modulo):
         Y.append(Modulo(a,N))
 
     return Y
-    
+
 """
 線形合同方程式関連
 """
 #法の合成
-def __modulo_composite__(p:Modulo,q:Modulo):
+def __modulo_composite__(p:Modulo, q:Modulo):
     """2つの等式 x ≡ p.a (mod p.n), x ≡ q.a (mod q.n) をともに満たす x を全て求める.
     """
     from math import gcd
@@ -343,7 +369,7 @@ def First_Order_Simultaneous_Congruent_Equation(*X):
 """
 #ルジャンドル記号
 def Legendre(X):
-    """ルジャンドル記号(a/p)を返す.
+    """ルジャンドル記号 (a/p) を返す.
 
     ※法が素数のときのみ成立する.
     """
@@ -356,7 +382,7 @@ def Legendre(X):
         return -1
 
 #根号
-def sqrt(X, All=False):
+def Sqrt(X, All=False):
     """ X=a (mod p) のとき, r*r=a (mod p) を満たす r を (存在すれば) 返す.
 
     [Input]
@@ -416,15 +442,15 @@ def sqrt(X, All=False):
         return r
 
 #離散対数
-def Discrete_Log(A,B):
+def Discrete_Log(A, B, default=-1):
     """ A^X=B (mod M) を満たす最小の非負整数 X を求める.
 
     [入力]
     A:底
     B:
     [出力]
-    A^X=B (mod M)を満たす非負整数Xが存在すればその中で最小のもの
-    存在しなければ-1
+    A^X=B (mod M)を満たす非負整数 X が存在すればその中で最小のもの
+    存在しなければ default
     """
 
     if isinstance(B,int):
@@ -464,8 +490,8 @@ def Discrete_Log(A,B):
         if Giant in D:
             j=D[Giant]
             X=i*S-j
-            return X if pow(A,X,M)==B else None
-    return None
+            return X if pow(A,X,M)==B else default
+    return default
 
 def Order(X):
     """ X の位数を求める. つまり, X^k=[1] を満たす最小の正整数 k を求める.
@@ -570,14 +596,10 @@ def Primitive_Root(p):
 
         g+=1
 
-Mod=10**9+7
-X=Modulo(3,Mod)
-Y=Modulo(193,Mod)
-
 """
 数え上げ関連
 """
-def Factor_Modulo(N,Mod,Mode=0):
+def Factor_Modulo(N, Mod, Mode=0):
     """
     Mode=0: N! (mod Mod) を求める.
     Mode=1: k! (mod Mod) (k=0,1,...,N) のリストも出力する.
