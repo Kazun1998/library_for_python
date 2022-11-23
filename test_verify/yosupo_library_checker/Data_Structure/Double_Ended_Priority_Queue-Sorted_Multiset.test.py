@@ -1,8 +1,6 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/double_ended_priority_queue
 
 #==================================================
-import sys
-sys.path.append("../../../")
 from Sorted_Set.Sorted_Multiset import *
 
 import sys
