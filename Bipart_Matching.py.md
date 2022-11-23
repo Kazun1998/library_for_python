@@ -1,7 +1,10 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
+    title: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: py
@@ -15,7 +18,7 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "# Thank you Snuke !!\n# https://snuke.hatenablog.com/entry/2019/05/07/013609\n\
+  code: "# \u53C2\u8003 URL\n# https://snuke.hatenablog.com/entry/2019/05/07/013609\n\
     \nclass Bipartite_Matching:\n    def __init__(self,M,N):\n        \"\"\" \u30B5\
     \u30A4\u30BA\u304C M,N \u304B\u3089\u306A\u308B\u4E8C\u90E8\u7A7A\u30B0\u30E9\u30D5\
     \u3092\u4F5C\u6210\u3059\u308B.\n        \"\"\"\n        self.M=M; self.N=N\n\
@@ -43,8 +46,9 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: Bipart_Matching.py
-  requiredBy: []
-  timestamp: '2022-01-07 17:52:59+09:00'
+  requiredBy:
+  - test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.py
+  timestamp: '2022-11-23 15:40:18+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Bipart_Matching.py
