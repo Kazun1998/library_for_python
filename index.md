@@ -81,7 +81,7 @@ data:
     - icon: ':warning:'
       path: Mo.py
       title: Mo
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Modulo.py
       title: Modulo
     - icon: ':warning:'
@@ -415,6 +415,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
       title: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
+      title: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
   - name: test_verify/yosupo_library_checker/Matrix
     pages:
     - icon: ':heavy_check_mark:'

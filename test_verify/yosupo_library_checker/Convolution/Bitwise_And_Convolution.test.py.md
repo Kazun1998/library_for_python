@@ -22,8 +22,7 @@ data:
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/bitwise_and_convolution\n\
     \n#==================================================\nfrom Convolution.AND_Convolution\
     \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
-    #==================================================\ndef verify():\n    import\
-    \ sys\n    input=sys.stdin.readline\n    write=sys.stdout.write\n\n    N=int(input())\n\
+    #==================================================\ndef verify():\n    N=int(input())\n\
     \    A=list(map(int,input().split()))\n    B=list(map(int,input().split()))\n\
     \    write(\" \".join(map(str,Convolution_AND(A,B))))\n\n#==================================================\n\
     verify()\n"
@@ -32,7 +31,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Convolution/Bitwise_And_Convolution.test.py
   requiredBy: []
-  timestamp: '2022-11-23 16:01:19+09:00'
+  timestamp: '2022-11-23 16:07:50+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Convolution/Bitwise_And_Convolution.test.py
