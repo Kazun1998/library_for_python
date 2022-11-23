@@ -303,7 +303,7 @@ data:
     pages:
     - icon: ':heavy_check_mark:'
       path: Modulo_Sequence/Modulo_Polynomial.py
-      title: Modulo_Sequence/Modulo_Polynomial.py
+      title: Modulo Polynomial
     - icon: ':warning:'
       path: Modulo_Sequence/Modulo_Sequence.py
       title: Modulo Sequence
