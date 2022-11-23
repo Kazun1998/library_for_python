@@ -150,7 +150,7 @@ data:
     - icon: ':warning:'
       path: Vector3.py
       title: Vector3.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Wavelet_Matrix.py
       title: Wavelet_Matrix.py
     - icon: ':warning:'
@@ -399,6 +399,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Range_Kth_Smallest.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Range_Kth_Smallest.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py

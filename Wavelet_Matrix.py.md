@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: test_verify/yosupo_library_checker/Data_Structure/Range_Kth_Smallest.test.py
+    title: test_verify/yosupo_library_checker/Data_Structure/Range_Kth_Smallest.test.py
   _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links:
     - https://judge.yosupo.jp/submission/33990
@@ -156,8 +159,9 @@ data:
   path: Wavelet_Matrix.py
   requiredBy: []
   timestamp: '2022-04-20 14:58:29+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - test_verify/yosupo_library_checker/Data_Structure/Range_Kth_Smallest.test.py
 documentation_of: Wavelet_Matrix.py
 layout: document
 redirect_from:
