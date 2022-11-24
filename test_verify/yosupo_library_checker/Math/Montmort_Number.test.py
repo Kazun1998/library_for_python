@@ -10,7 +10,7 @@ write=sys.stdout.write
 #==================================================
 def verify():
     N,M=map(int,input().split())
-    write(" ".join(map(str, Montmort_Number(N,M))))
+    write(" ".join(map(str, Montmort_Number(N,M)[1:])))
 
 #==================================================
 verify()
