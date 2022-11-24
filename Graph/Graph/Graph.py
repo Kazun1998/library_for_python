@@ -469,7 +469,7 @@ def Connected_Component_Decomposition(G, mode=0):
     """ 連結成分毎に分解する.
 
     G: Graph
-    mode: 0→連結成分, 1, 連結成分番号, 2→ (連結成分, 連結成分番号)"""
+    mode:0 → 連結成分, 1 → 連結成分番号, 2 → (連結成分, 連結成分番号)"""
     from collections import deque
 
     N=G.vertex_count()
@@ -620,7 +620,7 @@ def Find_Eulerian_Trail(G):
     for v in range(N-1,-1,-1):
         if G.degree(v)%2:
             K+=1
-            s=v
+            start=v
 
             if K==3:
                 return None
@@ -630,133 +630,87 @@ def Find_Eulerian_Trail(G):
     from copy import deepcopy
     E=deepcopy(G.adjacent)
 
-    def dfs(w):
-        X=[w]
-        while E[w]:
-            u=E[w].pop()
-            E[u].discard(w)
-            X.append(u)
-            w=u
-        return X
+    temp=[start]; v=start
+    while E[v]:
+        w=E[v].pop()
+        E[w].remove(v)
+        temp.append(w)
+        v=w
 
-    P=[]
-    Q=dfs(s)
-    while Q:
-        u=Q.pop()
-        P.append(u)
-        if len(E[u])>0:
-            Q.extend(dfs(u)[:-1])
+    path=[]
+    while temp:
+        v=temp.pop()
+        if E[v]:
+            temp.append(v)
+            while E[v]:
+                w=E[v].pop()
+                E[w].remove(v)
+                temp.append(w)
+                v=w
+        else:
+            path.append(v)
 
-    if len(P)-1==G.edge_count():
-        return P
-    else:
-        return None
+    path.reverse()
+    return path if len(path)-1==G.size() else None
 
 #Euler閉路を見つける
 def Find_Eulerian_Cycle(G):
     N=G.vertex_count()
-    for v in range(N-1,-1,-1):
+    for v in range(N):
         if G.degree(v)%2:
             return None
 
     from copy import deepcopy
     E=deepcopy(G.adjacent)
 
-    def dfs(w):
-        X=[w]
-        while E[w]:
-            u=E[w].pop()
-            E[u].discard(w)
-            X.append(u)
-            w=u
-        return X
+    temp=[0]; v=0
+    while E[v]:
+        w=E[v].pop()
+        E[w].remove(v)
+        temp.append(w)
+        v=w
 
-    P=[]
-    Q=dfs(0)
-    while Q:
-        u=Q.pop()
-        P.append(u)
-        if len(E[u])>0:
-            Q.extend(dfs(u)[:-1])
+    cycle=[]
+    while temp:
+        v=temp.pop()
+        if E[v]:
+            temp.append(v)
+            while E[v]:
+                w=E[v].pop()
+                E[w].remove(v)
+                temp.append(w)
+                v=w
+        else:
+            cycle.append(v)
 
-    if len(P)-1==G.edge_count():
-        return P
-    else:
-        return None
+    cycle.reverse()
+    return cycle if len(cycle)-1==G.size() else None
 
 #ハミルトングラフ?
 def Is_Hamiltonian_Graph(G):
-    N=len(G.vertex)
+    """ ハミルトングラフ (全ての頂点を1回ずつ通るサイクルを含むグラフ) かどうかを判定する.
+
+    """
+
+    N=G.order()
     if N==2 or N==0:
         return False
     elif N==1:
         return True
 
-    A=G.vertex[0]
-    B=G.vertex[1]
-    C=G.vertex[2]
-
-    X={v:False for v in G.vertex}
-    X[A]=True
-    #------------------------------
-    def __f__(v,k):
-        if k==0:
-            return v in G.adjacent[A]
-
-        if v==B and X[C]:
-            return False
-
-        for w in G.adjacent[v]:
-            if not X[w]:
-                X[w]=True
-                if __f__(w,k-1):
-                    return True
-                X[w]=False
-
-        return False
-    #------------------------------
-    return __f__(A,N-1)
+    pass
 
 #ハミルトンを探す.
 def Find_Hamiltonian_Graph(G):
     from collections import deque
 
-    N=len(G.vertex)
+    N=G.order()
     if N==2 or N==0:
         return None
     elif N==1:
-        return G.vertex
+        return [0]
 
-    A=G.vertex[0]
-    B=G.vertex[1]
-    C=G.vertex[2]
-
-    X={v:False for v in G.vertex}
-    X[A]=True
-    Y=deque([A])
-    #------------------------------
-    def __f__(v,k):
-        if k==0:
-            return v in G.adjacent[A]
-
-        if v==B and X[C]:
-            return False
-
-        for w in G.adjacent[v]:
-            if not X[w]:
-                X[w]=True
-                Y.append(w)
-                if __f__(w,k-1):
-                    return True
-                X[w]=False
-                _=Y.pop()
-
-        return False
-    #------------------------------
-    if __f__(A,N-1):
-        return list(Y)
-    else:
-        return None
+    pass
 
 #クリーク
 def Clique(G: Graph, calc, merge, unit, empty=False):
@@ -1145,3 +1099,5 @@ def Depth_First_Search_yielder(G):
                 else:
                     yield (x, parent[x], -1)
             yield (x, -1, -1)
+
+print(Is_Hamiltonian_Graph(Complete_Graph(12)))
