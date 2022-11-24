@@ -170,9 +170,9 @@ data:
     \ if Mode:\n        return (d,(u,v))\n    else:\n        return d\n\n#\u9023\u7D50\
     \u6210\u5206\u306B\u5206\u89E3\ndef Connected_Component_Decomposition(G, mode=0):\n\
     \    \"\"\" \u9023\u7D50\u6210\u5206\u6BCE\u306B\u5206\u89E3\u3059\u308B.\n\n\
-    \    G: Graph\n    mode: 0\u2192\u9023\u7D50\u6210\u5206, 1, \u9023\u7D50\u6210\
-    \u5206\u756A\u53F7, 2\u2192 (\u9023\u7D50\u6210\u5206, \u9023\u7D50\u6210\u5206\
-    \u756A\u53F7)\"\"\"\n    from collections import deque\n\n    N=G.vertex_count()\n\
+    \    G: Graph\n    mode:0 \u2192 \u9023\u7D50\u6210\u5206, 1 \u2192 \u9023\u7D50\
+    \u6210\u5206\u756A\u53F7, 2 \u2192 (\u9023\u7D50\u6210\u5206, \u9023\u7D50\u6210\
+    \u5206\u756A\u53F7)\"\"\"\n    from collections import deque\n\n    N=G.vertex_count()\n\
     \    T=[-1]*N\n    C=[]\n    k=0\n    for v in range(N):\n        if T[v]==-1:\n\
     \            Q=deque([v]); T[v]=k\n            c=[]\n            while Q:\n  \
     \              u=Q.popleft()\n                c.append(u)\n                for\
@@ -222,51 +222,41 @@ data:
     \           K+=1\n            if K==3:\n                return False\n    return\
     \ K==2 and Is_Connected(G)\n\n#Euler \u8DEF\u3092\u898B\u3064\u3051\u308B\ndef\
     \ Find_Eulerian_Trail(G):\n    K=0\n    N=G.vertex_count()\n    for v in range(N-1,-1,-1):\n\
-    \        if G.degree(v)%2:\n            K+=1\n            s=v\n\n            if\
-    \ K==3:\n                return None\n    if K==0:\n        return None\n\n  \
-    \  from copy import deepcopy\n    E=deepcopy(G.adjacent)\n\n    def dfs(w):\n\
-    \        X=[w]\n        while E[w]:\n            u=E[w].pop()\n            E[u].discard(w)\n\
-    \            X.append(u)\n            w=u\n        return X\n\n    P=[]\n    Q=dfs(s)\n\
-    \    while Q:\n        u=Q.pop()\n        P.append(u)\n        if len(E[u])>0:\n\
-    \            Q.extend(dfs(u)[:-1])\n\n    if len(P)-1==G.edge_count():\n     \
-    \   return P\n    else:\n        return None\n\n#Euler\u9589\u8DEF\u3092\u898B\
-    \u3064\u3051\u308B\ndef Find_Eulerian_Cycle(G):\n    N=G.vertex_count()\n    for\
-    \ v in range(N-1,-1,-1):\n        if G.degree(v)%2:\n            return None\n\
-    \n    from copy import deepcopy\n    E=deepcopy(G.adjacent)\n\n    def dfs(w):\n\
-    \        X=[w]\n        while E[w]:\n            u=E[w].pop()\n            E[u].discard(w)\n\
-    \            X.append(u)\n            w=u\n        return X\n\n    P=[]\n    Q=dfs(0)\n\
-    \    while Q:\n        u=Q.pop()\n        P.append(u)\n        if len(E[u])>0:\n\
-    \            Q.extend(dfs(u)[:-1])\n\n    if len(P)-1==G.edge_count():\n     \
-    \   return P\n    else:\n        return None\n\n#\u30CF\u30DF\u30EB\u30C8\u30F3\
-    \u30B0\u30E9\u30D5?\ndef Is_Hamiltonian_Graph(G):\n    N=len(G.vertex)\n    if\
-    \ N==2 or N==0:\n        return False\n    elif N==1:\n        return True\n\n\
-    \    A=G.vertex[0]\n    B=G.vertex[1]\n    C=G.vertex[2]\n\n    X={v:False for\
-    \ v in G.vertex}\n    X[A]=True\n    #------------------------------\n    def\
-    \ __f__(v,k):\n        if k==0:\n            return v in G.adjacent[A]\n\n   \
-    \     if v==B and X[C]:\n            return False\n\n        for w in G.adjacent[v]:\n\
-    \            if not X[w]:\n                X[w]=True\n                if __f__(w,k-1):\n\
-    \                    return True\n                X[w]=False\n\n        return\
-    \ False\n    #------------------------------\n    return __f__(A,N-1)\n\n#\u30CF\
-    \u30DF\u30EB\u30C8\u30F3\u3092\u63A2\u3059.\ndef Find_Hamiltonian_Graph(G):\n\
-    \    from collections import deque\n\n    N=len(G.vertex)\n    if N==2 or N==0:\n\
-    \        return None\n    elif N==1:\n        return G.vertex\n\n    A=G.vertex[0]\n\
-    \    B=G.vertex[1]\n    C=G.vertex[2]\n\n    X={v:False for v in G.vertex}\n \
-    \   X[A]=True\n    Y=deque([A])\n    #------------------------------\n    def\
-    \ __f__(v,k):\n        if k==0:\n            return v in G.adjacent[A]\n\n   \
-    \     if v==B and X[C]:\n            return False\n\n        for w in G.adjacent[v]:\n\
-    \            if not X[w]:\n                X[w]=True\n                Y.append(w)\n\
-    \                if __f__(w,k-1):\n                    return True\n         \
-    \       X[w]=False\n                _=Y.pop()\n\n        return False\n    #------------------------------\n\
-    \    if __f__(A,N-1):\n        return list(Y)\n    else:\n        return None\n\
-    \n#\u30AF\u30EA\u30FC\u30AF\ndef Clique(G: Graph, calc, merge, unit, empty=False):\n\
-    \    \"\"\"\n    \u30B0\u30E9\u30D5 G \u306B\u5BFE\u3059\u308B Clique C \u5168\
-    \u3066\u306B\u5BFE\u3059\u308B calc (C) \u3092\u8A08\u7B97\u3057, merge \u3067\
-    \u30DE\u30FC\u30B8\u3059\u308B.\n\n    G: Graph\n    calc: calc(C) Clique \u3067\
-    \u3042\u308B\u90E8\u5206\u96C6\u5408 C \u306B\u5BFE\u3059\u308B\u5024\n    merge:\
-    \ merge(x,y) x,y \u306E\u30DE\u30FC\u30B8\u306E\u65B9\u6CD5\n    empty: \u7A7A\
-    \u96C6\u5408\u3092 Clique \u3068\u3059\u308B\u304B?\n\n    \u8A08\u7B97\u91CF\
-    : O(2^{sqrt(2M)} N)\n    \"\"\"\n\n    N=G.order(); M=G.size()\n    deg=[G.degree(v)\
-    \ for v in range(N)]; V=[1]*N\n\n    M_sqrt=0\n    while (M_sqrt+1)**2<=2*M:\n\
+    \        if G.degree(v)%2:\n            K+=1\n            start=v\n\n        \
+    \    if K==3:\n                return None\n    if K==0:\n        return None\n\
+    \n    from copy import deepcopy\n    E=deepcopy(G.adjacent)\n\n    temp=[start];\
+    \ v=start\n    while E[v]:\n        w=E[v].pop()\n        E[w].remove(v)\n   \
+    \     temp.append(w)\n        v=w\n\n    path=[]\n    while temp:\n        v=temp.pop()\n\
+    \        if E[v]:\n            temp.append(v)\n            while E[v]:\n     \
+    \           w=E[v].pop()\n                E[w].remove(v)\n                temp.append(w)\n\
+    \                v=w\n        else:\n            path.append(v)\n\n    path.reverse()\n\
+    \    return path if len(path)-1==G.size() else None\n\n#Euler\u9589\u8DEF\u3092\
+    \u898B\u3064\u3051\u308B\ndef Find_Eulerian_Cycle(G):\n    N=G.vertex_count()\n\
+    \    for v in range(N):\n        if G.degree(v)%2:\n            return None\n\n\
+    \    from copy import deepcopy\n    E=deepcopy(G.adjacent)\n\n    temp=[0]; v=0\n\
+    \    while E[v]:\n        w=E[v].pop()\n        E[w].remove(v)\n        temp.append(w)\n\
+    \        v=w\n\n    cycle=[]\n    while temp:\n        v=temp.pop()\n        if\
+    \ E[v]:\n            temp.append(v)\n            while E[v]:\n               \
+    \ w=E[v].pop()\n                E[w].remove(v)\n                temp.append(w)\n\
+    \                v=w\n        else:\n            cycle.append(v)\n\n    cycle.reverse()\n\
+    \    return cycle if len(cycle)-1==G.size() else None\n\n#\u30CF\u30DF\u30EB\u30C8\
+    \u30F3\u30B0\u30E9\u30D5?\ndef Is_Hamiltonian_Graph(G):\n    \"\"\" \u30CF\u30DF\
+    \u30EB\u30C8\u30F3\u30B0\u30E9\u30D5 (\u5168\u3066\u306E\u9802\u70B9\u30921\u56DE\
+    \u305A\u3064\u901A\u308B\u30B5\u30A4\u30AF\u30EB\u3092\u542B\u3080\u30B0\u30E9\
+    \u30D5) \u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B.\n\n    \"\"\"\n\
+    \n    N=G.order()\n    if N==2 or N==0:\n        return False\n    elif N==1:\n\
+    \        return True\n\n    pass\n\n#\u30CF\u30DF\u30EB\u30C8\u30F3\u3092\u63A2\
+    \u3059.\ndef Find_Hamiltonian_Graph(G):\n    from collections import deque\n\n\
+    \    N=G.order()\n    if N==2 or N==0:\n        return None\n    elif N==1:\n\
+    \        return [0]\n\n    pass\n\n#\u30AF\u30EA\u30FC\u30AF\ndef Clique(G: Graph,\
+    \ calc, merge, unit, empty=False):\n    \"\"\"\n    \u30B0\u30E9\u30D5 G \u306B\
+    \u5BFE\u3059\u308B Clique C \u5168\u3066\u306B\u5BFE\u3059\u308B calc (C) \u3092\
+    \u8A08\u7B97\u3057, merge \u3067\u30DE\u30FC\u30B8\u3059\u308B.\n\n    G: Graph\n\
+    \    calc: calc(C) Clique \u3067\u3042\u308B\u90E8\u5206\u96C6\u5408 C \u306B\u5BFE\
+    \u3059\u308B\u5024\n    merge: merge(x,y) x,y \u306E\u30DE\u30FC\u30B8\u306E\u65B9\
+    \u6CD5\n    empty: \u7A7A\u96C6\u5408\u3092 Clique \u3068\u3059\u308B\u304B?\n\
+    \n    \u8A08\u7B97\u91CF: O(2^{sqrt(2M)} N)\n    \"\"\"\n\n    N=G.order(); M=G.size()\n\
+    \    deg=[G.degree(v) for v in range(N)]; V=[1]*N\n\n    M_sqrt=0\n    while (M_sqrt+1)**2<=2*M:\n\
     \        M_sqrt+=1\n\n    X=unit\n    while True:\n        A=[]\n        for u\
     \ in range(N):\n            if V[u] and deg[u]<M_sqrt:\n                for v\
     \ in range(N):\n                    if u!=v and V[v] and G.edge_exist(u,v):\n\
@@ -394,18 +384,18 @@ data:
     \            parent[y]=x\n                        yield (x,y,1)\n            \
     \            break\n                    else:\n                        yield (x,y,0)\n\
     \                else:\n                    yield (x, parent[x], -1)\n       \
-    \     yield (x, -1, -1)\n"
+    \     yield (x, -1, -1)\n\nprint(Is_Hamiltonian_Graph(Complete_Graph(12)))\n"
   dependsOn: []
   isVerificationFile: false
-  path: Graph/Graph.py
+  path: Graph/Graph/Graph.py
   requiredBy: []
-  timestamp: '2022-09-28 11:01:42+09:00'
+  timestamp: '2022-11-25 00:16:56+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
-documentation_of: Graph/Graph.py
+documentation_of: Graph/Graph/Graph.py
 layout: document
 redirect_from:
-- /library/Graph/Graph.py
-- /library/Graph/Graph.py.html
-title: Graph/Graph.py
+- /library/Graph/Graph/Graph.py
+- /library/Graph/Graph/Graph.py.html
+title: Graph/Graph/Graph.py
 ---

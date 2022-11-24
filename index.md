@@ -275,14 +275,16 @@ data:
       path: Graph/Digraph.py
       title: Graph/Digraph.py
     - icon: ':warning:'
-      path: Graph/Graph.py
-      title: Graph/Graph.py
-    - icon: ':warning:'
       path: Graph/Weighted_Digraph.py
       title: Graph/Weighted_Digraph.py
     - icon: ':warning:'
       path: Graph/Weighted_Graph.py
       title: Graph/Weighted_Graph.py
+  - name: Graph/Graph
+    pages:
+    - icon: ':warning:'
+      path: Graph/Graph/Graph.py
+      title: Graph/Graph/Graph.py
   - name: Min_Cost_Flow
     pages:
     - icon: ':warning:'
