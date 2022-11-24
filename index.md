@@ -336,7 +336,7 @@ data:
     - icon: ':warning:'
       path: Sequence/Derangement.py
       title: Sequence/Derangement.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Sequence/Longest_Increasing_Subsequence.py
       title: Sequence/Longest_Increasing_Subsequence.py
   - name: Sorted_Set
@@ -421,6 +421,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Longest_Increasing_Subsequence.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Longest_Increasing_Subsequence.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Predecessor_Problem-Ordered_Set.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Predecessor_Problem-Ordered_Set.test.py
