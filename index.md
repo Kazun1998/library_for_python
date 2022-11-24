@@ -121,9 +121,6 @@ data:
       path: Root.py
       title: Root.py
     - icon: ':warning:'
-      path: Sequence.py
-      title: Sequence.py
-    - icon: ':warning:'
       path: Slide_Maximum.py
       title: Slide_Maximum.py
     - icon: ':heavy_check_mark:'
@@ -334,6 +331,14 @@ data:
     - icon: ':heavy_check_mark:'
       path: Segment_Tree/Segment_Tree.py
       title: Segment Tree
+  - name: Sequence
+    pages:
+    - icon: ':warning:'
+      path: Sequence/Derangement.py
+      title: Sequence/Derangement.py
+    - icon: ':warning:'
+      path: Sequence/Longest_Increasing_Subsequence.py
+      title: Sequence/Longest_Increasing_Subsequence.py
   - name: Sorted_Set
     pages:
     - icon: ':heavy_check_mark:'
