@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: Sequence/Montmort_Number.py
     title: Sequence/Montmort_Number.py
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/montmort_number_mod
     links:
@@ -23,15 +23,15 @@ data:
     \n#==================================================\nfrom Sequence.Montmort_Number\
     \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
     #==================================================\ndef verify():\n    N,M=map(int,input().split())\n\
-    \    write(\" \".join(map(str, Montmort_Number(N,M))))\n\n#==================================================\n\
+    \    write(\" \".join(map(str, Montmort_Number(N,M)[1:])))\n\n#==================================================\n\
     verify()\n"
   dependsOn:
   - Sequence/Montmort_Number.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
   requiredBy: []
-  timestamp: '2022-11-25 04:03:31+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2022-11-25 04:06:40+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
 layout: document
