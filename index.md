@@ -284,7 +284,7 @@ data:
     pages:
     - icon: ':warning:'
       path: Graph/Graph/Graph.py
-      title: Graph/Graph/Graph.py
+      title: Graph
   - name: Min_Cost_Flow
     pages:
     - icon: ':warning:'
