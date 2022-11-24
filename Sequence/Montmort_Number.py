@@ -1,4 +1,4 @@
-def Derangement_List(N,Mod=None):
+def Montmort_Number(N, Mod=None):
     """ k=0,1,...,N に関して, k 要素撹乱順列の個数を求める.
     """
     if N<0:
