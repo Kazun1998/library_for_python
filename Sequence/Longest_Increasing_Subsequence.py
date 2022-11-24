@@ -1,4 +1,4 @@
-def Longest_Increase_Subsequence(A, mode=False, equal=False):
+def Longest_Increasing_Subsequence(A, mode=False, equal=False):
     """ 列 L における LIS の長さを求める.
 
     Mode=False のとき ... LIS の長さ, True のとき ... (長さ, 一例, 一例の各要素の場所)
