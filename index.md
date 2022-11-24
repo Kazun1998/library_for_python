@@ -48,6 +48,9 @@ data:
     - icon: ':warning:'
       path: Grid_Graph.py
       title: Grid_Graph.py
+    - icon: ':heavy_check_mark:'
+      path: Hash_Table.py
+      title: Hash_Table.py
     - icon: ':warning:'
       path: HeapDict.py
       title: HeapDict.py
@@ -390,6 +393,9 @@ data:
       title: test_verify/yosupo_library_checker/Convolution/Lcm_Convolution.test.py
   - name: test_verify/yosupo_library_checker/Data_Structure
     pages:
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Associative_Array.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Associative_Array.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py
