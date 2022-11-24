@@ -333,12 +333,12 @@ data:
       title: Segment Tree
   - name: Sequence
     pages:
-    - icon: ':warning:'
-      path: Sequence/Derangement.py
-      title: Sequence/Derangement.py
     - icon: ':heavy_check_mark:'
       path: Sequence/Longest_Increasing_Subsequence.py
       title: Sequence/Longest_Increasing_Subsequence.py
+    - icon: ':x:'
+      path: Sequence/Montmort_Number.py
+      title: Sequence/Montmort_Number.py
   - name: Sorted_Set
     pages:
     - icon: ':heavy_check_mark:'
@@ -455,6 +455,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
       title: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
+    - icon: ':x:'
+      path: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
+      title: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
       title: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
