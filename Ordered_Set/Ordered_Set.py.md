@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: test_verify/yosupo_library_checker/Data_Structure/Predecessor_Problem-Ordered_Set.test.py
+    title: test_verify/yosupo_library_checker/Data_Structure/Predecessor_Problem-Ordered_Set.test.py
   _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -160,8 +163,9 @@ data:
   path: Ordered_Set/Ordered_Set.py
   requiredBy: []
   timestamp: '2022-04-26 00:13:12+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - test_verify/yosupo_library_checker/Data_Structure/Predecessor_Problem-Ordered_Set.test.py
 documentation_of: Ordered_Set/Ordered_Set.py
 layout: document
 redirect_from:

@@ -309,7 +309,7 @@ data:
       title: Modulo Sequence
   - name: Ordered_Set
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Ordered_Set/Ordered_Set.py
       title: Ordered_Set/Ordered_Set.py
   - name: Segment_Tree
@@ -405,6 +405,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Predecessor_Problem-Ordered_Set.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Predecessor_Problem-Ordered_Set.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Queue_Operate_All_Composite.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Queue_Operate_All_Composite.test.py
