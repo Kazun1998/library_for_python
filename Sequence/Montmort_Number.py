@@ -5,20 +5,14 @@ def Montmort_Number(N, Mod=None):
         return []
     elif N==0:
         return [0]
-    elif N==1:
-        return [0,0]
-    elif Mod==1:
-        return [0]*(N+1)
 
     X=[0]*(N+1)
     if Mod==None:
-        X[2]=1
-        for k in range(3,N+1):
-            X[k]=(k-1)*(X[k-1]+X[k-2])
+        for k in range(2, N+1):
+            X[k]=k*X[k-1]+(-1 if k%2 else 1)
     else:
-        X[2]=1%Mod
-        for k in range(3,N+1):
-            X[k]=(k-1)*(X[k-1]+X[k-2])%Mod
+        for k in range(2, N+1):
+            X[k]=(k*X[k-1]+(-1 if k%2 else 1))%Mod
 
     return X
 
