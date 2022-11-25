@@ -351,7 +351,7 @@ data:
     - icon: ':warning:'
       path: Sequence/Subsequence_Count.py
       title: Sequence/Subsequence_Count.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Sequence/Z_Algorithm.py
       title: Sequence/Z_Algorithm.py
   - name: Sorted_Set
@@ -515,6 +515,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
+  - name: test_verify/yosupo_library_checker/String
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/String/Z_Algorithm.test.py
+      title: test_verify/yosupo_library_checker/String/Z_Algorithm.test.py
   - name: test_verify/yosupo_library_checker/Tree
     pages:
     - icon: ':heavy_check_mark:'

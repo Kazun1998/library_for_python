@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: test_verify/yosupo_library_checker/String/Z_Algorithm.test.py
+    title: test_verify/yosupo_library_checker/String/Z_Algorithm.test.py
   _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -27,8 +30,9 @@ data:
   path: Sequence/Z_Algorithm.py
   requiredBy: []
   timestamp: '2022-11-26 03:55:08+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - test_verify/yosupo_library_checker/String/Z_Algorithm.test.py
 documentation_of: Sequence/Z_Algorithm.py
 layout: document
 redirect_from:
