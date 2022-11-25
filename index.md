@@ -365,6 +365,9 @@ data:
   - name: String
     pages:
     - icon: ':warning:'
+      path: String/Substring_Count.py
+      title: String/Substring_Count.py
+    - icon: ':warning:'
       path: String/Suffix_Array.py
       title: String/Suffix_Array.py
   - name: Summation
