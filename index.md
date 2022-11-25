@@ -236,7 +236,7 @@ data:
     pages:
     - icon: ':warning:'
       path: Functional_Graph/Functional_Graph.py
-      title: Functional_Graph/Functional_Graph.py
+      title: Functional Graph
     - icon: ':warning:'
       path: Functional_Graph/Functional_Graph_Single_Source.py
       title: Functional_Graph/Functional_Graph_Single_Source.py
