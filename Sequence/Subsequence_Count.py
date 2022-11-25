@@ -1,4 +1,4 @@
-def Substring_Count(S, Mod=None):
+def Subsequence_Count(S, Mod=None):
     """ 列 S の異なる部分列の個数を求める.
 
     Mod: 余り
