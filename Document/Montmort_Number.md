@@ -42,7 +42,7 @@ M_{N}-M_{N-1}
 
 であるから, $(M\_N)$ は二項間漸化式
 
-$$M\_N=\begin{cases} 0 & (N=1) \\ NM_{N-1}+(-1)^N & (N \geq 2) \end{cases}$$
+$$M_N=\begin{cases} 0 & (N=1) \\ NM_{N-1}+(-1)^N & (N \geq 2) \end{cases}$$
 
 ともなる.
 
