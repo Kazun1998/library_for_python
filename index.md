@@ -338,7 +338,7 @@ data:
       title: Sequence/Longest_Increasing_Subsequence.py
     - icon: ':heavy_check_mark:'
       path: Sequence/Montmort_Number.py
-      title: Sequence/Montmort_Number.py
+      title: Montmort Number
   - name: Sorted_Set
     pages:
     - icon: ':heavy_check_mark:'

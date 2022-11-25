@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: Sequence/Montmort_Number.py
-    title: Sequence/Montmort_Number.py
+    title: Montmort Number
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
