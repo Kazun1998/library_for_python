@@ -1,45 +1,22 @@
-def Subsequence_Count(S, Mod=None):
-    """ 列 S の異なる部分列の個数を求める.
+def Subsequence_Count(S, Mod=None, empty=True):
+    """ 列 S の異なる (連続とは限らない) 部分列の個数を求める.
 
     Mod: 余り
+    empty: 空部分列を認めるならば True, 認めないならば False.
     """
 
-    #前処理
-    N=len(S)
-    A=list(set(S))
-    inv_A={A[i]:i for i in range(len(A))}
+    X=0
+    dp={}
+    for a in S:
+        Y=2*X+1-dp.get(a, 0)
+        dp[a]=X+1
 
-    B=[[N]*len(A) for _ in range(N+1)]
-
-    for i in range(N-1,-1,-1):
-        Bi=B[i]; Bii=B[i+1]
-        for j in range(len(A)):
-            Bi[j]=Bii[j]
-        Bi[inv_A[S[i]]]=i
-
-    #DP部
-    DP=[0]*(N+1)
-    if Mod==None:
-        DP[0]=1
-    else:
-        DP[0]=1%Mod
-
-    for i in range(N):
-        Bi=B[i]
-        for j in range(len(A)):
-            if Bi[j]>=N:
-                continue
-
-            DP[B[i][j]+1]+=DP[i]
-            if Mod!=None:
-                DP[B[i][j]+1]%=Mod
-    #集計
-    for i in range(N+1):
-        if Mod==None:
-            return sum(DP)
+        if Mod is None:
+            X=Y
         else:
-            T=0
-            for a in DP:
-                T+=a
-                T%=Mod
-            return T
+            X=Y%Mod
+
+    if Mod is not None:
+        return (X+empty)%Mod
+    else:
+        return X+empty
