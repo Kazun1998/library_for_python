@@ -348,7 +348,7 @@ data:
     - icon: ':warning:'
       path: Sequence/Run_Length_Encoding.py
       title: Run Length Encoding
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Sequence/Subsequence_Count.py
       title: Sequence/Subsequence_Count.py
     - icon: ':heavy_check_mark:'
@@ -447,6 +447,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Longest_Increasing_Subsequence.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Longest_Increasing_Subsequence.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Number_of_Subsequences.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Number_of_Subsequences.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Predecessor_Problem-Ordered_Set.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Predecessor_Problem-Ordered_Set.test.py
