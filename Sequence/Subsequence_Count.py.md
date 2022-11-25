@@ -14,7 +14,7 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "def Substring_Count(S, Mod=None):\n    \"\"\" \u5217 S \u306E\u7570\u306A\
+  code: "def Subsequence_Count(S, Mod=None):\n    \"\"\" \u5217 S \u306E\u7570\u306A\
     \u308B\u90E8\u5206\u5217\u306E\u500B\u6570\u3092\u6C42\u3081\u308B.\n\n    Mod:\
     \ \u4F59\u308A\n    \"\"\"\n\n    #\u524D\u51E6\u7406\n    N=len(S)\n    A=list(set(S))\n\
     \    inv_A={A[i]:i for i in range(len(A))}\n\n    B=[[N]*len(A) for _ in range(N+1)]\n\
@@ -31,7 +31,7 @@ data:
   isVerificationFile: false
   path: Sequence/Subsequence_Count.py
   requiredBy: []
-  timestamp: '2022-11-26 03:55:08+09:00'
+  timestamp: '2022-11-26 03:59:35+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Sequence/Subsequence_Count.py
