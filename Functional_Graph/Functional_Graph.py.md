@@ -103,7 +103,7 @@ Functional Graph における様々な計算を行う.
 
 対応の方法としては, Function Graph $D=(V,A)$ において, 各 $v \in V$ に対して唯一の出近傍を $F(v)$ で割り当てればよく. 逆に, 写像 $F: V \to V$ に対して, 有向グラフ $D=(V,A)$ を
 
-$$A=\\{\overrightarrow{v F(v)} \mid v \in V\\}$$
+$$A=\{\overrightarrow{v F(v)} \mid v \in V \}$$
 
 とすると, $D$ は Functional Graph になる.
 
