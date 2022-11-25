@@ -351,7 +351,7 @@ data:
     pages:
     - icon: ':heavy_check_mark:'
       path: Summation/Floor_Sum.py
-      title: Summation/Floor_Sum.py
+      title: Floor Sum
     - icon: ':warning:'
       path: Summation/Math.py
       title: Summation/Math.py

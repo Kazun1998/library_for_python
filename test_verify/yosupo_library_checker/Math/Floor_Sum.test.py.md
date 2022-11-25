@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: Summation/Floor_Sum.py
-    title: Summation/Floor_Sum.py
+    title: Floor Sum
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
