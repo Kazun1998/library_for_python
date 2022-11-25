@@ -20,16 +20,14 @@ data:
   code: "def Montmort_Number(N, Mod=None):\n    \"\"\" k=0,1,...,N \u306B\u95A2\u3057\
     \u3066, k \u8981\u7D20\u64B9\u4E71\u9806\u5217\u306E\u500B\u6570\u3092\u6C42\u3081\
     \u308B.\n    \"\"\"\n    if N<0:\n        return []\n    elif N==0:\n        return\
-    \ [0]\n    elif N==1:\n        return [0,0]\n    elif Mod==1:\n        return\
-    \ [0]*(N+1)\n\n    X=[0]*(N+1)\n    if Mod==None:\n        X[2]=1\n        for\
-    \ k in range(3,N+1):\n            X[k]=(k-1)*(X[k-1]+X[k-2])\n    else:\n    \
-    \    X[2]=1%Mod\n        for k in range(3,N+1):\n            X[k]=(k-1)*(X[k-1]+X[k-2])%Mod\n\
-    \n    return X\n\n"
+    \ [0]\n\n    X=[0]*(N+1)\n    if Mod==None:\n        for k in range(2, N+1):\n\
+    \            X[k]=k*X[k-1]+(-1 if k%2 else 1)\n    else:\n        for k in range(2,\
+    \ N+1):\n            X[k]=(k*X[k-1]+(-1 if k%2 else 1))%Mod\n\n    return X\n\n"
   dependsOn: []
   isVerificationFile: false
   path: Sequence/Montmort_Number.py
   requiredBy: []
-  timestamp: '2022-11-25 04:01:22+09:00'
+  timestamp: '2022-11-25 11:47:07+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Math/Montmort_Number.test.py

@@ -30,7 +30,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
   requiredBy: []
-  timestamp: '2022-11-25 04:06:40+09:00'
+  timestamp: '2022-11-25 11:47:07+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
