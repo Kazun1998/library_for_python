@@ -132,9 +132,6 @@ data:
     - icon: ':warning:'
       path: Special_Input.py
       title: Special_Input.py
-    - icon: ':warning:'
-      path: String.py
-      title: String.py
     - icon: ':heavy_check_mark:'
       path: Strongly_Connected_Components.py
       title: Strongly_Connected_Components.py
@@ -333,12 +330,30 @@ data:
       title: Segment Tree
   - name: Sequence
     pages:
+    - icon: ':warning:'
+      path: Sequence/Hamming_Distance.py
+      title: Sequence/Hamming_Distance.py
+    - icon: ':warning:'
+      path: Sequence/Levenshtein_Distance.py
+      title: Sequence/Levenshtein_Distance.py
+    - icon: ':warning:'
+      path: Sequence/Longest_Common_Subsequence.py
+      title: Sequence/Longest_Common_Subsequence.py
     - icon: ':heavy_check_mark:'
       path: Sequence/Longest_Increasing_Subsequence.py
       title: Sequence/Longest_Increasing_Subsequence.py
     - icon: ':heavy_check_mark:'
       path: Sequence/Montmort_Number.py
       title: Montmort Number
+    - icon: ':warning:'
+      path: Sequence/Run_Length_Encoding.py
+      title: Sequence/Run_Length_Encoding.py
+    - icon: ':warning:'
+      path: Sequence/Subsequence_Count.py
+      title: Sequence/Subsequence_Count.py
+    - icon: ':warning:'
+      path: Sequence/Z_Algorithm.py
+      title: Sequence/Z_Algorithm.py
   - name: Sorted_Set
     pages:
     - icon: ':heavy_check_mark:'
@@ -347,6 +362,11 @@ data:
     - icon: ':warning:'
       path: Sorted_Set/Sorted_Set.py
       title: Sorted_Set/Sorted_Set.py
+  - name: String
+    pages:
+    - icon: ':warning:'
+      path: String/Suffix_Array.py
+      title: String/Suffix_Array.py
   - name: Summation
     pages:
     - icon: ':heavy_check_mark:'
