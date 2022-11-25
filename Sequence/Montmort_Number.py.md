@@ -78,4 +78,3 @@ M_{N}-M_{N-1}
 $$M_N=\begin{cases} 0 & (N=1) \\ NM_{N-1}+(-1)^N & (N \geq 2) \end{cases}$$
 
 ともなる.
-
