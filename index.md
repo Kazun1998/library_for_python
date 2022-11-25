@@ -347,7 +347,7 @@ data:
       title: Montmort Number
     - icon: ':warning:'
       path: Sequence/Run_Length_Encoding.py
-      title: Sequence/Run_Length_Encoding.py
+      title: Run Length Encoding
     - icon: ':warning:'
       path: Sequence/Subsequence_Count.py
       title: Sequence/Subsequence_Count.py
