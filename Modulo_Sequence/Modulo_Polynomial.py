@@ -669,14 +669,23 @@ class Calculator:
         """ A=(A[0], A[1], ..., A[d-1]) で Mod を法とする畳み込みを行う.
 
         """
-        from heapq import heapify,heappush,heappop
-        Q=[(len(a), a) for a in A]
-        heapify(Q)
-        while len(Q)>1:
-            m,a=heappop(Q)
-            n,b=heappop(Q)
-            heappush(Q, (m+n-1, self.Convolution(a,b)))
-        return Q[0][1]
+
+        from collections import deque
+
+        if not A:
+            return [1]
+
+        Q=deque(list(range(len(A))))
+        A=list(A)
+
+        while len(Q)>=2:
+            i=Q.popleft(); j=Q.popleft()
+            A[i]=self.Convolution(A[i], A[j])
+            A[j]=None
+            Q.append(i)
+
+        i=Q.popleft()
+        return A[i]
 
     def Inverse(self, F, length=None):
         if length==None:
