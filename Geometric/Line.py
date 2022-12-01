@@ -26,7 +26,7 @@ class Segment():
             )
 
     def __contains__(self,point):
-        return iSP(self.begin,self.end,point)==2
+        return (self.begin==point) or (self.end==point) or (iSP(self.begin,self.end,point)==0)
 
     def vectorize(self):
         return self.end-self.begin
@@ -192,7 +192,7 @@ def Intersection_between_Line_and_Line(L,M,Mode=False):
             assert 0,"交点が存在ません"
 
     a=L.begin; b=L.end; c=M.begin; d=M.end
-    k=(c-a).det(d-c)/(b-a).det(d-c)
+    k=(d-a).det(d-c)/(b-a).det(d-c)
     return a+k*(b-a)
 
 #=== 垂直二等分線
