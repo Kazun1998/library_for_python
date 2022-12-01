@@ -9,21 +9,21 @@ data:
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test_verify/yosupo_library_checker/Polynomial/Log.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Log.test.py
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test_verify/yosupo_library_checker/Polynomial/Power.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Power.test.py
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links:
     - http://q.c.titech.ac.jp/docs/progs/polynomial_division.html
@@ -273,21 +273,22 @@ data:
     \n        self.NTT(A)\n\n        for i in range(K):\n            A[i]=A[i]*A[i]%Mod\n\
     \        self.Inverse_NTT(A)\n\n        return A[:L]\n\n    def Multiple_Convolution(self,\
     \ *A):\n        \"\"\" A=(A[0], A[1], ..., A[d-1]) \u3067 Mod \u3092\u6CD5\u3068\
-    \u3059\u308B\u7573\u307F\u8FBC\u307F\u3092\u884C\u3046.\n\n        \"\"\"\n  \
-    \      from heapq import heapify,heappush,heappop\n        Q=[(len(a), a) for\
-    \ a in A]\n        heapify(Q)\n        while len(Q)>1:\n            m,a=heappop(Q)\n\
-    \            n,b=heappop(Q)\n            heappush(Q, (m+n-1, self.Convolution(a,b)))\n\
-    \        return Q[0][1]\n\n    def Inverse(self, F, length=None):\n        if\
-    \ length==None:\n            M=len(F)\n        else:\n            M=length\n\n\
-    \        if M<=0:\n            return []\n\n        if self.is_sparse(F):\n  \
-    \          \"\"\"\n            \u611A\u76F4\u306B\u6F38\u5316\u5F0F\u3092\u7528\
-    \u3044\u3066\u6C42\u3081\u308B.\n            \u8A08\u7B97\u91CF: F \u306B\u3042\
-    \u308B\u4FC2\u6570\u304C\u975E\u96F6\u306E\u9805\u306E\u500B\u6570\u3092 K, \u6C42\
-    \u3081\u308B\u6700\u5927\u6B21\u6570\u3092 N \u3068\u3057\u3066, O(NK) \u6642\u9593\
-    \n            \"\"\"\n            d,f=self.coefficients_list(F)\n\n          \
-    \  G=[0]*M\n            alpha=pow(F[0], Mod-2, Mod)\n            G[0]=alpha\n\n\
-    \            for i in range(1, M):\n                for j in range(1, len(d)):\n\
-    \                    if d[j]<=i:\n                        G[i]+=f[j]*G[i-d[j]]%Mod\n\
+    \u3059\u308B\u7573\u307F\u8FBC\u307F\u3092\u884C\u3046.\n\n        \"\"\"\n\n\
+    \        from collections import deque\n\n        if not A:\n            return\
+    \ [1]\n\n        Q=deque(list(range(len(A))))\n        A=list(A)\n\n        while\
+    \ len(Q)>=2:\n            i=Q.popleft(); j=Q.popleft()\n            A[i]=self.Convolution(A[i],\
+    \ A[j])\n            A[j]=None\n            Q.append(i)\n\n        i=Q.popleft()\n\
+    \        return A[i]\n\n    def Inverse(self, F, length=None):\n        if length==None:\n\
+    \            M=len(F)\n        else:\n            M=length\n\n        if M<=0:\n\
+    \            return []\n\n        if self.is_sparse(F):\n            \"\"\"\n\
+    \            \u611A\u76F4\u306B\u6F38\u5316\u5F0F\u3092\u7528\u3044\u3066\u6C42\
+    \u3081\u308B.\n            \u8A08\u7B97\u91CF: F \u306B\u3042\u308B\u4FC2\u6570\
+    \u304C\u975E\u96F6\u306E\u9805\u306E\u500B\u6570\u3092 K, \u6C42\u3081\u308B\u6700\
+    \u5927\u6B21\u6570\u3092 N \u3068\u3057\u3066, O(NK) \u6642\u9593\n          \
+    \  \"\"\"\n            d,f=self.coefficients_list(F)\n\n            G=[0]*M\n\
+    \            alpha=pow(F[0], Mod-2, Mod)\n            G[0]=alpha\n\n         \
+    \   for i in range(1, M):\n                for j in range(1, len(d)):\n      \
+    \              if d[j]<=i:\n                        G[i]+=f[j]*G[i-d[j]]%Mod\n\
     \                    else:\n                        break\n\n                G[i]%=Mod\n\
     \                G[i]=(-alpha*G[i])%Mod\n            del G[M:]\n        else:\n\
     \            \"\"\"\n            FFT\u306E\u7406\u8AD6\u3092\u5FDC\u7528\u3057\
@@ -487,8 +488,8 @@ data:
   isVerificationFile: false
   path: Modulo_Sequence/Modulo_Polynomial.py
   requiredBy: []
-  timestamp: '2022-11-23 00:05:10+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2022-12-02 01:09:24+09:00'
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test_verify/yosupo_library_checker/Polynomial/Division.test.py
   - test_verify/yosupo_library_checker/Polynomial/Exp.test.py

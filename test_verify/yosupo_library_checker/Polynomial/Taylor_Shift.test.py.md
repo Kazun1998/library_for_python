@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: Modulo_Sequence/Modulo_Polynomial.py
     title: Modulo Polynomial
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/polynomial_taylor_shift
     links:
@@ -31,8 +31,8 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
   requiredBy: []
-  timestamp: '2022-11-23 17:51:29+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2022-12-02 01:09:24+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
 layout: document
