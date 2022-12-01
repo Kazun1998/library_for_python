@@ -31,7 +31,10 @@ def Factor_with_inverse(N):
     """
 
     f=Factor(N)
-    g=[1]*(N+1); g[-1]=pow(f[-1],Mod-2,Mod)
+    g=[0]*(N+1)
+
+    N=min(N,Mod-1)
+    g[N]=pow(f[N],Mod-2,Mod)
 
     for k in range(N-1,-1,-1):
         g[k]=((k+1)*g[k+1])%Mod
@@ -61,8 +64,8 @@ def Modular_Inverse(N):
     for k in range(2, N+1):
         q,r=divmod(Mod,k)
         inv[k]=(-q*inv[r])%Mod
-    return inv    
-    
+    return inv
+
 """
 組み合わせの数
 Factor_with_inverse で fact, fact_inv を既に求めていることが前提 (グローバル変数)
@@ -151,6 +154,24 @@ def Pascal_Triangle(N: int):
         L.append(Y)
     return L
 
+def Lucas_Combination(n, r):
+    """ Lucas の定理を用いて nCr (mod Mod) を求める.
+
+    """
+
+    X=1
+    while n or r:
+        ni=n%Mod; ri=r%Mod
+        n//=Mod; r//=Mod
+
+        if ni<ri:
+            return 0
+
+        beta=fact_inv[ri]*fact_inv[ni-ri]%Mod
+        X*=(fact[ni]*beta)%Mod
+        X%=Mod
+    return X
+
 """
 等比数列
 """
@@ -201,5 +222,4 @@ def Sum_of_Product_Yielder(N,*Y):
         S+=x
     return S%Mod
 #==================================================
-Mod=998244353
-fact, fact_inv=Factor_with_inverse(100)
+
