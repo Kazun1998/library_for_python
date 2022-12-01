@@ -6,9 +6,9 @@ data:
     title: Modulo Polynomial
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/product_of_polynomial_sequence
     links:
@@ -33,7 +33,7 @@ data:
   path: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
   requiredBy: []
   timestamp: '2022-12-02 01:16:54+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
 layout: document
