@@ -22,16 +22,17 @@ data:
     \ \"[Segment] {}, {}\".format(self.begin,self.end)\n\n    __repr__=__str__\n\n\
     \    def __eq__(self,other):\n        return (\n            (self.begin==other.begin)\
     \ and (self.end==other.end) or\n            (self.begin==other.end) and (self.end==other.begin)\n\
-    \            )\n\n    def __contains__(self,point):\n        return iSP(self.begin,self.end,point)==2\n\
-    \n    def vectorize(self):\n        return self.end-self.begin\n\n    def counter_vectorize(self):\n\
-    \        return self.begin-self.end\n\nclass Ray():\n    __slots__=[\"begin\"\
-    ,\"end\",\"id\"]\n\n    ep=1e-9\n    def __init__(self,P,Q):\n        \"\"\" P\
-    \ \u3092\u7AEF\u70B9\u3068\u3057, Q \u3092\u901A\u308B\u534A\u76F4\u7DDA\u3092\
-    \u901A\u308B.\n\n        P,Q: Point\n        \"\"\"\n        assert P!=Q\n   \
-    \     self.begin=P\n        self.end=Q\n        self.id=3\n\n    def __str__(self):\n\
-    \        return \"[Ray] {} -> {}\".format(self.begin,self.end)\n\n    __repr__=__str__\n\
-    \n    def __eq__(self,other):\n        if self.begin!=other.begin:\n         \
-    \   return False\n\n        m=iSP(self.begin,self.end,other.end)\n        return\
+    \            )\n\n    def __contains__(self,point):\n        return (self.begin==point)\
+    \ or (self.end==point) or (iSP(self.begin,self.end,point)==0)\n\n    def vectorize(self):\n\
+    \        return self.end-self.begin\n\n    def counter_vectorize(self):\n    \
+    \    return self.begin-self.end\n\nclass Ray():\n    __slots__=[\"begin\",\"end\"\
+    ,\"id\"]\n\n    ep=1e-9\n    def __init__(self,P,Q):\n        \"\"\" P \u3092\u7AEF\
+    \u70B9\u3068\u3057, Q \u3092\u901A\u308B\u534A\u76F4\u7DDA\u3092\u901A\u308B.\n\
+    \n        P,Q: Point\n        \"\"\"\n        assert P!=Q\n        self.begin=P\n\
+    \        self.end=Q\n        self.id=3\n\n    def __str__(self):\n        return\
+    \ \"[Ray] {} -> {}\".format(self.begin,self.end)\n\n    __repr__=__str__\n\n \
+    \   def __eq__(self,other):\n        if self.begin!=other.begin:\n           \
+    \ return False\n\n        m=iSP(self.begin,self.end,other.end)\n        return\
     \ m==0 or m==2\n\n    def __contains__(self,point):\n        m=iSP(self.begin,self.end,point)\n\
     \        return m==0 or m==2\n\n    def vectorize(self):\n        return self.end-self.begin\n\
     \n    def counter_vectorize(self):\n        return self.begin-self.end\n\nclass\
@@ -76,7 +77,7 @@ data:
     \        assert 0,\"\u76F4\u7DDA\u304C\u4E00\u81F4\u3057\u307E\u3059\"\n    if\
     \ is_Parallel(L,M):\n        if Mode:\n            return False\n        else:\n\
     \            assert 0,\"\u4EA4\u70B9\u304C\u5B58\u5728\u307E\u305B\u3093\"\n\n\
-    \    a=L.begin; b=L.end; c=M.begin; d=M.end\n    k=(c-a).det(d-c)/(b-a).det(d-c)\n\
+    \    a=L.begin; b=L.end; c=M.begin; d=M.end\n    k=(d-a).det(d-c)/(b-a).det(d-c)\n\
     \    return a+k*(b-a)\n\n#=== \u5782\u76F4\u4E8C\u7B49\u5206\u7DDA\ndef Perpendicular_Bisector(S,\
     \ lattice=False):\n    \"\"\" \u7DDA\u5206 S \u306E\u5782\u76F4\u4E8C\u7B49\u5206\
     \u7DDA\u3092\u6C42\u3081\u308B.\"\"\"\n\n    u=S.vectorize()\n\n    M=S.begin+S.end\n\
@@ -121,7 +122,7 @@ data:
   isVerificationFile: false
   path: Geometric/Line.py
   requiredBy: []
-  timestamp: '2022-09-10 17:09:03+09:00'
+  timestamp: '2022-12-02 03:22:50+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Geometric/Line.py
