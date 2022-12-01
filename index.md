@@ -515,7 +515,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Log.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Log.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Power.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Power.test.py
     - icon: ':x:'
