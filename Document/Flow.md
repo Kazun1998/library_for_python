@@ -5,7 +5,7 @@ documentation_of: //Flow/Flow.py
 
 ## Outline
 
-有向グラフ $D=(V,A)$ において, 各孤 $\overrightarrow{a} \in A$ には容量 $u(\overrightarrow{a})$ が定められている.
+有向グラフ $D=(V,A)$ において, 各孤 $a \in A$ には容量 $u(a)$ が定められている.
 
 2頂点 $s, t \in V$ に対して, $s$ から $t$ へ流せる水の最大量を求める.
 
@@ -13,10 +13,10 @@ documentation_of: //Flow/Flow.py
 
 - Maximize : $F$
 - Subject to :
-  - $\displaystyle \sum_{\substack{\overrightarrow{a} \in A \\ s=\operatorname{sink}(\overrightarrow{a})}} f_{\overrightarrow{a}}-\sum_{\substack{\overrightarrow{a} \in A \\ s=\operatorname{target}(\overrightarrow{a})}} f_{\overrightarrow{a}}=F$
-  - $\displaystyle \sum_{\substack{\overrightarrow{a} \in A \\ t=\operatorname{sink}(\overrightarrow{a})}} f_{\overrightarrow{a}}-\sum_{\substack{\overrightarrow{a} \in A \\ t=\operatorname{target}(\overrightarrow{a})}} f_{\overrightarrow{a}}=-F$
-  - $\displaystyle \sum_{\substack{\overrightarrow{a} \in A \\ v=\operatorname{sink}(\overrightarrow{a})}} f_{\overrightarrow{a}}-\sum_{\substack{\overrightarrow{a} \in A \\ v=\operatorname{target}(\overrightarrow{a})}} f_{\overrightarrow{a}}=0 \quad (\forall v \in V \setminus \{s,t\})$
-  - $0 \leq f_{\overrightarrow{a}} \leq u(\overrightarrow{a}) \quad (\forall a \in A)$
+  - $\displaystyle \sum_{\substack{a \in A \\\\ s=\operatorname{sink}(a)}} f_{a}-\sum_{\substack{a \in A \\\\ s=\operatorname{target}(a)}} f_{a}=F$
+  - $\displaystyle \sum_{\substack{a \in A \\\\ t=\operatorname{sink}(a)}} f_{a}-\sum_{\substack{a \in A \\\\ t=\operatorname{target}(a)}} f_{a}=-F$
+  - $\displaystyle \sum_{\substack{a \in A \\\\ v=\operatorname{sink}(a)}} f_{a}-\sum_{\substack{a \in A \\\\ v=\operatorname{target}(a)}} f_{a}=0 \quad (\forall v \in V \setminus \{s,t\})$
+  - $0 \leq f_{a} \leq u(a) \quad (\forall a \in A)$
 
 ## Contents
 
