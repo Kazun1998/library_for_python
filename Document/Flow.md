@@ -15,7 +15,7 @@ documentation_of: //Flow/Flow.py
 - Subject to :
   - $\displaystyle \sum_{\substack{a \in A \\\\ s=\operatorname{sink}(a)}} f_{a}-\sum_{\substack{a \in A \\\\ s=\operatorname{target}(a)}} f_{a}=F$
   - $\displaystyle \sum_{\substack{a \in A \\\\ t=\operatorname{sink}(a)}} f_{a}-\sum_{\substack{a \in A \\\\ t=\operatorname{target}(a)}} f_{a}=-F$
-  - $\displaystyle \sum_{\substack{a \in A \\\\ v=\operatorname{sink}(a)}} f_{a}-\sum_{\substack{a \in A \\\\ v=\operatorname{target}(a)}} f_{a}=0 \quad (\forall v \in V \setminus \{s,t\})$
+  - $\displaystyle \sum_{\substack{a \in A \\\\ v=\operatorname{sink}(a)}} f_{a}-\sum_{\substack{a \in A \\\\ v=\operatorname{target}(a)}} f_{a}=0 \quad (\forall v \in V \setminus \\{s,t\\})$
   - $0 \leq f_{a} \leq u(a) \quad (\forall a \in A)$
 
 ## Contents
