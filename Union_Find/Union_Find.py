@@ -101,11 +101,7 @@ class Union_Find():
         """ 木になっている属の個数を求める.
         """
 
-        X=0
-        for g in self.representative():
-            if self.is_tree(g):
-                X+=1
-        return X
+        return len([g for g in self.representative() if self.is_tree(g)])
 
     def representative(self):
         """ 代表元のリスト
