@@ -32,7 +32,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
   requiredBy: []
-  timestamp: '2022-11-22 23:25:26+09:00'
+  timestamp: '2022-12-04 17:55:55+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py

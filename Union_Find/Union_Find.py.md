@@ -57,28 +57,27 @@ data:
     \n        \"\"\"\n        return self.size(x)==self.edges[self.find(x)]+1\n\n\
     \    def tree_count(self):\n        \"\"\" \u6728\u306B\u306A\u3063\u3066\u3044\
     \u308B\u5C5E\u306E\u500B\u6570\u3092\u6C42\u3081\u308B.\n        \"\"\"\n\n  \
-    \      X=0\n        for g in self.representative():\n            if self.is_tree(g):\n\
-    \                X+=1\n        return X\n\n    def representative(self):\n   \
-    \     \"\"\" \u4EE3\u8868\u5143\u306E\u30EA\u30B9\u30C8\n        \"\"\"\n    \
-    \    return [i for i, x in enumerate(self.parents) if x < 0]\n\n    def group_count(self):\n\
-    \        \"\"\" \u65CF\u306E\u500B\u6570\n        \"\"\"\n\n        return self.__group_number\n\
-    \n    def all_group_members(self):\n        \"\"\" \u5168\u3066\u306E\u65CF\u306E\
-    \u51FA\u529B\n        \"\"\"\n        X={r:[] for r in self.representative()}\n\
-    \        for k in range(self.n):\n            X[self.find(k)].append(k)\n    \
-    \    return X\n\n    def group_list(self):\n        \"\"\" \u5404\u8981\u7D20\u304C\
-    \u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\u30EA\u30B9\u30C8\u3092\u51FA\u529B\
-    \u3059\u308B.\n\n        \"\"\"\n        return [self.find(x) for x in range(self.n)]\n\
-    \n    def refresh(self):\n        for i in range(self.n):\n            _=self.find(i)\n\
-    \n    def __str__(self):\n        return str(self.all_group_members().values())[13:-2]\n\
-    \n    def __repr__(self):\n        return \"Union Find : \"+str(self)\n\n    def\
-    \ __getitem__(self,index):\n        return self.find(index)\n\n    def __setitem__(self,x,y):\n\
-    \        self.union(x,y)\n"
+    \      return len([g for g in self.representative() if self.is_tree(g)])\n\n \
+    \   def representative(self):\n        \"\"\" \u4EE3\u8868\u5143\u306E\u30EA\u30B9\
+    \u30C8\n        \"\"\"\n        return [i for i, x in enumerate(self.parents)\
+    \ if x < 0]\n\n    def group_count(self):\n        \"\"\" \u65CF\u306E\u500B\u6570\
+    \n        \"\"\"\n\n        return self.__group_number\n\n    def all_group_members(self):\n\
+    \        \"\"\" \u5168\u3066\u306E\u65CF\u306E\u51FA\u529B\n        \"\"\"\n \
+    \       X={r:[] for r in self.representative()}\n        for k in range(self.n):\n\
+    \            X[self.find(k)].append(k)\n        return X\n\n    def group_list(self):\n\
+    \        \"\"\" \u5404\u8981\u7D20\u304C\u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\
+    \u30EA\u30B9\u30C8\u3092\u51FA\u529B\u3059\u308B.\n\n        \"\"\"\n        return\
+    \ [self.find(x) for x in range(self.n)]\n\n    def refresh(self):\n        for\
+    \ i in range(self.n):\n            _=self.find(i)\n\n    def __str__(self):\n\
+    \        return str(self.all_group_members().values())[13:-2]\n\n    def __repr__(self):\n\
+    \        return \"Union Find : \"+str(self)\n\n    def __getitem__(self,index):\n\
+    \        return self.find(index)\n\n    def __setitem__(self,x,y):\n        self.union(x,y)\n"
   dependsOn: []
   isVerificationFile: false
   path: Union_Find/Union_Find.py
   requiredBy:
   - Union_Find/Bipartite_Checker.py
-  timestamp: '2022-10-27 18:39:37+09:00'
+  timestamp: '2022-12-04 17:55:55+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
