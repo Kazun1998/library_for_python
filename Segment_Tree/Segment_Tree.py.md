@@ -22,9 +22,9 @@ data:
     \ Tree \u3092\u4F5C\u6210\n\n        calc: \u6F14\u7B97 (2\u5909\u6570\u95A2\u6570\
     , Monoid)\n        unit: Monoid calc \u306E\u5358\u4F4D\u5143 (xe=ex=x\u3092\u6E80\
     \u305F\u3059e)\n        \"\"\"\n        self.calc=calc\n        self.unit=unit\n\
-    \n        N=len(L)\n        d=max(1,(N-1).bit_length())\n        k=1<<d\n\n  \
-    \      self.data=data=[unit]*k+L+[unit]*(k-len(L))\n        self.N=k\n       \
-    \ self.depth=d\n\n        for i in range(k-1,0,-1):\n            data[i]=calc(data[i<<1],\
+    \n        N=len(L); self.n=N\n        d=max(1,(N-1).bit_length())\n        k=1<<d\n\
+    \n        self.data=data=[unit]*k+L+[unit]*(k-len(L))\n        self.N=k\n    \
+    \    self.depth=d\n\n        for i in range(k-1,0,-1):\n            data[i]=calc(data[i<<1],\
     \ data[i<<1|1])\n\n    def get(self, k):\n        \"\"\" \u7B2C k \u8981\u7D20\
     \u3092\u53D6\u5F97\n        \"\"\"\n        assert 0<=k<self.N,\"\u6DFB\u5B57\u304C\
     \u7BC4\u56F2\u5916\"\n        return self.data[k+self.N]\n\n    def update(self,\
@@ -78,12 +78,13 @@ data:
     \ sm)\n                        right-=1\n                return right+1-self.N\n\
     \            sm=calc(data[right], sm)\n        return 0\n\n    def __getitem__(self,k):\n\
     \        return self.get(k)\n\n    def __setitem__(self,k,x):\n        return\
-    \ self.update(k,x)\n"
+    \ self.update(k,x)\n\n    def __iter__(self):\n        for i in range(self.n):\n\
+    \            yield self.get(i)\n"
   dependsOn: []
   isVerificationFile: false
   path: Segment_Tree/Segment_Tree.py
   requiredBy: []
-  timestamp: '2022-10-02 18:22:42+09:00'
+  timestamp: '2022-12-06 20:56:01+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
