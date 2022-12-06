@@ -1,7 +1,7 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/point_set_range_composite
 
 #==================================================
-from Segment_Tree.Segment_Tree import Segment_Tree
+from Segment_Tree.Segment_Tree import *
 
 import sys
 input=sys.stdin.readline
