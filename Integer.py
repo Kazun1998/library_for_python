@@ -11,30 +11,28 @@ def Prime_Factorization(N):
     N=abs(N)
 
     if N&1==0:
-        C=0
+        R.append([2,0])
         while N&1==0:
             N>>=1
-            C+=1
-        R.append([2,C])
+            R[-1][1]+=1
 
     if N%3==0:
-        C=0
+        R.append([3,0])
         while N%3==0:
             N//=3
-            C+=1
-        R.append([3,C])
+            R[-1][1]+=1
 
-    k=5
-    Flag=0
-    while k*k<=N:
-        if N%k==0:
-            C=0
-            while N%k==0:
-                C+=1
-                N//=k
-            R.append([k,C])
-        k+=2+2*Flag
-        Flag^=1
+    p=5
+    flag=0
+    while p*p<=N:
+        if N%p==0:
+            R.append([p,0])
+            while N%p==0:
+                N//=p
+                R[-1][1]+=1
+
+        p+=2+2*flag
+        flag^=1
 
     if N!=1:
         R.append([N,1])
@@ -119,7 +117,7 @@ def Divisors(N):
     return L+U[::-1]
 
 #素因数分解の結果から, 約数を全て求める.
-def Divisors_from_Prime_Factor(P,sorting=False):
+def Divisors_from_Prime_Factor(P, sorting=False):
     X=[1]
     for p,e in P:
         q=1
@@ -171,21 +169,24 @@ def Highly_Composite_Number(N):
 #素数判定
 def Is_Prime(N):
     N=abs(N)
-    if N<=1: return False
+    if N<=1:
+        return False
 
-    if (N==2) or (N==3) or (N==5): return True
+    if (N==2) or (N==3) or (N==5):
+        return True
 
     r=N%6
-    if not(r==1 or r==5): return False
+    if not(r==1 or r==5):
+        return False
 
-    k=5
-    Flag=0
-    while k*k<=N:
-        if N%k==0:
+    p=5
+    flag=0
+    while p*p<=N:
+        if N%p==0:
             return False
 
-        k+=2+2*Flag
-        Flag^=1
+        p+=2+2*flag
+        flag^=1
     return True
 
 #素数判定 for long long
@@ -208,7 +209,7 @@ def Is_Prime_for_long_long(N):
     return True
 
 #Miller-Rabinの素数判定法
-def Miller_Rabin_Primality_Test(N,Times=20):
+def Miller_Rabin_Primality_Test(N, Times=20):
     """ Miller-Rabin による整数 N の素数判定を行う.
 
     N: 整数
@@ -412,7 +413,7 @@ def Interval_Sieve_of_Eratosthenes(L,R):
     N:自然数
 
     [Output]
-    素数かどうかのリスト ([0,0,1,1,0,1,...])
+    素数かどうかのリスト X: X[k]:=k+L が素数なら 1, 素数でないならば 0
     """
 
     M=1
@@ -437,37 +438,33 @@ def Smallest_Prime_Factor(N):
     """ 0,1,2,...,N の最小の素因数のリスト (0,1 については 1 にしている)
     """
 
-    if N==0:
-        return [1]
+    if N<=1:
+        return [1]*(N+1)
 
-    N=abs(N)
-    L=list(range(N+1))
-    L[0]=L[1]=1
+    T=[0]*(N+1); T[0]=T[1]=1
 
-    x=4
-    while x<=N:
-        L[x]=2
-        x+=2
+    for i in range(2, N+1, 2):
+        T[i]=2
 
-    x=9
-    while x<=N:
-        if L[x]==x:
-            L[x]=3
-        x+=6
+    for i in range(3, N+1, 6):
+        T[i]=3
 
-    x=5
-    Flag=0
-    while x*x<=N:
-        if L[x]==x:
-            y=x*x
-            while y<=N:
-                if L[y]==y:
-                    L[y]=x
-                y+=x<<1
-        x+=2+2*Flag
-        Flag^=1
+    prime=[2,3]
+    i=5; d=2
+    while i<=N:
+        if T[i]==0:
+            T[i]=i
+            prime.append(i)
 
-    return L
+        for p in prime:
+            if i*p<=N:
+                T[i*p]=p
+            else:
+                break
+            if p==T[i]:
+                break
+        i+=d; d=6-d
+    return T
 
 def Faster_Prime_Factorization(N,L):
     """ Smallest_Prime_Factors(N)で求めたリストを利用して, N を高速素因数分解する.
@@ -983,8 +980,12 @@ def kth_Power(a,k):
     存在する    : b^k=a を満たす b
     """
 
-    b=Floor_Root(a,k)
-    if pow(b,k)==a:
-        return b
+    if k%2==0:
+        if a<0:
+            return None
+        b=Floor_Root(a,k)
+        return b if pow(b,k)==a else None
     else:
-        return None
+        sgn=1 if a>=0 else -1
+        b=Floor_Root(abs(a),k)
+        return sgn*b if pow(sgn*b,k)==a else None
