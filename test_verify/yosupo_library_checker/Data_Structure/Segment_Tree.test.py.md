@@ -21,8 +21,8 @@ data:
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/point_set_range_composite\n\
     \n#==================================================\nfrom Segment_Tree.Segment_Tree\
-    \ import Segment_Tree\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\
-    \n#==================================================\ndef verify():\n    N,Q=map(int,input().split())\n\
+    \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
+    #==================================================\ndef verify():\n    N,Q=map(int,input().split())\n\
     \    Mod=998244353\n\n    A=[0]*N\n    for i in range(N):\n        a,b=map(int,input().split())\n\
     \        A[i]=(a,b)\n\n    calc=lambda p,q:((p[0]*q[0])%Mod,(p[1]*q[0]+q[1])%Mod)\n\
     \    S=Segment_Tree(A,calc,(1,0))\n\n    Ans=[]\n    for _ in range(Q):\n    \
@@ -35,7 +35,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
   requiredBy: []
-  timestamp: '2022-12-06 20:56:01+09:00'
+  timestamp: '2022-12-06 21:03:06+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
