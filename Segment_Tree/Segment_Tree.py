@@ -8,7 +8,7 @@ class Segment_Tree():
         self.calc=calc
         self.unit=unit
 
-        N=len(L)
+        N=len(L); self.n=N
         d=max(1,(N-1).bit_length())
         k=1<<d
 
@@ -146,3 +146,7 @@ class Segment_Tree():
 
     def __setitem__(self,k,x):
         return self.update(k,x)
+
+    def __iter__(self):
+        for i in range(self.n):
+            yield self.get(i)
