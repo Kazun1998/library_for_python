@@ -34,6 +34,9 @@ data:
       path: Disjoint_Sparse_Table.py
       title: Disjoint Sparse Table
     - icon: ':warning:'
+      path: Double_Heap.py
+      title: Double_Heap.py
+    - icon: ':warning:'
       path: Doubling.py
       title: Doubling.py
     - icon: ':warning:'
@@ -51,9 +54,6 @@ data:
     - icon: ':heavy_check_mark:'
       path: Hash_Table.py
       title: Hash_Table.py
-    - icon: ':warning:'
-      path: HeapDict.py
-      title: HeapDict.py
     - icon: ':warning:'
       path: Heap_for_Dijkstra.py
       title: Heap_for_Dijkstra.py
