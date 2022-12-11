@@ -5,10 +5,13 @@ data:
   - icon: ':warning:'
     path: Median.py
     title: Median.py
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Double_Heap.test.py
+    title: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Double_Heap.test.py
   _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -17,7 +20,7 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "import heapq\nclass Double_Heap:\n    def __init__(self):\n        self.__small=[]\n\
+  code: "import heapq\n\nclass Double_Heap:\n    def __init__(self):\n        self.__small=[]\n\
     \        self.__large=[]\n        self.__dict={}\n        self.__length=0\n  \
     \      self.__sum=0\n\n    def __bool__(self):\n        return bool(self.__length)\n\
     \n    def __len__(self):\n        return self.__length\n\n    def __contains__(self,\
@@ -48,9 +51,10 @@ data:
   path: Double_Heap.py
   requiredBy:
   - Median.py
-  timestamp: '2022-12-11 16:52:17+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  timestamp: '2022-12-11 17:04:31+09:00'
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Double_Heap.test.py
 documentation_of: Double_Heap.py
 layout: document
 redirect_from:

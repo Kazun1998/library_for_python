@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: Double_Heap.py
     title: Double_Heap.py
   _extendedRequiredBy: []
@@ -56,7 +56,7 @@ data:
   isVerificationFile: false
   path: Median.py
   requiredBy: []
-  timestamp: '2022-12-11 16:52:17+09:00'
+  timestamp: '2022-12-11 17:04:31+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Median.py

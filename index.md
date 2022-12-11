@@ -33,7 +33,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: Disjoint_Sparse_Table.py
       title: Disjoint Sparse Table
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Double_Heap.py
       title: Double_Heap.py
     - icon: ':warning:'
@@ -435,6 +435,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Double_Heap.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Double_Heap.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Sorted_Multiset.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Sorted_Multiset.test.py
