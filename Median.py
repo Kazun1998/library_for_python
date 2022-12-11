@@ -1,9 +1,9 @@
-from HeapDict import *
+from Double_Heap import *
 
 class Median:
     def __init__(self):
-        self.left=Heap_Dict(0)
-        self.right=Heap_Dict(1)
+        self.left=Double_Heap()
+        self.right=Double_Heap()
 
     def __bool__(self):
         return bool(self.left) or bool(self.right)
@@ -14,45 +14,45 @@ class Median:
     def __contains__(self, x):
         return (x in self.left) or (x in self.right)
 
-    def insert(self, x):
+    def push(self, x):
         """ 要素 x を追加する. """
 
         if len(self.left)==len(self.right):
-            u=self.right.get_min()
+            u=self.right.get_min() if self.right else float("inf")
             if x>u:
                 v=self.right.pop_min()
-                self.left.insert(v)
-                self.right.insert(x)
+                self.left.push(v)
+                self.right.push(x)
             else:
-                self.left.insert(x)
+                self.left.push(x)
         else:
             u=self.left.get_max()
             if x>u:
-                self.right.insert(x)
+                self.right.push(x)
             else:
                 v=self.left.pop_max()
-                self.left.insert(x)
-                self.right.insert(v)
+                self.left.push(x)
+                self.right.push(v)
 
     def erase(self,x):
         """ 要素 x を削除する. """
 
         assert x in self
-        alpha=self.left.get_max()
+        alpha=self.left.get_max() if self.left else -float("inf")
         if len(self.left)==len(self.right):
             if x<=alpha:
-                self.left.erase(x)
+                self.left.discard(x)
                 y=self.right.pop_min()
-                self.left.insert(y)
+                self.left.push(y)
             else:
-                self.right.erase(x)
+                self.right.discard(x)
         else:
             if x<=alpha:
-                self.left.erase(x)
+                self.left.discard(x)
             else:
-                self.right.erase(x)
+                self.right.discard(x)
                 y=self.left.pop_max()
-                self.right.insert(y)
+                self.right.push(y)
 
     def get_median(self,mode=0,func=None):
         """ 中央値を求める.
