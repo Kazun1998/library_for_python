@@ -1,4 +1,5 @@
 import heapq
+
 class Double_Heap:
     def __init__(self):
         self.__small=[]
