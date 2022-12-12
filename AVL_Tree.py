@@ -308,17 +308,3 @@ class Adelson_Velsky_and_Landis_Tree:
         dfs(self.root)
         return X
 
-def debug(T):
-    def print_node(node, n=0):
-        if not node:
-            return
-
-        print_node(node.right, n+1)
-        print(" "*(4*n), node.key, "(", node.size, ")", )
-        print_node(node.left, n+1)
-
-    print_node(T.root)
-
-T=Adelson_Velsky_and_Landis_Tree()
-for a in range(30):
-    T.insert(a)
