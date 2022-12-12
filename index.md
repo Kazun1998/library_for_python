@@ -6,7 +6,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: AVL_Tree.py
       title: AVL_Tree.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Binary_Trie.py
       title: Binary_Trie.py
     - icon: ':heavy_check_mark:'
@@ -471,6 +471,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Set_Xor_Min.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Set_Xor_Min.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
