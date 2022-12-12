@@ -1,7 +1,5 @@
-"""
-Reference:
-https://yottagin.com/?p=4157
-"""
+# Reference:
+# https://yottagin.com/?p=4157
 
 class AVL_Node:
     def __init__(self, key, value):
@@ -87,6 +85,7 @@ class Adelson_Velsky_and_Landis_Tree:
                 root=None
                 return temp
 
+            temp=root.right
             while temp.left:
                 temp=temp.left
             root.key=temp.key
@@ -284,6 +283,18 @@ class Adelson_Velsky_and_Landis_Tree:
         while node.right:
             node=node.right
         return node.key
+
+    def pop_min(self):
+        key=self.get_min()
+        if key is not None:
+            self.delete(key)
+        return key
+
+    def pop_max(self):
+        key=self.get_max()
+        if key is not None:
+            self.delete(key)
+        return key
 
     def keys(self):
         def dfs(node):

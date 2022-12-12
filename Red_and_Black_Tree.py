@@ -528,6 +528,18 @@ class Red_and_Black_Tree:
             N=N.right
         return N.key
 
+    def pop_min(self):
+        key=self.get_min()
+        if key is not None:
+            self.delete(key)
+        return key
+
+    def pop_max(self):
+        key=self.get_max()
+        if key is not None:
+            self.delete(key)
+        return key
+
 def debug(T):
     def print_node(node, n=0):
         if not node:
