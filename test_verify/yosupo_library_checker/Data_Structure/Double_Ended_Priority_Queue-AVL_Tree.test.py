@@ -1,7 +1,7 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/double_ended_priority_queue
 
 #==================================================
-from AVL_Tree import *
+from Binary_Tree.AVL_Tree import *
 
 import sys
 input=sys.stdin.readline
