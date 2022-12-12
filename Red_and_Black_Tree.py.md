@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Red_and_Black_Tree.test.py
+    title: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Red_and_Black_Tree.test.py
   _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links:
     - http://fujimura2.fiw-web.net/java/mutter/tree/red-black-tree.html
@@ -190,19 +193,15 @@ data:
     \           N=N.right\n        return N.key\n\n    def pop_min(self):\n      \
     \  key=self.get_min()\n        if key is not None:\n            self.delete(key)\n\
     \        return key\n\n    def pop_max(self):\n        key=self.get_max()\n  \
-    \      if key is not None:\n            self.delete(key)\n        return key\n\
-    \ndef debug(T):\n    def print_node(node, n=0):\n        if not node:\n      \
-    \      return\n\n        print_node(node.right, n+1)\n        print(\" \"*(4*n),\
-    \ node.key, \"(\",\"R\" if node.is_red() else \"B\", \":\",node.size,\")\")\n\
-    \        print_node(node.left, n+1)\n\n    print_node(T.root)\n    print(\"*\"\
-    *40)\n"
+    \      if key is not None:\n            self.delete(key)\n        return key\n"
   dependsOn: []
   isVerificationFile: false
   path: Red_and_Black_Tree.py
   requiredBy: []
-  timestamp: '2022-12-12 20:46:39+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  timestamp: '2022-12-13 00:29:19+09:00'
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Red_and_Black_Tree.test.py
 documentation_of: Red_and_Black_Tree.py
 layout: document
 redirect_from:

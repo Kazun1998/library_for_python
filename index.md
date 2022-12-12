@@ -3,7 +3,7 @@ data:
   libraryCategories:
   - name: .
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: AVL_Tree.py
       title: AVL_Tree.py
     - icon: ':warning:'
@@ -111,7 +111,7 @@ data:
     - icon: ':warning:'
       path: Quaternion.py
       title: Quaternion.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Red_and_Black_Tree.py
       title: Red_and_Black_Tree.py
     - icon: ':warning:'
@@ -436,8 +436,14 @@ data:
       path: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
     - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-AVL_Tree.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-AVL_Tree.test.py
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Double_Heap.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Double_Heap.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Red_and_Black_Tree.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Red_and_Black_Tree.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Sorted_Multiset.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Sorted_Multiset.test.py
