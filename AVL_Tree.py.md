@@ -122,16 +122,12 @@ data:
     \        return key\n\n    def keys(self):\n        def dfs(node):\n         \
     \   if node is None:\n                return\n            dfs(node.left)\n   \
     \         X.append(node.key)\n            dfs(node.right)\n\n        X=[]\n  \
-    \      dfs(self.root)\n        return X\n\ndef debug(T):\n    def print_node(node,\
-    \ n=0):\n        if not node:\n            return\n\n        print_node(node.right,\
-    \ n+1)\n        print(\" \"*(4*n), node.key, \"(\", node.size, \")\", )\n    \
-    \    print_node(node.left, n+1)\n\n    print_node(T.root)\n\nT=Adelson_Velsky_and_Landis_Tree()\n\
-    for a in range(30):\n    T.insert(a)\n"
+    \      dfs(self.root)\n        return X\n\n"
   dependsOn: []
   isVerificationFile: false
   path: AVL_Tree.py
   requiredBy: []
-  timestamp: '2022-12-12 20:46:39+09:00'
+  timestamp: '2022-12-13 00:36:52+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-AVL_Tree.test.py
