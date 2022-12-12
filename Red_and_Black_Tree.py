@@ -539,15 +539,3 @@ class Red_and_Black_Tree:
         if key is not None:
             self.delete(key)
         return key
-
-def debug(T):
-    def print_node(node, n=0):
-        if not node:
-            return
-
-        print_node(node.right, n+1)
-        print(" "*(4*n), node.key, "(","R" if node.is_red() else "B", ":",node.size,")")
-        print_node(node.left, n+1)
-
-    print_node(T.root)
-    print("*"*40)
