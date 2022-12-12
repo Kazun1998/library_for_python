@@ -1,10 +1,10 @@
-class Slide_Window():
+class Sliding_Window_Aggregation():
     """ 積をスライドさせながらもとめる.
     """
 
     __slots__=("calc", "__front", "__back", "__left", "__right", "__cnt")
 
-    def __init__(self,calc,X=[]):
+    def __init__(self, calc, X=[]):
         """スライドプロダクトクラスを生成する.
 
         calc: 2項演算 (半群)
@@ -36,7 +36,8 @@ class Slide_Window():
         else:
             return str(self.__back)[6:-1]
 
-    __repr__=__str__
+    def __repr__(self):
+        return "Slide Product: "+str(self)+": product: {}".format(self.product())
 
     def __len__(self):
         return self.__cnt
@@ -44,45 +45,39 @@ class Slide_Window():
     def __bool__(self):
         return self.__cnt>0
 
-    def push(self, x, k=1):
-        """ x を k 回 push する.
+    def push(self, x):
+        """ x を push する.
 
         x: value
-        k: 回数
         """
 
-        for _ in range(k):
-            self.__cnt+=1
+        self.__cnt+=1
 
-            self.__back.append(x)
+        self.__back.append(x)
 
-            if self.__right:
-                self.__right.append(self.calc(self.__right[-1],x))
-            else:
-                self.__right.append(x)
+        if self.__right:
+            self.__right.append(self.calc(self.__right[-1],x))
+        else:
+            self.__right.append(x)
 
-    def pop(self, k=1):
-        """ k 回 push する.
+    def pop(self):
+        """ push する.
 
-        k: 回数
         """
 
-        for _ in range(min(k,self.__cnt)):
-            if not self.__front:
-                self.__right.clear()
-                while self.__back:
-                    x=self.__back.pop()
+        if not self.__front:
+            self.__right.clear()
+            while self.__back:
+                x=self.__back.pop()
 
-                    if self.__front:
-                        self.__left.appendleft(self.calc(x,self.__left[0]))
-                    else:
-                        self.__left.appendleft(x)
-                    self.__front.appendleft(x)
+                if self.__front:
+                    self.__left.appendleft(self.calc(x,self.__left[0]))
+                else:
+                    self.__left.appendleft(x)
+                self.__front.appendleft(x)
 
-            self.__front.popleft()
-            self.__left.popleft()
-
-        self.__cnt-=min(k,self.__cnt)
+        self.__front.popleft()
+        self.__left.popleft()
 
     def product(self, default=None):
         """ 積を求める.
