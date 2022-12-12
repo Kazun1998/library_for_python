@@ -2,8 +2,8 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: Red_and_Black_Tree.py
-    title: Red_and_Black_Tree.py
+    path: Binary_Tree/Red_and_Black_Tree.py
+    title: Binary_Tree/Red_and_Black_Tree.py
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -20,7 +20,7 @@ data:
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/double_ended_priority_queue\n\
-    \n#==================================================\nfrom Red_and_Black_Tree\
+    \n#==================================================\nfrom Binary_Tree.Red_and_Black_Tree\
     \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
     #==================================================\ndef verify():\n    N,Q=map(int,input().split())\n\
     \    S=map(int,input().split())\n\n    E=Red_and_Black_Tree()\n    for a in S:\n\
@@ -33,11 +33,11 @@ data:
     \    write(\"\\n\".join(map(str,Ans)))\n\n#==================================================\n\
     verify()\n"
   dependsOn:
-  - Red_and_Black_Tree.py
+  - Binary_Tree/Red_and_Black_Tree.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Red_and_Black_Tree.test.py
   requiredBy: []
-  timestamp: '2022-12-13 00:29:19+09:00'
+  timestamp: '2022-12-13 01:23:20+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Red_and_Black_Tree.test.py

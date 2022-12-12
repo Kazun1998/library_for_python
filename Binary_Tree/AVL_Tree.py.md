@@ -125,16 +125,16 @@ data:
     \      dfs(self.root)\n        return X\n\n"
   dependsOn: []
   isVerificationFile: false
-  path: AVL_Tree.py
+  path: Binary_Tree/AVL_Tree.py
   requiredBy: []
-  timestamp: '2022-12-13 00:36:52+09:00'
+  timestamp: '2022-12-13 01:23:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-AVL_Tree.test.py
-documentation_of: AVL_Tree.py
+documentation_of: Binary_Tree/AVL_Tree.py
 layout: document
 redirect_from:
-- /library/AVL_Tree.py
-- /library/AVL_Tree.py.html
-title: AVL_Tree.py
+- /library/Binary_Tree/AVL_Tree.py
+- /library/Binary_Tree/AVL_Tree.py.html
+title: Binary_Tree/AVL_Tree.py
 ---

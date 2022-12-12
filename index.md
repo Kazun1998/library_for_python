@@ -1,11 +1,50 @@
 ---
 data:
   libraryCategories:
-  - name: .
+  - name: Binary_Indexed_Tree
     pages:
     - icon: ':heavy_check_mark:'
-      path: AVL_Tree.py
-      title: AVL_Tree.py
+      path: Binary_Indexed_Tree/Binary_Indexed_Tree.py
+      title: Binary Indexed Tree (Fenwick Tree)
+    - icon: ':warning:'
+      path: Binary_Indexed_Tree/Binary_Indexed_Tree_2D.py
+      title: Binary_Indexed_Tree/Binary_Indexed_Tree_2D.py
+    - icon: ':warning:'
+      path: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
+      title: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
+    - icon: ':warning:'
+      path: Binary_Indexed_Tree/Sparse_Binary_Indexed_Tree.py
+      title: Binary_Indexed_Tree/Sparse_Binary_Indexed_Tree.py
+  - name: Binary_Search
+    pages:
+    - icon: ':warning:'
+      path: Binary_Search/Count.py
+      title: Binary_Search/Count.py
+    - icon: ':warning:'
+      path: Binary_Search/Find.py
+      title: Binary_Search/Find.py
+    - icon: ':warning:'
+      path: Binary_Search/General.py
+      title: Binary_Search/General.py
+    - icon: ':warning:'
+      path: Binary_Search/Index.py
+      title: Binary_Search/Index.py
+    - icon: ':warning:'
+      path: Binary_Search/Ternary.py
+      title: Binary_Search/Ternary.py
+    - icon: ':warning:'
+      path: Binary_Search/Value.py
+      title: Binary_Search/Value.py
+  - name: Binary_Tree
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: Binary_Tree/AVL_Tree.py
+      title: Binary_Tree/AVL_Tree.py
+    - icon: ':heavy_check_mark:'
+      path: Binary_Tree/Red_and_Black_Tree.py
+      title: Binary_Tree/Red_and_Black_Tree.py
+  - name: .
+    pages:
     - icon: ':heavy_check_mark:'
       path: Binary_Trie.py
       title: Binary_Trie.py
@@ -111,9 +150,6 @@ data:
     - icon: ':warning:'
       path: Quaternion.py
       title: Quaternion.py
-    - icon: ':heavy_check_mark:'
-      path: Red_and_Black_Tree.py
-      title: Red_and_Black_Tree.py
     - icon: ':warning:'
       path: Rolling_Hash.py
       title: Rolling_Hash.py
@@ -156,40 +192,6 @@ data:
     - icon: ':warning:'
       path: XOR_Vector_Space.py
       title: XOR_Vector_Space.py
-  - name: Binary_Indexed_Tree
-    pages:
-    - icon: ':heavy_check_mark:'
-      path: Binary_Indexed_Tree/Binary_Indexed_Tree.py
-      title: Binary Indexed Tree (Fenwick Tree)
-    - icon: ':warning:'
-      path: Binary_Indexed_Tree/Binary_Indexed_Tree_2D.py
-      title: Binary_Indexed_Tree/Binary_Indexed_Tree_2D.py
-    - icon: ':warning:'
-      path: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
-      title: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
-    - icon: ':warning:'
-      path: Binary_Indexed_Tree/Sparse_Binary_Indexed_Tree.py
-      title: Binary_Indexed_Tree/Sparse_Binary_Indexed_Tree.py
-  - name: Binary_Search
-    pages:
-    - icon: ':warning:'
-      path: Binary_Search/Count.py
-      title: Binary_Search/Count.py
-    - icon: ':warning:'
-      path: Binary_Search/Find.py
-      title: Binary_Search/Find.py
-    - icon: ':warning:'
-      path: Binary_Search/General.py
-      title: Binary_Search/General.py
-    - icon: ':warning:'
-      path: Binary_Search/Index.py
-      title: Binary_Search/Index.py
-    - icon: ':warning:'
-      path: Binary_Search/Ternary.py
-      title: Binary_Search/Ternary.py
-    - icon: ':warning:'
-      path: Binary_Search/Value.py
-      title: Binary_Search/Value.py
   - name: Convolution
     pages:
     - icon: ':warning:'

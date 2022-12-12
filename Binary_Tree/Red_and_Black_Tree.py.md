@@ -196,16 +196,16 @@ data:
     \      if key is not None:\n            self.delete(key)\n        return key\n"
   dependsOn: []
   isVerificationFile: false
-  path: Red_and_Black_Tree.py
+  path: Binary_Tree/Red_and_Black_Tree.py
   requiredBy: []
-  timestamp: '2022-12-13 00:29:19+09:00'
+  timestamp: '2022-12-13 01:23:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Red_and_Black_Tree.test.py
-documentation_of: Red_and_Black_Tree.py
+documentation_of: Binary_Tree/Red_and_Black_Tree.py
 layout: document
 redirect_from:
-- /library/Red_and_Black_Tree.py
-- /library/Red_and_Black_Tree.py.html
-title: Red_and_Black_Tree.py
+- /library/Binary_Tree/Red_and_Black_Tree.py
+- /library/Binary_Tree/Red_and_Black_Tree.py.html
+title: Binary_Tree/Red_and_Black_Tree.py
 ---
