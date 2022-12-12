@@ -187,16 +187,20 @@ data:
     \        N=self.root\n        while N.left:\n            N=N.left\n        return\
     \ N.key\n\n    def get_max(self, default=None):\n        if self.root is None:\n\
     \            return default\n\n        N=self.root\n        while N.right:\n \
-    \           N=N.right\n        return N.key\n\ndef debug(T):\n    def print_node(node,\
-    \ n=0):\n        if not node:\n            return\n\n        print_node(node.right,\
-    \ n+1)\n        print(\" \"*(4*n), node.key, \"(\",\"R\" if node.is_red() else\
-    \ \"B\", \":\",node.size,\")\")\n        print_node(node.left, n+1)\n\n    print_node(T.root)\n\
-    \    print(\"*\"*40)\n"
+    \           N=N.right\n        return N.key\n\n    def pop_min(self):\n      \
+    \  key=self.get_min()\n        if key is not None:\n            self.delete(key)\n\
+    \        return key\n\n    def pop_max(self):\n        key=self.get_max()\n  \
+    \      if key is not None:\n            self.delete(key)\n        return key\n\
+    \ndef debug(T):\n    def print_node(node, n=0):\n        if not node:\n      \
+    \      return\n\n        print_node(node.right, n+1)\n        print(\" \"*(4*n),\
+    \ node.key, \"(\",\"R\" if node.is_red() else \"B\", \":\",node.size,\")\")\n\
+    \        print_node(node.left, n+1)\n\n    print_node(T.root)\n    print(\"*\"\
+    *40)\n"
   dependsOn: []
   isVerificationFile: false
   path: Red_and_Black_Tree.py
   requiredBy: []
-  timestamp: '2022-11-24 23:23:27+09:00'
+  timestamp: '2022-12-12 20:46:39+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Red_and_Black_Tree.py

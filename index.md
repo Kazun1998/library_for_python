@@ -124,8 +124,8 @@ data:
       path: Slide_Maximum.py
       title: Slide_Maximum.py
     - icon: ':heavy_check_mark:'
-      path: Slide_Window.py
-      title: Slide_Window.py
+      path: Sliding_Window_Aggregation.py
+      title: Sliding_Window_Aggregation.py
     - icon: ':warning:'
       path: Slope_Trick.py
       title: Slope_Trick.py

@@ -15,8 +15,8 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "\"\"\"\nReference:\nhttps://yottagin.com/?p=4157\n\"\"\"\n\nclass AVL_Node:\n\
-    \    def __init__(self, key, value):\n        self.key=key\n        self.value=value\n\
+  code: "# Reference:\n# https://yottagin.com/?p=4157\n\nclass AVL_Node:\n    def\
+    \ __init__(self, key, value):\n        self.key=key\n        self.value=value\n\
     \        self.left=None\n        self.right=None\n        self.height=1\n    \
     \    self.size=1\n\n    def __str__(self):\n        return \"key: {}, value: {}\"\
     .format(self.key, self.value)\n\n    def __repr__(self):\n        return \"[AVL\
@@ -46,13 +46,13 @@ data:
     \ is None:\n                temp=root.right\n                root=None\n     \
     \           return temp\n            elif root.right is None:\n              \
     \  temp=root.left\n                root=None\n                return temp\n\n\
-    \            while temp.left:\n                temp=temp.left\n            root.key=temp.key\n\
-    \            root.value=temp.value\n            root.right=self.__delete(root.right,\
-    \ temp.key, mode=0)\n\n        if root is None:\n            return root\n\n \
-    \       root.height=1+max(self.get_height(root.left), self.get_height(root.right))\n\
-    \        root.size=1+self.get_size(root.left)+self.get_size(root.right)\n\n  \
-    \      bias=self.get_bias(root)\n\n        # Case I : Left Left\n        if bias>1\
-    \ and self.get_bias(root.left)>=0:\n            return self.right_rotation(root)\n\
+    \            temp=root.right\n            while temp.left:\n                temp=temp.left\n\
+    \            root.key=temp.key\n            root.value=temp.value\n          \
+    \  root.right=self.__delete(root.right, temp.key, mode=0)\n\n        if root is\
+    \ None:\n            return root\n\n        root.height=1+max(self.get_height(root.left),\
+    \ self.get_height(root.right))\n        root.size=1+self.get_size(root.left)+self.get_size(root.right)\n\
+    \n        bias=self.get_bias(root)\n\n        # Case I : Left Left\n        if\
+    \ bias>1 and self.get_bias(root.left)>=0:\n            return self.right_rotation(root)\n\
     \n        # Case II : Right Right\n        if bias<-1 and self.get_bias(root.right)<=0:\n\
     \            return self.left_rotation(root)\n\n        # Case III : Left Right\n\
     \        if bias>1 and self.get_bias(root.left)<0:\n            root.left=self.left_rotation(root.left)\n\
@@ -113,19 +113,22 @@ data:
     \        return node.key\n\n    def get_max(self, default=None):\n        if self.root\
     \ is None:\n            return default\n\n        node=self.root\n        while\
     \ node.right:\n            node=node.right\n        return node.key\n\n    def\
-    \ keys(self):\n        def dfs(node):\n            if node is None:\n        \
-    \        return\n            dfs(node.left)\n            X.append(node.key)\n\
-    \            dfs(node.right)\n\n        X=[]\n        dfs(self.root)\n       \
-    \ return X\n\ndef debug(T):\n    def print_node(node, n=0):\n        if not node:\n\
-    \            return\n\n        print_node(node.right, n+1)\n        print(\" \"\
-    *(4*n), node.key, \"(\", node.size, \")\", )\n        print_node(node.left, n+1)\n\
-    \n    print_node(T.root)\n\nT=Adelson_Velsky_and_Landis_Tree()\nfor a in range(30):\n\
-    \    T.insert(a)\n"
+    \ pop_min(self):\n        key=self.get_min()\n        if key is not None:\n  \
+    \          self.delete(key)\n        return key\n\n    def pop_max(self):\n  \
+    \      key=self.get_max()\n        if key is not None:\n            self.delete(key)\n\
+    \        return key\n\n    def keys(self):\n        def dfs(node):\n         \
+    \   if node is None:\n                return\n            dfs(node.left)\n   \
+    \         X.append(node.key)\n            dfs(node.right)\n\n        X=[]\n  \
+    \      dfs(self.root)\n        return X\n\ndef debug(T):\n    def print_node(node,\
+    \ n=0):\n        if not node:\n            return\n\n        print_node(node.right,\
+    \ n+1)\n        print(\" \"*(4*n), node.key, \"(\", node.size, \")\", )\n    \
+    \    print_node(node.left, n+1)\n\n    print_node(T.root)\n\nT=Adelson_Velsky_and_Landis_Tree()\n\
+    for a in range(30):\n    T.insert(a)\n"
   dependsOn: []
   isVerificationFile: false
   path: AVL_Tree.py
   requiredBy: []
-  timestamp: '2022-11-02 04:01:57+09:00'
+  timestamp: '2022-12-12 20:46:39+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: AVL_Tree.py
