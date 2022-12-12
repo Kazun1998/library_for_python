@@ -10,9 +10,9 @@ class Binary_Trie:
         self.multi=allow_multiple
 
         if query_number!=None:
-            self.arc=[-1]*2*self.bit*query_number
-            self.size=[0]*self.bit*query_number
-            self.terminal=[0]*self.bit*query_number
+            self.arc=[-1]*2*(self.bit*query_number+1)
+            self.size=[0]*(self.bit*query_number+1)
+            self.terminal=[0]*(self.bit*query_number+1)
             self.id=0
         else:
             self.arc=[-1,-1]
@@ -199,7 +199,7 @@ class Binary_Trie:
         else:
             return self.kth_element(-beta,0)
 
-    def kth_element(self, k, index=0):
+    def kth_element(self, k, index=0, default=-1):
         """ index -indexed で k 番目に小さい値を求める.
         ただし, index=0, k<0 のときは |k| 番目に大きい値になる.
 
@@ -208,7 +208,8 @@ class Binary_Trie:
         if k<0:
             k+=self.size[0]
         k-=index
-        assert 0<=k<self.size[0]
+        if not (0<=k<self.size[0]):
+            return default
 
         v=0
         res=0
