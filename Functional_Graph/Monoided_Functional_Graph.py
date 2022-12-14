@@ -1,5 +1,14 @@
 class Monoided_Functional_Graph:
     def __init__(self, N, K, calc, unit):
+        """ 有向辺にモノイドの重みを乗せた Functional Graph を生成する.
+
+        Args:
+            N : 頂点数 (0,1,2,...,N-1 を生成する)
+            K : 計算に必要な最大の指数
+            calc : モノイドの演算 calc(new, old)
+            unit : 単位元
+        """
+
         self.N=N
         self.K=K
         self.calc=calc
@@ -29,16 +38,16 @@ class Monoided_Functional_Graph:
             self.value.append(Y)
             K>>=1
 
-    def calculate(self, v, t):
+    def calculate(self, v, k):
         x=self.unit
         calc=self.calc
         out=self.out
         value=self.value
         d=0
-        while t:
-            if t&1:
+        while k:
+            if k&1:
                 x=calc(value[d][v], x)
                 v=out[d][v]
-            t>>=1; d+=1
+            k>>=1; d+=1
         return x
 
