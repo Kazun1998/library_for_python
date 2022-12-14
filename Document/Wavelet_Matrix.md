@@ -23,6 +23,17 @@ W=Wavelet_Matrix(X)
 
 - **計算量** : $O(N \log N)$ Times.
 
+--
+
+### access
+
+```Python
+W.access(index)
+```
+
+- $X_{{\rm index}}$ を求める.
+- **計算量** : $O(N \log N)$ Times.
+
 ---
 
 ### rank
