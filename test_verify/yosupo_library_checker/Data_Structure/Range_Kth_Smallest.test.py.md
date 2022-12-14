@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: Wavelet_Matrix.py
-    title: Wavelet_Matrix.py
+    title: Wavelet Matrix
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false

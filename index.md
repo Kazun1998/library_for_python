@@ -188,7 +188,7 @@ data:
       title: Vector3.py
     - icon: ':heavy_check_mark:'
       path: Wavelet_Matrix.py
-      title: Wavelet_Matrix.py
+      title: Wavelet Matrix
     - icon: ':warning:'
       path: XOR_Vector_Space.py
       title: XOR_Vector_Space.py
