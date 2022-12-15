@@ -25,7 +25,7 @@ data:
       title: Binary_Search/Find.py
     - icon: ':warning:'
       path: Binary_Search/General.py
-      title: Binary_Search/General.py
+      title: General Binary Search
     - icon: ':warning:'
       path: Binary_Search/Index.py
       title: Binary_Search/Index.py
