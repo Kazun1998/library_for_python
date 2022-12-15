@@ -80,8 +80,8 @@ title: General Binary Search
 
 $X$ は $\mathbb{Z}$ か $\mathbb{R}$ であるとする. $X$ 上の条件 $\operatorname{cond}: X \to \\{\mathbb{T}, \mathbb{F}\\}$ について, 以下を定義する.
 
-* 以下を満たすとき, $\operatorname{cond}$ は単調増加であるという. $$\forall x \in X;\,\operatorname{cond}(x)=\mathbb{T} \Rightarrow \left(\forall y \geq x;\, \operatorname{cond}(x)=\mathbb{T} \right)$$
-* 以下を満たすとき, $\operatorname{cond}$ は単調減少であるという. $$\forall x \in X;\,\operatorname{cond}(x)=\mathbb{F} \Rightarrow \left(\forall y \geq x;\,\operatorname{cond}(x)=\mathbb{F} \right)$$
+* 以下を満たすとき, $\operatorname{cond}$ は単調増加であるという: $\forall x \in X;\,\operatorname{cond}(x)=\mathbb{T} \Rightarrow \left(\forall y \geq x;\, \operatorname{cond}(x)=\mathbb{T} \right)$
+* 以下を満たすとき, $\operatorname{cond}$ は単調減少であるという: $\forall x \in X;\,\operatorname{cond}(x)=\mathbb{F} \Rightarrow \left(\forall y \geq x;\,\operatorname{cond}(x)=\mathbb{F} \right)$
 * 単調増加または単調減少であるとき, 単調という.
 
 $X=\mathbb{Z}$ とする. このとき, 単調増加である $\operatorname{cond}$ に対して, $\operatorname{cond}(x)=\mathbb{T}$ となる最小の $x \in \mathbb{Z}$ を $X$ として, $X$ を求める.
