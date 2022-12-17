@@ -168,6 +168,9 @@ data:
     - icon: ':warning:'
       path: Slope_Trick.py
       title: Slope_Trick.py
+    - icon: ':heavy_check_mark:'
+      path: Sparse_Table.py
+      title: Sparse_Table.py
     - icon: ':warning:'
       path: Special_Input.py
       title: Special_Input.py
@@ -479,6 +482,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Set_Xor_Min.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Set_Xor_Min.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Sparse_Table.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Sparse_Table.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
