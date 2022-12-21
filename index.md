@@ -566,4 +566,4 @@ layout: toppage
 
 ## Mathematics
 
-- [代数的構造](pages/Algebra.md)
+- [代数的構造](pages/Algebra.html)
