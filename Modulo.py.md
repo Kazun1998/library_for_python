@@ -267,7 +267,7 @@ $x \in \mathbb{Z}$ の属する類を $[x], [x]\_m$ と書くことにする. �
 
 よって, 各整数の余りを考えることにより,
 
-$$\mathbb{Z}/m\mathbb{Z}=\\{[0], [1], \dots, [m-1] \\}$$
+$$\mathbb{Z}/m\mathbb{Z}=\{[0], [1], \dots, [m-1] \}$$
 
 となることがわかる.
 
@@ -351,7 +351,7 @@ $$ax \equiv b \pmod{m} \iff x \equiv bk \pmod{m'}$$
 
 $p$ を素数とする. 整数 $a \in \mathbb{Z}$ におけるルジャンドル記号 $\displaystyle \left( \dfrac{a}{p} \right)$ を
 
-$$\left( \dfrac{a}{p} \right) \equiv a^{(p-1)/2} \pmod{p}, \quad \left( \dfrac{a}{p} \right) \in \\{-1,0,1\\}$$
+$$\left( \dfrac{a}{p} \right) \equiv a^{(p-1)/2} \pmod{p}, \quad \left( \dfrac{a}{p} \right) \in \{-1,0,1\}$$
 
 をみたす (唯一の) 整数と定義する (well-defindness はフェルマーの小定理より従う).
 
@@ -373,18 +373,18 @@ $[a] \in \mathbb{Z}/m \mathbb{Z}$ に対して, $[a]^n=[1]$ となる 正の整�
 
 可逆元 $[a]$ に対して, 積に関して生成される $\left \langle [a] \right \rangle$ は $(\mathbb{Z}/m\mathbb{Z})^\times$ の部分群である. このとき, ラグランジュの定理から次のことが従う.
 
-* $\# \left \langle [a] \right \rangle$ は $\# (\mathbb{Z}/m\mathbb{Z})^\times$ の約数である.
+* $\\# \left \langle [a] \right \rangle$ は $\\# (\mathbb{Z}/m\mathbb{Z})^\times$ の約数である.
 
 また, この2つの群の位数について,
 
 * $\operatorname{ord} [a]=\left \langle [a] \right \rangle$
-* $\# (\mathbb{Z}/m\mathbb{Z})^\times=\varphi(m)$ (Euler's totient function)
+* $\\# (\mathbb{Z}/m\mathbb{Z})^\times=\varphi(m)$ (Euler's totient function)
 
 が成り立つ.
 
 以上のことから,
 
-$$\operatorname{ord} [a]=\min \\{d \mid 1 \leq d \leq m, d~|~\varphi(m), [a]^d=1\\}$$
+$$\operatorname{ord} [a]=\min \{d \mid 1 \leq d \leq m, d~|~\varphi(m), [a]^d=1 \}$$
 
 となる.
 
