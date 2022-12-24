@@ -5,7 +5,7 @@ def Largest_Rectangle(H, mode=0):
     mode: 1 のときはその範囲も求める.
     """
     from collections import deque
-    H.append(0)
+    H=H+[0]
     S=deque([])
     X=H[0]
     l=r=-1
