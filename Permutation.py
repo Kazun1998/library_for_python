@@ -18,10 +18,17 @@ class Permutation():
     def __str__(self):
         return str(self.p)
 
-    __repr__=__str__
+    def __repr__(self):
+        return "[Permutation] : "+str(self)
 
     def __eq__(self,other):
         return (self.n==other.n) and (self.p==other.p)
+
+    def __iter__(self):
+        return iter(self.p)
+
+    def index(self, x):
+        return self.ind[x]
 
     def __mul__(self,other):
         assert self.n==other.n
@@ -57,6 +64,9 @@ class Permutation():
         return Permutation(self.n, self.ind)
 
     def inversion(self):
+        """ 転倒数を求める.
+        """
+
         BIT=[0]*(self.n+1)
         Y=(self.n*(self.n-1))//2
 
@@ -81,7 +91,7 @@ class Permutation():
         self.ind[v]=i; self.ind[u]=j
 
     def transposition(self, u, v):
-        """ u,v のある場所を交換する ※ u 番目とv 番目ではない"""
+        """ u と v を交換する ※ u 番目とv 番目ではない"""
 
         a=self.ind[u]; b=self.ind[v]
 
@@ -123,23 +133,80 @@ class Permutation():
         return [list[self.ind[i]] for i in range(self.n)]
 
 
-    def order(self):
+    def order(self, mod=None):
+        """ 位数を求める (mod を指定すると, mod で割った余りになる).
+
+        """
+
         from math import gcd
 
-        x=1
-        for m in self.cycle_division():
-            g=gcd(x,len(m))
-            x=(x//g)*len(m)
-        return x
+        if mod==None:
+            x=1
+            for m in self.cycle_division():
+                g=gcd(x,len(m))
+                x=(x//g)*len(m)
+            return x
+        else:
+            def factor(n):
+                e=(n&(-n)).bit_length()-1
+                yield 2,e
+
+                n>>=e
+
+                p=3
+                while p*p<=n:
+                    if n%p==0:
+                        e=0
+                        while n%p==0:
+                            n//=p
+                            e+=1
+                        yield p,e
+                    p+=2
+
+                if n>1:
+                    yield n,1
+                return
+
+            T={}
+            for m in self.cycle_division():
+                for p,e in factor(len(m)):
+                    T[p]=max(T.get(p,0), e)
+
+            x=1
+            for p in T:
+                x*=pow(p, T[p], mod)
+                x%=mod
+            return x
+
+    def conjugate(self):
+        return Permutation(self.n, [self.n-1-x for x in self.p])
+
+    def next(self):
+        y=[]
+        for i in range(self.n-1,0,-1):
+            y.append(self.p[i])
+            if self.p[i-1]<self.p[i]:
+                y.append(self.p[i-1])
+                a=self.p[i-1]
+                break
+
+        x=self.p[:i-1]
+        y.sort()
+        for j,b in enumerate(y):
+            if a<b:
+                x.append(b)
+                del y[j]
+                break
+        return Permutation(self.n, x+y)
 
 #=================================================
-def Permutation_Inversion(P,Q):
+def Permutation_Inversion(P, Q):
     """ P から Q へ隣接項同士の入れ替えのみの最小回数を求める.
     """
     R=Q*(P.inverse())
     return R.inversion()
 
-def List_Inversion(A,B,default=-1):
+def List_Inversion(A, B, default=-1):
     """長さが等しいリスト A,B に対して, 以下の操作の最小回数を求める.
     列 A[i] と A[i+1] を入れ替え, B と一致させる.
     """
