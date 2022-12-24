@@ -1,4 +1,5 @@
-"""Tips
+"""
+[Tips]
 自然数全体の集合 N において, 加法と F_2 とのスカラー倍を
     x+y:=x xor y, [0] x:=0, [1] x:=x
 と定めると, N は F_2 上のベクトル空間になる.
@@ -6,49 +7,53 @@
 
 class XOR_Vector_Space:
     def __init__(self):
-        self.S=[]
+        self.basis=[]
 
-    def __contains__(self,x):
-        for v in self.S:
-            if x&v&(-v):
-                x^=v
-            if x==0:
-                return True
-        return False
+    def __contains__(self, x):
+        for v in self.basis:
+            x=min(x, x^v)
+        return x==0
 
-    def __add__(self,other):
+    def __add__(self, other):
         W=XOR_Vector_Space()
 
-        W.S=self.S[:]
-        W.add_vector(*other.S)
+        W.basis=self.basis[:]
+        W.add_vector(*other.bais)
         return W
 
-    def add_vector(self,*T):
+    def add_vector(self, *T):
         for x in T:
-            for v in self.S:
-                if x&v&(-v):
-                    x^=v
-                    if x==0:
-                        break
-            if x:
-                self.S.append(x)
+            for v in self.basis:
+                x=min(x, x^v)
 
-    def dim(self):
-        return len(self.S)
+            if x:
+                self.basis.append(x)
+
+    def dimension(self):
+        return len(self.basis)
 
     def reduction(self):
-        S=self.S
+        S=self.basis
         for i in range(len(S)):
             vb=S[i]&(-S[i])
             for j in  range(len(S)):
-                if i==j: continue
+                if i==j:
+                    continue
 
                 if S[j]&vb:
                     S[j]^=S[i]
-        self.S=[s for s in S if s]
+        self.basis=[s for s in S if s]
+
+    def projection(self, x):
+        for v in self.basis:
+            x=min(x, x^v)
+        return x
+
+    def __repr__(self):
+        return "[XOR Vector Space]: dim: {}, basis: {}".format(self.dimension(), self.basis)
 
     def __le__(self,other):
-        for u in self.S:
+        for u in self.basis:
             if not u in other:
                 return False
         return True
@@ -60,18 +65,25 @@ class XOR_Vector_Space:
         return (self<=other) and (other<=self)
 
 def Generate_Space(*S):
+    """ S によって生成される XOR ベクトル空間を求める.
+
+    """
+
     V=XOR_Vector_Space()
     V.add_vector(*S)
     V.reduction()
     return V
 
 def Get_Basis(*S):
+    """ S によって生成される XOR ベクトル空間 V において, S の部分集合でもあるV の基底を求める
+
+    """
+
     B=[]
     V=XOR_Vector_Space()
-    k=0
     for v in S:
-        V.add_vector(v)
-        if k+1==V.dim():
+        w=V.projection(v)
+        if w:
             B.append(v)
-            k+=1
+            V.basis.append(w)
     return B
