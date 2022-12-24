@@ -107,22 +107,13 @@ data:
     \n    F=[0]*(K+1)\n    for i in range(1,K+1):\n        if A[i]:\n            j=i\n\
     \            k=1\n            c=1\n            while j<=K:\n                F[j]=(F[j]+c*Inv[k]*A[i])%Mod\n\
     \                c*=-1\n                j+=i\n                k+=1\n    P=Modulo_Polynomial(F,K+1)\n\
-    \    return Exp(P).Poly\n\n#===\ndef Two_Term_Product(S, K, alpha):\n    \"\"\"\
-    \ S=[s[0], ..., s[N-1]] \u3068\u3057\u305F\u3068\u304D, prod(1+alpha X^s[i]) \u3092\
-    \ K \u6B21\u307E\u3067\u6C42\u3081\u308B.\n\n    \"\"\"\n\n    A=[0]*(K+1)\n \
-    \   for x in S:\n        if x<=K:\n            A[x]+=1\n\n    Inv=[0]*(K+1)\n\
-    \    Inv[1]=1\n    for i in range(2,K+1):\n        Inv[i]=(-(Mod//i)*Inv[Mod%i])%Mod\n\
-    \n    F=[0]*(K+1)\n    for i in range(1,K+1):\n        if A[i]:\n            j=i\n\
-    \            k=1\n            c=alpha\n            while j<=K:\n             \
-    \   m=c*Inv[k]%Mod\n                F[j]=(F[j]+m*A[i])%Mod\n                c*=-alpha;\
-    \ c%=Mod\n                j+=i\n                k+=1\n    return Exp(Modulo_Polynomial(F,K+1))\n\
-    \n#===\n#\u591A\u9805\u5F0F\u548C\ndef Polynominal_Sigma(P):\n    \"\"\" Q(n)=P(1)+P(2)+...+P(n)\
-    \ \u3092\u6E80\u305F\u3059\u591A\u9805\u5F0F Q \u3092\u6C42\u3081\u308B.\n\n \
-    \   \"\"\"\n\n    from itertools import accumulate\n\n    N=len(P.Poly)\n    A=Multipoint_Evaluation(P,\
-    \ list(range(1,N+2)))\n    A=list(accumulate(A,lambda x,y:(x+y)%Mod))\n    return\
-    \ Polynominal_Interpolation(list(range(1,N+2)), A)\n\ndef Differences(P, k=1):\n\
-    \    \"\"\" P \u306E k- \u5DEE\u5206 D[k](P(n))=D[k-1](P(n+1)-P(n)), D[0](P)=P\
-    \ \u3092\u6C42\u3081\u308B. \"\"\"\n\n    N=len(P.Poly)\n\n    fact=[1]*(k+1)\n\
+    \    return Exp(P).Poly\n\n#===\n#\u591A\u9805\u5F0F\u548C\ndef Polynominal_Sigma(P):\n\
+    \    \"\"\" Q(n)=P(1)+P(2)+...+P(n) \u3092\u6E80\u305F\u3059\u591A\u9805\u5F0F\
+    \ Q \u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n\n    from itertools import accumulate\n\
+    \n    N=len(P.Poly)\n    A=Multipoint_Evaluation(P, list(range(1,N+2)))\n    A=list(accumulate(A,lambda\
+    \ x,y:(x+y)%Mod))\n    return Polynominal_Interpolation(list(range(1,N+2)), A)\n\
+    \ndef Differences(P, k=1):\n    \"\"\" P \u306E k- \u5DEE\u5206 D[k](P(n))=D[k-1](P(n+1)-P(n)),\
+    \ D[0](P)=P \u3092\u6C42\u3081\u308B. \"\"\"\n\n    N=len(P.Poly)\n\n    fact=[1]*(k+1)\n\
     \    for i in range(1,k+1):\n        fact[i]=i*fact[i-1]%Mod\n\n    fact_inv=[1]*(k+1);\
     \ fact_inv[-1]=pow(fact[i],Mod-2,Mod)\n    for i in range(k-1,-1,-1):\n      \
     \  fact_inv[i]=(i+1)*fact_inv[i+1]%Mod\n\n    Q=[0]*(N-k)\n    sgn=1 if k%2==0\
@@ -133,7 +124,7 @@ data:
   isVerificationFile: false
   path: Modulo_Sequence/Modulo_Sequence.py
   requiredBy: []
-  timestamp: '2022-11-23 00:05:10+09:00'
+  timestamp: '2022-12-24 17:43:12+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Modulo_Sequence/Modulo_Sequence.py

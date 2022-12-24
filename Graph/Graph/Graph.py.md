@@ -204,34 +204,35 @@ data:
     \ return True\n\n#2\u90E8\u30B0\u30E9\u30D5\u306E\u90E8\u96C6\u5408\u306B\u5206\
     \u5272\ndef Bipartite_Separate(G):\n    \"\"\" 2\u90E8\u30B0\u30E9\u30D5\u306E\
     \u9802\u70B9\u3092\u90E8\u96C6\u5408\u306B\u5206\u5272\u3059\u308B. \"\"\"\n\n\
-    \    N=G.vertex_count()\n    T=[0]*N\n    adj=G.adjacent\n\n    for v in range(N):\n\
-    \        if T[v]==0:\n            T[v]=1\n            S=[v]\n            while\
-    \ S:\n                u=S.pop()\n                for w in adj[u]:\n          \
-    \          if T[w]==0:\n                        T[w]=-T[u]\n                 \
-    \       S.append(w)\n                    elif T[w]==T[u]:\n                  \
-    \      return None, None\n\n    U=[u for u in range(N) if T[u]==1]\n    V=[v for\
-    \ v in range(N) if T[v]==-1]\n    return U,V\n\n#\u30AA\u30A4\u30E9\u30FC\u30B0\
-    \u30E9\u30D5?\ndef Is_Eulerian_Graph(G):\n    \"\"\" \u30B0\u30E9\u30D5 G \u304C\
+    \    N=G.vertex_count()\n    T=[0]*N\n    adj=G.adjacent\n\n    Bip=[]\n    for\
+    \ v in range(N):\n        if T[v]==0:\n            T[v]=1\n            S=[v]\n\
+    \            A=[]; B=[]\n            while S:\n                u=S.pop()\n\n \
+    \               if T[u]==1:\n                    A.append(u)\n               \
+    \ else:\n                    B.append(u)\n\n                for w in adj[u]:\n\
+    \                    if T[w]==0:\n                        T[w]=-T[u]\n       \
+    \                 S.append(w)\n                    elif T[w]==T[u]:\n        \
+    \                return None\n            Bip.append((A,B))\n\n    return Bip\n\
+    \n#\u30AA\u30A4\u30E9\u30FC\u30B0\u30E9\u30D5?\ndef Is_Eulerian_Graph(G):\n  \
+    \  \"\"\" \u30B0\u30E9\u30D5 G \u304C\u30AA\u30A4\u30E9\u30FC\u30B0\u30E9\u30D5\
+    \u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B. \"\"\"\n\n    N=G.vertex_count()\n\
+    \    for v in range(N):\n        if G.degree(v)%2:\n            return False\n\
+    \    return Is_Connected(G)\n\n#\u6E96\u30AA\u30A4\u30E9\u30FC\u30B0\u30E9\u30D5\
+    ?\ndef Is_Semi_Eulerian_Graph(G):\n    \"\"\" \u30B0\u30E9\u30D5 G \u304C\u6E96\
     \u30AA\u30A4\u30E9\u30FC\u30B0\u30E9\u30D5\u304B\u3069\u3046\u304B\u3092\u5224\
-    \u5B9A\u3059\u308B. \"\"\"\n\n    N=G.vertex_count()\n    for v in range(N):\n\
-    \        if G.degree(v)%2:\n            return False\n    return Is_Connected(G)\n\
-    \n#\u6E96\u30AA\u30A4\u30E9\u30FC\u30B0\u30E9\u30D5?\ndef Is_Semi_Eulerian_Graph(G):\n\
-    \    \"\"\" \u30B0\u30E9\u30D5 G \u304C\u6E96\u30AA\u30A4\u30E9\u30FC\u30B0\u30E9\
-    \u30D5\u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B. \"\"\"\n\n    K=0\n\
-    \    N=G.vertex_count()\n    for v in range(N):\n        if G.degree(v)%2:\n \
-    \           K+=1\n            if K==3:\n                return False\n    return\
-    \ K==2 and Is_Connected(G)\n\n#Euler \u8DEF\u3092\u898B\u3064\u3051\u308B\ndef\
-    \ Find_Eulerian_Trail(G):\n    K=0\n    N=G.vertex_count()\n    for v in range(N-1,-1,-1):\n\
-    \        if G.degree(v)%2:\n            K+=1\n            start=v\n\n        \
-    \    if K==3:\n                return None\n    if K==0:\n        return None\n\
-    \n    from copy import deepcopy\n    E=deepcopy(G.adjacent)\n\n    temp=[start];\
-    \ v=start\n    while E[v]:\n        w=E[v].pop()\n        E[w].remove(v)\n   \
-    \     temp.append(w)\n        v=w\n\n    path=[]\n    while temp:\n        v=temp.pop()\n\
-    \        if E[v]:\n            temp.append(v)\n            while E[v]:\n     \
-    \           w=E[v].pop()\n                E[w].remove(v)\n                temp.append(w)\n\
-    \                v=w\n        else:\n            path.append(v)\n\n    path.reverse()\n\
-    \    return path if len(path)-1==G.size() else None\n\n#Euler\u9589\u8DEF\u3092\
-    \u898B\u3064\u3051\u308B\ndef Find_Eulerian_Cycle(G):\n    N=G.vertex_count()\n\
+    \u5B9A\u3059\u308B. \"\"\"\n\n    K=0\n    N=G.vertex_count()\n    for v in range(N):\n\
+    \        if G.degree(v)%2:\n            K+=1\n            if K==3:\n         \
+    \       return False\n    return K==2 and Is_Connected(G)\n\n#Euler \u8DEF\u3092\
+    \u898B\u3064\u3051\u308B\ndef Find_Eulerian_Trail(G):\n    K=0\n    N=G.vertex_count()\n\
+    \    for v in range(N-1,-1,-1):\n        if G.degree(v)%2:\n            K+=1\n\
+    \            start=v\n\n            if K==3:\n                return None\n  \
+    \  if K==0:\n        return None\n\n    from copy import deepcopy\n    E=deepcopy(G.adjacent)\n\
+    \n    temp=[start]; v=start\n    while E[v]:\n        w=E[v].pop()\n        E[w].remove(v)\n\
+    \        temp.append(w)\n        v=w\n\n    path=[]\n    while temp:\n       \
+    \ v=temp.pop()\n        if E[v]:\n            temp.append(v)\n            while\
+    \ E[v]:\n                w=E[v].pop()\n                E[w].remove(v)\n      \
+    \          temp.append(w)\n                v=w\n        else:\n            path.append(v)\n\
+    \n    path.reverse()\n    return path if len(path)-1==G.size() else None\n\n#Euler\u9589\
+    \u8DEF\u3092\u898B\u3064\u3051\u308B\ndef Find_Eulerian_Cycle(G):\n    N=G.vertex_count()\n\
     \    for v in range(N):\n        if G.degree(v)%2:\n            return None\n\n\
     \    from copy import deepcopy\n    E=deepcopy(G.adjacent)\n\n    temp=[0]; v=0\n\
     \    while E[v]:\n        w=E[v].pop()\n        E[w].remove(v)\n        temp.append(w)\n\
@@ -389,7 +390,7 @@ data:
   isVerificationFile: false
   path: Graph/Graph/Graph.py
   requiredBy: []
-  timestamp: '2022-11-25 00:16:56+09:00'
+  timestamp: '2022-12-24 16:47:42+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Graph/Graph/Graph.py

@@ -59,15 +59,16 @@ data:
     \    X[self.find(k)].append(k)\n        return X\n\n    def list(self):\n    \
     \    return [self.get(x) for x in range(self.n)]\n\n    def map(self):\n     \
     \   return {x:self.get(x) for x in self.roots()}\n\n    def __str__(self):\n \
-    \       return '\\n'.join('{} [color: {}]: {}'.format(r,self.get(r),self.members(r))\
-    \ for r in self.roots())\n\n    def __repr__(self):\n        return self.__str__()\n\
-    \n    def __getitem__(self,index):\n        return self.data[self.find(index)]\n\
+    \       string=[]\n        for x,g in self.all_group_members().items():\n    \
+    \        string.append(\" ({}) {}\".format(self.get(x), g))\n        return \"\
+    ,\".join(string)\n\n    def __repr__(self):\n        return \"Coloring Union Find:\"\
+    +str(self)\n\n    def __getitem__(self,index):\n        return self.data[self.find(index)]\n\
     \n    def __setitem__(self,index,value):\n        self.data[self.find(index)]=value\n"
   dependsOn: []
   isVerificationFile: false
   path: Union_Find/Coloring_Union_Find.py
   requiredBy: []
-  timestamp: '2022-09-28 10:52:52+09:00'
+  timestamp: '2022-12-24 17:43:44+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Union_Find/Coloring_Union_Find.py

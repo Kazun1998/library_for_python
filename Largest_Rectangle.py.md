@@ -18,7 +18,7 @@ data:
     \u30E0 H \u306B\u304A\u3051\u308B\u6700\u5927\u9577\u65B9\u5F62\u306E\u30B5\u30A4\
     \u30BA\u3092\u6C42\u3081\u308B.\n\n    H: \u30EA\u30B9\u30C8\n    mode: 1 \u306E\
     \u3068\u304D\u306F\u305D\u306E\u7BC4\u56F2\u3082\u6C42\u3081\u308B.\n    \"\"\"\
-    \n    from collections import deque\n    H.append(0)\n    S=deque([])\n    X=H[0]\n\
+    \n    from collections import deque\n    H=H+[0]\n    S=deque([])\n    X=H[0]\n\
     \    l=r=-1\n    for i in range(len(H)):\n        if (not S) or H[S[-1]]<H[i]:\n\
     \            S.append(i)\n        else:\n            while S and H[S[-1]]>=H[i]:\n\
     \                j=S.pop()\n                if X<H[j]*(i-j):\n               \
@@ -29,7 +29,7 @@ data:
   isVerificationFile: false
   path: Largest_Rectangle.py
   requiredBy: []
-  timestamp: '2022-09-28 10:59:08+09:00'
+  timestamp: '2022-12-24 17:41:50+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Largest_Rectangle.py
