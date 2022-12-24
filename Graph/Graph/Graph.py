@@ -573,22 +573,29 @@ def Bipartite_Separate(G):
     T=[0]*N
     adj=G.adjacent
 
+    Bip=[]
     for v in range(N):
         if T[v]==0:
             T[v]=1
             S=[v]
+            A=[]; B=[]
             while S:
                 u=S.pop()
+
+                if T[u]==1:
+                    A.append(u)
+                else:
+                    B.append(u)
+
                 for w in adj[u]:
                     if T[w]==0:
                         T[w]=-T[u]
                         S.append(w)
                     elif T[w]==T[u]:
-                        return None, None
+                        return None
+            Bip.append((A,B))
 
-    U=[u for u in range(N) if T[u]==1]
-    V=[v for v in range(N) if T[v]==-1]
-    return U,V
+    return Bip
 
 #オイラーグラフ?
 def Is_Eulerian_Graph(G):
