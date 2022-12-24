@@ -61,6 +61,9 @@ data:
       path: Coordinate_Compression.py
       title: Coordinate_Compression.py
     - icon: ':warning:'
+      path: Cumulative_2D.py
+      title: Cumulative_2D.py
+    - icon: ':warning:'
       path: Date.py
       title: Date.py
     - icon: ':warning:'
@@ -121,6 +124,9 @@ data:
       path: Median.py
       title: Median.py
     - icon: ':warning:'
+      path: Merge_Sort.py
+      title: Merge_Sort.py
+    - icon: ':warning:'
       path: Mo.py
       title: Mo
     - icon: ':heavy_check_mark:'
@@ -165,6 +171,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: Sliding_Window_Aggregation.py
       title: Sliding_Window_Aggregation.py
+    - icon: ':warning:'
+      path: Sliding_Window_Aggregation_Both_Sides.py
+      title: Sliding_Window_Aggregation_Both_Sides.py
     - icon: ':warning:'
       path: Slope_Trick.py
       title: Slope_Trick.py

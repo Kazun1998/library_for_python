@@ -74,7 +74,7 @@ data:
   path: Quaternion.py
   requiredBy:
   - Vector3.py
-  timestamp: '2022-02-12 00:31:19+09:00'
+  timestamp: '2022-12-24 15:15:20+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Quaternion.py
