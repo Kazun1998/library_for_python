@@ -27,7 +27,7 @@ class Binary_Indexed_Tree():
         k    : 数列の要素
         index: 先頭の要素の番号
         """
-        return self.sum(k,k)
+        return self.sum(k, k)
 
     def add(self, k, x):
         """ 第 k 要素に x を加え, 更新を行う.
@@ -38,7 +38,7 @@ class Binary_Indexed_Tree():
         data=self.data; calc=self.calc
         p=k+1
         while p<=self.N:
-            data[p]=calc(self.data[p],x)
+            data[p]=calc(self.data[p], x)
             p+=p&(-p)
 
     def update(self, k, x):
@@ -49,7 +49,7 @@ class Binary_Indexed_Tree():
         """
 
         a=self.get(k)
-        y=self.calc(self.inv(a),x)
+        y=self.calc(self.inv(a), x)
 
         self.add(k,y)
 
@@ -67,19 +67,19 @@ class Binary_Indexed_Tree():
         elif l==1:
             return self.__section(r)
         else:
-            return self.calc(self.inv(self.__section(l-1)),self.__section(r))
+            return self.calc(self.inv(self.__section(l-1)), self.__section(r))
 
-    def __section(self,x):
+    def __section(self, x):
         """ B[0]+...+B[x] を求める. """
         data=self.data; calc=self.calc
         S=self.unit
         while x>0:
-            S=calc(data[x],S)
+            S=calc(data[x], S)
             x-=x&(-x)
         return S
 
     def all_sum(self):
-        return self.sum(0,self.N-1)
+        return self.sum(0, self.N-1)
 
     def binary_search(self, cond):
         """ cond(B[0]+...+B[k]) が True となるような最小の k を返す.
@@ -101,7 +101,7 @@ class Binary_Indexed_Tree():
 
         while t>0:
             if j+t<=self.N:
-                beta=calc(alpha,data[j+t])
+                beta=calc(alpha, data[j+t])
                 if not cond(beta):
                     alpha=beta
                     j+=t
@@ -109,15 +109,15 @@ class Binary_Indexed_Tree():
 
         return j
 
-    def __getitem__(self,index):
-        if isinstance(index,int):
+    def __getitem__(self, index):
+        if isinstance(index, int):
             return self.get(index)
         else:
             return [self.get(t) for t in index]
 
-    def __setitem__(self,index,val):
-        self.update(index,val)
+    def __setitem__(self, index, val):
+        self.update(index, val)
 
     def __iter__(self):
         for k in range(self.N):
-            yield self.sum(k,k)
+            yield self.sum(k, k)
