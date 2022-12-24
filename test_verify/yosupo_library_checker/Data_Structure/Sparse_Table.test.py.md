@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: Sparse_Table.py
-    title: Sparse_Table.py
+    title: Sparse Table
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false

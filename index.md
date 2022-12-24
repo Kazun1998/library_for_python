@@ -179,7 +179,7 @@ data:
       title: Slope_Trick.py
     - icon: ':heavy_check_mark:'
       path: Sparse_Table.py
-      title: Sparse_Table.py
+      title: Sparse Table
     - icon: ':warning:'
       path: Special_Input.py
       title: Special_Input.py
