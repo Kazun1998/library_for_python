@@ -1,5 +1,5 @@
 def Substring_Count(S, Mod=None):
-    """ 文字列 S の異なる部分列の個数を求める.
+    """ 文字列 S の異なる連続とは限らない部分列の個数を求める.
 
     Mod: 余り
     """
@@ -34,12 +34,7 @@ def Substring_Count(S, Mod=None):
             if Mod!=None:
                 DP[B[i][j]+1]%=Mod
     #集計
-    for i in range(N+1):
-        if Mod==None:
-            return sum(DP)
-        else:
-            T=0
-            for a in DP:
-                T+=a
-                T%=Mod
-            return T
+    if Mod==None:
+        return sum(DP)
+    else:
+        return sum(DP)%Mod
