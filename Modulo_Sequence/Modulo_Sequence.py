@@ -267,36 +267,6 @@ def Subset_Sum(X, K):
     return Exp(P).Poly
 
 #===
-def Two_Term_Product(S, K, alpha):
-    """ S=[s[0], ..., s[N-1]] としたとき, prod(1+alpha X^s[i]) を K 次まで求める.
-
-    """
-
-    A=[0]*(K+1)
-    for x in S:
-        if x<=K:
-            A[x]+=1
-
-    Inv=[0]*(K+1)
-    Inv[1]=1
-    for i in range(2,K+1):
-        Inv[i]=(-(Mod//i)*Inv[Mod%i])%Mod
-
-    F=[0]*(K+1)
-    for i in range(1,K+1):
-        if A[i]:
-            j=i
-            k=1
-            c=alpha
-            while j<=K:
-                m=c*Inv[k]%Mod
-                F[j]=(F[j]+m*A[i])%Mod
-                c*=-alpha; c%=Mod
-                j+=i
-                k+=1
-    return Exp(Modulo_Polynomial(F,K+1))
-
-#===
 #多項式和
 def Polynominal_Sigma(P):
     """ Q(n)=P(1)+P(2)+...+P(n) を満たす多項式 Q を求める.
