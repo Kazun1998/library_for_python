@@ -116,10 +116,13 @@ class Coloring_Union_Find():
         return {x:self.get(x) for x in self.roots()}
 
     def __str__(self):
-        return '\n'.join('{} [color: {}]: {}'.format(r,self.get(r),self.members(r)) for r in self.roots())
+        string=[]
+        for x,g in self.all_group_members().items():
+            string.append(" ({}) {}".format(self.get(x), g))
+        return ",".join(string)
 
     def __repr__(self):
-        return self.__str__()
+        return "Coloring Union Find:"+str(self)
 
     def __getitem__(self,index):
         return self.data[self.find(index)]
