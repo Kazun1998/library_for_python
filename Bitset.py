@@ -9,7 +9,13 @@ N=3000, __bit_size=63?
 """
 
 class Bitset:
-    def __popcount(self, n):
+    # ※ 事前に設定しておくこと!!!
+    N=100
+    __bit_size=63*1
+    # ここまで
+
+    @staticmethod
+    def __popcount(n):
         n -= ((n >> 1) & 0x5555555555555555)
         n = (n & 0x3333333333333333) + ((n >> 2) & 0x3333333333333333)
         n = (n + (n >> 4)) & 0x0f0f0f0f0f0f0f0f
@@ -18,75 +24,75 @@ class Bitset:
         n += ((n >> 32) & 0x00000000ffffffff)
         return n & 0x7f
 
-    # ※ 事前に設定しておくこと!!!
-    N=30
-    __bit_size=63*1
-    # ここまで
-
     __block=(N+__bit_size-1)//__bit_size
 
     __msk_b=(1<<__bit_size)-1
     __msk_s=(1<<(N%__bit_size))-1
 
     __on=[1<<i for i in range(__bit_size)]
-    __off=[0]*__block
-    for k in range(__block):
-        __off[k]=((1<<__bit_size)-1) & (1<<k)
+    __off=[0]*__bit_size
+    for k in range(__bit_size):
+        __off[k]=((1<<__bit_size)-1) ^ (1<<k)
+    del k
 
     def __init__(self):
-        self.__bit=[0]*self.__block
+        self.__bit=[0]*Bitset.__block
 
     def __len__(self):
-        assert self.__bit_size<=63
+        assert Bitset.__bit_size<=63
         x=0
         for bit in self.__bit:
-            x+=self.__popcount(bit)
+            x+=Bitset.__popcount(bit)
         return x
+
+    def __bool__(self):
+        return self.any()
 
     def __str__(self):
         return " ".join(map(str, [i for i in range(self.N) if i in self]))
 
     def __repr__(self):
-        return "[Bitset] : "+str(self)
+        return "[Bitset] : "+(str(self) if self else "empty")
 
     def __contains__(self, index):
-        k,i=divmod(index, self.__bit_size)
+        k,i=divmod(index, Bitset.__bit_size)
         return bool((self.__bit[k]>>i)&1)
 
     __getitem__=__contains__
+
     def __setitem__(self, index, value):
         self.set(index, value)
 
     def set(self, index=-1, value=1):
         if index==-1:
             if value:
-                self.__bit[-1]=self.__msk_s
-                for k in range(self.__block):
-                    self.__bit[k]=self.__msk_b
+                self.__bit[-1]=Bitset.__msk_s
+                for k in range(Bitset.__block-1):
+                    self.__bit[k]=Bitset.__msk_b
             else:
-                for k in range(self.__block):
+                for k in range(Bitset.__block):
                     self.__bit[k]=0
         else:
-            k,i=divmod(index, self.__bit_size)
+            k,i=divmod(index, Bitset.__bit_size)
             if value:
-                self.__bit[k]|=self.__on[i]
+                self.__bit[k]|=Bitset.__on[i]
             else:
-                self.__bit[k]&=self.__off[i]
+                self.__bit[k]&=Bitset.__off[i]
 
     def reset(self, index=-1):
-        self.set(index,value=0)
+        self.set(index, value=0)
 
     def flip(self, index=-1):
         if index==-1:
-            for k in range(self.__block-1):
-                self.__bit[k]=self.__bit[k]^self.__msk_b
-            if self.N%self.__bit_size:
-                self.__bit[-1]=self.__bit[-1]^self.__msk_s
+            for k in range(Bitset.__block-1):
+                self.__bit[k]=self.__bit[k]^Bitset.__msk_b
+            if self.N%Bitset.__bit_size:
+                self.__bit[-1]=self.__bit[-1]^Bitset.__msk_s
             else:
-                self.__bit[-1]=self.__bit[-1]^self.__msk_b
+                self.__bit[-1]=self.__bit[-1]^Bitset.__msk_b
         else:
-            k,i=divmod(index, self.__bit_size)
-            self.__bit[k]^=self.__on[i]
+            k,i=divmod(index, Bitset.__bit_size)
+            self.__bit[k]^=Bitset.__on[i]
 
     test=__contains__
 
@@ -97,16 +103,16 @@ class Bitset:
         return False
 
     def all(self):
-        for k in range(self.__block-1):
-            if self.__bit[k]!=self.__msk_b:
+        for k in range(Bitset.__block-1):
+            if self.__bit[k]!=Bitset.__msk_b:
                 return False
-        if self.N%self.__bit_size:
-            return self.__bit[-1]==self.__msk_s
+        if self.N%Bitset.__bit_size:
+            return self.__bit[-1]==Bitset.__msk_s
         else:
-            return self.__bit[-1]==self.__msk_b
+            return self.__bit[-1]==Bitset.__msk_b
 
     def __iand__(self, other):
-        for k in range(self.__block):
+        for k in range(Bitset.__block):
             self.__bit[k]&=other.__bit[k]
         return self
 
@@ -116,7 +122,7 @@ class Bitset:
         return X
 
     def __ior__(self, other):
-        for k in range(self.__block):
+        for k in range(Bitset.__block):
             self.__bit[k]|=other.__bit[k]
         return self
 
@@ -126,7 +132,7 @@ class Bitset:
         return X
 
     def __ixor__(self, other):
-        for k in range(self.__block):
+        for k in range(Bitset.__block):
             self.__bit[k]^=other.__bit[k]
         return self
 
@@ -136,7 +142,7 @@ class Bitset:
         return X
 
     def __eq__(self, other):
-        for k in range(self.__block):
+        for k in range(Bitset.__block):
             if self.__bit[k]!=other.__bit[k]:
                 return False
         return True
