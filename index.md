@@ -206,7 +206,7 @@ data:
       title: Wavelet Matrix
     - icon: ':warning:'
       path: XOR_Vector_Space.py
-      title: XOR_Vector_Space.py
+      title: XOR Vector Space
   - name: Convolution
     pages:
     - icon: ':warning:'
