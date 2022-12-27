@@ -1,9 +1,5 @@
-"""
-バグあり
-"""
-
 class Potentilized_Union_Find():
-    def __init__(self, N, calc, e, inv):
+    def __init__(self, N, calc, zero, inv):
         """ 0,1,...,N-1 を要素として初期化する.
 
         N: 要素数
@@ -17,8 +13,8 @@ class Potentilized_Union_Find():
         self.__group_number=N
 
         self.calc=calc
-        self.diff=lambda u,v:self.calc(u, self.inv(v))
-        self.e=e
+        self.diff=lambda u,v:self.calc(u, self.inv(v)) # diff(u,v)=U(u)-U(v)
+        self.zero=zero
         self.inv=inv
 
 
@@ -28,18 +24,21 @@ class Potentilized_Union_Find():
         x: 要素
         """
 
+
         if self.parents[x]<0:
             return x
 
+        par=self.parents; pot=self.pot; calc=self.calc
+
         r=x
         data=[]
-        while self.parents[r]>=0:
+        while par[r]>=0:
             data.append(r)
-            r=self.parents[r]
+            r=par[r]
 
-        for x in data:
-            self.pot[x]=self.calc(self.pot[x], self.pot[r])
-            self.parents[x]=r
+        for x in data[::-1]:
+            pot[x]=self.calc(pot[x], pot[par[x]])
+            par[x]=r
 
         return r
 
@@ -49,9 +48,9 @@ class Potentilized_Union_Find():
         x,y: 要素
         """
 
+        a=self.find(x); b=self.find(y)
         u=self.calc(u, self.diff(self.pot[x],self.pot[y]))
-
-        x=self.find(x); y=self.find(y)
+        x=a; y=b
 
         if x==y:
             self.valid[x]&=self.diff(self.pot[y],self.pot[x])==u
@@ -160,6 +159,3 @@ class Potentilized_Union_Find():
         return '\n'.join('{}: {}'.format(r, self.members(r)) for r in self.roots())
 
     __repr__=__str__
-
-from operator import *
-U=Potentilized_Union_Find(4, add, 0, neg)
