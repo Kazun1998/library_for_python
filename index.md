@@ -355,7 +355,8 @@ data:
       title: Sequence/Levenshtein_Distance.py
     - icon: ':warning:'
       path: Sequence/Longest_Common_Subsequence.py
-      title: Sequence/Longest_Common_Subsequence.py
+      title: "Longest Common Subsequence (\u6700\u9577\u5171\u901A\u90E8\u5206\u5217\
+        )"
     - icon: ':heavy_check_mark:'
       path: Sequence/Longest_Increasing_Subsequence.py
       title: Sequence/Longest_Increasing_Subsequence.py
