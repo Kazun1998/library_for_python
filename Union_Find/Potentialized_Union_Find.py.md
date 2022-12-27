@@ -14,25 +14,26 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.1/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "\"\"\"\n\u30D0\u30B0\u3042\u308A\n\"\"\"\n\nclass Potentilized_Union_Find():\n\
-    \    def __init__(self, N, calc, e, inv):\n        \"\"\" 0,1,...,N-1 \u3092\u8981\
-    \u7D20\u3068\u3057\u3066\u521D\u671F\u5316\u3059\u308B.\n\n        N: \u8981\u7D20\
-    \u6570\n        \"\"\"\n        self.n=N\n        self.parents=[-1]*N\n      \
-    \  self.rank=[0]*N\n        self.edges=[0]*N\n        self.pot=[0]*N\n       \
-    \ self.valid=[True]*N\n        self.__group_number=N\n\n        self.calc=calc\n\
-    \        self.diff=lambda u,v:self.calc(u, self.inv(v))\n        self.e=e\n  \
-    \      self.inv=inv\n\n\n    def find(self, x):\n        \"\"\" \u8981\u7D20 x\
-    \ \u306E\u5C5E\u3057\u3066\u3044\u308B\u65CF\u3092\u8ABF\u3079\u308B.\n\n    \
-    \    x: \u8981\u7D20\n        \"\"\"\n\n        if self.parents[x]<0:\n      \
-    \      return x\n\n        r=x\n        data=[]\n        while self.parents[r]>=0:\n\
-    \            data.append(r)\n            r=self.parents[r]\n\n        for x in\
-    \ data:\n            self.pot[x]=self.calc(self.pot[x], self.pot[r])\n       \
-    \     self.parents[x]=r\n\n        return r\n\n    def union(self, x, y, u):\n\
-    \        \"\"\" \u8981\u7D20 x,y \u3092\u540C\u4E00\u8996\u3057, U(y)-U(x)=u \u3068\
-    \u3044\u3046\u60C5\u5831\u3092\u52A0\u3048\u308B.\n\n        x,y: \u8981\u7D20\
-    \n        \"\"\"\n\n        u=self.calc(u, self.diff(self.pot[x],self.pot[y]))\n\
-    \n        x=self.find(x); y=self.find(y)\n\n        if x==y:\n            self.valid[x]&=self.diff(self.pot[y],self.pot[x])==u\n\
-    \            self.edges[x]+=1\n            return\n\n        if self.rank[x]<self.rank[y]:\n\
+  code: "class Potentilized_Union_Find():\n    def __init__(self, N, calc, zero, inv):\n\
+    \        \"\"\" 0,1,...,N-1 \u3092\u8981\u7D20\u3068\u3057\u3066\u521D\u671F\u5316\
+    \u3059\u308B.\n\n        N: \u8981\u7D20\u6570\n        \"\"\"\n        self.n=N\n\
+    \        self.parents=[-1]*N\n        self.rank=[0]*N\n        self.edges=[0]*N\n\
+    \        self.pot=[0]*N\n        self.valid=[True]*N\n        self.__group_number=N\n\
+    \n        self.calc=calc\n        self.diff=lambda u,v:self.calc(u, self.inv(v))\
+    \ # diff(u,v)=U(u)-U(v)\n        self.zero=zero\n        self.inv=inv\n\n\n  \
+    \  def find(self, x):\n        \"\"\" \u8981\u7D20 x \u306E\u5C5E\u3057\u3066\u3044\
+    \u308B\u65CF\u3092\u8ABF\u3079\u308B.\n\n        x: \u8981\u7D20\n        \"\"\
+    \"\n\n\n        if self.parents[x]<0:\n            return x\n\n        par=self.parents;\
+    \ pot=self.pot; calc=self.calc\n\n        r=x\n        data=[]\n        while\
+    \ par[r]>=0:\n            data.append(r)\n            r=par[r]\n\n        for\
+    \ x in data[::-1]:\n            pot[x]=self.calc(pot[x], pot[par[x]])\n      \
+    \      par[x]=r\n\n        return r\n\n    def union(self, x, y, u):\n       \
+    \ \"\"\" \u8981\u7D20 x,y \u3092\u540C\u4E00\u8996\u3057, U(y)-U(x)=u \u3068\u3044\
+    \u3046\u60C5\u5831\u3092\u52A0\u3048\u308B.\n\n        x,y: \u8981\u7D20\n   \
+    \     \"\"\"\n\n        a=self.find(x); b=self.find(y)\n        u=self.calc(u,\
+    \ self.diff(self.pot[x],self.pot[y]))\n        x=a; y=b\n\n        if x==y:\n\
+    \            self.valid[x]&=self.diff(self.pot[y],self.pot[x])==u\n          \
+    \  self.edges[x]+=1\n            return\n\n        if self.rank[x]<self.rank[y]:\n\
     \            x,y=y,x\n            u=self.inv(u)\n        elif self.rank[x]==self.rank[y]:\n\
     \            self.rank[x]+=1\n\n        self.parents[x]+=self.parents[y]\n   \
     \     self.parents[y]=x\n\n        self.edges[x]+=self.edges[y]+1\n        self.edges[y]=0\n\
@@ -73,13 +74,12 @@ data:
     \        X[self.find(k)].append(k)\n        return X\n\n    def refresh(self):\n\
     \        for i in range(self.n):\n            _=self.find(i)\n\n    def __str__(self):\n\
     \        return '\\n'.join('{}: {}'.format(r, self.members(r)) for r in self.roots())\n\
-    \n    __repr__=__str__\n\nfrom operator import *\nU=Potentilized_Union_Find(4,\
-    \ add, 0, neg)\n"
+    \n    __repr__=__str__\n"
   dependsOn: []
   isVerificationFile: false
   path: Union_Find/Potentialized_Union_Find.py
   requiredBy: []
-  timestamp: '2022-12-25 04:35:06+09:00'
+  timestamp: '2022-12-28 01:44:54+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Union_Find/Potentialized_Union_Find.py
