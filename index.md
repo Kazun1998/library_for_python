@@ -113,7 +113,7 @@ data:
       title: Knapsack.py
     - icon: ':warning:'
       path: Lagrange_Interpolation.py
-      title: Lagrange_Interpolation.py
+      title: Lagrange Interpolation
     - icon: ':warning:'
       path: Largest_Rectangle.py
       title: Largest_Rectangle.py
