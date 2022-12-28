@@ -133,7 +133,7 @@ def Binomial_Coefficient_Modulo_List(n: int):
         L[r]=((n+1-r)*inv[r]%Mod)*L[r-1]%Mod
     return L
 
-def Pascal_Triangle(N: int):
+def Pascal_Triangle(N: int, mode=False):
     """
     0<=n<=N, 0<=r<=n の全てに対して nCr (mod M) のリストを出力する.
 
@@ -143,15 +143,26 @@ def Pascal_Triangle(N: int):
     [[0C0], [1C0, 1C1], ... , [nC0, ... , nCn], ..., [NC0, ..., NCN]]
     """
 
-    X=[1]
-    L=[[1]]
-    for n in range(N):
-        Y=[1]
-        for k in range(1,n+1):
-            Y.append((X[k]+X[k-1])%Mod)
-        Y.append(1)
-        X=Y
-        L.append(Y)
+    if mode:
+        L=[[0]*(N+1) for _ in range(N+1)]
+        L[0][0]=1
+        for n in range(1,N+1):
+            Ln=L[n]; Lnn=L[n-1]
+            Ln[0]=1
+            for r in range(1,N+1):
+                Ln[r]=(Lnn[r]+Lnn[r-1])%Mod
+        return L
+
+    else:
+        X=[1]
+        L=[[1]]
+        for n in range(N):
+            Y=[1]
+            for k in range(1, n+1):
+                Y.append((X[k]+X[k-1])%Mod)
+            Y.append(1)
+            X=Y
+            L.append(Y)
     return L
 
 def Lucas_Combination(n, r):
@@ -222,4 +233,3 @@ def Sum_of_Product_Yielder(N,*Y):
         S+=x
     return S%Mod
 #==================================================
-
