@@ -54,37 +54,40 @@ data:
     \u308B.\n\n    n: int\n\n    [\u51FA\u529B]\n    [nC0 , nC1 ,..., nCn]\n    \"\
     \"\"\n\n    L=[1]*(n+1)\n    inv=Modular_Inverse(n+1)\n    for r in range(1, n+1):\n\
     \        L[r]=((n+1-r)*inv[r]%Mod)*L[r-1]%Mod\n    return L\n\ndef Pascal_Triangle(N:\
-    \ int):\n    \"\"\"\n    0<=n<=N, 0<=r<=n \u306E\u5168\u3066\u306B\u5BFE\u3057\
-    \u3066 nCr (mod M) \u306E\u30EA\u30B9\u30C8\u3092\u51FA\u529B\u3059\u308B.\n\n\
-    \    N: int\n\n    [\u51FA\u529B]\n    [[0C0], [1C0, 1C1], ... , [nC0, ... , nCn],\
-    \ ..., [NC0, ..., NCN]]\n    \"\"\"\n\n    X=[1]\n    L=[[1]]\n    for n in range(N):\n\
-    \        Y=[1]\n        for k in range(1,n+1):\n            Y.append((X[k]+X[k-1])%Mod)\n\
-    \        Y.append(1)\n        X=Y\n        L.append(Y)\n    return L\n\ndef Lucas_Combination(n,\
-    \ r):\n    \"\"\" Lucas \u306E\u5B9A\u7406\u3092\u7528\u3044\u3066 nCr (mod Mod)\
-    \ \u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n\n    X=1\n    while n or r:\n    \
-    \    ni=n%Mod; ri=r%Mod\n        n//=Mod; r//=Mod\n\n        if ni<ri:\n     \
-    \       return 0\n\n        beta=fact_inv[ri]*fact_inv[ni-ri]%Mod\n        X*=(fact[ni]*beta)%Mod\n\
-    \        X%=Mod\n    return X\n\n\"\"\"\n\u7B49\u6BD4\u6570\u5217\n\"\"\"\n\n\
-    def Geometric_Sequence(a, r, N):\n    \"\"\" k=0,1,...,N \u306B\u5BFE\u3059\u308B\
-    \ a*r^k \u3092\u51FA\u529B\u3059\u308B.\n\n    a,r,N: int\n    \"\"\"\n\n    a%=Mod;\
-    \ r%=Mod\n    X=[0]*(N+1); X[0]=a\n    for k in range(1,N+1):\n        X[k]=r*X[k-1]%Mod\n\
-    \    return X\n\ndef Geometric_Inverse_Sequence(a, r, N):\n    \"\"\" k=0,1,...,N\
-    \ \u306B\u5BFE\u3059\u308B a/r^k \u3092\u51FA\u529B\u3059\u308B.\n\n    a,r,N:\
-    \ int\n    \"\"\"\n\n    a%=Mod; r_inv=pow(r, Mod-2, Mod)\n    X=[0]*(N+1); X[0]=a\n\
-    \    for k in range(1,N+1):\n        X[k]=r_inv*X[k-1]%Mod\n    return X\n\n\"\
-    \"\"\n\u7A4D\u548C\n\"\"\"\ndef Sum_of_Product(*X):\n    \"\"\" \u9577\u3055\u304C\
-    \u7B49\u3057\u3044\u30EA\u30B9\u30C8 X_1, X_2, ..., X_k \u306B\u5BFE\u3057\u3066\
-    , sum(X_1[i]*X_2[i]*...*X_k[i]) \u3092\u6C42\u3081\u308B.\n    \"\"\"\n\n    S=0\n\
-    \    for alpha in zip(*X):\n        S+=product_modulo(*alpha)\n    return S%Mod\n\
-    \ndef Sum_of_Product_Yielder(N,*Y):\n    S=0\n    M=len(Y)\n    for _ in range(N+1):\n\
-    \        x=1\n        for j in range(M):\n            x*=next(Y[j]); x%=Mod\n\
-    \        S+=x\n    return S%Mod\n#==================================================\n\
-    \n"
+    \ int, mode=False):\n    \"\"\"\n    0<=n<=N, 0<=r<=n \u306E\u5168\u3066\u306B\
+    \u5BFE\u3057\u3066 nCr (mod M) \u306E\u30EA\u30B9\u30C8\u3092\u51FA\u529B\u3059\
+    \u308B.\n\n    N: int\n\n    [\u51FA\u529B]\n    [[0C0], [1C0, 1C1], ... , [nC0,\
+    \ ... , nCn], ..., [NC0, ..., NCN]]\n    \"\"\"\n\n    if mode:\n        L=[[0]*(N+1)\
+    \ for _ in range(N+1)]\n        L[0][0]=1\n        for n in range(1,N+1):\n  \
+    \          Ln=L[n]; Lnn=L[n-1]\n            Ln[0]=1\n            for r in range(1,N+1):\n\
+    \                Ln[r]=(Lnn[r]+Lnn[r-1])%Mod\n        return L\n\n    else:\n\
+    \        X=[1]\n        L=[[1]]\n        for n in range(N):\n            Y=[1]\n\
+    \            for k in range(1, n+1):\n                Y.append((X[k]+X[k-1])%Mod)\n\
+    \            Y.append(1)\n            X=Y\n            L.append(Y)\n    return\
+    \ L\n\ndef Lucas_Combination(n, r):\n    \"\"\" Lucas \u306E\u5B9A\u7406\u3092\
+    \u7528\u3044\u3066 nCr (mod Mod) \u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n\n \
+    \   X=1\n    while n or r:\n        ni=n%Mod; ri=r%Mod\n        n//=Mod; r//=Mod\n\
+    \n        if ni<ri:\n            return 0\n\n        beta=fact_inv[ri]*fact_inv[ni-ri]%Mod\n\
+    \        X*=(fact[ni]*beta)%Mod\n        X%=Mod\n    return X\n\n\"\"\"\n\u7B49\
+    \u6BD4\u6570\u5217\n\"\"\"\n\ndef Geometric_Sequence(a, r, N):\n    \"\"\" k=0,1,...,N\
+    \ \u306B\u5BFE\u3059\u308B a*r^k \u3092\u51FA\u529B\u3059\u308B.\n\n    a,r,N:\
+    \ int\n    \"\"\"\n\n    a%=Mod; r%=Mod\n    X=[0]*(N+1); X[0]=a\n    for k in\
+    \ range(1,N+1):\n        X[k]=r*X[k-1]%Mod\n    return X\n\ndef Geometric_Inverse_Sequence(a,\
+    \ r, N):\n    \"\"\" k=0,1,...,N \u306B\u5BFE\u3059\u308B a/r^k \u3092\u51FA\u529B\
+    \u3059\u308B.\n\n    a,r,N: int\n    \"\"\"\n\n    a%=Mod; r_inv=pow(r, Mod-2,\
+    \ Mod)\n    X=[0]*(N+1); X[0]=a\n    for k in range(1,N+1):\n        X[k]=r_inv*X[k-1]%Mod\n\
+    \    return X\n\n\"\"\"\n\u7A4D\u548C\n\"\"\"\ndef Sum_of_Product(*X):\n    \"\
+    \"\" \u9577\u3055\u304C\u7B49\u3057\u3044\u30EA\u30B9\u30C8 X_1, X_2, ..., X_k\
+    \ \u306B\u5BFE\u3057\u3066, sum(X_1[i]*X_2[i]*...*X_k[i]) \u3092\u6C42\u3081\u308B\
+    .\n    \"\"\"\n\n    S=0\n    for alpha in zip(*X):\n        S+=product_modulo(*alpha)\n\
+    \    return S%Mod\n\ndef Sum_of_Product_Yielder(N,*Y):\n    S=0\n    M=len(Y)\n\
+    \    for _ in range(N+1):\n        x=1\n        for j in range(M):\n         \
+    \   x*=next(Y[j]); x%=Mod\n        S+=x\n    return S%Mod\n#==================================================\n"
   dependsOn: []
   isVerificationFile: false
   path: Enumeration.py
   requiredBy: []
-  timestamp: '2022-12-02 02:51:57+09:00'
+  timestamp: '2022-12-29 01:59:34+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Enumeration.py
