@@ -103,12 +103,12 @@ $$\begin{align*}
 \ell_i(x)
 &=\prod_{\substack{0 \leq k \leq N \\ k \neq i}} \dfrac{x-x_k}{x_i-x_k} \\
 &=\prod_{\substack{0 \leq k \leq N \\ k \neq i}} \dfrac{x-(ai+b)}{a(i-k)} \\
-&=\dfrac{1}{(-a)^N} \cdot \dfrac{{\rm Left}_{i-1}(x) \cdot {\rm Right}_{i+1}(x)}{(-1)^{i} i! (N-i)!} \\
+&=\dfrac{1}{(-a)^N} \cdot \dfrac{ \mathrm{Left}_{i-1}(x) \cdot \mathrm{Right}_{i+1}(x)}{(-1)^{i} i! (N-i)!} \\
 \end{align*}$$
 
 である. ただし,
 
-$${\rm Left}_i(x):=\prod_{k=0}^i (x-(ak+b)), \quad {\rm Right}_i(x):=\prod_{k=i}^N (x-(ak+b))$$
+$$\mathrm{Left}_i(x):=\prod_{k=0}^i (x-(ak+b)), \quad \mathrm{Right}_i(x):=\prod_{k=i}^N (x-(ak+b))$$
 
 である.
 
