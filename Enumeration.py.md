@@ -68,26 +68,31 @@ data:
     \u7528\u3044\u3066 nCr (mod Mod) \u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n\n \
     \   X=1\n    while n or r:\n        ni=n%Mod; ri=r%Mod\n        n//=Mod; r//=Mod\n\
     \n        if ni<ri:\n            return 0\n\n        beta=fact_inv[ri]*fact_inv[ni-ri]%Mod\n\
-    \        X*=(fact[ni]*beta)%Mod\n        X%=Mod\n    return X\n\n\"\"\"\n\u7B49\
-    \u6BD4\u6570\u5217\n\"\"\"\n\ndef Geometric_Sequence(a, r, N):\n    \"\"\" k=0,1,...,N\
-    \ \u306B\u5BFE\u3059\u308B a*r^k \u3092\u51FA\u529B\u3059\u308B.\n\n    a,r,N:\
-    \ int\n    \"\"\"\n\n    a%=Mod; r%=Mod\n    X=[0]*(N+1); X[0]=a\n    for k in\
-    \ range(1,N+1):\n        X[k]=r*X[k-1]%Mod\n    return X\n\ndef Geometric_Inverse_Sequence(a,\
-    \ r, N):\n    \"\"\" k=0,1,...,N \u306B\u5BFE\u3059\u308B a/r^k \u3092\u51FA\u529B\
-    \u3059\u308B.\n\n    a,r,N: int\n    \"\"\"\n\n    a%=Mod; r_inv=pow(r, Mod-2,\
-    \ Mod)\n    X=[0]*(N+1); X[0]=a\n    for k in range(1,N+1):\n        X[k]=r_inv*X[k-1]%Mod\n\
-    \    return X\n\n\"\"\"\n\u7A4D\u548C\n\"\"\"\ndef Sum_of_Product(*X):\n    \"\
-    \"\" \u9577\u3055\u304C\u7B49\u3057\u3044\u30EA\u30B9\u30C8 X_1, X_2, ..., X_k\
-    \ \u306B\u5BFE\u3057\u3066, sum(X_1[i]*X_2[i]*...*X_k[i]) \u3092\u6C42\u3081\u308B\
-    .\n    \"\"\"\n\n    S=0\n    for alpha in zip(*X):\n        S+=product_modulo(*alpha)\n\
-    \    return S%Mod\n\ndef Sum_of_Product_Yielder(N,*Y):\n    S=0\n    M=len(Y)\n\
-    \    for _ in range(N+1):\n        x=1\n        for j in range(M):\n         \
-    \   x*=next(Y[j]); x%=Mod\n        S+=x\n    return S%Mod\n#==================================================\n"
+    \        X*=(fact[ni]*beta)%Mod\n        X%=Mod\n    return X\n\"\"\"\n\u7279\u5225\
+    \u306A\u6570\n\"\"\"\n\ndef Catalan_Number(N):\n    \"\"\" Catalan \u6570 C(N)\
+    \ \u3092\u6C42\u3081\u308B.\n\n    \u6CE8\u610F\n    C(N)=(2N)!/((N+1)!N!) \u306A\
+    \u306E\u3067, (2N)! \u307E\u3067\u306E\u5024\u304C\u5FC5\u8981.\n    \"\"\"\n\n\
+    \    g_inv=fact_inv[N+1]*fact_inv[N]%Mod\n    return fact[2*N]*g_inv%Mod\n\n\"\
+    \"\"\n\u7B49\u6BD4\u6570\u5217\n\"\"\"\n\ndef Geometric_Sequence(a, r, N):\n \
+    \   \"\"\" k=0,1,...,N \u306B\u5BFE\u3059\u308B a*r^k \u3092\u51FA\u529B\u3059\
+    \u308B.\n\n    a,r,N: int\n    \"\"\"\n\n    a%=Mod; r%=Mod\n    X=[0]*(N+1);\
+    \ X[0]=a\n    for k in range(1,N+1):\n        X[k]=r*X[k-1]%Mod\n    return X\n\
+    \ndef Geometric_Inverse_Sequence(a, r, N):\n    \"\"\" k=0,1,...,N \u306B\u5BFE\
+    \u3059\u308B a/r^k \u3092\u51FA\u529B\u3059\u308B.\n\n    a,r,N: int\n    \"\"\
+    \"\n\n    a%=Mod; r_inv=pow(r, Mod-2, Mod)\n    X=[0]*(N+1); X[0]=a\n    for k\
+    \ in range(1,N+1):\n        X[k]=r_inv*X[k-1]%Mod\n    return X\n\n\"\"\"\n\u7A4D\
+    \u548C\n\"\"\"\ndef Sum_of_Product(*X):\n    \"\"\" \u9577\u3055\u304C\u7B49\u3057\
+    \u3044\u30EA\u30B9\u30C8 X_1, X_2, ..., X_k \u306B\u5BFE\u3057\u3066, sum(X_1[i]*X_2[i]*...*X_k[i])\
+    \ \u3092\u6C42\u3081\u308B.\n    \"\"\"\n\n    S=0\n    for alpha in zip(*X):\n\
+    \        S+=product_modulo(*alpha)\n    return S%Mod\n\ndef Sum_of_Product_Yielder(N,*Y):\n\
+    \    S=0\n    M=len(Y)\n    for _ in range(N+1):\n        x=1\n        for j in\
+    \ range(M):\n            x*=next(Y[j]); x%=Mod\n        S+=x\n    return S%Mod\n\
+    #==================================================\n"
   dependsOn: []
   isVerificationFile: false
   path: Enumeration.py
   requiredBy: []
-  timestamp: '2022-12-29 01:59:34+09:00'
+  timestamp: '2022-12-29 02:32:37+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Enumeration.py
@@ -112,13 +117,14 @@ title: Enumeration
 |${}_n P_r$|$N$ 人から $r$ 人を選び出し, その $r$ 人を一列に並べる方法|${}\_n P_r=\dfrac{N!}{(N-r)!}$|
 |${}_n H_r$|$N$ 個のものを $r$ 人に配る方法|${}\_n H_r=\dbinom{N+r-1}{r}$ <br> (ただし, $_0H_0=1$ とする.)|
 |$\dbinom{N}{r_1, r_2, \dots, r_m}$ <br> $(N=r_1+\dots+r_m)$|$N$ 人を $r_1$ 人の $1$ 班, $\cdots$, $r_m$ 人の $m$ 班に分ける方法|$\dbinom{N}{r_1,r_2, \dots, r_m}=\dfrac{N!}{r_1!r_2! \dots r_m!}$|
+|$C_n$<br>(カタラン数)|$N$ 個の `(` と $N$ 個の `)` からなる文字列が正しい文字列になる文字列の数 (など) |$C_N=\dfrac{(2N)!}{(N+1)!N!}$|
 
 ### 組み合わせに関する定理
 
 #### Lucas の定理
 
-$N,r$ の $p$ 進表記をそれぞれ $(N_i)\_{i=0}^{\infty}, (r_i)\_{i=0}^\infty$ としたとき,
+$p$ を素数とする. $N,r$ の $p$ 進表記をそれぞれ $(N_i)\_{i=0}^{\infty}, (r_i)\_{i=0}^\infty$ としたとき,
 
-$$\dbinom{N}{r}=\prod_{i=0}^\infty \dbinom{N_i}{r_i}$$
+$$\dbinom{N}{r} \equiv \prod_{i=0}^\infty \dbinom{N_i}{r_i} \pmod{p}$$
 
 が成り立つ.
