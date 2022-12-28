@@ -83,7 +83,7 @@ data:
       title: Doubling.py
     - icon: ':warning:'
       path: Enumeration.py
-      title: Enumeration.py
+      title: Enumeration
     - icon: ':warning:'
       path: Fraction.py
       title: Fraction.py
