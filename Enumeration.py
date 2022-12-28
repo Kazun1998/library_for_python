@@ -182,6 +182,19 @@ def Lucas_Combination(n, r):
         X*=(fact[ni]*beta)%Mod
         X%=Mod
     return X
+"""
+特別な数
+"""
+
+def Catalan_Number(N):
+    """ Catalan 数 C(N) を求める.
+
+    注意
+    C(N)=(2N)!/((N+1)!N!) なので, (2N)! までの値が必要.
+    """
+
+    g_inv=fact_inv[N+1]*fact_inv[N]%Mod
+    return fact[2*N]*g_inv%Mod
 
 """
 等比数列
