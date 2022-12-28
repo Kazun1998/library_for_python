@@ -185,7 +185,8 @@ data:
       title: Special_Input.py
     - icon: ':heavy_check_mark:'
       path: Strongly_Connected_Components.py
-      title: Strongly_Connected_Components.py
+      title: "Strongly Connected Components (\u5F37\u9023\u7D50\u6210\u5206\u5206\u89E3\
+        )"
     - icon: ':warning:'
       path: Topological_Sort.py
       title: Topological_Sort.py

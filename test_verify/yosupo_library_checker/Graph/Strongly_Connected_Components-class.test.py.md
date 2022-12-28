@@ -3,7 +3,8 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: Strongly_Connected_Components.py
-    title: Strongly_Connected_Components.py
+    title: "Strongly Connected Components (\u5F37\u9023\u7D50\u6210\u5206\u5206\u89E3\
+      )"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
