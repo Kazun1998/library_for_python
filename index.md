@@ -405,6 +405,14 @@ data:
     - icon: ':heavy_check_mark:'
       path: Tree/Tree.py
       title: Tree
+  - name: Tuple
+    pages:
+    - icon: ':warning:'
+      path: Tuple/Pair.py
+      title: Tuple/Pair.py
+    - icon: ':warning:'
+      path: Tuple/Triple.py
+      title: Tuple/Triple.py
   - name: Union_Find
     pages:
     - icon: ':warning:'
