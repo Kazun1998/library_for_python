@@ -52,8 +52,8 @@ class Date():
         Y,M,D=self.Y,self.M,self.D
 
         x=400*365+97
-        if Day>=x:
-            t,Day=divmod(Day,x)
+        if day>=x:
+            t,day=divmod(day,x)
             Y+=400*t
 
         def leap(Y):
@@ -65,7 +65,7 @@ class Date():
                 return (Y%400)==0
 
         T=leap(Y)
-        for _ in range(Day):
+        for _ in range(day):
             D+=1
             if (M!=2) and (self.Month_End[M]<D):
                 D=1
