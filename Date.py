@@ -11,6 +11,9 @@ class Date():
         d=str(self.D)
         return "{} / {} / {}".format(y,m.zfill(2),d.zfill(2))
 
+    def __iter__(self):
+        yield from [self.Y, self.M, self.D]
+
     def __repr__(self):
         return self.__str__()
 
