@@ -1,6 +1,3 @@
-class Date_Error(Exception):
-    pass
-
 class Date():
     Month_End=[0,31,28,31,30,31,30,31,31,30,31,30,31]
     def __init__(self,Y,M,D):
