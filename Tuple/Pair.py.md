@@ -17,9 +17,10 @@ data:
   code: "class Pair:\n    __slot__=(\"first\", \"second\")\n\n    def __init__(self,\
     \ first, second):\n        self.first=first\n        self.second=second\n\n  \
     \  def __str__(self):\n        return \"({}, {})\".format(self.first, self.second)\n\
-    \n    def __repr__(self):\n        return \"[Pair] : \"+str(self)\n\n    def __eq__(self,\
-    \ other):\n        return (self.first==other.first) and (self.second==other.second)\n\
-    \n    def __neq__(self, other):\n        return not (self==other)\n\n    def __le__(self,\
+    \n    def __repr__(self):\n        return \"[Pair] : \"+str(self)\n\n    def __iter__(self):\n\
+    \        yield from [self.first, self.second]\n\n    def __eq__(self, other):\n\
+    \        return (self.first==other.first) and (self.second==other.second)\n\n\
+    \    def __neq__(self, other):\n        return not (self==other)\n\n    def __le__(self,\
     \ other):\n        return (self.first<other.first) or (self.first==other.first\
     \ and self.second<=other.second)\n\n    def __lt__(self, other):\n        return\
     \ (self.first<other.first) or (self.first==other.first and self.second<other.second)\n\
@@ -43,7 +44,7 @@ data:
   isVerificationFile: false
   path: Tuple/Pair.py
   requiredBy: []
-  timestamp: '2022-12-29 19:27:54+09:00'
+  timestamp: '2023-01-01 16:05:24+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Tuple/Pair.py

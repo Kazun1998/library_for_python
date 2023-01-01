@@ -228,43 +228,43 @@ data:
     \    for p in range(2,N+1):\n        if phi[p]==p:\n            for j in range(p,N+1,p):\n\
     \                phi[j]=phi[j]//p*(p-1)\n    return phi\n\n#\u7D04\u6570\u306E\
     K\u4E57\u548C\ndef Divisor_Sigma(N,K=1):\n    if N==1:\n        return 1\n\n \
-    \   H=Prime_Factorization(N)\n\n    R=1\n    p=2\n    while p*p<=N:\n        if\
-    \ N%p==0:\n            e=0\n            while N%p==0:\n                N//=p\n\
-    \                e+=1\n\n            if K:\n                s=pow(p,K)\n     \
-    \           R*=(pow(s,e+1)-1)//(s-1)\n            else:\n                R*=e+1\n\
-    \        p+=1\n\n    if N>1:\n        R*=pow(N,K)+1\n\n    return R\n\n#\u5B8C\
-    \u5168\u6570?\ndef Is_Perfect(N):\n    return 2*N==Divisor_Sigma(N,1)\n\n#\u5546\
-    \u5217\u6319\ndef Quotient_Range(N):\n    \"\"\"N\u3067\u5272\u3063\u305F\u5546\
-    \u306E\u53EF\u80FD\u6027\u3092\u5168\u3066\u5217\u6319\u3059\u308B.\n\n    [Input]\n\
-    \    N:\u6B63\u6574\u6570\n\n    [Output]\n    X:\u30EA\u30B9\u30C8\n    X\u306E\
-    \u5404\u8981\u7D20(k,x,y) \u306F x<=i<=y \u3067\u3042\u308B\u3053\u3068\u3068\
-    , floor(N/i)=k \u304C\u540C\u5024\u3067\u3042\u308B\u3053\u3068\u3092\u8868\u3059\
-    .\n    \"\"\"\n    X=[]\n\n    M=1\n    while M*M<=N:\n        X.append((N//M,M,M))\n\
-    \        M+=1\n\n    for i in range(M,0,-1):\n        L=N//(i+1)+1\n        R=N//i\n\
-    \n        if L<=R and X[-1][-1]<L:\n            X.append((N//L,L,R))\n    return\
-    \ X\n\ndef Reminder_Enumeration(N,r):\n    \"\"\" N \u3092 q \u5272\u3063\u305F\
-    \u4F59\u308A\u304C r \u306B\u306A\u308B q \u3092\u5168\u3066\u5217\u6319\u3059\
-    \u308B.\n\n    N: \u6B63\u6574\u6570\n    r: \u975E\u8CA0\u6574\u6570, N!=r\n\
-    \    \"\"\"\n\n    assert N!=r,\"\u7121\u9650\u500B\u3042\u308A\u307E\u3059.\"\
-    \n\n    k=1\n    X=[];Y=[]\n    N-=r\n    while k*k<=N:\n        if N%k==0:\n\
-    \            if k>r:\n                X.append(k)\n            if k*k!=N and N//k>r:\n\
-    \                Y.append(N//k)\n        k+=1\n    return X+Y[::-1]\n\ndef Next_Remainder(x,\
-    \ p, r):\n    \"\"\" x \u4EE5\u4E0A\u3067 p \u3067\u5272\u3063\u3066 r \u4F59\u308B\
-    \u6574\u6570\u306E\u3046\u3061, \u6700\u5C0F\u306E\u6574\u6570\u3092\u6C42\u3081\
-    \u308B.\n\n    \"\"\"\n\n    if x%p<=r:\n        return (x//p)*p+r\n    else:\n\
-    \        return (x//p+1)*p+r\n\ndef Previous_Remainder(x, p, r):\n    \"\"\" x\
-    \ \u4EE5\u4E0B\u3067 p \u3067\u5272\u3063\u3066 r \u4F59\u308B\u6574\u6570\u306E\
-    \u3046\u3061, \u6700\u5927\u306E\u6574\u6570\u3092\u6C42\u3081\u308B.\n\n    \"\
-    \"\"\n\n    if r<=x%p:\n        return (x//p)*p+r\n    else:\n        return (x//p-1)*p+r\n\
-    \n#\u6CD5 p \u306E\u539F\u59CB\u6839\ndef Primitive_Root(p):\n    \"\"\"Z/pZ\u4E0A\
-    \u306E\u539F\u59CB\u6839\u3092\u898B\u3064\u3051\u308B\n\n    p:\u7D20\u6570\n\
-    \    \"\"\"\n    if p==2:\n        return 1\n    if p==998244353:\n        return\
-    \ 3\n    if p==10**9+7:\n        return 5\n\n    fac=[]\n    q=2\n    v=p-1\n\n\
-    \    while v>=q*q:\n        e=0\n        while v%q==0:\n            e+=1\n   \
-    \         v//=q\n\n        if e>0:\n            fac.append(q)\n        q+=1\n\n\
-    \    if v>1:\n        fac.append(v)\n\n    g=2\n    while g<p:\n        if pow(g,p-1,p)!=1:\n\
-    \            return None\n\n        flag=True\n        for q in fac:\n       \
-    \     if pow(g,(p-1)//q,p)==1:\n                flag=False\n                break\n\
+    \   R=1\n    p=2\n    while p*p<=N:\n        if N%p==0:\n            e=0\n   \
+    \         while N%p==0:\n                N//=p\n                e+=1\n\n     \
+    \       if K:\n                s=pow(p,K)\n                R*=(pow(s,e+1)-1)//(s-1)\n\
+    \            else:\n                R*=e+1\n        p+=1\n\n    if N>1:\n    \
+    \    R*=pow(N,K)+1\n\n    return R\n\n#\u5B8C\u5168\u6570?\ndef Is_Perfect(N):\n\
+    \    return 2*N==Divisor_Sigma(N,1)\n\n#\u5546\u5217\u6319\ndef Quotient_Range(N):\n\
+    \    \"\"\"N\u3067\u5272\u3063\u305F\u5546\u306E\u53EF\u80FD\u6027\u3092\u5168\
+    \u3066\u5217\u6319\u3059\u308B.\n\n    [Input]\n    N:\u6B63\u6574\u6570\n\n \
+    \   [Output]\n    X:\u30EA\u30B9\u30C8\n    X\u306E\u5404\u8981\u7D20(k,x,y) \u306F\
+    \ x<=i<=y \u3067\u3042\u308B\u3053\u3068\u3068, floor(N/i)=k \u304C\u540C\u5024\
+    \u3067\u3042\u308B\u3053\u3068\u3092\u8868\u3059.\n    \"\"\"\n    X=[]\n\n  \
+    \  M=1\n    while M*M<=N:\n        X.append((N//M,M,M))\n        M+=1\n\n    for\
+    \ i in range(M,0,-1):\n        L=N//(i+1)+1\n        R=N//i\n\n        if L<=R\
+    \ and X[-1][-1]<L:\n            X.append((N//L,L,R))\n    return X\n\ndef Reminder_Enumeration(N,r):\n\
+    \    \"\"\" N \u3092 q \u5272\u3063\u305F\u4F59\u308A\u304C r \u306B\u306A\u308B\
+    \ q \u3092\u5168\u3066\u5217\u6319\u3059\u308B.\n\n    N: \u6B63\u6574\u6570\n\
+    \    r: \u975E\u8CA0\u6574\u6570, N!=r\n    \"\"\"\n\n    assert N!=r,\"\u7121\
+    \u9650\u500B\u3042\u308A\u307E\u3059.\"\n\n    k=1\n    X=[];Y=[]\n    N-=r\n\
+    \    while k*k<=N:\n        if N%k==0:\n            if k>r:\n                X.append(k)\n\
+    \            if k*k!=N and N//k>r:\n                Y.append(N//k)\n        k+=1\n\
+    \    return X+Y[::-1]\n\ndef Next_Remainder(x, p, r):\n    \"\"\" x \u4EE5\u4E0A\
+    \u3067 p \u3067\u5272\u3063\u3066 r \u4F59\u308B\u6574\u6570\u306E\u3046\u3061\
+    , \u6700\u5C0F\u306E\u6574\u6570\u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n\n  \
+    \  if x%p<=r:\n        return (x//p)*p+r\n    else:\n        return (x//p+1)*p+r\n\
+    \ndef Previous_Remainder(x, p, r):\n    \"\"\" x \u4EE5\u4E0B\u3067 p \u3067\u5272\
+    \u3063\u3066 r \u4F59\u308B\u6574\u6570\u306E\u3046\u3061, \u6700\u5927\u306E\u6574\
+    \u6570\u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n\n    if r<=x%p:\n        return\
+    \ (x//p)*p+r\n    else:\n        return (x//p-1)*p+r\n\n#\u6CD5 p \u306E\u539F\
+    \u59CB\u6839\ndef Primitive_Root(p):\n    \"\"\"Z/pZ\u4E0A\u306E\u539F\u59CB\u6839\
+    \u3092\u898B\u3064\u3051\u308B\n\n    p:\u7D20\u6570\n    \"\"\"\n    if p==2:\n\
+    \        return 1\n    if p==998244353:\n        return 3\n    if p==10**9+7:\n\
+    \        return 5\n\n    fac=[]\n    q=2\n    v=p-1\n\n    while v>=q*q:\n   \
+    \     e=0\n        while v%q==0:\n            e+=1\n            v//=q\n\n    \
+    \    if e>0:\n            fac.append(q)\n        q+=1\n\n    if v>1:\n       \
+    \ fac.append(v)\n\n    g=2\n    while g<p:\n        if pow(g,p-1,p)!=1:\n    \
+    \        return None\n\n        flag=True\n        for q in fac:\n           \
+    \ if pow(g,(p-1)//q,p)==1:\n                flag=False\n                break\n\
     \n        if flag:\n            return g\n\n        g+=1\n\n#\u6700\u5927\u516C\
     \u7D04\u6570\ndef gcd(m,n):\n    m=abs(m)\n    n=abs(n)\n\n    while n:\n    \
     \    m,n=n,m%n\n    return m\n\ndef GCD(*X):\n    from functools import reduce\n\
@@ -306,7 +306,7 @@ data:
   isVerificationFile: false
   path: Integer.py
   requiredBy: []
-  timestamp: '2022-12-06 20:55:37+09:00'
+  timestamp: '2023-01-01 15:53:57+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Integer.py

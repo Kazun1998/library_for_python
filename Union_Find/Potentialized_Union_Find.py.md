@@ -59,27 +59,31 @@ data:
     \ x):\n        \"\"\" x \u304C\u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\u30DD\
     \u30C6\u30F3\u30B7\u30E3\u30EB\u304C\u59A5\u5F53\u304B\u3069\u3046\u304B\u3092\
     \u5224\u5B9A\u3059\u308B. \"\"\"\n\n        return self.valid[self.find(x)]\n\n\
-    \    def is_tree(self, x):\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3059\u308B\
-    \u65CF\u304C\u68EE\u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B.\n\n\
-    \        x: \u8981\u7D20\n        \"\"\"\n        return self.size(x)==self.edges[self.find(x)]+1\n\
-    \n    def tree_count(self):\n        \"\"\" \u68EE\u306B\u306A\u3063\u3066\u3044\
-    \u308B\u5C5E\u306E\u500B\u6570\u3092\u6C42\u3081\u308B.\n        \"\"\"\n\n  \
-    \      return sum(self.is_tree(g) for g in self.representative())\n\n    def representative(self):\n\
-    \        \"\"\" \u4EE3\u8868\u5143\u306E\u540D\u524D\u306E\u30EA\u30B9\u30C8\n\
-    \        \"\"\"\n        return [i for i, x in enumerate(self.parents) if x <\
-    \ 0]\n\n    def group_count(self):\n        \"\"\" \u65CF\u306E\u500B\u6570\n\
-    \        \"\"\"\n        return self.__group_number\n\n    def all_group_members(self):\n\
-    \        \"\"\" \u5168\u3066\u306E\u65CF\u306E\u51FA\u529B\n        \"\"\"\n \
-    \       X={r:[] for r in self.roots()}\n        for k in range(self.n):\n    \
-    \        X[self.find(k)].append(k)\n        return X\n\n    def refresh(self):\n\
-    \        for i in range(self.n):\n            _=self.find(i)\n\n    def __str__(self):\n\
+    \    def is_well_defined(self):\n        \"\"\" \u3053\u306E\u7CFB\u5168\u4F53\
+    \u306E\u30DD\u30C6\u30F3\u30B7\u30E3\u30EB\u304C\u59A5\u5F53\u304B\u3069\u3046\
+    \u304B\u3092\u5224\u5B9A\u3059\u308B. \"\"\"\n\n        return all(self.is_valid(x)\
+    \ for x in range(self.n))\n\n    def is_tree(self, x):\n        \"\"\" \u8981\u7D20\
+    \ x \u304C\u5C5E\u3059\u308B\u65CF\u304C\u68EE\u304B\u3069\u3046\u304B\u3092\u5224\
+    \u5B9A\u3059\u308B.\n\n        x: \u8981\u7D20\n        \"\"\"\n        return\
+    \ self.size(x)==self.edges[self.find(x)]+1\n\n    def tree_count(self):\n    \
+    \    \"\"\" \u68EE\u306B\u306A\u3063\u3066\u3044\u308B\u5C5E\u306E\u500B\u6570\
+    \u3092\u6C42\u3081\u308B.\n        \"\"\"\n\n        return sum(self.is_tree(g)\
+    \ for g in self.representative())\n\n    def representative(self):\n        \"\
+    \"\" \u4EE3\u8868\u5143\u306E\u540D\u524D\u306E\u30EA\u30B9\u30C8\n        \"\"\
+    \"\n        return [i for i, x in enumerate(self.parents) if x < 0]\n\n    def\
+    \ group_count(self):\n        \"\"\" \u65CF\u306E\u500B\u6570\n        \"\"\"\n\
+    \        return self.__group_number\n\n    def all_group_members(self):\n    \
+    \    \"\"\" \u5168\u3066\u306E\u65CF\u306E\u51FA\u529B\n        \"\"\"\n     \
+    \   X={r:[] for r in self.roots()}\n        for k in range(self.n):\n        \
+    \    X[self.find(k)].append(k)\n        return X\n\n    def refresh(self):\n \
+    \       for i in range(self.n):\n            _=self.find(i)\n\n    def __str__(self):\n\
     \        return '\\n'.join('{}: {}'.format(r, self.members(r)) for r in self.roots())\n\
     \n    __repr__=__str__\n"
   dependsOn: []
   isVerificationFile: false
   path: Union_Find/Potentialized_Union_Find.py
   requiredBy: []
-  timestamp: '2022-12-28 01:44:54+09:00'
+  timestamp: '2023-01-01 16:05:59+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Union_Find/Potentialized_Union_Find.py

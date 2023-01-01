@@ -14,11 +14,12 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.1/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Date_Error(Exception):\n    pass\n\nclass Date():\n    Month_End=[0,31,28,31,30,31,30,31,31,30,31,30,31]\n\
-    \    def __init__(self,Y,M,D):\n        self.Y=Y\n        self.M=M\n        self.D=D\n\
+  code: "class Date():\n    Month_End=[0,31,28,31,30,31,30,31,31,30,31,30,31]\n  \
+    \  def __init__(self,Y,M,D):\n        self.Y=Y\n        self.M=M\n        self.D=D\n\
     \n    def __str__(self):\n        y=str(self.Y)\n        m=str(self.M)\n     \
     \   d=str(self.D)\n        return \"{} / {} / {}\".format(y,m.zfill(2),d.zfill(2))\n\
-    \n    def __repr__(self):\n        return self.__str__()\n\n    def __eq__(self,other):\n\
+    \n    def __iter__(self):\n        yield from [self.Y, self.M, self.D]\n\n   \
+    \ def __repr__(self):\n        return self.__str__()\n\n    def __eq__(self,other):\n\
     \        return (self.Y==other.Y) and (self.M==other.M) and (self.D==other.D)\n\
     \n    def __neq__(self,other):\n        return not(self==other)\n\n    def __le__(self,other):\n\
     \        if self.Y!=other.Y:\n            return self.Y<other.Y\n        elif\
@@ -29,11 +30,11 @@ data:
     \        Y=self.Y\n        if Y%4:\n            return False\n        elif Y%100:\n\
     \            return True\n        elif Y%400:\n            return False\n    \
     \    else:\n            return True\n\n    def next_day(self, day=1):\n      \
-    \  Y,M,D=self.Y,self.M,self.D\n\n        x=400*365+97\n        if Day>=x:\n  \
-    \          t,Day=divmod(Day,x)\n            Y+=400*t\n\n        def leap(Y):\n\
+    \  Y,M,D=self.Y,self.M,self.D\n\n        x=400*365+97\n        if day>=x:\n  \
+    \          t,day=divmod(day,x)\n            Y+=400*t\n\n        def leap(Y):\n\
     \            if Y%4:\n                return False\n            elif Y%100:\n\
     \                return True\n            else:\n                return (Y%400)==0\n\
-    \n        T=leap(Y)\n        for _ in range(Day):\n            D+=1\n        \
+    \n        T=leap(Y)\n        for _ in range(day):\n            D+=1\n        \
     \    if (M!=2) and (self.Month_End[M]<D):\n                D=1\n             \
     \   M=M%12+1\n                Y+=1 if M==1 else 0\n\n                if M==1:\n\
     \                    T=leap(Y)\n\n            elif (M==2) and (not T) and D>28:\n\
@@ -52,7 +53,7 @@ data:
   isVerificationFile: false
   path: Date.py
   requiredBy: []
-  timestamp: '2022-08-28 03:59:12+09:00'
+  timestamp: '2023-01-01 16:03:17+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Date.py
