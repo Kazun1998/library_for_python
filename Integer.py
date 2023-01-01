@@ -728,8 +728,6 @@ def Divisor_Sigma(N,K=1):
     if N==1:
         return 1
 
-    H=Prime_Factorization(N)
-
     R=1
     p=2
     while p*p<=N:
