@@ -11,6 +11,9 @@ class Pair:
     def __repr__(self):
         return "[Pair] : "+str(self)
 
+    def __iter__(self):
+        yield from [self.first, self.second]
+
     def __eq__(self, other):
         return (self.first==other.first) and (self.second==other.second)
 

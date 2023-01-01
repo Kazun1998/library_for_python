@@ -12,6 +12,9 @@ class Triple:
     def __repr__(self):
         return "[Triple] : "+str(self)
 
+    def __iter__(self):
+        yield from [self.first, self.second, self.third]
+
     def __eq__(self, other):
         return (self.first==other.first) and (self.second==other.second) and (self.thrid==other.third)
 
