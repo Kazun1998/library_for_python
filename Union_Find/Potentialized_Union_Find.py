@@ -120,6 +120,11 @@ class Potentilized_Union_Find():
 
         return self.valid[self.find(x)]
 
+    def is_well_defined(self):
+        """ この系全体のポテンシャルが妥当かどうかを判定する. """
+
+        return all(self.is_valid(x) for x in range(self.n))
+
     def is_tree(self, x):
         """ 要素 x が属する族が森かどうかを判定する.
 
