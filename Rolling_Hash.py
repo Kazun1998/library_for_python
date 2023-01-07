@@ -6,7 +6,7 @@ class Rolling_Hash():
 
         self.mod=mod
         self.base=base
-        self.string=S
+        self.length=len(S)
         self.power=power=[1]*(len(S)+1)
         self.type=type
 
@@ -68,8 +68,8 @@ class Rolling_Hash():
     def __getitem__(self, index):
         if index.__class__==int:
             if index<0:
-                index+=len(self.string)
-            assert 0<=index<len(self.string)
+                index+=self.length
+            assert 0<=index<self.length
             return self.get(index, index+1)
         elif index.__class__==slice:
             assert (index.step==None) or (index.step==1)
@@ -82,7 +82,7 @@ class Rolling_Hash():
             return self.get(L,R)
 
     def __len__(self):
-        return len(self.string)
+        return self.length
 
     def docking(self, *ranges):
         """ ranges: tuple (l,r) からなるリスト, i 番目の (l,r) は部分列 [l,r) を意味する.
@@ -96,8 +96,8 @@ class Rolling_Hash():
 #=================================================
 class Multi_Rolling_Hash():
     def __init__(self, S, base, mods, type):
-        self.string=S
         self.__N=len(mods)
+        self.__length=len(S)
         self.__base=base
         self.__mod=mods
         self.__type=type
@@ -120,8 +120,8 @@ class Multi_Rolling_Hash():
     def __getitem__(self, index):
         if index.__class__==int:
             if index<0:
-                index+=len(self.string)
-            assert 0<=index<len(self.string)
+                index+=self.__length
+            assert 0<=index<self.__length
             return tuple(H[index] for H in self.rh)
         elif index.__class__==slice:
             assert (index.step==None) or (index.step==1)
@@ -167,7 +167,7 @@ class Multi_Rolling_Hash():
         raise ValueError("substring not found")
 
     def __len__(self):
-        return len(self.string)
+        return self.__length
 
     def docking(self, *ranges):
         """ ranges: tuple (l,r) からなるリスト, i 番目の (l,r) は部分列 [l,r) を意味する.
