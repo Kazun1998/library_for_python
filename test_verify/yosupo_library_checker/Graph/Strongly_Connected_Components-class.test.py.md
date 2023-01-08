@@ -33,7 +33,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py
   requiredBy: []
-  timestamp: '2022-11-23 17:42:07+09:00'
+  timestamp: '2023-01-08 21:36:08+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py
