@@ -69,7 +69,7 @@ title: XOR Vector Space
 
 なお, 実用的には整数 $K$ に対して, $V_K$ を $0$ 以上 $2^K$ 未満の非負整数全体の集合とすると, $V_K$ は $\mathbb{N}$ の部分空間になり, $V_K$ を全体として扱うことになる.
 
-ここで, 体が $\mathbb{F}_2$ という位数 $2$ の体であることから, $\# V_K=2^{\dim V_K}$ が成り立つ.
+ここで, 体が $\mathbb{F}_2$ という位数 $2$ の体であることから, $\\# V_K=2^{\dim V_K}$ が成り立つ.
 
 ## Contents
 
@@ -79,6 +79,6 @@ title: XOR Vector Space
 V=XOR_Vector_Space()
 ```
 
-- XOR ベクトル空間を生成する.
+* XOR ベクトル空間を生成する.
 
 ---
