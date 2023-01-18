@@ -95,9 +95,9 @@ data:
   isVerificationFile: false
   path: Fraction.py
   requiredBy:
-  - Root.py
-  - Quaternion.py
   - Vector3.py
+  - Quaternion.py
+  - Root.py
   timestamp: '2022-12-24 15:15:20+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
