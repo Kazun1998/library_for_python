@@ -12,7 +12,7 @@ data:
     - icon: ':warning:'
       path: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
       title: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Binary_Indexed_Tree/Sparse_Binary_Indexed_Tree.py
       title: Binary_Indexed_Tree/Sparse_Binary_Indexed_Tree.py
   - name: Binary_Search
@@ -501,6 +501,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Set_Xor_Min.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Set_Xor_Min.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Sparse_Binary_Indexed_Tree.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Sparse_Binary_Indexed_Tree.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Sparse_Table.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Sparse_Table.test.py
