@@ -14,18 +14,18 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.1/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Trie_Node():\n    def __init__(self,item):\n        self.item=item\n\
+  code: "class Trie_Node():\n    def __init__(self, item):\n        self.item=item\n\
     \        self.next={}\n        self.terminal_count=0\n        self.prefix_count=0\n\
     \n    def __str__(self):\n        if self.terminal_count:\n            return\
     \ \"({}) [{} ({})]: {}\".format(self.terminal_count, self.item,self.prefix_count,self.next)\n\
     \        else:\n            return \"[{} ({})]: {}\".format(self.item,self.prefix_count,self.next)\n\
-    \n    __repr__=__str__\n\nclass Trie_Tree():\n    def __init__(self, artifical_item=\"\
-    @\"):\n        \"\"\" Trie \u6728\u3092\u751F\u6210\u3059\u308B.\n\n        artifical_item:\
+    \n    __repr__=__str__\n\nclass Trie_Tree():\n    def __init__(self):\n      \
+    \  \"\"\" Trie \u6728\u3092\u751F\u6210\u3059\u308B.\n\n        artifical_item:\
     \ \u767B\u9332\u3055\u308C\u308B\u5217\u306B\u767B\u5834\u3057\u306A\u3044\u3053\
     \u3068\u304C\u4FDD\u8A3C\u3055\u308C\u3066\u3044\u308B\u8981\u7D20\n        \"\
-    \"\"\n        self.nodes=[Trie_Node(artifical_item)]\n\n    def insert(self, S):\n\
-    \        \"\"\" \u5217 S \u3092\u767B\u9332\u3059\u308B.\n\n        S: \u5217\n\
-    \        \"\"\"\n        nodes=self.nodes\n        node_id=0\n        nodes[node_id].prefix_count+=1\n\
+    \"\"\n        self.nodes=[Trie_Node(None)]\n\n    def insert(self, S):\n     \
+    \   \"\"\" \u5217 S \u3092\u767B\u9332\u3059\u308B.\n\n        S: \u5217\n   \
+    \     \"\"\"\n        nodes=self.nodes\n        node_id=0\n        nodes[node_id].prefix_count+=1\n\
     \        for x in S:\n            if x not in nodes[node_id].next:\n         \
     \       nodes[node_id].next[x]=len(nodes)\n                nodes.append(Trie_Node(x))\n\
     \            node_id=nodes[node_id].next[x]\n            nodes[node_id].prefix_count+=1\n\
@@ -110,7 +110,7 @@ data:
   isVerificationFile: false
   path: Trie.py
   requiredBy: []
-  timestamp: '2022-09-28 11:00:09+09:00'
+  timestamp: '2023-02-03 01:13:10+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Trie.py
