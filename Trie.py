@@ -1,5 +1,5 @@
 class Trie_Node():
-    def __init__(self,item):
+    def __init__(self, item):
         self.item=item
         self.next={}
         self.terminal_count=0
@@ -14,12 +14,12 @@ class Trie_Node():
     __repr__=__str__
 
 class Trie_Tree():
-    def __init__(self, artifical_item="@"):
+    def __init__(self):
         """ Trie 木を生成する.
 
         artifical_item: 登録される列に登場しないことが保証されている要素
         """
-        self.nodes=[Trie_Node(artifical_item)]
+        self.nodes=[Trie_Node(None)]
 
     def insert(self, S):
         """ 列 S を登録する.
