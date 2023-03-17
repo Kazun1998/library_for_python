@@ -15,7 +15,9 @@ def Nth_Term_of_Linearly_Recurrent_Sequence(A, C, N, offset=0):
 
     N-=offset
 
-    if N<d:
+    if N<0:
+        return 0
+    elif N<d:
         return A[N]%Mod
 
     A=Modulo_Polynomial(A,d+1)
