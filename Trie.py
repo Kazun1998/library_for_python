@@ -15,10 +15,8 @@ class Trie_Node():
 
 class Trie_Tree():
     def __init__(self):
-        """ Trie 木を生成する.
+        """ Trie 木を生成する."""
 
-        artifical_item: 登録される列に登場しないことが保証されている要素
-        """
         self.nodes=[Trie_Node(None)]
 
     def insert(self, S):
