@@ -10,7 +10,6 @@ data:
     links:
     - https://judge.yosupo.jp/submission/31819
     - https://judge.yosupo.jp/submission/6131
-    - https://qiita.com/convexineq/items/e3d599cb9f91a73f936d
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.2/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
@@ -41,36 +40,9 @@ data:
     \            N//=3\n\n    p=5\n    Flag=1\n    while p*p<=N:\n        if N%p==0:\n\
     \            X.append(p)\n            while N%p==0:\n                N//=p\n \
     \       p+=2 if Flag else 4\n        Flag^=1\n\n    if N!=1:\n        X.append(N)\n\
-    \    return X\n\n#\u7D04\u6570\u5168\u90E8\ndef Divisors(N):\n    N=abs(N)\n \
-    \   L,U=[],[]\n    k=1\n    while k*k <=N:\n        if N%k== 0:\n            L.append(k)\n\
-    \            if k*k!=N:\n                U.append(N//k)\n        k+=1\n    return\
-    \ L+U[::-1]\n\n#\u7D20\u56E0\u6570\u5206\u89E3\u306E\u7D50\u679C\u304B\u3089,\
-    \ \u7D04\u6570\u3092\u5168\u3066\u6C42\u3081\u308B.\ndef Divisors_from_Prime_Factor(P,\
-    \ sorting=False):\n    X=[1]\n    for p,e in P:\n        q=1\n        n=len(X)\n\
-    \        for _ in range(e):\n            q*=p\n            for j in range(n):\n\
-    \                X.append(X[j]*q)\n\n    if sorting:\n        X.sort()\n\n   \
-    \ return X\n\n#\u9AD8\u5EA6\u5408\u6210\u6570\n#\u53C2\u8003\u5143:https://qiita.com/convexineq/items/e3d599cb9f91a73f936d\n\
-    def Highly_Composite_Number(N):\n    \"\"\" N \u4EE5\u4E0B\u306E\u9AD8\u5EA6\u5408\
-    \u6210\u6570\u3092\u6C42\u3081\u308B.\n    \"\"\"\n\n    from heapq import heappop,heappush\n\
-    \    from math import log\n    prime = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263]\n\
-    \    lim = [[2*int(log(p,q)) for q in prime] for p in prime] #\u679D\u5208\u308A\
-    \u7528\u914D\u5217\n    # \u521D\u671F\u72B6\u614B\n    q = [(2,2,[1])] # (n,n\u306E\
-    \u7D04\u6570\u306E\u500B\u6570\u3001n\u306E\u6307\u6570\u8868\u8A18)\u3092\u4FDD\
-    \u5B58\u3059\u308B heapq\n    res = [(1,1,[])]\n\n    while q and q[0][0] <= N:\n\
-    \        n,val,lst = heappop(q)\n        if val > res[-1][1]: #\u6761\u4EF6\u3092\
-    \u307F\u305F\u3059\u306A\u3089\u7B54\u306B\u8FFD\u52A0\n            res.append((n,val,lst[:]))\n\
-    \        L = len(lst)\n        e0 = lst[0]\n        #\u5168\u90E81\u306A\u3089\
-    \u65B0\u3057\u3044\u7D20\u6570\u3067\u6A2A\u306B\u4F38\u3070\u305B\u308B\n   \
-    \     if e0 == 1:\n            heappush(q,(n*prime[L],val*2,[1]*(L+1)))\n    \
-    \    #\u6700\u4E0A\u6BB5\u306E\u4E0A\u3092\u6A2A\u65B9\u5411\u306B\u7A4D\u3080\
-    \n        for i in range(L):\n            if e0 > lst[i]: break #\u6BB5\u5DEE\u304C\
-    \u3042\u308B\u3068\u3001\u3082\u3046\u4F38\u3070\u305B\u306A\u3044\n         \
-    \   if e0 >= lim[L][i]: break #\u679D\u5208\u308A\uFF08\u91CD\u8981\uFF09\n  \
-    \          n *= prime[i]\n            if n <= N:\n                lst[i] += 1\n\
-    \                val = val//(e0+1)*(e0+2)\n                heappush(q,(n,val,lst[:]))\n\
-    \    return res\n\n#\u7D20\u6570\u5224\u5B9A\ndef Is_Prime(N):\n    N=abs(N)\n\
-    \    if N<=1:\n        return False\n\n    if (N==2) or (N==3) or (N==5):\n  \
-    \      return True\n\n    r=N%6\n    if not(r==1 or r==5):\n        return False\n\
+    \    return X\n\n#\u7D20\u6570\u5224\u5B9A\ndef Is_Prime(N):\n    N=abs(N)\n \
+    \   if N<=1:\n        return False\n\n    if (N==2) or (N==3) or (N==5):\n   \
+    \     return True\n\n    r=N%6\n    if not(r==1 or r==5):\n        return False\n\
     \n    p=5\n    flag=0\n    while p*p<=N:\n        if N%p==0:\n            return\
     \ False\n\n        p+=2+2*flag\n        flag^=1\n    return True\n\n#\u7D20\u6570\
     \u5224\u5B9A for long long\ndef Is_Prime_for_long_long(N):\n    if N<=1: return\
@@ -196,123 +168,18 @@ data:
     \ log K)\n    N,K,Mod: int\n    \"\"\"\n\n    if N==0:\n        return [0]\n\n\
     \    S=Smallest_Prime_Factor(N)\n    A=[0]*(N+1); A[1]=pow(1,K,Mod)\n\n    for\
     \ i in range(2,N+1):\n        if S[i]<i:\n            A[i]=A[S[i]]*A[i//S[i]]%Mod\n\
-    \        else:\n            A[i]=pow(i,K,Mod)\n    return A\n\n#\u5E73\u65B9\u6570\
-    ?\ndef Is_Square_Number(N):\n    if N<0:\n        return False\n    elif N==0:\n\
-    \        return True\n\n    for p in [2,3]:\n        F=0\n        while N%p==0:\n\
-    \            F^=1\n            N//=p\n        if F:\n            return False\n\
-    \n    k=5\n    Flag=1\n    while k*k<=N:\n        F=0\n        while N%k==0:\n\
-    \            F^=1\n            N//=k\n        if F:\n            return False\n\
-    \        k+=2 if Flag else 4\n    return N==1\n\n#\u7ACB\u65B9\u6570?\ndef Is_Cubic_Number(N):\n\
-    \    if N<0:\n        return False\n    elif N==0:\n        return True\n\n  \
-    \  for p in [2,3]:\n        F=0\n        while N%p==0:\n            F+=1\n   \
-    \         N//=p\n        if F%3:\n            return False\n\n    k=5\n    Flag=1\n\
-    \    while k*k<=N:\n        F=0\n        while N%k==0:\n            F+=1\n   \
-    \         N//=k\n        if F%3:\n            return False\n        k+=2 if Flag\
-    \ else 4\n    return N==1\n\n#Euler's Totient\u95A2\u6570\ndef Euler_Totient(N):\n\
-    \    \"\"\" 1 \u4EE5\u4E0A N \u4EE5\u4E0B\u306E\u6574\u6570\u306E\u3046\u3061\
-    , N \u3068\u4E92\u3044\u306B\u7D20\u306A\u6574\u6570\u306E\u500B\u6570 phi (N)\
-    \ \u3092\u6C42\u3081\u308B.\n\n    Args:\n        N (int): \u6B63\u306E\u6574\u6570\
-    \n\n    Returns:\n        int: varphi (N)\n    \"\"\"\n\n    assert N>=0,\"N\u304C\
-    \u975E\u8CA0\u6574\u6570\u3067\u306F\u306A\u3044.\"\n\n    e=(N&(-N)).bit_length()-1\n\
-    \    if e>0:\n        phi=1<<(e-1)\n        N>>=e\n    else:\n        phi=1\n\n\
-    \    e=0\n    while N%3==0:\n        e+=1\n        N//=3\n\n    if e>0:\n    \
-    \    phi*=pow(3,e-1)*2\n\n    flag=0\n    p=5\n    while p*p<=N:\n        if N%p==0:\n\
-    \            e=0\n            while N%p==0:\n                e+=1\n          \
-    \      N//=p\n\n            phi*=pow(p,e-1)*(p-1)\n\n        p+=2\n        flag^=1\n\
-    \n    if N>1:\n        phi*=N-1\n\n    return phi\n\n#Euler's Totient\u95A2\u6570\
-    \ndef Euler_Totient_List(N):\n    \"\"\"k=0,1,...,N \u306B\u5BFE\u3057\u3066,\
-    \ 1\u4EE5\u4E0Ak\u4EE5\u4E0B\u306E\u6574\u6570\u306E\u3046\u3061, k\u3068\u4E92\
-    \u3044\u306B\u7D20\u306A\u6574\u6570\u306E\u500B\u6570 \u03C6(k) \u3092\u6C42\u3081\
-    \u308B.\n\n    N:\u6B63\u306E\u6574\u6570\n    \"\"\"\n\n    assert N>=0,\"N\u304C\
-    \u975E\u8CA0\u6574\u6570\u3067\u306F\u306A\u3044.\"\n\n    phi=list(range(N+1))\n\
-    \    for p in range(2,N+1):\n        if phi[p]==p:\n            for j in range(p,N+1,p):\n\
-    \                phi[j]=phi[j]//p*(p-1)\n    return phi\n\n#\u7D04\u6570\u306E\
-    K\u4E57\u548C\ndef Divisor_Sigma(N,K=1):\n    if N==1:\n        return 1\n\n \
-    \   R=1\n    p=2\n    while p*p<=N:\n        if N%p==0:\n            e=0\n   \
-    \         while N%p==0:\n                N//=p\n                e+=1\n\n     \
-    \       if K:\n                s=pow(p,K)\n                R*=(pow(s,e+1)-1)//(s-1)\n\
-    \            else:\n                R*=e+1\n        p+=1\n\n    if N>1:\n    \
-    \    R*=pow(N,K)+1\n\n    return R\n\n#\u5B8C\u5168\u6570?\ndef Is_Perfect(N):\n\
-    \    return 2*N==Divisor_Sigma(N,1)\n\n#\u5546\u5217\u6319\ndef Quotient_Range(N):\n\
-    \    \"\"\"N\u3067\u5272\u3063\u305F\u5546\u306E\u53EF\u80FD\u6027\u3092\u5168\
-    \u3066\u5217\u6319\u3059\u308B.\n\n    [Input]\n    N:\u6B63\u6574\u6570\n\n \
-    \   [Output]\n    X:\u30EA\u30B9\u30C8\n    X\u306E\u5404\u8981\u7D20(k,x,y) \u306F\
-    \ x<=i<=y \u3067\u3042\u308B\u3053\u3068\u3068, floor(N/i)=k \u304C\u540C\u5024\
-    \u3067\u3042\u308B\u3053\u3068\u3092\u8868\u3059.\n    \"\"\"\n    X=[]\n\n  \
-    \  M=1\n    while M*M<=N:\n        X.append((N//M,M,M))\n        M+=1\n\n    for\
-    \ i in range(M,0,-1):\n        L=N//(i+1)+1\n        R=N//i\n\n        if L<=R\
-    \ and X[-1][-1]<L:\n            X.append((N//L,L,R))\n    return X\n\ndef Reminder_Enumeration(N,r):\n\
-    \    \"\"\" N \u3092 q \u5272\u3063\u305F\u4F59\u308A\u304C r \u306B\u306A\u308B\
-    \ q \u3092\u5168\u3066\u5217\u6319\u3059\u308B.\n\n    N: \u6B63\u6574\u6570\n\
-    \    r: \u975E\u8CA0\u6574\u6570, N!=r\n    \"\"\"\n\n    assert N!=r,\"\u7121\
-    \u9650\u500B\u3042\u308A\u307E\u3059.\"\n\n    k=1\n    X=[];Y=[]\n    N-=r\n\
-    \    while k*k<=N:\n        if N%k==0:\n            if k>r:\n                X.append(k)\n\
-    \            if k*k!=N and N//k>r:\n                Y.append(N//k)\n        k+=1\n\
-    \    return X+Y[::-1]\n\ndef Next_Remainder(x, p, r):\n    \"\"\" x \u4EE5\u4E0A\
-    \u3067 p \u3067\u5272\u3063\u3066 r \u4F59\u308B\u6574\u6570\u306E\u3046\u3061\
-    , \u6700\u5C0F\u306E\u6574\u6570\u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n\n  \
-    \  if x%p<=r:\n        return (x//p)*p+r\n    else:\n        return (x//p+1)*p+r\n\
-    \ndef Previous_Remainder(x, p, r):\n    \"\"\" x \u4EE5\u4E0B\u3067 p \u3067\u5272\
-    \u3063\u3066 r \u4F59\u308B\u6574\u6570\u306E\u3046\u3061, \u6700\u5927\u306E\u6574\
-    \u6570\u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n\n    if r<=x%p:\n        return\
-    \ (x//p)*p+r\n    else:\n        return (x//p-1)*p+r\n\n#\u6CD5 p \u306E\u539F\
-    \u59CB\u6839\ndef Primitive_Root(p):\n    \"\"\"Z/pZ\u4E0A\u306E\u539F\u59CB\u6839\
-    \u3092\u898B\u3064\u3051\u308B\n\n    p:\u7D20\u6570\n    \"\"\"\n    if p==2:\n\
-    \        return 1\n    if p==998244353:\n        return 3\n    if p==10**9+7:\n\
-    \        return 5\n\n    fac=[]\n    q=2\n    v=p-1\n\n    while v>=q*q:\n   \
-    \     e=0\n        while v%q==0:\n            e+=1\n            v//=q\n\n    \
-    \    if e>0:\n            fac.append(q)\n        q+=1\n\n    if v>1:\n       \
-    \ fac.append(v)\n\n    g=2\n    while g<p:\n        if pow(g,p-1,p)!=1:\n    \
-    \        return None\n\n        flag=True\n        for q in fac:\n           \
-    \ if pow(g,(p-1)//q,p)==1:\n                flag=False\n                break\n\
-    \n        if flag:\n            return g\n\n        g+=1\n\n#\u6700\u5927\u516C\
-    \u7D04\u6570\ndef gcd(m,n):\n    m=abs(m)\n    n=abs(n)\n\n    while n:\n    \
-    \    m,n=n,m%n\n    return m\n\ndef GCD(*X):\n    from functools import reduce\n\
-    \    return reduce(gcd,X)\n\n#\u62E1\u5F35\u30E6\u30FC\u30AF\u30EA\u30C3\u30C9\
-    \u306E\u4E92\u9664\u6CD5\ndef Extend_Euclid(a: int, b: int):\n    \"\"\" gcd(a,b)\
-    \ \u3068 ax+by=gcd(a,b) \u3092\u6E80\u305F\u3059\u6574\u6570 x,y \u306E\u4F8B\u3092\
-    \u6319\u3052\u308B.\n\n    [Input]\n    a,b: \u6574\u6570\n\n    [Output]\n  \
-    \  (x,y,gcd(a,b))\n    \"\"\"\n    s,t,u,v=1,0,0,1\n    while b:\n        q,a,b=a//b,b,a%b\n\
-    \        s,t=t,s-q*t\n        u,v=v,u-q*v\n    return s,u,a\n\ndef Modulo_Inverse(a,\
-    \ m):\n    \"\"\" (mod m) \u306B\u304A\u3051\u308B\u9006\u5143\u3092\u6C42\u3081\
-    \u308B.\n\n    Args:\n        a (int): mod m \u306E\u5143\n        m (int): \u6CD5\
-    \n\n    Returns:\n        int: \u53EF\u9006\u5143\u304C\u5B58\u5728\u3059\u308B\
-    \u306A\u3089\u3070\u305D\u306E\u5024, \u5B58\u5728\u3057\u306A\u3044\u306E\u3067\
-    \u3042\u308C\u3070 -1\n    \"\"\"\n\n    h=Extend_Euclid(a,m)\n    return h[0]%m\
-    \ if h[2]==1 else -1\n\n#\u6700\u5C0F\u516C\u500D\u6570\ndef lcm(m,n):\n    return\
-    \ (m//gcd(m,n))*n\n\ndef LCM(*X):\n    from functools import reduce\n    return\
-    \ reduce(lcm,X)\n\n#floor(a^(1/k)) \u3092\u6C42\u3081\u308B.\ndef Floor_Root(a,k):\n\
-    \    \"\"\"floor(a^(1/k)) \u3092\u6C42\u3081\u308B.\n\n    a:\u975E\u8CA0\u6574\
-    \u6570\n    k:\u6B63\u306E\u6574\u6570\n    \"\"\"\n    assert 0<=a and 0<k\n\
-    \    if a==0: return 0\n    if k==1: return a\n\n    #\u5927\u4F53\u306E\u5024\
-    \u3092\u6C42\u3081\u308B.\n    x=int(pow(a,1/k))\n\n    #\u5897\u3084\u3059\n\
-    \    while pow(x+1,k)<=a:\n        x+=1\n\n    #\u6E1B\u3089\u3059\n    while\
-    \ pow(x,k)>a:\n        x-=1\n    return x\n\n#ceil(a^(1/k)) \u3092\u6C42\u3081\
-    \u308B.\ndef Ceil_Root(a,k):\n    \"\"\"ceil(a^(1/k)) \u3092\u6C42\u3081\u308B\
-    .\n\n    a:\u975E\u8CA0\u6574\u6570\n    k:\u6B63\u306E\u6574\u6570\n    \"\"\"\
-    \n    assert 0<=a and 0<k\n    if a==0:\n        return 0\n    if k==1:\n    \
-    \    return a\n\n    #\u5927\u4F53\u306E\u5024\u3092\u6C42\u3081\u308B.\n    x=int(pow(a,1/k))+1\n\
-    \n    #\u5897\u3084\u3059\n    while pow(x,k)<a:\n        x+=1\n\n    #\u6E1B\u3089\
-    \u3059\n    while a<=pow(x-1,k):\n        x-=1\n    return x\n\ndef kth_Power(a,k):\n\
-    \    \"\"\" \u6574\u6570 a \u304C k \u4E57\u6570\u304B\u3069\u3046\u304B\u3092\
-    \u6C42\u3081, \u305D\u3046\u306A\u3089\u3070, b^k=a \u3092\u6E80\u305F\u3059 k\
-    \ \u3092\u8FD4\u3059.\n\n    [Input]\n    a: int\n    k: int (k>0)\n\n    [Output]\n\
-    \    \u5B58\u5728\u3057\u306A\u3044  : None\n    \u5B58\u5728\u3059\u308B    :\
-    \ b^k=a \u3092\u6E80\u305F\u3059 b\n    \"\"\"\n\n    if k%2==0:\n        if a<0:\n\
-    \            return None\n        b=Floor_Root(a,k)\n        return b if pow(b,k)==a\
-    \ else None\n    else:\n        sgn=1 if a>=0 else -1\n        b=Floor_Root(abs(a),k)\n\
-    \        return sgn*b if pow(sgn*b,k)==a else None\n"
+    \        else:\n            A[i]=pow(i,K,Mod)\n    return A\n"
   dependsOn: []
   isVerificationFile: false
-  path: Integer.py
+  path: Integer/Prime.py
   requiredBy: []
-  timestamp: '2023-01-01 15:53:57+09:00'
+  timestamp: '2023-03-18 02:55:12+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
-documentation_of: Integer.py
+documentation_of: Integer/Prime.py
 layout: document
 redirect_from:
-- /library/Integer.py
-- /library/Integer.py.html
-title: Integer.py
+- /library/Integer/Prime.py
+- /library/Integer/Prime.py.html
+title: Integer/Prime.py
 ---

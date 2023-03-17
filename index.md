@@ -103,9 +103,6 @@ data:
       path: Imos.py
       title: Imos.py
     - icon: ':warning:'
-      path: Integer.py
-      title: Integer.py
-    - icon: ':warning:'
       path: Integer_Interval.py
       title: Integer_Interval.py
     - icon: ':warning:'
@@ -297,6 +294,32 @@ data:
     - icon: ':warning:'
       path: Graph/Graph/Graph.py
       title: Graph
+  - name: Integer
+    pages:
+    - icon: ':warning:'
+      path: Integer/Divisors.py
+      title: Integer/Divisors.py
+    - icon: ':warning:'
+      path: Integer/Feature.py
+      title: Integer/Feature.py
+    - icon: ':warning:'
+      path: Integer/Modulo.py
+      title: Integer/Modulo.py
+    - icon: ':warning:'
+      path: Integer/Prime.py
+      title: Integer/Prime.py
+    - icon: ':warning:'
+      path: Integer/Quotient_Reminder.py
+      title: Integer/Quotient_Reminder.py
+    - icon: ':warning:'
+      path: Integer/Summation.py
+      title: Integer/Summation.py
+    - icon: ':warning:'
+      path: Integer/Totient.py
+      title: Integer/Totient.py
+    - icon: ':warning:'
+      path: Integer/Value.py
+      title: Integer/Value.py
   - name: Min_Cost_Flow
     pages:
     - icon: ':warning:'
