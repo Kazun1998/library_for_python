@@ -22,9 +22,9 @@ data:
     \    C=(C[0], ..., C[d-1]): \u7DDA\u5F62\u6F38\u5316\u5F0F\n    N: \u6C42\u3081\
     \u308B\u9805\u6570\n    offset: \u305A\u3089\u3059\u9805\u6570 (\u521D\u9805\u304C\
     \u7B2C offset \u9805\u306B\u306A\u308B)\n    \"\"\"\n\n    assert len(A)==len(C)\n\
-    \    d=len(A)\n\n    N-=offset\n\n    if N<d:\n        return A[N]%Mod\n\n   \
-    \ A=Modulo_Polynomial(A,d+1)\n    Q=Modulo_Polynomial([-C[i-1] if i else 1  for\
-    \ i in range(d+1)], d+1)\n\n    P=A*Q; P[d]=0\n    return Polynominal_Coefficient(P,Q,N)\n\
+    \    d=len(A)\n\n    N-=offset\n\n    if N<0:\n        return 0\n    elif N<d:\n\
+    \        return A[N]%Mod\n\n    A=Modulo_Polynomial(A,d+1)\n    Q=Modulo_Polynomial([-C[i-1]\
+    \ if i else 1  for i in range(d+1)], d+1)\n\n    P=A*Q; P[d]=0\n    return Polynominal_Coefficient(P,Q,N)\n\
     \ndef Find_Linear_Recurrence(A):\n    \"\"\" A \u304B\u3089\u63A8\u5B9A\u3055\u308C\
     \u308B\u6700\u5C0F\u306E\u9577\u3055\u306E\u95A2\u4FC2\u5F0F\u3092\u6C42\u3081\
     \u308B.\n\n    Reference: https://judge.yosupo.jp/submission/28692\n    \"\"\"\
@@ -124,7 +124,7 @@ data:
   isVerificationFile: false
   path: Modulo_Sequence/Modulo_Sequence.py
   requiredBy: []
-  timestamp: '2022-12-24 17:43:12+09:00'
+  timestamp: '2023-03-18 02:35:05+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Modulo_Sequence/Modulo_Sequence.py
