@@ -1,5 +1,10 @@
 class Partial_Persistent_List:
     def __init__(self, A, manual_mode=False):
+        """ A を半永続リスト化する.
+
+        manual_mode: False ならば代入すると自動的に時刻が進み, True ならば時刻は self.forward_time() で進めなければならない.
+        """
+
         from bisect import bisect_left
 
         self.__N=N=len(A)
