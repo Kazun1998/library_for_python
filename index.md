@@ -422,8 +422,8 @@ data:
       path: Union_Find/Coloring_Union_Find.py
       title: Union_Find/Coloring_Union_Find.py
     - icon: ':warning:'
-      path: Union_Find/Generized_Union_Find.py
-      title: Union_Find/Generized_Union_Find.py
+      path: Union_Find/Dynamic_Union_Find.py
+      title: Union_Find/Dynamic_Union_Find.py
     - icon: ':warning:'
       path: Union_Find/Potentialized_Union_Find.py
       title: Union_Find/Potentialized_Union_Find.py

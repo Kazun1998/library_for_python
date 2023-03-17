@@ -8,11 +8,11 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.1/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.2/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.11.1/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.11.2/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "class Trie_Node():\n    def __init__(self, item):\n        self.item=item\n\
     \        self.next={}\n        self.terminal_count=0\n        self.prefix_count=0\n\
@@ -20,48 +20,45 @@ data:
     \ \"({}) [{} ({})]: {}\".format(self.terminal_count, self.item,self.prefix_count,self.next)\n\
     \        else:\n            return \"[{} ({})]: {}\".format(self.item,self.prefix_count,self.next)\n\
     \n    __repr__=__str__\n\nclass Trie_Tree():\n    def __init__(self):\n      \
-    \  \"\"\" Trie \u6728\u3092\u751F\u6210\u3059\u308B.\n\n        artifical_item:\
-    \ \u767B\u9332\u3055\u308C\u308B\u5217\u306B\u767B\u5834\u3057\u306A\u3044\u3053\
-    \u3068\u304C\u4FDD\u8A3C\u3055\u308C\u3066\u3044\u308B\u8981\u7D20\n        \"\
-    \"\"\n        self.nodes=[Trie_Node(None)]\n\n    def insert(self, S):\n     \
-    \   \"\"\" \u5217 S \u3092\u767B\u9332\u3059\u308B.\n\n        S: \u5217\n   \
-    \     \"\"\"\n        nodes=self.nodes\n        node_id=0\n        nodes[node_id].prefix_count+=1\n\
-    \        for x in S:\n            if x not in nodes[node_id].next:\n         \
-    \       nodes[node_id].next[x]=len(nodes)\n                nodes.append(Trie_Node(x))\n\
-    \            node_id=nodes[node_id].next[x]\n            nodes[node_id].prefix_count+=1\n\
-    \        nodes[node_id].terminal_count+=1\n\n    def insert_continuation(self,\
-    \ S, start_id=0):\n        \"\"\" \u5217 S \u3092\u767B\u9332\u3059\u308B. \u305F\
-    \u3060\u3057, \u767B\u9332\u306E\u5834\u6240\u306F start_id \u304B\u3089\u59CB\
-    \u307E\u308B\u3068\u3059\u308B.\n\n        S: \u5217\n        start_id: int\n\
-    \        \"\"\"\n        nodes=self.nodes\n        node_id=start_id\n        nodes[node_id].prefix_count+=1\n\
-    \        for x in S:\n            if x not in nodes[node_id].next:\n         \
-    \       nodes[node_id].next[x]=len(nodes)\n                nodes.append(Trie_Node(x))\n\
-    \            node_id=nodes[node_id].next[x]\n            nodes[node_id].prefix_count+=1\n\
-    \        nodes[node_id].terminal_count+=1\n\n    def count(self, S):\n       \
-    \ \"\"\" \u5217 S \u306E\u6570\u3092\u6C42\u3081\u308B.\n\n        S: \u5217\n\
-    \        \"\"\"\n        nodes=self.nodes\n        node_id=0\n        for x in\
-    \ S:\n            if x not in nodes[node_id].next:\n                return 0\n\
-    \            node_id=nodes[node_id].next[x]\n        return nodes[node_id].terminal_count\n\
-    \n    def count_continuation(self,S,start_id=0):\n        \"\"\" \u5217 S \u306E\
-    \u6570\u3092\u6570\u3048\u308B. \u305F\u3060\u3057, \u691C\u7D22\u306E\u5834\u6240\
-    \u306F start_id \u304B\u3089\u59CB\u307E\u308B\u3068\u3059\u308B.\n\n        S:\
-    \ \u5217\n        start_id: int\n        \"\"\"\n        nodes=self.nodes\n  \
-    \      node_id=start_id\n        for x in S:\n            if x not in nodes[node_id].next:\n\
+    \  \"\"\" Trie \u6728\u3092\u751F\u6210\u3059\u308B.\"\"\"\n\n        self.nodes=[Trie_Node(None)]\n\
+    \n    def insert(self, S):\n        \"\"\" \u5217 S \u3092\u767B\u9332\u3059\u308B\
+    .\n\n        S: \u5217\n        \"\"\"\n        nodes=self.nodes\n        node_id=0\n\
+    \        nodes[node_id].prefix_count+=1\n        for x in S:\n            if x\
+    \ not in nodes[node_id].next:\n                nodes[node_id].next[x]=len(nodes)\n\
+    \                nodes.append(Trie_Node(x))\n            node_id=nodes[node_id].next[x]\n\
+    \            nodes[node_id].prefix_count+=1\n        nodes[node_id].terminal_count+=1\n\
+    \n    def insert_continuation(self, S, start_id=0):\n        \"\"\" \u5217 S \u3092\
+    \u767B\u9332\u3059\u308B. \u305F\u3060\u3057, \u767B\u9332\u306E\u5834\u6240\u306F\
+    \ start_id \u304B\u3089\u59CB\u307E\u308B\u3068\u3059\u308B.\n\n        S: \u5217\
+    \n        start_id: int\n        \"\"\"\n        nodes=self.nodes\n        node_id=start_id\n\
+    \        nodes[node_id].prefix_count+=1\n        for x in S:\n            if x\
+    \ not in nodes[node_id].next:\n                nodes[node_id].next[x]=len(nodes)\n\
+    \                nodes.append(Trie_Node(x))\n            node_id=nodes[node_id].next[x]\n\
+    \            nodes[node_id].prefix_count+=1\n        nodes[node_id].terminal_count+=1\n\
+    \n    def count(self, S):\n        \"\"\" \u5217 S \u306E\u6570\u3092\u6C42\u3081\
+    \u308B.\n\n        S: \u5217\n        \"\"\"\n        nodes=self.nodes\n     \
+    \   node_id=0\n        for x in S:\n            if x not in nodes[node_id].next:\n\
     \                return 0\n            node_id=nodes[node_id].next[x]\n      \
-    \  return nodes[node_id].terminal_count\n\n    def search(self, S):\n        \"\
-    \"\" \u5217 S \u304C\u5B58\u5728\u3059\u308B\u304B\u3069\u3046\u304B\u3092\u5224\
-    \u5B9A\u3059\u308B.\n\n        S: \u5217\n        \"\"\"\n        return self.count(S)>0\n\
-    \n    def search_continuation(self,S,start_id=0):\n        \"\"\" \u5217 S \u304C\
-    \u5B58\u5728\u3059\u308B\u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B\
-    . \u305F\u3060\u3057, \u691C\u7D22\u306E\u5834\u6240\u306F start_id \u304B\u3089\
-    \u59CB\u307E\u308B\u3068\u3059\u308B.\n\n        S: \u5217\n        start_id:\
-    \ int\n        \"\"\"\n        return self.count_continuation(S, start_id)>0\n\
-    \n    def search_prefix(self, S):\n        \"\"\" S \u3092 prefix \u306B\u6301\
-    \u3064\u5217\u304C\u5B58\u5728\u3059\u308B\u304B\u3069\u3046\u304B\u3092\u5224\
-    \u5B9A\u3059\u308B.\n\n        S: \u5217\n        \"\"\"\n        nodes=self.nodes\n\
-    \        node_id=0\n        for x in S:\n            if x not in nodes[node_id].next:\n\
-    \                return False\n            node_id=nodes[node_id].next[x]\n  \
-    \      return True\n\n    def search_prefix_continuation(self, S, start_id=0):\n\
+    \  return nodes[node_id].terminal_count\n\n    def count_continuation(self,S,start_id=0):\n\
+    \        \"\"\" \u5217 S \u306E\u6570\u3092\u6570\u3048\u308B. \u305F\u3060\u3057\
+    , \u691C\u7D22\u306E\u5834\u6240\u306F start_id \u304B\u3089\u59CB\u307E\u308B\
+    \u3068\u3059\u308B.\n\n        S: \u5217\n        start_id: int\n        \"\"\"\
+    \n        nodes=self.nodes\n        node_id=start_id\n        for x in S:\n  \
+    \          if x not in nodes[node_id].next:\n                return 0\n      \
+    \      node_id=nodes[node_id].next[x]\n        return nodes[node_id].terminal_count\n\
+    \n    def search(self, S):\n        \"\"\" \u5217 S \u304C\u5B58\u5728\u3059\u308B\
+    \u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B.\n\n        S: \u5217\n\
+    \        \"\"\"\n        return self.count(S)>0\n\n    def search_continuation(self,S,start_id=0):\n\
+    \        \"\"\" \u5217 S \u304C\u5B58\u5728\u3059\u308B\u304B\u3069\u3046\u304B\
+    \u3092\u5224\u5B9A\u3059\u308B. \u305F\u3060\u3057, \u691C\u7D22\u306E\u5834\u6240\
+    \u306F start_id \u304B\u3089\u59CB\u307E\u308B\u3068\u3059\u308B.\n\n        S:\
+    \ \u5217\n        start_id: int\n        \"\"\"\n        return self.count_continuation(S,\
+    \ start_id)>0\n\n    def search_prefix(self, S):\n        \"\"\" S \u3092 prefix\
+    \ \u306B\u6301\u3064\u5217\u304C\u5B58\u5728\u3059\u308B\u304B\u3069\u3046\u304B\
+    \u3092\u5224\u5B9A\u3059\u308B.\n\n        S: \u5217\n        \"\"\"\n       \
+    \ nodes=self.nodes\n        node_id=0\n        for x in S:\n            if x not\
+    \ in nodes[node_id].next:\n                return False\n            node_id=nodes[node_id].next[x]\n\
+    \        return True\n\n    def search_prefix_continuation(self, S, start_id=0):\n\
     \        \"\"\" S \u3092 prefix \u306B\u6301\u3064\u5217\u304C\u5B58\u5728\u3059\
     \u308B\u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B. \u305F\u3060\u3057\
     , \u691C\u7D22\u306E\u5834\u6240\u306F start_id \u304B\u3089\u59CB\u307E\u308B\
@@ -110,7 +107,7 @@ data:
   isVerificationFile: false
   path: Trie.py
   requiredBy: []
-  timestamp: '2023-02-03 01:13:10+09:00'
+  timestamp: '2023-03-18 02:33:42+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Trie.py
