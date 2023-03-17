@@ -1,10 +1,8 @@
-class Generalized_Union_Find():
+class Dynamic_Union_Find():
     def __init__(self):
         """初期化する.
 
         N:要素数
-        f:2変数関数の合成
-        e:最初の値
         """
         self.parent={}
         self.SIZE={}
@@ -36,7 +34,7 @@ class Generalized_Union_Find():
 
         self.parent[x]=x
         for v in V:
-            self.parent[x]=x
+            self.parent[v]=x
         return x
 
     def union(self, x, y):
