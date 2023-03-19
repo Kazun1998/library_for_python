@@ -36,7 +36,7 @@ def verify():
         t,*query=map(int,input().split())
         if t==0:
             l,r,b,c=query
-            S.operate(l,r-1,(b<<32)+c)
+            S.action(l,r-1,(b<<32)+c)
         else:
             l,r=query
             Ans.append(S.product(l,r-1)>>32)
