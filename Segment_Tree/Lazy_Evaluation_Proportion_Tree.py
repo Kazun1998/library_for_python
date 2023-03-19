@@ -1,10 +1,10 @@
 class Lazy_Evaluation_Proportion_Tree():
-    def __init__(self,L,calc,unit,op,comp,id,prop,index=1):
-        """calcを演算,opを作用とするリストLのSegment Treeを作成
+    def __init__(self,L,calc,unit,act,comp,id,prop,index=1):
+        """calcを演算,actを作用とするリストLのSegment Treeを作成
 
         calc:演算
         unit:モノイドcalcの単位元 (xe=ex=xを満たすe)
-        op:作用素
+        act:作用素
         comp:作用素の合成
         id:恒等写像
         prop:比例の仕方
@@ -22,7 +22,7 @@ class Lazy_Evaluation_Proportion_Tree():
         """
         self.calc=calc
         self.unit=unit
-        self.op=op
+        self.act=act
         self.comp=comp
         self.id=id
         self.prop=prop
@@ -51,7 +51,7 @@ class Lazy_Evaluation_Proportion_Tree():
     def _eval_at(self,m):
         if self.lazy[m]==self.id:
             return self.data[m]
-        return self.op(self.prop(self.lazy[m],self.Left[m],self.Right[m]),self.data[m])
+        return self.act(self.prop(self.lazy[m],self.Left[m],self.Right[m]),self.data[m])
 
     #配列の第m要素を下に伝搬
     def _propagate_at(self,m):
@@ -98,7 +98,7 @@ class Lazy_Evaluation_Proportion_Tree():
         return self.data[m]
 
     #作用
-    def operate(self,From,To,alpha,left_closed=True,right_closed=True):
+    def action(self,From,To,alpha,left_closed=True,right_closed=True):
         L=(From-self.index)+self.N+(not left_closed)
         R=(To-self.index)+self.N+(right_closed)
 

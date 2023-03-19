@@ -1,11 +1,11 @@
 class Segment_Tree():
-    def __init__(self, L, calc, unit):
-        """ calc を演算とするリスト L の Segment Tree を作成
+    def __init__(self, L, op, unit):
+        """ op を演算とするリスト L の Segment Tree を作成
 
-        calc: 演算 (2変数関数, Monoid)
-        unit: Monoid calc の単位元 (xe=ex=xを満たすe)
+        op: 演算 (2変数関数, Monoid)
+        unit: Monoid op の単位元 (xe=ex=xを満たすe)
         """
-        self.calc=calc
+        self.op=op
         self.unit=unit
 
         N=len(L); self.n=N
@@ -17,7 +17,7 @@ class Segment_Tree():
         self.depth=d
 
         for i in range(k-1,0,-1):
-            data[i]=calc(data[i<<1], data[i<<1|1])
+            data[i]=op(data[i<<1], data[i<<1|1])
 
     def get(self, k):
         """ 第 k 要素を取得
@@ -34,12 +34,12 @@ class Segment_Tree():
         assert 0<=k<self.N,"添字が範囲外"
         m=k+self.N
 
-        data=self.data; calc=self.calc
+        data=self.data; op=self.op
         data[m]=x
 
         while m>1:
             m>>=1
-            data[m]=calc(data[m<<1], data[m<<1|1])
+            data[m]=op(data[m<<1], data[m<<1|1])
 
     def product(self, l, r, left_closed=True,right_closed=True):
         L=l+self.N+(not left_closed)
@@ -48,20 +48,20 @@ class Segment_Tree():
         vL=self.unit
         vR=self.unit
 
-        data=self.data; calc=self.calc
+        data=self.data; op=self.op
         while L<R:
             if L&1:
-                vL=calc(vL, data[L])
+                vL=op(vL, data[L])
                 L+=1
 
             if R&1:
                 R-=1
-                vR=calc(data[R], vR)
+                vR=op(data[R], vR)
 
             L>>=1
             R>>=1
 
-        return calc(vL,vR)
+        return op(vL,vR)
 
     def all_product(self):
         return self.data[1]
@@ -86,21 +86,21 @@ class Segment_Tree():
         left+=self.N
         sm=self.unit
 
-        calc=self.calc; data=self.data
+        op=self.op; data=self.data
         first=True
 
         while first or (left & (-left))!=left:
             first=False
             while left%2==0:
                 left>>=1
-            if not cond(calc(sm, data[left])):
+            if not cond(op(sm, data[left])):
                 while left<self.N:
                     left<<=1
-                    if cond(calc(sm, data[left])):
-                        sm=calc(sm, data[left])
+                    if cond(op(sm, data[left])):
+                        sm=op(sm, data[left])
                         left+=1
                 return left-self.N
-            sm=calc(sm, data[left])
+            sm=op(sm, data[left])
             left+=1
         return self.N
 
@@ -123,7 +123,7 @@ class Segment_Tree():
         right+=self.N
         sm=self.unit
 
-        calc=self.calc; data=self.data
+        op=self.op; data=self.data
         first=1
         while first or (right & (-right))!=right:
             first=0
@@ -131,14 +131,14 @@ class Segment_Tree():
             while right>1 and right&1:
                 right>>=1
 
-            if not cond(calc(data[right], sm)):
+            if not cond(op(data[right], sm)):
                 while right<self.N:
                     right=2*right+1
-                    if cond(calc(data[right], sm)):
-                        sm=calc(data[right], sm)
+                    if cond(op(data[right], sm)):
+                        sm=op(data[right], sm)
                         right-=1
                 return right+1-self.N
-            sm=calc(data[right], sm)
+            sm=op(data[right], sm)
         return 0
 
     def __getitem__(self,k):

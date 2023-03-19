@@ -1,5 +1,5 @@
 class Potentilized_Union_Find():
-    def __init__(self, N, calc, zero, inv):
+    def __init__(self, N, op, zero, neg):
         """ 0,1,...,N-1 を要素として初期化する.
 
         N: 要素数
@@ -12,10 +12,10 @@ class Potentilized_Union_Find():
         self.valid=[True]*N
         self.__group_number=N
 
-        self.calc=calc
-        self.diff=lambda u,v:self.calc(u, self.inv(v)) # diff(u,v)=U(u)-U(v)
+        self.op=op
+        self.diff=lambda u,v:self.op(u, self.neg(v)) # diff(u,v)=U(u)-U(v)
         self.zero=zero
-        self.inv=inv
+        self.neg=neg
 
 
     def find(self, x):
@@ -28,7 +28,7 @@ class Potentilized_Union_Find():
         if self.parents[x]<0:
             return x
 
-        par=self.parents; pot=self.pot; calc=self.calc
+        par=self.parents; pot=self.pot; op=self.op
 
         r=x
         data=[]
@@ -37,7 +37,7 @@ class Potentilized_Union_Find():
             r=par[r]
 
         for x in data[::-1]:
-            pot[x]=self.calc(pot[x], pot[par[x]])
+            pot[x]=self.op(pot[x], pot[par[x]])
             par[x]=r
 
         return r
@@ -49,7 +49,7 @@ class Potentilized_Union_Find():
         """
 
         a=self.find(x); b=self.find(y)
-        u=self.calc(u, self.diff(self.pot[x],self.pot[y]))
+        u=self.op(u, self.diff(self.pot[x],self.pot[y]))
         x=a; y=b
 
         if x==y:
@@ -59,7 +59,7 @@ class Potentilized_Union_Find():
 
         if self.rank[x]<self.rank[y]:
             x,y=y,x
-            u=self.inv(u)
+            u=self.neg(u)
         elif self.rank[x]==self.rank[y]:
             self.rank[x]+=1
 

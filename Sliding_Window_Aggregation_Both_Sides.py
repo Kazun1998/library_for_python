@@ -1,12 +1,12 @@
 class Sliding_Window_Aggregation_Both_Sides:
-    def __init__(self, calc):
+    def __init__(self, op):
         """ 両側スライドプロダクトクラスを生成する.
 
-        calc: 2項演算 (半群)
-        ※calcについて, front は左から, back は右から行う.
+        op: 2項演算 (半群)
+        ※opについて, front は左から, back は右から行う.
         """
 
-        self.calc=calc
+        self.op=op
         self.left_value=[]
         self.left_prod=[]
         self.right_value=[]
@@ -33,14 +33,14 @@ class Sliding_Window_Aggregation_Both_Sides:
     def push_front(self, x):
         self.left_value.append(x)
         if self.left_prod:
-            self.left_prod.append(self.calc(x, self.left_prod[-1]))
+            self.left_prod.append(self.op(x, self.left_prod[-1]))
         else:
             self.left_prod.append(x)
 
     def push_back(self, x):
         self.right_value.append(x)
         if self.right_prod:
-            self.right_prod.append(self.calc(self.right_prod[-1], x))
+            self.right_prod.append(self.op(self.right_prod[-1], x))
         else:
             self.right_prod.append(x)
 
@@ -56,7 +56,7 @@ class Sliding_Window_Aggregation_Both_Sides:
                 y=self.right_value.pop()
                 self.left_value.append(y)
                 if self.left_prod:
-                    self.left_prod.append(self.calc(y, self.left_prod[-1]))
+                    self.left_prod.append(self.op(y, self.left_prod[-1]))
                 else:
                     self.left_prod.append(y)
 
@@ -64,7 +64,7 @@ class Sliding_Window_Aggregation_Both_Sides:
                 y=T.pop()
                 self.right_value.append(y)
                 if self.right_prod:
-                    self.right_prod.append(self.calc(self.right_prod[-1], y))
+                    self.right_prod.append(self.op(self.right_prod[-1], y))
                 else:
                     self.right_prod.append(y)
 
@@ -83,7 +83,7 @@ class Sliding_Window_Aggregation_Both_Sides:
                 y=self.left_value.pop()
                 self.right_value.append(y)
                 if self.right_prod:
-                    self.right_prod.append(self.calc(self.right_prod[-1], y))
+                    self.right_prod.append(self.op(self.right_prod[-1], y))
                 else:
                     self.right_prod.append(y)
 
@@ -91,7 +91,7 @@ class Sliding_Window_Aggregation_Both_Sides:
                 y=T.pop()
                 self.left_value.append(y)
                 if self.left_prod:
-                    self.left_prod.append(self.calc(y, self.left_prod[-1]))
+                    self.left_prod.append(self.op(y, self.left_prod[-1]))
                 else:
                     self.left_prod.append(y)
 
@@ -101,7 +101,7 @@ class Sliding_Window_Aggregation_Both_Sides:
     def product(self, default=None):
         if self.right_prod:
             if self.left_prod:
-                return self.calc(self.left_prod[-1], self.right_prod[-1])
+                return self.op(self.left_prod[-1], self.right_prod[-1])
             else:
                 return self.right_prod[-1]
         else:

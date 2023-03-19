@@ -1,19 +1,19 @@
 """
 Note
 [1] RMQ(区間上の最小値:Range Minimum Query)
-calc=lambda x,y:min(x,y)
+op=lambda x,y:min(x,y)
 unit=float("inf")
-op=lambda alpha,x:alpha
+act=lambda alpha,x:alpha
 comp=lambda alpha,beta:alpha
 """
 
 class Lazy_Evaluation_Tree():
-    def __init__(self, L, calc, unit, op, comp, id):
-        """ calc を演算, op を作用とするリスト L の Segment Tree を作成
+    def __init__(self, L, op, unit, act, comp, id):
+        """ op を演算, act を作用とするリスト L の Segment Tree を作成
 
-        calc: 演算
-        unit: Monoid calc の単位元 ( xe=ex=x を満たす e )
-        op: 作用素
+        op: 演算
+        unit: Monoid op の単位元 ( xe=ex=x を満たす e )
+        act: 作用素
         comp: 作用素の合成
         id: 恒等写像
 
@@ -26,9 +26,9 @@ class Lazy_Evaluation_Tree():
         作用素は左から掛ける. 更新も左から.
         """
 
-        self.calc=calc
-        self.unit=unit
         self.op=op
+        self.unit=unit
+        self.act=act
         self.comp=comp
         self.id=id
 
@@ -42,12 +42,12 @@ class Lazy_Evaluation_Tree():
         self.depth=d
 
         for i in range(k-1,0,-1):
-            data[i]=calc(data[i<<1], data[i<<1|1])
+            data[i]=op(data[i<<1], data[i<<1|1])
 
     def _eval_at(self, m):
         if self.lazy[m]==self.id:
             return self.data[m]
-        return self.op(self.lazy[m],self.data[m])
+        return self.act(self.lazy[m],self.data[m])
 
     #配列の第m要素を下に伝搬
     def _propagate_at(self, m):
@@ -67,11 +67,11 @@ class Lazy_Evaluation_Tree():
 
     #配列の第m要素より上を全て再計算
     def _recalc_above(self, m):
-        data=self.data; calc=self.calc
+        data=self.data; op=self.op
         eval_at=self._eval_at
         while m>1:
             m>>=1
-            data[m]=calc(eval_at(m<<1),eval_at(m<<1|1))
+            data[m]=op(eval_at(m<<1),eval_at(m<<1|1))
 
     def get(self,k):
         m=k+self.N
@@ -81,7 +81,7 @@ class Lazy_Evaluation_Tree():
         return self.data[m]
 
     #作用
-    def operate(self, l, r, alpha, left_closed=True, right_closed=True):
+    def action(self, l, r, alpha, left_closed=True, right_closed=True):
         """ 第 l 要素から第 r 要素全てに alpha を作用させる.
 
         """
@@ -164,20 +164,20 @@ class Lazy_Evaluation_Tree():
         self._propagate_above(R0)
 
         vL=vR=self.unit
-        calc=self.calc; eval_at=self._eval_at
+        op=self.op; eval_at=self._eval_at
         while L<R:
             if L&1:
-                vL=calc(vL, eval_at(L))
+                vL=op(vL, eval_at(L))
                 L+=1
 
             if R&1:
                 R-=1
-                vR=calc(eval_at(R), vR)
+                vR=op(eval_at(R), vR)
 
             L>>=1
             R>>=1
 
-        return self.calc(vL,vR)
+        return self.op(vL,vR)
 
     def all_product(self):
         return self.product(0,self.N-1)

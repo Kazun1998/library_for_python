@@ -2,16 +2,16 @@ class Sliding_Window_Aggregation():
     """ 積をスライドさせながらもとめる.
     """
 
-    __slots__=("calc", "__front", "__back", "__left", "__right", "__cnt")
+    __slots__=("op", "__front", "__back", "__left", "__right", "__cnt")
 
-    def __init__(self, calc, X=[]):
+    def __init__(self, op, X=[]):
         """スライドプロダクトクラスを生成する.
 
-        calc: 2項演算 (半群)
-        ※calcについて, 右から新しい項を加えること.
+        op: 2項演算 (半群)
+        ※opについて, 右から新しい項を加えること.
         """
         from collections import deque
-        self.calc=calc
+        self.op=op
         self.__front=deque()
         self.__left=deque()
         self.__back=deque()
@@ -20,7 +20,7 @@ class Sliding_Window_Aggregation():
 
         for x in X:
             if self.__right:
-                self.__right.append(self.calc(self.__right[-1], x))
+                self.__right.append(self.op(self.__right[-1], x))
             else:
                 self.__right.append(x)
 
@@ -56,7 +56,7 @@ class Sliding_Window_Aggregation():
         self.__back.append(x)
 
         if self.__right:
-            self.__right.append(self.calc(self.__right[-1],x))
+            self.__right.append(self.op(self.__right[-1],x))
         else:
             self.__right.append(x)
 
@@ -71,7 +71,7 @@ class Sliding_Window_Aggregation():
                 x=self.__back.pop()
 
                 if self.__front:
-                    self.__left.appendleft(self.calc(x,self.__left[0]))
+                    self.__left.appendleft(self.op(x,self.__left[0]))
                 else:
                     self.__left.appendleft(x)
                 self.__front.appendleft(x)
@@ -87,7 +87,7 @@ class Sliding_Window_Aggregation():
 
         if self.__front:
             if self.__back:
-                return self.calc(self.__left[0],self.__right[-1])
+                return self.op(self.__left[0],self.__right[-1])
             else:
                 return self.__left[0]
         else:

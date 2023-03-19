@@ -1,13 +1,13 @@
 class Sparse_Binary_Indexed_Tree():
-    def __init__(self, N, op, unit, inv):
+    def __init__(self, N, op, zero, neg):
         """ calc を演算とする最高の添字が N になるような Sparse Binary Indexed Tree を作成
         calc: 演算 (2変数関数, 可換群)
-        unit: 群 calc の単位元 (x+e=e+x=xを満たすe)
-        inv : 群 calc の逆元 (1変数関数, x+inv(x)=inv(x)+x=e をみたす inv(x))
+        zero: 群 calc の単位元 (x+e=e+x=xを満たすe)
+        neg : 群 calc の逆元 (1変数関数, x+neg(x)=neg(x)+x=e をみたす neg(x))
         """
         self.op=op
-        self.unit=unit
-        self.inv=inv
+        self.zero=zero
+        self.neg=neg
         self.N=N
         self.log=max(N.bit_length()-1, 1)
         self.data={}
@@ -28,7 +28,7 @@ class Sparse_Binary_Indexed_Tree():
         data=self.data; op=self.op
         p=k+1
         while p<=self.N:
-            data[p]=op(data.get(p, self.unit), x)
+            data[p]=op(data.get(p, self.zero), x)
             p+=p&(-p)
 
     def update(self, k, x):
@@ -38,7 +38,7 @@ class Sparse_Binary_Indexed_Tree():
         """
 
         a=self.get(k)
-        y=self.op(self.inv(a), x)
+        y=self.op(self.neg(a), x)
 
         self.add(k,y)
 
@@ -53,18 +53,18 @@ class Sparse_Binary_Indexed_Tree():
         r=r+1 if r<self.N else self.N
 
         if l>r:
-            return self.unit
+            return self.zero
         elif l==1:
             return self.__section(r)
         else:
-            return self.op(self.inv(self.__section(l-1)), self.__section(r))
+            return self.op(self.neg(self.__section(l-1)), self.__section(r))
 
     def __section(self, x):
         """ B[0]+...+B[x] を求める. """
         data=self.data; op=self.op
-        S=self.unit
+        S=self.zero
         while x>0:
-            S=op(data.get(x, self.unit), S)
+            S=op(data.get(x, self.zero), S)
             x-=x&(-x)
         return S
 
@@ -76,22 +76,22 @@ class Sparse_Binary_Indexed_Tree():
 
         cond: 単調増加
 
-        ※ cond(unit)=True の場合の返り値は -1 とする.
+        ※ cond(zero)=True の場合の返り値は -1 とする.
         ※ cond(B[0]+...+B[k]) なる k が (0<=k<N に) 存在しない場合の返り値は N とする.
         """
 
-        if cond(self.unit):
+        if cond(self.zero):
             return -1
 
         j=0
         r=self.N
         t=1<<self.log
         data=self.data; op=self.op
-        alpha=self.unit
+        alpha=self.zero
 
         while t>0:
             if j+t<=self.N:
-                beta=op(alpha, data.get(j+t, self.unit))
+                beta=op(alpha, data.get(j+t, self.zero))
                 if not cond(beta):
                     alpha=beta
                     j+=t
@@ -111,4 +111,3 @@ class Sparse_Binary_Indexed_Tree():
     def __iter__(self):
         for k in range(self.N):
             yield self.sum(k, k)
-
