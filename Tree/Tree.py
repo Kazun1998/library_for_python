@@ -205,7 +205,7 @@ class Tree:
 
         N=self.N
 
-        bit=((2*N-1)-1).bit_length()
+        bit=max(1, ((2*N-1)-1).bit_length())
         D=[[0]*(2*N-1) for _ in range(bit)]
 
         self.euler_tour_vertex()
@@ -907,3 +907,47 @@ def Spanning_Tree(N,E,root,index=0,exclude=False):
             L.append((u,v))
 
     return T,L
+
+def Breath_First_Search_Tree(N, A, root, index=0):
+    from collections import deque
+
+    T=Tree(N, index)
+    T.root_set(root)
+
+    S=[False]*(N+index); S[root]=True
+    Q=deque([root])
+    while Q:
+        v=Q.popleft()
+        for w in A[v]:
+            if not S[w]:
+                S[w]=True
+                T.parent_set(w,v)
+                Q.append(w)
+
+    T.seal()
+    return T
+
+def Depth_First_Search_Tree(N, A, root, index=0):
+    from collections import deque
+
+    T=Tree(N,index); T.root_set(root)
+
+    X=[False]*(N+index); X[root]=True
+    R=[0]*(N+index)
+
+    S=deque([root])
+    while S:
+        v=S.pop()
+        X[v]=True
+
+        while R[v]<len(A[v]):
+            w=A[v][R[v]]
+            R[v]+=1
+
+            if not X[w]:
+                S.append(v)
+                S.append(w)
+                T.child_set(v,w)
+                continue
+    T.seal()
+    return T
