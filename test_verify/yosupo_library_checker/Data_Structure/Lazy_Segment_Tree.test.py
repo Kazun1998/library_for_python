@@ -9,12 +9,12 @@ write=sys.stdout.write
 
 #==================================================
 def verify():
-    def calc(p,q):
+    def op(p,q):
         a,x=p>>32,p&msk
         b,y=q>>32,q&msk
         return ((a+b)%Mod<<32)+(x+y)
 
-    def op(u,p):
+    def act(u,p):
         b,c=u>>32,u&msk
         a,x=p>>32,p&msk
         return (((a*b+c*x)%Mod)<<32)+x
@@ -29,7 +29,7 @@ def verify():
 
     Mod=998244353
     msk=(1<<32)-1
-    S=Lazy_Evaluation_Tree(A,calc,0,op,comp,1<<32)
+    S=Lazy_Evaluation_Tree(A,op,0,act,comp,1<<32)
 
     Ans=[]
     for q in range(Q):
