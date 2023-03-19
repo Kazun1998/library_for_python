@@ -76,7 +76,7 @@ data:
   isVerificationFile: false
   path: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py
   requiredBy: []
-  timestamp: '2022-12-24 17:45:38+09:00'
+  timestamp: '2023-03-20 03:47:37+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Binary_Indexed_Tree/Range_Binary_Indexed_Tree.py

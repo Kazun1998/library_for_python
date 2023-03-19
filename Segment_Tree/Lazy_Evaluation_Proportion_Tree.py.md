@@ -14,11 +14,11 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.2/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Lazy_Evaluation_Proportion_Tree():\n    def __init__(self,L,calc,unit,op,comp,id,prop,index=1):\n\
-    \        \"\"\"calc\u3092\u6F14\u7B97,op\u3092\u4F5C\u7528\u3068\u3059\u308B\u30EA\
+  code: "class Lazy_Evaluation_Proportion_Tree():\n    def __init__(self,L,calc,unit,act,comp,id,prop,index=1):\n\
+    \        \"\"\"calc\u3092\u6F14\u7B97,act\u3092\u4F5C\u7528\u3068\u3059\u308B\u30EA\
     \u30B9\u30C8L\u306ESegment Tree\u3092\u4F5C\u6210\n\n        calc:\u6F14\u7B97\
     \n        unit:\u30E2\u30CE\u30A4\u30C9calc\u306E\u5358\u4F4D\u5143 (xe=ex=x\u3092\
-    \u6E80\u305F\u3059e)\n        op:\u4F5C\u7528\u7D20\n        comp:\u4F5C\u7528\
+    \u6E80\u305F\u3059e)\n        act:\u4F5C\u7528\u7D20\n        comp:\u4F5C\u7528\
     \u7D20\u306E\u5408\u6210\n        id:\u6052\u7B49\u5199\u50CF\n        prop:\u6BD4\
     \u4F8B\u306E\u4ED5\u65B9\n\n        [\u6761\u4EF6] M:Monoid,F={f:F x M\u2192 M:\u4F5C\
     \u7528\u7D20},prop:F x N \u2192F\u306B\u5BFE\u3057\u3066,\u4EE5\u4E0B\u304C\u6210\
@@ -34,7 +34,7 @@ data:
     \u3044\u308BIndex (l\u304Ca,r\u304Cb)\n        prop(a,l,r):l\u304B\u3089r\u307E\
     \u3067\u306E\u30D6\u30ED\u30C3\u30AF\u304Ca\u3067\u3042\u308B\u3068\u304D\u306E\
     \u6BD4\u4F8B\u306E\u4ED5\u65B9.\n        \"\"\"\n        self.calc=calc\n    \
-    \    self.unit=unit\n        self.op=op\n        self.comp=comp\n        self.id=id\n\
+    \    self.unit=unit\n        self.act=act\n        self.comp=comp\n        self.id=id\n\
     \        self.prop=prop\n        self.index=index\n\n        N=len(L)\n      \
     \  d=max(1,(N-1).bit_length())\n        k=1<<d\n\n        self.data=[unit]*k+L+[unit]*(k-len(L))\n\
     \        self.lazy=[self.id]*(2*k)\n        self.N=k\n        self.depth=d\n \
@@ -43,7 +43,7 @@ data:
     \ for x in range(1,k+1)]\n\n        for i in range(k-1,0,-1):\n            self.Left[i]=self.Left[i<<1]\n\
     \            self.Right[i]=self.Right[i<<1|1]\n\n    def _eval_at(self,m):\n \
     \       if self.lazy[m]==self.id:\n            return self.data[m]\n        return\
-    \ self.op(self.prop(self.lazy[m],self.Left[m],self.Right[m]),self.data[m])\n\n\
+    \ self.act(self.prop(self.lazy[m],self.Left[m],self.Right[m]),self.data[m])\n\n\
     \    #\u914D\u5217\u306E\u7B2Cm\u8981\u7D20\u3092\u4E0B\u306B\u4F1D\u642C\n  \
     \  def _propagate_at(self,m):\n        self.data[m]=self._eval_at(m)\n\n     \
     \   if m<self.N and self.lazy[m]!=self.id:\n            self.lazy[m<<1]=self.comp(\n\
@@ -60,8 +60,8 @@ data:
     \            )\n\n    def get(self,k):\n        m=k-self.index+self.N\n      \
     \  self._propagate_above(m)\n\n        self.data[m]=self._eval_at(m)\n\n     \
     \   self.lazy[m]=self.id\n        return self.data[m]\n\n    #\u4F5C\u7528\n \
-    \   def operate(self,From,To,alpha,left_closed=True,right_closed=True):\n    \
-    \    L=(From-self.index)+self.N+(not left_closed)\n        R=(To-self.index)+self.N+(right_closed)\n\
+    \   def action(self,From,To,alpha,left_closed=True,right_closed=True):\n     \
+    \   L=(From-self.index)+self.N+(not left_closed)\n        R=(To-self.index)+self.N+(right_closed)\n\
     \n        L0=R0=-1\n        X,Y=L,R-1\n        while X<Y:\n            if X&1:\n\
     \                L0=max(L0,X)\n                X+=1\n\n            if Y&1==0:\n\
     \                R0=max(R0,Y)\n                Y-=1\n\n            X>>=1\n   \
@@ -95,7 +95,7 @@ data:
   isVerificationFile: false
   path: Segment_Tree/Lazy_Evaluation_Proportion_Tree.py
   requiredBy: []
-  timestamp: '2022-08-28 03:55:36+09:00'
+  timestamp: '2023-03-20 03:47:37+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Segment_Tree/Lazy_Evaluation_Proportion_Tree.py

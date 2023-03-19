@@ -98,29 +98,29 @@ data:
     \        while dx>dy:\n            x=pa[x]\n            dx-=1\n\n        while\
     \ x!=y:\n            x=pa[x]\n            y=pa[y]\n\n        return x\n\n    def\
     \ __lca_prepare(self):\n        assert self.__after_seal_check()\n\n        N=self.N\n\
-    \n        bit=((2*N-1)-1).bit_length()\n        D=[[0]*(2*N-1) for _ in range(bit)]\n\
-    \n        self.euler_tour_vertex()\n        tour=self.euler_vertex\n        D[0]=tour.copy()\n\
-    \        dep=self.depth_search(True)\n\n        for i in range(1, bit):\n    \
-    \        shift=1<<i\n            tab=D[i]\n\n            for j in range(0, 2*N-1,\
-    \ 2*shift):\n                t=min(j+shift, 2*N-1)\n                tab[t-1]=tour[t-1]\n\
-    \n                for k in range(t-2, j-1, -1):\n                    if dep[tour[k]]<dep[tab[k+1]]:\n\
-    \                        tab[k]=tour[k]\n                    else:\n         \
-    \               tab[k]=tab[k+1]\n\n                if 2*N-1<=t:\n            \
-    \        break\n\n                tab[t]=tour[t]\n                r=min(t+shift,\
-    \ 2*N-1)\n\n                for k in range(t+1, r):\n                    if dep[tab[k-1]]<dep[tour[k]]:\n\
-    \                        tab[k]=tab[k-1]\n                    else:\n        \
-    \                tab[k]=tour[k]\n\n        self.lca_dst=D\n        return\n\n\
-    \    def lowest_common_ancestor(self, x, y):\n        \"\"\"\u9802\u70B9 x, y\
-    \ \u306E\u6700\u5C0F\u5171\u901A\u5148\u7956 (x,y\u306B\u5171\u901A\u3059\u308B\
-    \u5148\u7956\u3067\u6700\u3082\u6DF1\u3044\u3082\u306E) \u3092 \"\u9AD8\u901F\u306B\
-    \" \u6C42\u3081\u308B. \"\"\"\n\n        assert self.__after_seal_check(x,y)\n\
-    \        if not hasattr(self, \"lca_dst\"):\n            self.__lca_prepare()\n\
-    \n        a=self.in_time[x]; b=self.in_time[y]\n        if a>b:\n            x,y=y,x\n\
-    \            a,b=b,a\n\n        if a==b:\n            return self.lca_dst[0][a]\n\
-    \n        p=(a^b).bit_length()-1\n        tab=self.lca_dst[p]\n        u=tab[a];\
-    \ v=tab[b]\n\n        return u if self.vertex_depth(u)<self.vertex_depth(v) else\
-    \ v\n\n    def degree(self,v):\n        \"\"\" \u9802\u70B9 v \u306E\u6B21\u6570\
-    \u3092\u6C42\u3081\u308B. \"\"\"\n\n        assert self.__after_seal_check(v)\n\
+    \n        bit=max(1, ((2*N-1)-1).bit_length())\n        D=[[0]*(2*N-1) for _ in\
+    \ range(bit)]\n\n        self.euler_tour_vertex()\n        tour=self.euler_vertex\n\
+    \        D[0]=tour.copy()\n        dep=self.depth_search(True)\n\n        for\
+    \ i in range(1, bit):\n            shift=1<<i\n            tab=D[i]\n\n      \
+    \      for j in range(0, 2*N-1, 2*shift):\n                t=min(j+shift, 2*N-1)\n\
+    \                tab[t-1]=tour[t-1]\n\n                for k in range(t-2, j-1,\
+    \ -1):\n                    if dep[tour[k]]<dep[tab[k+1]]:\n                 \
+    \       tab[k]=tour[k]\n                    else:\n                        tab[k]=tab[k+1]\n\
+    \n                if 2*N-1<=t:\n                    break\n\n                tab[t]=tour[t]\n\
+    \                r=min(t+shift, 2*N-1)\n\n                for k in range(t+1,\
+    \ r):\n                    if dep[tab[k-1]]<dep[tour[k]]:\n                  \
+    \      tab[k]=tab[k-1]\n                    else:\n                        tab[k]=tour[k]\n\
+    \n        self.lca_dst=D\n        return\n\n    def lowest_common_ancestor(self,\
+    \ x, y):\n        \"\"\"\u9802\u70B9 x, y \u306E\u6700\u5C0F\u5171\u901A\u5148\
+    \u7956 (x,y\u306B\u5171\u901A\u3059\u308B\u5148\u7956\u3067\u6700\u3082\u6DF1\u3044\
+    \u3082\u306E) \u3092 \"\u9AD8\u901F\u306B\" \u6C42\u3081\u308B. \"\"\"\n\n   \
+    \     assert self.__after_seal_check(x,y)\n        if not hasattr(self, \"lca_dst\"\
+    ):\n            self.__lca_prepare()\n\n        a=self.in_time[x]; b=self.in_time[y]\n\
+    \        if a>b:\n            x,y=y,x\n            a,b=b,a\n\n        if a==b:\n\
+    \            return self.lca_dst[0][a]\n\n        p=(a^b).bit_length()-1\n   \
+    \     tab=self.lca_dst[p]\n        u=tab[a]; v=tab[b]\n\n        return u if self.vertex_depth(u)<self.vertex_depth(v)\
+    \ else v\n\n    def degree(self,v):\n        \"\"\" \u9802\u70B9 v \u306E\u6B21\
+    \u6570\u3092\u6C42\u3081\u308B. \"\"\"\n\n        assert self.__after_seal_check(v)\n\
     \        if v==self.root:\n            return len(self.children[v])\n        else:\n\
     \            return len(self.children[v])+1\n\n    def diameter(self):\n     \
     \   \"\"\" \u6728\u306E\u76F4\u5F84\u3092\u6C42\u3081\u308B.\"\"\"\n\n       \
@@ -357,12 +357,23 @@ data:
     \n    T=Tree(N,index)\n    T.root_set(root)\n    T.parent=X\n    T.children=C\n\
     \    T.seal()\n\n    if exclude==False:\n        return T\n\n    pa=T.parent\n\
     \    for u,v in EE:\n        if not(pa[v]==u or pa[u]==v):\n            L.append((u,v))\n\
-    \n    return T,L\n"
+    \n    return T,L\n\ndef Breath_First_Search_Tree(N, A, root, index=0):\n    from\
+    \ collections import deque\n\n    T=Tree(N, index)\n    T.root_set(root)\n\n \
+    \   S=[False]*(N+index); S[root]=True\n    Q=deque([root])\n    while Q:\n   \
+    \     v=Q.popleft()\n        for w in A[v]:\n            if not S[w]:\n      \
+    \          S[w]=True\n                T.parent_set(w,v)\n                Q.append(w)\n\
+    \n    T.seal()\n    return T\n\ndef Depth_First_Search_Tree(N, A, root, index=0):\n\
+    \    from collections import deque\n\n    T=Tree(N,index); T.root_set(root)\n\n\
+    \    X=[False]*(N+index); X[root]=True\n    R=[0]*(N+index)\n\n    S=deque([root])\n\
+    \    while S:\n        v=S.pop()\n        X[v]=True\n\n        while R[v]<len(A[v]):\n\
+    \            w=A[v][R[v]]\n            R[v]+=1\n\n            if not X[w]:\n \
+    \               S.append(v)\n                S.append(w)\n                T.child_set(v,w)\n\
+    \                continue\n    T.seal()\n    return T\n"
   dependsOn: []
   isVerificationFile: false
   path: Tree/Tree.py
   requiredBy: []
-  timestamp: '2022-09-28 11:04:34+09:00'
+  timestamp: '2023-03-20 03:27:06+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py

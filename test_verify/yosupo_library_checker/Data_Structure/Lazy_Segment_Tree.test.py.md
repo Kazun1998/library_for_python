@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: Segment_Tree/Lazy_Segment_Tree.py
     title: Lazy Segment Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/range_affine_range_sum
     links:
@@ -39,8 +39,8 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
   requiredBy: []
-  timestamp: '2022-11-23 02:07:00+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2023-03-20 03:47:37+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
 layout: document
