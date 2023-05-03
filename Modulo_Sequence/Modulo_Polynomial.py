@@ -1330,6 +1330,22 @@ def lcm(*X):
         X[i]=(a_inv*X[i])%Mod
     return L
 
+"""
+スライドさせる畳み込み
+"""
+def Slide_Convolution(A, B, cyclic=False):
+    """
+
+    """
+    assert len(A)>=len(B)
+
+    N,M=len(A)-1,len(B)-1
+    if cyclic:
+        A=A+A[:M]
+        return Calc.Convolution(A,B[::-1])[M:N+M+1]
+    else:
+        return Calc.Convolution(A,B[::-1])[M:N+1]
+
 #=================================================
 Mod=998244353
 Calc=Calculator()
