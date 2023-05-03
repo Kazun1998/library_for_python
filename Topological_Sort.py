@@ -1,14 +1,16 @@
 class Topological_Sort:
-    __slots__=("N","__arc","__rev")
-    def __init__(self, N: int):
+    __slots__=("N","__arc","__rev", "__reflexive")
+    def __init__(self, N: int, reflexive=False):
         """ N 頂点からなる空グラフを生成する.
 
         N: 頂点数
+        reflexive: 自己ループの追加を認めるか? (False の場合は自己ループは自動的に取り除かれる.)
         """
 
         self.N=N
         self.__arc=[[] for _ in  range(N)]
         self.__rev=[[] for _ in range(N)]
+        self.__reflexive=reflexive
 
     def add_arc(self, source: int, target: int):
         """ 有向辺 source -> target を追加する.
@@ -16,6 +18,10 @@ class Topological_Sort:
         source: 始点
         target: 終点
         """
+
+        if source==target and (not self.__reflexive):
+            return
+
         self.__arc[source].append(target)
         self.__rev[target].append(source)
 
