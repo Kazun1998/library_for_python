@@ -14,11 +14,11 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.2/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.3/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.11.2/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.11.3/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "import math\nfrom copy import *\nfrom Number  import Number\nfrom Fraction\
     \  import Fraction\nfrom functools import total_ordering\n\n\nclass root(Fraction):\n\
@@ -93,8 +93,8 @@ data:
     \  r.term+=[-t]\n        return r\n\n    def __abs__(self):\n        if self>=0:return\
     \ self\n        else:return -self\n\n    def __len__(self):\n        return len(self.term)\n"
   dependsOn:
-  - Fraction.py
   - Number.py
+  - Fraction.py
   isVerificationFile: false
   path: Root.py
   requiredBy: []

@@ -14,11 +14,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.2/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.3/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.11.2/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.11.3/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "class Modulo():\n    __slots__=(\"a\",\"n\")\n\n    def __init__(self, a,\
     \ n, mode=True):\n        if mode:\n            a%=n\n\n        self.a=a\n   \
@@ -246,8 +246,8 @@ data:
   timestamp: '2022-11-23 16:09:09+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
   - test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
+  - test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
 documentation_of: Modulo.py
 layout: document
 title: Modulo
