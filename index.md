@@ -82,6 +82,9 @@ data:
       path: Doubling.py
       title: Doubling.py
     - icon: ':warning:'
+      path: Doubly_Linked_List.py
+      title: Doubly_Linked_List.py
+    - icon: ':warning:'
       path: Enumeration.py
       title: Enumeration
     - icon: ':warning:'
@@ -577,10 +580,10 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Exp.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Log.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Log.test.py
     - icon: ':x:'
