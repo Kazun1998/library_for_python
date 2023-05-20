@@ -365,6 +365,34 @@ def First_Order_Simultaneous_Congruent_Equation(*X):
     return R
 
 """
+総和
+"""
+
+def Geometric_Sum(X, L, R):
+    """ sum_{i=L}^R X^i を求める.
+
+    X: modulo
+    0<=L<=R
+    """
+    assert 0<=L
+    if L>R:
+        return 0
+
+    a=X.a; m=X.n
+    def calc(K):
+        """ sum_{i=0}^{K-1} a^i
+        """
+
+        if K==0:
+            return 0
+        elif K%2==0:
+            return (1+pow(a, K//2, m))*calc(K//2)%m
+        else:
+            return (1+a*calc(K-1))%m
+
+    return Modulo(calc(R+1)-calc(L), m)
+
+"""
 有限体の操作関連
 """
 #ルジャンドル記号
