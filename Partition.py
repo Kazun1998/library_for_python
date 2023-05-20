@@ -1,6 +1,7 @@
 def Integer_Partition(N,M):
     """ 各項が M 以下の N の分割を求める. """
 
+    M=min(M,N)
     Q=[[k] for k in range(1,M+1)]
     X=[]
 
@@ -20,6 +21,7 @@ def Integer_Partition(N,M):
 def Integer_Partition_yielder(N,M):
     """ 各項が M 以下の N の分割を求める. (yielder)"""
 
+    M=min(M,N)
     Q=[[k] for k in range(1,M+1)]
 
     while Q:
@@ -32,11 +34,4 @@ def Integer_Partition_yielder(N,M):
 
         for k in range(1, min(M, N-alpha, x[-1])+1):
             Q.append(x+[k])
-
-from math import gcd
-def lcm(A):
-    x=1
-    for a in A:
-        x*=a//gcd(a,x)
-    return x
 
