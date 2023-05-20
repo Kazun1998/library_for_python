@@ -1,6 +1,6 @@
 class Gaussian_Integer():
     #入力定義
-    def __init__(self,Real_part=0,Imaginary_part=0):
+    def __init__(self, Real_part=0, Imaginary_part=0):
         self.re=Real_part
         self.im=Imaginary_part
 
@@ -88,6 +88,7 @@ class Gaussian_Integer():
 
     def __mod__(self,other):
         return  self-other*(self//other)
+
     #比較演算子
     def __eq__(self,other):
         if isinstance(other,Gaussian_Integer):
