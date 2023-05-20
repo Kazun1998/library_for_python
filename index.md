@@ -188,6 +188,9 @@ data:
       title: "Strongly Connected Components (\u5F37\u9023\u7D50\u6210\u5206\u5206\u89E3\
         )"
     - icon: ':warning:'
+      path: Subset_Sum.py
+      title: Subset_Sum.py
+    - icon: ':warning:'
       path: Topological_Sort.py
       title: Topological_Sort.py
     - icon: ':warning:'
@@ -586,7 +589,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Log.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Log.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Power.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Power.test.py
     - icon: ':x:'

@@ -376,8 +376,8 @@ data:
   timestamp: '2023-03-20 03:27:06+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
   - test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py
+  - test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
 documentation_of: Tree/Tree.py
 layout: document
 title: Tree

@@ -140,22 +140,28 @@ data:
     \u30BF\u30D7\u30EB\n    \"\"\"\n    R=Modulo(0,1)\n    for (a,b,m) in X:\n   \
     \     T=First_Order_Congruent_Equation(a,b,m)\n        if T==None:\n         \
     \   return None\n        R=__modulo_composite__(R,T)\n    return R\n\n\"\"\"\n\
-    \u6709\u9650\u4F53\u306E\u64CD\u4F5C\u95A2\u9023\n\"\"\"\n#\u30EB\u30B8\u30E3\u30F3\
-    \u30C9\u30EB\u8A18\u53F7\ndef Legendre(X):\n    \"\"\"\u30EB\u30B8\u30E3\u30F3\
-    \u30C9\u30EB\u8A18\u53F7 (a/p) \u3092\u8FD4\u3059.\n\n    \u203B\u6CD5\u304C\u7D20\
-    \u6570\u306E\u3068\u304D\u306E\u307F\u6210\u7ACB\u3059\u308B.\n    \"\"\"\n\n\
-    \    if X==0:\n        return 0\n    elif pow(X,(X.n-1)//2)==1:\n        return\
-    \ 1\n    else:\n        return -1\n\n#\u6839\u53F7\ndef Sqrt(X, All=False):\n\
-    \    \"\"\" X=a (mod p) \u306E\u3068\u304D, r*r=a (mod p) \u3092\u6E80\u305F\u3059\
-    \ r \u3092 (\u5B58\u5728\u3059\u308C\u3070) \u8FD4\u3059.\n\n    [Input]\n   \
-    \ All: False \u306A\u3089\u3070\u4E00\u65B9\u306E\u307F, True \u306A\u3089\u3070\
-    \u4E21\u65B9\n    \u203B \u6CD5 p \u304C\u7D20\u6570\u306E\u3068\u304D\u306E\u307F\
-    \u6709\u52B9\n    \u203B \u5B58\u5728\u3057\u306A\u3044\u3068\u304D\u306F None\
-    \ \u304C\u8FD4\u308A\u5024\n    \"\"\"\n    if Legendre(X)==-1:\n        return\
-    \ None\n\n    a,p=X.a,X.n\n\n    if X==0:\n        return X\n    elif p==2:\n\
-    \        return X\n    elif p%8==3 or p%8==7:\n        r=pow(X,(p+1)//4)\n   \
-    \     if All:\n            return (r,-r)\n        else:\n            return r\n\
-    \    elif p%8==5:\n        if pow(X,(p-1)//4)==1:\n            r=pow(X,(p+3)//8)\n\
+    \u7DCF\u548C\n\"\"\"\n\ndef Geometric_Sum(X, L, R):\n    \"\"\" sum_{i=L}^R X^i\
+    \ \u3092\u6C42\u3081\u308B.\n\n    X: modulo\n    0<=L<=R\n    \"\"\"\n    assert\
+    \ 0<=L\n    if L>R:\n        return 0\n\n    a=X.a; m=X.n\n    def calc(K):\n\
+    \        \"\"\" sum_{i=0}^{K-1} a^i\n        \"\"\"\n\n        if K==0:\n    \
+    \        return 0\n        elif K%2==0:\n            return (1+pow(a, K//2, m))*calc(K//2)%m\n\
+    \        else:\n            return (1+a*calc(K-1))%m\n\n    return Modulo(calc(R+1)-calc(L),\
+    \ m)\n\n\"\"\"\n\u6709\u9650\u4F53\u306E\u64CD\u4F5C\u95A2\u9023\n\"\"\"\n#\u30EB\
+    \u30B8\u30E3\u30F3\u30C9\u30EB\u8A18\u53F7\ndef Legendre(X):\n    \"\"\"\u30EB\
+    \u30B8\u30E3\u30F3\u30C9\u30EB\u8A18\u53F7 (a/p) \u3092\u8FD4\u3059.\n\n    \u203B\
+    \u6CD5\u304C\u7D20\u6570\u306E\u3068\u304D\u306E\u307F\u6210\u7ACB\u3059\u308B\
+    .\n    \"\"\"\n\n    if X==0:\n        return 0\n    elif pow(X,(X.n-1)//2)==1:\n\
+    \        return 1\n    else:\n        return -1\n\n#\u6839\u53F7\ndef Sqrt(X,\
+    \ All=False):\n    \"\"\" X=a (mod p) \u306E\u3068\u304D, r*r=a (mod p) \u3092\
+    \u6E80\u305F\u3059 r \u3092 (\u5B58\u5728\u3059\u308C\u3070) \u8FD4\u3059.\n\n\
+    \    [Input]\n    All: False \u306A\u3089\u3070\u4E00\u65B9\u306E\u307F, True\
+    \ \u306A\u3089\u3070\u4E21\u65B9\n    \u203B \u6CD5 p \u304C\u7D20\u6570\u306E\
+    \u3068\u304D\u306E\u307F\u6709\u52B9\n    \u203B \u5B58\u5728\u3057\u306A\u3044\
+    \u3068\u304D\u306F None \u304C\u8FD4\u308A\u5024\n    \"\"\"\n    if Legendre(X)==-1:\n\
+    \        return None\n\n    a,p=X.a,X.n\n\n    if X==0:\n        return X\n  \
+    \  elif p==2:\n        return X\n    elif p%8==3 or p%8==7:\n        r=pow(X,(p+1)//4)\n\
+    \        if All:\n            return (r,-r)\n        else:\n            return\
+    \ r\n    elif p%8==5:\n        if pow(X,(p-1)//4)==1:\n            r=pow(X,(p+3)//8)\n\
     \        else:\n            r=pow(2,(p-1)//4,p)*pow(X,(p+3)//8)\n\n        if\
     \ All:\n            return (r,-r)\n        else:\n            return r\n\n   \
     \ from random import randint as ri\n    u=2\n    s=1\n    while (p-1)%(2*u)==0:\n\
@@ -243,11 +249,11 @@ data:
   isVerificationFile: false
   path: Modulo.py
   requiredBy: []
-  timestamp: '2022-11-23 16:09:09+09:00'
+  timestamp: '2023-05-20 13:26:16+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
   - test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
+  - test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
 documentation_of: Modulo.py
 layout: document
 title: Modulo

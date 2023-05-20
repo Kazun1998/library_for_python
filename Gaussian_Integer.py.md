@@ -14,17 +14,17 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.3/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Gaussian_Integer():\n    #\u5165\u529B\u5B9A\u7FA9\n    def __init__(self,Real_part=0,Imaginary_part=0):\n\
-    \        self.re=Real_part\n        self.im=Imaginary_part\n\n    #\u8868\u793A\
-    \u5B9A\u7FA9\n    def __str__(self):\n        if self.re==0:\n            if self.im==0:\n\
-    \                return \"0\"\n            elif self.im==1:\n                return\
-    \ \"i\"\n            elif self.im==-1:\n                return \"-i\"\n      \
-    \      else:\n                return \"{}i\".format(self.im)\n        else:\n\
-    \            if self.im==0:\n                return str(self.re)\n           \
-    \ elif self.im==1:\n                return \"{}+i\".format(self.re)\n        \
-    \    elif self.im==-1:\n                return \"{}-i\".format(self.re)\n    \
-    \        else:\n                return \"{}{:+}i\".format(self.re,self.im)\n\n\
-    \    __repr__=__str__\n\n    #\u56DB\u5247\u6F14\u7B97\u5B9A\u7FA9\n    #\u52A0\
+  code: "class Gaussian_Integer():\n    #\u5165\u529B\u5B9A\u7FA9\n    def __init__(self,\
+    \ Real_part=0, Imaginary_part=0):\n        self.re=Real_part\n        self.im=Imaginary_part\n\
+    \n    #\u8868\u793A\u5B9A\u7FA9\n    def __str__(self):\n        if self.re==0:\n\
+    \            if self.im==0:\n                return \"0\"\n            elif self.im==1:\n\
+    \                return \"i\"\n            elif self.im==-1:\n               \
+    \ return \"-i\"\n            else:\n                return \"{}i\".format(self.im)\n\
+    \        else:\n            if self.im==0:\n                return str(self.re)\n\
+    \            elif self.im==1:\n                return \"{}+i\".format(self.re)\n\
+    \            elif self.im==-1:\n                return \"{}-i\".format(self.re)\n\
+    \            else:\n                return \"{}{:+}i\".format(self.re,self.im)\n\
+    \n    __repr__=__str__\n\n    #\u56DB\u5247\u6F14\u7B97\u5B9A\u7FA9\n    #\u52A0\
     \u6CD5\n    def __add__(self,other):\n        if isinstance(other,Gaussian_Integer):\n\
     \            return Gaussian_Integer(self.re+other.re,self.im+other.im)\n    \
     \    else:\n            return Gaussian_Integer(self.re+other,self.im)\n\n   \
@@ -43,8 +43,8 @@ data:
     \        c,d=other.re,other.im\n\n        n=other.norm()\n\n        p=(2*(a*c+b*d)+n)//(2*n)\n\
     \        q=(2*(b*c-a*d)+n)//(2*n)\n\n        return Gaussian_Integer(p,q)\n\n\
     \    def __divmod__(self,other):\n        x=self//other\n        return (x,self-other*x)\n\
-    \n    def __mod__(self,other):\n        return  self-other*(self//other)\n   \
-    \ #\u6BD4\u8F03\u6F14\u7B97\u5B50\n    def __eq__(self,other):\n        if isinstance(other,Gaussian_Integer):\n\
+    \n    def __mod__(self,other):\n        return  self-other*(self//other)\n\n \
+    \   #\u6BD4\u8F03\u6F14\u7B97\u5B50\n    def __eq__(self,other):\n        if isinstance(other,Gaussian_Integer):\n\
     \            return (self.re==other.re) and (self.im==other.im)\n        else:\n\
     \            return (self-other)==Gaussian_Integer(0,0)\n\n    def __bool__(self):\n\
     \        return not(self==0)\n\n    #\u305D\u306E\u4ED6\n    def conjugate(self):\n\
@@ -73,7 +73,7 @@ data:
   isVerificationFile: false
   path: Gaussian_Integer.py
   requiredBy: []
-  timestamp: '2021-10-01 03:09:20+09:00'
+  timestamp: '2023-05-20 13:43:10+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Gaussian_Integer.py

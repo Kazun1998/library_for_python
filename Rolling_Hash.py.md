@@ -89,12 +89,24 @@ data:
     \ encode(self, S):\n        code=0; N=len(S)\n        for i in range(N):\n   \
     \         if self.type:\n                code+=ord(S[i])*self.power[N-1-i]%self.mod\n\
     \            else:\n                code+=S[i]*self.power[N-1-i]%self.mod\n\n\
-    \        return code%self.mod\n\n    def decode(self, S):\n        pass\n"
+    \        return code%self.mod\n\n    def decode(self, S):\n        pass\n\n#=================================================\n\
+    class Double_Hasher():\n    def __init__(self, length, base, mod0, mod1, type=0):\n\
+    \        self.length=length\n        self.base=base\n        self.mod0=mod0\n\
+    \        self.mod1=mod1\n        self.type=type\n\n        self.power0=pw0=[1]*length\n\
+    \        self.power1=pw1=[1]*length\n        for i in range(1, length):\n    \
+    \        pw0[i]=(base*pw0[i-1])%mod0\n            pw1[i]=(base*pw1[i-1])%mod1\n\
+    \n    def __repr__(self):\n        return \"length: {}\\nbase: {}\\nmod: {}\"\
+    .format(self.length, self.base, self.mod)\n\n    def encode(self, S):\n      \
+    \  code0=0; code1=0\n        N=len(S)\n        for i in range(N):\n          \
+    \  if self.type:\n                code0+=ord(S[i])*self.power0[N-1-i]%self.mod0\n\
+    \                code1+=ord(S[i])*self.power1[N-1-i]%self.mod1\n            else:\n\
+    \                code0+=S[i]*self.power0[N-1-i]%self.mod0\n                code1+=S[i]*self.power1[N-1-i]%self.mod1\n\
+    \n        code0%=self.mod0; code1%=self.mod1\n        return code1*self.mod0+code0\n"
   dependsOn: []
   isVerificationFile: false
   path: Rolling_Hash.py
   requiredBy: []
-  timestamp: '2023-01-08 04:07:51+09:00'
+  timestamp: '2023-05-20 13:26:54+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Rolling_Hash.py

@@ -23,29 +23,32 @@ data:
     \        self.Q+=1\n\n    def calculate(self, add, delete, rem):\n        \"\"\
     \" \u30AF\u30A8\u30EA\u3092\u51E6\u7406\u3059\u308B.\n\n        \"\"\"\n\n   \
     \     block_size=self.N//(min(self.N, int(self.Q**0.5+0.5)))\n        t=(self.N+block_size-1)//block_size\n\
-    \        B=[[] for __ in range(t)]\n\n        left=self.left; right=self.right\n\
+    \        B=[[] for _ in range(t)]\n\n        left=self.left; right=self.right\n\
     \n        for q in range(self.Q):\n            B[left[q]//block_size].append(q)\n\
     \n        for i in range(t):\n            B[i].sort(key=lambda q: right[q], reverse=i%2)\n\
     \n        x=y=0\n        for b in B:\n            for q in b:\n              \
-    \  l=left[q]; r=right[q]\n                for i in range(x, l): delete(i)\n  \
-    \              for i in range(x-1, l-1, -1): add(i)\n                for j in\
-    \ range(y, r): add(j)\n                for j in range(y-1, r-1, -1): delete(j)\n\
-    \                x=l; y=r\n                rem(q)\n        return\n\n    def calculate_noncommutative(self,\
-    \ add_left, add_right, delete_left, delete_right, rem):\n        block_size=self.N//(min(self.N,\
-    \ int(self.Q**0.5+0.5)))\n        t=(self.N+block_size-1)//block_size\n      \
-    \  B=[[] for __ in range(t)]\n\n        left=self.left; right=self.right\n\n \
-    \       for q in range(self.Q):\n            B[left[q]//block_size].append(q)\n\
-    \n        for i in range(t):\n            B[i].sort(key=lambda q: right[q], reverse=i%2)\n\
-    \n        x=y=0\n        for b in B:\n            for q in b:\n              \
-    \  l=left[q]; r=right[q]\n                for i in range(x, l): delete_left(i)\n\
-    \                for i in range(x-1, l-1, -1): add_left(i)\n                for\
-    \ j in range(y, r): add_right(j)\n                for j in range(y-1, r-1, -1):\
-    \ delete_right(j)\n                x=l; y=r\n                rem(q)\n        return\n"
+    \  l=left[q]; r=right[q]\n                for i in range(x, l):\n            \
+    \        delete(i)\n\n                for i in range(x-1, l-1, -1):\n        \
+    \            add(i)\n\n                for j in range(y, r):\n               \
+    \     add(j)\n\n                for j in range(y-1, r-1, -1):\n              \
+    \      delete(j)\n\n                x=l; y=r\n                rem(q)\n       \
+    \ return\n\n    def calculate_noncommutative(self, add_left, add_right, delete_left,\
+    \ delete_right, rem):\n        block_size=self.N//(min(self.N, int(self.Q**0.5+0.5)))\n\
+    \        t=(self.N+block_size-1)//block_size\n        B=[[] for _ in range(t)]\n\
+    \n        left=self.left; right=self.right\n\n        for q in range(self.Q):\n\
+    \            B[left[q]//block_size].append(q)\n\n        for i in range(t):\n\
+    \            B[i].sort(key=lambda q: right[q], reverse=i%2)\n\n        x=y=0\n\
+    \        for b in B:\n            for q in b:\n                l=left[q]; r=right[q]\n\
+    \n                for i in range(x, l):\n                    delete_left(i)\n\n\
+    \                for i in range(x-1, l-1, -1):\n                    add_left(i)\n\
+    \n                for j in range(y, r):\n                    add_right(j)\n\n\
+    \                for j in range(y-1, r-1, -1):\n                    delete_right(j)\n\
+    \n                x=l; y=r\n                rem(q)\n        return\n    \n"
   dependsOn: []
   isVerificationFile: false
   path: Mo.py
   requiredBy: []
-  timestamp: '2022-03-20 20:43:59+09:00'
+  timestamp: '2023-05-20 13:28:58+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Mo.py

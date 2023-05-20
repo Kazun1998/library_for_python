@@ -31,7 +31,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
   requiredBy: []
-  timestamp: '2022-11-23 16:11:14+09:00'
+  timestamp: '2023-05-20 13:26:16+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
