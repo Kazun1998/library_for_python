@@ -23,7 +23,7 @@ class Mo:
 
         block_size=self.N//(min(self.N, int(self.Q**0.5+0.5)))
         t=(self.N+block_size-1)//block_size
-        B=[[] for __ in range(t)]
+        B=[[] for _ in range(t)]
 
         left=self.left; right=self.right
 
@@ -37,10 +37,18 @@ class Mo:
         for b in B:
             for q in b:
                 l=left[q]; r=right[q]
-                for i in range(x, l): delete(i)
-                for i in range(x-1, l-1, -1): add(i)
-                for j in range(y, r): add(j)
-                for j in range(y-1, r-1, -1): delete(j)
+                for i in range(x, l):
+                    delete(i)
+
+                for i in range(x-1, l-1, -1):
+                    add(i)
+
+                for j in range(y, r):
+                    add(j)
+
+                for j in range(y-1, r-1, -1):
+                    delete(j)
+
                 x=l; y=r
                 rem(q)
         return
@@ -48,7 +56,7 @@ class Mo:
     def calculate_noncommutative(self, add_left, add_right, delete_left, delete_right, rem):
         block_size=self.N//(min(self.N, int(self.Q**0.5+0.5)))
         t=(self.N+block_size-1)//block_size
-        B=[[] for __ in range(t)]
+        B=[[] for _ in range(t)]
 
         left=self.left; right=self.right
 
@@ -62,10 +70,20 @@ class Mo:
         for b in B:
             for q in b:
                 l=left[q]; r=right[q]
-                for i in range(x, l): delete_left(i)
-                for i in range(x-1, l-1, -1): add_left(i)
-                for j in range(y, r): add_right(j)
-                for j in range(y-1, r-1, -1): delete_right(j)
+
+                for i in range(x, l):
+                    delete_left(i)
+
+                for i in range(x-1, l-1, -1):
+                    add_left(i)
+
+                for j in range(y, r):
+                    add_right(j)
+
+                for j in range(y-1, r-1, -1):
+                    delete_right(j)
+
                 x=l; y=r
                 rem(q)
         return
+    
