@@ -199,6 +199,12 @@ class Graph:
                 if v<=w:
                     yield (v,w)
 
+    def pop_neighborhood(self, v):
+        assert self.adjacent[v]
+        w=self.adjacent[v].pop()
+        self.adjacent[v].add(w)
+        return w
+
 #==========
 #グラフの生成
 #==========
