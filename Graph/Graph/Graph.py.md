@@ -65,76 +65,76 @@ data:
     \      while Q:\n            u=Q.popleft()\n            for w in self.adjacent[u]:\n\
     \                if T[w]==0:\n                    T[w]=1\n                   \
     \ Q.append(w)\n        return [x for x in range(N) if T[x]]\n\n    #\u8DDD\u96E2\
-    \n    def distance(self,u,v):\n        \"\"\" 2\u9802\u70B9 u,v \u9593\u306E\u8DDD\
-    \u96E2\u3092\u6C42\u3081\u308B.\"\"\"\n\n        if u==v:\n            return\
-    \ 0\n\n        from collections import deque\n        inf=float(\"inf\")\n   \
-    \     N=len(self.adjacent)\n        T=[inf]*N; T[u]=0\n\n        Q=deque([u])\n\
-    \        while Q:\n            w=Q.popleft()\n            for x in self.adjacent[w]:\n\
-    \                if T[x]==inf:\n                    T[x]=T[w]+1\n            \
-    \        Q.append(x)\n                    if x==v:\n                        return\
-    \ T[x]\n        return inf\n\n    #\u3042\u308B1\u70B9\u304B\u3089\u306E\u8DDD\
-    \u96E2\n    def distance_all(self,u):\n        \"\"\" \u9802\u70B9 u \u304B\u3089\
-    \u306E\u8DDD\u96E2\u3092\u6C42\u3081\u308B.\"\"\"\n\n        from collections\
-    \ import deque\n        inf=float(\"inf\")\n        N=len(self.adjacent)\n   \
-    \     T=[inf]*N; T[u]=0\n\n        Q=deque([u])\n        while Q:\n          \
-    \  w=Q.popleft()\n            for x in self.adjacent[w]:\n                if T[x]==inf:\n\
-    \                    T[x]=T[w]+1\n                    Q.append(x)\n        return\
-    \ T\n\n    #\u6700\u77ED\u8DEF\n    def shortest_path(self,u,v):\n        \"\"\
-    \" u \u304B\u3089 v \u3078\u306E\u6700\u77ED\u8DEF\u3092\u6C42\u3081\u308B (\u5B58\
-    \u5728\u3057\u306A\u3044\u5834\u5408\u306F None). \"\"\"\n\n        if u==v:\n\
-    \            return [u]\n\n        from collections import deque\n        inf=float(\"\
-    inf\")\n        T=[-1]*len(self.adjacent)\n\n        Q=deque([u]); T[u]=u\n  \
-    \      while Q:\n            w=Q.popleft()\n            for x in self.adjacent[w]:\n\
-    \                if T[x]==-1:\n                    T[x]=w\n                  \
-    \  Q.append(x)\n                    if x==v:\n                        P=[v]\n\
-    \                        a=v\n                        while a!=u:\n          \
-    \                  a=T[a]\n                            P.append(a)\n         \
-    \               return P[::-1]\n        return None\n\n    def edge_yielder(self):\n\
-    \        g=self.adjacent\n        for v in range(self.vertex_count()):\n     \
-    \       for w in g[v]:\n                if v<=w:\n                    yield (v,w)\n\
-    \n#==========\n#\u30B0\u30E9\u30D5\u306E\u751F\u6210\n#==========\n#\u88DC\u30B0\
-    \u30E9\u30D5\u306E\u4F5C\u6210\ndef Complement_Graph(G):\n    \"\"\" \u30B0\u30E9\
-    \u30D5 G \u306E\u88DC\u30B0\u30E9\u30D5\u3092\u6C42\u3081\u308B.\"\"\"\n\n   \
-    \ N=G.vertex_count(); V=set(range(N))\n    H=Graph(N)\n\n    for u in range(N):\n\
-    \        H.adjacent[u]=V-G.adjacent[u]-{u}\n    return H\n\n# N \u9802\u70B9\u306E\
-    \u30E9\u30F3\u30C0\u30E0\u30B0\u30E9\u30D5\ndef Random_Graph(N, p=0.5, self_loop=False,\
-    \ seed=None):\n    import random\n    G=Graph(N)\n\n    random.seed(seed)\n  \
-    \  for u in range(N):\n        for v in range(u,N):\n            if u==v and self_loop==False:\n\
-    \                continue\n\n            if random.random()<p:\n             \
-    \   G.add_edge(u,v)\n    return G\n\ndef Directed_Sum(*G):\n    offset=0\n   \
-    \ H=Graph()\n    for g in G:\n        n=g.vertex_count()\n        H.add_vertices(n)\n\
-    \        for i,j in g.edge_yielder():\n            H.add_edge(i+offset, j+offset)\n\
-    \        offset+=n\n    return H\n\n#==========\n#\u9023\u7D50\u30B0\u30E9\u30D5\
-    ?\ndef Is_Connected(G):\n    from collections import deque\n\n    N=G.vertex_count()\n\
-    \    T=[0]*N; T[0]=1\n    Q=deque([0])\n\n    Q_popleft=Q.popleft\n    Q_append=Q.append\n\
-    \    adj=G.adjacent\n\n    while Q:\n        u=Q_popleft()\n        for v in adj[u]:\n\
-    \            if T[v]==0:\n                T[v]=1\n                Q_append(v)\n\
-    \n    return all(T)\n\ndef Lowlink(G, mode=0):\n    \"\"\" G \u306E ord, lowlink\
-    \ \u3092\u6C42\u3081\u308B.\n\n    G: Graph\n\n    output: (ord, lowlink)\n  \
-    \  \"\"\"\n\n    from collections import deque\n\n    N=G.vertex_count()\n   \
-    \ ord=[-1]*N; low=[-1]*N\n    flag=[0]*N\n    adj=G.adjacent\n    parent=[-1]*N\n\
-    \n    #BFS\u30D1\u30FC\u30C8\n    for v in range(N):\n        if flag[v]:\n  \
-    \          continue\n\n        k=0\n        S=deque([v])\n        T=[]\n\n   \
-    \     while S:\n            u=S.pop()\n            if flag[u]:\n             \
-    \   continue\n\n            T.append(u)\n            ord[u]=k\n            k+=1\n\
-    \            flag[u]=1\n\n            for w in adj[u]:\n                if not\
-    \ flag[w]:\n                    S.append(w)\n                    parent[w]=u\n\
-    \n        for u in T:\n            low[u]=ord[u]\n\n        for w in T[:0:-1]:\n\
-    \            for x in adj[w]:\n                if w==v or x!=parent[w]:\n    \
-    \                low[w]=min(low[w],low[x],ord[x])\n\n    if mode==0:\n       \
-    \ return ord, low\n    else:\n        return ord, low, parent\n\n#\u6A4B\u5217\
-    \u6319\ndef Bridge(G):\n    \"\"\" G \u306B\u3042\u308B\u6A4B\u3092\u5217\u6319\
-    \u3059\u308B.\n\n    G: Graph\n    \"\"\"\n    ord,low=Lowlink(G)\n    return\
-    \ [(u,v) for u,v in G.edge_yielder() if ord[u]<low[v] or ord[v]<low[u]]\n\n#\u95A2\
-    \u7BC0\u70B9\u306E\u5217\u6319\ndef Articulation_Point(G):\n    from collections\
-    \ import deque\n\n    N=G.vertex_count()\n    A=[]; A_append=A.append\n    ord=[-1]*N;\
-    \ low=[-1]*N\n    flag=[0]*N\n    adj=G.adjacent\n\n    parent=[-1]*N; children=[[]\
-    \ for _ in range(N)]\n\n    #BFS\u30D1\u30FC\u30C8\n    for v in range(N):\n \
-    \       if flag[v]:\n            continue\n\n        k=0\n        S=deque([v])\n\
-    \        T=[]\n        X=[]\n\n        while S:\n            u=S.pop()\n     \
-    \       if flag[u]:\n                continue\n\n            T.append(u)\n   \
-    \         ord[u]=k\n            k+=1\n            flag[u]=1\n\n            for\
-    \ w in adj[u]:\n                if not flag[w]:\n                    S.append(w)\n\
+    \n    def distance(self,u,v,default):\n        \"\"\" 2\u9802\u70B9 u,v \u9593\
+    \u306E\u8DDD\u96E2\u3092\u6C42\u3081\u308B.\"\"\"\n\n        if u==v:\n      \
+    \      return 0\n\n        from collections import deque\n        N=len(self.adjacent)\n\
+    \        T=[default]*N; T[u]=0\n\n        Q=deque([u])\n        while Q:\n   \
+    \         w=Q.popleft()\n            for x in self.adjacent[w]:\n            \
+    \    if T[x]==default:\n                    T[x]=T[w]+1\n                    Q.append(x)\n\
+    \                    if x==v:\n                        return T[x]\n        return\
+    \ default\n\n    #\u3042\u308B1\u70B9\u304B\u3089\u306E\u8DDD\u96E2\n    def distance_all(self,u,default=-1):\n\
+    \        \"\"\" \u9802\u70B9 u \u304B\u3089\u306E\u8DDD\u96E2\u3092\u6C42\u3081\
+    \u308B.\"\"\"\n\n        from collections import deque\n        N=len(self.adjacent)\n\
+    \        T=[default]*N; T[u]=0\n\n        Q=deque([u])\n        while Q:\n   \
+    \         w=Q.popleft()\n            for x in self.adjacent[w]:\n            \
+    \    if T[x]==default:\n                    T[x]=T[w]+1\n                    Q.append(x)\n\
+    \        return T\n\n    #\u6700\u77ED\u8DEF\n    def shortest_path(self,u,v):\n\
+    \        \"\"\" u \u304B\u3089 v \u3078\u306E\u6700\u77ED\u8DEF\u3092\u6C42\u3081\
+    \u308B (\u5B58\u5728\u3057\u306A\u3044\u5834\u5408\u306F None). \"\"\"\n\n   \
+    \     if u==v:\n            return [u]\n\n        from collections import deque\n\
+    \        T=[-1]*len(self.adjacent)\n\n        Q=deque([u]); T[u]=u\n        while\
+    \ Q:\n            w=Q.popleft()\n            for x in self.adjacent[w]:\n    \
+    \            if T[x]==-1:\n                    T[x]=w\n                    Q.append(x)\n\
+    \                    if x==v:\n                        P=[v]\n               \
+    \         a=v\n                        while a!=u:\n                         \
+    \   a=T[a]\n                            P.append(a)\n                        return\
+    \ P[::-1]\n        return None\n\n    def edge_yielder(self):\n        g=self.adjacent\n\
+    \        for v in range(self.vertex_count()):\n            for w in g[v]:\n  \
+    \              if v<=w:\n                    yield (v,w)\n\n    def pop_neighborhood(self,\
+    \ v):\n        assert self.adjacent[v]\n        w=self.adjacent[v].pop()\n   \
+    \     self.adjacent[v].add(w)\n        return w\n\n#==========\n#\u30B0\u30E9\u30D5\
+    \u306E\u751F\u6210\n#==========\n#\u88DC\u30B0\u30E9\u30D5\u306E\u4F5C\u6210\n\
+    def Complement_Graph(G):\n    \"\"\" \u30B0\u30E9\u30D5 G \u306E\u88DC\u30B0\u30E9\
+    \u30D5\u3092\u6C42\u3081\u308B.\"\"\"\n\n    N=G.vertex_count(); V=set(range(N))\n\
+    \    H=Graph(N)\n\n    for u in range(N):\n        H.adjacent[u]=V-G.adjacent[u]-{u}\n\
+    \    return H\n\n# N \u9802\u70B9\u306E\u30E9\u30F3\u30C0\u30E0\u30B0\u30E9\u30D5\
+    \ndef Random_Graph(N, p=0.5, self_loop=False, seed=None):\n    import random\n\
+    \    G=Graph(N)\n\n    random.seed(seed)\n    for u in range(N):\n        for\
+    \ v in range(u,N):\n            if u==v and self_loop==False:\n              \
+    \  continue\n\n            if random.random()<p:\n                G.add_edge(u,v)\n\
+    \    return G\n\ndef Directed_Sum(*G):\n    offset=0\n    H=Graph()\n    for g\
+    \ in G:\n        n=g.vertex_count()\n        H.add_vertices(n)\n        for i,j\
+    \ in g.edge_yielder():\n            H.add_edge(i+offset, j+offset)\n        offset+=n\n\
+    \    return H\n\n#==========\n#\u9023\u7D50\u30B0\u30E9\u30D5?\ndef Is_Connected(G):\n\
+    \    from collections import deque\n\n    N=G.vertex_count()\n    T=[0]*N; T[0]=1\n\
+    \    Q=deque([0])\n\n    Q_popleft=Q.popleft\n    Q_append=Q.append\n    adj=G.adjacent\n\
+    \n    while Q:\n        u=Q_popleft()\n        for v in adj[u]:\n            if\
+    \ T[v]==0:\n                T[v]=1\n                Q_append(v)\n\n    return\
+    \ all(T)\n\ndef Lowlink(G, mode=0):\n    \"\"\" G \u306E ord, lowlink \u3092\u6C42\
+    \u3081\u308B.\n\n    G: Graph\n\n    output: (ord, lowlink)\n    \"\"\"\n\n  \
+    \  from collections import deque\n\n    N=G.vertex_count()\n    ord=[-1]*N; low=[-1]*N\n\
+    \    flag=[0]*N\n    adj=G.adjacent\n    parent=[-1]*N\n\n    #BFS\u30D1\u30FC\
+    \u30C8\n    for v in range(N):\n        if flag[v]:\n            continue\n\n\
+    \        k=0\n        S=deque([v])\n        T=[]\n\n        while S:\n       \
+    \     u=S.pop()\n            if flag[u]:\n                continue\n\n       \
+    \     T.append(u)\n            ord[u]=k\n            k+=1\n            flag[u]=1\n\
+    \n            for w in adj[u]:\n                if not flag[w]:\n            \
+    \        S.append(w)\n                    parent[w]=u\n\n        for u in T:\n\
+    \            low[u]=ord[u]\n\n        for w in T[:0:-1]:\n            for x in\
+    \ adj[w]:\n                if w==v or x!=parent[w]:\n                    low[w]=min(low[w],low[x],ord[x])\n\
+    \n    if mode==0:\n        return ord, low\n    else:\n        return ord, low,\
+    \ parent\n\n#\u6A4B\u5217\u6319\ndef Bridge(G):\n    \"\"\" G \u306B\u3042\u308B\
+    \u6A4B\u3092\u5217\u6319\u3059\u308B.\n\n    G: Graph\n    \"\"\"\n    ord,low=Lowlink(G)\n\
+    \    return [(u,v) for u,v in G.edge_yielder() if ord[u]<low[v] or ord[v]<low[u]]\n\
+    \n#\u95A2\u7BC0\u70B9\u306E\u5217\u6319\ndef Articulation_Point(G):\n    from\
+    \ collections import deque\n\n    N=G.vertex_count()\n    A=[]; A_append=A.append\n\
+    \    ord=[-1]*N; low=[-1]*N\n    flag=[0]*N\n    adj=G.adjacent\n\n    parent=[-1]*N;\
+    \ children=[[] for _ in range(N)]\n\n    #BFS\u30D1\u30FC\u30C8\n    for v in\
+    \ range(N):\n        if flag[v]:\n            continue\n\n        k=0\n      \
+    \  S=deque([v])\n        T=[]\n        X=[]\n\n        while S:\n            u=S.pop()\n\
+    \            if flag[u]:\n                continue\n\n            T.append(u)\n\
+    \            ord[u]=k\n            k+=1\n            flag[u]=1\n\n           \
+    \ for w in adj[u]:\n                if not flag[w]:\n                    S.append(w)\n\
     \                    parent[w]=u\n\n        for w in T:\n            low[w]=ord[w]\n\
     \n        for w in T[:0:-1]:\n            children[parent[w]].append(w)\n\n  \
     \      for w in T[:0:-1]:\n            for x in adj[w]:\n                if w==v\
@@ -390,7 +390,7 @@ data:
   isVerificationFile: false
   path: Graph/Graph/Graph.py
   requiredBy: []
-  timestamp: '2022-12-24 16:47:42+09:00'
+  timestamp: '2023-05-28 12:18:06+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Graph/Graph/Graph.py

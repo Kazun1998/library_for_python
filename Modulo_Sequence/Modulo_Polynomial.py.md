@@ -18,7 +18,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Polynomial/Power.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Power.test.py
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
   - icon: ':x:'
