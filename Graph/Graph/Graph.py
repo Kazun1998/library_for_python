@@ -125,42 +125,40 @@ class Graph:
         return [x for x in range(N) if T[x]]
 
     #距離
-    def distance(self,u,v):
+    def distance(self,u,v,default):
         """ 2頂点 u,v 間の距離を求める."""
 
         if u==v:
             return 0
 
         from collections import deque
-        inf=float("inf")
         N=len(self.adjacent)
-        T=[inf]*N; T[u]=0
+        T=[default]*N; T[u]=0
 
         Q=deque([u])
         while Q:
             w=Q.popleft()
             for x in self.adjacent[w]:
-                if T[x]==inf:
+                if T[x]==default:
                     T[x]=T[w]+1
                     Q.append(x)
                     if x==v:
                         return T[x]
-        return inf
+        return default
 
     #ある1点からの距離
-    def distance_all(self,u):
+    def distance_all(self,u,default=-1):
         """ 頂点 u からの距離を求める."""
 
         from collections import deque
-        inf=float("inf")
         N=len(self.adjacent)
-        T=[inf]*N; T[u]=0
+        T=[default]*N; T[u]=0
 
         Q=deque([u])
         while Q:
             w=Q.popleft()
             for x in self.adjacent[w]:
-                if T[x]==inf:
+                if T[x]==default:
                     T[x]=T[w]+1
                     Q.append(x)
         return T
@@ -173,7 +171,6 @@ class Graph:
             return [u]
 
         from collections import deque
-        inf=float("inf")
         T=[-1]*len(self.adjacent)
 
         Q=deque([u]); T[u]=u
