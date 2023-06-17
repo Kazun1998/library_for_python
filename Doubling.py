@@ -1,6 +1,6 @@
 class Doubling():
     def __init__(self, A, Max_Level=1):
-        """ N=len(A), X={0,1,...,N-1} とする. f:X→X を f(x):=A[x] としたとき, f^k(x) を求める.
+        """ N=len(A), X={0,1,...,N-1} とする. f: X→X を f(x):=A[x] としたとき, f^k(x) を求める.
 
         A: f を表すリスト, 任意の x in X に対して, f(x) in X でなければならない.
         Max_Level: k=2^(Max_Level+1)-1 まで対応可能になる.
@@ -16,7 +16,7 @@ class Doubling():
             E[i]=A[i]
 
         for k in range(1,Max_Level+1):
-            E=self.D[k];F=self.D[k-1]
+            E=self.D[k]; F=self.D[k-1]
             for i in range(self.N):
                 E[i]=F[F[i]]
 
