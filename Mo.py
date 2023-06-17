@@ -86,4 +86,3 @@ class Mo:
                 x=l; y=r
                 rem(q)
         return
-    
