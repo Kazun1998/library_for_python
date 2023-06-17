@@ -8,11 +8,11 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.3/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.4/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.11.3/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.11.4/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "class Mo:\n    def __init__(self, N):\n        \"\"\" \u7BC4\u56F2\u304C\
     \ 0 \u4EE5\u4E0A N \"\u672A\u6E80\" \u306E Mo's Algorithm \u306E\u6E96\u5099\u3092\
@@ -43,12 +43,12 @@ data:
     \                for i in range(x-1, l-1, -1):\n                    add_left(i)\n\
     \n                for j in range(y, r):\n                    add_right(j)\n\n\
     \                for j in range(y-1, r-1, -1):\n                    delete_right(j)\n\
-    \n                x=l; y=r\n                rem(q)\n        return\n    \n"
+    \n                x=l; y=r\n                rem(q)\n        return\n"
   dependsOn: []
   isVerificationFile: false
   path: Mo.py
   requiredBy: []
-  timestamp: '2023-05-20 13:28:58+09:00'
+  timestamp: '2023-06-17 23:31:23+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Mo.py

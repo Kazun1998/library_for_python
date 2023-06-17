@@ -103,6 +103,9 @@ data:
       path: Heap_for_Dijkstra.py
       title: Heap_for_Dijkstra.py
     - icon: ':warning:'
+      path: Hungarian.py
+      title: Hungarian.py
+    - icon: ':warning:'
       path: Imos.py
       title: Imos.py
     - icon: ':warning:'
@@ -165,6 +168,9 @@ data:
     - icon: ':warning:'
       path: Root.py
       title: Root.py
+    - icon: ':warning:'
+      path: Separate_Alternative.py
+      title: Separate_Alternative.py
     - icon: ':warning:'
       path: Slide_Maximum.py
       title: Slide_Maximum.py
@@ -350,7 +356,7 @@ data:
       title: Modulo_Matrix/Modulo_Vector_Space.py
   - name: Modulo_Sequence
     pages:
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: Modulo_Sequence/Modulo_Polynomial.py
       title: Modulo Polynomial
     - icon: ':warning:'
@@ -595,7 +601,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
   - name: test_verify/yosupo_library_checker/String
