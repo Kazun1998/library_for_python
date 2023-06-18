@@ -122,12 +122,12 @@ data:
     \        return key\n\n    def keys(self):\n        def dfs(node):\n         \
     \   if node is None:\n                return\n            dfs(node.left)\n   \
     \         X.append(node.key)\n            dfs(node.right)\n\n        X=[]\n  \
-    \      dfs(self.root)\n        return X\n\n"
+    \      dfs(self.root)\n        return X\n"
   dependsOn: []
   isVerificationFile: false
   path: Binary_Tree/AVL_Tree.py
   requiredBy: []
-  timestamp: '2022-12-13 01:23:20+09:00'
+  timestamp: '2023-06-18 16:53:16+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-AVL_Tree.test.py
