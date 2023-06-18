@@ -164,7 +164,7 @@ data:
       title: Quaternion.py
     - icon: ':warning:'
       path: Rolling_Hash.py
-      title: Rolling_Hash.py
+      title: Rolling  Hash
     - icon: ':warning:'
       path: Root.py
       title: Root.py
