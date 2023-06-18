@@ -150,6 +150,27 @@ class Sorted_Multiset:
 
         return value
 
+    #=== k-th element
+    def kth_min(self, k):
+        """ k (0-indexed) 番目に小さい整数を求める.
+
+        k: int (0<=k<|S|)
+        """
+
+        assert 0<=k<len(self)
+
+        return self[k]
+
+    def kth_max(self, k):
+        """ k (0-indexed) 番目に大きい整数を求める.
+
+        k: int (0<=k<|S|)
+        """
+
+        assert 0<=k<len(self)
+
+        return self[len(self)-1-k]
+
     #=== previous, next
 
     def previous(self, value, mode=False):
