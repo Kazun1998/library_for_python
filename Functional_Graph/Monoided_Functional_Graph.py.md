@@ -29,7 +29,7 @@ data:
     \ X=[0]*N\n            B=self.value[-1]; Y=[0]*N\n\n            for i in range(N):\n\
     \                p=A[i]; x=B[i]\n                q=A[p]; y=B[p]\n            \
     \    X[i]=q; Y[i]=op(y,x)\n\n            self.out.append(X)\n            self.value.append(Y)\n\
-    \            K>>=1\n\n    def opulate(self, v, k):\n        x=self.unit\n    \
+    \            K>>=1\n\n    def operate(self, v, k):\n        x=self.unit\n    \
     \    op=self.op\n        out=self.out\n        value=self.value\n        d=0\n\
     \        while k:\n            if k&1:\n                x=op(value[d][v], x)\n\
     \                v=out[d][v]\n            k>>=1; d+=1\n        return x\n\n"
@@ -37,7 +37,7 @@ data:
   isVerificationFile: false
   path: Functional_Graph/Monoided_Functional_Graph.py
   requiredBy: []
-  timestamp: '2023-06-18 16:22:50+09:00'
+  timestamp: '2023-06-18 17:02:56+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Functional_Graph/Monoided_Functional_Graph.py
