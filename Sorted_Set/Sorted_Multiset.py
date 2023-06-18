@@ -237,6 +237,11 @@ class Sorted_Multiset:
 
         return self.N-self.less_count(value, not equal)
 
+    def count(self, value):
+        """ a = value となる S の元 a の個数を求める.
+        """
+        return self.less_count(value, True)-self.less_count(value, False)
+
     #===
     def is_upper_bound(self, x, equal=True):
         if self.N:
