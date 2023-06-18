@@ -120,7 +120,7 @@ title: Rolling  Hash
 
 ## Theory
 
-$\mathcal{A}$ をアルファベット (文字全体の集合) とし, $p$ を $\# \mathcal{A}$ より非常に大きい **素数** とする.
+$\mathcal{A}$ をアルファベット (文字全体の集合) とし, $p$ を $\\# \mathcal{A}$ より非常に大きい **素数** とする.
 
 また, $\beta \in \mathbb{F}\_p$ とし, $h: \mathcal{A} \to \mathbb{F}\_p$ を単射とする. このとき, $\mathcal{A}$ の列 $S=(S\_i)\_{i=1}^{\left \lvert S \right \rvert}$ に対する Rolling Hash $\operatorname{hash}(S)$ を
 
