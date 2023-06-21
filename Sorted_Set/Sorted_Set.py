@@ -22,7 +22,12 @@ class Sorted_Set:
         while self.BUCKET_RATIO*K*K<N:
             K+=1
 
-        self.list=[A[N*i//K: N*(i+1)//K] for i in range(K)]
+        if N>0:
+            self.list=[A[N*i//K: N*(i+1)//K] for i in range(K)]
+        else:
+            self.list=[]
+
+        self.__bucket_max=[a[-1] for a in self.list]
 
     def __iter__(self):
         for A in self.list:
@@ -48,19 +53,19 @@ class Sorted_Set:
         return "Sorted Set: "+str(self)
 
     def __find_bucket(self, x):
-        for A in self.list:
-            if x<=A[-1]:
-                return A
-        else:
-            return A
+        if x > self.__bucket_max[-1]:
+            return len(self.list)-1
+
+        return bisect_left(self.__bucket_max, x)
 
     def __contains__(self, x):
         if self.N==0:
             return False
 
-        A=self.__find_bucket(x)
-        i=bisect_left(A,x)
-        return i!=len(A) and A[i]==x
+        i=self.__find_bucket(x)
+        A=self.list[i]
+        j=bisect_left(A[i], x)
+        return j!=len(A) and A[j]==x
 
     def add(self, x):
         if self.N==0:
@@ -68,14 +73,16 @@ class Sorted_Set:
             self.N+=1
             return True
 
-        A=self.__find_bucket(x)
-        i=bisect_left(A, x)
+        i=self.__find_bucket(x)
+        A=self.list[i]
+        j=bisect_left(A, x)
 
-        if i!=len(A) and A[i]==x:
+        if j!=len(A) and A[j]==x:
             return False # x が既に存在するので...
 
-        A.insert(i,x)
+        A.insert(j, x)
         self.N+=1
+        self.__bucket_max[i]=A[-1]
 
         if len(A)>len(self.list)*self.REBUILD_RATIO:
             self.__build()
@@ -85,16 +92,19 @@ class Sorted_Set:
         if self.N==0:
             return False
 
-        A=self.__find_bucket(x)
-        i=bisect_left(A, x)
+        i=self.__find_bucket(x)
+        A=self.list[i]
+        j=bisect_left(A, x)
 
-        if not(i!=len(A) and A[i]==x):
+        if not(j!=len(A) and A[j]==x):
             return False # x が存在しないので...
 
-        A.pop(i)
+        A.pop(j)
         self.N-=1
 
-        if len(A)==0:
+        if A:
+            self.__bucket_max[i]=A[-1]
+        else:
             self.__build()
 
         return True
