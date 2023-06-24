@@ -98,15 +98,23 @@ class Rolling_Hash():
 
 #=================================================
 class Double_Rolling_Hash():
-    def __init__(self, S, base, mod0, mod1, type):
+    def __init__(self, S, mod0, mod1, type = 0, base = -1):
         self.__length=len(S)
-        self.__base=base
         self.__mod0=mod0
         self.__mod1=mod1
         self.__type=type
 
-        self.rh0=Rolling_Hash(S, base, mod0, type)
-        self.rh1=Rolling_Hash(S, base, mod1, type)
+        if type:
+            S=[ord(S[i]) for i in range(self.length)]
+
+        S_max=max(S)
+        if base <= S_max:
+            import random
+            base = random.randint(S_max + 1, min(mod0, mod1) - 1)
+
+        self.__base=base
+        self.rh0=Rolling_Hash(S, mod0, base=self.__base)
+        self.rh1=Rolling_Hash(S, mod1, base=self.__base)
 
     def encode(self, a0, a1):
         return a0*self.__mod1+a1
