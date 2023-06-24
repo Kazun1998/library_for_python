@@ -1,25 +1,33 @@
 class Rolling_Hash():
-    def __init__(self, S, base, mod, type=0):
+    def __init__(self, S, mod, type = 0, base = -1):
         """ type=0: 整数列 (各要素は mod 未満), type=1: 文字列 (mod>(最大の文字コード))
 
         """
 
         self.mod=mod
-        self.base=base
         self.length=len(S)
         self.power=power=[1]*(len(S)+1)
         self.type=type
+
+        S_max=max(S)
+        assert S_max < mod
+
+        if base <= S_max:
+            import random
+            self.base = random.randint(S_max + 1, mod - 1)
+        else:
+            self.base = base
 
         self.hash=h=[0]*(self.length+1)
 
         for i in range(self.length):
             if type:
-                h[i+1]=(base*h[i]+ord(S[i]))%mod
+                h[i+1]=(self.base*h[i]+ord(S[i]))%mod
             else:
-                h[i+1]=(base*h[i]+S[i])%mod
+                h[i+1]=(self.base*h[i]+S[i])%mod
 
         for i in range(self.length):
-            power[i+1]=base*power[i]%mod
+            power[i+1]=self.base*power[i]%mod
 
     def __hasher(self, X):
         assert len(X)<=len(self)
