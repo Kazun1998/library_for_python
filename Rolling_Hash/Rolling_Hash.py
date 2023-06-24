@@ -30,8 +30,10 @@ class Rolling_Hash():
     def __hasher(self, X):
         assert len(X)<=len(self)
         h=0
-        for i in range(len(X)):
-            h=(h*self.base+X[i])%self.mod
+        for x in X:
+            if self.type==1:
+                x=ord(x)
+            h=(h*self.base+x)%self.mod
         return h
 
     def get(self, l, r):
@@ -128,9 +130,10 @@ class Double_Rolling_Hash():
         assert len(X)<=len(self)
         a0=0; a1=0
         for x in X:
-            if self.__type==0:
-                a0=(a0*self.__base+x)%self.__mod0
-                a1=(a1*self.__base+x)%self.__mod1
+            if self.__type==1:
+                x=ord(x)
+            a0=(a0*self.__base+x)%self.__mod0
+            a1=(a1*self.__base+x)%self.__mod1
         return self.encode(a0, a1)
 
     def __getitem__(self, index):
