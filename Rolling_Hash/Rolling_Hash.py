@@ -9,6 +9,9 @@ class Rolling_Hash():
         self.power=power=[1]*(len(S)+1)
         self.type=type
 
+        if type:
+            S=[ord(S[i]) for i in range(self.length)]
+
         S_max=max(S)
         assert S_max < mod
 
@@ -21,12 +24,7 @@ class Rolling_Hash():
         self.hash=h=[0]*(self.length+1)
 
         for i in range(self.length):
-            if type:
-                h[i+1]=(self.base*h[i]+ord(S[i]))%mod
-            else:
-                h[i+1]=(self.base*h[i]+S[i])%mod
-
-        for i in range(self.length):
+            h[i+1]=(self.base*h[i]+S[i])%mod
             power[i+1]=self.base*power[i]%mod
 
     def __hasher(self, X):
