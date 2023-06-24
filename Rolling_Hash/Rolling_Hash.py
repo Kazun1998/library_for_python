@@ -10,16 +10,15 @@ class Rolling_Hash():
         self.power=power=[1]*(len(S)+1)
         self.type=type
 
-        L=len(S)
-        self.hash=h=[0]*(L+1)
+        self.hash=h=[0]*(self.length+1)
 
-        for i in range(L):
+        for i in range(self.length):
             if type:
                 h[i+1]=(base*h[i]+ord(S[i]))%mod
             else:
                 h[i+1]=(base*h[i]+S[i])%mod
 
-        for i in range(L):
+        for i in range(self.length):
             power[i+1]=base*power[i]%mod
 
     def __hasher(self, X):
