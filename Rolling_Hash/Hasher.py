@@ -22,9 +22,6 @@ class Hasher():
 
         return code%self.mod
 
-    def decode(self, S):
-        pass
-
 #=================================================
 class Double_Hasher():
     def __init__(self, length, base, mod0, mod1, type=0):
