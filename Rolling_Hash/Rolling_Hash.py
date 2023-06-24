@@ -1,7 +1,11 @@
 class Rolling_Hash():
     def __init__(self, S, mod, type = 0, base = -1):
-        """ type=0: 整数列 (各要素は mod 未満), type=1: 文字列 (mod>(最大の文字コード))
+        """ S の Rolling Hash を生成する.
 
+        S: 列
+        mod: 法
+        type: S が整数列ならば, type = 0 (各要素は mod 未満), S が文字列ならば, type = 1((文字コードの最大値) < mod)
+        base: 指数 (base = -1 とすると, 乱数による自動設定)
         """
 
         self.mod=mod
@@ -101,6 +105,14 @@ class Rolling_Hash():
 #=================================================
 class Double_Rolling_Hash():
     def __init__(self, S, mod0, mod1, type = 0, base = -1):
+        """ S の 2 つの法に関する Rolling Hash を生成する.
+
+        S: 列
+        mod0, mod1: 法
+        type: S が整数列ならば, type = 0 (各要素は mod 未満), S が文字列ならば, type = 1((文字コードの最大値) < mod)
+        base: 指数 (base = -1 とすると, 乱数による自動設定)
+        """
+
         self.__length=len(S)
         self.__mod0=mod0
         self.__mod1=mod1
