@@ -119,7 +119,7 @@ class Double_Rolling_Hash():
         self.__type=type
 
         if type:
-            S=[ord(S[i]) for i in range(self.length)]
+            S=[ord(S[i]) for i in range(self.__length)]
 
         S_max=max(S)
         if base <= S_max:
