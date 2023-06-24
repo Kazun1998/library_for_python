@@ -1,5 +1,5 @@
 class Rolling_Hash():
-    def __init__(self,S, base, mod, type=0):
+    def __init__(self, S, base, mod, type=0):
         """ type=0: 整数列 (各要素は mod 未満), type=1: 文字列 (mod>(最大の文字コード))
 
         """
@@ -87,7 +87,7 @@ class Rolling_Hash():
         """ [l0, r0) と [l1, r1) の部分列をドッキングしたハッシュを返す.
         """
 
-        h0=self.get(l0,r0); h1=self.get(l1,r1)
+        h0=self.get(l0, r0); h1=self.get(l1, r1)
         return (h0*self.power[r1-l1]+h1)%self.mod
 
 #=================================================
@@ -117,7 +117,7 @@ class Double_Rolling_Hash():
             if self.__type==0:
                 a0=(a0*self.__base+x)%self.__mod0
                 a1=(a1*self.__base+x)%self.__mod1
-        return self.encode(a0,a1)
+        return self.encode(a0, a1)
 
     def __getitem__(self, index):
         if index.__class__==int:
