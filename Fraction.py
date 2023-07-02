@@ -35,9 +35,6 @@ class Fraction():
     def denominator(self):
         return  self.__b
 
-    def value(self):
-        return self.__a, self.__b
-
     def __iter__(self):
         yield self.__a
         yield self.__b
