@@ -10,7 +10,7 @@ class Fraction():
     """
 
     ##入力定義
-    def __init__(self, Numerator=0, Denominator=1):
+    def __init__(self, Numerator = 0, Denominator = 1):
         """分数のオブジェクトを生成する.
 
         Numerator : 分子
