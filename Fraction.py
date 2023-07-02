@@ -38,6 +38,10 @@ class Fraction():
     def value(self):
         return self.__a, self.__b
 
+    def __iter__(self):
+        yield self.__a
+        yield self.__b
+
     #表示定義
     def __str__(self):
         if self.__b == 1:
