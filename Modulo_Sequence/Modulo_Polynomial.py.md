@@ -500,12 +500,12 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Polynomial/Exp.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Log.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Power.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
   - test_verify/yosupo_library_checker/Polynomial/Inv.test.py
   - test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Log.test.py
   - test_verify/yosupo_library_checker/Polynomial/Division.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Power.test.py
 documentation_of: Modulo_Sequence/Modulo_Polynomial.py
 layout: document
 title: Modulo Polynomial
