@@ -133,7 +133,7 @@ class Fraction():
         return Fraction(x, y)
 
     def __pow__(self, m):
-        alpha, beta = self.__a, self.__b
+        alpha, beta = self
 
         if m < 0:
             alpha, beta = beta, alpha
@@ -216,7 +216,7 @@ class Fraction():
         return self.__a == 1
 
     def __hash__(self):
-        x = self.__a; y = self.__b
+        x, y = self
         if not Fraction.reduction:
             g=gcd(x, y)
             x //= g; y //= g
