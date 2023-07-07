@@ -23,3 +23,6 @@ class Common:
         x > y ならば +1, x < y ならば -1, x = y ならば 0
         """
         return Common.sign(y-x)
+
+sign=Common.sign
+compare=Common.compare
