@@ -89,4 +89,4 @@ class Dual_Segment_Tree:
         return self.lazy[m]
 
     def __setitem__(self,index,value):
-        self.operate(index, index, value)
+        self.action(index, index, value)
