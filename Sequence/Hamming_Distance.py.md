@@ -29,8 +29,10 @@ data:
   verifiedWith: []
 documentation_of: Sequence/Hamming_Distance.py
 layout: document
-redirect_from:
-- /library/Sequence/Hamming_Distance.py
-- /library/Sequence/Hamming_Distance.py.html
-title: Sequence/Hamming_Distance.py
+title: Hamming Distance
 ---
+
+## Outline
+
+$\lvert S \rvert = \lvert T \rvert$ である列 $S,T$ に対して, $N:=\lvert S \rvert$ とする.
+このとき, $S_i \neq T_i$ を満たす $1$ 以上 $N$ 以下の整数 $i$ の個数を $S,T$ の Hamming 距離という.

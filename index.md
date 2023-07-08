@@ -385,7 +385,7 @@ data:
     pages:
     - icon: ':warning:'
       path: Sequence/Hamming_Distance.py
-      title: Sequence/Hamming_Distance.py
+      title: Hamming Distance
     - icon: ':warning:'
       path: Sequence/Levenshtein_Distance.py
       title: Sequence/Levenshtein_Distance.py
