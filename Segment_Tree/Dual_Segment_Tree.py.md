@@ -3,12 +3,12 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
     title: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.4/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -31,7 +31,7 @@ data:
     \n    #\u914D\u5217\u306E\u7B2C m \u8981\u7D20\u3088\u308A\u4E0A\u3092\u5168\u3066\
     \u4F1D\u642C\n    def _propagate_above(self,m):\n        H=m.bit_length()\n  \
     \      for h in range(H-1,0,-1):\n            self._propagate_at(m>>h)\n\n   \
-    \ #\u4F5C\u7528\n    def operate(self, l, r, alpha, left_closed=True, right_closed=True):\n\
+    \ #\u4F5C\u7528\n    def action(self, l, r, alpha, left_closed=True, right_closed=True):\n\
     \        L=l+self.N+(not left_closed)\n        R=r+self.N+(right_closed)\n\n \
     \       L0=R0=-1\n        X,Y=L,R-1\n        while X<Y:\n            if X&1:\n\
     \                L0=max(L0,X)\n                X+=1\n\n            if Y&1==0:\n\
@@ -46,13 +46,13 @@ data:
     \u5F97\n    def get(self,k):\n        m=k+self.N\n        self._propagate_above(m)\n\
     \        return self.lazy[m]\n\n    def __getitem__(self,index):\n        m=index+self.N\n\
     \        self._propagate_above(m)\n        return self.lazy[m]\n\n    def __setitem__(self,index,value):\n\
-    \        self.operate(index, index, value)\n"
+    \        self.action(index, index, value)\n"
   dependsOn: []
   isVerificationFile: false
   path: Segment_Tree/Dual_Segment_Tree.py
   requiredBy: []
-  timestamp: '2022-11-22 04:21:42+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2023-07-08 23:14:20+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
 documentation_of: Segment_Tree/Dual_Segment_Tree.py

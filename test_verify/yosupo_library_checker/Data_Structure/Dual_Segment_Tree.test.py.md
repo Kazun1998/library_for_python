@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: Segment_Tree/Dual_Segment_Tree.py
     title: Dual Segment Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/range_affine_point_get
     links:
@@ -37,8 +37,8 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
   requiredBy: []
-  timestamp: '2022-11-22 23:25:26+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2023-07-08 23:14:20+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
 layout: document

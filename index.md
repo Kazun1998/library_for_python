@@ -369,7 +369,7 @@ data:
       title: Ordered_Set/Ordered_Set.py
   - name: Segment_Tree
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: Segment_Tree/Dual_Segment_Tree.py
       title: Dual Segment Tree
     - icon: ':warning:'
@@ -509,7 +509,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Sorted_Multiset.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Sorted_Multiset.test.py
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py
     - icon: ':heavy_check_mark:'
