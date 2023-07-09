@@ -48,6 +48,8 @@ title: "Longest Common Subsequence (\u6700\u9577\u5171\u901A\u90E8\u5206\u5217)"
 
 $\mathcal{A}$ をアルファベットとする. $S \in W(\mathcal{A})$ に対して, 以下を満たすような正の整数列 $\rho$ が存在するとき, $T \in W(\mathcal{A})$ は $S$ の部分列であるという.
 
+* $\rho$ は長さ $\lvert T \rvert$ の列.
+* $1 \leq \rho(1) \lt \rho(2) \lt \dots \lt \rho(\lvert T \rvert) \leq \lvert S \rvert$.
 * $i=1,2, \dots, \lvert T \rvert$ に対して, $S_{\rho(i)}=T_i$ が成り立つ.
 
 2つの列 $S,T \in W(\mathcal{A})$ に対して, $S,T$ 両方の部分列であるような列のことを $S,T$ の共通部分列という.
