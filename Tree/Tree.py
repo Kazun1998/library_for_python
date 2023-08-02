@@ -532,23 +532,21 @@ class Tree:
         """ 木の根から yield する. """
 
         assert self.__after_seal_check()
-        if not hasattr(self,"tower"):
+        if not hasattr(self, "tower"):
             self.depth_search(False)
 
-        for E in self.tower:
-            for v in E:
-                yield v
+        for layer in self.tower:
+            yield from layer
 
     def bottom_up(self):
         """ 木の葉から yield する. """
 
         assert self.__after_seal_check()
-        if not hasattr(self,"tower"):
+        if not hasattr(self, "tower"):
             self.depth_search(False)
 
-        for E in self.tower[::-1]:
-            for v in E:
-                yield v
+        for layer in self.tower[::-1]:
+            yield from layer
 
     def tree_dp_from_leaf(self,merge,unit,f,g,Mode=False):
         """ 葉から木 DP 行う.
