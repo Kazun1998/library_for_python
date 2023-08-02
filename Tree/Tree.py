@@ -82,7 +82,8 @@ class Tree:
     def depth_search(self, mode=True):
         """ 木の深さを求める.
 
-        mode=True ならば, 各頂点の深さが記録されたリストを返す."""
+        mode=True ならば, 各頂点の深さが記録されたリストを返す.
+        """
 
         assert self.__after_seal_check()
 
@@ -92,28 +93,26 @@ class Tree:
             else:
                 return
 
-        from collections import deque
-        C=self.children
-        D=[-1]*(self.index+self.N)
-        E=[[] for _ in range(self.N)]
+        children = self.children
+        depth = [-1] * (self.index+self.N)
+        tower = [[] for _ in range(self.N)]
 
-        Q=deque([self.root])
-        D[self.root]=0
-        E[0]=[self.root]
+        S = [self.root]
+        depth[self.root]=0
+        tower[0]=[self.root]
 
-        while Q:
-            x=Q.popleft()
-            d=D[x]
-            for y in C[x]:
-                D[y]=d+1
-                E[d+1].append(y)
-                Q.append(y)
+        while S:
+            x = S.pop()
+            for y in children[x]:
+                depth[y] = depth[x] + 1
+                tower[depth[y]].append(y)
+                S.append(y)
 
-        self.depth=D
-        self.tower=E
+        self.depth = depth
+        self.tower = tower
 
         if mode:
-            return D
+            return depth
 
     def vertex_depth(self, x):
         """ 頂点 x の深さを求める."""
