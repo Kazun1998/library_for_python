@@ -58,18 +58,18 @@ data:
     \n    #\u30C7\u30FC\u30BF\u3092\u6C42\u3081\u308B.\n    def depth_search(self,\
     \ mode=True):\n        \"\"\" \u6728\u306E\u6DF1\u3055\u3092\u6C42\u3081\u308B\
     .\n\n        mode=True \u306A\u3089\u3070, \u5404\u9802\u70B9\u306E\u6DF1\u3055\
-    \u304C\u8A18\u9332\u3055\u308C\u305F\u30EA\u30B9\u30C8\u3092\u8FD4\u3059.\"\"\"\
-    \n\n        assert self.__after_seal_check()\n\n        if hasattr(self, \"depth\"\
-    ):\n            if mode:\n                return self.depth\n            else:\n\
-    \                return\n\n        from collections import deque\n        C=self.children\n\
-    \        D=[-1]*(self.index+self.N)\n        E=[[] for _ in range(self.N)]\n\n\
-    \        Q=deque([self.root])\n        D[self.root]=0\n        E[0]=[self.root]\n\
-    \n        while Q:\n            x=Q.popleft()\n            d=D[x]\n          \
-    \  for y in C[x]:\n                D[y]=d+1\n                E[d+1].append(y)\n\
-    \                Q.append(y)\n\n        self.depth=D\n        self.tower=E\n\n\
-    \        if mode:\n            return D\n\n    def vertex_depth(self, x):\n  \
-    \      \"\"\" \u9802\u70B9 x \u306E\u6DF1\u3055\u3092\u6C42\u3081\u308B.\"\"\"\
-    \n\n        assert self.__after_seal_check(x)\n\n        if not hasattr(self,\
+    \u304C\u8A18\u9332\u3055\u308C\u305F\u30EA\u30B9\u30C8\u3092\u8FD4\u3059.\n  \
+    \      \"\"\"\n\n        assert self.__after_seal_check()\n\n        if hasattr(self,\
+    \ \"depth\"):\n            if mode:\n                return self.depth\n     \
+    \       else:\n                return\n\n        children = self.children\n  \
+    \      depth = [-1] * (self.index+self.N)\n        tower = [[] for _ in range(self.N)]\n\
+    \n        S = [self.root]\n        depth[self.root]=0\n        tower[0]=[self.root]\n\
+    \n        while S:\n            x = S.pop()\n            for y in children[x]:\n\
+    \                depth[y] = depth[x] + 1\n                tower[depth[y]].append(y)\n\
+    \                S.append(y)\n\n        self.depth = depth\n        self.tower\
+    \ = tower\n\n        if mode:\n            return depth\n\n    def vertex_depth(self,\
+    \ x):\n        \"\"\" \u9802\u70B9 x \u306E\u6DF1\u3055\u3092\u6C42\u3081\u308B\
+    .\"\"\"\n\n        assert self.__after_seal_check(x)\n\n        if not hasattr(self,\
     \ \"depth\"):\n            self.depth_search(mode=False)\n        return self.depth[x]\n\
     \n    def __upper_list(self):\n        assert self.__after_seal_check()\n\n  \
     \      if hasattr(self, \"upper_list\"):\n            return\n\n        if not\
@@ -222,21 +222,21 @@ data:
     \u3081\u308B\n                w=v\n                v=ch[v][S[v]]\n           \
     \     S[w]+=1\n                yield (v, 1)\n\n    def top_down(self):\n     \
     \   \"\"\" \u6728\u306E\u6839\u304B\u3089 yield \u3059\u308B. \"\"\"\n\n     \
-    \   assert self.__after_seal_check()\n        if not hasattr(self,\"tower\"):\n\
-    \            self.depth_search(False)\n\n        for E in self.tower:\n      \
-    \      for v in E:\n                yield v\n\n    def bottom_up(self):\n    \
-    \    \"\"\" \u6728\u306E\u8449\u304B\u3089 yield \u3059\u308B. \"\"\"\n\n    \
-    \    assert self.__after_seal_check()\n        if not hasattr(self,\"tower\"):\n\
-    \            self.depth_search(False)\n\n        for E in self.tower[::-1]:\n\
-    \            for v in E:\n                yield v\n\n    def tree_dp_from_leaf(self,merge,unit,f,g,Mode=False):\n\
-    \        \"\"\" \u8449\u304B\u3089\u6728 DP \u884C\u3046.\n\n        [input]\n\
-    \        merge: \u53EF\u63DB\u30E2\u30CE\u30A4\u30C9\u3092\u6210\u30592\u9805\u6F14\
-    \u7B97 M x M -> M\n        unit: M \u306E\u5358\u4F4D\u5143\n        f: X x V\
-    \ x V \u2192 M: f(x,v,w): v \u304C\u89AA, w \u304C\u5B50\n        g: M x V \u2192\
-    \ X: g(x,v)\n        Mode: False \u2192 \u6839\u306E\u5024\u306E\u307F, True \u2192\
-    \ \u5168\u3066\u306E\u5024\n\n        [\u88DC\u8DB3]\n        \u9802\u70B9 v \u306E\
-    \u5B50\u304C x,y,z,..., w \u306E\u3068\u304D, \u66F4\u65B0\u5F0F\u306F * \u3092\
-    \ merge \u3068\u3057\u3066\n            dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*...*f(dp[w],v,w),\
+    \   assert self.__after_seal_check()\n        if not hasattr(self, \"tower\"):\n\
+    \            self.depth_search(False)\n\n        for layer in self.tower:\n  \
+    \          yield from layer\n\n    def bottom_up(self):\n        \"\"\" \u6728\
+    \u306E\u8449\u304B\u3089 yield \u3059\u308B. \"\"\"\n\n        assert self.__after_seal_check()\n\
+    \        if not hasattr(self, \"tower\"):\n            self.depth_search(False)\n\
+    \n        for layer in self.tower[::-1]:\n            yield from layer\n\n   \
+    \ def tree_dp_from_leaf(self,merge,unit,f,g,Mode=False):\n        \"\"\" \u8449\
+    \u304B\u3089\u6728 DP \u884C\u3046.\n\n        [input]\n        merge: \u53EF\u63DB\
+    \u30E2\u30CE\u30A4\u30C9\u3092\u6210\u30592\u9805\u6F14\u7B97 M x M -> M\n   \
+    \     unit: M \u306E\u5358\u4F4D\u5143\n        f: X x V x V \u2192 M: f(x,v,w):\
+    \ v \u304C\u89AA, w \u304C\u5B50\n        g: M x V \u2192 X: g(x,v)\n        Mode:\
+    \ False \u2192 \u6839\u306E\u5024\u306E\u307F, True \u2192 \u5168\u3066\u306E\u5024\
+    \n\n        [\u88DC\u8DB3]\n        \u9802\u70B9 v \u306E\u5B50\u304C x,y,z,...,\
+    \ w \u306E\u3068\u304D, \u66F4\u65B0\u5F0F\u306F * \u3092 merge \u3068\u3057\u3066\
+    \n            dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*...*f(dp[w],v,w),\
     \ v)\n        \u306B\u306A\u308B.\n        \"\"\"\n        assert self.__after_seal_check()\n\
     \n        data=[unit]*(self.index+self.N)\n        ch=self.children\n\n      \
     \  for x in self.bottom_up():\n            for y in ch[x]:\n                data[x]=merge(data[x],\
@@ -373,7 +373,7 @@ data:
   isVerificationFile: false
   path: Tree/Tree.py
   requiredBy: []
-  timestamp: '2023-03-20 03:27:06+09:00'
+  timestamp: '2023-08-03 01:12:40+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
