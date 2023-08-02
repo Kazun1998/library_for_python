@@ -40,7 +40,7 @@ data:
     \   x: value\n        \"\"\"\n\n        self.__cnt+=1\n\n        self.__back.append(x)\n\
     \n        if self.__right:\n            self.__right.append(self.op(self.__right[-1],x))\n\
     \        else:\n            self.__right.append(x)\n\n    def pop(self):\n   \
-    \     \"\"\" push \u3059\u308B.\n\n        \"\"\"\n\n        if not self.__front:\n\
+    \     \"\"\" pop \u3059\u308B.\n\n        \"\"\"\n\n        if not self.__front:\n\
     \            self.__right.clear()\n            while self.__back:\n          \
     \      x=self.__back.pop()\n\n                if self.__front:\n             \
     \       self.__left.appendleft(self.op(x,self.__left[0]))\n                else:\n\
@@ -59,7 +59,7 @@ data:
   isVerificationFile: false
   path: Sliding_Window_Aggregation.py
   requiredBy: []
-  timestamp: '2023-03-20 03:47:37+09:00'
+  timestamp: '2023-08-03 01:41:13+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Queue_Operate_All_Composite.test.py
