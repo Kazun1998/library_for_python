@@ -25,7 +25,7 @@ class Fraction():
         self.__a = Numerator
         self.__b = Denominator
         if Fraction.reduction:
-            g=gcd(Numerator, Denominator)
+            g = gcd(Numerator, Denominator)
             self.__a = Numerator // g
             self.__b = Denominator // g
 
@@ -46,7 +46,7 @@ class Fraction():
         else:
             return "{}/{}".format(self.__a, self.__b)
 
-    __repr__=__str__
+    __repr__ = __str__
 
     #四則演算定義
     def __add__(self, other):
@@ -218,6 +218,6 @@ class Fraction():
     def __hash__(self):
         x, y = self
         if not Fraction.reduction:
-            g=gcd(x, y)
+            g = gcd(x, y)
             x //= g; y //= g
         return hash((x, y))
