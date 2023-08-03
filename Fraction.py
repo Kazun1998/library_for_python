@@ -51,7 +51,7 @@ class Fraction():
     #四則演算定義
     def __add__(self, other):
         if isinstance(other, Fraction):
-            x = self.__a * other.__b + self.__b*other.__a
+            x = self.__a * other.__b + self.__b * other.__a
             y = self.__b * other.__b
         elif isinstance(other, int):
             x = self.__a + self.__b * other
@@ -75,7 +75,7 @@ class Fraction():
         return Fraction(x, y)
 
     def __rsub__(self, other):
-        return - self + other
+        return -self + other
 
     def __mul__(self, other):
         if isinstance(other, Fraction):
@@ -97,7 +97,7 @@ class Fraction():
             raise ZeroDivisionError
 
         H = self / other
-        return H.a//H.b
+        return H.a // H.b
 
     def __rfloordiv__(self, other):
         if self == Fraction():
@@ -158,7 +158,7 @@ class Fraction():
             y = self.__b * other.__a
         else:
             x = self.__a
-            y = self.__b*other
+            y = self.__b * other
         return x, y
 
     #比較
