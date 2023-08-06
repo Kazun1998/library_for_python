@@ -285,7 +285,7 @@ def __modulo_composite__(p:Modulo, q:Modulo):
 
     n//=g;m//=g;d//=g
 
-    s=(1/Modulo(n,m)).a
+    s = pow(n, -1, m)
 
     return Modulo(a+(n*g)*d*s,n*m*g)
 
