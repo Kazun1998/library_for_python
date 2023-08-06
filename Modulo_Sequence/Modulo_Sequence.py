@@ -233,7 +233,7 @@ def Motzkin(N, mode=0):
     F=((Modulo_Polynomial([1,-1], N+3)-Sqrt(Modulo_Polynomial([1,-2,-3], N+3)))*two_inv)>>2
 
     if mode:
-        return F.poly[:N+1]
+        return F.Poly[:N+1]
     else:
         return F[N]
 
