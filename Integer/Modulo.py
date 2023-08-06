@@ -71,6 +71,9 @@ def Modulo_Inverse(a, m):
         int: 可逆元が存在するならばその値, 存在しないのであれば -1
     """
 
-    h=Extend_Euclid(a,m)
-    return h[0]%m if h[2]==1 else -1
+    try:
+        return pow(a, -1, m)
+    except ValueError:
+        return -1
+
 
