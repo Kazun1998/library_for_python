@@ -158,15 +158,9 @@ class Modulo():
         return other*(self.modulo_inverse())
 
     #累乗
-    def __pow__(self,other):
-        if isinstance(other,int):
-            u=abs(other)
-
-            r=Modulo(pow(self.a,u,self.n),self.n, False)
-            if other>=0:
-                return r
-            else:
-                return r.modulo_inverse()
+    def __pow__(self, other):
+        if isinstance(other, int):
+            return Modulo(pow(self.a, other, self.n), self.n, False)
         else:
             b,n=other.a,other.n
             assert pow(self.a,n,self.n)==1, "矛盾なく定義できません."
