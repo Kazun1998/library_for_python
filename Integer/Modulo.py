@@ -46,20 +46,18 @@ def Primitive_Root(p):
 
 #拡張ユークリッドの互除法
 def Extend_Euclid(a: int, b: int):
-    """ gcd(a,b) と ax+by=gcd(a,b) を満たす整数 x,y の例を挙げる.
+    """ax+by=gcd(a, b) を満たす (x, y, gcd(a, b)) を 1 つ求める.
 
-    [Input]
-    a,b: 整数
-
-    [Output]
-    (x,y,gcd(a,b))
+    a,b:整数
     """
-    s,t,u,v=1,0,0,1
-    while b:
-        q,a,b=a//b,b,a%b
-        s,t=t,s-q*t
-        u,v=v,u-q*v
-    return s,u,a
+    from math import gcd
+    g = gcd(a, b)
+    if g == 0:
+        return (1, 0, 0)
+
+    x = pow(a//g, -1, b//g)
+    y = - (a*x-g) // b
+    return (x, y, g)
 
 
 def Modulo_Inverse(a, m):
