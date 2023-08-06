@@ -145,15 +145,10 @@ class Modulo():
         return self.modulo_inverse()
 
     def modulo_inverse(self):
-        s,t=1,0
-        a,b=self.a,self.n
-        while b:
-            q,a,b=a//b,b,a%b
-            s,t=t,s-q*t
-
-        assert a==1,"{}の逆数が存在しません".format(self)
-        s%=self.n
-        return Modulo(s,self.n, False)
+        try:
+            return Modulo(pow(self.a, -1, self.n), self.n, False)
+        except ValueError:
+            raise ValueError(f"{self} の逆数が存在しません") from None
 
     #除法
     def __truediv__(self,other):
