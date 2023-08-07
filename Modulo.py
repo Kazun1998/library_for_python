@@ -329,16 +329,16 @@ def First_Order_Congruent_Equation(a: int, b: int, m: int):
     m!=0
     """
     assert m
-    g=a;h=m
+    g=a; h=m
     while h:
-        g,h=h,g%h
+        g, h = h, g % h
 
     if b%g:
         return None
 
-    a,b,m=a//g,b//g,m//g
-    c,_,_=Extended_Euclid(a,m)
-    return Modulo(b*c,m)
+    a, b, m = a // g, b // g, m // g
+    c = pow(a, -1, m)
+    return Modulo(b * c, m)
 
 #1次連立合同方程式を解く
 def First_Order_Simultaneous_Congruent_Equation(*X):
