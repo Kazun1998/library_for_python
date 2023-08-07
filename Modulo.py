@@ -315,7 +315,7 @@ def Extended_Euclid(a: int, b: int):
     from math import gcd
     g = gcd(a, b)
     if g == 0:
-        return (1, 0, 0)
+        return (0, 0, 0)
 
     x = pow(a//g, -1, b//g)
     y = - (a*x-g) // b
