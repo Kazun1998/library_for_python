@@ -24,28 +24,28 @@ data:
     \ for i,u in zip(self.__ind, self.basis):\n                v-=v[i]*u\n\n     \
     \       if bool(v):\n                for j in range(self.dim):\n             \
     \       if v[j]:\n                        self.__ind.append(j)\n             \
-    \           break\n                v=pow(v[j], Mod-2, Mod)*v\n               \
-    \ self.basis.append(v)\n\n                for k in range(len(self.basis)-1):\n\
-    \                    self.basis[k]-=self.basis[k][j]*v\n\n    def dimension(self):\n\
-    \        return len(self.basis)\n\n    def __le__(self, other):\n        for u\
-    \ in self.basis:\n            if u not in other:\n                return False\n\
-    \        return True\n\n    def __ge__(self, other):\n        return other<=self\n\
-    \n    def __eq__(self, other):\n        return (self<=other) and (other<=self)\n\
-    \n    def refresh(self):\n        I=sorted(range(len(self.__ind)), key=lambda\
-    \ i:self.__ind[i])\n        self.basis=[self.basis[i] for i in I]\n        self.__ind=[self.__ind[i]\
-    \ for i in I]\n\n    def projection(self, v):\n        for i,u in zip(self.__ind,\
-    \ self.basis):\n            v-=v[i]*u\n        return v\n\n#====================\n\
-    def Overall(dim):\n    V=Modulo_Vector_Space(dim)\n    V.add_vectors(*[Standard_Basis(dim,k)\
-    \ for k in range(dim)])\n    return V\n\ndef Kernel_Space(A):\n    \"\"\" \u884C\
-    \u5217 A \u306E\u6838\u7A7A\u9593 Ker A (Ax=0 \u3068\u306A\u308B x \u306E\u7A7A\
-    \u9593) \u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n\n    row,col=A.size\n    T=deepcopy(A.ele)\n\
-    \n    p=[]; q=[]\n    rnk=0\n    for j in range(col):\n        for i in range(rnk,row):\n\
-    \            if T[i][j]!=0:\n                break\n        else:\n          \
-    \  q.append(j)\n            continue\n        if j==col:\n            return None\n\
-    \        p.append(j)\n        T[rnk],T[i]=T[i],T[rnk]\n\n        inv=pow(T[rnk][j],\
-    \ Mod-2, Mod)\n        for k in range(col):\n            T[rnk][k]=(inv*T[rnk][k])%Mod\n\
-    \n        for s in range(row):\n            if s==rnk:\n                continue\n\
-    \            c=-T[s][j]\n            for t in range(col):\n                T[s][t]=(T[s][t]+c*T[rnk][t])%Mod\n\
+    \           break\n                v=pow(v[j], -1, Mod) * v\n                self.basis.append(v)\n\
+    \n                for k in range(len(self.basis)-1):\n                    self.basis[k]-=self.basis[k][j]*v\n\
+    \n    def dimension(self):\n        return len(self.basis)\n\n    def __le__(self,\
+    \ other):\n        for u in self.basis:\n            if u not in other:\n    \
+    \            return False\n        return True\n\n    def __ge__(self, other):\n\
+    \        return other<=self\n\n    def __eq__(self, other):\n        return (self<=other)\
+    \ and (other<=self)\n\n    def refresh(self):\n        I=sorted(range(len(self.__ind)),\
+    \ key=lambda i:self.__ind[i])\n        self.basis=[self.basis[i] for i in I]\n\
+    \        self.__ind=[self.__ind[i] for i in I]\n\n    def projection(self, v):\n\
+    \        for i,u in zip(self.__ind, self.basis):\n            v-=v[i]*u\n    \
+    \    return v\n\n#====================\ndef Overall(dim):\n    V=Modulo_Vector_Space(dim)\n\
+    \    V.add_vectors(*[Standard_Basis(dim,k) for k in range(dim)])\n    return V\n\
+    \ndef Kernel_Space(A):\n    \"\"\" \u884C\u5217 A \u306E\u6838\u7A7A\u9593 Ker\
+    \ A (Ax=0 \u3068\u306A\u308B x \u306E\u7A7A\u9593) \u3092\u6C42\u3081\u308B.\n\
+    \n    \"\"\"\n\n    row,col=A.size\n    T=deepcopy(A.ele)\n\n    p=[]; q=[]\n\
+    \    rnk=0\n    for j in range(col):\n        for i in range(rnk,row):\n     \
+    \       if T[i][j]!=0:\n                break\n        else:\n            q.append(j)\n\
+    \            continue\n        if j==col:\n            return None\n        p.append(j)\n\
+    \        T[rnk],T[i]=T[i],T[rnk]\n\n        inv=pow(T[rnk][j], -1, Mod)\n    \
+    \    for k in range(col):\n            T[rnk][k]=(inv*T[rnk][k])%Mod\n\n     \
+    \   for s in range(row):\n            if s==rnk:\n                continue\n \
+    \           c=-T[s][j]\n            for t in range(col):\n                T[s][t]=(T[s][t]+c*T[rnk][t])%Mod\n\
     \        rnk+=1\n\n    x=[0]*col\n    for i in range(rnk):\n        x[p[i]]=T[i][-1]\n\
     \n    ker_dim=col-rnk\n    ker=[[0]*col for _ in range(ker_dim)]\n\n    for i\
     \ in range(ker_dim):\n        ker[i][q[i]]=1\n\n    for i in range(ker_dim):\n\
@@ -62,7 +62,7 @@ data:
     \            if T[i][j]!=0:\n                break\n        else:\n          \
     \  q.append(j)\n            continue\n        if j==col:\n            return None\n\
     \        p.append(j)\n        T[rnk],T[i]=T[i],T[rnk]\n\n        inv=pow(T[rnk][j],\
-    \ Mod-2, Mod)\n        for k in range(col+1):\n            T[rnk][k]=(inv*T[rnk][k])%Mod\n\
+    \ -1, Mod)\n        for k in range(col+1):\n            T[rnk][k]=(inv*T[rnk][k])%Mod\n\
     \n        for s in range(row):\n            if s==rnk:\n                continue\n\
     \            c=-T[s][j]\n            for t in range(col+1):\n                T[s][t]=(T[s][t]+c*T[rnk][t])%Mod\n\
     \        rnk+=1\n\n    x=[0]*col\n    for i in range(rnk):\n        x[p[i]]=T[i][-1]\n\
@@ -74,7 +74,7 @@ data:
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Vector_Space.py
   requiredBy: []
-  timestamp: '2022-04-20 15:01:38+09:00'
+  timestamp: '2023-08-06 21:06:56+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Modulo_Matrix/Modulo_Vector_Space.py

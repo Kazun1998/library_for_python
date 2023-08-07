@@ -127,7 +127,7 @@ data:
     \n    #\u9664\u6CD5\n    def __truediv__(self,other):\n        if isinstance(other,\
     \ Modulo_Polynomial):\n            if Calc.is_sparse(other.Poly):\n          \
     \      d,f=Calc.coefficients_list(other.Poly)\n                K=len(d)\n    \
-    \            H=[0]*self.max_degree\n\n                alpha=pow(other[0], Mod-2,\
+    \            H=[0]*self.max_degree\n\n                alpha=pow(other[0], -1,\
     \ Mod)\n                H[0]=alpha*self[0]%Mod\n\n                for i in range(1,\
     \ self.max_degree):\n                    c=0\n                    for j in range(1,\
     \ K):\n                        if d[j]<=i:\n                            c+=f[j]*H[i-d[j]]%Mod\n\
@@ -135,7 +135,7 @@ data:
     \          c%=Mod\n                    H[i]=alpha*(self[i]-c)%Mod\n          \
     \      H=Modulo_Polynomial(H, min(self.max_degree, other.max_degree))\n      \
     \          return H\n            else:\n                return self*other.inverse()\n\
-    \        else:\n            return pow(other,Mod-2,Mod)*self\n\n    def __rtruediv__(self,other):\n\
+    \        else:\n            return pow(other, -1, Mod)*self\n\n    def __rtruediv__(self,other):\n\
     \        return other*self.inverse()\n\n    #\u30B9\u30AB\u30E9\u30FC\u500D\n\
     \    def scale(self, s):\n        return Modulo_Polynomial(Calc.Times(self.Poly,s),self.max_degree)\n\
     \n    #\u6700\u9AD8\u6B21\u306E\u4FC2\u6570\n    def leading_coefficient(self):\n\
@@ -170,11 +170,11 @@ data:
     \            if pow(g,(p-1)//q,p)==1:\n                    flag=False\n      \
     \              break\n\n            if flag:\n                return g\n\n   \
     \         g+=1\n\n    #\u53C2\u8003\u5143: https://judge.yosupo.jp/submission/72676\n\
-    \    def __build_up(self):\n        rank2=(~(Mod-1)&(Mod-2)).bit_length()\n  \
-    \      root=[0]*(rank2+1); iroot=[0]*(rank2+1)\n        rate2=[0]*max(0, rank2-1);\
+    \    def __build_up(self):\n        rank2=(~(Mod-1) & ((Mod-1)-1)).bit_length()\n\
+    \        root=[0]*(rank2+1); iroot=[0]*(rank2+1)\n        rate2=[0]*max(0, rank2-1);\
     \ irate2=[0]*max(0, rank2-1)\n        rate3=[0]*max(0, rank2-2); irate3=[0]*max(0,\
     \ rank2-2)\n\n        root[-1]=pow(self.primitive, (Mod-1)>>rank2, Mod)\n    \
-    \    iroot[-1]=pow(root[-1], Mod-2, Mod)\n\n        for i in range(rank2)[::-1]:\n\
+    \    iroot[-1]=pow(root[-1], -1, Mod)\n\n        for i in range(rank2)[::-1]:\n\
     \            root[i]=root[i+1]*root[i+1]%Mod\n            iroot[i]=iroot[i+1]*iroot[i+1]%Mod\n\
     \n        prod=iprod=1\n        for i in range(rank2-1):\n            rate2[i]=root[i+2]*prod%Mod\n\
     \            irate2[i]=iroot[i+2]*prod%Mod\n            prod*=iroot[i+2]; prod%=Mod\n\
@@ -242,17 +242,17 @@ data:
     \    A[i+offset+p]=(a0-a1+beta)*irot%Mod\n                        A[i+offset+2*p]=(a0+a1-a2-a3)*irot2%Mod\n\
     \                        A[i+offset+3*p]=(a0-a1-beta)*irot3%Mod\n\n          \
     \          if s+1!=1<<(l-2):\n                        irot*=irate3[(~s&-~s).bit_length()-1]\n\
-    \                        irot%=Mod\n                l-=2\n        N_inv=pow(N,Mod-2,Mod)\n\
-    \        for i in range(N):\n            A[i]=N_inv*A[i]%Mod\n\n    def non_zero_count(self,\
-    \ A):\n        \"\"\" A \u306B\u3042\u308B\u975E\u96F6\u306E\u6570\u3092\u6C42\
-    \u3081\u308B. \"\"\"\n        return len(A)-A.count(0)\n\n    def is_sparse(self,\
-    \ A, K=None):\n        \"\"\" A \u304C\u758E\u304B\u3069\u3046\u304B\u3092\u5224\
-    \u5B9A\u3059\u308B. \"\"\"\n\n        if K==None:\n            K=25\n\n      \
-    \  return self.non_zero_count(A)<=K\n\n    def coefficients_list(self, A):\n \
-    \       \"\"\" A \u306B\u3042\u308B\u975E\u96F6\u306E\u30EA\u30B9\u30C8\u3092\u6C42\
-    \u3081\u308B.\n\n\n        output: ( [d[0], ..., d[k-1] ], [f[0], ..., f[k-1]\
-    \ ]) : a[d[j]]=f[j] \u3067\u3042\u308B\u3053\u3068\u3092\u8868\u3057\u3066\u3044\
-    \u308B.\n        \"\"\"\n\n        f=[]; d=[]\n        for i in range(len(A)):\n\
+    \                        irot%=Mod\n                l-=2\n        N_inv=pow(N,\
+    \ -1, Mod)\n        for i in range(N):\n            A[i]=N_inv*A[i]%Mod\n\n  \
+    \  def non_zero_count(self, A):\n        \"\"\" A \u306B\u3042\u308B\u975E\u96F6\
+    \u306E\u6570\u3092\u6C42\u3081\u308B. \"\"\"\n        return len(A)-A.count(0)\n\
+    \n    def is_sparse(self, A, K=None):\n        \"\"\" A \u304C\u758E\u304B\u3069\
+    \u3046\u304B\u3092\u5224\u5B9A\u3059\u308B. \"\"\"\n\n        if K==None:\n  \
+    \          K=25\n\n        return self.non_zero_count(A)<=K\n\n    def coefficients_list(self,\
+    \ A):\n        \"\"\" A \u306B\u3042\u308B\u975E\u96F6\u306E\u30EA\u30B9\u30C8\
+    \u3092\u6C42\u3081\u308B.\n\n\n        output: ( [d[0], ..., d[k-1] ], [f[0],\
+    \ ..., f[k-1] ]) : a[d[j]]=f[j] \u3067\u3042\u308B\u3053\u3068\u3092\u8868\u3057\
+    \u3066\u3044\u308B.\n        \"\"\"\n\n        f=[]; d=[]\n        for i in range(len(A)):\n\
     \            if A[i]:\n                d.append(i)\n                f.append(A[i])\n\
     \        return d,f\n\n    def Convolution(self, A, B):\n        \"\"\" A, B \u3067\
     \ Mod \u3092\u6CD5\u3068\u3059\u308B\u7573\u307F\u8FBC\u307F\u3092\u6C42\u3081\
@@ -289,17 +289,17 @@ data:
     \u304C\u975E\u96F6\u306E\u9805\u306E\u500B\u6570\u3092 K, \u6C42\u3081\u308B\u6700\
     \u5927\u6B21\u6570\u3092 N \u3068\u3057\u3066, O(NK) \u6642\u9593\n          \
     \  \"\"\"\n            d,f=self.coefficients_list(F)\n\n            G=[0]*M\n\
-    \            alpha=pow(F[0], Mod-2, Mod)\n            G[0]=alpha\n\n         \
-    \   for i in range(1, M):\n                for j in range(1, len(d)):\n      \
-    \              if d[j]<=i:\n                        G[i]+=f[j]*G[i-d[j]]%Mod\n\
-    \                    else:\n                        break\n\n                G[i]%=Mod\n\
+    \            alpha=pow(F[0], -1, Mod)\n            G[0]=alpha\n\n            for\
+    \ i in range(1, M):\n                for j in range(1, len(d)):\n            \
+    \        if d[j]<=i:\n                        G[i]+=f[j]*G[i-d[j]]%Mod\n     \
+    \               else:\n                        break\n\n                G[i]%=Mod\n\
     \                G[i]=(-alpha*G[i])%Mod\n            del G[M:]\n        else:\n\
     \            \"\"\"\n            FFT\u306E\u7406\u8AD6\u3092\u5FDC\u7528\u3057\
     \u3066\u6C42\u3081\u308B.\n            \u8A08\u7B97\u91CF: \u6C42\u3081\u305F\u3044\
     \u9805\u306E\u500B\u6570\u3092N\u3068\u3057\u3066, O(N log N)\n\n            Reference:\
     \ https://judge.yosupo.jp/submission/42413\n            \"\"\"\n\n           \
-    \ N=len(F)\n            r=pow(F[0],Mod-2,Mod)\n\n            m=1\n           \
-    \ G=[r]\n            while m<M:\n                A=F[:min(N, 2*m)]; A+=[0]*(2*m-len(A))\n\
+    \ N=len(F)\n            r=pow(F[0], -1, Mod)\n\n            m=1\n            G=[r]\n\
+    \            while m<M:\n                A=F[:min(N, 2*m)]; A+=[0]*(2*m-len(A))\n\
     \                B=G.copy(); B+=[0]*(2*m-len(B))\n\n                Calc.NTT(A);\
     \ Calc.NTT(B)\n                for i in range(2*m):\n                    A[i]=A[i]*B[i]%Mod\n\
     \n                Calc.Inverse_NTT(A)\n                A=A[m:]+[0]*m\n       \
@@ -347,11 +347,11 @@ data:
     \            #2.g'\n            V=Calc.Convolution(F,U)[:m]\n            #2.h'\n\
     \            F.extend(V)\n            #2.i'\n            m<<=1\n    return Modulo_Polynomial(F[:N],P.max_degree)\n\
     \ndef Root(P,k):\n    assert P.Poly[0]==1, \"\u5B9A\u6570\u9805\u304C1\u3067\u306F\
-    \u306A\u3044\"\n    k%=Mod\n    assert k, \"k\u304C\u7279\u7570\"\n    k_inv=pow(k,Mod-2,Mod)\n\
-    \    return Power(P,k_inv)\n\n\"\"\"\n\u4E09\u89D2\u95A2\u6570\n\"\"\"\n#\u6B63\
-    \u5F26\ndef Sin(P):\n    I=Tonelli_Shanks(-1)\n    B=I*P\n    C=Exp(B)-Exp(-B)\n\
-    \    return C*pow(2*I,Mod-2,Mod)\n\n#\u4F59\u5F26\ndef Cos(P):\n    I=Tonelli_Shanks(-1)\n\
-    \    B=I*P\n    C=Exp(B)+Exp(-B)\n    return C*pow(2,Mod-2,Mod)\n\n#\u6B63\u63A5\
+    \u306A\u3044\"\n    k%=Mod\n    assert k, \"k\u304C\u7279\u7570\"\n    k_inv=pow(k,\
+    \ -1, Mod)\n    return Power(P,k_inv)\n\n\"\"\"\n\u4E09\u89D2\u95A2\u6570\n\"\"\
+    \"\n#\u6B63\u5F26\ndef Sin(P):\n    I=Tonelli_Shanks(-1)\n    B=I*P\n    C=Exp(B)-Exp(-B)\n\
+    \    return C*pow(2*I, -1, Mod)\n\n#\u4F59\u5F26\ndef Cos(P):\n    I=Tonelli_Shanks(-1)\n\
+    \    B=I*P\n    C=Exp(B)+Exp(-B)\n    return C*pow(2, -1, Mod)\n\n#\u6B63\u63A5\
     \ndef Tan(P):\n    return Sin(P)/Cos(P)\n\n#\u9006\u6B63\u5F26\ndef ArcSin(P):\n\
     \    #\u7A4D\u5206\u7248\n    return Integrate(Differentiate(P)/Sqrt(1-P*P))\n\
     \n    #\u4E09\u89D2\u95A2\u6570\u3068\u6307\u6570\u95A2\u6570\u306E\u76F8\u4E92\
@@ -362,20 +362,20 @@ data:
     \u95A2\u4FC2\u7248\n    I=Tonelli_Shanks(-1)\n    return I*Log(Sqrt(1-P*P)+I*P)\n\
     \n#\u9006\u6B63\u63A5\ndef ArcTan(P):\n    #\u7A4D\u5206\u7248\n    return Integrate(Differentiate(P)/(1+P*P))\n\
     \n    #\u4E09\u89D2\u95A2\u6570\u3068\u6307\u6570\u95A2\u6570\u306E\u76F8\u4E92\
-    \u95A2\u4FC2\u7248\n    I=Tonelli_Shanks(-1)\n    return I*pow(2,Mod-2,Mod)*Log((I+P)/(I-P))\n\
+    \u95A2\u4FC2\u7248\n    I=Tonelli_Shanks(-1)\n    return I*pow(2, -1, Mod)*Log((I+P)/(I-P))\n\
     \ndef Power(P, M):\n    \"\"\" P \u306E M \u4E57\u3092\u6C42\u3081\u308B.\n\n\
     \    \"\"\"\n\n    assert M>=0\n    N=P.max_degree\n    F=P.Poly\n    F+=[0]*((N+1)-len(F))\n\
     \    for (deg,p) in enumerate(F):\n        if p:\n            break\n    else:\n\
     \        if M==0:\n            return Modulo_Polynomial([1], P.max_degree)\n \
     \       else:\n            return Modulo_Polynomial([0] ,P.max_degree)\n\n   \
     \ if deg*M>N:\n        return Modulo_Polynomial([0], P.max_degree)\n\n    p_inv=pow(p,\
-    \ Mod-2, Mod)\n    M_mod=M%Mod\n\n    if Calc.is_sparse(F):\n        # P \u304C\
-    \u758E\u306A\u5834\u5408\n        H=[(p_inv*a)%Mod for a in F[deg:]]+[0]\n   \
-    \     Nh=len(H)-1\n        d,h=Calc.coefficients_list(H); K=len(d)\n\n       \
-    \ Inv=[0]*(Nh+1); Inv[1]=1\n        for i in range(2, Nh+1):\n            q,r=divmod(Mod,\
-    \ i)\n            Inv[i]=(-q*Inv[r])%Mod\n\n        G=[0]*Nh; G[0]=1\n       \
-    \ for i in range(Nh-1):\n            g=(M_mod*(i+1)%Mod)*H[i+1]%Mod\n        \
-    \    for j in range(K):\n                if 1<=d[j]<=i:\n                    alpha=(d[j]*M_mod-(i-d[j]+1))%Mod\n\
+    \ -1, Mod)\n    M_mod=M%Mod\n\n    if Calc.is_sparse(F):\n        # P \u304C\u758E\
+    \u306A\u5834\u5408\n        H=[(p_inv*a)%Mod for a in F[deg:]]+[0]\n        Nh=len(H)-1\n\
+    \        d,h=Calc.coefficients_list(H); K=len(d)\n\n        Inv=[0]*(Nh+1); Inv[1]=1\n\
+    \        for i in range(2, Nh+1):\n            q,r=divmod(Mod, i)\n          \
+    \  Inv[i]=(-q*Inv[r])%Mod\n\n        G=[0]*Nh; G[0]=1\n        for i in range(Nh-1):\n\
+    \            g=(M_mod*(i+1)%Mod)*H[i+1]%Mod\n            for j in range(K):\n\
+    \                if 1<=d[j]<=i:\n                    alpha=(d[j]*M_mod-(i-d[j]+1))%Mod\n\
     \                    beta=G[i+1-d[j]]*H[d[j]]%Mod\n                    g+=alpha*beta\n\
     \            g%=Mod\n            G[i+1]=g*Inv[i+1]%Mod\n    else:\n        Q=Modulo_Polynomial([(p_inv*a)%Mod\
     \ for a in F[deg:]],P.max_degree)\n        G=Exp(M_mod*Log(Q)).Poly\n\n    pk=pow(p,\
@@ -400,8 +400,8 @@ data:
     \            m=m-1\n        else:\n            c,t,r,m=(c*c)%Mod,(c*c*t)%Mod,(c*r)%Mod,m-1\n\
     \    return r\n\n#\u591A\u9805\u5F0F\u306E\u6839\u53F7\ndef __sqrt(F, N):\n  \
     \  F+=[0]*(N-len(F))\n    s=Tonelli_Shanks(F[0])\n    if s==-1:\n        return\
-    \ None\n\n    two_inv=pow(2, Mod-2, Mod)\n\n    if not Calc.is_sparse(F):\n  \
-    \      # P \u304C\u758E\u306A\u5834\u5408\n        F.append(0)\n        d,f=Calc.coefficients_list(F);\
+    \ None\n\n    two_inv=pow(2, -1, Mod)\n\n    if not Calc.is_sparse(F):\n     \
+    \   # P \u304C\u758E\u306A\u5834\u5408\n        F.append(0)\n        d,f=Calc.coefficients_list(F);\
     \ K=len(d)\n\n        Inv=[0]*(N+1); Inv[1]=1\n        for i in range(2, N+1):\n\
     \            q,r=divmod(Mod, i)\n            Inv[i]=(-q*Inv[r])%Mod\n\n      \
     \  G=[0]*N; G[0]=1\n        for i in range(N):\n            g=(two_inv*(i+1)%Mod)*F[i+1]%Mod\n\
@@ -433,8 +433,8 @@ data:
     \u3048\u3089\u308C\u305F\u591A\u9805\u5F0F P \u306B\u5BFE\u3057\u3066, P(X+a)\
     \ \u3092\u6C42\u3081\u308B.\n\n    P: Polynominal\n    a: int\n    \"\"\"\n\n\
     \    N=len(P.Poly)-1\n\n    fact=[0]*(N+1)\n    fact[0]=1\n    for i in range(1,N+1):\n\
-    \        fact[i]=(fact[i-1]*i)%Mod\n\n    fact_inv=[0]*(N+1)\n    fact_inv[-1]=pow(fact[-1],Mod-2,Mod)\n\
-    \n    for i in range(N-1,-1,-1):\n        fact_inv[i]=(fact_inv[i+1]*(i+1))%Mod\n\
+    \        fact[i]=(fact[i-1]*i)%Mod\n\n    fact_inv=[0]*(N+1)\n    fact_inv[-1]=pow(fact[-1],\
+    \ -1, Mod)\n\n    for i in range(N-1,-1,-1):\n        fact_inv[i]=(fact_inv[i+1]*(i+1))%Mod\n\
     \n    F=P.Poly.copy()\n    for i in range(N+1):\n        F[i]=(F[i]*fact[i])%Mod\n\
     \n    G=[0]*(N+1)\n    c=1\n    for i in range(N+1):\n        G[i]=(c*fact_inv[i])%Mod\n\
     \        c=(c*a)%Mod\n    G.reverse()\n\n    H=Calc.Convolution(F,G)[N:]\n   \
@@ -451,18 +451,19 @@ data:
     \              P[i]=P[2*i]\n        else:\n            for i in range(m):\n  \
     \              P[i]=P[2*i+1]\n\n        for i in range(m):\n            Q[i]=Q[2*i]\n\
     \n        for i in range(m,2*m):\n            P[i]=Q[i]=0\n\n        N>>=1\n\n\
-    \    if Q[0]==1:\n        return P[0]\n    else:\n        return P[0]*pow(Q[0],Mod-2,Mod)%Mod\n\
-    \ndef Multipoint_Evaluation(P, X):\n    \"\"\" \u591A\u9805\u5F0F P \u306B\u5BFE\
-    \u3057\u3066, X=[x[0], ..., x[N-1]] \u3068\u3057\u305F\u3068\u304D, [P(x[0]),\
-    \ ..., P(x[N-1])] \u3092\u6C42\u3081\u308B.\n    \"\"\"\n\n    N=len(X)\n    size=1<<(N-1).bit_length()\n\
-    \n    G=[[1] for _ in range(2*size)]\n\n    for i in range(N):\n        G[i+size]=[-X[i],1]\n\
-    \n    for i in range(size-1,0,-1):\n        G[i]=Calc.Convolution(G[2*i],G[2*i+1])\n\
-    \n    for i in range(1, 2*size):\n        A=P.Poly if i==1 else G[i>>1]\n    \
-    \    m=len(A)-len(G[i])+1\n        v=Calc.Convolution(A[::-1][:m], Calc.Inverse(G[i][::-1],m))[m-1::-1]\n\
-    \        w=Calc.Convolution(v,G[i])\n\n        G[i]=A.copy()\n        g=G[i]\n\
-    \n        for j in range(len(w)):\n            g[j]-=w[j]; g[j]%=Mod\n\n     \
-    \   while len(g)>1 and g[-1]==0:\n            g.pop()\n\n    return [G[i+size][0]\
-    \ for i in range(N)]\n\ndef Polynominal_Interpolation(X, Y):\n    \"\"\" N=|X|=|Y|\
+    \    if Q[0]==1:\n        return P[0]\n    else:\n        return P[0]*pow(Q[0],\
+    \ -1, Mod)%Mod\n\ndef Multipoint_Evaluation(P, X):\n    \"\"\" \u591A\u9805\u5F0F\
+    \ P \u306B\u5BFE\u3057\u3066, X=[x[0], ..., x[N-1]] \u3068\u3057\u305F\u3068\u304D\
+    , [P(x[0]), ..., P(x[N-1])] \u3092\u6C42\u3081\u308B.\n    \"\"\"\n\n    N=len(X)\n\
+    \    size=1<<(N-1).bit_length()\n\n    G=[[1] for _ in range(2*size)]\n\n    for\
+    \ i in range(N):\n        G[i+size]=[-X[i],1]\n\n    for i in range(size-1,0,-1):\n\
+    \        G[i]=Calc.Convolution(G[2*i],G[2*i+1])\n\n    for i in range(1, 2*size):\n\
+    \        A=P.Poly if i==1 else G[i>>1]\n        m=len(A)-len(G[i])+1\n       \
+    \ v=Calc.Convolution(A[::-1][:m], Calc.Inverse(G[i][::-1],m))[m-1::-1]\n     \
+    \   w=Calc.Convolution(v,G[i])\n\n        G[i]=A.copy()\n        g=G[i]\n\n  \
+    \      for j in range(len(w)):\n            g[j]-=w[j]; g[j]%=Mod\n\n        while\
+    \ len(g)>1 and g[-1]==0:\n            g.pop()\n\n    return [G[i+size][0] for\
+    \ i in range(N)]\n\ndef Polynominal_Interpolation(X, Y):\n    \"\"\" N=|X|=|Y|\
     \ \u3068\u3059\u308B. P(x_i)=y_i (0<=i<|X|-1) \u3092\u6E80\u305F\u3059\u9AD8\u3005\
     \ (N-1) \u6B21\u306E\u591A\u9805\u5F0F P \u3092\u6C42\u3081\u308B.\n\n    \"\"\
     \"\n\n    assert len(X)==len(Y)\n\n    N=len(X)\n    size=1<<(N-1).bit_length()\n\
@@ -473,18 +474,18 @@ data:
     \        w=Calc.Convolution(v,T[i])\n\n        U[i]=U[i//2].copy()\n        u=U[i]\n\
     \        for j in range(len(w)):\n            u[j]-=w[j]; u[j]%=Mod\n\n      \
     \  while len(u)>1 and u[-1]==0:\n            u.pop()\n\n    for i in range(N):\n\
-    \        U[i+size]=[(Y[i]*pow(U[i+size][0],Mod-2,Mod))%Mod]\n\n    for i in range(size-1,0,-1):\n\
+    \        U[i+size]=[(Y[i]*pow(U[i+size][0], -1, Mod))%Mod]\n\n    for i in range(size-1,0,-1):\n\
     \        A=Calc.Convolution(U[2*i], T[2*i+1])\n        B=Calc.Convolution(T[2*i],\
     \ U[2*i+1])\n\n        m=min(len(A), len(B))\n\n        u=[0]*m\n        for j\
     \ in range(m):\n            u[j]=(A[j]+B[j])%Mod\n        u.extend(A[m:])\n  \
     \      u.extend(B[m:])\n        U[i]=u\n\n    return Modulo_Polynomial(U[1], N)\n\
     \n#\u591A\u9805\u5F0F\u540C\u58EB\u306E\u6700\u5927\u516C\u7D04\u6570\ndef _gcd(F,G):\n\
-    \    while G:\n        F,G=G,F%G\n\n    a_inv=pow(F.leading_coefficient(),Mod-2,Mod)\n\
-    \    X=F.Poly\n    for i in range(len(X)):\n        X[i]=(a_inv*X[i])%Mod\n  \
-    \  return F\n\ndef gcd(*X):\n    from functools import reduce\n    return reduce(_gcd,X)\n\
+    \    while G:\n        F,G=G,F%G\n\n    a_inv=pow(F.leading_coefficient(), -1,\
+    \ Mod)\n    X=F.Poly\n    for i in range(len(X)):\n        X[i]=(a_inv*X[i])%Mod\n\
+    \    return F\n\ndef gcd(*X):\n    from functools import reduce\n    return reduce(_gcd,X)\n\
     \n#\u591A\u9805\u5F0F\u540C\u58EB\u306E\u6700\u5C0F\u516C\u500D\u6570\ndef _lcm(F,G):\n\
     \    return (F//gcd(F,G))*G\n\ndef lcm(*X):\n    from functools import reduce\n\
-    \    L=reduce(_lcm,X)\n    a_inv=pow(L.leading_coefficient(),Mod-2,Mod)\n    X=L.Poly\n\
+    \    L=reduce(_lcm,X)\n    a_inv=pow(L.leading_coefficient(), -1, Mod)\n    X=L.Poly\n\
     \    for i in range(len(X)):\n        X[i]=(a_inv*X[i])%Mod\n    return L\n\n\"\
     \"\"\n\u30B9\u30E9\u30A4\u30C9\u3055\u305B\u308B\u7573\u307F\u8FBC\u307F\n\"\"\
     \"\ndef Slide_Convolution(A, B, cyclic=False):\n    \"\"\"\n\n    \"\"\"\n   \
@@ -496,7 +497,7 @@ data:
   isVerificationFile: false
   path: Modulo_Sequence/Modulo_Polynomial.py
   requiredBy: []
-  timestamp: '2023-05-03 17:41:52+09:00'
+  timestamp: '2023-08-06 21:52:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Polynomial/Power.test.py

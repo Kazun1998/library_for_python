@@ -76,10 +76,10 @@ data:
     \        if n<0: return 0\n        if r<0 or n<r: return 0\n\n        a=b=1\n\
     \        r=min(r,n-r)\n\n        while r:\n            a*=n; b*=r\n\n        \
     \    if Mod!=None:\n                a%=Mod; b%=Mod\n\n            n-=1; r-=1\n\
-    \n        if Mod!=None:\n            return (a*pow(b,Mod-2,Mod))%Mod\n       \
-    \ else:\n            return a//b\n\n    def nHr(n,r):\n        if n==r==0:\n \
-    \           return 1\n        else:\n            return nCr(n+r-1,n-1)\n\n   \
-    \ N=len(Range)\n    X=0\n    for p in product((0,1),repeat=N):\n        T=S\n\
+    \n        if Mod!=None:\n            return (a * pow(b, -1, Mod)) % Mod\n    \
+    \    else:\n            return a//b\n\n    def nHr(n,r):\n        if n==r==0:\n\
+    \            return 1\n        else:\n            return nCr(n+r-1,n-1)\n\n  \
+    \  N=len(Range)\n    X=0\n    for p in product((0,1),repeat=N):\n        T=S\n\
     \        for i in range(N):\n            a,b=Range[i]\n            if p[i]:\n\
     \                T-=b+1\n            else:\n                T-=a\n\n        X+=pow(-1,sum(p))*nHr(N,T)\n\
     \n    if Mod==None:\n        return X\n    else:\n        return X%Mod\n\n#==================================================\n\
@@ -99,7 +99,7 @@ data:
   isVerificationFile: false
   path: Summation/Math.py
   requiredBy: []
-  timestamp: '2022-11-23 04:24:29+09:00'
+  timestamp: '2023-08-06 21:11:53+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Summation/Math.py

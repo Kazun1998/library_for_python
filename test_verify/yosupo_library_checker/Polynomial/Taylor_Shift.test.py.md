@@ -31,7 +31,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
   requiredBy: []
-  timestamp: '2023-05-03 17:41:52+09:00'
+  timestamp: '2023-08-06 21:52:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py

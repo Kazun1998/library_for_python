@@ -24,13 +24,14 @@ data:
     \                y=A[i|bit]\n                A[i]=(x+y)%Mod\n                A[i|bit]=(x-y)%Mod\n\
     \ndef Fast_Inverse_Walsh_Hadamard_Transform_XOR(A):\n    \"\"\" XOR \u306B\u95A2\
     \u3059\u308B\u9006 Walsh_Hadamard_Transform \u3092\u884C\u3046.\n\n    A: List\n\
-    \    \"\"\"\n\n    Fast_Walsh_Hadamard_Transform_XOR(A)\n    N_inv=pow(len(A),Mod-2,Mod)\n\
-    \    for i in range(len(A)):\n        A[i]=(A[i]*N_inv)%Mod\n\ndef Convolution_XOR(A,B):\n\
-    \    \"\"\" XOR \u6F14\u7B97\u306B\u95A2\u3059\u308B\u7573\u8FBC\u307F\u3092\u884C\
-    \u3046.\n\n    A,B: List\n    \"\"\"\n\n    N=len(A); M=len(B)\n    L=1<<(max(N,M)-1).bit_length()\n\
-    \n    if min(N,M)<64:\n        C=[0]*L\n        for i in range(N):\n         \
-    \   for j in range(M):\n                C[i^j]+=A[i]*B[j]\n                C[i^j]%=Mod\n\
-    \        return C\n\n    A=A+[0]*(L-N)\n    B=B+[0]*(L-M)\n\n    Fast_Walsh_Hadamard_Transform_XOR(A)\n\
+    \    \"\"\"\n\n    Fast_Walsh_Hadamard_Transform_XOR(A)\n    N_inv=pow(len(A),\
+    \ -1, Mod)\n    for i in range(len(A)):\n        A[i] = (A[i] * N_inv) % Mod\n\
+    \ndef Convolution_XOR(A,B):\n    \"\"\" XOR \u6F14\u7B97\u306B\u95A2\u3059\u308B\
+    \u7573\u8FBC\u307F\u3092\u884C\u3046.\n\n    A,B: List\n    \"\"\"\n\n    N=len(A);\
+    \ M=len(B)\n    L=1<<(max(N,M)-1).bit_length()\n\n    if min(N,M)<64:\n      \
+    \  C=[0]*L\n        for i in range(N):\n            for j in range(M):\n     \
+    \           C[i^j]+=A[i]*B[j]\n                C[i^j]%=Mod\n        return C\n\
+    \n    A=A+[0]*(L-N)\n    B=B+[0]*(L-M)\n\n    Fast_Walsh_Hadamard_Transform_XOR(A)\n\
     \    Fast_Walsh_Hadamard_Transform_XOR(B)\n\n    for i in range(N):\n        A[i]*=B[i]\n\
     \        A[i]%=Mod\n\n    Fast_Inverse_Walsh_Hadamard_Transform_XOR(A)\n    return\
     \ A\n\ndef Convolution_Power_XOR(A,k):\n    \"\"\" XOR \u6F14\u7B97\u306B\u95A2\
@@ -43,7 +44,7 @@ data:
   isVerificationFile: false
   path: Convolution/XOR_Convolution.py
   requiredBy: []
-  timestamp: '2022-10-03 22:52:26+09:00'
+  timestamp: '2023-08-06 20:56:34+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Convolution/Bitwise_Xor_Convolution.test.py

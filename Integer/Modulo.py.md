@@ -25,21 +25,21 @@ data:
     \     if pow(g,(p-1)//q,p)==1:\n                flag=False\n                break\n\
     \n        if flag:\n            return g\n\n        g+=1\n\n#\u62E1\u5F35\u30E6\
     \u30FC\u30AF\u30EA\u30C3\u30C9\u306E\u4E92\u9664\u6CD5\ndef Extend_Euclid(a: int,\
-    \ b: int):\n    \"\"\" gcd(a,b) \u3068 ax+by=gcd(a,b) \u3092\u6E80\u305F\u3059\
-    \u6574\u6570 x,y \u306E\u4F8B\u3092\u6319\u3052\u308B.\n\n    [Input]\n    a,b:\
-    \ \u6574\u6570\n\n    [Output]\n    (x,y,gcd(a,b))\n    \"\"\"\n    s,t,u,v=1,0,0,1\n\
-    \    while b:\n        q,a,b=a//b,b,a%b\n        s,t=t,s-q*t\n        u,v=v,u-q*v\n\
-    \    return s,u,a\n\n\ndef Modulo_Inverse(a, m):\n    \"\"\" (mod m) \u306B\u304A\
-    \u3051\u308B\u9006\u5143\u3092\u6C42\u3081\u308B.\n\n    Args:\n        a (int):\
-    \ mod m \u306E\u5143\n        m (int): \u6CD5\n\n    Returns:\n        int: \u53EF\
-    \u9006\u5143\u304C\u5B58\u5728\u3059\u308B\u306A\u3089\u3070\u305D\u306E\u5024\
-    , \u5B58\u5728\u3057\u306A\u3044\u306E\u3067\u3042\u308C\u3070 -1\n    \"\"\"\n\
-    \n    h=Extend_Euclid(a,m)\n    return h[0]%m if h[2]==1 else -1\n\n"
+    \ b: int):\n    \"\"\"ax+by=gcd(a, b) \u3092\u6E80\u305F\u3059 (x, y, gcd(a, b))\
+    \ \u3092 1 \u3064\u6C42\u3081\u308B.\n\n    a,b:\u6574\u6570\n    \"\"\"\n   \
+    \ from math import gcd\n    g = gcd(a, b)\n    if g == 0:\n        return (1,\
+    \ 0, 0)\n\n    x = pow(a//g, -1, b//g)\n    y = - (a*x-g) // b\n    return (x,\
+    \ y, g)\n\n\ndef Modulo_Inverse(a, m):\n    \"\"\" (mod m) \u306B\u304A\u3051\u308B\
+    \u9006\u5143\u3092\u6C42\u3081\u308B.\n\n    Args:\n        a (int): mod m \u306E\
+    \u5143\n        m (int): \u6CD5\n\n    Returns:\n        int: \u53EF\u9006\u5143\
+    \u304C\u5B58\u5728\u3059\u308B\u306A\u3089\u3070\u305D\u306E\u5024, \u5B58\u5728\
+    \u3057\u306A\u3044\u306E\u3067\u3042\u308C\u3070 -1\n    \"\"\"\n\n    try:\n\
+    \        return pow(a, -1, m)\n    except ValueError:\n        return -1\n\n\n"
   dependsOn: []
   isVerificationFile: false
   path: Integer/Modulo.py
   requiredBy: []
-  timestamp: '2023-03-18 02:55:12+09:00'
+  timestamp: '2023-08-06 22:35:43+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Integer/Modulo.py

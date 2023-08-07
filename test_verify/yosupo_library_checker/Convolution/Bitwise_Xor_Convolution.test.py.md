@@ -31,7 +31,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Convolution/Bitwise_Xor_Convolution.test.py
   requiredBy: []
-  timestamp: '2022-11-23 16:07:50+09:00'
+  timestamp: '2023-08-06 20:56:34+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Convolution/Bitwise_Xor_Convolution.test.py

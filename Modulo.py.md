@@ -69,42 +69,41 @@ data:
     \u6F14\u7B97\u3067\u3059.\"\n            y=other.a\n        elif isinstance(other,int):\n\
     \            y=other%self.n\n\n        self.a*=y\n        self.a%=self.n\n   \
     \     return self\n\n    #Modulo\u9006\u6570\n    def inverse(self):\n       \
-    \ return self.modulo_inverse()\n\n    def modulo_inverse(self):\n        s,t=1,0\n\
-    \        a,b=self.a,self.n\n        while b:\n            q,a,b=a//b,b,a%b\n \
-    \           s,t=t,s-q*t\n\n        assert a==1,\"{}\u306E\u9006\u6570\u304C\u5B58\
-    \u5728\u3057\u307E\u305B\u3093\".format(self)\n        s%=self.n\n        return\
-    \ Modulo(s,self.n, False)\n\n    #\u9664\u6CD5\n    def __truediv__(self,other):\n\
-    \        return self*(other.modulo_inverse())\n\n    def __rtruediv__(self,other):\n\
-    \        return other*(self.modulo_inverse())\n\n    #\u7D2F\u4E57\n    def __pow__(self,other):\n\
-    \        if isinstance(other,int):\n            u=abs(other)\n\n            r=Modulo(pow(self.a,u,self.n),self.n,\
-    \ False)\n            if other>=0:\n                return r\n            else:\n\
-    \                return r.modulo_inverse()\n        else:\n            b,n=other.a,other.n\n\
-    \            assert pow(self.a,n,self.n)==1, \"\u77DB\u76FE\u306A\u304F\u5B9A\u7FA9\
-    \u3067\u304D\u307E\u305B\u3093.\"\n            return self**b\n\n\"\"\"\n\u521D\
-    \u7B49\u7684\n\"\"\"\ndef Modulo_Inverse_List(M:int,K:int):\n    \"\"\"\n    1^(-1),\
-    \ 2^(-1), ... , K^(-1) (mod N) \u306E\u30EA\u30B9\u30C8\u3092\u51FA\u529B\u3059\
-    \u308B.\n\n    [\u5165\u529B]\n    M,K:\u6574\u6570\n    M>0, K>=1\n    K=min(M-1,K)\
-    \ \u306B\u5909\u63DB\u3055\u308C\u308B.\n\n    [\u51FA\u529B]\n    \u9577\u3055\
-    \ K+1 \u306E\u30EA\u30B9\u30C8 F\n    k=1,2,...,K \u306B\u5BFE\u3057\u3066, F[k]=k^(-1)\
-    \ mod M\n    \u307E\u305F, k^(-1) mod M \u304C\u5B58\u5728\u3057\u306A\u3044\u5834\
-    \u5408, F[k]=None\n    \"\"\"\n\n    assert M>0 and K>=1\n\n    if K==None:\n\
-    \        K=M-1\n    K=min(K,M-1)\n\n    F=[None,Modulo(1,M)]\n    for k in range(2,K+1):\n\
-    \        q,r=divmod(M,k)\n        if F[r]!=None:\n            F.append(-q*F[r])\n\
-    \        else:\n            F.append(None)\n    return F\n\n#\u7D30\u5206\u5316\
-    \ndef Subdivision(X:Modulo,M:int):\n    \"\"\" X \u3092x (mod M) \u306E\u5F62\u306B\
-    \u7D30\u5206\u5316\u3059\u308B.\n\n    X.n | M\u3067\u306A\u304F\u3066\u306F\u306A\
-    \u3089\u306A\u3044.\n    \"\"\"\n\n    assert M%X.n==0,\"X.n | M \u3067\u306F\u3042\
-    \u308A\u307E\u305B\u3093.\"\n\n    k=M//X.n\n    return [Modulo(X.n*i+X.a,M) for\
-    \ i in range(k)]\n\n#\u9000\u5316\ndef Degenerate(X:Modulo, M:int):\n    \"\"\"\
-    \ X \u306E\u60C5\u5831\u3092\u9000\u5316\u3055\u305B\u308B. X=x (mod N) \u3067\
-    \u3042\u308B\u3068\u304D, mod M \u3067\u306E\u60C5\u5831\u306B\u9000\u5316\u3055\
-    \u305B\u308B.\n\n    M | X.n \u3067\u306A\u304F\u3066\u306F\u306A\u3089\u306A\u3044\
-    .\n    \"\"\"\n\n    assert X.n%M==0,\"M | X.n \u3067\u306F\u3042\u308A\u307E\u305B\
-    \u3093.\"\n    return Modulo(X.a%M,M)\n\ndef Chinese_Remainder(X: Modulo):\n \
-    \   \"\"\" \u4E2D\u56FD\u5270\u4F59\u5B9A\u7406\u306B\u3088\u308A, X\u3092\u5206\
-    \u89E3\u3059\u308B.\n\n    \"\"\"\n\n    Y=[]\n\n    a,N=X.a,X.n\n    e=(N&(-N)).bit_length()-1\n\
-    \    if e>0:\n        N>>=e\n        Y.append(Modulo(a,1<<e))\n\n    e=0\n   \
-    \ while N%3==0:\n        e+=1\n        N//=3\n\n    if e>0:\n        Y.append(Modulo(a,pow(3,e)))\n\
+    \ return self.modulo_inverse()\n\n    def modulo_inverse(self):\n        try:\n\
+    \            return Modulo(pow(self.a, -1, self.n), self.n, False)\n        except\
+    \ ValueError:\n            raise ValueError(f\"{self} \u306E\u9006\u6570\u304C\
+    \u5B58\u5728\u3057\u307E\u305B\u3093\") from None\n\n    #\u9664\u6CD5\n    def\
+    \ __truediv__(self,other):\n        return self*(other.modulo_inverse())\n\n \
+    \   def __rtruediv__(self,other):\n        return other*(self.modulo_inverse())\n\
+    \n    #\u7D2F\u4E57\n    def __pow__(self, other):\n        if isinstance(other,\
+    \ int):\n            return Modulo(pow(self.a, other, self.n), self.n, False)\n\
+    \        else:\n            b,n=other.a,other.n\n            assert pow(self.a,n,self.n)==1,\
+    \ \"\u77DB\u76FE\u306A\u304F\u5B9A\u7FA9\u3067\u304D\u307E\u305B\u3093.\"\n  \
+    \          return self**b\n\n\"\"\"\n\u521D\u7B49\u7684\n\"\"\"\ndef Modulo_Inverse_List(M:int,K:int):\n\
+    \    \"\"\"\n    1^(-1), 2^(-1), ... , K^(-1) (mod N) \u306E\u30EA\u30B9\u30C8\
+    \u3092\u51FA\u529B\u3059\u308B.\n\n    [\u5165\u529B]\n    M,K:\u6574\u6570\n\
+    \    M>0, K>=1\n    K=min(M-1,K) \u306B\u5909\u63DB\u3055\u308C\u308B.\n\n   \
+    \ [\u51FA\u529B]\n    \u9577\u3055 K+1 \u306E\u30EA\u30B9\u30C8 F\n    k=1,2,...,K\
+    \ \u306B\u5BFE\u3057\u3066, F[k]=k^(-1) mod M\n    \u307E\u305F, k^(-1) mod M\
+    \ \u304C\u5B58\u5728\u3057\u306A\u3044\u5834\u5408, F[k]=None\n    \"\"\"\n\n\
+    \    assert M>0 and K>=1\n\n    if K==None:\n        K=M-1\n    K=min(K,M-1)\n\
+    \n    F=[None,Modulo(1,M)]\n    for k in range(2,K+1):\n        q,r=divmod(M,k)\n\
+    \        if F[r]!=None:\n            F.append(-q*F[r])\n        else:\n      \
+    \      F.append(None)\n    return F\n\n#\u7D30\u5206\u5316\ndef Subdivision(X:Modulo,M:int):\n\
+    \    \"\"\" X \u3092x (mod M) \u306E\u5F62\u306B\u7D30\u5206\u5316\u3059\u308B\
+    .\n\n    X.n | M\u3067\u306A\u304F\u3066\u306F\u306A\u3089\u306A\u3044.\n    \"\
+    \"\"\n\n    assert M%X.n==0,\"X.n | M \u3067\u306F\u3042\u308A\u307E\u305B\u3093\
+    .\"\n\n    k=M//X.n\n    return [Modulo(X.n*i+X.a,M) for i in range(k)]\n\n#\u9000\
+    \u5316\ndef Degenerate(X:Modulo, M:int):\n    \"\"\" X \u306E\u60C5\u5831\u3092\
+    \u9000\u5316\u3055\u305B\u308B. X=x (mod N) \u3067\u3042\u308B\u3068\u304D, mod\
+    \ M \u3067\u306E\u60C5\u5831\u306B\u9000\u5316\u3055\u305B\u308B.\n\n    M | X.n\
+    \ \u3067\u306A\u304F\u3066\u306F\u306A\u3089\u306A\u3044.\n    \"\"\"\n\n    assert\
+    \ X.n%M==0,\"M | X.n \u3067\u306F\u3042\u308A\u307E\u305B\u3093.\"\n    return\
+    \ Modulo(X.a%M,M)\n\ndef Chinese_Remainder(X: Modulo):\n    \"\"\" \u4E2D\u56FD\
+    \u5270\u4F59\u5B9A\u7406\u306B\u3088\u308A, X\u3092\u5206\u89E3\u3059\u308B.\n\
+    \n    \"\"\"\n\n    Y=[]\n\n    a,N=X.a,X.n\n    e=(N&(-N)).bit_length()-1\n \
+    \   if e>0:\n        N>>=e\n        Y.append(Modulo(a,1<<e))\n\n    e=0\n    while\
+    \ N%3==0:\n        e+=1\n        N//=3\n\n    if e>0:\n        Y.append(Modulo(a,pow(3,e)))\n\
     \n    flag=0\n    p=5\n    while p*p<=N:\n        if N%p==0:\n            e=0\n\
     \            while N%p==0:\n                e+=1\n                N//=p\n\n  \
     \          Y.append(Modulo(a,pow(p,e)))\n\n        p+=2+2*flag\n        flag^=1\n\
@@ -116,7 +115,7 @@ data:
     \ math import gcd\n\n    a,n=p.a,p.n\n    b,m=q.a,q.n\n\n    d=b-a\n\n    g,h=n,m\n\
     \    while h:\n        g,h=h,g%h\n\n    if d%g:\n        return None\n       \
     \ #raise Modulo_Error(\"{}\u3068{}\u306F\u4E21\u7ACB\u3057\u307E\u305B\u3093.\"\
-    .format(p,q))\n\n    n//=g;m//=g;d//=g\n\n    s=(1/Modulo(n,m)).a\n\n    return\
+    .format(p,q))\n\n    n//=g;m//=g;d//=g\n\n    s = pow(n, -1, m)\n\n    return\
     \ Modulo(a+(n*g)*d*s,n*m*g)\n\ndef Modulo_Composite(*X: Modulo):\n    \"\"\" N\u500B\
     \u306E\u65B9\u7A0B\u5F0F x \u2261 a (mod n) \u3092\u5168\u3066\u6E80\u305F\u3059\
     \ x \u3092 mod \u306E\u5F62\u3067\u6C42\u3081\u308B.\n    \"\"\"\n    x=Modulo(0,1)\n\
@@ -125,16 +124,17 @@ data:
     \u6570\u306F Y \u3092\u5168\u3066\u6E80\u305F\u3059\u304B?\n\n    X,Y: Modulo\n\
     \    \"\"\"\n    a,p=X.a,X.n\n    b,q=Y.a,Y.n\n    return (a-b)%q==0 and p%q==0\n\
     \n#\u62E1\u5F35Euclid\u306E\u4E92\u9664\u6CD5\ndef Extended_Euclid(a: int, b:\
-    \ int):\n    \"\"\"ax+by=gcd(a,b) \u3092\u6E80\u305F\u3059(x,y,gcd(a,b))\u3092\
-    1\u3064\u6C42\u3081\u308B.\n\n    a,b:\u6574\u6570\n    \"\"\"\n    s,t,u,v=1,0,0,1\n\
-    \    while b:\n        q,a,b=a//b,b,a%b\n        s,t=t,s-q*t\n        u,v=v,u-q*v\n\
-    \    return s,u,a\n\n#1\u6B21\u5408\u540C\u65B9\u7A0B\u5F0F\u3092\u89E3\u304F\n\
-    def First_Order_Congruent_Equation(a: int, b: int, m: int):\n    \"\"\"1\u6B21\
-    \u5408\u540C\u65B9\u7A0B\u5F0F ax\u2261b (mod m) \u3092\u6C42\u3081\u308B.\n\n\
-    \    a,b,m:\u6574\u6570\n    m!=0\n    \"\"\"\n    assert m\n    g=a;h=m\n   \
-    \ while h:\n        g,h=h,g%h\n\n    if b%g:\n        return None\n\n    a,b,m=a//g,b//g,m//g\n\
-    \    c,_,_=Extended_Euclid(a,m)\n    return Modulo(b*c,m)\n\n#1\u6B21\u9023\u7ACB\
-    \u5408\u540C\u65B9\u7A0B\u5F0F\u3092\u89E3\u304F\ndef First_Order_Simultaneous_Congruent_Equation(*X):\n\
+    \ int):\n    \"\"\"ax+by=gcd(a, b) \u3092\u6E80\u305F\u3059 (x, y, gcd(a, b))\
+    \ \u3092 1 \u3064\u6C42\u3081\u308B.\n\n    a,b:\u6574\u6570\n    \"\"\"\n   \
+    \ from math import gcd\n    g = gcd(a, b)\n    if g == 0:\n        return (0,\
+    \ 0, 0)\n\n    x = pow(a//g, -1, b//g)\n    y = - (a*x-g) // b\n    return (x,\
+    \ y, g)\n\n#1\u6B21\u5408\u540C\u65B9\u7A0B\u5F0F\u3092\u89E3\u304F\ndef First_Order_Congruent_Equation(a:\
+    \ int, b: int, m: int):\n    \"\"\"1\u6B21\u5408\u540C\u65B9\u7A0B\u5F0F ax\u2261\
+    b (mod m) \u3092\u6C42\u3081\u308B.\n\n    a,b,m:\u6574\u6570\n    m!=0\n    \"\
+    \"\"\n    assert m\n    g=a; h=m\n    while h:\n        g, h = h, g % h\n\n  \
+    \  if b%g:\n        return None\n\n    a, b, m = a // g, b // g, m // g\n    c\
+    \ = pow(a, -1, m)\n    return Modulo(b * c, m)\n\n#1\u6B21\u9023\u7ACB\u5408\u540C\
+    \u65B9\u7A0B\u5F0F\u3092\u89E3\u304F\ndef First_Order_Simultaneous_Congruent_Equation(*X):\n\
     \    \"\"\"1\u6B21\u5408\u540C\u65B9\u7A0B\u5F0F a_i x\u2261b_i (mod m_i) \u3092\
     \u6C42\u3081\u308B.\n\n    [Input]\n    X:(a,b,m) \u3068\u3044\u3046\u5F62\u306E\
     \u30BF\u30D7\u30EB\n    \"\"\"\n    R=Modulo(0,1)\n    for (a,b,m) in X:\n   \
@@ -249,7 +249,7 @@ data:
   isVerificationFile: false
   path: Modulo.py
   requiredBy: []
-  timestamp: '2023-05-20 13:26:16+09:00'
+  timestamp: '2023-08-08 01:23:05+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py

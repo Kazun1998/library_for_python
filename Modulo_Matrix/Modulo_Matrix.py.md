@@ -66,9 +66,9 @@ data:
     \            if T[i][j]:\n                        break\n                else:\n\
     \                    assert 0, \"\u6B63\u5247\u884C\u5217\u3067\u306F\u3042\u308A\
     \u307E\u305B\u3093\"\n\n                T[j],T[i]=T[i],T[j]\n                R[j],R[i]=R[i],R[j]\n\
-    \            Tj,Rj=T[j],R[j]\n            inv=pow(Tj[j],Mod-2,Mod)\n         \
-    \   for k in range(N):\n                Tj[k]*=inv; Tj[k]%=Mod\n             \
-    \   Rj[k]*=inv; Rj[k]%=Mod\n            for i in range(N):\n                if\
+    \            Tj,Rj=T[j],R[j]\n            inv=pow(Tj[j], -1, Mod)\n          \
+    \  for k in range(N):\n                Tj[k]*=inv; Tj[k]%=Mod\n              \
+    \  Rj[k]*=inv; Rj[k]%=Mod\n            for i in range(N):\n                if\
     \ i==j: continue\n                c=T[i][j]\n                Ti,Ri=T[i],R[i]\n\
     \                for k in range(N):\n                    Ti[k]-=Tj[k]*c; Ti[k]%=Mod\n\
     \                    Ri[k]-=Rj[k]*c; Ri[k]%=Mod\n        return Modulo_Matrix(R)\n\
@@ -97,11 +97,11 @@ data:
     \    if T[I][J]==0:\n                for i in range(I+1,R):\n                \
     \    if T[i][J]!=0:\n                        T[i],T[I]=T[I],T[i]\n           \
     \             break\n\n            if T[I][J]!=0:\n                u=T[I][J]\n\
-    \                u_inv=pow(u,Mod-2,Mod)\n                for j in range(C):\n\
-    \                    T[I][j]*=u_inv\n                    T[I][j]%=Mod\n\n    \
-    \            for i in range(R):\n                    if i!=I:\n              \
-    \          v=T[i][J]\n                        for j in range(C):\n           \
-    \                 T[i][j]-=v*T[I][j]\n                            T[i][j]%=Mod\n\
+    \                u_inv=pow(u, -1, Mod)\n                for j in range(C):\n \
+    \                   T[I][j]*=u_inv\n                    T[I][j]%=Mod\n\n     \
+    \           for i in range(R):\n                    if i!=I:\n               \
+    \         v=T[i][J]\n                        for j in range(C):\n            \
+    \                T[i][j]-=v*T[I][j]\n                            T[i][j]%=Mod\n\
     \                I+=1\n                if I==R:\n                    break\n\n\
     \        return Modulo_Matrix(T)\n\n    #\u5217\u57FA\u672C\u5909\u5F62\n    def\
     \ column_reduce(self):\n        M=self\n        (R,C)=M.size\n\n        T=[]\n\
@@ -111,11 +111,11 @@ data:
     \ in range(J+1,C):\n                    if T[I][j]!=0:\n                     \
     \   for k in range(R):\n                            T[k][j],T[k][J]=T[k][J],T[k][j]\n\
     \                        break\n\n            if T[I][J]!=0:\n               \
-    \ u=T[I][J]\n                u_inv=pow(u,Mod-2,Mod)\n                for i in\
-    \ range(R):\n                    T[i][J]*=u_inv\n                    T[i][J]%=Mod\n\
-    \n                for j in range(C):\n                    if j!=J:\n         \
-    \               v=T[I][j]\n                        for i in range(R):\n      \
-    \                      T[i][j]-=v*T[i][J]\n                            T[i][j]%=Mod\n\
+    \ u=T[I][J]\n                u_inv=pow(u, -1, Mod)\n                for i in range(R):\n\
+    \                    T[i][J]*=u_inv\n                    T[i][J]%=Mod\n\n    \
+    \            for j in range(C):\n                    if j!=J:\n              \
+    \          v=T[I][j]\n                        for i in range(R):\n           \
+    \                 T[i][j]-=v*T[i][J]\n                            T[i][j]%=Mod\n\
     \                J+=1\n                if J==C:\n                    break\n\n\
     \        return Modulo_Matrix(T)\n\n    #\u884C\u5217\u306E\u968E\u6570\n    def\
     \ rank(self):\n        M=self.row_reduce()\n        (R,C)=M.size\n        T=M.ele\n\
@@ -162,8 +162,8 @@ data:
     \    T=deepcopy(M.ele)\n    det=1\n\n    for j in range(N):\n        if T[j][j]==0:\n\
     \            for i in range(j+1,N):\n                if T[i][j]:\n           \
     \         break\n            else:\n                return 0\n            T[j],T[i]=T[i],T[j]\n\
-    \            det=-det\n        Tj=T[j]\n        inv=pow(Tj[j],Mod-2,Mod)\n   \
-    \     for i in range(j+1,N):\n            Ti=T[i]\n            c=-inv*Ti[j]%Mod\n\
+    \            det=-det\n        Tj=T[j]\n        inv=pow(Tj[j], -1, Mod)\n    \
+    \    for i in range(j+1,N):\n            Ti=T[i]\n            c=-inv*Ti[j]%Mod\n\
     \            for k in range(N):\n                Ti[k]+=c*Tj[k]\n            \
     \    Ti[k]%=Mod\n\n    for i in range(N):\n        det*=T[i][i]\n        det%=Mod\n\
     \    return det\n\ndef Determinant_Arbitrary_Mod(A):\n    \"\"\" \u6B63\u65B9\u884C\
@@ -181,24 +181,24 @@ data:
     \    for j in range(N-2):\n        for i in range(j+1, N):\n            if T[i][j]:\n\
     \                break\n        else:\n            continue\n\n        T[j+1],T[i]=T[i],T[j+1]\n\
     \        for k in range(N):\n            T[k][j+1],T[k][i]=T[k][i],T[k][j+1]\n\
-    \n        if T[j+1][j]:\n            Tjj=T[j+1]\n            inv=pow(Tjj[j], Mod-2,Mod)\n\
-    \            for i in range(j+2, N):\n                Ti=T[i]\n              \
-    \  c=inv*Ti[j]%Mod\n                for k in range(j,N):\n                   \
-    \ Ti[k]-=c*Tjj[k]\n                    Ti[k]%=Mod\n\n                for k in\
-    \ range(N):\n                    T[k][j+1]+=c*T[k][i]\n                    T[k][j+1]%=Mod\n\
-    \n    dp=[[0]*(i+1) for i in range(N+1)]; dp[0][0]=1\n    for i in range(N):\n\
-    \        P=dp[i+1]\n        for k in range(i+1):\n            P[k+1]=dp[i][k]\n\
-    \        for k in range(i+1):\n            P[k]+=T[i][i]*dp[i][k]\n          \
-    \  P[k]%=Mod\n\n        p=1\n        for j in range(i-1,-1,-1):\n            p*=-T[j+1][j];\
-    \ p%=Mod\n            c=p*T[j][i]%Mod\n            for k in range(j+1):\n    \
-    \            P[k]+=c*dp[j][k]\n                P[k]%=Mod\n    P=dp[-1]\n    for\
-    \ i in range(N+1):\n        if i%2:\n            P[~i]*=-1; P[~i]%=Mod\n    return\
-    \ P\n\n#===\nMod=998244353\n"
+    \n        if T[j+1][j]:\n            Tjj=T[j+1]\n            inv=pow(Tjj[j], -1,\
+    \ Mod)\n            for i in range(j+2, N):\n                Ti=T[i]\n       \
+    \         c=inv*Ti[j]%Mod\n                for k in range(j,N):\n            \
+    \        Ti[k]-=c*Tjj[k]\n                    Ti[k]%=Mod\n\n                for\
+    \ k in range(N):\n                    T[k][j+1]+=c*T[k][i]\n                 \
+    \   T[k][j+1]%=Mod\n\n    dp=[[0]*(i+1) for i in range(N+1)]; dp[0][0]=1\n   \
+    \ for i in range(N):\n        P=dp[i+1]\n        for k in range(i+1):\n      \
+    \      P[k+1]=dp[i][k]\n        for k in range(i+1):\n            P[k]+=T[i][i]*dp[i][k]\n\
+    \            P[k]%=Mod\n\n        p=1\n        for j in range(i-1,-1,-1):\n  \
+    \          p*=-T[j+1][j]; p%=Mod\n            c=p*T[j][i]%Mod\n            for\
+    \ k in range(j+1):\n                P[k]+=c*dp[j][k]\n                P[k]%=Mod\n\
+    \    P=dp[-1]\n    for i in range(N+1):\n        if i%2:\n            P[~i]*=-1;\
+    \ P[~i]%=Mod\n    return P\n\n#===\nMod=998244353\n"
   dependsOn: []
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py
   requiredBy: []
-  timestamp: '2022-11-23 02:22:59+09:00'
+  timestamp: '2023-08-06 21:18:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Determinant.test.py

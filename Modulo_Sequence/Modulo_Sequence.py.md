@@ -31,8 +31,8 @@ data:
     \n\n    N=len(A)\n    B=[1]; C=[1]\n    l=0; m=0; p=1\n    for i in range(N):\n\
     \        m+=1\n        d=A[i]\n        for j in range(1,l+1):\n            d+=C[j]*A[i-j]\n\
     \            d%=Mod\n        if d==0:\n            continue\n\n        T=C.copy()\n\
-    \        q=pow(p,Mod-2,Mod)*d%Mod\n        C=C+[0]*(len(B)+m-len(C))\n\n     \
-    \   for j in range(len(B)):\n            C[j+m]-=q*B[j]\n            C[j+m]%=Mod\n\
+    \        q=pow(p, -1, Mod)*d%Mod\n        C=C+[0]*(len(B)+m-len(C))\n\n      \
+    \  for j in range(len(B)):\n            C[j+m]-=q*B[j]\n            C[j+m]%=Mod\n\
     \        if 2*l<=i:\n            B=T\n            l,m,p=i+1-l,0,d\n\n    return\
     \ [Mod-c if c else 0 for c in C[1:]]\n\ndef Fibonacci(N):\n    \"\"\" Fibonacci\
     \ \u5217\u306E\u7B2C N \u9805\u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n    return\
@@ -82,7 +82,7 @@ data:
     \u30B0\u30EB\u30FC\u30D7 (\u7A7A\u30B0\u30EB\u30FC\u30D7\u7981\u6B62) \u306B\u5206\
     \u5272\u3059\u308B\u65B9\u6CD5) \u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n\n  \
     \  fact=[0]*(N+1); fact[0]=1\n    for i in range(1,N+1):\n        fact[i]=i*fact[i-1]%Mod\n\
-    \n    fact_inv=[0]*(N+1); fact_inv[-1]=pow(fact[-1],Mod-2,Mod)\n    for i in range(N-1,-1,-1):\n\
+    \n    fact_inv=[0]*(N+1); fact_inv[-1]=pow(fact[-1], -1, Mod)\n    for i in range(N-1,-1,-1):\n\
     \        fact_inv[i]=(i+1)*fact_inv[i+1]%Mod\n\n    A=[pow(i,N,Mod)*fact_inv[i]%Mod\
     \ for i in range(N+1)]\n    B=[fact_inv[i] if i&1==0 else -fact_inv[i] for i in\
     \ range(N+1)]\n    return Calc.Convolution(A,B)[:N+1]\n\ndef Bell(N, mode=0):\n\
@@ -95,8 +95,8 @@ data:
     2\u3064\u3082\u5171\u901A\u90E8\u5206\u304C\u306A\u3044 (N \u70B9\u3067\u5171\u6709\
     \u3082\u7981\u6B62) \u3067\u7D50\u3076\u65B9\u6CD5 (\u7D50\u3070\u308C\u306A\u3044\
     \u70B9\u304C\u3042\u3063\u3066\u3082\u3088\u3044) \u306E\u6570.\n\n    \"\"\"\n\
-    \n    two_inv=pow(2, Mod-2, Mod)\n    F=((Modulo_Polynomial([1,-1], N+3)-Sqrt(Modulo_Polynomial([1,-2,-3],\
-    \ N+3)))*two_inv)>>2\n\n    if mode:\n        return F.poly[:N+1]\n    else:\n\
+    \n    two_inv=pow(2, -1, Mod)\n    F=((Modulo_Polynomial([1,-1], N+3)-Sqrt(Modulo_Polynomial([1,-2,-3],\
+    \ N+3)))*two_inv)>>2\n\n    if mode:\n        return F.Poly[:N+1]\n    else:\n\
     \        return F[N]\n\n#===\ndef Subset_Sum(X, K):\n    \"\"\" X \u306E\u8981\
     \u7D20\u306E\u3046\u3061, \u4EFB\u610F\u500B\u3092\u7528\u3044\u3066, \u548C\u304C\
     \ k=0,1,...,K \u306B\u306A\u308B\u7D44\u307F\u5408\u308F\u305B\u306E\u7DCF\u6570\
@@ -115,8 +115,8 @@ data:
     \ndef Differences(P, k=1):\n    \"\"\" P \u306E k- \u5DEE\u5206 D[k](P(n))=D[k-1](P(n+1)-P(n)),\
     \ D[0](P)=P \u3092\u6C42\u3081\u308B. \"\"\"\n\n    N=len(P.Poly)\n\n    fact=[1]*(k+1)\n\
     \    for i in range(1,k+1):\n        fact[i]=i*fact[i-1]%Mod\n\n    fact_inv=[1]*(k+1);\
-    \ fact_inv[-1]=pow(fact[i],Mod-2,Mod)\n    for i in range(k-1,-1,-1):\n      \
-    \  fact_inv[i]=(i+1)*fact_inv[i+1]%Mod\n\n    Q=[0]*(N-k)\n    sgn=1 if k%2==0\
+    \ fact_inv[-1]=pow(fact[i], -1, Mod)\n    for i in range(k-1,-1,-1):\n       \
+    \ fact_inv[i]=(i+1)*fact_inv[i+1]%Mod\n\n    Q=[0]*(N-k)\n    sgn=1 if k%2==0\
     \ else -1\n\n    for r in range(k+1):\n        alpha=sgn*fact[k]*(fact_inv[r]*fact_inv[k-r]%Mod)%Mod\n\
     \        for j in range(N-k):\n            Q[j]+=alpha*P[j]%Mod\n\n        if\
     \ r!=k:\n            sgn*=-1\n            P=Taylor_Shift(P,1)\n\n    return Modulo_Polynomial(Q,P.max_degree)\n"
@@ -124,7 +124,7 @@ data:
   isVerificationFile: false
   path: Modulo_Sequence/Modulo_Sequence.py
   requiredBy: []
-  timestamp: '2023-03-18 02:35:05+09:00'
+  timestamp: '2023-08-06 21:39:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Modulo_Sequence/Modulo_Sequence.py
