@@ -119,7 +119,7 @@ class Modulo_Matrix():
                 T[j],T[i]=T[i],T[j]
                 R[j],R[i]=R[i],R[j]
             Tj,Rj=T[j],R[j]
-            inv=pow(Tj[j],Mod-2,Mod)
+            inv=pow(Tj[j], -1, Mod)
             for k in range(N):
                 Tj[k]*=inv; Tj[k]%=Mod
                 Rj[k]*=inv; Rj[k]%=Mod
@@ -210,7 +210,7 @@ class Modulo_Matrix():
 
             if T[I][J]!=0:
                 u=T[I][J]
-                u_inv=pow(u,Mod-2,Mod)
+                u_inv=pow(u, -1, Mod)
                 for j in range(C):
                     T[I][j]*=u_inv
                     T[I][j]%=Mod
@@ -250,7 +250,7 @@ class Modulo_Matrix():
 
             if T[I][J]!=0:
                 u=T[I][J]
-                u_inv=pow(u,Mod-2,Mod)
+                u_inv=pow(u, -1, Mod)
                 for i in range(R):
                     T[i][J]*=u_inv
                     T[i][J]%=Mod
@@ -405,7 +405,7 @@ def Determinant(M):
             T[j],T[i]=T[i],T[j]
             det=-det
         Tj=T[j]
-        inv=pow(Tj[j],Mod-2,Mod)
+        inv=pow(Tj[j], -1, Mod)
         for i in range(j+1,N):
             Ti=T[i]
             c=-inv*Ti[j]%Mod
@@ -466,7 +466,7 @@ def Characteristic_Polynomial(M):
 
         if T[j+1][j]:
             Tjj=T[j+1]
-            inv=pow(Tjj[j], Mod-2,Mod)
+            inv=pow(Tjj[j], -1, Mod)
             for i in range(j+2, N):
                 Ti=T[i]
                 c=inv*Ti[j]%Mod

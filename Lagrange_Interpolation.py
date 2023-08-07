@@ -26,7 +26,7 @@ def Lagrange_Interpolation_Point(L,X,P):
             if i==j: continue
             a*=X-x[j]; a%=P
             b*=x[i]-x[j]; b%=P
-        c=(a*pow(b,P-2,P))%P
+        c = (a * pow(b, -1 ,P)) % P
         Y+=y[i]*c; Y%=P
     return Y
 
@@ -71,7 +71,7 @@ def Lagrange_Interpolation_Polynomial(T,P):
         for j in range(N):
             if j!=i:
                 Q=Q*(x-X[j])%P
-        Q=pow(Q,P-2,P)
+        Q=pow(Q, -1, P)
 
         tmp=Poly.copy()
 
@@ -115,12 +115,12 @@ def Lagrange_Interpolation_Point_Arithmetic(L,a,b,X,P):
     fact=1
     for i in range(1,d+1): fact=(fact*i)%P
 
-    Fact_inv=[1]*(d+1); Fact_inv[-1]=pow(fact,P-2,P)
+    Fact_inv=[1]*(d+1); Fact_inv[-1]=pow(fact, -1, P)
     for i in range(d-1,-1,-1):
         Fact_inv[i]=(Fact_inv[i+1]*(i+1))%P
 
     Y=0
-    coef=pow(-a,d*(P-2),P)
+    coef=pow(-a, -d, P)
 
     for i in range(d+1):
         V_inv=(Fact_inv[i]*Fact_inv[d-i])%P
