@@ -67,14 +67,14 @@ data:
     \   return self\n\n    #\u6B63\u8CA0\u5224\u5B9A\n\n    #\u8981\u7D04\n\n    #\u9006\
     \u6570\n    def __inverse(self):\n        return  Fraction(1,Quaternion.abs2(self))*Quaternion.conjugate(self)\n\
     \n    #\u7B26\u53F7\n    def __pos__(self):\n        return self\n\n    def __neg__(self):\n\
-    \        return Quaternion(-self.r,-self.i,-self.j,-self.k)\n\n\n\n\n"
+    \        return Quaternion(-self.r,-self.i,-self.j,-self.k)\n"
   dependsOn:
   - Fraction.py
   isVerificationFile: false
   path: Quaternion.py
   requiredBy:
   - Vector3.py
-  timestamp: '2023-07-02 11:15:33+09:00'
+  timestamp: '2023-08-08 23:42:03+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Quaternion.py

@@ -22,28 +22,30 @@ data:
     \n    def add_edge(self,u,v):\n        self.__Union.union(u,v+self.N)\n      \
     \  self.__Union.union(u+self.N,v)\n\n    def check(self):\n        U=self.__Union\n\
     \        for x in range(self.N):\n            if U.same(x,x+self.N):\n       \
-    \         return False\n        return True\n\n    def bipart(self, Mode=False):\n\
+    \         return False\n        return True\n\n    def bipart_example(self):\n\
     \        X=[-1]*self.N\n        G=self.__Union.all_group_members()\n        for\
     \ x in range(self.N):\n            if X[x]!=-1:\n                continue\n\n\
     \            z=self.__Union.find(x)\n            for y in G[z]:\n            \
     \    if y<self.N:\n                    if X[y]==1: return None,None\n        \
     \            X[y]=0\n                else:\n                    if X[y-self.N]==0:\
-    \ return None,None\n                    X[y-self.N]=1\n\n        if Mode==0:\n\
-    \            return X\n        else:\n            U=[]; V=[]\n            for\
-    \ x in range(self.N):\n                if X[x]==0:\n                    U.append(x)\n\
-    \                else:\n                    V.append(x)\n            return U,V\n\
-    \n    def bipart_cases(self,Mod=None):\n        \"\"\" 2\u90E8\u30B0\u30E9\u30D5\
-    \u3078\u306E\u5206\u5272\u306E\u65B9\u6CD5\u306E\u5834\u5408\u306E\u6570\u3092\
-    \u6C42\u3081\u308B.\n\n        \"\"\"\n\n        U,V=self.bipart(True)\n     \
-    \   if U==None:\n            return 0\n        else:\n            S=set()\n  \
-    \          for u in U:\n                S.add(self.__Union.find(u))\n        \
-    \    return pow(2,len(S),Mod)\n"
+    \ return None,None\n                    X[y-self.N]=1\n        return X\n\n  \
+    \  def bipart(self):\n        Bip=[]\n        seen=[0]*self.N\n        G=self.__Union.all_group_members()\n\
+    \n        for x in range(self.N):\n            if seen[x]:\n                continue\n\
+    \n            g=self.__Union.find(x)\n            U=[]; V=[]\n            for\
+    \ y in G[g]:\n                if seen[y%self.N]:\n                    return None\n\
+    \n                seen[y%self.N]=1\n                if y<self.N:\n           \
+    \         U.append(y)\n                else:\n                    V.append(y-self.N)\n\
+    \            Bip.append((U,V))\n        return Bip\n\n    def bipart_cases(self,\
+    \ Mod=None):\n        \"\"\" 2\u90E8\u30B0\u30E9\u30D5\u3078\u306E\u5206\u5272\
+    \u306E\u65B9\u6CD5\u306E\u5834\u5408\u306E\u6570\u3092\u6C42\u3081\u308B.\n\n\
+    \        \"\"\"\n\n        Bip=self.bipart()\n        if Bip is None:\n      \
+    \      return 0\n        else:\n            return pow(2, len(Bip), Mod)\n\n"
   dependsOn:
   - Union_Find/Union_Find.py
   isVerificationFile: false
   path: Union_Find/Bipartite_Checker.py
   requiredBy: []
-  timestamp: '2022-12-04 19:53:09+09:00'
+  timestamp: '2023-08-08 23:44:57+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Union_Find/Bipartite_Checker.py

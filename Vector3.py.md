@@ -63,13 +63,13 @@ data:
     \    #\u7B26\u53F7\n    def __pos__(self):\n        return self\n\n    def __neg__(self):\n\
     \        return Vector3(-self.x,-self.y,-self.z)\n\n\n\n\n"
   dependsOn:
-  - Fraction.py
   - Complex.py
+  - Fraction.py
   - Quaternion.py
   isVerificationFile: false
   path: Vector3.py
   requiredBy: []
-  timestamp: '2023-07-02 11:15:33+09:00'
+  timestamp: '2023-08-08 23:42:03+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Vector3.py

@@ -91,6 +91,9 @@ data:
       path: Fraction.py
       title: Fraction.py
     - icon: ':warning:'
+      path: Function_Minimizer.py
+      title: Function_Minimizer.py
+    - icon: ':warning:'
       path: Gaussian_Integer.py
       title: Gaussian_Integer.py
     - icon: ':warning:'
@@ -367,6 +370,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: Ordered_Set/Ordered_Set.py
       title: Ordered_Set/Ordered_Set.py
+    - icon: ':warning:'
+      path: Ordered_Set/Super_Ordered_Set.py
+      title: Ordered_Set/Super_Ordered_Set.py
   - name: Segment_Tree
     pages:
     - icon: ':heavy_check_mark:'
