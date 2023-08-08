@@ -1,5 +1,5 @@
 ##と.で表されたグリッドを01に変換する.
-def Black_White_Grid(H:int, W:int, wall=False):
+def Black_White_Grid(H: int, W: int, wall=False):
     """H: 縦のマス数, W: 横のマス数
 
     ※通れるところが1
@@ -23,13 +23,13 @@ def Black_White_Grid(H:int, W:int, wall=False):
 
     return S
 
-#小数点以下第k位まで与えられる小数を10^k倍する.
-def Decimal_to_Int(s:str,k:int,base=10) -> int:
-    """
+#小数点以下第 k 位まで与えられる小数を 10^k 倍する.
+def Decimal_to_Int(s: str, k: int, base=10) -> int:
+    """ s*10^k を整数で出力する.
 
-    s:小数点を含むかもしれない数
-    k:小数点以下高々何位までか?
-    base:基数
+    s: 小数点を含むかもしれない数
+    k: 小数点以下高々何位までか?
+    base: 基数 (大体 10)
     """
 
     if "." not in s:
