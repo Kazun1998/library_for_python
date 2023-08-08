@@ -1,4 +1,5 @@
-from Point import *
+from math import sqrt,gcd
+from Point import iSP,compare,Point,Angle_Type
 
 class Segment():
     __slots__=["begin","end","id"]
