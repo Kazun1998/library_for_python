@@ -44,7 +44,7 @@ class Fraction():
         if self.__b == 1:
             return str(self.__a)
         else:
-            return "{}/{}".format(self.__a, self.__b)
+            return f"{self.__a}/{self.__b}"
 
     __repr__ = __str__
 
