@@ -132,7 +132,3 @@ class Quaternion(Complex):
 
     def __neg__(self):
         return Quaternion(-self.r,-self.i,-self.j,-self.k)
-
-
-
-
