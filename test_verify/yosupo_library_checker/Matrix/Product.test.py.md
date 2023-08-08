@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: Modulo_Matrix/Modulo_Matrix.py
-    title: Modulo_Matrix/Modulo_Matrix.py
+    title: Modulo_Matrix
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false

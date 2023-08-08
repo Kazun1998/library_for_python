@@ -342,12 +342,12 @@ data:
       title: Bipartite Weighted Matching
     - icon: ':warning:'
       path: Min_Cost_Flow/Min_Cost_Flow.py
-      title: Min_Cost_Flow/Min_Cost_Flow.py
+      title: Min Cost Flow
   - name: Modulo_Matrix
     pages:
     - icon: ':heavy_check_mark:'
       path: Modulo_Matrix/Modulo_Matrix.py
-      title: Modulo_Matrix/Modulo_Matrix.py
+      title: Modulo_Matrix
     - icon: ':warning:'
       path: Modulo_Matrix/Modulo_Sequence.py
       title: Modulo_Matrix/Modulo_Sequence.py
@@ -470,7 +470,7 @@ data:
       title: Union_Find/Dynamic_Union_Find.py
     - icon: ':warning:'
       path: Union_Find/Potentialized_Union_Find.py
-      title: Union_Find/Potentialized_Union_Find.py
+      title: "\u30DD\u30C6\u30F3\u30B7\u30E3\u30EB\u4ED8\u304D Union Find"
     - icon: ':warning:'
       path: Union_Find/RollBack_Union_Find.py
       title: Union_Find/RollBack_Union_Find.py
