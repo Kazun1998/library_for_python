@@ -339,7 +339,7 @@ data:
     pages:
     - icon: ':warning:'
       path: Min_Cost_Flow/Bipartite_Weighted_Matching.py
-      title: Min_Cost_Flow/Bipartite_Weighted_Matching.py
+      title: Bipartite Weighted Matching
     - icon: ':warning:'
       path: Min_Cost_Flow/Min_Cost_Flow.py
       title: Min_Cost_Flow/Min_Cost_Flow.py
