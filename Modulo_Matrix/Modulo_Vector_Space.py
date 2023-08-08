@@ -27,7 +27,7 @@ class Modulo_Vector_Space:
                     if v[j]:
                         self.__ind.append(j)
                         break
-                v=pow(v[j], Mod-2, Mod)*v
+                v=pow(v[j], -1, Mod) * v
                 self.basis.append(v)
 
                 for k in range(len(self.basis)-1):
@@ -86,7 +86,7 @@ def Kernel_Space(A):
         p.append(j)
         T[rnk],T[i]=T[i],T[rnk]
 
-        inv=pow(T[rnk][j], Mod-2, Mod)
+        inv=pow(T[rnk][j], -1, Mod)
         for k in range(col):
             T[rnk][k]=(inv*T[rnk][k])%Mod
 
@@ -152,7 +152,7 @@ def Linear_System_Equations(A,b):
         p.append(j)
         T[rnk],T[i]=T[i],T[rnk]
 
-        inv=pow(T[rnk][j], Mod-2, Mod)
+        inv=pow(T[rnk][j], -1, Mod)
         for k in range(col+1):
             T[rnk][k]=(inv*T[rnk][k])%Mod
 

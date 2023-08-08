@@ -22,9 +22,9 @@ def Fast_Inverse_Walsh_Hadamard_Transform_XOR(A):
     """
 
     Fast_Walsh_Hadamard_Transform_XOR(A)
-    N_inv=pow(len(A),Mod-2,Mod)
+    N_inv=pow(len(A), -1, Mod)
     for i in range(len(A)):
-        A[i]=(A[i]*N_inv)%Mod
+        A[i] = (A[i] * N_inv) % Mod
 
 def Convolution_XOR(A,B):
     """ XOR 演算に関する畳込みを行う.

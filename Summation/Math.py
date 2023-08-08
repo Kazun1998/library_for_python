@@ -204,7 +204,7 @@ def Range_Sum_Inclusion(Range, S, Mod=None):
             n-=1; r-=1
 
         if Mod!=None:
-            return (a*pow(b,Mod-2,Mod))%Mod
+            return (a * pow(b, -1, Mod)) % Mod
         else:
             return a//b
 
