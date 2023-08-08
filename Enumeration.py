@@ -30,15 +30,16 @@ def Factor_with_inverse(N):
     N: int
     """
 
-    f=Factor(N)
-    g=[0]*(N+1)
+    f = Factor(N)
+    g = [0]*(N+1)
 
-    N=min(N,Mod-1)
-    g[N]=pow(f[N],Mod-2,Mod)
+    N = min(N, Mod-1)
+    g[N] = pow(f[N], -1, Mod)
 
     for k in range(N-1,-1,-1):
-        g[k]=((k+1)*g[k+1])%Mod
-    return f,g
+        g[k] = ((k+1) * g[k+1]) % Mod
+
+    return f, g
 
 def Double_Factor(N):
     """ 0!!, 1!!, ..., N!! (mod Mod) を出力する.
@@ -218,10 +219,11 @@ def Geometric_Inverse_Sequence(a, r, N):
     a,r,N: int
     """
 
-    a%=Mod; r_inv=pow(r, Mod-2, Mod)
-    X=[0]*(N+1); X[0]=a
+    a %= Mod; r_inv = pow(r, -1, Mod)
+    X = [0] * (N+1); X[0]=a
+
     for k in range(1,N+1):
-        X[k]=r_inv*X[k-1]%Mod
+        X[k] = r_inv * X[k-1] % Mod
     return X
 
 """

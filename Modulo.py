@@ -145,15 +145,10 @@ class Modulo():
         return self.modulo_inverse()
 
     def modulo_inverse(self):
-        s,t=1,0
-        a,b=self.a,self.n
-        while b:
-            q,a,b=a//b,b,a%b
-            s,t=t,s-q*t
-
-        assert a==1,"{}の逆数が存在しません".format(self)
-        s%=self.n
-        return Modulo(s,self.n, False)
+        try:
+            return Modulo(pow(self.a, -1, self.n), self.n, False)
+        except ValueError:
+            raise ValueError(f"{self} の逆数が存在しません") from None
 
     #除法
     def __truediv__(self,other):
@@ -163,15 +158,9 @@ class Modulo():
         return other*(self.modulo_inverse())
 
     #累乗
-    def __pow__(self,other):
-        if isinstance(other,int):
-            u=abs(other)
-
-            r=Modulo(pow(self.a,u,self.n),self.n, False)
-            if other>=0:
-                return r
-            else:
-                return r.modulo_inverse()
+    def __pow__(self, other):
+        if isinstance(other, int):
+            return Modulo(pow(self.a, other, self.n), self.n, False)
         else:
             b,n=other.a,other.n
             assert pow(self.a,n,self.n)==1, "矛盾なく定義できません."
@@ -296,7 +285,7 @@ def __modulo_composite__(p:Modulo, q:Modulo):
 
     n//=g;m//=g;d//=g
 
-    s=(1/Modulo(n,m)).a
+    s = pow(n, -1, m)
 
     return Modulo(a+(n*g)*d*s,n*m*g)
 
@@ -319,16 +308,18 @@ def Is_Included(X: Modulo, Y: Modulo):
 
 #拡張Euclidの互除法
 def Extended_Euclid(a: int, b: int):
-    """ax+by=gcd(a,b) を満たす(x,y,gcd(a,b))を1つ求める.
+    """ax+by=gcd(a, b) を満たす (x, y, gcd(a, b)) を 1 つ求める.
 
     a,b:整数
     """
-    s,t,u,v=1,0,0,1
-    while b:
-        q,a,b=a//b,b,a%b
-        s,t=t,s-q*t
-        u,v=v,u-q*v
-    return s,u,a
+    from math import gcd
+    g = gcd(a, b)
+    if g == 0:
+        return (0, 0, 0)
+
+    x = pow(a//g, -1, b//g)
+    y = - (a*x-g) // b
+    return (x, y, g)
 
 #1次合同方程式を解く
 def First_Order_Congruent_Equation(a: int, b: int, m: int):
@@ -338,16 +329,16 @@ def First_Order_Congruent_Equation(a: int, b: int, m: int):
     m!=0
     """
     assert m
-    g=a;h=m
+    g=a; h=m
     while h:
-        g,h=h,g%h
+        g, h = h, g % h
 
     if b%g:
         return None
 
-    a,b,m=a//g,b//g,m//g
-    c,_,_=Extended_Euclid(a,m)
-    return Modulo(b*c,m)
+    a, b, m = a // g, b // g, m // g
+    c = pow(a, -1, m)
+    return Modulo(b * c, m)
 
 #1次連立合同方程式を解く
 def First_Order_Simultaneous_Congruent_Equation(*X):

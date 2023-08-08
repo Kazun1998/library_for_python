@@ -355,7 +355,7 @@ def Bellman_Ford_All(D, start):
 
 #Warshall–Floyd
 def Warshall_Floyd(D):
-    """ Warshall–Floyd 法を用いて, 全点間距離を求める.
+    """ Warshall-Floyd 法を用いて, 全点間距離を求める.
 
     D: 重み付き有向グラフ
     """
