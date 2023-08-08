@@ -307,4 +307,3 @@ class Adelson_Velsky_and_Landis_Tree:
         X=[]
         dfs(self.root)
         return X
-

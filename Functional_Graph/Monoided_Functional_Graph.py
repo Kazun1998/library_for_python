@@ -38,7 +38,7 @@ class Monoided_Functional_Graph:
             self.value.append(Y)
             K>>=1
 
-    def opulate(self, v, k):
+    def operate(self, v, k):
         x=self.unit
         op=self.op
         out=self.out

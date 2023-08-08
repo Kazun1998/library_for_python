@@ -1,6 +1,6 @@
 from collections import deque
 
-def Slide_Maximum_Index(A,k):
+def Slide_Maximum_Index(A, k):
     """リストA の k 要素スライド最大値をもつインデックスを求める.
 
     [Input]
@@ -25,7 +25,7 @@ def Slide_Maximum_Index(A,k):
         index[i]=Q[0]
     return index
 
-def Slide_Maximum_Value(A,k):
+def Slide_Maximum_Value(A, k):
     """リストA の k 要素スライド最大値を求める.
 
     [Input]
