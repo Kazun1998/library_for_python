@@ -143,12 +143,12 @@ data:
     \       return T\n\n    for _ in range(N):\n        update=0\n        for u,v,c\
     \ in E:\n            if T[v]>T[u]+c:\n                T[v]=-inf\n            \
     \    update=1\n        if update==0:\n            break\n    return T\n\n#Warshall\u2013\
-    Floyd\ndef Warshall_Floyd(D):\n    \"\"\" Warshall\u2013Floyd \u6CD5\u3092\u7528\
-    \u3044\u3066, \u5168\u70B9\u9593\u8DDD\u96E2\u3092\u6C42\u3081\u308B.\n\n    D:\
-    \ \u91CD\u307F\u4ED8\u304D\u6709\u5411\u30B0\u30E9\u30D5\n    \"\"\"\n\n    def\
-    \ three_loop():\n        for u in range(N):\n            Tu=T[u]\n           \
-    \ for v in range(N):\n                Tv=T[v]\n                for w in range(N):\n\
-    \                    Tv[w]=min(Tv[w],Tv[u]+Tu[w])\n\n    inf=float(\"inf\"); N=D.vertex_count()\n\
+    Floyd\ndef Warshall_Floyd(D):\n    \"\"\" Warshall-Floyd \u6CD5\u3092\u7528\u3044\
+    \u3066, \u5168\u70B9\u9593\u8DDD\u96E2\u3092\u6C42\u3081\u308B.\n\n    D: \u91CD\
+    \u307F\u4ED8\u304D\u6709\u5411\u30B0\u30E9\u30D5\n    \"\"\"\n\n    def three_loop():\n\
+    \        for u in range(N):\n            Tu=T[u]\n            for v in range(N):\n\
+    \                Tv=T[v]\n                for w in range(N):\n               \
+    \     Tv[w]=min(Tv[w],Tv[u]+Tu[w])\n\n    inf=float(\"inf\"); N=D.vertex_count()\n\
     \n    T=[[0]*N for _ in range(N)]\n    adj_out=D.adjacent_out\n    for u in range(N):\n\
     \        Tu=T[u]\n        E=adj_out[u]\n        for v in range(N):\n         \
     \   if v==u:\n                Tu[v]=0\n            elif v in E:\n            \
@@ -266,7 +266,7 @@ data:
   isVerificationFile: false
   path: Graph/Weighted_Digraph.py
   requiredBy: []
-  timestamp: '2022-04-16 12:03:09+09:00'
+  timestamp: '2023-08-08 23:40:39+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Graph/Weighted_Digraph.py
