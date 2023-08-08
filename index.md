@@ -463,6 +463,9 @@ data:
       path: Union_Find/Coloring_Union_Find.py
       title: "\u8272\u4ED8\u304D Union Find"
     - icon: ':warning:'
+      path: Union_Find/Dynamic_Coloring_Union_Find.py
+      title: Union_Find/Dynamic_Coloring_Union_Find.py
+    - icon: ':warning:'
       path: Union_Find/Dynamic_Union_Find.py
       title: Union_Find/Dynamic_Union_Find.py
     - icon: ':warning:'
