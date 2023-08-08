@@ -57,7 +57,7 @@ class Fraction():
             x = self.__a + self.__b * other
             y = self.__b
         else:
-            assert 0, "型が違う"
+            raise TypeError(f"{other} の型がおかしいです.")
         return Fraction(x, y)
 
     def __radd__(self, other):
@@ -71,7 +71,7 @@ class Fraction():
             x = self.__a - self.__b * other
             y = self.__b
         else:
-            assert 0, "型が違う"
+            raise TypeError(f"{other} の型がおかしいです.")
         return Fraction(x, y)
 
     def __rsub__(self, other):
@@ -85,7 +85,7 @@ class Fraction():
             x = self.__a * other
             y = self.__b
         else:
-            assert 0, "型が違う"
+            raise TypeError(f"{other} の型がおかしいです.")
 
         return Fraction(x, y)
 
@@ -107,7 +107,8 @@ class Fraction():
         return H.a // H.b
 
     def __truediv__(self, other):
-        assert other, "除数が0"
+        if not other:
+            raise ZeroDivisionError("ゼロ除算")
 
         if isinstance(other, Fraction):
             x = self.__a * other.__b
@@ -116,12 +117,14 @@ class Fraction():
             x = self.__a
             y = self.__b * other
         else:
-            assert 0, "型が違う"
+            raise TypeError(f"{other} の型がおかしいです.")
 
         return Fraction(x, y)
 
     def __rtruediv__(self, other):
-        assert self,"除数が0"
+        if not self:
+            raise ZeroDivisionError("ゼロ除算")
+
         if isinstance(other, Fraction):
             x = other.__a * self.__b
             y = other.__b * self.__a
@@ -129,7 +132,7 @@ class Fraction():
             x = other * self.__b
             y = self.__a
         else:
-            assert 0, "型が違う"
+            raise TypeError(f"{other} の型がおかしいです.")
         return Fraction(x, y)
 
     def __pow__(self, m):
