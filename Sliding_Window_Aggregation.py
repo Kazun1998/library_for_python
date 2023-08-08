@@ -61,7 +61,7 @@ class Sliding_Window_Aggregation():
             self.__right.append(x)
 
     def pop(self):
-        """ push する.
+        """ pop する.
 
         """
 

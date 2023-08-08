@@ -35,7 +35,7 @@ class Dual_Segment_Tree:
             self._propagate_at(m>>h)
 
     #作用
-    def operate(self, l, r, alpha, left_closed=True, right_closed=True):
+    def action(self, l, r, alpha, left_closed=True, right_closed=True):
         L=l+self.N+(not left_closed)
         R=r+self.N+(right_closed)
 
@@ -89,4 +89,4 @@ class Dual_Segment_Tree:
         return self.lazy[m]
 
     def __setitem__(self,index,value):
-        self.operate(index, index, value)
+        self.action(index, index, value)

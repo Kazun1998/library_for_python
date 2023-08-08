@@ -45,7 +45,7 @@ def Find_Linear_Recurrence(A):
             continue
 
         T=C.copy()
-        q=pow(p,Mod-2,Mod)*d%Mod
+        q=pow(p, -1, Mod)*d%Mod
         C=C+[0]*(len(B)+m-len(C))
 
         for j in range(len(B)):
@@ -201,7 +201,7 @@ def Stirling_2nd(N):
     for i in range(1,N+1):
         fact[i]=i*fact[i-1]%Mod
 
-    fact_inv=[0]*(N+1); fact_inv[-1]=pow(fact[-1],Mod-2,Mod)
+    fact_inv=[0]*(N+1); fact_inv[-1]=pow(fact[-1], -1, Mod)
     for i in range(N-1,-1,-1):
         fact_inv[i]=(i+1)*fact_inv[i+1]%Mod
 
@@ -229,11 +229,11 @@ def Motzkin(N, mode=0):
 
     """
 
-    two_inv=pow(2, Mod-2, Mod)
+    two_inv=pow(2, -1, Mod)
     F=((Modulo_Polynomial([1,-1], N+3)-Sqrt(Modulo_Polynomial([1,-2,-3], N+3)))*two_inv)>>2
 
     if mode:
-        return F.poly[:N+1]
+        return F.Poly[:N+1]
     else:
         return F[N]
 
@@ -291,7 +291,7 @@ def Differences(P, k=1):
     for i in range(1,k+1):
         fact[i]=i*fact[i-1]%Mod
 
-    fact_inv=[1]*(k+1); fact_inv[-1]=pow(fact[i],Mod-2,Mod)
+    fact_inv=[1]*(k+1); fact_inv[-1]=pow(fact[i], -1, Mod)
     for i in range(k-1,-1,-1):
         fact_inv[i]=(i+1)*fact_inv[i+1]%Mod
 

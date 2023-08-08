@@ -18,7 +18,7 @@ class Bipartite_Check():
                 return False
         return True
 
-    def bipart(self, Mode=False):
+    def bipart_example(self):
         X=[-1]*self.N
         G=self.__Union.all_group_members()
         for x in range(self.N):
@@ -33,28 +33,39 @@ class Bipartite_Check():
                 else:
                     if X[y-self.N]==0: return None,None
                     X[y-self.N]=1
+        return X
 
-        if Mode==0:
-            return X
-        else:
+    def bipart(self):
+        Bip=[]
+        seen=[0]*self.N
+        G=self.__Union.all_group_members()
+
+        for x in range(self.N):
+            if seen[x]:
+                continue
+
+            g=self.__Union.find(x)
             U=[]; V=[]
-            for x in range(self.N):
-                if X[x]==0:
-                    U.append(x)
-                else:
-                    V.append(x)
-            return U,V
+            for y in G[g]:
+                if seen[y%self.N]:
+                    return None
 
-    def bipart_cases(self,Mod=None):
+                seen[y%self.N]=1
+                if y<self.N:
+                    U.append(y)
+                else:
+                    V.append(y-self.N)
+            Bip.append((U,V))
+        return Bip
+
+    def bipart_cases(self, Mod=None):
         """ 2部グラフへの分割の方法の場合の数を求める.
 
         """
 
-        U,V=self.bipart(True)
-        if U==None:
+        Bip=self.bipart()
+        if Bip is None:
             return 0
         else:
-            S=set()
-            for u in U:
-                S.add(self.__Union.find(u))
-            return pow(2,len(S),Mod)
+            return pow(2, len(Bip), Mod)
+

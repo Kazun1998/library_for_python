@@ -249,7 +249,7 @@ class Modulo_Polynomial():
                 K=len(d)
                 H=[0]*self.max_degree
 
-                alpha=pow(other[0], Mod-2, Mod)
+                alpha=pow(other[0], -1, Mod)
                 H[0]=alpha*self[0]%Mod
 
                 for i in range(1, self.max_degree):
@@ -266,7 +266,7 @@ class Modulo_Polynomial():
             else:
                 return self*other.inverse()
         else:
-            return pow(other,Mod-2,Mod)*self
+            return pow(other, -1, Mod)*self
 
     def __rtruediv__(self,other):
         return other*self.inverse()
@@ -384,13 +384,13 @@ class Calculator:
 
     #参考元: https://judge.yosupo.jp/submission/72676
     def __build_up(self):
-        rank2=(~(Mod-1)&(Mod-2)).bit_length()
+        rank2=(~(Mod-1) & ((Mod-1)-1)).bit_length()
         root=[0]*(rank2+1); iroot=[0]*(rank2+1)
         rate2=[0]*max(0, rank2-1); irate2=[0]*max(0, rank2-1)
         rate3=[0]*max(0, rank2-2); irate3=[0]*max(0, rank2-2)
 
         root[-1]=pow(self.primitive, (Mod-1)>>rank2, Mod)
-        iroot[-1]=pow(root[-1], Mod-2, Mod)
+        iroot[-1]=pow(root[-1], -1, Mod)
 
         for i in range(rank2)[::-1]:
             root[i]=root[i+1]*root[i+1]%Mod
@@ -567,7 +567,7 @@ class Calculator:
                         irot*=irate3[(~s&-~s).bit_length()-1]
                         irot%=Mod
                 l-=2
-        N_inv=pow(N,Mod-2,Mod)
+        N_inv=pow(N, -1, Mod)
         for i in range(N):
             A[i]=N_inv*A[i]%Mod
 
@@ -704,7 +704,7 @@ class Calculator:
             d,f=self.coefficients_list(F)
 
             G=[0]*M
-            alpha=pow(F[0], Mod-2, Mod)
+            alpha=pow(F[0], -1, Mod)
             G[0]=alpha
 
             for i in range(1, M):
@@ -726,7 +726,7 @@ class Calculator:
             """
 
             N=len(F)
-            r=pow(F[0],Mod-2,Mod)
+            r=pow(F[0], -1, Mod)
 
             m=1
             G=[r]
@@ -875,7 +875,7 @@ def Root(P,k):
     assert P.Poly[0]==1, "定数項が1ではない"
     k%=Mod
     assert k, "kが特異"
-    k_inv=pow(k,Mod-2,Mod)
+    k_inv=pow(k, -1, Mod)
     return Power(P,k_inv)
 
 """
@@ -886,14 +886,14 @@ def Sin(P):
     I=Tonelli_Shanks(-1)
     B=I*P
     C=Exp(B)-Exp(-B)
-    return C*pow(2*I,Mod-2,Mod)
+    return C*pow(2*I, -1, Mod)
 
 #余弦
 def Cos(P):
     I=Tonelli_Shanks(-1)
     B=I*P
     C=Exp(B)+Exp(-B)
-    return C*pow(2,Mod-2,Mod)
+    return C*pow(2, -1, Mod)
 
 #正接
 def Tan(P):
@@ -925,7 +925,7 @@ def ArcTan(P):
 
     #三角関数と指数関数の相互関係版
     I=Tonelli_Shanks(-1)
-    return I*pow(2,Mod-2,Mod)*Log((I+P)/(I-P))
+    return I*pow(2, -1, Mod)*Log((I+P)/(I-P))
 
 def Power(P, M):
     """ P の M 乗を求める.
@@ -948,7 +948,7 @@ def Power(P, M):
     if deg*M>N:
         return Modulo_Polynomial([0], P.max_degree)
 
-    p_inv=pow(p, Mod-2, Mod)
+    p_inv=pow(p, -1, Mod)
     M_mod=M%Mod
 
     if Calc.is_sparse(F):
@@ -1041,7 +1041,7 @@ def __sqrt(F, N):
     if s==-1:
         return None
 
-    two_inv=pow(2, Mod-2, Mod)
+    two_inv=pow(2, -1, Mod)
 
     if not Calc.is_sparse(F):
         # P が疎な場合
@@ -1153,7 +1153,7 @@ def Taylor_Shift(P, a):
         fact[i]=(fact[i-1]*i)%Mod
 
     fact_inv=[0]*(N+1)
-    fact_inv[-1]=pow(fact[-1],Mod-2,Mod)
+    fact_inv[-1]=pow(fact[-1], -1, Mod)
 
     for i in range(N-1,-1,-1):
         fact_inv[i]=(fact_inv[i+1]*(i+1))%Mod
@@ -1216,7 +1216,7 @@ def Polynominal_Coefficient(P,Q,N):
     if Q[0]==1:
         return P[0]
     else:
-        return P[0]*pow(Q[0],Mod-2,Mod)%Mod
+        return P[0]*pow(Q[0], -1, Mod)%Mod
 
 def Multipoint_Evaluation(P, X):
     """ 多項式 P に対して, X=[x[0], ..., x[N-1]] としたとき, [P(x[0]), ..., P(x[N-1])] を求める.
@@ -1285,7 +1285,7 @@ def Polynominal_Interpolation(X, Y):
             u.pop()
 
     for i in range(N):
-        U[i+size]=[(Y[i]*pow(U[i+size][0],Mod-2,Mod))%Mod]
+        U[i+size]=[(Y[i]*pow(U[i+size][0], -1, Mod))%Mod]
 
     for i in range(size-1,0,-1):
         A=Calc.Convolution(U[2*i], T[2*i+1])
@@ -1307,7 +1307,7 @@ def _gcd(F,G):
     while G:
         F,G=G,F%G
 
-    a_inv=pow(F.leading_coefficient(),Mod-2,Mod)
+    a_inv=pow(F.leading_coefficient(), -1, Mod)
     X=F.Poly
     for i in range(len(X)):
         X[i]=(a_inv*X[i])%Mod
@@ -1324,7 +1324,7 @@ def _lcm(F,G):
 def lcm(*X):
     from functools import reduce
     L=reduce(_lcm,X)
-    a_inv=pow(L.leading_coefficient(),Mod-2,Mod)
+    a_inv=pow(L.leading_coefficient(), -1, Mod)
     X=L.Poly
     for i in range(len(X)):
         X[i]=(a_inv*X[i])%Mod
