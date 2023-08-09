@@ -9,7 +9,7 @@ def Merge_Sort_by_Index(X):
 
         J=[0]*(right-left)
         while (i<mid and j<right):
-            if X[I[i]]<X[I[j]]:
+            if X[I[i]] <= X[I[j]]:
                 J[k]=I[i]
                 i+=1
             else:
