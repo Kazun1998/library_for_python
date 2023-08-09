@@ -156,38 +156,40 @@ class Fraction():
         return bool(self.__a)
 
     def __compare(self, other):
+        """ self < other ならば -1, self = other ならば 0, self > other ならば, +1
+        """
         if isinstance(other, Fraction):
             x = self.__a * other.__b
             y = self.__b * other.__a
         else:
             x = self.__a
             y = self.__b * other
-        return x, y
+
+        if x < y:
+            return -1
+        elif x > y:
+            return 1
+        else:
+            return 0
 
     #比較
     def __eq__(self, other):
-        x, y = self.__compare(other)
-        return x == y
+        return self.__compare(other) == 0
 
-    def __nq__(self, other):
-        x, y = self.__compare(other)
-        return x != y
+    def __neq__(self, other):
+        return self.__compare(other) != 0
 
     def __lt__(self, other):
-        x, y = self.__compare(other)
-        return x < y
+        return self.__compare(other) == -1
 
     def __le__(self, other):
-        x, y = self.__compare(other)
-        return x <= y
+        return self.__compare(other) != 1
 
     def __gt__(self, other):
-        x, y = self.__compare(other)
-        return x > y
+        return self.__compare(other) == 1
 
     def __ge__(self, other):
-        x, y = self.__compare(other)
-        return x >= y
+        return self.__compare(other) != -1
 
     #その他
     def __float__(self):
