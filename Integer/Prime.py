@@ -105,25 +105,23 @@ def Prime_Factor_List(N):
 
 #素数判定
 def Is_Prime(N):
-    N=abs(N)
-    if N<=1:
+    N = abs(N)
+    if N <= 1:
         return False
 
-    if (N==2) or (N==3) or (N==5):
+    if (N == 2) or (N == 3) or (N == 5) or (N == 7):
         return True
 
-    r=N%6
-    if not(r==1 or r==5):
+    if not (N % 6 == 1 or N % 6 == 5):
         return False
 
-    p=5
-    flag=0
-    while p*p<=N:
-        if N%p==0:
+    offset = 0
+    while offset * offset <= N:
+        p = offset + 5
+        q = offset + 7
+        if (N % p == 0) or (N % q == 0):
             return False
-
-        p+=2+2*flag
-        flag^=1
+        offset += 6
     return True
 
 #素数判定 for long long
