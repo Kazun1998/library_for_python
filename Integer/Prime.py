@@ -1,43 +1,44 @@
 #素因数分解
 def Prime_Factorization(N):
-    if N==0:
-        return [[0,1]]
+    if N == 0:
+        return [ [0, 1] ]
 
-    if N<0:
-        R=[[-1,1]]
+    if N < 0:
+        factor = [ [-1, 1] ]
+        N = abs(N)
     else:
-        R=[]
+        factor = [ ]
 
-    N=abs(N)
+    def exponents(n, p):
+        e = 0
+        while n % p == 0:
+            e += 1
+            n //= p
+        return e, n
 
-    if N&1==0:
-        R.append([2,0])
-        while N&1==0:
-            N>>=1
-            R[-1][1]+=1
+    for p in [2, 3]:
+        e, N = exponents(N, p)
+        if e:
+            factor.append([p, e])
 
-    if N%3==0:
-        R.append([3,0])
-        while N%3==0:
-            N//=3
-            R[-1][1]+=1
+    offset = 0
+    while offset * offset <= N:
+        p = offset + 5
+        e, N = exponents(N, p)
+        if e:
+            factor.append([p, e])
 
-    p=5
-    flag=0
-    while p*p<=N:
-        if N%p==0:
-            R.append([p,0])
-            while N%p==0:
-                N//=p
-                R[-1][1]+=1
+        q = offset + 7
+        e, N = exponents(N, q)
+        if e:
+            factor.append([q, e])
 
-        p+=2+2*flag
-        flag^=1
+        offset += 6
 
-    if N!=1:
-        R.append([N,1])
+    if N > 1:
+        factor.append([N, 1])
 
-    return R
+    return factor
 
 #根基
 def Radical(N):
