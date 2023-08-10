@@ -1,39 +1,38 @@
 from math import sqrt,gcd
+from Common import Common, sign, compare
 from Point import iSP,compare,Point,Angle_Type
 
 class Segment():
-    __slots__=["begin","end","id"]
+    __slots__ = ("begin", "end")
 
-    ep=1e-9
-    def __init__(self,P,Q):
-        """2点 P, Q (P!=Q) を端点とする線分を生成する.
+    def __init__(self, P, Q):
+        """2点 P, Q (P != Q) を端点とする線分を生成する.
 
         P,Q: Point
         """
-        assert P!=Q
-        self.begin=P
-        self.end=Q
-        self.id=2
+        assert P != Q
+        self.begin = P
+        self.end = Q
 
     def __str__(self):
-        return "[Segment] {}, {}".format(self.begin,self.end)
+        return f"[Segment] {self.begin}, {self.end}"
 
-    __repr__=__str__
+    __repr__ = __str__
 
-    def __eq__(self,other):
+    def __eq__(self, other):
         return (
-            (self.begin==other.begin) and (self.end==other.end) or
-            (self.begin==other.end) and (self.end==other.begin)
+            (self.begin == other.begin) and (self.end == other.end) or
+            (self.begin == other.end) and (self.end == other.begin)
             )
 
-    def __contains__(self,point):
-        return (self.begin==point) or (self.end==point) or (iSP(self.begin,self.end,point)==0)
+    def __contains__(self, point):
+        return (self.begin == point) or (self.end == point) or (iSP(self.begin, self.end, point) == 0)
 
     def vectorize(self):
-        return self.end-self.begin
+        return self.end - self.begin
 
     def counter_vectorize(self):
-        return self.begin-self.end
+        return self.begin - self.end
 
 class Ray():
     __slots__=["begin","end","id"]

@@ -12,7 +12,7 @@ class Point(Common):
     def __str__(self):
         return f"({self.x}, {self.y})".format(self.x, self.y)
 
-    __repr__=__str__
+    __repr__ = __str__
 
     def __iter__(self):
         yield self.x
