@@ -170,7 +170,7 @@ def has_Intersection_between_Line_and_Line(L, M):
     return sign(L.vectorize().det(M.vectorize())) !=0
 
 #=== 交点を求める
-def Intersection_between_Line_and_Line(L,M,Mode=False):
+def Intersection_between_Line_and_Line(L, M, Mode = False):
     """ 直線 L,M の交点を求める.
 
     L,M: 直線
@@ -178,20 +178,20 @@ def Intersection_between_Line_and_Line(L,M,Mode=False):
     Mode=True: 一致する場合, True, 交点が存在しない場合 False を返す.
     """
 
-    if L==M:
+    if L == M:
         if Mode:
             return True
         else:
-            assert 0,"直線が一致します"
-    if is_Parallel(L,M):
+            assert 0 ,"直線が一致します"
+    if is_Parallel(L, M):
         if Mode:
             return False
         else:
-            assert 0,"交点が存在ません"
+            assert 0, "交点が存在ません"
 
-    a=L.begin; b=L.end; c=M.begin; d=M.end
-    k=(d-a).det(d-c)/(b-a).det(d-c)
-    return a+k*(b-a)
+    a = L.begin; b = L.end; c = M.begin; d = M.end
+    k = (d-a).det(d-c) / (b-a).det(d-c)
+    return a + k * (b - a)
 
 #=== 垂直二等分線
 def Perpendicular_Bisector(S, lattice=False):
