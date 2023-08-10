@@ -242,7 +242,7 @@ def MidPoint(P,Q):
 
 def Argument_Compare(P,Q):
     """ OQ が OP からみて反時計回りかどうかを判定する."""
-    return compare(Q.det(P),0,max(P.ep,Q.ep))
+    return compare(Q.det(P), 0) > 0
 
 def Argument_Sort(L):
     """ 点を偏角ソートする.
