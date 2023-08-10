@@ -123,19 +123,19 @@ def General_Form_from_Line(L, lattice=False):
     """ 直線 L が満たす式 ax+by+c=0 の a,b,c を求める.
     """
 
-    s=L.begin.x; t=L.begin.y
-    v=L.vectorize(); alpha=v.x; beta=v.y
+    s = L.begin.x; t = L.begin.y
+    v = L.vectorize(); alpha = v.x; beta = v.y
 
-    sgn=compare(beta,0,L.ep)
-    if sgn==0:
-        sgn=compare(-alpha,0,L.ep)
+    sgn = sign(beta)
+    if sgn == 0:
+        sgn = sign(-alpha)
 
-    k=alpha*t-beta*s
+    k = alpha * t - beta * s
     if lattice:
-        g=gcd(gcd(alpha,beta),k)
-        alpha//=g; beta//=g; k//=g
+        g = gcd(alpha, beta, k)
+        alpha //= g; beta //= g; k //= g
 
-    return (sgn*beta,sgn*(-alpha),sgn*k)
+    return (sgn * beta, sgn * (-alpha), sgn * k)
 
 #=== 交差判定
 def has_Intersection_between_Segment_and_Segment(L,M,endpoint=True):
