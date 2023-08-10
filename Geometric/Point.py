@@ -10,7 +10,7 @@ class Point(Common):
 
     #文字列
     def __str__(self):
-        return "({}, {})".format(self.x, self.y)
+        return f"({self.x}, {self.y})".format(self.x, self.y)
 
     __repr__=__str__
 
