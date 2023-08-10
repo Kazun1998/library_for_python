@@ -16,48 +16,51 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.4/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "#\u7D20\u56E0\u6570\u5206\u89E3\ndef Prime_Factorization(N):\n    if N==0:\n\
-    \        return [[0,1]]\n\n    if N<0:\n        R=[[-1,1]]\n    else:\n      \
-    \  R=[]\n\n    N=abs(N)\n\n    if N&1==0:\n        R.append([2,0])\n        while\
-    \ N&1==0:\n            N>>=1\n            R[-1][1]+=1\n\n    if N%3==0:\n    \
-    \    R.append([3,0])\n        while N%3==0:\n            N//=3\n            R[-1][1]+=1\n\
-    \n    p=5\n    flag=0\n    while p*p<=N:\n        if N%p==0:\n            R.append([p,0])\n\
-    \            while N%p==0:\n                N//=p\n                R[-1][1]+=1\n\
-    \n        p+=2+2*flag\n        flag^=1\n\n    if N!=1:\n        R.append([N,1])\n\
-    \n    return R\n\n#\u6839\u57FA\ndef Radical(N):\n    \"\"\" N \u304C\u7D20\u56E0\
-    \u6570\u5206\u89E3 N=p^a*q^b*r^c ... \u3068\u306A\u308B\u3068\u304D, pqr... \u3092\
-    \u8FD4\u3059.\n\n    N: \u975E\u8CA0\u6574\u6570\n    \"\"\"\n\n    assert N>=0,\"\
-    N\u306F\u975E\u8CA0\u6574\u6570\u3067\u306F\u306A\u3044.\"\n    a=1\n\n    if\
-    \ N&1==0:\n        a*=2\n        while N&1==0:\n            N>>=1\n\n    if N%3==0:\n\
-    \        a*=3\n        while N%3==0:\n            N//=3\n\n    k=5\n    Flag=0\n\
-    \    while k*k<=N:\n        if N%k==0:\n            a*=k\n            while N%k==0:\n\
-    \                N//=k\n        k+=2+2*Flag\n        Flag^=1\n\n    if N>1:\n\
-    \        a*=N\n    return a\n\n#\u7D20\u56E0\u6570\u306E\u7A2E\u985E\ndef Prime_Factor_List(N):\n\
-    \    \"\"\"N\u304C\u7D20\u56E0\u6570\u5206\u89E3 N=p^a*q^b*r^c ...\u3068\u306A\
-    \u308B\u3068\u304D,\u30EA\u30B9\u30C8[p,q,r,...]\u3092\u8FD4\u3059.\n    \"\"\"\
-    \n    N=abs(N)\n    X=[]\n    if N%2==0:\n        X.append(2)\n        while N&1==0:\n\
-    \            N>>=1\n\n    if N%3==0:\n        X.append(3)\n        while N%3==0:\n\
-    \            N//=3\n\n    p=5\n    Flag=1\n    while p*p<=N:\n        if N%p==0:\n\
-    \            X.append(p)\n            while N%p==0:\n                N//=p\n \
-    \       p+=2 if Flag else 4\n        Flag^=1\n\n    if N!=1:\n        X.append(N)\n\
-    \    return X\n\n#\u7D20\u6570\u5224\u5B9A\ndef Is_Prime(N):\n    N=abs(N)\n \
-    \   if N<=1:\n        return False\n\n    if (N==2) or (N==3) or (N==5):\n   \
-    \     return True\n\n    r=N%6\n    if not(r==1 or r==5):\n        return False\n\
-    \n    p=5\n    flag=0\n    while p*p<=N:\n        if N%p==0:\n            return\
-    \ False\n\n        p+=2+2*flag\n        flag^=1\n    return True\n\n#\u7D20\u6570\
-    \u5224\u5B9A for long long\ndef Is_Prime_for_long_long(N):\n    if N<=1: return\
-    \ False\n    if N==2 or N==7 or N==61: return True\n    if N%2==0: return False\n\
-    \n    d=N-1\n    while d%2==0: d//=2\n\n    for a in (2,7,61):\n        t=d\n\
-    \        y=pow(a,t,N)\n        while t!=N-1 and y!=1 and y!=N-1:\n           \
-    \ y=(y*y)%N\n            t<<=1\n        if y!=N-1 and t%2==0:\n            return\
-    \ False\n    return True\n\n#Miller-Rabin\u306E\u7D20\u6570\u5224\u5B9A\u6CD5\n\
-    def Miller_Rabin_Primality_Test(N, Times=20):\n    \"\"\" Miller-Rabin \u306B\u3088\
-    \u308B\u6574\u6570 N \u306E\u7D20\u6570\u5224\u5B9A\u3092\u884C\u3046.\n\n   \
-    \ N: \u6574\u6570\n    \u203B True \u306F\u6B63\u78BA\u306B\u306F Probably True\
-    \ \u3067\u3042\u308B ( False \u306F \u78BA\u5B9A False ).\n    \"\"\"\n    from\
-    \ random import randint as ri\n\n    if N==2: return True\n\n    if N==1 or N%2==0:\
-    \ return False\n\n    q=N-1\n    k=0\n    while q&1==0:\n        k+=1\n      \
-    \  q>>=1\n\n    for _ in range(Times):\n        m=ri(2,N-1)\n        y=pow(m,q,N)\n\
+  code: "#\u7D20\u56E0\u6570\u5206\u89E3\ndef Prime_Factorization(N):\n    if N ==\
+    \ 0:\n        return [ [0, 1] ]\n\n    if N < 0:\n        factor = [ [-1, 1] ]\n\
+    \        N = abs(N)\n    else:\n        factor = [ ]\n\n    def exponents(n, p):\n\
+    \        e = 0\n        while n % p == 0:\n            e += 1\n            n //=\
+    \ p\n        return e, n\n\n    for p in [2, 3]:\n        e, N = exponents(N,\
+    \ p)\n        if e:\n            factor.append([p, e])\n\n    offset = 0\n   \
+    \ while offset * offset <= N:\n        p = offset + 5\n        e, N = exponents(N,\
+    \ p)\n        if e:\n            factor.append([p, e])\n\n        q = offset +\
+    \ 7\n        e, N = exponents(N, q)\n        if e:\n            factor.append([q,\
+    \ e])\n\n        offset += 6\n\n    if N > 1:\n        factor.append([N, 1])\n\
+    \n    return factor\n\n#\u6839\u57FA\ndef Radical(N):\n    \"\"\" N \u304C\u7D20\
+    \u56E0\u6570\u5206\u89E3 N=p^a*q^b*r^c ... \u3068\u306A\u308B\u3068\u304D, pqr...\
+    \ \u3092\u8FD4\u3059.\n\n    N: \u975E\u8CA0\u6574\u6570\n    \"\"\"\n\n    assert\
+    \ N>=0,\"N\u306F\u975E\u8CA0\u6574\u6570\u3067\u306F\u306A\u3044.\"\n    a=1\n\
+    \n    if N&1==0:\n        a*=2\n        while N&1==0:\n            N>>=1\n\n \
+    \   if N%3==0:\n        a*=3\n        while N%3==0:\n            N//=3\n\n   \
+    \ k=5\n    Flag=0\n    while k*k<=N:\n        if N%k==0:\n            a*=k\n \
+    \           while N%k==0:\n                N//=k\n        k+=2+2*Flag\n      \
+    \  Flag^=1\n\n    if N>1:\n        a*=N\n    return a\n\n#\u7D20\u56E0\u6570\u306E\
+    \u7A2E\u985E\ndef Prime_Factor_List(N):\n    \"\"\"N\u304C\u7D20\u56E0\u6570\u5206\
+    \u89E3 N=p^a*q^b*r^c ...\u3068\u306A\u308B\u3068\u304D,\u30EA\u30B9\u30C8[p,q,r,...]\u3092\
+    \u8FD4\u3059.\n    \"\"\"\n    N=abs(N)\n    X=[]\n    if N%2==0:\n        X.append(2)\n\
+    \        while N&1==0:\n            N>>=1\n\n    if N%3==0:\n        X.append(3)\n\
+    \        while N%3==0:\n            N//=3\n\n    p=5\n    Flag=1\n    while p*p<=N:\n\
+    \        if N%p==0:\n            X.append(p)\n            while N%p==0:\n    \
+    \            N//=p\n        p+=2 if Flag else 4\n        Flag^=1\n\n    if N!=1:\n\
+    \        X.append(N)\n    return X\n\n#\u7D20\u6570\u5224\u5B9A\ndef Is_Prime(N):\n\
+    \    N = abs(N)\n    if N <= 1:\n        return False\n\n    if (N == 2) or (N\
+    \ == 3) or (N == 5) or (N == 7):\n        return True\n\n    if not (N % 6 ==\
+    \ 1 or N % 6 == 5):\n        return False\n\n    offset = 0\n    while offset\
+    \ * offset <= N:\n        p = offset + 5\n        q = offset + 7\n        if (N\
+    \ % p == 0) or (N % q == 0):\n            return False\n        offset += 6\n\
+    \    return True\n\n#\u7D20\u6570\u5224\u5B9A for long long\ndef Is_Prime_for_long_long(N):\n\
+    \    if N<=1: return False\n    if N==2 or N==7 or N==61: return True\n    if\
+    \ N%2==0: return False\n\n    d=N-1\n    while d%2==0: d//=2\n\n    for a in (2,7,61):\n\
+    \        t=d\n        y=pow(a,t,N)\n        while t!=N-1 and y!=1 and y!=N-1:\n\
+    \            y=(y*y)%N\n            t<<=1\n        if y!=N-1 and t%2==0:\n   \
+    \         return False\n    return True\n\n#Miller-Rabin\u306E\u7D20\u6570\u5224\
+    \u5B9A\u6CD5\ndef Miller_Rabin_Primality_Test(N, Times=20):\n    \"\"\" Miller-Rabin\
+    \ \u306B\u3088\u308B\u6574\u6570 N \u306E\u7D20\u6570\u5224\u5B9A\u3092\u884C\u3046\
+    .\n\n    N: \u6574\u6570\n    \u203B True \u306F\u6B63\u78BA\u306B\u306F Probably\
+    \ True \u3067\u3042\u308B ( False \u306F \u78BA\u5B9A False ).\n    \"\"\"\n \
+    \   from random import randint as ri\n\n    if N==2: return True\n\n    if N==1\
+    \ or N%2==0: return False\n\n    q=N-1\n    k=0\n    while q&1==0:\n        k+=1\n\
+    \        q>>=1\n\n    for _ in range(Times):\n        m=ri(2,N-1)\n        y=pow(m,q,N)\n\
     \        if y==1:\n            continue\n\n        flag=True\n        for i in\
     \ range(k):\n            if (y+1)%N==0:\n                flag=False\n        \
     \        break\n\n            y*=y\n            y%=N\n\n        if flag:\n   \
@@ -173,7 +176,7 @@ data:
   isVerificationFile: false
   path: Integer/Prime.py
   requiredBy: []
-  timestamp: '2023-03-18 02:55:12+09:00'
+  timestamp: '2023-08-10 01:13:38+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Integer/Prime.py

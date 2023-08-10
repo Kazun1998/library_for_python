@@ -93,12 +93,12 @@ data:
     \  r.term+=[-t]\n        return r\n\n    def __abs__(self):\n        if self>=0:return\
     \ self\n        else:return -self\n\n    def __len__(self):\n        return len(self.term)\n"
   dependsOn:
-  - Number.py
   - Fraction.py
+  - Number.py
   isVerificationFile: false
   path: Root.py
   requiredBy: []
-  timestamp: '2023-07-02 11:15:33+09:00'
+  timestamp: '2023-08-09 23:41:14+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Root.py
