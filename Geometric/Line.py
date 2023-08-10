@@ -35,40 +35,39 @@ class Segment():
         return self.begin - self.end
 
 class Ray():
-    __slots__=["begin","end","id"]
+    __slots__ = ("begin", "end")
 
     ep=1e-9
-    def __init__(self,P,Q):
+    def __init__(self, P, Q):
         """ P を端点とし, Q を通る半直線を通る.
 
         P,Q: Point
         """
-        assert P!=Q
-        self.begin=P
-        self.end=Q
-        self.id=3
+        assert P != Q
+        self.begin = P
+        self.end = Q
 
     def __str__(self):
-        return "[Ray] {} -> {}".format(self.begin,self.end)
+        return f"[Ray] {self.begin} -> {self.end}"
 
-    __repr__=__str__
+    __repr__ = __str__
 
-    def __eq__(self,other):
-        if self.begin!=other.begin:
+    def __eq__(self, other):
+        if self.begin != other.begin:
             return False
 
-        m=iSP(self.begin,self.end,other.end)
-        return m==0 or m==2
+        m = iSP(self.begin, self.end, other.end)
+        return m == 0 or m == 2
 
-    def __contains__(self,point):
-        m=iSP(self.begin,self.end,point)
-        return m==0 or m==2
+    def __contains__(self, point):
+        m = iSP(self.begin, self.end, point)
+        return m == 0 or m == 2
 
     def vectorize(self):
-        return self.end-self.begin
+        return self.end - self.begin
 
     def counter_vectorize(self):
-        return self.begin-self.end
+        return self.begin - self.end
 
 class Line():
     __slots__=["begin","end","id"]
