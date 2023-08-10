@@ -213,8 +213,8 @@ def is_Parallel(L,M):
     L,M: 直線 or 線分
     """
 
-    u=L.vectorize(); v=M.vectorize()
-    return compare(u.det(v),0,max(L.ep,M.ep))==0
+    u = L.vectorize();v = M.vectorize()
+    return sign(u.det(v)) == 0
 
 def is_Orthogonal(L,M):
     """2つの直線 (線分) L,M が直行するかどうかを判定する.
