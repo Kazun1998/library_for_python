@@ -278,29 +278,28 @@ def Argument_Sort_by_Index(L):
     L: 点のリスト
     """
 
-    ep=max_ep(*L)
     def position(P):
-        m=compare(P.y,0,ep)
-        if m==-1:
+        m = compare(P.y, 0)
+        if m == -1:
             return -1
-        elif m==0 and compare(P.x,0,ep)>=0:
+        elif m == 0 and compare(P.x, 0) >= 0:
             return 0
         else:
             return 1
 
-    def merge(a,b):
-        I=[]
+    def merge(a, b):
+        I = []
 
-        la=len(a); lb=len(b)
-        ia=0; ib=0
+        la = len(a); lb = len(b)
+        ia = 0; ib = 0
 
-        while (ia<la) and (ib<lb):
-            if Argument_Compare(L[a[ia]],L[b[ib]])<=0:
+        while (ia < la) and (ib < lb):
+            if Argument_Compare(L[a[ia]], L[b[ib]]) <= 0:
                 I.append(a[ia])
-                ia+=1
+                ia += 1
             else:
                 I.append(b[ib])
-                ib+=1
+                ib += 1
 
         I.extend(a[ia:])
         I.extend(b[ib:])
@@ -308,19 +307,18 @@ def Argument_Sort_by_Index(L):
         return I
 
     def sorting(a):
-        if len(a)<=1:
+        if len(a) <= 1:
             return a
         else:
-            return merge(sorting(a[:len(a)//2]),sorting(a[len(a)//2:]))
+            return merge(sorting(a[:len(a)//2]), sorting(a[len(a)//2:]))
 
     I=[]; J=[]; K=[]
     for i in range(len(L)):
-        t=position(L[i])
-        if t==1:
-            I.append(i)
-        elif t==0:
-            J.append(i)
-        else:
-            K.append(i)
-
-    return sorting(K)+J+sorting(I)
+        match position(L[i]):
+            case 1:
+                I.append(i)
+            case 0:
+                J.append(i)
+            case -1:
+                K.append(i)
+    return sorting(K) + J + sorting(I)
