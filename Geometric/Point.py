@@ -166,16 +166,15 @@ def iSP(A,B,C):
     A-C-Bの順に並んでいる: 0
     """
 
-    ep=max_ep(A,B,C)
-    p=compare((B-A).det(C-A),0,ep)
-    if p==1:
+    p = compare((B-A).det(C-A), 0)
+    if p == 1:
         return 1
-    elif p==-1:
+    elif p == -1:
         return -1
     else:
-        if compare((B-A).dot(C-A),0,ep)==-1:
+        if compare((B-A).dot(C-A), 0) == -1:
             return -2
-        if compare((A-B).dot(C-B),0,ep)==-1:
+        elif compare((A-B).dot(C-B), 0) == -1:
             return 2
         return 0
 
