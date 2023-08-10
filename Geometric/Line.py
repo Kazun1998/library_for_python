@@ -222,8 +222,7 @@ def is_Orthogonal(L,M):
     L,M: 直線 or 線分
     """
 
-    u=L.vectorize(); v=M.vectorize()
-    return compare(u.dot(v),0,max(L.ep,M.ep))==0
+    return sign(L.vectorize().dot(M.vectorize())) == 0
 
 #=== 点との距離
 def Distance_between_Point_and_Segment(P,L):
