@@ -161,13 +161,13 @@ def has_Intersection_between_Line_and_Segment(L,M,endpoint=True):
     a=L.begin; b=L.end; c=M.begin; d=M.end
     return iSP(a,b,c)*iSP(a,b,d)<=0
 
-def has_Intersection_between_Line_and_Line(L,M):
+def has_Intersection_between_Line_and_Line(L, M):
     """ 直線 L,M が交わるかどうかを判定する.
 
     L,M: 直線
     """
 
-    return compare(L.vectorize().det(M.vectorize()),0,max(L.ep,M.ep))!=0
+    return sign(L.vectorize().det(M.vectorize())) !=0
 
 #=== 交点を求める
 def Intersection_between_Line_and_Line(L,M,Mode=False):
