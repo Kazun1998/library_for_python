@@ -197,7 +197,7 @@ def Angle_Type(A,B,C):
     1: 鋭角, 0: 直角, -1: 鈍角
     """
 
-    return compare((A-B).dot(C-B),0,max_ep(A,B,C))
+    return compare((A-B).dot(C-B), 0)
 
 def Inner(P,Q):
     """点P,Qの内積を求める.
