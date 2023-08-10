@@ -8,6 +8,7 @@ class Common:
         [return]
         a が負なら -1, 正なら +1, 0 は 0.
         """
+
         if a < -Common.error:
             return -1
         elif a > Common.error:
@@ -22,7 +23,7 @@ class Common:
         [return]
         x > y ならば +1, x < y ならば -1, x = y ならば 0
         """
-        return Common.sign(y-x)
+        return Common.sign(x-y)
 
 sign=Common.sign
 compare=Common.compare

@@ -121,7 +121,7 @@ class Point(Common):
 
         ax = floor(self.x + 0.5); ay = floor(self.y + 0.5)
 
-        if compare(abs(self.x - ax), delta) >= 0 and compare(abs(self.y - ay), delta) >= 0:
+        if compare(abs(self.x - ax), delta) <= 0 and compare(abs(self.y - ay), delta) <= 0:
             self.x = ax
             self.y = ay
             return True
