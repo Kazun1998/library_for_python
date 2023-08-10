@@ -252,23 +252,25 @@ def Argument_Sort(L):
 
     from functools import cmp_to_key
 
-    ep=max_ep(*L)
     def position(P):
-        m=compare(P.y,0,ep)
-        if m==-1:
+        m = compare(P.y, 0)
+        if m == -1:
             return -1
-        elif m==0 and compare(P.x,0,ep)>=0:
+        elif m == 0 and compare(P.x, 0)>=0:
             return 0
         else:
             return 1
 
-    def cmp(P,Q):
-        a=position(P); b=position(Q)
-        if a<b: return -1
-        elif a>b: return 1
-        else:return -compare(P.det(Q),0,ep)
+    def cmp(P, Q):
+        a = position(P); b = position(Q)
+        if a < b:
+            return -1
+        elif a > b:
+            return 1
+        else:
+            return -compare(P.det(Q), 0)
 
-    L.sort(key=cmp_to_key(cmp))
+    L.sort(key = cmp_to_key(cmp))
 
 def Argument_Sort_by_Index(L):
     """ 点を偏角ソートする (返り値は添字).
