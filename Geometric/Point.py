@@ -119,9 +119,13 @@ class Point(Common):
     def latticization(self, delta):
         """ 格子点に十分近いならば, その格子点に吸い寄せる"""
 
-        if compare(self.x, floor(self.x + 0.5)) == 0 and compare(self.y, floor(self.y + 0.5)) == 0:
-            self.x = floor(self.x + 0.5)
-            self.y = floor(self.y + 0.5)
+        ax = floor(self.x + 0.5); ay = floor(self.y + 0.5)
+
+        if compare(abs(self.x - ax), delta) >= 0 and compare(abs(self.y - ay), delta) >= 0:
+            self.x = ax
+            self.y = ay
+            return True
+        return False
 
     def normalization(self):
         a = abs(self)
