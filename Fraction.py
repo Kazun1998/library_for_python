@@ -25,7 +25,7 @@ class Fraction():
         self.__a = Numerator
         self.__b = Denominator
         if Fraction.reduction:
-            g=gcd(Numerator, Denominator)
+            g = gcd(Numerator, Denominator)
             self.__a = Numerator // g
             self.__b = Denominator // g
 
@@ -44,20 +44,20 @@ class Fraction():
         if self.__b == 1:
             return str(self.__a)
         else:
-            return "{}/{}".format(self.__a, self.__b)
+            return f"{self.__a}/{self.__b}"
 
-    __repr__=__str__
+    __repr__ = __str__
 
     #四則演算定義
     def __add__(self, other):
         if isinstance(other, Fraction):
-            x = self.__a * other.__b + self.__b*other.__a
+            x = self.__a * other.__b + self.__b * other.__a
             y = self.__b * other.__b
         elif isinstance(other, int):
             x = self.__a + self.__b * other
             y = self.__b
         else:
-            assert 0, "型が違う"
+            raise TypeError(f"{other} の型がおかしいです.")
         return Fraction(x, y)
 
     def __radd__(self, other):
@@ -71,11 +71,11 @@ class Fraction():
             x = self.__a - self.__b * other
             y = self.__b
         else:
-            assert 0, "型が違う"
+            raise TypeError(f"{other} の型がおかしいです.")
         return Fraction(x, y)
 
     def __rsub__(self, other):
-        return - self + other
+        return -self + other
 
     def __mul__(self, other):
         if isinstance(other, Fraction):
@@ -85,7 +85,7 @@ class Fraction():
             x = self.__a * other
             y = self.__b
         else:
-            assert 0, "型が違う"
+            raise TypeError(f"{other} の型がおかしいです.")
 
         return Fraction(x, y)
 
@@ -97,7 +97,7 @@ class Fraction():
             raise ZeroDivisionError
 
         H = self / other
-        return H.a//H.b
+        return H.a // H.b
 
     def __rfloordiv__(self, other):
         if self == Fraction():
@@ -107,7 +107,8 @@ class Fraction():
         return H.a // H.b
 
     def __truediv__(self, other):
-        assert other, "除数が0"
+        if not other:
+            raise ZeroDivisionError("ゼロ除算")
 
         if isinstance(other, Fraction):
             x = self.__a * other.__b
@@ -116,12 +117,14 @@ class Fraction():
             x = self.__a
             y = self.__b * other
         else:
-            assert 0, "型が違う"
+            raise TypeError(f"{other} の型がおかしいです.")
 
         return Fraction(x, y)
 
     def __rtruediv__(self, other):
-        assert self,"除数が0"
+        if not self:
+            raise ZeroDivisionError("ゼロ除算")
+
         if isinstance(other, Fraction):
             x = other.__a * self.__b
             y = other.__b * self.__a
@@ -129,7 +132,7 @@ class Fraction():
             x = other * self.__b
             y = self.__a
         else:
-            assert 0, "型が違う"
+            raise TypeError(f"{other} の型がおかしいです.")
         return Fraction(x, y)
 
     def __pow__(self, m):
@@ -153,38 +156,40 @@ class Fraction():
         return bool(self.__a)
 
     def __compare(self, other):
+        """ self < other ならば -1, self = other ならば 0, self > other ならば, +1
+        """
         if isinstance(other, Fraction):
             x = self.__a * other.__b
             y = self.__b * other.__a
         else:
             x = self.__a
-            y = self.__b*other
-        return x, y
+            y = self.__b * other
+
+        if x < y:
+            return -1
+        elif x > y:
+            return 1
+        else:
+            return 0
 
     #比較
     def __eq__(self, other):
-        x, y = self.__compare(other)
-        return x == y
+        return self.__compare(other) == 0
 
-    def __nq__(self, other):
-        x, y = self.__compare(other)
-        return x != y
+    def __neq__(self, other):
+        return self.__compare(other) != 0
 
     def __lt__(self, other):
-        x, y = self.__compare(other)
-        return x < y
+        return self.__compare(other) == -1
 
     def __le__(self, other):
-        x, y = self.__compare(other)
-        return x <= y
+        return self.__compare(other) != 1
 
     def __gt__(self, other):
-        x, y = self.__compare(other)
-        return x > y
+        return self.__compare(other) == 1
 
     def __ge__(self, other):
-        x, y = self.__compare(other)
-        return x >= y
+        return self.__compare(other) != -1
 
     #その他
     def __float__(self):
@@ -218,6 +223,6 @@ class Fraction():
     def __hash__(self):
         x, y = self
         if not Fraction.reduction:
-            g=gcd(x, y)
+            g = gcd(x, y)
             x //= g; y //= g
         return hash((x, y))
