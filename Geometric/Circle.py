@@ -169,26 +169,26 @@ def Relationship_between_Circle_and_Circle(C: Circle, D:Circle):
                     return 0
 
 #=== 共通部分
-def Circles_Intersection_Area(C,D):
+def Circles_Intersection_Area(C, D):
     """ 2つの円 C, D の共通部分の面積を求める.
 
     C, D: Circle
     """
 
-    d=abs(C.P-D.P)
-    r=C.r; s=D.r
-    ep=max(C.ep, D.ep)
+    d = abs(C.center - D.center)
+    r = C.radius; s = D.radius
 
-    if compare(d,r+s,ep)==1:
+    if compare(d, r+s) == 1: #共通部分なし
         return 0
-    if compare(d,abs(r-s),ep)==-1:
-        a=min(r,s)
-        return pi*a*a
 
-    alpha=acos((d*d+r*r-s*s)/(2*d*r))
-    beta =acos((d*d-r*r+s*s)/(2*d*s))
+    if compare(d, abs(r - s)) == -1: #一方が他方を含んでいる
+        a = min(r, s)
+        return pi * a * a
 
-    X=r*r*alpha
-    Y=s*s*beta
-    Z=d*r*sin(alpha)
+    alpha = acos((d * d + r * r - s * s) / (2 * d * r))
+    beta = acos((d * d - r * r + s * s) / (2 * d * s))
+
+    X = r * r * alpha
+    Y = s * s * beta
+    Z = d * r * sin(alpha)
     return X+Y-Z
