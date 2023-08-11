@@ -150,8 +150,8 @@ def is_Equilateral_Triangle(T):
     T: Triangle
     """
 
-    a,b,c=T.three_edges()
-    return compare(a,b,T.ep)==0 and compare(b,c,T.ep)==0 and compare(c,a,T.ep)==0
+    a, b, c = T.three_edges()
+    return compare(a, b) == 0 and compare(b, c) == 0 and compare(c, a) == 0
 
 #=== 三角形の決定
 def SSS_Triangle(a, b, c):
