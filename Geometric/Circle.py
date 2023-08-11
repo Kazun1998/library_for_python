@@ -113,27 +113,27 @@ def Tangent_to_Circle_from_Point(P,C):
 def Common_Tangent_between_Circle_and_Circle(C,D):
     """ 円 C,D の共通接線を求める."""
 
-    ep=max(C.ep,D.ep)
-    r=C.radius; s=D.radius
-    d=abs(C.center-D.center)
+    r = C.radius; s = D.radius
+    d = abs(C.center - D.center)
 
-    X=[]
+    X = []
 
-    K=Circle(Point(),r)
-    if compare(d,abs(r-s),ep)>=0:
-        a=r*(r-s)/d
-        b=sqrt(max(0,r*r-a*a))
+    K = Circle(Point(), r)
+    if compare(d, abs(r-s)) >= 0:
+        a = r * (r - s) / d
+        b = sqrt(max(0, r * r - a * a))
 
-        X.append(Tangent_to_Circle_on_Point(Point(a,b),K))
-        X.append(Tangent_to_Circle_on_Point(Point(a,-b),K))
-    if compare(d,abs(r+s),ep)>=0:
-        a=r*(r+s)/d
-        b=sqrt(max(0,r*r-a*a))
+        X.append(Tangent_to_Circle_on_Point(Point(a, b), K))
+        X.append(Tangent_to_Circle_on_Point(Point(a, -b), K))
 
-        X.append(Tangent_to_Circle_on_Point(Point(a,b),K))
-        X.append(Tangent_to_Circle_on_Point(Point(a,-b),K))
+    if compare(d, abs(r+s)) >= 0:
+        a = r * (r + s) / d
+        b = sqrt(max(0, r * r - a * a))
 
-    F=Translation_and_Rotate_Affine_Determine(Point(),Point(d,0),C.center,D.center)
+        X.append(Tangent_to_Circle_on_Point( Point(a, b), K))
+        X.append(Tangent_to_Circle_on_Point( Point(a, -b), K))
+
+    F = Translation_and_Rotate_Affine_Determine(Point(), Point(d, 0), C.center, D.center)
     return [F[l] for l in X]
 
 #=== 2つの円の位置関係を求める.
