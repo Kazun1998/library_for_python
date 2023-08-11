@@ -47,11 +47,10 @@ def has_Intersection_between_Circle_and_Circle(C,D):
 
     """
 
-    r=C.radius; s=D.radius;
-    d=abs(C.center-D.center)
-    ep=max(C.ep,D.ep)
+    r = C.radius; s = D.radius;
+    d = abs(C.center - D.center)
 
-    return compare(d,abs(r-s),ep)>=0 and compare(d,r+s,ep)<=0
+    return compare(d, abs(r-s)) >= 0 and compare(d, r+s) <= 0
 
 #=== 交点を求める
 def Intersection_between_Circle_and_Line(C,L):
