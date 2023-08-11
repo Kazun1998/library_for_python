@@ -85,9 +85,9 @@ def is_Acute_Triangle(T):
     T: Triangle
     """
 
-    a,b,c=T.three_edges()
-    m=max(a,b,c)
-    return compare(a*a+b*b+c*c-2*m*m,0,T.ep)==1
+    a, b, c = T.three_edges()
+    m = max(a, b, c)
+    return sign(a * a + b * b + c * c - 2 * m * m) == 1
 
 def is_Right_Triangle(T):
     """ 三角形 T が直角三角形かどうかを判定する.
@@ -95,9 +95,9 @@ def is_Right_Triangle(T):
     T: Triangle
     """
 
-    a,b,c=T.three_edges()
-    m=max(a,b,c)
-    return compare(a*a+b*b+c*c-2*m*m,0,T.ep)==0
+    a, b, c = T.three_edges()
+    m = max(a, b, c)
+    return sign(a * a + b * b + c * c - 2 * m * m) == 0
 
 def is_Obtuse_Triangle(T):
     """ 三角形 T が鈍角三角形かどうかを判定する.
@@ -105,9 +105,9 @@ def is_Obtuse_Triangle(T):
     T: Triangle
     """
 
-    a,b,c=T.three_edges()
-    m=max(a,b,c)
-    return compare(a*a+b*b+c*c-2*m*m,0,T.ep)==-1
+    a, b, c = T.three_edges()
+    m = max(a, b, c)
+    return sign(a * a + b * b + c * c - 2 * m * m) == -1
 
 def Triangle_Division_by_Angle(T):
     """ 三角形 T が鋭角か直角か鈍角かを判定する.
@@ -119,9 +119,9 @@ def Triangle_Division_by_Angle(T):
     1: 鋭角, 0: 直角, -1: 鈍角
     """
 
-    a,b,c=T.three_edges()
-    m=max(a,b,c)
-    return compare(a*a+b*b+c*c-2*m*m,0,T.ep)
+    a, b, c = T.three_edges()
+    m = max(a, b, c)
+    return sign(a * a + b * b + c * c - 2 * m * m)
 
 def is_Isosceles_Triangle(T):
     """ 三角形 T が二等辺三角形かを判定する.
