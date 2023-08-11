@@ -159,50 +159,54 @@ def SSS_Triangle(a, b, c):
 
     a,b,c: int or float
     """
-    assert 2*max(a,b,c)<a+b+c
+    assert compare(a + b + c, 2 * max(a, b, c)) == 1
 
-    t=a+b+c
+    t = a + b + c
 
-    A=Point(); B=Point(c,0)
-    C=Point((-a*a+b*b+c*c)/(2*c), sqrt(t*(t-2*a)*(t-2*b)*(t-2*c))/(2*c))
-    return Triangle(A,B,C)
+    A = Point()
+    B = Point(c, 0)
+    C = Point((-a * a + b * b + c * c) / (2 * c), sqrt(t * (t - 2 * a) * (t - 2 * b) * (t - 2 * c)) / (2 * c))
+    return Triangle(A, B, C)
 
 def SAS_Triangle(a, gamma, b):
-    """ 2 辺の長さが a,b で ,間の角度が gamma である三角形を生成する.
+    """ 2 辺の長さが a,b で, 間の角度が gamma である三角形を生成する.
 
     a,b: int or float
     gamma: int or float
     """
 
-    t=sqrt(a*a+b*b-2*a*b*cos(gamma))
+    t = sqrt(a * a + b * b - 2 * a * b * cos(gamma))
 
-    A=Point(); B=Point(t,0)
-    C=Point((b*b-a*b*cos(gamma))/t, (a*b*sin(gamma))/t)
-    return Triangle(A,B,C)
+    A=Point()
+    B=Point(t, 0)
+    C=Point((b * b - a * b * cos(gamma)) / t, (a * b * sin(gamma)) / t)
+    return Triangle(A, B, C)
 
-def ASA_Triangle(alpha ,c, beta):
+def ASA_Triangle(alpha, c, beta):
     """ 1辺の長さが c で, 両端の角度が alpha, beta である三角形を生成する.
 
     c: int or float
     alpha, beta: int or float (alpha+beta<pi)
     """
 
-    assert alpha+beta<pi
-    t=sin(beta)/sin(alpha+beta)
+    assert compare(alpha + beta, pi) == -1
+    t=sin(beta) / sin(alpha + beta)
 
-    A=Point(); B=Point(c,0)
-    C=Point(c*t*cos(alpha), c*t*sin(alpha))
-    return Triangle(A,B,C)
+    A = Point()
+    B = Point(c, 0)
+    C = Point(c * t * cos(alpha), c * t * sin(alpha))
+    return Triangle(A, B, C)
 
 def AAS_Triangle(alpha, beta, a):
-    """ 1辺の長さが a で, 2つの角が alpha, beta である三角形を生成する (a の対角が alpha).
+    """ 1辺の長さが a で, 2つの角が alpha, beta である三角形を生成する (a の対角が alpha, 辺 BC の長さが a).
 
     a: int or float
-    alpha ,beta: int or float
+    alpha, beta: int or float
     """
 
-    assert alpha+beta<pi
+    assert compare(alpha + beta, pi)
 
-    A=Point(); B=Point(a*sin(alpha+beta)/sin(alpha),0)
-    C=Point(a*sin(beta)*cos(alpha)/ sin(alpha), a*sin(beta))
-    return Triangle(A,B,C)
+    A = Point()
+    B = Point(a * sin(alpha +beta) / sin(alpha), 0)
+    C = Point(a * sin(beta) * cos(alpha) / sin(alpha), a * sin(beta))
+    return Triangle(A, B, C)
