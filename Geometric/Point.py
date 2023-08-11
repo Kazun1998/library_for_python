@@ -154,7 +154,7 @@ class Point(Common):
 def Distance(A,B):
     return abs(A-B)
 
-def iSP(A,B,C):
+def iSP(A, B, C):
     """ A->B->C と進んだときの進行方向を見る. ※ B が中心
 
     A,B,C: Point
@@ -166,17 +166,17 @@ def iSP(A,B,C):
     A-C-Bの順に並んでいる: 0
     """
 
-    p = compare((B-A).det(C-A), 0)
-    if p == 1:
-        return 1
-    elif p == -1:
-        return -1
-    else:
-        if compare((B-A).dot(C-A), 0) == -1:
-            return -2
-        elif compare((A-B).dot(C-B), 0) == -1:
-            return 2
-        return 0
+    match compare((B - A).det(C - A), 0):
+        case 1:
+            return 1
+        case -1:
+            return -1
+        case 0:
+            if compare((B - A).dot(C - A), 0) == -1:
+                return -2
+            elif compare((A - B).dot(C - B), 0) == -1:
+                return 2
+            return 0
 
 def Arg(P,Q=Point(0,0)):
     """点 Q から見た点 P の偏角を求める.
