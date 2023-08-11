@@ -163,19 +163,14 @@ def Translation_and_Rotate_Affine_Determine(A,B,P,Q):
 
     assert abs(B-A)==abs(Q-P)
 
-
-    return Rotation(Arg(Q,P)-Arg(B,A),*P)*Translation(*(P-A))
-
-def Affine_Determine(A,B,C,P,Q,R):
+def Affine_Determine(A, B, C, P, Q, R):
     """ F(A)=P, F(B)=Q, F(C)=R となるアフィン変換 F を求める.
 
     A,B,C,P,Q,R: Point
     ※ A,B,C は同一直線上の点であってはいけない.
     """
 
-    ep=max_ep(A,B,C,P,Q,R)
-
-    assert compare((B-A).det(C-A),0,ep)
+    assert sign((B - A).det(C - A)) != 0
 
     q1,q2=Q-P; r1,r2=R-P
     b1,b2=B-A; c1,c2=C-A; det=b1*c2-b2*c1
@@ -187,4 +182,4 @@ def Affine_Determine(A,B,C,P,Q,R):
 
     v=[P.x-(M[0][0]*A.x+M[0][1]*A.y), P.y-(M[1][0]*A.x+M[1][1]*A.y)]
 
-    return Affine(M,v)
+    return Affine(M, v)
