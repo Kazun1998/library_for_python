@@ -151,23 +151,22 @@ def Relationship_between_Circle_and_Circle(C: Circle, D:Circle):
     0: 含んでいる
     """
 
-    d=abs(C.center-D.center)
-    r=C.radius; s=D.radius
-    ep=max(C.ep, D.ep)
+    d = abs(C.center - D.center)
+    r = C.radius; s = D.radius
 
-    alpha=compare(d,r+s,ep)
-    if alpha==1:
-        return 4
-    elif alpha==0:
-        return 3
-    else:
-        beta=compare(d,abs(r-s),ep)
-        if beta==1:
-            return 2
-        elif beta==0:
-            return 1
-        else:
-            return 0
+    match compare(d, r + s):
+        case 1:
+            return 4
+        case 0:
+            return 3
+        case _:
+            match compare(d, abs(r - s)):
+                case 1:
+                    return 2
+                case 0:
+                    return 1
+                case _:
+                    return 0
 
 #=== 共通部分
 def Circles_Intersection_Area(C,D):
