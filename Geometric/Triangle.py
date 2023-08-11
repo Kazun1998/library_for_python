@@ -43,14 +43,12 @@ def CircumCenter(T):
     T: Triangle
     """
 
-    da=(T.B-T.C).norm_2()
-    db=(T.C-T.A).norm_2()
-    dc=(T.A-T.B).norm_2()
-    ta=da*(-da+db+dc)
-    tb=db*(da-db+dc)
-    tc=dc*(da+db-dc)
-    s=ta+tb+tc
-    return (ta/s)*T.A+(tb/s)*T.B+(tc/s)*T.C
+    alpha = complex(*T.A) - complex(*T.C)
+    beta = complex(*T.B) - complex(*T.C)
+
+    zeta = alpha * beta * (alpha.conjugate() - beta.conjugate()) / (alpha.conjugate() * beta - alpha * beta.conjugate())
+    zeta += complex(*T.C)
+    return Point(zeta.real, zeta.imag)
 
 def InnerCenter(T):
     """ 三角形 T の内心を求める.
