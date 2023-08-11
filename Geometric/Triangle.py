@@ -130,8 +130,8 @@ def is_Isosceles_Triangle(T):
     T: Triangle
     """
 
-    a,b,c=T.three_edges()
-    return compare(a,b,T.ep)==0 or compare(b,c,T.ep)==0 or compare(c,a,T.ep)==0
+    a, b, c = T.three_edges()
+    return compare(a, b)==0 or compare(b, c) == 0 or compare(c, a) == 0
 
 def is_Isosceles_Right_Triangle(T):
     """ 三角形 T が直角二等辺三角形かを判定する.
