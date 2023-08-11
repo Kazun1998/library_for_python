@@ -159,9 +159,9 @@ def Translation_and_Rotate_Affine_Determine(A,B,P,Q):
     ※ |AB|=|PQ| でなくてはならない.
     """
 
-    ep=max_ep(A,B,P,Q)
+    assert compare(abs(B - A), abs(Q - P)) == 0
 
-    assert abs(B-A)==abs(Q-P)
+    return Rotation(Arg(Q, P) - Arg(B, A), *P) * Translation(*(P - A))
 
 def Affine_Determine(A, B, C, P, Q, R):
     """ F(A)=P, F(B)=Q, F(C)=R となるアフィン変換 F を求める.
