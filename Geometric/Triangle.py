@@ -1,33 +1,32 @@
 from Point import *
 
 class Triangle():
-    __slots__=["A","B","C","id"]
-    ep=1e-9
-    def __init__(self,A,B,C):
+    __slots__ = ("A", "B", "C")
+
+    def __init__(self, A, B, C):
         """ 3点 A,B,C を頂点とする三角形を生成する.
 
         A,B,C: Point
         """
 
         assert A!=B and B!=C and C!=A
-        self.A=A
-        self.B=B
-        self.C=C
-        self.id=6
+        self.A = A
+        self.B = B
+        self.C = C
 
     def __str__(self):
-        return "[Triangle] {}, {}, {}".format(self.A,self.B,self.C)
+        return f"[Triangle] {self.A}, {self.B}, {self.C}"
 
-    __repr__=__str__
+    __repr__ = __str__
 
     def area(self):
-        return abs((self.B-self.A).det(self.C-self.A)/2)
+        return abs((self.B - self.A).det(self.C - self.A) / 2)
 
     def three_edges(self):
         """ 辺 BC, CA, AB の長さを求める.
 
         """
-        return abs(self.B-self.C),abs(self.C-self.A),abs(self.A-self.B)
+        return abs(self.B - self.C), abs(self.C - self.A), abs(self.A - self.B)
 
 #=== 三角形の心
 def Center_of_Gravity(T):
