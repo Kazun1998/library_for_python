@@ -26,18 +26,14 @@ class Circle():
         return compare(abs(Point-self.center), self.radius) == 0
 
 #=== 交差判定
-def has_Intersection_between_Circle_and_Segment(C,L,endpoint=True):
-    """円 C と線分 L の交差判定を行う.
+def has_Intersection_between_Circle_and_Segment(C, S, endpoint = True):
+    """円 C と線分 S の交差判定を行う.
 
     """
 
-    c=C.center
-    ep=max(C.ep,L.ep)
-    flag1=(compare(
-        Distance_between_Point_and_Segment(c,L),
-        C.radius,
-        ep)<=0)
-    flag2=(compare(max(abs(c-L.begin),abs(c-L.end)),C.radius,ep)>=0)
+    c = C.center
+    flag1 = compare(Distance_between_Point_and_Segment(c, S), C.radius) <= 0
+    flag2 = compare(max(abs(c-S.begin), abs(c-S.end)), C.radius) >= 0
     return flag1 and flag2
 
 def has_Intersection_between_Circle_and_Line(C,L):
