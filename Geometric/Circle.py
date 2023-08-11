@@ -27,7 +27,7 @@ class Circle():
 
 #=== 交差判定
 def has_Intersection_between_Circle_and_Segment(C, S, endpoint = True):
-    """円 C と線分 S の交差判定を行う.
+    """円 C と線分 L の交差判定を行う.
 
     """
 
@@ -40,11 +40,7 @@ def has_Intersection_between_Circle_and_Line(C,L):
     """円 C と直線 L の交差判定を行う.
 
     """
-    return compare(
-        Distance_between_Point_and_Line(C.center,L),
-        C.radius,
-        max(C.ep,L.ep)
-        )<=0
+    return compare(Distance_between_Point_and_Line(C.center, L), C.radius) <= 0
 
 def has_Intersection_between_Circle_and_Circle(C,D):
     """2つの円 C,D の交差判定を行う.
