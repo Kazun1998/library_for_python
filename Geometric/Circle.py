@@ -3,10 +3,9 @@ from Line import *
 from Affine import *
 
 class Circle():
-    __slots__=["center","radius","id"]
+    __slots__ = ("center", "radius")
 
-    ep=1e-9
-    def __init__(self,Center:Point,Radius:float):
+    def __init__(self, Center: Point, Radius: float):
         """ 2点 P を中心とする半径 r の円を生成する.
 
         P: Point
@@ -14,17 +13,17 @@ class Circle():
         """
         assert Radius>=0
 
-        self.center=Center
-        self.radius=Radius
-        self.id=5
+        self.center = Center
+        self.radius = Radius
+
 
     def __str__(self):
-        return "[Circle] Center: {}, Radius: {}".format(self.center,self.radius)
+        return f"[Circle] Center: {self.center}, Radius: {self.radius}"
 
-    __repr__=__str__
+    __repr__ = __str__
 
     def __contains__(self,Point):
-        return compare(abs(Point-self.center),self.radius,self.ep)==0
+        return compare(abs(Point-self.center), self.radius) == 0
 
 #=== 交差判定
 def has_Intersection_between_Circle_and_Segment(C,L,endpoint=True):
