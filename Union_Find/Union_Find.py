@@ -60,6 +60,35 @@ class Union_Find():
             self.rank[x]+=1
         return True
 
+    def union_force(self, x, y):
+        """ 要素 x へ要素 y を同一視する (新しい代表元は x が属する族の代表元になる).
+
+        [input]
+        x,y: 要素
+
+        [output]
+        元々が非連結 → True
+        元々が連結 → False
+        """
+        x = self.find(x)
+        y = self.find(y)
+
+        if x == y:
+            self.edges[x] += 1
+            return False
+
+        self.__group_number -= 1
+
+        self.edges[x] += self.edges[y]+1
+        self.edges[y] = 0
+
+        self.parents[x] += self.parents[y]
+        self.parents[y] = x
+
+        if self.rank[x] == self.rank[y]:
+            self.rank[x] += 1
+        return True
+
     def size(self, x):
         """ 要素 x の属している族の要素の数.
 
