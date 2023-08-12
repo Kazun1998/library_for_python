@@ -38,24 +38,35 @@ data:
     \        if self.rank[x]<self.rank[y]:\n            x,y=y,x\n\n        self.__group_number-=1\n\
     \n        self.edges[x]+=self.edges[y]+1\n        self.edges[y]=0\n\n        self.parents[x]+=self.parents[y]\n\
     \        self.parents[y]=x\n\n        if self.rank[x]==self.rank[y]:\n       \
-    \     self.rank[x]+=1\n        return True\n\n    def size(self, x):\n       \
-    \ \"\"\" \u8981\u7D20 x \u306E\u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\u8981\
-    \u7D20\u306E\u6570.\n\n        x: \u8981\u7D20\n        \"\"\"\n        return\
-    \ -self.parents[self.find(x)]\n\n    def same(self, x, y):\n        \"\"\" \u8981\
-    \u7D20 x,y \u306F\u540C\u4E00\u8996\u3055\u308C\u3066\u3044\u308B\u304B?\n\n \
-    \       x,y: \u8981\u7D20\n        \"\"\"\n        return self.find(x) == self.find(y)\n\
-    \n    def members(self, x):\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3057\u3066\
-    \u3044\u308B\u65CF\u306E\u8981\u7D20.\n        \u203B\u65CF\u306E\u8981\u7D20\u306E\
-    \u500B\u6570\u304C\u6B32\u3057\u3044\u3068\u304D\u306F size \u3092\u4F7F\u3046\
-    \u3053\u3068!!\n\n        x: \u8981\u7D20\n        \"\"\"\n        root = self.find(x)\n\
-    \        return [i for i in range(self.n) if self.find(i) == root]\n\n    def\
-    \ edge_count(self, x):\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3059\u308B\
-    \u65CF\u306E\u8FBA\u306E\u672C\u6570\u3092\u6C42\u3081\u308B.\n\n        x: \u8981\
-    \u7D20\n        \"\"\"\n        return self.edges[self.find(x)]\n\n    def is_tree(self,\
-    \ x):\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3059\u308B\u65CF\u304C\u6728\
-    \u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B.\n\n        x: \u8981\u7D20\
-    \n        \"\"\"\n        return self.size(x)==self.edges[self.find(x)]+1\n\n\
-    \    def tree_count(self):\n        \"\"\" \u6728\u306B\u306A\u3063\u3066\u3044\
+    \     self.rank[x]+=1\n        return True\n\n    def union_force(self, x, y):\n\
+    \        \"\"\" \u8981\u7D20 x \u3078\u8981\u7D20 y \u3092\u540C\u4E00\u8996\u3059\
+    \u308B (\u65B0\u3057\u3044\u4EE3\u8868\u5143\u306F x \u304C\u5C5E\u3059\u308B\u65CF\
+    \u306E\u4EE3\u8868\u5143\u306B\u306A\u308B).\n\n        [input]\n        x,y:\
+    \ \u8981\u7D20\n\n        [output]\n        \u5143\u3005\u304C\u975E\u9023\u7D50\
+    \ \u2192 True\n        \u5143\u3005\u304C\u9023\u7D50 \u2192 False\n        \"\
+    \"\"\n        x = self.find(x)\n        y = self.find(y)\n\n        if x == y:\n\
+    \            self.edges[x] += 1\n            return False\n\n        self.__group_number\
+    \ -= 1\n\n        self.edges[x] += self.edges[y]+1\n        self.edges[y] = 0\n\
+    \n        self.parents[x] += self.parents[y]\n        self.parents[y] = x\n\n\
+    \        if self.rank[x] == self.rank[y]:\n            self.rank[x] += 1\n   \
+    \     return True\n\n    def size(self, x):\n        \"\"\" \u8981\u7D20 x \u306E\
+    \u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\u8981\u7D20\u306E\u6570.\n\n      \
+    \  x: \u8981\u7D20\n        \"\"\"\n        return -self.parents[self.find(x)]\n\
+    \n    def same(self, x, y):\n        \"\"\" \u8981\u7D20 x,y \u306F\u540C\u4E00\
+    \u8996\u3055\u308C\u3066\u3044\u308B\u304B?\n\n        x,y: \u8981\u7D20\n   \
+    \     \"\"\"\n        return self.find(x) == self.find(y)\n\n    def members(self,\
+    \ x):\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3057\u3066\u3044\u308B\u65CF\
+    \u306E\u8981\u7D20.\n        \u203B\u65CF\u306E\u8981\u7D20\u306E\u500B\u6570\u304C\
+    \u6B32\u3057\u3044\u3068\u304D\u306F size \u3092\u4F7F\u3046\u3053\u3068!!\n\n\
+    \        x: \u8981\u7D20\n        \"\"\"\n        root = self.find(x)\n      \
+    \  return [i for i in range(self.n) if self.find(i) == root]\n\n    def edge_count(self,\
+    \ x):\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3059\u308B\u65CF\u306E\u8FBA\
+    \u306E\u672C\u6570\u3092\u6C42\u3081\u308B.\n\n        x: \u8981\u7D20\n     \
+    \   \"\"\"\n        return self.edges[self.find(x)]\n\n    def is_tree(self, x):\n\
+    \        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3059\u308B\u65CF\u304C\u6728\u304B\
+    \u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B.\n\n        x: \u8981\u7D20\n\
+    \        \"\"\"\n        return self.size(x)==self.edges[self.find(x)]+1\n\n \
+    \   def tree_count(self):\n        \"\"\" \u6728\u306B\u306A\u3063\u3066\u3044\
     \u308B\u5C5E\u306E\u500B\u6570\u3092\u6C42\u3081\u308B.\n        \"\"\"\n\n  \
     \      return sum(self.is_tree(g) for g in self.representative())\n\n    def representative(self):\n\
     \        \"\"\" \u4EE3\u8868\u5143\u306E\u30EA\u30B9\u30C8\n        \"\"\"\n \
@@ -77,7 +88,7 @@ data:
   path: Union_Find/Union_Find.py
   requiredBy:
   - Union_Find/Bipartite_Checker.py
-  timestamp: '2022-12-04 19:53:09+09:00'
+  timestamp: '2023-08-13 00:13:45+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
