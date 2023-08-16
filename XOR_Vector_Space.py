@@ -33,16 +33,13 @@ class XOR_Vector_Space:
         return len(self.basis)
 
     def reduction(self):
-        S=self.basis
+        S = self.basis
         for i in range(len(S)):
-            vb=S[i]&(-S[i])
+            vb = S[i] & (-S[i])
             for j in  range(len(S)):
-                if i==j:
-                    continue
-
-                if S[j]&vb:
-                    S[j]^=S[i]
-        self.basis=[s for s in S if s]
+                if (j != i) and (S[j] & vb):
+                    S[j] ^= S[i]
+        self.basis = [s for s in S if s]
 
     def projection(self, x):
         for v in self.basis:
