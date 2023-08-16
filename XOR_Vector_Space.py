@@ -62,7 +62,7 @@ class XOR_Vector_Space:
         return other<=self
 
     def __eq__(self,other):
-        return (self<=other) and (other<=self)
+        return (self <= other) and self.dimension() == other.dimension()
 
 def Generate_Space(*S):
     """ S によって生成される XOR ベクトル空間を求める.
