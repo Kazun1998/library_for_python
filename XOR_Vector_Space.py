@@ -50,7 +50,7 @@ class XOR_Vector_Space:
         return x
 
     def __repr__(self):
-        return "[XOR Vector Space]: dim: {}, basis: {}".format(self.dimension(), self.basis)
+        return f"[XOR Vector Space]: dim: {self.dimension()}, basis: {self.basis}"
 
     def __le__(self, other):
         return all(u in other for u in self.basis)
