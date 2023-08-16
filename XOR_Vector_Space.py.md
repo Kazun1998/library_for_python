@@ -25,30 +25,30 @@ data:
     \ W\n\n    def add_vector(self, *T):\n        for x in T:\n            for v in\
     \ self.basis:\n                x=min(x, x^v)\n\n            if x:\n          \
     \      self.basis.append(x)\n\n    def dimension(self):\n        return len(self.basis)\n\
-    \n    def reduction(self):\n        S=self.basis\n        for i in range(len(S)):\n\
-    \            vb=S[i]&(-S[i])\n            for j in  range(len(S)):\n         \
-    \       if i==j:\n                    continue\n\n                if S[j]&vb:\n\
-    \                    S[j]^=S[i]\n        self.basis=[s for s in S if s]\n\n  \
-    \  def projection(self, x):\n        for v in self.basis:\n            x=min(x,\
-    \ x^v)\n        return x\n\n    def __repr__(self):\n        return \"[XOR Vector\
-    \ Space]: dim: {}, basis: {}\".format(self.dimension(), self.basis)\n\n    def\
-    \ __le__(self,other):\n        for u in self.basis:\n            if not u in other:\n\
-    \                return False\n        return True\n\n    def __ge__(self,other):\n\
-    \        return other<=self\n\n    def __eq__(self,other):\n        return (self<=other)\
-    \ and (other<=self)\n\ndef Generate_Space(*S):\n    \"\"\" S \u306B\u3088\u3063\
-    \u3066\u751F\u6210\u3055\u308C\u308B XOR \u30D9\u30AF\u30C8\u30EB\u7A7A\u9593\u3092\
-    \u6C42\u3081\u308B.\n\n    \"\"\"\n\n    V=XOR_Vector_Space()\n    V.add_vector(*S)\n\
-    \    V.reduction()\n    return V\n\ndef Get_Basis(*S):\n    \"\"\" S \u306B\u3088\
-    \u3063\u3066\u751F\u6210\u3055\u308C\u308B XOR \u30D9\u30AF\u30C8\u30EB\u7A7A\u9593\
-    \ V \u306B\u304A\u3044\u3066, S \u306E\u90E8\u5206\u96C6\u5408\u3067\u3082\u3042\
-    \u308BV \u306E\u57FA\u5E95\u3092\u6C42\u3081\u308B\n\n    \"\"\"\n\n    B=[]\n\
-    \    V=XOR_Vector_Space()\n    for v in S:\n        w=V.projection(v)\n      \
-    \  if w:\n            B.append(v)\n            V.basis.append(w)\n    return B\n"
+    \n    def reduction(self):\n        S = self.basis\n        for i in range(len(S)):\n\
+    \            vb = S[i] & (-S[i])\n            for j in  range(len(S)):\n     \
+    \           if (j != i) and (S[j] & vb):\n                    S[j] ^= S[i]\n \
+    \       self.basis = [s for s in S if s]\n\n    def projection(self, x):\n   \
+    \     for v in self.basis:\n            x=min(x, x^v)\n        return x\n\n  \
+    \  def __repr__(self):\n        return f\"[XOR Vector Space]: dim: {self.dimension()},\
+    \ basis: {self.basis}\"\n\n    def __le__(self, other):\n        return all(u\
+    \ in other for u in self.basis)\n\n    def __ge__(self,other):\n        return\
+    \ other<=self\n\n    def __eq__(self,other):\n        return (self <= other) and\
+    \ self.dimension() == other.dimension()\n\ndef Generate_Space(*S):\n    \"\"\"\
+    \ S \u306B\u3088\u3063\u3066\u751F\u6210\u3055\u308C\u308B XOR \u30D9\u30AF\u30C8\
+    \u30EB\u7A7A\u9593\u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n\n    V=XOR_Vector_Space()\n\
+    \    V.add_vector(*S)\n    V.reduction()\n    return V\n\ndef Get_Basis(*S):\n\
+    \    \"\"\" S \u306B\u3088\u3063\u3066\u751F\u6210\u3055\u308C\u308B XOR \u30D9\
+    \u30AF\u30C8\u30EB\u7A7A\u9593 V \u306B\u304A\u3044\u3066, S \u306E\u90E8\u5206\
+    \u96C6\u5408\u3067\u3082\u3042\u308BV \u306E\u57FA\u5E95\u3092\u6C42\u3081\u308B\
+    \n\n    \"\"\"\n\n    B=[]\n    V=XOR_Vector_Space()\n    for v in S:\n      \
+    \  w=V.projection(v)\n        if w:\n            B.append(v)\n            V.basis.append(w)\n\
+    \    return B\n"
   dependsOn: []
   isVerificationFile: false
   path: XOR_Vector_Space.py
   requiredBy: []
-  timestamp: '2022-12-25 03:43:05+09:00'
+  timestamp: '2023-08-17 00:15:40+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: XOR_Vector_Space.py
