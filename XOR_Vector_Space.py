@@ -52,11 +52,8 @@ class XOR_Vector_Space:
     def __repr__(self):
         return "[XOR Vector Space]: dim: {}, basis: {}".format(self.dimension(), self.basis)
 
-    def __le__(self,other):
-        for u in self.basis:
-            if not u in other:
-                return False
-        return True
+    def __le__(self, other):
+        return all(u in other for u in self.basis)
 
     def __ge__(self,other):
         return other<=self
