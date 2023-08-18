@@ -1,8 +1,5 @@
 from Modulo_Matrix import *
 
-class Modulo_Vector_Error(Exception):
-    pass
-
 class Modulo_Vector:
     def __init__(self,v):
         self.vec=[x%Mod for x in v]
@@ -27,8 +24,7 @@ class Modulo_Vector:
 
     #加法
     def __add__(self,other):
-        if self.size!=other.size:
-            raise Modulo_Vector_Error("2つのベクトルのサイズが異なります. ({}, {})".format(self.size,other.size))
+        assert self.size == other.size, f"2つのベクトルのサイズが異なります. ({self.size}, {other.size})"
 
         v=self.vec
         w=other.vec
@@ -56,8 +52,7 @@ class Modulo_Vector:
 
     #内積
     def inner(self,other):
-        if self.size!=other.size:
-            raise Modulo_Vector_Error("2つのベクトルのサイズが異なります.({},{})".format(self.size,other.size))
+        assert self.size == other.size, f"2つのベクトルのサイズが異なります. ({self.size}, {other.size})"
 
         X=0
         v=self.vec
