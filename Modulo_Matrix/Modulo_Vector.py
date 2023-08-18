@@ -51,14 +51,7 @@ class Modulo_Vector:
     #内積
     def inner(self,other):
         assert self.size == other.size, f"2つのベクトルのサイズが異なります. ({self.size}, {other.size})"
-
-        X=0
-        v=self.vec
-        w=other.vec
-
-        for i in range(self.size):
-            X+=v[i]*w[i]%Mod
-        return X
+        return sum(vi * wi % Mod for vi, wi in zip(self, other)) % Mod
 
     #累乗
     def __pow__(self,n):
