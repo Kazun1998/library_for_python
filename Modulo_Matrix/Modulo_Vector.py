@@ -1,9 +1,9 @@
 from Modulo_Matrix import *
 
 class Modulo_Vector:
-    def __init__(self,v):
-        self.vec=[x%Mod for x in v]
-        self.size=len(v)
+    def __init__(self, vector):
+        self.vec = [vi % Mod for vi in vector]
+        self.size = len(vector)
 
         #出力
     def __str__(self):
