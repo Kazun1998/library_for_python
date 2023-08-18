@@ -15,6 +15,9 @@ class Modulo_Vector:
     def __bool__(self):
         return any(self.vec)
 
+    def __iter__(self):
+        yield from self.vec
+
     #+,-
     def __pos__(self):
         return self
