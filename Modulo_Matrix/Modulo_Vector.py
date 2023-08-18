@@ -45,10 +45,8 @@ class Modulo_Vector:
         return self.__scale__(other)
 
     #スカラー倍
-    def __scale__(self,r):
-        v=self.vec
-        v=[r*x for x in v]
-        return Modulo_Vector(v)
+    def __scale__(self, r):
+        return Modulo_Vector([r * vi for vi in self])
 
     #内積
     def inner(self,other):
