@@ -14,33 +14,32 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.11.4/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "from Modulo_Matrix import *\n\nclass Modulo_Vector_Error(Exception):\n  \
-    \  pass\n\nclass Modulo_Vector:\n    def __init__(self,v):\n        self.vec=[x%Mod\
-    \ for x in v]\n        self.size=len(v)\n\n        #\u51FA\u529B\n    def __str__(self):\n\
-    \        return str(self.vec)\n\n    def __repr__(self):\n        return str(self)\n\
-    \n    def __bool__(self):\n        return any(self.vec)\n\n    #+,-\n    def __pos__(self):\n\
-    \        return self\n\n    def __neg__(self):\n        return self.__scale__(-1)\n\
-    \n    #\u52A0\u6CD5\n    def __add__(self,other):\n        if self.size!=other.size:\n\
-    \            raise Modulo_Vector_Error(\"2\u3064\u306E\u30D9\u30AF\u30C8\u30EB\
-    \u306E\u30B5\u30A4\u30BA\u304C\u7570\u306A\u308A\u307E\u3059. ({}, {})\".format(self.size,other.size))\n\
-    \n        v=self.vec\n        w=other.vec\n        return Modulo_Vector([v[i]+w[i]\
-    \ for i in range(self.size)])\n\n    #\u6E1B\u6CD5\n    def __sub__(self, other):\n\
-    \        return self+(-other)\n\n    def __rsub__(self, other):\n        return\
-    \ (-self)+other\n\n    #\u4E57\u6CD5\n    def __mul__(self,other):\n        pass\n\
-    \n    def __rmul__(self,other):\n        return self.__scale__(other)\n\n    #\u30B9\
-    \u30AB\u30E9\u30FC\u500D\n    def __scale__(self,r):\n        v=self.vec\n   \
-    \     v=[r*x for x in v]\n        return Modulo_Vector(v)\n\n    #\u5185\u7A4D\
-    \n    def inner(self,other):\n        if self.size!=other.size:\n            raise\
-    \ Modulo_Vector_Error(\"2\u3064\u306E\u30D9\u30AF\u30C8\u30EB\u306E\u30B5\u30A4\
-    \u30BA\u304C\u7570\u306A\u308A\u307E\u3059.({},{})\".format(self.size,other.size))\n\
-    \n        X=0\n        v=self.vec\n        w=other.vec\n\n        for i in range(self.size):\n\
-    \            X+=v[i]*w[i]%Mod\n        return X\n\n    #\u7D2F\u4E57\n    def\
-    \ __pow__(self,n):\n        pass\n\n    #\u7B49\u53F7\n    def __eq__(self,other):\n\
-    \        return (self.vec==other.vec)\n\n    def __len__(self):\n        return\
-    \ self.size\n\n    #\u4E0D\u7B49\u53F7\n    def __neq__(self,other):\n       \
-    \ return not(self==other)\n\n    def __getitem__(self,index):\n        assert\
-    \ isinstance(index,int)\n        return self.vec[index]\n\n    def __setitem__(self,index,val):\n\
-    \        assert isinstance(index,int)\n        self.vec[index]=val\n\n#=================================================\n\
+  code: "from Modulo_Matrix import *\n\nclass Modulo_Vector:\n    def __init__(self,\
+    \ vector):\n        self.vec = [vi % Mod for vi in vector]\n        self.size\
+    \ = len(vector)\n\n        #\u51FA\u529B\n    def __str__(self):\n        return\
+    \ str(self.vec)\n\n    def __repr__(self):\n        return str(self)\n\n    def\
+    \ __bool__(self):\n        return any(self.vec)\n\n    def __iter__(self):\n \
+    \       yield from self.vec\n\n    #+,-\n    def __pos__(self):\n        return\
+    \ self\n\n    def __neg__(self):\n        return self.__scale__(-1)\n\n    #\u52A0\
+    \u6CD5\n    def __add__(self, other):\n        assert self.size == other.size,\
+    \ f\"2\u3064\u306E\u30D9\u30AF\u30C8\u30EB\u306E\u30B5\u30A4\u30BA\u304C\u7570\
+    \u306A\u308A\u307E\u3059. ({self.size}, {other.size})\"\n        return Modulo_Vector([vi\
+    \ + wi for vi, wi in zip(self, other)])\n\n    #\u6E1B\u6CD5\n    def __sub__(self,\
+    \ other):\n        return self+(-other)\n\n    def __rsub__(self, other):\n  \
+    \      return (-self)+other\n\n    #\u4E57\u6CD5\n    def __mul__(self,other):\n\
+    \        pass\n\n    def __rmul__(self,other):\n        return self.__scale__(other)\n\
+    \n    #\u30B9\u30AB\u30E9\u30FC\u500D\n    def __scale__(self, r):\n        return\
+    \ Modulo_Vector([r * vi for vi in self])\n\n    #\u5185\u7A4D\n    def inner(self,other):\n\
+    \        assert self.size == other.size, f\"2\u3064\u306E\u30D9\u30AF\u30C8\u30EB\
+    \u306E\u30B5\u30A4\u30BA\u304C\u7570\u306A\u308A\u307E\u3059. ({self.size}, {other.size})\"\
+    \n        return sum(vi * wi % Mod for vi, wi in zip(self, other)) % Mod\n\n \
+    \   #\u7D2F\u4E57\n    def __pow__(self,n):\n        pass\n\n    #\u7B49\u53F7\
+    \n    def __eq__(self, other):\n        return self.vec == other.vec\n\n    def\
+    \ __len__(self):\n        return self.size\n\n    #\u4E0D\u7B49\u53F7\n    def\
+    \ __neq__(self, other):\n        return not (self == other)\n\n    def __getitem__(self,index):\n\
+    \        assert isinstance(index,int)\n        return self.vec[index]\n\n    def\
+    \ __setitem__(self,index,val):\n        assert isinstance(index,int)\n       \
+    \ self.vec[index]=val\n\n#=================================================\n\
     def Zero_Vector(N):\n    \"\"\"N \u6B21\u5143\u306E\u30BC\u30ED\u30D9\u30AF\u30C8\
     \u30EB\u3092\u51FA\u529B\u3059\u308B.\n\n    \"\"\"\n    return Modulo_Vector([0]*N)\n\
     \ndef Standard_Basis(N, k):\n    \"\"\"N \u6B21\u5143\u30D9\u30AF\u30C8\u30EB\u306E\
@@ -69,7 +68,7 @@ data:
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Vector.py
   requiredBy: []
-  timestamp: '2022-02-01 19:50:52+09:00'
+  timestamp: '2023-08-19 01:38:40+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Modulo_Matrix/Modulo_Vector.py
