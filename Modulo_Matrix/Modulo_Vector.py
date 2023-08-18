@@ -23,12 +23,9 @@ class Modulo_Vector:
         return self.__scale__(-1)
 
     #加法
-    def __add__(self,other):
+    def __add__(self, other):
         assert self.size == other.size, f"2つのベクトルのサイズが異なります. ({self.size}, {other.size})"
-
-        v=self.vec
-        w=other.vec
-        return Modulo_Vector([v[i]+w[i] for i in range(self.size)])
+        return Modulo_Vector([vi + wi for vi, wi in zip(self.vec, other.vec)])
 
     #減法
     def __sub__(self, other):
