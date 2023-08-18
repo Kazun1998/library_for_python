@@ -28,7 +28,7 @@ class Modulo_Vector:
     #加法
     def __add__(self, other):
         assert self.size == other.size, f"2つのベクトルのサイズが異なります. ({self.size}, {other.size})"
-        return Modulo_Vector([vi + wi for vi, wi in zip(self.vec, other.vec)])
+        return Modulo_Vector([vi + wi for vi, wi in zip(self, other)])
 
     #減法
     def __sub__(self, other):
