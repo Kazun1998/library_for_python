@@ -58,15 +58,15 @@ class Modulo_Vector:
         pass
 
     #等号
-    def __eq__(self,other):
-        return (self.vec==other.vec)
+    def __eq__(self, other):
+        return self.vec == other.vec
 
     def __len__(self):
         return self.size
 
     #不等号
-    def __neq__(self,other):
-        return not(self==other)
+    def __neq__(self, other):
+        return not (self == other)
 
     def __getitem__(self,index):
         assert isinstance(index,int)
