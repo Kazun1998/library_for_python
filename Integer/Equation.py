@@ -13,3 +13,27 @@ def Find_Extend_Euclid(a: int, b: int):
     y = - (a*x-g) // b
     return (x, y, g)
 
+
+def Solve_Bezout_Identity(a, b, c, lx, rx, ly, ry, extgcd = None):
+    """ a x + b y = c, lx <= x <=rx, ly <= y <= ry を満たす整数 (x,y) について求める.
+
+    [Input]
+    a != 0, b != 0 でなくてはならない.
+    extgcd : (s, t) の形のタプルで, a s + b t = gcd(a, b) を満たしていなければならない.
+
+    [Output]
+    答えが存在する場合:
+    (p0, p1, q0, q1, l, r) の形のタプルで, 以下を意味する
+    x = p0 + p1 k, y = q0 + q1 k, l <= k <= r
+
+    答えが存在しない場合: None
+    """
+
+    if extgcd is None:
+        s, t, g = Find_Extend_Euclid(a, b)
+    else:
+        s, t = extgcd
+        g = a * s + b * t
+
+    if c % g != 0:
+        return None
