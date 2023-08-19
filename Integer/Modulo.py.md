@@ -15,26 +15,31 @@ data:
     \  File \"/opt/hostedtoolcache/Python/3.11.4/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "#\u6CD5 p \u306E\u539F\u59CB\u6839\ndef Primitive_Root(p):\n    \"\"\"Z/pZ\u4E0A\
-    \u306E\u539F\u59CB\u6839\u3092\u898B\u3064\u3051\u308B\n\n    p:\u7D20\u6570\n\
-    \    \"\"\"\n    if p==2:\n        return 1\n    if p==998244353:\n        return\
-    \ 3\n    if p==10**9+7:\n        return 5\n\n    fac=[]\n    q=2\n    v=p-1\n\n\
-    \    while v>=q*q:\n        e=0\n        while v%q==0:\n            e+=1\n   \
-    \         v//=q\n\n        if e>0:\n            fac.append(q)\n        q+=1\n\n\
-    \    if v>1:\n        fac.append(v)\n\n    g=2\n    while g<p:\n        if pow(g,p-1,p)!=1:\n\
-    \            return None\n\n        flag=True\n        for q in fac:\n       \
-    \     if pow(g,(p-1)//q,p)==1:\n                flag=False\n                break\n\
-    \n        if flag:\n            return g\n\n        g+=1\n\ndef Modulo_Inverse(a,\
-    \ m):\n    \"\"\" (mod m) \u306B\u304A\u3051\u308B\u9006\u5143\u3092\u6C42\u3081\
-    \u308B.\n\n    Args:\n        a (int): mod m \u306E\u5143\n        m (int): \u6CD5\
-    \n\n    Returns:\n        int: \u53EF\u9006\u5143\u304C\u5B58\u5728\u3059\u308B\
-    \u306A\u3089\u3070\u305D\u306E\u5024, \u5B58\u5728\u3057\u306A\u3044\u306E\u3067\
-    \u3042\u308C\u3070 -1\n    \"\"\"\n\n    try:\n        return pow(a, -1, m)\n\
-    \    except ValueError:\n        return -1\n\n\n"
+    \u306E\u539F\u59CB\u6839\u3092\u898B\u3064\u3051\u308B\n    p:\u7D20\u6570\n \
+    \   \"\"\"\n    if p==2:\n        return 1\n    if p==998244353:\n        return\
+    \ 3\n    if p==10**9+7:\n        return 5\n    fac=[]\n    q=2\n    v=p-1\n  \
+    \  while v>=q*q:\n        e=0\n        while v%q==0:\n            e+=1\n     \
+    \       v//=q\n        if e>0:\n            fac.append(q)\n        q+=1\n    if\
+    \ v>1:\n        fac.append(v)\n    g=2\n    while g<p:\n        if pow(g,p-1,p)!=1:\n\
+    \            return None\n        flag=True\n        for q in fac:\n         \
+    \   if pow(g,(p-1)//q,p)==1:\n                flag=False\n                break\n\
+    \        if flag:\n            return g\n\n        g+=1\n\n#\u62E1\u5F35\u30E6\
+    \u30FC\u30AF\u30EA\u30C3\u30C9\u306E\u4E92\u9664\u6CD5\ndef Extend_Euclid(a: int,\
+    \ b: int):\n    \"\"\"ax+by=gcd(a, b) \u3092\u6E80\u305F\u3059 (x, y, gcd(a, b))\
+    \ \u3092 1 \u3064\u6C42\u3081\u308B.\n    a,b:\u6574\u6570\n    \"\"\"\n    from\
+    \ math import gcd\n    g = gcd(a, b)\n    if g == 0:\n        return (1, 0, 0)\n\
+    \n    x = pow(a//g, -1, b//g)\n    y = - (a*x-g) // b\n    return (x, y, g)\n\n\
+    \ndef Modulo_Inverse(a, m):\n    \"\"\" (mod m) \u306B\u304A\u3051\u308B\u9006\
+    \u5143\u3092\u6C42\u3081\u308B.\n    Args:\n        a (int): mod m \u306E\u5143\
+    \n        m (int): \u6CD5\n    Returns:\n        int: \u53EF\u9006\u5143\u304C\
+    \u5B58\u5728\u3059\u308B\u306A\u3089\u3070\u305D\u306E\u5024, \u5B58\u5728\u3057\
+    \u306A\u3044\u306E\u3067\u3042\u308C\u3070 -1\n    \"\"\"\n    try:\n        return\
+    \ pow(a, -1, m)\n    except ValueError:\n        return -1"
   dependsOn: []
   isVerificationFile: false
   path: Integer/Modulo.py
   requiredBy: []
-  timestamp: '2023-08-20 00:10:03+09:00'
+  timestamp: '2023-08-20 01:43:27+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Integer/Modulo.py
