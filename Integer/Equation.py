@@ -1,16 +1,25 @@
 #拡張ユークリッドの互除法
-def Find_Extend_Euclid(a: int, b: int):
+def Find_Extend_Euclid(a: int, b: int, new = True):
     """ax+by=gcd(a, b) を満たす (x, y, gcd(a, b)) を 1 つ求める.
     a,b:整数
     """
-    from math import gcd
-    g = gcd(a, b)
-    if g == 0:
-        return (1, 0, 0)
 
-    x = pow(a//g, -1, b//g)
-    y = - (a*x-g) // b
-    return (x, y, g)
+    if new:
+        from math import gcd
+        g = gcd(a, b)
+        if g == 0:
+            return (1, 0, 0)
+
+        x = pow(a//g, -1, b//g)
+        y = - (a*x-g) // b
+        return (x, y, g)
+    else:
+        s,t,u,v=1,0,0,1
+        while b:
+            q,a,b=a//b,b,a%b
+            s,t=t,s-q*t
+            u,v=v,u-q*v
+        return s,u,a
 
 def Solve_Bezout_Identity(a, b, c, lx, rx, ly, ry, extgcd = None):
     """ a x + b y = c , lx <= x <= rx, ly <= y <= ry を満たすような整数の組 (x,y) を求める.
