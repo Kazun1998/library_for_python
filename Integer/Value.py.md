@@ -36,43 +36,12 @@ data:
     \ b^k=a \u3092\u6E80\u305F\u3059 b\n    \"\"\"\n\n    if k%2==0:\n        if a<0:\n\
     \            return None\n        b=Floor_Root(a,k)\n        return b if pow(b,k)==a\
     \ else None\n    else:\n        sgn=1 if a>=0 else -1\n        b=Floor_Root(abs(a),k)\n\
-    \        return sgn*b if pow(sgn*b,k)==a else None\n\n#===\ndef Integer_Equation(P,\
-    \ Y, L=0, default=None):\n    \"\"\" P[0]+P[1]x+...+P[n-1]x^(n-1)=Y \u3092\u6E80\
-    \u305F\u3059\u6574\u6570 x \u3092\u6C42\u3081\u308B.\n\n    P: \u591A\u9805\u5F0F\
-    \ (1\u6B21\u4EE5\u4E0A, \u975E\u96F6\u3067\u3042\u308A, L<=x \u306E\u7BC4\u56F2\
-    \u3067 P \u306F\u5358\u8ABF\u5897\u52A0\u3067\u306A\u304F\u3066\u306F\u306A\u3089\
-    \u306A\u3044).\n    Y: int\n    L: int (x \u3068\u3057\u3066\u3042\u308A\u3046\
-    \u308B\u4E0B\u754C\u3092\u6C42\u3081\u308B).\n    default: \u5B58\u5728\u3057\u306A\
-    \u3044\u5834\u5408\u306E\u8FD4\u308A\u5024\n    \"\"\"\n\n    P=list(P)\n    while\
-    \ P and P[-1]==0:\n        P.pop()\n    assert len(P)>=2\n\n    def calc(x):\n\
-    \        y=0\n        for p in reversed(P):\n            y=(y*x+p)\n        return\
-    \ y\n\n    if calc(L)>Y:\n        return default\n\n    # \u4E0A\u754C\u3092\u6C42\
-    \u3081\u308B\n    d=1\n    while calc(L+d)<=Y:\n        d*=2\n    R=L+d\n\n  \
-    \  # \u89E3\u3092\u6C42\u3081\u308B\n    while R-L>1:\n        C=L+(R-L)//2\n\
-    \        if calc(C)<=Y:\n            L=C\n        else:\n            R=C\n   \
-    \ return L if calc(L)==Y else default\n\ndef Integer_Inequality(P, Y, L=0, mode=True,\
-    \ default=None):\n    \"\"\" P[0]+P[1]x+...+P[n-1]x^(n-1) <= Y \u3092\u6E80\u305F\
-    \u3059\u6700\u5927\u306E\u6574\u6570 x \u3092\u6C42\u3081\u308B.\n\n    P: \u591A\
-    \u9805\u5F0F (1\u6B21\u4EE5\u4E0A, \u975E\u96F6\u3067\u3042\u308A, L<=x \u306E\
-    \u7BC4\u56F2\u3067 P \u306F\u5358\u8ABF\u5897\u52A0\u3067\u306A\u304F\u3066\u306F\
-    \u306A\u3089\u306A\u3044).\n    Y: int\n    L: int (x \u3068\u3057\u3066\u3042\
-    \u308A\u3046\u308B\u4E0B\u754C\u3092\u6C42\u3081\u308B).\n    mode: True \u306E\
-    \u5834\u5408\u306F <=, False \u306E\u5834\u5408\u306F < \u306B\u306A\u308B.\n\
-    \    default: \u5B58\u5728\u3057\u306A\u3044\u5834\u5408\u306E\u8FD4\u308A\u5024\
-    \n    \"\"\"\n\n    P=list(P)\n    while P and P[-1]==0:\n        P.pop()\n  \
-    \  assert len(P)>=2\n\n    def calc(x):\n        y=0\n        for p in reversed(P):\n\
-    \            y=(y*x+p)\n        return y\n\n    if calc(L)>Y or (not mode and\
-    \ calc(L)==Y):\n        return default\n\n    # \u4E0A\u754C\u3092\u6C42\u3081\
-    \u308B\n    d=1\n    if mode:\n        while calc(L+d)<=Y:\n            d*=2\n\
-    \    else:\n        while calc(L+d)<Y:\n            d*=2\n    R=L+d\n\n    # \u89E3\
-    \u3092\u6C42\u3081\u308B\n    while R-L>1:\n        C=L+(R-L)//2\n        y0=calc(C)\n\
-    \        if y0<Y or (mode and y0==Y):\n            L=C\n        else:\n      \
-    \      R=C\n    return L\n"
+    \        return sgn*b if pow(sgn*b,k)==a else None\n"
   dependsOn: []
   isVerificationFile: false
   path: Integer/Value.py
   requiredBy: []
-  timestamp: '2023-03-18 02:55:12+09:00'
+  timestamp: '2023-08-20 11:29:25+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Integer/Value.py

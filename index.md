@@ -318,6 +318,9 @@ data:
       path: Integer/Divisors.py
       title: Integer/Divisors.py
     - icon: ':warning:'
+      path: Integer/Equation.py
+      title: Integer/Equation.py
+    - icon: ':warning:'
       path: Integer/Feature.py
       title: Integer/Feature.py
     - icon: ':warning:'
