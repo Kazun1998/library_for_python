@@ -41,12 +41,12 @@ data:
     \n    \"\"\"\n\n    row,col=A.size\n    T=deepcopy(A.ele)\n\n    p=[]; q=[]\n\
     \    rnk=0\n    for j in range(col):\n        for i in range(rnk,row):\n     \
     \       if T[i][j]!=0:\n                break\n        else:\n            q.append(j)\n\
-    \            continue\n        if j==col:\n            return None\n        p.append(j)\n\
-    \        T[rnk],T[i]=T[i],T[rnk]\n\n        inv=pow(T[rnk][j], -1, Mod)\n    \
-    \    for k in range(col):\n            T[rnk][k]=(inv*T[rnk][k])%Mod\n\n     \
-    \   for s in range(row):\n            if s==rnk:\n                continue\n \
-    \           c=-T[s][j]\n            for t in range(col):\n                T[s][t]=(T[s][t]+c*T[rnk][t])%Mod\n\
-    \        rnk+=1\n\n    x=[0]*col\n    for i in range(rnk):\n        x[p[i]]=T[i][-1]\n\
+    \            continue\n\n        p.append(j)\n        T[rnk],T[i]=T[i],T[rnk]\n\
+    \n        inv=pow(T[rnk][j], -1, Mod)\n        for k in range(col):\n        \
+    \    T[rnk][k]=(inv*T[rnk][k])%Mod\n\n        for s in range(row):\n         \
+    \   if s==rnk:\n                continue\n            c=-T[s][j]\n           \
+    \ for t in range(col):\n                T[s][t]=(T[s][t]+c*T[rnk][t])%Mod\n  \
+    \      rnk+=1\n\n    x=[0]*col\n    for i in range(rnk):\n        x[p[i]]=T[i][-1]\n\
     \n    ker_dim=col-rnk\n    ker=[[0]*col for _ in range(ker_dim)]\n\n    for i\
     \ in range(ker_dim):\n        ker[i][q[i]]=1\n\n    for i in range(ker_dim):\n\
     \        for j in range(rnk):\n            ker[i][p[j]]=-T[j][q[i]]%Mod\n\n  \
@@ -74,7 +74,7 @@ data:
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Vector_Space.py
   requiredBy: []
-  timestamp: '2023-08-06 21:06:56+09:00'
+  timestamp: '2023-08-26 01:58:57+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Modulo_Matrix/Modulo_Vector_Space.py
