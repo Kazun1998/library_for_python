@@ -81,8 +81,7 @@ def Kernel_Space(A):
         else:
             q.append(j)
             continue
-        if j==col:
-            return None
+
         p.append(j)
         T[rnk],T[i]=T[i],T[rnk]
 
