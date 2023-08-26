@@ -27,15 +27,16 @@ data:
     \ 1\n        else:\n            self.less_count[x] = 1\n\n    def _more_discard(self,\
     \ x):\n        self.more_sum -= x\n        self.more_length -= 1\n        self.more_count[x]\
     \ -= 1\n\n        if self.more_count[x] == 0:\n            del self.more_count[x]\n\
-    \n        while self.more and (self.more[0] not in self):\n            heappop(self.more)\n\
-    \n    def _less_discard(self, x):\n        self.less_sum -= x\n        self.less_length\
-    \ -= 1\n        self.less_count[x] -= 1\n\n        if self.less_count[x] == 0:\n\
-    \            del self.less_count[x]\n\n        while self.less and (-self.less[0]\
-    \ not in self):\n            heappop(self.less)\n\n    def _more_to_less(self):\n\
-    \        x = heappop(self.more)\n        self._more_discard(x)\n        self._less_insert(x)\n\
-    \n    def _less_to_more(self):\n        x = -heappop(self.less)\n        self._less_discard(x)\n\
-    \        self._more_insert(x)\n\n    def _validation(self):\n        if self.more_length\
-    \ > self.K:\n            while self.more_length > self.K:\n                self._more_to_less()\n\
+    \n        while self.more and self.more_count.get(self.more[0], 0) == 0:\n   \
+    \         heappop(self.more)\n\n    def _less_discard(self, x):\n        self.less_sum\
+    \ -= x\n        self.less_length -= 1\n        self.less_count[x] -= 1\n\n   \
+    \     if self.less_count[x] == 0:\n            del self.less_count[x]\n\n    \
+    \    while self.less and self.less_count.get(-self.less[0], 0) == 0:\n       \
+    \     heappop(self.less)\n\n    def _more_to_less(self):\n        x = self.more[0]\n\
+    \        self._more_discard(x)\n        self._less_insert(x)\n\n    def _less_to_more(self):\n\
+    \        x = -self.less[0]\n        self._less_discard(x)\n        self._more_insert(x)\n\
+    \n    def _validation(self):\n        if self.more_length > self.K:\n        \
+    \    while self.more_length > self.K:\n                self._more_to_less()\n\
     \        elif self.more_length < self.K:\n            while self.less_length >\
     \ 0 and self.more_length < self.K:\n                self._less_to_more()\n\n \
     \   def __len__(self):\n        return self.more_length + self.less_length\n\n\
@@ -55,7 +56,7 @@ data:
   isVerificationFile: false
   path: Best_Sum.py
   requiredBy: []
-  timestamp: '2023-08-18 01:40:57+09:00'
+  timestamp: '2023-08-26 10:17:25+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Best_Sum.py
