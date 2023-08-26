@@ -17,7 +17,6 @@ class Best_Sum:
         self.less_length  = 0
 
     def _more_insert(self, x):
-        heappush(self.more, x)
         self.more_sum += x
         self.more_length += 1
 
@@ -25,9 +24,9 @@ class Best_Sum:
             self.more_count[x] += 1
         else:
             self.more_count[x] = 1
+            heappush(self.more, x)
 
     def _less_insert(self, x):
-        heappush(self.less, -x)
         self.less_sum += x
         self.less_length += 1
 
@@ -35,6 +34,7 @@ class Best_Sum:
             self.less_count[x] += 1
         else:
             self.less_count[x] = 1
+            heappush(self.less, -x)
 
     def _more_discard(self, x):
         self.more_sum -= x
@@ -44,7 +44,7 @@ class Best_Sum:
         if self.more_count[x] == 0:
             del self.more_count[x]
 
-        while self.more and self.more_count.get(self.more[0], 0) == 0:
+        while self.more and (self.more[0] not in self.more_count):
             heappop(self.more)
 
     def _less_discard(self, x):
@@ -55,7 +55,7 @@ class Best_Sum:
         if self.less_count[x] == 0:
             del self.less_count[x]
 
-        while self.less and self.less_count.get(-self.less[0], 0) == 0:
+        while self.less and (-self.less[0] not in self.less_count):
             heappop(self.less)
 
     def _more_to_less(self):
@@ -81,6 +81,9 @@ class Best_Sum:
 
     def __contains__(self, value):
         return (value in self.more_count) or (value in self.less_count)
+
+    def count(self, value):
+        return self.more_count(value, 0) + self.less_count(value, 0)
 
     def insert(self, x):
         x *= self.reversal
