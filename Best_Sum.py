@@ -44,7 +44,7 @@ class Best_Sum:
         if self.more_count[x] == 0:
             del self.more_count[x]
 
-        while self.more and (self.more[0] not in self):
+        while self.more and self.more_count.get(self.more[0], 0) == 0:
             heappop(self.more)
 
     def _less_discard(self, x):
@@ -55,16 +55,16 @@ class Best_Sum:
         if self.less_count[x] == 0:
             del self.less_count[x]
 
-        while self.less and (-self.less[0] not in self):
+        while self.less and self.less_count.get(-self.less[0], 0) == 0:
             heappop(self.less)
 
     def _more_to_less(self):
-        x = heappop(self.more)
+        x = self.more[0]
         self._more_discard(x)
         self._less_insert(x)
 
     def _less_to_more(self):
-        x = -heappop(self.less)
+        x = -self.less[0]
         self._less_discard(x)
         self._more_insert(x)
 
