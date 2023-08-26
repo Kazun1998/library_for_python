@@ -122,8 +122,12 @@ data:
     \n        rnk=0\n        for i in range(R):\n            f=False\n           \
     \ for j in range(C):\n                if T[i][j]!=0:\n                    f=True\n\
     \                    break\n\n            if f:\n                rnk+=1\n    \
-    \        else:\n                break\n\n        return rnk\n\n    #\u884C\u306E\
-    \u7D50\u5408\n    def row_union(self,other):\n        return Modulo_Matrix(self.ele+other.ele)\n\
+    \        else:\n                break\n\n        return rnk\n\n    # \u5358\u5C04\
+    \ ?\n    def is_injection(self):\n        return self.rank() == self.col\n\n \
+    \   # \u5168\u5C04 ?\n    def is_surjective(self):\n        return self.rank()\
+    \ == self.row\n\n    # \u5168\u5358\u5C04 ?\n    def is_bijection(self):\n   \
+    \     return self.col == self.row == self.rank()\n\n    #\u884C\u306E\u7D50\u5408\
+    \n    def row_union(self,other):\n        return Modulo_Matrix(self.ele+other.ele)\n\
     \n    #\u5217\u306E\u7D50\u5408\n    def column_union(self,other):\n        E=[]\n\
     \        for i in range(self.row):\n            E.append(self.ele[i]+other.ele[i])\n\
     \n        return Modulo_Matrix(E)\n\n    def __getitem__(self,index):\n      \
@@ -198,7 +202,7 @@ data:
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py
   requiredBy: []
-  timestamp: '2023-08-06 21:18:11+09:00'
+  timestamp: '2023-08-26 11:00:13+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Product.test.py
