@@ -32,6 +32,7 @@
 "test_verify/yosupo_library_checker/Math/Two_Sat.test.py": "2022-11-23 16:35:46 +0900",
 "test_verify/yosupo_library_checker/Matrix/Determinant.test.py": "2023-08-26 11:00:13 +0900",
 "test_verify/yosupo_library_checker/Matrix/Inverse.test.py": "2023-08-26 11:00:13 +0900",
+"test_verify/yosupo_library_checker/Matrix/Product.test.py": "2023-08-26 11:00:13 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Division.test.py": "2023-08-06 21:52:53 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Exp.test.py": "2023-08-06 21:52:53 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Inv.test.py": "2023-08-06 21:52:53 +0900",
