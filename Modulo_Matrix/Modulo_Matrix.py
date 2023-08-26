@@ -292,6 +292,10 @@ class Modulo_Matrix():
     def is_injection(self):
         return self.rank() == self.col
 
+    # 全射 ?
+    def is_surjective(self):
+        return self.rank() == self.row
+
     #行の結合
     def row_union(self,other):
         return Modulo_Matrix(self.ele+other.ele)
