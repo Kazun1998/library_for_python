@@ -82,6 +82,9 @@ class Best_Sum:
     def __contains__(self, value):
         return (value in self.more_count) or (value in self.less_count)
 
+    def count(self, value):
+        return self.more_count(value, 0) + self.less_count(value, 0)
+
     def insert(self, x):
         x *= self.reversal
         self._more_insert(x)
