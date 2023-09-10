@@ -634,8 +634,6 @@ data:
       title: test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
 layout: toppage
 ---
-# Documents
-
-## Mathematics
+## Documents
 
 - [代数的構造](/library_for_python/Algebra.html)
