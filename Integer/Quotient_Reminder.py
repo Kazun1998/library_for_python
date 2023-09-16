@@ -60,6 +60,48 @@ def Quotient_Range_Yielder(N):
             yield (t, l, r)
             prev_l = l
 
+def Ceiling_Range(N, left = None):
+    """ 非負整数 x を全て走るときの ceil(N/x) の可能性を全て列挙する.
+
+    [Input]
+    N: 正整数
+
+    [Output]
+    X: リスト
+    X の各要素 (t, x, y) は x <= k <= y であることと, ceil(N/k) = t が同値であることを表す.
+
+    """
+
+    from math import isqrt
+
+    N_sqrt = isqrt(N)
+    ceil = lambda k: (N + k - 1) // k
+    X = []
+
+    # Step 1: ceil(N/k) < N_sqrt となる k の範囲で個別に求める.
+    k = 1
+    while True:
+        if ceil(k) == N_sqrt:
+            break
+
+        X.append((ceil(k), k, k))
+        k += 1
+
+    # Step 2: ceil(N/k) >= N_sqrt となる k の範囲をまとめ上げる.
+    for t in range(N_sqrt, 1, -1):
+        l = ceil(t)
+        r = ceil(t - 1) - 1
+        if (l <= r) and (X[-1][1] < l):
+            X.append((t, l, r))
+
+    if left == None:
+        X.append((1, N, float("inf")))
+    else:
+        left = max(left, N)
+        X.append((1, N, left))
+
+    return X
+
 def Reminder_Enumeration(N, r):
     """ N を q 割った余りが r になる q を全て列挙する.
 
