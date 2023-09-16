@@ -1,4 +1,4 @@
-""" Note: Projection Selection Problem で対応できる条件の一覧
+""" Note: Project Selection Problem で対応できる条件の一覧
 
 h(x)=0 ならば a 点得る → set_zero(x,a)
 h(x)=1 ならば a 点得る → set_one(x,a)
