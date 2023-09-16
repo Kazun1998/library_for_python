@@ -260,8 +260,8 @@ data:
       path: Flow/Flow.py
       title: Flow
     - icon: ':warning:'
-      path: Flow/Projection_Selection_Problem.py
-      title: Flow/Projection_Selection_Problem.py
+      path: Flow/Project_Selection_Problem.py
+      title: Project Selection Problem
   - name: Functional_Graph
     pages:
     - icon: ':warning:'
