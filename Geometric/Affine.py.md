@@ -105,27 +105,27 @@ title: Affine
 
 2次実行列 $A \in M_2(\mathbb{R})$ と2次ベクトル $\boldsymbol{b} \in \mathbb{R}^2$ に対して, 写像
 
-$$\varphi(A, \boldsymbol{b}): \mathbb{R}^2 \to \mathbb{R}^2; \boldsymbol{x} \mapsto A \boldsymbol{x}+\boldsymbol{b}$$
+$$\Phi(A, \boldsymbol{b}): \mathbb{R}^2 \to \mathbb{R}^2; \boldsymbol{x} \mapsto A \boldsymbol{x}+\boldsymbol{b}$$
 
 をアフィン写像という.
 
 このとき,
 
-$$\varphi(A,\boldsymbol{b})(\boldsymbol{x})=\begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \end{pmatrix} \begin{pmatrix} A & \boldsymbol{b} \\ \boldsymbol{0}^\top & 1 \end{pmatrix} \begin{pmatrix} \boldsymbol{x} \\ 1 \end{pmatrix} $$
+$$\Phi(A,\boldsymbol{b})(\boldsymbol{x})=\begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \end{pmatrix} \begin{pmatrix} A & \boldsymbol{b} \\ \boldsymbol{0}^\top & 1 \end{pmatrix} \begin{pmatrix} \boldsymbol{x} \\ 1 \end{pmatrix} $$
 
 が成り立つ. このとき, 和とスカラー倍と積において,
 
-* $\varphi(A, \boldsymbol{b})+\varphi(B, \boldsymbol{c})=\varphi(A+B, \boldsymbol{b}+\boldsymbol{c})$
-* $\lambda \varphi(A, \boldsymbol{b})=\varphi(\lambda A, \lambda \boldsymbol{b})$
-* $\varphi(A, \boldsymbol{b}) \circ \varphi(B, \boldsymbol{c})=\varphi(A+B, \boldsymbol{b}+\boldsymbol{c})=\varphi(AB, A \boldsymbol{c}+\boldsymbol{b})$
+* $\Phi(A, \boldsymbol{b})+\Phi(B, \boldsymbol{c})=\Phi(A+B, \boldsymbol{b}+\boldsymbol{c})$
+* $\lambda \Phi(A, \boldsymbol{b})=\Phi(\lambda A, \lambda \boldsymbol{b})$
+* $\Phi(A, \boldsymbol{b}) \circ \Phi(B, \boldsymbol{c})=\Phi(A+B, \boldsymbol{b}+\boldsymbol{c})=\Phi(AB, A \boldsymbol{c}+\boldsymbol{b})$
 
 が成り立つ (積については真ん中の項の行列積の結果と一致する).
 
-アフィン変換 $\varphi(A,\boldsymbol{b})$ に対して, $A$ を行列部, $\boldsymbol{b}$ をベクトル部という.
+アフィン変換 $\Phi(A,\boldsymbol{b})$ に対して, $A$ を行列部, $\boldsymbol{b}$ をベクトル部という.
 
 ### アフィン変換の特徴づけ
 
-* アフィン変換が **全単射** を持つことの必要十分条件は行列部が **正則行列** であることである.
+* アフィン変換が **全単射** であることの必要十分条件は行列部が **正則行列** であることである.
 * アフィン変換が **等距離写像** であることの必要十分条件は行列部が **直交行列** であることである.
 * アフィン変換が **線形写像** になることの必要十分条件はベクトル部が **零ベクトル** になることである.
 
@@ -133,8 +133,8 @@ $$\varphi(A,\boldsymbol{b})(\boldsymbol{x})=\begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 &
 
 座標空間における変換の多くはアフィン変換によって記述できる.
 
-* $\boldsymbol{v}$ だけ平行移動 $\cdots \varphi(I_2, \boldsymbol{v})$
-* 点 $\mathrm{P}$ に関して対称移動 $\cdots \varphi(-I_2, -\mathrm{P})$
+* $\boldsymbol{v}$ だけ平行移動 $\cdots \Phi(I_2, \boldsymbol{v})$
+* 点 $\mathrm{P}$ に関して対称移動 $\cdots \Phi(-I_2, -\mathrm{P})$
 
 ### アフィン変換の決定
 
