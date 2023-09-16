@@ -18,7 +18,7 @@ data:
     \        \"\"\" 0,1,...,N-1 \u3092\u8981\u7D20\u3068\u3057\u3066\u521D\u671F\u5316\
     \u3059\u308B.\n\n        N: \u8981\u7D20\u6570\n        \"\"\"\n        self.n=N\n\
     \        self.parents=[-1]*N\n        self.rank=[0]*N\n        self.edges=[0]*N\n\
-    \        self.pot=[0]*N\n        self.valid=[True]*N\n        self.__group_number=N\n\
+    \        self.pot=[zero]*N\n        self.valid=[True]*N\n        self.__group_number=N\n\
     \n        self.op=op\n        self.diff=lambda u,v:self.op(u, self.neg(v)) # diff(u,v)=U(u)-U(v)\n\
     \        self.zero=zero\n        self.neg=neg\n\n\n    def find(self, x):\n  \
     \      \"\"\" \u8981\u7D20 x \u306E\u5C5E\u3057\u3066\u3044\u308B\u65CF\u3092\u8ABF\
@@ -82,7 +82,7 @@ data:
   isVerificationFile: false
   path: Union_Find/Potentialized_Union_Find.py
   requiredBy: []
-  timestamp: '2023-03-20 03:47:37+09:00'
+  timestamp: '2023-09-16 23:32:46+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Union_Find/Potentialized_Union_Find.py
