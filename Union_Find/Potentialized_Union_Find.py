@@ -8,7 +8,7 @@ class Potentilized_Union_Find():
         self.parents=[-1]*N
         self.rank=[0]*N
         self.edges=[0]*N
-        self.pot=[0]*N
+        self.pot=[zero]*N
         self.valid=[True]*N
         self.__group_number=N
 
