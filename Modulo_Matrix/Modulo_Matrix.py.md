@@ -205,8 +205,8 @@ data:
   timestamp: '2023-08-26 11:00:13+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/yosupo_library_checker/Matrix/Product.test.py
   - test_verify/yosupo_library_checker/Matrix/Inverse.test.py
+  - test_verify/yosupo_library_checker/Matrix/Product.test.py
   - test_verify/yosupo_library_checker/Matrix/Determinant.test.py
 documentation_of: Modulo_Matrix/Modulo_Matrix.py
 layout: document
