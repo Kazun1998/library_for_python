@@ -420,6 +420,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: Sequence/Z_Algorithm.py
       title: Sequence/Z_Algorithm.py
+  - name: Set_Polynomial
+    pages:
+    - icon: ':warning:'
+      path: Set_Polynomial/Set_Polynomial.py
+      title: Set_Polynomial/Set_Polynomial.py
   - name: Sorted_Set
     pages:
     - icon: ':heavy_check_mark:'
