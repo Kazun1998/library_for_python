@@ -288,6 +288,18 @@ class Modulo_Matrix():
 
         return rnk
 
+    # 単射 ?
+    def is_injection(self):
+        return self.rank() == self.col
+
+    # 全射 ?
+    def is_surjective(self):
+        return self.rank() == self.row
+
+    # 全単射 ?
+    def is_bijection(self):
+        return self.col == self.row == self.rank()
+
     #行の結合
     def row_union(self,other):
         return Modulo_Matrix(self.ele+other.ele)

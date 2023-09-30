@@ -33,16 +33,13 @@ class XOR_Vector_Space:
         return len(self.basis)
 
     def reduction(self):
-        S=self.basis
+        S = self.basis
         for i in range(len(S)):
-            vb=S[i]&(-S[i])
+            vb = S[i] & (-S[i])
             for j in  range(len(S)):
-                if i==j:
-                    continue
-
-                if S[j]&vb:
-                    S[j]^=S[i]
-        self.basis=[s for s in S if s]
+                if (j != i) and (S[j] & vb):
+                    S[j] ^= S[i]
+        self.basis = [s for s in S if s]
 
     def projection(self, x):
         for v in self.basis:
@@ -50,19 +47,16 @@ class XOR_Vector_Space:
         return x
 
     def __repr__(self):
-        return "[XOR Vector Space]: dim: {}, basis: {}".format(self.dimension(), self.basis)
+        return f"[XOR Vector Space]: dim: {self.dimension()}, basis: {self.basis}"
 
-    def __le__(self,other):
-        for u in self.basis:
-            if not u in other:
-                return False
-        return True
+    def __le__(self, other):
+        return all(u in other for u in self.basis)
 
     def __ge__(self,other):
         return other<=self
 
     def __eq__(self,other):
-        return (self<=other) and (other<=self)
+        return (self <= other) and self.dimension() == other.dimension()
 
 def Generate_Space(*S):
     """ S によって生成される XOR ベクトル空間を求める.

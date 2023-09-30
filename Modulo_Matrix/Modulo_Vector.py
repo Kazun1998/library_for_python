@@ -1,12 +1,9 @@
 from Modulo_Matrix import *
 
-class Modulo_Vector_Error(Exception):
-    pass
-
 class Modulo_Vector:
-    def __init__(self,v):
-        self.vec=[x%Mod for x in v]
-        self.size=len(v)
+    def __init__(self, vector):
+        self.vec = [vi % Mod for vi in vector]
+        self.size = len(vector)
 
         #出力
     def __str__(self):
@@ -18,6 +15,9 @@ class Modulo_Vector:
     def __bool__(self):
         return any(self.vec)
 
+    def __iter__(self):
+        yield from self.vec
+
     #+,-
     def __pos__(self):
         return self
@@ -26,13 +26,9 @@ class Modulo_Vector:
         return self.__scale__(-1)
 
     #加法
-    def __add__(self,other):
-        if self.size!=other.size:
-            raise Modulo_Vector_Error("2つのベクトルのサイズが異なります. ({}, {})".format(self.size,other.size))
-
-        v=self.vec
-        w=other.vec
-        return Modulo_Vector([v[i]+w[i] for i in range(self.size)])
+    def __add__(self, other):
+        assert self.size == other.size, f"2つのベクトルのサイズが異なります. ({self.size}, {other.size})"
+        return Modulo_Vector([vi + wi for vi, wi in zip(self, other)])
 
     #減法
     def __sub__(self, other):
@@ -49,38 +45,28 @@ class Modulo_Vector:
         return self.__scale__(other)
 
     #スカラー倍
-    def __scale__(self,r):
-        v=self.vec
-        v=[r*x for x in v]
-        return Modulo_Vector(v)
+    def __scale__(self, r):
+        return Modulo_Vector([r * vi for vi in self])
 
     #内積
     def inner(self,other):
-        if self.size!=other.size:
-            raise Modulo_Vector_Error("2つのベクトルのサイズが異なります.({},{})".format(self.size,other.size))
-
-        X=0
-        v=self.vec
-        w=other.vec
-
-        for i in range(self.size):
-            X+=v[i]*w[i]%Mod
-        return X
+        assert self.size == other.size, f"2つのベクトルのサイズが異なります. ({self.size}, {other.size})"
+        return sum(vi * wi % Mod for vi, wi in zip(self, other)) % Mod
 
     #累乗
     def __pow__(self,n):
         pass
 
     #等号
-    def __eq__(self,other):
-        return (self.vec==other.vec)
+    def __eq__(self, other):
+        return self.vec == other.vec
 
     def __len__(self):
         return self.size
 
     #不等号
-    def __neq__(self,other):
-        return not(self==other)
+    def __neq__(self, other):
+        return not (self == other)
 
     def __getitem__(self,index):
         assert isinstance(index,int)
