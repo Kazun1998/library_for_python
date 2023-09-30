@@ -337,7 +337,7 @@ data:
       title: Integer/Summation.py
     - icon: ':warning:'
       path: Integer/Totient.py
-      title: Integer/Totient.py
+      title: Totient Function
     - icon: ':warning:'
       path: Integer/Value.py
       title: Integer/Value.py
