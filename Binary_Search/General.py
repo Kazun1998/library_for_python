@@ -62,14 +62,15 @@ def General_Binary_Increase_Search_Real(L, R, cond, ep, Times, default=None):
     if cond(L):
         return L
 
-    while (R-L)>=ep or Times:
-        Times-=1
-        C=L+(R-L)/2
+    while (R - L >= ep) or (Times > 0):
+        Times -= 1
+        C = L + (R - L) / 2
         if cond(C):
-            R=C
+            R = C
         else:
-            L=C
-    return (L+R)/2
+            L = C
+
+    return (L + R) / 2
 
 def General_Binary_Decrease_Search_Real(L, R, cond, ep, Times, default=None):
     """ 条件式が単調減少であるとき, 実数上で一般的な二部探索を行う.
@@ -88,11 +89,12 @@ def General_Binary_Decrease_Search_Real(L, R, cond, ep, Times, default=None):
     if cond(R):
         return R
 
-    while (R-L)>=ep or Times:
-        Times-=1
-        C=L+(R-L)/2
+    while (R - L >= ep) or (Times > 0):
+        Times -= 1
+        C = L + (R - L) / 2
         if cond(C):
-            L=C
+            L = C
         else:
-            R=C
-    return (L+R)/2
+            R = C
+
+    return (L + R) / 2
