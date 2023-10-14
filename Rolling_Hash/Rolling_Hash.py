@@ -1,32 +1,43 @@
 class Rolling_Hash():
-    def __init__(self,S, base, mod, type=0):
-        """ type=0: 整数列 (各要素は mod 未満), type=1: 文字列 (mod>(最大の文字コード))
+    def __init__(self, S, mod, type = 0, base = -1):
+        """ S の Rolling Hash を生成する.
 
+        S: 列
+        mod: 法
+        type: S が整数列ならば, type = 0 (各要素は mod 未満), S が文字列ならば, type = 1((文字コードの最大値) < mod)
+        base: 指数 (base = -1 とすると, 乱数による自動設定)
         """
 
         self.mod=mod
-        self.base=base
         self.length=len(S)
         self.power=power=[1]*(len(S)+1)
         self.type=type
 
-        L=len(S)
-        self.hash=h=[0]*(L+1)
+        if type:
+            S=[ord(S[i]) for i in range(self.length)]
 
-        for i in range(L):
-            if type:
-                h[i+1]=(base*h[i]+ord(S[i]))%mod
-            else:
-                h[i+1]=(base*h[i]+S[i])%mod
+        S_max=max(S)
+        assert S_max < mod
 
-        for i in range(L):
-            power[i+1]=base*power[i]%mod
+        if base <= S_max:
+            import random
+            self.base = random.randint(S_max + 1, mod - 1)
+        else:
+            self.base = base
+
+        self.hash=h=[0]*(self.length+1)
+
+        for i in range(self.length):
+            h[i+1]=(self.base*h[i]+S[i])%mod
+            power[i+1]=self.base*power[i]%mod
 
     def __hasher(self, X):
         assert len(X)<=len(self)
         h=0
-        for i in range(len(X)):
-            h=(h*self.base+X[i])%self.mod
+        for x in X:
+            if self.type==1:
+                x=ord(x)
+            h=(h*self.base+x)%self.mod
         return h
 
     def get(self, l, r):
@@ -88,20 +99,36 @@ class Rolling_Hash():
         """ [l0, r0) と [l1, r1) の部分列をドッキングしたハッシュを返す.
         """
 
-        h0=self.get(l0,r0); h1=self.get(l1,r1)
+        h0=self.get(l0, r0); h1=self.get(l1, r1)
         return (h0*self.power[r1-l1]+h1)%self.mod
 
 #=================================================
 class Double_Rolling_Hash():
-    def __init__(self, S, base, mod0, mod1, type):
+    def __init__(self, S, mod0, mod1, type = 0, base = -1):
+        """ S の 2 つの法に関する Rolling Hash を生成する.
+
+        S: 列
+        mod0, mod1: 法
+        type: S が整数列ならば, type = 0 (各要素は mod 未満), S が文字列ならば, type = 1((文字コードの最大値) < mod)
+        base: 指数 (base = -1 とすると, 乱数による自動設定)
+        """
+
         self.__length=len(S)
-        self.__base=base
         self.__mod0=mod0
         self.__mod1=mod1
         self.__type=type
 
-        self.rh0=Rolling_Hash(S, base, mod0, type)
-        self.rh1=Rolling_Hash(S, base, mod1, type)
+        if type:
+            S=[ord(S[i]) for i in range(self.__length)]
+
+        S_max=max(S)
+        if base <= S_max:
+            import random
+            base = random.randint(S_max + 1, min(mod0, mod1) - 1)
+
+        self.__base=base
+        self.rh0=Rolling_Hash(S, mod0, base=self.__base)
+        self.rh1=Rolling_Hash(S, mod1, base=self.__base)
 
     def encode(self, a0, a1):
         return a0*self.__mod1+a1
@@ -115,10 +142,11 @@ class Double_Rolling_Hash():
         assert len(X)<=len(self)
         a0=0; a1=0
         for x in X:
-            if self.__type==0:
-                a0=(a0*self.__base+x)%self.__mod0
-                a1=(a1*self.__base+x)%self.__mod1
-        return self.encode(a0,a1)
+            if self.__type==1:
+                x=ord(x)
+            a0=(a0*self.__base+x)%self.__mod0
+            a1=(a1*self.__base+x)%self.__mod1
+        return self.encode(a0, a1)
 
     def __getitem__(self, index):
         if index.__class__==int:
@@ -177,63 +205,3 @@ class Double_Rolling_Hash():
         """
 
         return self.encode(self.rh0.docking(l0, r0, l1, r1), self.rh1.docking(l0, r0, l1, r1))
-
-#=================================================
-class Hasher():
-    def __init__(self, length, base, mod, type=0):
-        self.length=length
-        self.base=base
-        self.mod=mod
-        self.type=type
-
-        self.power=pw=[1]*length
-        for i in range(1, length):
-            pw[i]=(base*pw[i-1])%mod
-
-    def __repr__(self):
-        return "length: {}\nbase: {}\nmod: {}".format(self.length, self.base, self.mod)
-
-    def encode(self, S):
-        code=0; N=len(S)
-        for i in range(N):
-            if self.type:
-                code+=ord(S[i])*self.power[N-1-i]%self.mod
-            else:
-                code+=S[i]*self.power[N-1-i]%self.mod
-
-        return code%self.mod
-
-    def decode(self, S):
-        pass
-
-#=================================================
-class Double_Hasher():
-    def __init__(self, length, base, mod0, mod1, type=0):
-        self.length=length
-        self.base=base
-        self.mod0=mod0
-        self.mod1=mod1
-        self.type=type
-
-        self.power0=pw0=[1]*length
-        self.power1=pw1=[1]*length
-        for i in range(1, length):
-            pw0[i]=(base*pw0[i-1])%mod0
-            pw1[i]=(base*pw1[i-1])%mod1
-
-    def __repr__(self):
-        return "length: {}\nbase: {}\nmod: {}".format(self.length, self.base, self.mod)
-
-    def encode(self, S):
-        code0=0; code1=0
-        N=len(S)
-        for i in range(N):
-            if self.type:
-                code0+=ord(S[i])*self.power0[N-1-i]%self.mod0
-                code1+=ord(S[i])*self.power1[N-1-i]%self.mod1
-            else:
-                code0+=S[i]*self.power0[N-1-i]%self.mod0
-                code1+=S[i]*self.power1[N-1-i]%self.mod1
-
-        code0%=self.mod0; code1%=self.mod1
-        return code1*self.mod0+code0
