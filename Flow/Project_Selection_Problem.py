@@ -233,4 +233,4 @@ class Project_Selection_Problem:
         if Mode==0:
             return base-alpha
         else:
-            return base-alpha, F.min_cut(self.source), self.source, self. target
+            return base-alpha, F.min_cut(self.source), self.source, self.target
