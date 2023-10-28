@@ -8,11 +8,11 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.5/x64/lib/python3.11/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.0/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.11.5/x64/lib/python3.11/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.12.0/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "\"\"\" Note: Project Selection Problem \u3067\u5BFE\u5FDC\u3067\u304D\u308B\
     \u6761\u4EF6\u306E\u4E00\u89A7\n\nh(x)=0 \u306A\u3089\u3070 a \u70B9\u5F97\u308B\
@@ -87,10 +87,23 @@ data:
     \    def ban_one(self,x):\n        \"\"\" h(x)=1 \u3068\u306A\u308B\u3053\u3068\
     \u3092\u7981\u6B62\u3059\u308B. (\u5B9F\u884C\u3057\u305F\u3089 -inf \u70B9\u306B\
     \u306A\u308B)\n\n        0<=x<N\n        \"\"\"\n\n        assert 0<=x<self.N\n\
-    \        self.set_one(x,-inf)\n\n    def solve(self,Mode=0):\n        \"\"\" Project\
-    \ Selection Problem \u3092\u89E3\u304F.\n\n        Mode\n        0: \u6700\u5927\
-    \u5024\u306E\u307F\n        1: \u6700\u5927\u5024\u3068\u305D\u308C\u3092\u9054\
-    \u6210\u3059\u308B\u4F8B\n        \"\"\"\n\n        F=MaxFlow(self.ver_num)\n\
+    \        self.set_one(x,-inf)\n\n    def force_zero(self, x):\n        \"\"\"\
+    \ h(x) = 0 \u3068\u3044\u3046\u6761\u4EF6\u3092\u8FFD\u52A0\u3059\u308B (\u3064\
+    \u307E\u308A, ban_zero(x)).\n\n        0 <= x < N\n        \"\"\"\n\n        assert\
+    \ 0 <= x < self.N\n        self.ban_one(x)\n\n    def force_one(self, x):\n  \
+    \      \"\"\" h(x) = 1 \u3068\u3044\u3046\u6761\u4EF6\u3092\u8FFD\u52A0\u3059\u308B\
+    \ (\u3064\u307E\u308A, ban_one(x)).\n\n        0 <= x < N\n        \"\"\"\n\n\
+    \        assert 0 <= x < self.N\n        self.ban_zero(x)\n\n    def increase(self,\
+    \ X):\n        \"\"\" h(x[0]) <= h(x[1]) <= ... <= h(x[k-1]) (h(x[i]) = 1, h(x[i+1])\
+    \ = 0 \u3092\u7981\u6B62) \u3068\u3044\u3046\u6761\u4EF6\u3092\u8FFD\u52A0\u3059\
+    \u308B.\n\n        \"\"\"\n\n        for i in range(len(X) - 1):\n           \
+    \ self.set_zero_one(X[i + 1], X[i], -inf)\n\n    def decrease(self, X):\n    \
+    \    \"\"\" h(x[0]) >= h(x[1]) >= ... >= h(x[k-1]) (h(x[i]) = 0, h(x[i+1]) = 1\
+    \ \u3092\u7981\u6B62) \u3068\u3044\u3046\u6761\u4EF6\u3092\u8FFD\u52A0\u3059\u308B\
+    .\n\n        \"\"\"\n\n        self.increase(X[::-1])\n\n    def solve(self,Mode=0):\n\
+    \        \"\"\" Project Selection Problem \u3092\u89E3\u304F.\n\n        Mode\n\
+    \        0: \u6700\u5927\u5024\u306E\u307F\n        1: \u6700\u5927\u5024\u3068\
+    \u305D\u308C\u3092\u9054\u6210\u3059\u308B\u4F8B\n        \"\"\"\n\n        F=MaxFlow(self.ver_num)\n\
     \        base=self.base\n        for i in range(self.N):\n            F.add_arc(self.source,i,0)\n\
     \            F.add_arc(i,self.target,0)\n\n            if self.indivi[i][0]>=0:\n\
     \                base+=self.indivi[i][0]\n                F.add_arc(self.source,i,self.indivi[i][0])\n\
@@ -103,12 +116,12 @@ data:
     \                F.add_arc(i,self.target,-self.indivi[i][1])\n\n        for x,y,c\
     \ in self.mutual:\n            F.add_arc(x,y,c)\n\n        alpha=F.max_flow(self.source,self.target)\n\
     \        if Mode==0:\n            return base-alpha\n        else:\n         \
-    \   return base-alpha, F.min_cut(self.source), self.source, self. target\n"
+    \   return base-alpha, F.min_cut(self.source), self.source, self.target\n"
   dependsOn: []
   isVerificationFile: false
   path: Flow/Project_Selection_Problem.py
   requiredBy: []
-  timestamp: '2023-09-16 23:54:47+09:00'
+  timestamp: '2023-10-29 01:38:54+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Flow/Project_Selection_Problem.py
