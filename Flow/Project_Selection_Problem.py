@@ -165,6 +165,17 @@ class Project_Selection_Problem:
         assert 0<=x<self.N
         self.set_one(x,-inf)
 
+    def increase(self, X):
+        """ h(x[0]) <= h(x[1]) <= ... <= h(x[n-2]) (h(x[i]) = 1, h(x[i+1]) = 0 を禁止) という条件を追加する.
+
+        """
+
+        for i in range(len(X) - 1):
+            self.set_zero_one(X[i + 1], X[i], -inf)
+
+    def decrease(self, X):
+        self.increase(X[::-1])
+
     def solve(self,Mode=0):
         """ Project Selection Problem を解く.
 
