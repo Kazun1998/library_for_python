@@ -165,6 +165,24 @@ class Project_Selection_Problem:
         assert 0<=x<self.N
         self.set_one(x,-inf)
 
+    def force_zero(self, x):
+        """ h(x) = 0 という条件を追加する (つまり, ban_zero(x)).
+
+        0 <= x < N
+        """
+
+        assert 0 <= x < self.N
+        self.ban_one(x)
+
+    def force_one(self, x):
+        """ h(x) = 1 という条件を追加する (つまり, ban_one(x)).
+
+        0 <= x < N
+        """
+
+        assert 0 <= x < self.N
+        self.ban_zero(x)
+
     def increase(self, X):
         """ h(x[0]) <= h(x[1]) <= ... <= h(x[n-2]) (h(x[i]) = 1, h(x[i+1]) = 0 を禁止) という条件を追加する.
 
