@@ -184,7 +184,7 @@ class Project_Selection_Problem:
         self.ban_zero(x)
 
     def increase(self, X):
-        """ h(x[0]) <= h(x[1]) <= ... <= h(x[n-2]) (h(x[i]) = 1, h(x[i+1]) = 0 を禁止) という条件を追加する.
+        """ h(x[0]) <= h(x[1]) <= ... <= h(x[k-1]) (h(x[i]) = 1, h(x[i+1]) = 0 を禁止) という条件を追加する.
 
         """
 
@@ -192,6 +192,10 @@ class Project_Selection_Problem:
             self.set_zero_one(X[i + 1], X[i], -inf)
 
     def decrease(self, X):
+        """ h(x[0]) >= h(x[1]) >= ... >= h(x[k-1]) (h(x[i]) = 0, h(x[i+1]) = 1 を禁止) という条件を追加する.
+
+        """
+
         self.increase(X[::-1])
 
     def solve(self,Mode=0):
