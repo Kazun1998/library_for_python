@@ -160,44 +160,49 @@ class Digraph:
         return [x for x in range(N) if T[x]]
 
     #頂点 u,v の距離を求める.
-    def distance(self,u,v):
-        if u==v:
-            return 0
-
+    def distance(self, u, v, default = -1):
         from collections import deque
-        inf=float("inf")
-        N=self.vertex_count()
-        adj_out=self.adjacent_out
-        T=[inf]*N; T[u]=0
+
+        adj_out = self.adjacent_out
+        dist = [-1] * self.vertex_count()
+        dist[u] = 0
 
         Q=deque([u])
         while Q:
-            w=Q.popleft()
-            for x in adj_out[w]:
-                if T[x]==inf:
-                    T[x]=T[w]+1
-                    Q.append(x)
-                    if x==v:
-                        return T[x]
-        return inf
+            x = Q.popleft()
+            for y in adj_out[x]:
+                if dist[y] != -1:
+                    continue
+
+                dist[y] = dist[x] + 1
+                Q.append(y)
+
+                if y == v:
+                    return dist[y]
+
+        return default
 
     #ある1点からの距離
-    def distance_all(self,u):
-        """ 頂点 u からの距離を求める."""
+    def distance_all(self, u, default):
+        """ 頂点 u からの距離をそれぞれの頂点について求める."""
 
         from collections import deque
-        inf=float("inf")
-        adj_out=self.adjacent_out
-        T=[inf]*self.vertex_count(); T[u]=0
+
+        adj_out = self.adjacent_out
+        dist = [-1] * self.vertex_count()
+        dist[u] = 0
 
         Q=deque([u])
         while Q:
-            w=Q.popleft()
-            for x in adj_out[w]:
-                if T[x]==inf:
-                    T[x]=T[w]+1
-                    Q.append(x)
-        return T
+            x = Q.popleft()
+            for y in adj_out[x]:
+                if dist[y] != -1:
+                    continue
+
+                dist[y] = dist[x]+1
+                Q.append(y)
+
+        return [d if d != -1 else default for d in dist]
 
     def shortest_path(self,u,v, dist=False):
         """ u から v への最短路を求める (存在しない場合は None).
