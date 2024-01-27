@@ -8,22 +8,26 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.0/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.12.0/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Imos_1:\n    def __init__(self, N):\n        \"\"\" \u533A\u9593 0<=t<N\
-    \ \u306B\u5BFE\u3059\u308B Imos \u6CD5\u3092\u6E96\u5099\u3059\u308B.\n      \
-    \  \"\"\"\n        self.__N=N\n        self.list=[0]*(N+1)\n\n    def __len__(self):\n\
-    \        return len(self.list)-1\n\n    def add(self, l, r, x=1):\n        \"\"\
-    \"\u9589\u533A\u9593 [l, r] \u306B x \u3092\u52A0\u7B97\u3059\u308B.\"\"\"\n\n\
-    \        assert 0<=l<self.__N\n        assert 0<=r<self.__N\n\n        if l<=r:\n\
-    \            self.list[l]+=x\n            self.list[r+1]-=x\n\n    def cumulative_sum(self):\n\
-    \        \"\"\"\u7D2F\u7A4D\u548C\u3092\u6C42\u3081\u308B.\n        \"\"\"\n \
-    \       X=self.list.copy()[:-1]\n        for i in range(1,len(self)):\n      \
-    \      X[i]+=X[i-1]\n        return X\n\n#=================================================\n\
+  code: "class Imos_1:\n    def __init__(self, N: int):\n        \"\"\" \u533A\u9593\
+    \ 0 <= t < N \u306B\u5BFE\u3059\u308B Imos \u6CD5\u306E\u30C7\u30FC\u30BF\u69CB\
+    \u9020\u3092\u4F5C\u6210\u3059\u308B.\n\n        Args:\n            N (int): \u5E45\
+    \n        \"\"\"\n\n        self.__N = N\n        self.list = [0] * (N + 1)\n\n\
+    \    def __len__(self):\n        return len(self.list) - 1\n\n    def add(self,\
+    \ l: int, r: int, x = 1):\n        \"\"\" \u9589\u533A\u9593 [l, r] \u306B x \u3092\
+    \u52A0\u7B97\u3059\u308B.\n\n        Args:\n            l (int): \u5DE6\u7AEF\n\
+    \            r (int): \u53F3\u7AEF\n            x (int, optional): \u8FFD\u52A0\
+    \u3059\u308B\u5024. Defaults to 1.\n        \"\"\"\n\n        if l > r:\n    \
+    \        return\n\n        if 0 <= l < self.__N:\n            self.list[l] +=\
+    \ x\n\n        if 0 <= r < self.__N:\n            self.list[r + 1] -= x\n\n  \
+    \  def cumulative_sum(self):\n        \"\"\" \u7D2F\u7A4D\u548C\u3092\u6C42\u3081\
+    \u308B\n        \"\"\"\n\n        X = self.list.copy()[:-1]\n        for i in\
+    \ range(1, len(self)):\n            X[i] += X[i - 1]\n\n        return X\n\n#=================================================\n\
     from collections import defaultdict\nclass Sparse_Imos_1:\n    def __init__(self):\n\
     \        self.dict=defaultdict(int)\n\n    def add(self, l, r, x=1):\n       \
     \ \"\"\"\u9589\u533A\u9593 [l,r] \u306B x \u3092\u52A0\u7B97\u3059\u308B.\n  \
@@ -72,7 +76,7 @@ data:
   isVerificationFile: false
   path: Imos.py
   requiredBy: []
-  timestamp: '2022-09-28 11:02:10+09:00'
+  timestamp: '2024-01-28 00:41:24+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Imos.py
