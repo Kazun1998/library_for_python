@@ -488,6 +488,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: Union_Find/Union_Find.py
       title: Union Find (Disjoint Set Union)
+  - name: test_verify/yosupo_library_checker/Math
+    pages:
+    - icon: ':warning:'
+      path: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.py
+      title: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.py
   verificationCategories:
   - name: test_verify/yosupo_library_checker/Convolution
     pages:
