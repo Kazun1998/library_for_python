@@ -1,29 +1,43 @@
 class Imos_1:
-    def __init__(self, N):
-        """ 区間 0<=t<N に対する Imos 法を準備する.
+    def __init__(self, N: int):
+        """ 区間 0 <= t < N に対する Imos 法のデータ構造を作成する.
+
+        Args:
+            N (int): 幅
         """
-        self.__N=N
-        self.list=[0]*(N+1)
+
+        self.__N = N
+        self.list = [0] * (N + 1)
 
     def __len__(self):
-        return len(self.list)-1
+        return len(self.list) - 1
 
-    def add(self, l, r, x=1):
-        """閉区間 [l, r] に x を加算する."""
+    def add(self, l: int, r: int, x = 1):
+        """ 閉区間 [l, r] に x を加算する.
 
-        assert 0<=l<self.__N
-        assert 0<=r<self.__N
+        Args:
+            l (int): 左端
+            r (int): 右端
+            x (int, optional): 追加する値. Defaults to 1.
+        """
 
-        if l<=r:
-            self.list[l]+=x
-            self.list[r+1]-=x
+        if l > r:
+            return
+
+        if 0 <= l < self.__N:
+            self.list[l] += x
+
+        if 0 <= r < self.__N:
+            self.list[r + 1] -= x
 
     def cumulative_sum(self):
-        """累積和を求める.
+        """ 累積和を求める
         """
-        X=self.list.copy()[:-1]
-        for i in range(1,len(self)):
-            X[i]+=X[i-1]
+
+        X = self.list.copy()[:-1]
+        for i in range(1, len(self)):
+            X[i] += X[i - 1]
+
         return X
 
 #=================================================

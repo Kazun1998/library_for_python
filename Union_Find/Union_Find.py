@@ -28,15 +28,16 @@ class Union_Find():
 
         return a
 
-    def union(self, x, y):
-        """ 要素 x,y を同一視する.
+    def union(self, x, y, force = False):
+        """ 要素 x と 要素 y を同一視する.
 
-        [input]
-        x,y: 要素
+        Args:
+            x (int): 要素 x
+            y (int): 要素 y
+            force (bool, optional): True の場合, 必ず x が代表元になるようにマージする. Defaults to False.
 
-        [output]
-        元々が非連結 → True
-        元々が連結 → False
+        Returns:
+            bool: 元々非連結ならば True, 元々連結ならば False.
         """
         x=self.find(x)
         y=self.find(y)
@@ -45,7 +46,7 @@ class Union_Find():
             self.edges[x]+=1
             return False
 
-        if self.rank[x]<self.rank[y]:
+        if (not force) and (self.rank[x] < self.rank[y]):
             x,y=y,x
 
         self.__group_number-=1
@@ -58,35 +59,6 @@ class Union_Find():
 
         if self.rank[x]==self.rank[y]:
             self.rank[x]+=1
-        return True
-
-    def union_force(self, x, y):
-        """ 要素 x へ要素 y を同一視する (新しい代表元は x が属する族の代表元になる).
-
-        [input]
-        x,y: 要素
-
-        [output]
-        元々が非連結 → True
-        元々が連結 → False
-        """
-        x = self.find(x)
-        y = self.find(y)
-
-        if x == y:
-            self.edges[x] += 1
-            return False
-
-        self.__group_number -= 1
-
-        self.edges[x] += self.edges[y]+1
-        self.edges[y] = 0
-
-        self.parents[x] += self.parents[y]
-        self.parents[y] = x
-
-        if self.rank[x] == self.rank[y]:
-            self.rank[x] += 1
         return True
 
     def size(self, x):
