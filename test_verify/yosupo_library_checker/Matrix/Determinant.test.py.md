@@ -31,7 +31,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Matrix/Determinant.test.py
   requiredBy: []
-  timestamp: '2023-08-26 11:00:13+09:00'
+  timestamp: '2024-02-11 19:13:28+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Matrix/Determinant.test.py

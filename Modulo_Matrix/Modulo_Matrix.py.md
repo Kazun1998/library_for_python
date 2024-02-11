@@ -31,30 +31,33 @@ data:
     \ X in M]\n        R=len(M)\n        if R!=0:\n            C=len(M[0])\n     \
     \   else:\n            C=0\n        self.row=R\n        self.col=C\n        self.size=(R,C)\n\
     \n    #\u51FA\u529B\n    def __str__(self):\n        return \"[\"+\"\\n\".join(map(str,self.ele))+\"\
-    ]\"\n\n    def __repr__(self):\n        return str(self)\n\n    #+,-\n    def\
-    \ __pos__(self):\n        return self\n\n    def __neg__(self):\n        return\
-    \ self.__scale__(-1)\n\n    #\u52A0\u6CD5\n    def __add__(self,other):\n    \
-    \    M=self.ele; N=other.ele\n\n        L=[[0]*self.col for _ in range(self.row)]\n\
-    \        for i in range(self.row):\n            Li,Mi,Ni=L[i],M[i],N[i]\n    \
-    \        for j in range(self.col):\n                Li[j]=Mi[j]+Ni[j]\n      \
-    \  return Modulo_Matrix(L)\n\n    def __iadd__(self,other):\n        M=self.ele;\
-    \ N=other.ele\n\n        for i in range(self.row):\n            Mi,Ni=M[i],N[i]\n\
-    \            for j in range(self.col):\n                Mi[j]+=Ni[j]\n       \
-    \         Mi[j]%=Mod\n        return self\n\n    #\u6E1B\u6CD5\n    def __sub__(self,other):\n\
-    \        M=self.ele; N=other.ele\n\n        L=[[0]*self.col for _ in range(self.row)]\n\
-    \        for i in range(self.row):\n            Li,Mi,Ni=L[i],M[i],N[i]\n    \
-    \        for j in range(self.col):\n                Li[j]=Mi[j]-Ni[j]\n      \
-    \  return Modulo_Matrix(L)\n\n    def __isub__(self,other):\n        M=self.ele;\
-    \ N=other.ele\n\n        for i in range(self.row):\n            Mi,Ni=M[i],N[i]\n\
-    \            for j in range(self.col):\n                Mi[j]-=Ni[j]\n       \
-    \         Mi[j]%=Mod\n        return self\n\n    #\u4E57\u6CD5\n    def __mul__(self,other):\n\
-    \        if isinstance(other,Modulo_Matrix):\n            assert self.col==other.row,\
-    \ \"\u5DE6\u5074\u306E\u5217\u3068\u53F3\u5074\u306E\u884C\u304C\u4E00\u81F4\u3057\
-    \u307E\u305B\u3093.({},{})\".format(self.size,other.size)\n\n            M=self.ele;\
-    \ N=other.ele\n            E=[[0]*other.col for _ in range(self.row)]\n\n    \
-    \        for i in range(self.row):\n                Ei,Mi=E[i],M[i]\n        \
-    \        for k in range(self.col):\n                    m_ik,Nk=Mi[k],N[k]\n \
-    \                   for j in range(other.col):\n                        Ei[j]+=m_ik*Nk[j]\n\
+    ]\"\n\n    def __repr__(self):\n        return str(self)\n\n    # \u96F6\u884C\
+    \u5217, \u5358\u4F4D\u884C\u5217\n    @classmethod\n    def Zero_Matrix(cls, row,\
+    \ col):\n        return Modulo_Matrix([[0] * col for _ in range(row)])\n\n   \
+    \ @classmethod\n    def Identity_Matrix(cls, N):\n        return Modulo_Matrix([[1\
+    \ if i==j else 0 for j in range(N)] for i in range(N)])\n\n    #+,-\n    def __pos__(self):\n\
+    \        return self\n\n    def __neg__(self):\n        return self.__scale__(-1)\n\
+    \n    #\u52A0\u6CD5\n    def __add__(self,other):\n        M=self.ele; N=other.ele\n\
+    \n        L=[[0]*self.col for _ in range(self.row)]\n        for i in range(self.row):\n\
+    \            Li,Mi,Ni=L[i],M[i],N[i]\n            for j in range(self.col):\n\
+    \                Li[j]=Mi[j]+Ni[j]\n        return Modulo_Matrix(L)\n\n    def\
+    \ __iadd__(self,other):\n        M=self.ele; N=other.ele\n\n        for i in range(self.row):\n\
+    \            Mi,Ni=M[i],N[i]\n            for j in range(self.col):\n        \
+    \        Mi[j]+=Ni[j]\n                Mi[j]%=Mod\n        return self\n\n   \
+    \ #\u6E1B\u6CD5\n    def __sub__(self,other):\n        M=self.ele; N=other.ele\n\
+    \n        L=[[0]*self.col for _ in range(self.row)]\n        for i in range(self.row):\n\
+    \            Li,Mi,Ni=L[i],M[i],N[i]\n            for j in range(self.col):\n\
+    \                Li[j]=Mi[j]-Ni[j]\n        return Modulo_Matrix(L)\n\n    def\
+    \ __isub__(self,other):\n        M=self.ele; N=other.ele\n\n        for i in range(self.row):\n\
+    \            Mi,Ni=M[i],N[i]\n            for j in range(self.col):\n        \
+    \        Mi[j]-=Ni[j]\n                Mi[j]%=Mod\n        return self\n\n   \
+    \ #\u4E57\u6CD5\n    def __mul__(self,other):\n        if isinstance(other,Modulo_Matrix):\n\
+    \            assert self.col==other.row, \"\u5DE6\u5074\u306E\u5217\u3068\u53F3\
+    \u5074\u306E\u884C\u304C\u4E00\u81F4\u3057\u307E\u305B\u3093.({},{})\".format(self.size,other.size)\n\
+    \n            M=self.ele; N=other.ele\n            E=[[0]*other.col for _ in range(self.row)]\n\
+    \n            for i in range(self.row):\n                Ei,Mi=E[i],M[i]\n   \
+    \             for k in range(self.col):\n                    m_ik,Nk=Mi[k],N[k]\n\
+    \                    for j in range(other.col):\n                        Ei[j]+=m_ik*Nk[j]\n\
     \                        Ei[j]%=Mod\n            return Modulo_Matrix(E)\n   \
     \     elif isinstance(other,int):\n            return self.__scale__(other)\n\n\
     \    def __rmul__(self,other):\n        if isinstance(other,int):\n          \
@@ -134,29 +137,23 @@ data:
     \  if isinstance(index, int):\n            return self.ele[index]\n        else:\n\
     \            return self.ele[index[0]][index[1]]\n\n    def __setitem__(self,index,val):\n\
     \        assert isinstance(index,tuple) and len(index)==2\n        self.ele[index[0]][index[1]]=val\n\
-    \n#=================================================\n#\u5358\u4F4D\u884C\u5217\
-    \ndef Identity_Matrix(N):\n    \"\"\" N \u6B21\u5358\u4F4D\u884C\u5217\u3092\u4F5C\
-    \u6210\u3059\u308B. \"\"\"\n\n    return Modulo_Matrix([[1 if i==j else 0 for\
-    \ j in range(N)] for i in range(N)])\n\n#\u96F6\u884C\u5217\ndef Zero_Matrix(row,\
-    \ col):\n    \"\"\" row \u884C col \u5217\u306E\u30BC\u30ED\u884C\u5217\u3092\u4F5C\
-    \u6210\u3059\u308B. \"\"\"\n\n    return Modulo_Matrix([[0]*col for i in range(row)])\n\
-    \n#\u6B63\u65B9\u884C\u5217?\ndef Is_Square(M):\n    return M.row==M.col\n\n#\u5BFE\
-    \u89D2\u884C\u5217\ndef Diagonal_Matrix(D):\n    \"\"\" D \u306E\u7B2C i \u8981\
-    \u7D20\u304C (i,i) \u6210\u5206\u3067\u3042\u308B\u5BFE\u89D2\u884C\u5217\u3092\
-    \u751F\u6210\u3059\u308B.\n\n    D: \u30EA\u30B9\u30C8\n    \"\"\"\n\n    N=len(D)\n\
-    \    return Modulo_Matrix([[D[i] if i==j else 0 for j in range(N)] for i in range(N)])\n\
-    \n#\u884C\u5217\u306E\u76F4\u548C\ndef Direct_Sum(*A):\n    \"\"\" A=[A_0, A_1,\
-    \ ..., A_{N-1}] \u306B\u5BFE\u3059\u308B\u76F4\u548C\u884C\u5217\u3092\u6C42\u3081\
-    \u308B.\n\n    \"\"\"\n\n    r=c=0\n    for a in A:\n        r+=a.row\n      \
-    \  c+=a.col\n\n    M=[[0]*c for _ in range(r)]\n    x=y=0\n    for p in range(len(A)):\n\
-    \        a=A[p]\n        for i in range(a.row):\n            b=A[p].ele[i]\n \
-    \           m=M[x+i]\n            for j in range(a.col):\n                m[y+j]=b[j]\n\
-    \        x+=a.row; y+=a.col\n    return Modulo_Matrix(M)\n\n#\u30AF\u30ED\u30CD\
-    \u30C3\u30AB\u30FC\u7A4D\ndef Kronecker_Product(*X):\n    A=[[1]]\n    for B in\
-    \ X:\n        A=[[A[i//B.row][j//B.col]*B[i%B.row][j%B.col]%Mod for j in range(len(A[0])*B.col)]\
-    \ for i in range(len(A)*B.row)]\n    return Modulo_Matrix(A)\n\n#\u30AF\u30ED\u30CD\
-    \u30C3\u30AB\u30FC\u548C\ndef Kronecker_Sum(*X):\n    A=Modulo_Matrix([[0]])\n\
-    \    for B in X:\n        A=Kronecker_Product(A, Identity_Matrix(B.row))+Kronecker_Product(Identity_Matrix(A.row),B)\n\
+    \n#=================================================\n#\u6B63\u65B9\u884C\u5217\
+    ?\ndef Is_Square(M):\n    return M.row==M.col\n\n#\u5BFE\u89D2\u884C\u5217\ndef\
+    \ Diagonal_Matrix(D):\n    \"\"\" D \u306E\u7B2C i \u8981\u7D20\u304C (i,i) \u6210\
+    \u5206\u3067\u3042\u308B\u5BFE\u89D2\u884C\u5217\u3092\u751F\u6210\u3059\u308B\
+    .\n\n    D: \u30EA\u30B9\u30C8\n    \"\"\"\n\n    N=len(D)\n    return Modulo_Matrix([[D[i]\
+    \ if i==j else 0 for j in range(N)] for i in range(N)])\n\n#\u884C\u5217\u306E\
+    \u76F4\u548C\ndef Direct_Sum(*A):\n    \"\"\" A=[A_0, A_1, ..., A_{N-1}] \u306B\
+    \u5BFE\u3059\u308B\u76F4\u548C\u884C\u5217\u3092\u6C42\u3081\u308B.\n\n    \"\"\
+    \"\n\n    r=c=0\n    for a in A:\n        r+=a.row\n        c+=a.col\n\n    M=[[0]*c\
+    \ for _ in range(r)]\n    x=y=0\n    for p in range(len(A)):\n        a=A[p]\n\
+    \        for i in range(a.row):\n            b=A[p].ele[i]\n            m=M[x+i]\n\
+    \            for j in range(a.col):\n                m[y+j]=b[j]\n        x+=a.row;\
+    \ y+=a.col\n    return Modulo_Matrix(M)\n\n#\u30AF\u30ED\u30CD\u30C3\u30AB\u30FC\
+    \u7A4D\ndef Kronecker_Product(*X):\n    A=[[1]]\n    for B in X:\n        A=[[A[i//B.row][j//B.col]*B[i%B.row][j%B.col]%Mod\
+    \ for j in range(len(A[0])*B.col)] for i in range(len(A)*B.row)]\n    return Modulo_Matrix(A)\n\
+    \n#\u30AF\u30ED\u30CD\u30C3\u30AB\u30FC\u548C\ndef Kronecker_Sum(*X):\n    A=Modulo_Matrix([[0]])\n\
+    \    for B in X:\n        A=Kronecker_Product(A, Modulo_Matrix.Identity_Matrix(B.row))+Kronecker_Product(Modulo_Matrix.Identity_Matrix(A.row),B)\n\
     \    return A\n\n#\u8DE1\ndef Trace(M):\n    \"\"\" \u6B63\u65B9\u884C\u5217 M\
     \ \u306E\u8DE1 (=\u5BFE\u89D2\u6210\u5206\u306E\u548C) \u3092\u6C42\u3081\u308B\
     . \"\"\"\n\n    assert Is_Square(M)\n\n    T=0\n    for i in range(M.row):\n \
@@ -202,12 +199,12 @@ data:
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py
   requiredBy: []
-  timestamp: '2023-08-26 11:00:13+09:00'
+  timestamp: '2024-02-11 19:13:28+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Product.test.py
-  - test_verify/yosupo_library_checker/Matrix/Determinant.test.py
   - test_verify/yosupo_library_checker/Matrix/Inverse.test.py
+  - test_verify/yosupo_library_checker/Matrix/Determinant.test.py
 documentation_of: Modulo_Matrix/Modulo_Matrix.py
 layout: document
 title: Modulo_Matrix
