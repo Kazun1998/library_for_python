@@ -28,6 +28,15 @@ class Modulo_Matrix():
     def __repr__(self):
         return str(self)
 
+    # 零行列, 単位行列
+    @classmethod
+    def Zero_Matrix(cls, row, col):
+        return Modulo_Matrix([[0] * col for _ in range(row)])
+
+    @classmethod
+    def Identity_Matrix(cls, N):
+        return Modulo_Matrix([[1 if i==j else 0 for j in range(N)] for i in range(N)])
+
     #+,-
     def __pos__(self):
         return self
@@ -323,18 +332,6 @@ class Modulo_Matrix():
         self.ele[index[0]][index[1]]=val
 
 #=================================================
-#単位行列
-def Identity_Matrix(N):
-    """ N 次単位行列を作成する. """
-
-    return Modulo_Matrix([[1 if i==j else 0 for j in range(N)] for i in range(N)])
-
-#零行列
-def Zero_Matrix(row, col):
-    """ row 行 col 列のゼロ行列を作成する. """
-
-    return Modulo_Matrix([[0]*col for i in range(row)])
-
 #正方行列?
 def Is_Square(M):
     return M.row==M.col
@@ -383,7 +380,7 @@ def Kronecker_Product(*X):
 def Kronecker_Sum(*X):
     A=Modulo_Matrix([[0]])
     for B in X:
-        A=Kronecker_Product(A, Identity_Matrix(B.row))+Kronecker_Product(Identity_Matrix(A.row),B)
+        A=Kronecker_Product(A, Modulo_Matrix.Identity_Matrix(B.row))+Kronecker_Product(Modulo_Matrix.Identity_Matrix(A.row),B)
     return A
 
 #跡
