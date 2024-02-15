@@ -1,20 +1,25 @@
 class Graph:
-    __slots__=("edge_number", "adjacent")
+    __slots__ = ("adjacent", "deg", "edge_offset", "edge_alive")
 
     #入力定義
-    def __init__(self, N=0):
+    def __init__(self, N = 0, edge_offset = 0):
         """ N 頂点の空グラフ (多重辺なし) を生成する."""
 
-        self.edge_number=0
-        self.adjacent=[set() for _ in range(N)]
+        self.adjacent = [[] for _ in range(N)]
+        self.deg = [0] * N
+        self.edge_alive = []
+        self.edge_offset = edge_offset
 
     #頂点の追加
     def add_vertex(self):
         """ 頂点を追加する.
 
         """
-        self.adjacent.append(set())
-        return self.order()-1
+
+        self.adjacent.append([])
+        self.deg.append(0)
+
+        return self.order() - 1
 
     def add_vertices(self, k):
         """ 頂点を k 個追加する.
@@ -22,71 +27,64 @@ class Graph:
         k: int
         """
 
-        n=self.order()
-        self.adjacent.extend([set() for _ in range(k)])
-        return list(range(n,n+k))
+        n = self.order()
+
+        self.adjacent.extend([[] for _ in range(k)])
+        self.deg.extend([0] * k)
+
+        return list(range(n, n + k))
 
     #辺の追加
-    def add_edge(self,u,v):
+    def add_edge(self, u, v):
         """ 無向辺 uv を加える"""
 
-        if not self.edge_exist(u,v):
-            self.adjacent[u].add(v)
-            self.adjacent[v].add(u)
-            self.edge_number+=1
-            return self.edge_number-1
-        else:
-            return -1
+        id = len(self.edge_alive)
+        self.adjacent[u].append((v, id))
+        if u != v:
+            self.adjacent[v].append((u, id))
 
-    #辺を除く
-    def remove_edge(self,u,v):
-        """ 無向辺 uv が存在するならば除く"""
+        self.deg[u] += 1
+        self.deg[v] += 1
+        self.edge_alive.append(True)
 
-        if self.edge_exist(u,v):
-            self.adjacent[u].discard(v)
-            self.adjacent[v].discard(u)
-            self.edge_number-=1
-            return True
-        else:
-            return False
-
-    def reset_vertex(self, u):
-        """ 頂点 u に接続している辺を全て消す."""
-
-        X=self.adjacent[u].copy()
-        for v in X:
-            self.remove_edge(u,v)
+        return id
 
     #Walkの追加
-    def add_walk(self,*walk):
+    def add_walk(self, *walk):
         """ walk=(w[0],...,w[n-1]) に対して, n-1 本の辺 w[i]w[i+1] を加える."""
-        n=len(walk)
-        for i in range(n-1):
-            self.add_edge(walk[i],walk[i+1])
+        for i in range(len(walk) - 1):
+            self.add_edge(walk[i], walk[i + 1])
 
     #Cycleの追加
-    def add_cycle(self,*cycle):
+    def add_cycle(self, *cycle):
         """ cycle=(c[0], ..., c[n-1]) を加える. """
         self.add_walk(*cycle)
-        self.add_edge(cycle[-1],cycle[0])
+        self.add_edge(cycle[-1], cycle[0])
 
-    #グラフに辺が存在するか否か
-    def edge_exist(self,u,v):
-        """ 辺 uv が存在するか? """
-        return v in self.adjacent[u]
+    def partner_yield(self, v):
+        for x, id in self.adjacent[v]:
+            if self.edge_alive[id]:
+                yield x
+
+    def partner(self, v):
+        return list(self.partner_yield(v))
+
+    def partner_with_index_yield(self, v):
+        for x, id in self.adjacent[v]:
+            if self.edge_alive[id]:
+                yield (x, id)
+
+        return [(x, id) for (x, id) in self.adjacent[v] if self.edge_alive[id]]
 
     #近傍
-    def neighbohood(self,v):
-        """ 頂点 v  の近傍を求める. """
-        return self.adjacent[v]
+    def neighborhood(self, v):
+        """ 頂点 v の近傍を求める. """
+        return set(x for x in self.partner_yield(v))
 
     #次数
-    def degree(self,v):
+    def degree(self, v):
         """ 頂点 v の次数を求める. """
-        if v in self.adjacent[v]:
-            return len(self.adjacent[v])+1
-        else:
-            return len(self.adjacent[v])
+        return self.deg[v]
 
     #頂点数
     def vertex_count(self):
@@ -101,49 +99,53 @@ class Graph:
     def edge_count(self):
         """ 辺の本数 (サイズ) を出力する."""
 
-        return self.edge_number
+        return len(self.edge_alive) - self.edge_offset
 
     def size(self):
         """ サイズ (辺の本数) を出力する. """
 
-        return self.edge_number
+        return len(self.edge_alive) - self.edge_offset
 
     #頂点vを含む連結成分
-    def connected_component(self,v):
+    def connected_component(self, v):
         """ 頂点 v を含む連結成分を出力する."""
 
-        from collections import deque
-        N=len(self.adjacent)
-        T=[0]*N; T[v]=1
-        Q=deque([v])
-        while Q:
-            u=Q.popleft()
-            for w in self.adjacent[u]:
-                if T[w]==0:
-                    T[w]=1
-                    Q.append(w)
-        return [x for x in range(N) if T[x]]
+        N = self.order()
+
+        stack = [v]
+        comp = [0] * N; comp[v] = 1
+        while stack:
+            x = stack.pop()
+            for y in self.partner_yield(x):
+                if comp[y] == 0:
+                    comp[y] = 1
+                    stack.append(y)
+
+        return [x for x in range(N) if comp[x]]
 
     #距離
-    def distance(self,u,v,default):
+    def distance(self, u, v, default):
         """ 2頂点 u,v 間の距離を求める."""
 
-        if u==v:
+        if u == v:
             return 0
 
         from collections import deque
-        N=len(self.adjacent)
-        T=[default]*N; T[u]=0
 
-        Q=deque([u])
-        while Q:
-            w=Q.popleft()
-            for x in self.adjacent[w]:
-                if T[x]==default:
-                    T[x]=T[w]+1
-                    Q.append(x)
-                    if x==v:
-                        return T[x]
+        N = self.order()
+        dist = [-1] * N; dist[u]=0
+
+        queue = deque([u])
+        while queue:
+            x = queue.popleft()
+            for y in self.partner_yield(x):
+                if dist[y] == -1:
+                    dist[y] = dist[x] + 1
+                    queue.append(y)
+
+                    if y == v:
+                        return dist[v]
+
         return default
 
     #ある1点からの距離
@@ -151,56 +153,82 @@ class Graph:
         """ 頂点 u からの距離を求める."""
 
         from collections import deque
-        N=len(self.adjacent)
-        T=[default]*N; T[u]=0
 
-        Q=deque([u])
-        while Q:
-            w=Q.popleft()
-            for x in self.adjacent[w]:
-                if T[x]==default:
-                    T[x]=T[w]+1
-                    Q.append(x)
-        return T
+        N = self.order()
+        dist = [-1] * N; dist[u]=0
+
+        queue = deque([u])
+        while queue:
+            x = queue.popleft()
+            for y in self.partner_yield(x):
+                if dist[y] == -1:
+                    dist[y] = dist[x] + 1
+                    queue.append(y)
+
+        return [dist[x] if dist[x] != -1 else default for x in range(N)]
 
     #最短路
-    def shortest_path(self,u,v):
+    def shortest_path(self, u, v):
         """ u から v への最短路を求める (存在しない場合は None). """
 
-        if u==v:
+        if u == v:
             return [u]
 
         from collections import deque
-        T=[-1]*len(self.adjacent)
 
-        Q=deque([u]); T[u]=u
-        while Q:
-            w=Q.popleft()
-            for x in self.adjacent[w]:
-                if T[x]==-1:
-                    T[x]=w
-                    Q.append(x)
-                    if x==v:
-                        P=[v]
-                        a=v
-                        while a!=u:
-                            a=T[a]
-                            P.append(a)
-                        return P[::-1]
+        prev = [-1] * self.order()
+        prev[u] = u
+
+        queue = deque([u])
+        while queue:
+            x = queue.popleft()
+            for y in self.partner_yield(x):
+                if prev[x] != -1:
+                    continue
+
+                prev[y] = x
+                queue.append(y)
+
+                if y != v:
+                    continue
+
+                path = [v]
+                a = v
+                while a != u:
+                    a = prev[a]
+                    path.append(a)
+                return path[::-1]
         return None
 
     def edge_yielder(self):
-        g=self.adjacent
-        for v in range(self.vertex_count()):
-            for w in g[v]:
-                if v<=w:
-                    yield (v,w)
+        u = [0] * len(self.edge_alive); v = [0] * len(self.edge_alive)
+        for x in range(self.order()):
+            adj = self.adjacent[x]
+            ids = self.edge_ids[x]
 
-    def pop_neighborhood(self, v):
-        assert self.adjacent[v]
-        w=self.adjacent[v].pop()
-        self.adjacent[v].add(w)
-        return w
+            for k in range(len(adj)):
+                id = ids[k]
+                u[id] = min(x, adj[k])
+                v[id] = max(x, adj[k])
+
+        for id in range(len(self.edge_alive)):
+            if self.edge_alive[id]:
+                yield (u[id], v[id])
+
+    def edge_yielder_with_index(self):
+        u = [0] * len(self.edge_alive); v = [0] * len(self.edge_alive)
+        for x in range(self.order()):
+            adj = self.adjacent[x]
+            ids = self.edge_ids[x]
+
+            for k in range(len(adj)):
+                id = ids[k]
+                u[id] = min(x, adj[k])
+                v[id] = max(x, adj[k])
+
+        for id in range(len(self.edge_alive)):
+            if self.edge_alive[id]:
+                yield (id, u[id], v[id])
 
 #==========
 #グラフの生成
@@ -208,63 +236,36 @@ class Graph:
 #補グラフの作成
 def Complement_Graph(G):
     """ グラフ G の補グラフを求める."""
-
-    N=G.vertex_count(); V=set(range(N))
-    H=Graph(N)
-
-    for u in range(N):
-        H.adjacent[u]=V-G.adjacent[u]-{u}
-    return H
+    pass
 
 # N 頂点のランダムグラフ
 def Random_Graph(N, p=0.5, self_loop=False, seed=None):
-    import random
-    G=Graph(N)
+    pass
 
-    random.seed(seed)
-    for u in range(N):
-        for v in range(u,N):
-            if u==v and self_loop==False:
-                continue
+def Directed_Sum(*Graphs):
+    total_order = sum(G.order() for G in Graphs)
+    order_offset = 0
 
-            if random.random()<p:
-                G.add_edge(u,v)
-    return G
+    H = Graph(total_order)
+    for G in Graphs:
+        for u, v in G.edge_yielder():
+            H.add_edge(u + order_offset, v + order_offset)
+        order_offset += G.order()
 
-def Directed_Sum(*G):
-    offset=0
-    H=Graph()
-    for g in G:
-        n=g.vertex_count()
-        H.add_vertices(n)
-        for i,j in g.edge_yielder():
-            H.add_edge(i+offset, j+offset)
-        offset+=n
     return H
 
 #==========
 #連結グラフ?
-def Is_Connected(G):
-    from collections import deque
+def Is_Connected(G: Graph):
+    """ G は連結グラフ ?
 
-    N=G.vertex_count()
-    T=[0]*N; T[0]=1
-    Q=deque([0])
+    Args:
+        G (Graph)
+    """
 
-    Q_popleft=Q.popleft
-    Q_append=Q.append
-    adj=G.adjacent
+    return (G.order() == 0) or all(d >= 0 for d in G.distance_all(0))
 
-    while Q:
-        u=Q_popleft()
-        for v in adj[u]:
-            if T[v]==0:
-                T[v]=1
-                Q_append(v)
-
-    return all(T)
-
-def Lowlink(G, mode=0):
+def Lowlink(G: Graph, mode=0):
     """ G の ord, lowlink を求める.
 
     G: Graph
@@ -299,7 +300,7 @@ def Lowlink(G, mode=0):
             k+=1
             flag[u]=1
 
-            for w in adj[u]:
+            for w in G.neighborhood(u):
                 if not flag[w]:
                     S.append(w)
                     parent[w]=u
@@ -318,13 +319,14 @@ def Lowlink(G, mode=0):
         return ord, low, parent
 
 #橋列挙
-def Bridge(G):
-    """ G にある橋を列挙する.
+def Bridge(G: Graph):
+    """ G にある橋の id を列挙する.
 
     G: Graph
     """
-    ord,low=Lowlink(G)
-    return [(u,v) for u,v in G.edge_yielder() if ord[u]<low[v] or ord[v]<low[u]]
+
+    ord, low = Lowlink(G)
+    return [id for id, u, v in G.edge_yielder_with_index() if (ord[u] < low[v]) or (ord[v] < low[u])]
 
 #関節点の列挙
 def Articulation_Point(G):
@@ -387,53 +389,58 @@ def Articulation_Point(G):
     return A
 
 #二辺連結成分分解
-def Two_Edge_Connected_Components(G):
+def Two_Edge_Connected_Components(G: Graph, mode = 0):
     """グラフ G を二辺連結成分分解 (橋を含まない) する.
 
     [input]
     G: Graph
     """
 
-    N=G.vertex_count()
-
     ord,low=Lowlink(G)
 
-    T=[0]*N; C=[]
-    for v in range(N):
-        if T[v]==1:
+    comp_id = [-1] * G.order()
+    comps = []
+
+    k = 0
+    for v in range(G.order()):
+        if comp_id[v] != -1:
             continue
 
-        T[v]=1
-        Q=[v]; c=[]
-        while Q:
-            v=Q.pop()
-            c.append(v)
+        comp_id[v] = 1
+        stack = [v]
+        comp = []
+        while stack:
+            x = stack.pop()
+            comp.append(x)
 
-            for w in G.adjacent[v]:
-                if (ord[v]>=low[w] and ord[w]>=low[v]) and T[w]==0:
-                    T[w]=1
-                    Q.append(w)
-        C.append(c)
-    return C
+            for y in G.neighborhood(x):
+                if not(ord[x] < low[y] or ord[x] < low[y]) and comp_id[y] == -1:
+                    comp_id[y] = k
+                    stack.append(y)
+        comps.append(comp)
+
+    match mode:
+        case 0:
+            return comps
+        case 1:
+            return comp_id
+        case 2:
+            return comps, comp_id
 
 #=====
 #森?
-def Is_Forest(G):
+def Is_Forest(G: Graph):
     """ 森かどうか判定する. """
 
-    C=Connected_Component_Number(G)
-    M=G.edge_count()
-    return G.vertex_count()==M+C
+    return G.order()== G.size() + Connected_Component_Number(G)
 
 #木?
-def Is_Tree(G):
+def Is_Tree(G: Graph):
     """ 木かどうか判定する. """
-    C=Connected_Component_Number(G)
-    M=G.edge_count()
-    return C==1 and G.vertex_count()==M+C
+    return (G.size() == G.order() - 1) and Is_Connected(G)
 
 #木の直径
-def Tree_Diameter(T,Mode=False):
+def Tree_Diameter(T: Graph, Mode = False):
     """ 木 T の直径を求める.
 
     T: 木
@@ -442,84 +449,91 @@ def Tree_Diameter(T,Mode=False):
     Mode=True → (直径, (直径を成す端点1, 直径を成す端点2))
     Mode=False → 直径
     """
-    from collections import deque
 
-    def __bfs(x):
-        N=T.vertex_count()
-        D=[-1]*N
-        D[x]=0
-        Q=deque([x])
-        while Q:
-            x=Q.popleft()
+    def bfs(x):
+        dist = [-1] * T.order(); dist[x] = 0
+        stack = [x]
+        while stack:
+            u = stack.pop()
 
-            for y in T.adjacent[x]:
-                if D[y]==-1:
-                    D[y]=D[x]+1
-                    Q.append(y)
-        z=max(range(N),key=lambda x:D[x])
-        return z,D[z]
+            for v in T.neighborhood(u):
+                if dist[v] == -1:
+                    dist[v] = dist[u] + 1
+                    stack.append(v)
 
-    u,_=__bfs(0)
-    v,d=__bfs(u)
+        y = max(range(T.order()), key = lambda x: dist[x])
+        return y, dist[y]
+
+    u, _ = bfs(0)
+    v, d = bfs(u)
 
     if Mode:
-        return (d,(u,v))
+        return (d, (u, v))
     else:
         return d
 
 #連結成分に分解
-def Connected_Component_Decomposition(G, mode=0):
+def Connected_Component_Decomposition(G: Graph, mode = 0):
     """ 連結成分毎に分解する.
 
     G: Graph
     mode:0 → 連結成分, 1 → 連結成分番号, 2 → (連結成分, 連結成分番号)"""
-    from collections import deque
 
-    N=G.vertex_count()
-    T=[-1]*N
-    C=[]
-    k=0
-    for v in range(N):
-        if T[v]==-1:
-            Q=deque([v]); T[v]=k
-            c=[]
-            while Q:
-                u=Q.popleft()
-                c.append(u)
-                for w in G.adjacent[u]:
-                    if T[w]==-1:
-                        T[w]=k
-                        Q.append(w)
-            k+=1
-            C.append(c)
 
-    if mode==0:
-        return C
-    elif mode==1:
-        return  T
-    else:
-        return C,T
+    comp_id = [-1] * G.order()
+    comps = []
+
+    def dfs(start, id):
+        stack = [start]
+        comp_id[start] = id
+        comp = []
+
+        while stack:
+            x = stack.pop()
+            comp.append(x)
+            for y in G.neighborhood(x):
+                if comp_id[y] == -1:
+                    comp_id[y] = id
+                    stack.append(y)
+        comps.append(comp)
+
+    id = 0
+    for x in range(G.order()):
+        if comp_id[x] == -1:
+            dfs(x, id)
+            id += 1
+
+    if mode == 0:
+        return comps
+    elif mode == 1:
+            return comp_id
+    elif mode == 2:
+            return (comps, comp_id)
 
 #連結成分の個数
-def Connected_Component_Number(G):
+def Connected_Component_Number(G: Graph):
     """ 連結成分の個数を求める. """
 
-    from collections import deque
+    seen = [False] * G.order()
 
-    N=G.vertex_count()
-    T=[0]*N
-    K=0
-    for v in range(N):
-        if T[v]==0:
-            Q=deque([v]);T[v]=1
-            K+=1
-            while Q:
-                u=Q.popleft()
-                for w in G.adjacent[u]:
-                    if T[w]==0:
-                        T[w]=1
-                        Q.append(w)
-    return K
+    def bfs(start):
+        seen[start] = True
+        stack = [start]
+
+        while stack:
+            x = stack.pop()
+            for y in G.neighborhood(x):
+                if not seen[y]:
+                    seen[y] = True
+                    stack.append(y)
+
+    count = 0
+    for x in range(G.order()):
+        if not seen[x]:
+            count += 1
+            bfs(x)
+
+    return count
 
 #Cycleが存在する?
 def Is_Exist_Cycle(G):
@@ -547,25 +561,25 @@ def Is_Exist_Cycle(G):
     return False
 
 #2部グラフ?
-def Is_Bipartite_Graph(G):
+def Is_Bipartite_Graph(G: Graph):
     """ 2部グラフかどうかを判定する. """
 
-    N=G.vertex_count()
-    T=[0]*N
-    adj=G.adjacent
+    seen = [0] * G.order()
 
-    for v in range(N):
-        if T[v]==0:
-            T[v]=1
-            S=[v]
-            while S:
-                u=S.pop()
-                for w in adj[u]:
-                    if T[w]==0:
-                        T[w]=-T[u]
-                        S.append(w)
-                    elif T[w]==T[u]:
-                        return False
+    for v in range(G.order()):
+        if seen[v] != 0:
+            continue
+
+        seen[v] = 1
+        stack = [v]
+        while stack:
+            x = stack.pop()
+            for y in G.neighborhood(x):
+                if seen[y]==0:
+                    seen[y] = -seen[x]
+                    stack.append(y)
+                elif seen[y] == seen[x]:
+                    return False
     return True
 
 #2部グラフの部集合に分割
@@ -601,125 +615,33 @@ def Bipartite_Separate(G):
     return Bip
 
 #オイラーグラフ?
-def Is_Eulerian_Graph(G):
+def Is_Eulerian_Graph(G: Graph):
     """ グラフ G がオイラーグラフかどうかを判定する. """
-
-    N=G.vertex_count()
-    for v in range(N):
-        if G.degree(v)%2:
-            return False
-    return Is_Connected(G)
+    return all(G.degree(v) % 2 == 0 for v in range(G.order())) and Is_Connected(G)
 
 #準オイラーグラフ?
-def Is_Semi_Eulerian_Graph(G):
+def Is_Semi_Eulerian_Graph(G: Graph):
     """ グラフ G が準オイラーグラフかどうかを判定する. """
-
-    K=0
-    N=G.vertex_count()
-    for v in range(N):
-        if G.degree(v)%2:
-            K+=1
-            if K==3:
-                return False
-    return K==2 and Is_Connected(G)
+    return len([v for v in range(G.order()) if G.degree(v) % 2 == 0]) == 2 and Is_Connected(G)
 
 #Euler 路を見つける
 def Find_Eulerian_Trail(G):
-    K=0
-    N=G.vertex_count()
-    for v in range(N-1,-1,-1):
-        if G.degree(v)%2:
-            K+=1
-            start=v
+    pass
 
-            if K==3:
-                return None
-    if K==0:
-        return None
-
-    from copy import deepcopy
-    E=deepcopy(G.adjacent)
-
-    temp=[start]; v=start
-    while E[v]:
-        w=E[v].pop()
-        E[w].remove(v)
-        temp.append(w)
-        v=w
-
-    path=[]
-    while temp:
-        v=temp.pop()
-        if E[v]:
-            temp.append(v)
-            while E[v]:
-                w=E[v].pop()
-                E[w].remove(v)
-                temp.append(w)
-                v=w
-        else:
-            path.append(v)
-
-    path.reverse()
-    return path if len(path)-1==G.size() else None
 
 #Euler閉路を見つける
 def Find_Eulerian_Cycle(G):
-    N=G.vertex_count()
-    for v in range(N):
-        if G.degree(v)%2:
-            return None
-
-    from copy import deepcopy
-    E=deepcopy(G.adjacent)
-
-    temp=[0]; v=0
-    while E[v]:
-        w=E[v].pop()
-        E[w].remove(v)
-        temp.append(w)
-        v=w
-
-    cycle=[]
-    while temp:
-        v=temp.pop()
-        if E[v]:
-            temp.append(v)
-            while E[v]:
-                w=E[v].pop()
-                E[w].remove(v)
-                temp.append(w)
-                v=w
-        else:
-            cycle.append(v)
-
-    cycle.reverse()
-    return cycle if len(cycle)-1==G.size() else None
+    pass
 
 #ハミルトングラフ?
 def Is_Hamiltonian_Graph(G):
     """ ハミルトングラフ (全ての頂点を1回ずつ通るサイクルを含むグラフ) かどうかを判定する.
 
     """
-
-    N=G.order()
-    if N==2 or N==0:
-        return False
-    elif N==1:
-        return True
-
     pass
 
 #ハミルトンを探す.
 def Find_Hamiltonian_Graph(G):
-    from collections import deque
-
-    N=G.order()
-    if N==2 or N==0:
-        return None
-    elif N==1:
-        return [0]
-
     pass
 
 #クリーク
@@ -742,13 +664,17 @@ def Clique(G: Graph, calc, merge, unit, empty=False):
     while (M_sqrt+1)**2<=2*M:
         M_sqrt+=1
 
+    F = [[False] * N for _ in range(N)]
+    for u, v in G.edge_yielder():
+        F[u][v] = F[v][u] = True
+
     X=unit
     while True:
         A=[]
         for u in range(N):
             if V[u] and deg[u]<M_sqrt:
                 for v in range(N):
-                    if u!=v and V[v] and G.edge_exist(u,v):
+                    if u!=v and V[v] and F[u][v]:
                         A.append(v)
                 A.append(u)
                 break
@@ -760,7 +686,7 @@ def Clique(G: Graph, calc, merge, unit, empty=False):
         bit=[0]*K
         for i in range(K):
             for j in range(i):
-                if not G.edge_exist(A[i],A[j]):
+                if not F[A[i]][A[j]]:
                     bit[i]|=1<<j
                     bit[j]|=1<<i
 
@@ -780,7 +706,7 @@ def Clique(G: Graph, calc, merge, unit, empty=False):
 
         V[A[-1]]=0; deg[A[-1]]=0
         for v in range(N):
-            if A[-1]!=v and V[v] and G.edge_exist(A[-1],v):
+            if A[-1]!=v and V[v] and F[A[-1]][v]:
                 deg[v]-=1
 
     A=[]
@@ -792,7 +718,7 @@ def Clique(G: Graph, calc, merge, unit, empty=False):
     bit=[0]*K
     for i in range(K):
         for j in range(i):
-            if not G.edge_exist(A[i], A[j]):
+            if not F[A[i]][A[j]]:
                 bit[i]|=1<<j
                 bit[j]|=1<<i
 
@@ -825,9 +751,9 @@ def Triangle(G: Graph , calc, merge, unit):
     N=G.order()
     A=[[] for _ in range(N)]
 
-    deg=G.degree; adj=G.adjacent
+    deg=G.degree
     for i in range(N):
-        for j in adj[i]:
+        for j in G.neighborhood(i):
             if (deg(i)>deg(j)) or (deg(i)==deg(j) and i>j):
                 A[i].append(j)
 
@@ -997,73 +923,6 @@ def Complete_Kary_Tree(n,k=2):
         T.add_edge((i-1)//k,i)
     return T
 
-#---------------------------------------
-def One_Point_Distance(G,From,with_path=False):
-    """ 単一始点 From からの距離を求める.
-
-    G: グラフ
-    From: 始点
-    with_path: 最短路も含めて出力するか?
-
-    (出力の結果)
-    with_path=True → (距離, 最短経路の辿る際の前の頂点)
-    with_path=False → 距離
-    """
-
-    from collections import deque
-
-    N=G.vertex_count(); adj=G.adjacent
-    inf=float("inf")
-    T=[inf]*N; T[From]=0
-
-    if with_path:
-        Prev=[None]*N
-
-    Q=deque([From])
-
-    while Q:
-        u=Q.popleft()
-
-        for v in adj[u]:
-            if T[v]==inf:
-                T[v]=T[u]+1
-                Q.append(v)
-
-                if with_path:
-                    Prev[v]=u
-
-    if with_path:
-        return (T,Prev)
-    else:
-        return  T
-
-#Warshall–Floyd
-def Warshall_Floyd(G):
-    """ Warshall-Floyd 法を用いて, 全点間距離を求める.
-
-    """
-
-    N=G.vertex_count(); inf=float("inf"); adj=G.adjacent
-    T=[[0]*N for _ in range(N)]
-
-    for u in range(N):
-        Tu=T[u]
-        for v in range(N):
-            if v==u:
-                T[u][v]=0
-            elif v in adj[u]:
-                T[u][v]=1
-            else:
-                T[u][v]=float("inf")
-
-    for u in range(N):
-        Tu=T[u]
-        for v in range(N):
-            Tv=T[v]
-            for w in range(N):
-                Tv[w]=min(Tv[w],Tv[u]+Tu[w])
-
-    return T
 #==========
 # グラフの走査
 #==========
@@ -1109,5 +968,3 @@ def Depth_First_Search_yielder(G):
                 else:
                     yield (x, parent[x], -1)
             yield (x, -1, -1)
-
-print(Is_Hamiltonian_Graph(Complete_Graph(12)))
