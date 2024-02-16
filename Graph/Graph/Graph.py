@@ -432,7 +432,7 @@ def Two_Edge_Connected_Components(G: Graph, mode = 0):
 def Is_Forest(G: Graph):
     """ 森かどうか判定する. """
 
-    return G.order()== G.size() + Connected_Component_Number(G)
+    return G.order() == G.size() + Connected_Component_Number(G)
 
 #木?
 def Is_Tree(G: Graph):
@@ -534,31 +534,6 @@ def Connected_Component_Number(G: Graph):
             bfs(x)
 
     return count
-
-#Cycleが存在する?
-def Is_Exist_Cycle(G):
-    from collections import deque
-
-    N=G.vertex_count()
-    T=[0]*N
-    adj=G.adjacent
-
-    for v in range(N):
-        if not T[v]:
-            x=v
-            T[v]=1
-            S=deque([v])
-            while S:
-                u=S.popleft()
-                for w in adj[u]:
-                    if T[w]==0:
-                        T[w]=1
-                        S.append(w)
-                    elif x!=w:
-                        return True
-                x=u
-
-    return False
 
 #2部グラフ?
 def Is_Bipartite_Graph(G: Graph):
