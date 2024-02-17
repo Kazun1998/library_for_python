@@ -39,11 +39,11 @@ data:
     - https://judge.yosupo.jp/submission/42413
     - https://judge.yosupo.jp/submission/72676
     - https://opt-cp.com/fps-fast-algorithms/
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.2/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.12.2/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "class Modulo_Polynomial():\n    __slots__=(\"Poly\", \"max_degree\")\n\n\
     \    def __init__(self, Poly=[], max_degree=2*10**5):\n        \"\"\" \u591A\u9805\
@@ -500,13 +500,13 @@ data:
   timestamp: '2023-08-06 21:52:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Inv.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Log.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Power.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Division.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
   - test_verify/yosupo_library_checker/Polynomial/Exp.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Division.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Inv.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Power.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Log.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
 documentation_of: Modulo_Sequence/Modulo_Polynomial.py
 layout: document
 title: Modulo Polynomial
