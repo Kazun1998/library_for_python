@@ -216,15 +216,11 @@ class Graph:
                 yield (u[id], v[id])
 
     def edge_yielder_with_index(self):
-        u = [0] * len(self.edge_alive); v = [0] * len(self.edge_alive)
+        u = [-1] * len(self.edge_alive); v = [-1] * len(self.edge_alive)
         for x in range(self.order()):
-            adj = self.adjacent[x]
-            ids = self.edge_ids[x]
-
-            for k in range(len(adj)):
-                id = ids[k]
-                u[id] = min(x, adj[k])
-                v[id] = max(x, adj[k])
+            for y, id in self.partner_with_index_yield(x):
+                u[id] = min(x, y)
+                v[id] = max(x, y)
 
         for id in range(len(self.edge_alive)):
             if self.edge_alive[id]:
@@ -264,168 +260,6 @@ def Is_Connected(G: Graph):
     """
 
     return (G.order() == 0) or all(d >= 0 for d in G.distance_all(0))
-
-def Lowlink(G: Graph, mode=0):
-    """ G の ord, lowlink を求める.
-
-    G: Graph
-
-    output: (ord, lowlink)
-    """
-
-    from collections import deque
-
-    N=G.vertex_count()
-    ord=[-1]*N; low=[-1]*N
-    flag=[0]*N
-    adj=G.adjacent
-    parent=[-1]*N
-
-    #BFSパート
-    for v in range(N):
-        if flag[v]:
-            continue
-
-        k=0
-        S=deque([v])
-        T=[]
-
-        while S:
-            u=S.pop()
-            if flag[u]:
-                continue
-
-            T.append(u)
-            ord[u]=k
-            k+=1
-            flag[u]=1
-
-            for w in G.neighborhood(u):
-                if not flag[w]:
-                    S.append(w)
-                    parent[w]=u
-
-        for u in T:
-            low[u]=ord[u]
-
-        for w in T[:0:-1]:
-            for x in adj[w]:
-                if w==v or x!=parent[w]:
-                    low[w]=min(low[w],low[x],ord[x])
-
-    if mode==0:
-        return ord, low
-    else:
-        return ord, low, parent
-
-#橋列挙
-def Bridge(G: Graph):
-    """ G にある橋の id を列挙する.
-
-    G: Graph
-    """
-
-    ord, low = Lowlink(G)
-    return [id for id, u, v in G.edge_yielder_with_index() if (ord[u] < low[v]) or (ord[v] < low[u])]
-
-#関節点の列挙
-def Articulation_Point(G):
-    from collections import deque
-
-    N=G.vertex_count()
-    A=[]; A_append=A.append
-    ord=[-1]*N; low=[-1]*N
-    flag=[0]*N
-    adj=G.adjacent
-
-    parent=[-1]*N; children=[[] for _ in range(N)]
-
-    #BFSパート
-    for v in range(N):
-        if flag[v]:
-            continue
-
-        k=0
-        S=deque([v])
-        T=[]
-        X=[]
-
-        while S:
-            u=S.pop()
-            if flag[u]:
-                continue
-
-            T.append(u)
-            ord[u]=k
-            k+=1
-            flag[u]=1
-
-            for w in adj[u]:
-                if not flag[w]:
-                    S.append(w)
-                    parent[w]=u
-
-        for w in T:
-            low[w]=ord[w]
-
-        for w in T[:0:-1]:
-            children[parent[w]].append(w)
-
-        for w in T[:0:-1]:
-            for x in adj[w]:
-                if w==v or x!=parent[w]:
-                    low[w]=min(low[w],low[x],ord[x])
-
-        #根での判定
-        if len(children[v])>=2:
-            A_append(v)
-
-        #根以外の判定
-        for w in T[:0:-1]:
-            for u in children[w]:
-                if ord[w]<=low[u]:
-                    A_append(w)
-                    break
-    return A
-
-#二辺連結成分分解
-def Two_Edge_Connected_Components(G: Graph, mode = 0):
-    """グラフ G を二辺連結成分分解 (橋を含まない) する.
-
-    [input]
-    G: Graph
-    """
-
-    ord,low=Lowlink(G)
-
-    comp_id = [-1] * G.order()
-    comps = []
-
-    k = 0
-    for v in range(G.order()):
-        if comp_id[v] != -1:
-            continue
-
-        comp_id[v] = 1
-        stack = [v]
-        comp = []
-        while stack:
-            x = stack.pop()
-            comp.append(x)
-
-            for y in G.neighborhood(x):
-                if not(ord[x] < low[y] or ord[x] < low[y]) and comp_id[y] == -1:
-                    comp_id[y] = k
-                    stack.append(y)
-        comps.append(comp)
-
-    match mode:
-        case 0:
-            return comps
-        case 1:
-            return comp_id
-        case 2:
-            return comps, comp_id
 
 #=====
 #森?
