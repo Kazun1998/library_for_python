@@ -153,6 +153,9 @@ data:
     - icon: ':warning:'
       path: Special_Input.py
       title: Special_Input.py
+    - icon: ':warning:'
+      path: Stern_Brocot_Tree.py
+      title: Stern_Brocot_Tree.py
     - icon: ':heavy_check_mark:'
       path: Strongly_Connected_Components.py
       title: "Strongly Connected Components (\u5F37\u9023\u7D50\u6210\u5206\u5206\u89E3\
