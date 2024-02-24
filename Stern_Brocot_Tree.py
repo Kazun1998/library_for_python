@@ -78,5 +78,3 @@ class Stern_Brocot_Tree:
 class Stern_Brocot_Tree_Node:
     def __init__(self):
         pass
-
-print(Stern_Brocot_Tree.ancestor(1000000000, 1, 300))
