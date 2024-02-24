@@ -1,84 +1,67 @@
-def Knapsack_01_Weight(List,Weight,Mode=False):
-    """重さが非常に軽い01-Knapsack Problemを解く.
+def Knapsack_01_Weight(items, weight):
+    """ 非常に軽い 01- ナップサック問題を解く.
 
-    List:各要素はタプル(v,w) の形で, vは価値, wは重さ
-    Mode:Mode=Trueのとき, 最大値とそれを達成する例を返す.
-    [計算量]
-    O(NW)
+    items: (重さ, 価値) の形のタプル
+    weight: ナップサックの耐久重量
     """
 
-    if Mode:
-        X=[[0]*(Weight+1) for _ in range(len(List)+1)]
-        for i,(v,w) in enumerate(List,0):
-            E=X[i]
-            F=X[i+1]
+    dp = [0] * (weight + 1)
+    for item in items:
+        if item is None:
+            continue
 
-            for s in range(Weight,w-1,-1):
-                F[s]=max(E[s],E[s-w]+v)
-        alpha=max(X[-1])
-        W=X[-1].index(alpha)
+        w, v = item
+        for a in range(weight, w - 1, -1):
+            dp[a] = max(dp[a], dp[a - w] + v)
 
-        L=[]
-        for i in range(len(List)-1,-1,-1):
-            if X[i+1][W]>X[i][W]:
-                v,w=List[i]
-                L.append((i,List[i]))
-                W-=w
-        return alpha,L[::-1]
-    else:
-        X=[0]*(Weight+1)
-        for v,w in List:
-            for s in range(Weight,w-1,-1):
-                X[s]=max(X[s],X[s-w]+v)
-        return max(X)
+    packed_value = max(dp)
+    packed_weight = dp.index(packed_value)
+    knapsack = []
+    for i, item in enumerate(items):
+        if item is None:
+            continue
 
-def Knapsack_01_Value(List,Weight,Mode=False):
-    """価値が非常に小さい01-Knapsack Problemを解く.
+        w, v = item
+        if (w <= packed_weight) and (dp[packed_weight] == dp[packed_weight - w] + v):
+            knapsack.append(i)
+            packed_weight -= w
 
-    List:各要素はタプル(v,w) の形で, vは価値, wは重さ
-    Mode:Mode=Trueのとき, 最大値とそれを達成する例を返す.
+    return { 'value': packed_value, 'knapsack': knapsack }
+
+def Knapsack_01_Value(items, weight):
+    """ 価値が非常に小さい 01-Knapsack 問題を解く.
+
+    items: (価値, 重さ) の形のタプル
+    weight: ナップサックの耐久重量
+
     [計算量]
     O(N sum(v))
     """
 
-    inf=float("inf")
-    v_sum=0
-    for v,_ in List:
-        v_sum+=v
+    v_sum = sum(v for _, v in items)
 
-    if Mode:
-        X=[[inf]*(v_sum+1) for _ in range(len(List)+1)]
-        X[0][0]=0
+    dp = [weight + 1] * (v_sum + 1)
+    dp[0] = 0
+    for item in items:
+        if item is None:
+            continue
 
-        for i,(v,w) in enumerate(List,0):
-            E=X[i]
-            F=X[i+1]
+        w, v = item
+        for a in range(v_sum, v - 1, -1):
+            dp[a] = min(dp[a], dp[a - v] + w)
 
-            for s in range(v_sum,v-1,-1):
-                F[s]=min(E[s],E[s-v]+w)
-            for s in range(v-1,-1,-1):
-                F[s]=E[s]
+    value = pointer = max(v for v in range(v_sum + 1) if dp[v] <= weight)
+    knapsack = []
+    for i, item in enumerate(items):
+        if item is None:
+            continue
 
-        E=X[-1]
-        Y=[v for v in range(v_sum+1) if E[v]<=Weight]
-        V=alpha=max(Y)
+        w, v = item
+        if dp[pointer] == dp[pointer - v] + w:
+            knapsack.append(i)
+            pointer -= v
 
-        L=[]
-        for i in range(len(List)-1,-1,-1):
-            if X[i+1][V]<X[i][V]:
-                v,w=List[i]
-                L.append((i,List[i]))
-                V-=v
-        return alpha,L[::-1]
-    else:
-        X=[inf]*(v_sum+1)
-        X[0]=0
-
-        for v,w in List:
-            for s in range(v_sum,v-1,-1):
-                X[s]=min(X[s],X[s-v]+w)
-        Y=[v for v in range(v_sum+1) if X[v]<=Weight]
-        return max(Y)
+    return { 'value': value, 'knapsack': knapsack }
 
 def Knapsack_01_Middle(List,Weight,Mode=False):
     """個数が非常に少ない01-Knapsack Problemを (半分全列挙で) 解く.

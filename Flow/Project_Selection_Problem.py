@@ -165,6 +165,39 @@ class Project_Selection_Problem:
         assert 0<=x<self.N
         self.set_one(x,-inf)
 
+    def force_zero(self, x):
+        """ h(x) = 0 という条件を追加する (つまり, ban_zero(x)).
+
+        0 <= x < N
+        """
+
+        assert 0 <= x < self.N
+        self.ban_one(x)
+
+    def force_one(self, x):
+        """ h(x) = 1 という条件を追加する (つまり, ban_one(x)).
+
+        0 <= x < N
+        """
+
+        assert 0 <= x < self.N
+        self.ban_zero(x)
+
+    def increase(self, X):
+        """ h(x[0]) <= h(x[1]) <= ... <= h(x[k-1]) (h(x[i]) = 1, h(x[i+1]) = 0 を禁止) という条件を追加する.
+
+        """
+
+        for i in range(len(X) - 1):
+            self.set_zero_one(X[i + 1], X[i], -inf)
+
+    def decrease(self, X):
+        """ h(x[0]) >= h(x[1]) >= ... >= h(x[k-1]) (h(x[i]) = 0, h(x[i+1]) = 1 を禁止) という条件を追加する.
+
+        """
+
+        self.increase(X[::-1])
+
     def solve(self,Mode=0):
         """ Project Selection Problem を解く.
 
@@ -204,4 +237,4 @@ class Project_Selection_Problem:
         if Mode==0:
             return base-alpha
         else:
-            return base-alpha, F.min_cut(self.source), self.source, self. target
+            return base-alpha, F.min_cut(self.source), self.source, self.target
