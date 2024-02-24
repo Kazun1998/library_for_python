@@ -51,17 +51,18 @@ data:
     \ __isub__(self,other):\n        M=self.ele; N=other.ele\n\n        for i in range(self.row):\n\
     \            Mi,Ni=M[i],N[i]\n            for j in range(self.col):\n        \
     \        Mi[j]-=Ni[j]\n                Mi[j]%=Mod\n        return self\n\n   \
-    \ #\u4E57\u6CD5\n    def __mul__(self,other):\n        if isinstance(other,Modulo_Matrix):\n\
-    \            assert self.col==other.row, \"\u5DE6\u5074\u306E\u5217\u3068\u53F3\
-    \u5074\u306E\u884C\u304C\u4E00\u81F4\u3057\u307E\u305B\u3093.({},{})\".format(self.size,other.size)\n\
-    \n            M=self.ele; N=other.ele\n            E=[[0]*other.col for _ in range(self.row)]\n\
-    \n            for i in range(self.row):\n                Ei,Mi=E[i],M[i]\n   \
-    \             for k in range(self.col):\n                    m_ik,Nk=Mi[k],N[k]\n\
-    \                    for j in range(other.col):\n                        Ei[j]+=m_ik*Nk[j]\n\
-    \                        Ei[j]%=Mod\n            return Modulo_Matrix(E)\n   \
-    \     elif isinstance(other,int):\n            return self.__scale__(other)\n\n\
-    \    def __rmul__(self,other):\n        if isinstance(other,int):\n          \
-    \  return self.__scale__(other)\n\n    def inverse(self):\n        assert self.row==self.col,\"\
+    \ #\u4E57\u6CD5\n    def __mul__(self, other):\n        if isinstance(other, Modulo_Matrix):\n\
+    \            assert self.col == other.row, f\"\u5DE6\u5074\u306E\u5217\u3068\u53F3\
+    \u5074\u306E\u884C\u304C\u4E00\u81F4\u3057\u307E\u305B\u3093 (left: {self.col},\
+    \ right:{other.row}).\"\n\n            A = self.ele; B = other.ele\n         \
+    \   C = [[0] * other.col for _ in range(self.row)]\n\n            for i in range(self.row):\n\
+    \                Ai = A[i]\n                Ci = C[i]\n                for k in\
+    \ range(self.col):\n                    a_ik = Ai[k]\n                    Bk =\
+    \ B[k]\n                    for j in range(other.col):\n                     \
+    \   Ci[j] = (Ci[j] + a_ik * Bk[j]) % Mod\n            return Modulo_Matrix(C)\n\
+    \        elif isinstance(other,int):\n            return self.__scale__(other)\n\
+    \n    def __rmul__(self,other):\n        if isinstance(other,int):\n         \
+    \   return self.__scale__(other)\n\n    def inverse(self):\n        assert self.row==self.col,\"\
     \u6B63\u65B9\u884C\u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093.\"\n\n    \
     \    M=self\n        N=M.row\n        R=[[1 if i==j else 0 for j in range(N)]\
     \ for i in range(N)]\n        T=deepcopy(M.ele)\n\n        for j in range(N):\n\
@@ -78,59 +79,52 @@ data:
     \n    #\u30B9\u30AB\u30E9\u30FC\u500D\n    def __scale__(self,r):\n        M=self.ele\n\
     \        r%=Mod\n        L=[[(r*M[i][j])%Mod for j in range(self.col)] for i in\
     \ range(self.row)]\n        return Modulo_Matrix(L)\n\n    #\u7D2F\u4E57\n   \
-    \ def __pow__(self,n):\n        assert self.row==self.col, \"\u6B63\u65B9\u884C\
-    \u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093.\"\n\n        r=self.col\n\n\
-    \        def __mat_mul(A,B):\n            E=[[0]*r for _ in range(r)]\n      \
-    \      for i in range(r):\n                a=A[i]; e=E[i]\n                for\
-    \ k in range(r):\n                    b=B[k]\n                    for j in range(r):\n\
-    \                        e[j]+=a[k]*b[j]\n                        e[j]%=Mod\n\
-    \            return E\n\n        X=deepcopy(self.ele)\n        E=[[1 if i==j else\
-    \ 0 for j in range(r)] for i in range(r)]\n\n        sgn=1 if n>=0 else -1\n \
-    \       n=abs(n)\n\n        while True:\n            if n&1:\n               \
-    \ E=__mat_mul(E,X)\n            n>>=1\n            if n:\n                X=__mat_mul(X,X)\n\
-    \            else:\n                break\n\n        if sgn==1:\n            return\
-    \ Modulo_Matrix(E)\n        else:\n            return Modulo_Matrix(E).inverse()\n\
-    \n    #\u7B49\u53F7\n    def __eq__(self,other):\n        return self.ele==other.ele\n\
-    \n    #\u4E0D\u7B49\u53F7\n    def __neq__(self,other):\n        return not(self==other)\n\
-    \n    #\u8EE2\u7F6E\n    def transpose(self):\n        return Modulo_Matrix(list(map(list,zip(*self.ele))))\n\
-    \n    #\u884C\u57FA\u672C\u5909\u5F62\n    def row_reduce(self):\n        M=self\n\
-    \        (R,C)=M.size\n        T=[]\n\n        for i in range(R):\n          \
+    \ def __pow__(self, n):\n        assert self.row==self.col, \"\u6B63\u65B9\u884C\
+    \u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093.\"\n\n        sgn = 1 if n >=\
+    \ 0 else -1\n        n = abs(n)\n\n        C = Modulo_Matrix.Identity_Matrix(self.row)\n\
+    \        tmp = self\n        while n:\n            if n & 1:\n               \
+    \ C = C * tmp\n            tmp = tmp * tmp\n            n >>= 1\n\n        return\
+    \ C if sgn == 1 else C.inverse()\n\n    #\u7B49\u53F7\n    def __eq__(self,other):\n\
+    \        return self.ele==other.ele\n\n    #\u4E0D\u7B49\u53F7\n    def __neq__(self,other):\n\
+    \        return not(self==other)\n\n    #\u8EE2\u7F6E\n    def transpose(self):\n\
+    \        return Modulo_Matrix(list(map(list,zip(*self.ele))))\n\n    #\u884C\u57FA\
+    \u672C\u5909\u5F62\n    def row_reduce(self):\n        M=self\n        (R,C)=M.size\n\
+    \        T=[]\n\n        for i in range(R):\n            U=[]\n            for\
+    \ j in range(C):\n                U.append(M.ele[i][j])\n            T.append(U)\n\
+    \n        I=0\n        for J in range(C):\n            if T[I][J]==0:\n      \
+    \          for i in range(I+1,R):\n                    if T[i][J]!=0:\n      \
+    \                  T[i],T[I]=T[I],T[i]\n                        break\n\n    \
+    \        if T[I][J]!=0:\n                u=T[I][J]\n                u_inv=pow(u,\
+    \ -1, Mod)\n                for j in range(C):\n                    T[I][j]*=u_inv\n\
+    \                    T[I][j]%=Mod\n\n                for i in range(R):\n    \
+    \                if i!=I:\n                        v=T[i][J]\n               \
+    \         for j in range(C):\n                            T[i][j]-=v*T[I][j]\n\
+    \                            T[i][j]%=Mod\n                I+=1\n            \
+    \    if I==R:\n                    break\n\n        return Modulo_Matrix(T)\n\n\
+    \    #\u5217\u57FA\u672C\u5909\u5F62\n    def column_reduce(self):\n        M=self\n\
+    \        (R,C)=M.size\n\n        T=[]\n        for i in range(R):\n          \
     \  U=[]\n            for j in range(C):\n                U.append(M.ele[i][j])\n\
-    \            T.append(U)\n\n        I=0\n        for J in range(C):\n        \
-    \    if T[I][J]==0:\n                for i in range(I+1,R):\n                \
-    \    if T[i][J]!=0:\n                        T[i],T[I]=T[I],T[i]\n           \
-    \             break\n\n            if T[I][J]!=0:\n                u=T[I][J]\n\
-    \                u_inv=pow(u, -1, Mod)\n                for j in range(C):\n \
-    \                   T[I][j]*=u_inv\n                    T[I][j]%=Mod\n\n     \
-    \           for i in range(R):\n                    if i!=I:\n               \
-    \         v=T[i][J]\n                        for j in range(C):\n            \
-    \                T[i][j]-=v*T[I][j]\n                            T[i][j]%=Mod\n\
-    \                I+=1\n                if I==R:\n                    break\n\n\
-    \        return Modulo_Matrix(T)\n\n    #\u5217\u57FA\u672C\u5909\u5F62\n    def\
-    \ column_reduce(self):\n        M=self\n        (R,C)=M.size\n\n        T=[]\n\
-    \        for i in range(R):\n            U=[]\n            for j in range(C):\n\
-    \                U.append(M.ele[i][j])\n            T.append(U)\n\n        J=0\n\
-    \        for I in range(R):\n            if T[I][J]==0:\n                for j\
-    \ in range(J+1,C):\n                    if T[I][j]!=0:\n                     \
-    \   for k in range(R):\n                            T[k][j],T[k][J]=T[k][J],T[k][j]\n\
-    \                        break\n\n            if T[I][J]!=0:\n               \
-    \ u=T[I][J]\n                u_inv=pow(u, -1, Mod)\n                for i in range(R):\n\
-    \                    T[i][J]*=u_inv\n                    T[i][J]%=Mod\n\n    \
-    \            for j in range(C):\n                    if j!=J:\n              \
-    \          v=T[I][j]\n                        for i in range(R):\n           \
-    \                 T[i][j]-=v*T[i][J]\n                            T[i][j]%=Mod\n\
-    \                J+=1\n                if J==C:\n                    break\n\n\
-    \        return Modulo_Matrix(T)\n\n    #\u884C\u5217\u306E\u968E\u6570\n    def\
-    \ rank(self):\n        M=self.row_reduce()\n        (R,C)=M.size\n        T=M.ele\n\
-    \n        rnk=0\n        for i in range(R):\n            f=False\n           \
-    \ for j in range(C):\n                if T[i][j]!=0:\n                    f=True\n\
-    \                    break\n\n            if f:\n                rnk+=1\n    \
-    \        else:\n                break\n\n        return rnk\n\n    # \u5358\u5C04\
-    \ ?\n    def is_injection(self):\n        return self.rank() == self.col\n\n \
-    \   # \u5168\u5C04 ?\n    def is_surjective(self):\n        return self.rank()\
-    \ == self.row\n\n    # \u5168\u5358\u5C04 ?\n    def is_bijection(self):\n   \
-    \     return self.col == self.row == self.rank()\n\n    #\u884C\u306E\u7D50\u5408\
-    \n    def row_union(self,other):\n        return Modulo_Matrix(self.ele+other.ele)\n\
+    \            T.append(U)\n\n        J=0\n        for I in range(R):\n        \
+    \    if T[I][J]==0:\n                for j in range(J+1,C):\n                \
+    \    if T[I][j]!=0:\n                        for k in range(R):\n            \
+    \                T[k][j],T[k][J]=T[k][J],T[k][j]\n                        break\n\
+    \n            if T[I][J]!=0:\n                u=T[I][J]\n                u_inv=pow(u,\
+    \ -1, Mod)\n                for i in range(R):\n                    T[i][J]*=u_inv\n\
+    \                    T[i][J]%=Mod\n\n                for j in range(C):\n    \
+    \                if j!=J:\n                        v=T[I][j]\n               \
+    \         for i in range(R):\n                            T[i][j]-=v*T[i][J]\n\
+    \                            T[i][j]%=Mod\n                J+=1\n            \
+    \    if J==C:\n                    break\n\n        return Modulo_Matrix(T)\n\n\
+    \    #\u884C\u5217\u306E\u968E\u6570\n    def rank(self):\n        M=self.row_reduce()\n\
+    \        (R,C)=M.size\n        T=M.ele\n\n        rnk=0\n        for i in range(R):\n\
+    \            f=False\n            for j in range(C):\n                if T[i][j]!=0:\n\
+    \                    f=True\n                    break\n\n            if f:\n\
+    \                rnk+=1\n            else:\n                break\n\n        return\
+    \ rnk\n\n    # \u5358\u5C04 ?\n    def is_injection(self):\n        return self.rank()\
+    \ == self.col\n\n    # \u5168\u5C04 ?\n    def is_surjective(self):\n        return\
+    \ self.rank() == self.row\n\n    # \u5168\u5358\u5C04 ?\n    def is_bijection(self):\n\
+    \        return self.col == self.row == self.rank()\n\n    #\u884C\u306E\u7D50\
+    \u5408\n    def row_union(self,other):\n        return Modulo_Matrix(self.ele+other.ele)\n\
     \n    #\u5217\u306E\u7D50\u5408\n    def column_union(self,other):\n        E=[]\n\
     \        for i in range(self.row):\n            E.append(self.ele[i]+other.ele[i])\n\
     \n        return Modulo_Matrix(E)\n\n    def __getitem__(self,index):\n      \
@@ -199,7 +193,7 @@ data:
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py
   requiredBy: []
-  timestamp: '2024-02-11 19:13:28+09:00'
+  timestamp: '2024-02-25 00:15:07+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Inverse.test.py
