@@ -87,21 +87,22 @@ class Modulo_Matrix():
         return self
 
     #乗法
-    def __mul__(self,other):
-        if isinstance(other,Modulo_Matrix):
-            assert self.col==other.row, "左側の列と右側の行が一致しません.({},{})".format(self.size,other.size)
+    def __mul__(self, other):
+        if isinstance(other, Modulo_Matrix):
+            assert self.col == other.row, f"左側の列と右側の行が一致しません (left: {self.col}, right:{other.row})."
 
-            M=self.ele; N=other.ele
-            E=[[0]*other.col for _ in range(self.row)]
+            A = self.ele; B = other.ele
+            C = [[0] * other.col for _ in range(self.row)]
 
             for i in range(self.row):
-                Ei,Mi=E[i],M[i]
+                Ai = A[i]
+                Ci = C[i]
                 for k in range(self.col):
-                    m_ik,Nk=Mi[k],N[k]
+                    a_ik = Ai[k]
+                    Bk = B[k]
                     for j in range(other.col):
-                        Ei[j]+=m_ik*Nk[j]
-                        Ei[j]%=Mod
-            return Modulo_Matrix(E)
+                        Ci[j] = (Ci[j] + a_ik * Bk[j]) % Mod
+            return Modulo_Matrix(C)
         elif isinstance(other,int):
             return self.__scale__(other)
 
@@ -149,41 +150,21 @@ class Modulo_Matrix():
         return Modulo_Matrix(L)
 
     #累乗
-    def __pow__(self,n):
+    def __pow__(self, n):
         assert self.row==self.col, "正方行列ではありません."
 
-        r=self.col
+        sgn = 1 if n >= 0 else -1
+        n = abs(n)
 
-        def __mat_mul(A,B):
-            E=[[0]*r for _ in range(r)]
-            for i in range(r):
-                a=A[i]; e=E[i]
-                for k in range(r):
-                    b=B[k]
-                    for j in range(r):
-                        e[j]+=a[k]*b[j]
-                        e[j]%=Mod
-            return E
+        C = Modulo_Matrix.Identity_Matrix(self.row)
+        tmp = self
+        while n:
+            if n & 1:
+                C = C * tmp
+            tmp = tmp * tmp
+            n >>= 1
 
-        X=deepcopy(self.ele)
-        E=[[1 if i==j else 0 for j in range(r)] for i in range(r)]
-
-        sgn=1 if n>=0 else -1
-        n=abs(n)
-
-        while True:
-            if n&1:
-                E=__mat_mul(E,X)
-            n>>=1
-            if n:
-                X=__mat_mul(X,X)
-            else:
-                break
-
-        if sgn==1:
-            return Modulo_Matrix(E)
-        else:
-            return Modulo_Matrix(E).inverse()
+        return C if sgn == 1 else C.inverse()
 
     #等号
     def __eq__(self,other):
