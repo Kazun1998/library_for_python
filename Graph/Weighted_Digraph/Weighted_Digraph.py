@@ -160,30 +160,6 @@ def Bellman_Ford_All(D, start):
             break
     return T
 
-#巡回セールスマン問題を解く.
-def Traveling_Salesman_Problem(D):
-    """ 巡回セールスマン問題を解く. """
-
-    N=D.vertex_count()
-
-    inf=float("inf")
-    T=[[inf]*N for _ in range(1<<N)]
-    T[0][0]=0
-
-    for S in range(1<<N):
-        F=T[S]
-        for v in range(N):
-            if S&(1<<v):
-                continue
-
-            E=T[S|1<<v]
-            cost=D.adjacent_out[v]
-
-            for w in cost:
-                if v!=w and E[v]>F[w]+cost[w]:
-                    E[v]=F[w]+cost[w]
-    return T[-1][0]
-
 #FromからToへの(長さが丁度L or L以下の)Walkが存在するか否か
 def walk_exist(graph,From,To,L,just=False):
     pass
