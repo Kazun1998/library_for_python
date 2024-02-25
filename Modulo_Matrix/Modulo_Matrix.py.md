@@ -37,30 +37,28 @@ data:
     \ @classmethod\n    def Identity_Matrix(cls, N):\n        return Modulo_Matrix([[1\
     \ if i==j else 0 for j in range(N)] for i in range(N)])\n\n    #+,-\n    def __pos__(self):\n\
     \        return self\n\n    def __neg__(self):\n        return self.__scale__(-1)\n\
-    \n    #\u52A0\u6CD5\n    def __add__(self,other):\n        M=self.ele; N=other.ele\n\
-    \n        L=[[0]*self.col for _ in range(self.row)]\n        for i in range(self.row):\n\
-    \            Li,Mi,Ni=L[i],M[i],N[i]\n            for j in range(self.col):\n\
-    \                Li[j]=Mi[j]+Ni[j]\n        return Modulo_Matrix(L)\n\n    def\
-    \ __iadd__(self,other):\n        M=self.ele; N=other.ele\n\n        for i in range(self.row):\n\
-    \            Mi,Ni=M[i],N[i]\n            for j in range(self.col):\n        \
-    \        Mi[j]+=Ni[j]\n                Mi[j]%=Mod\n        return self\n\n   \
-    \ #\u6E1B\u6CD5\n    def __sub__(self,other):\n        M=self.ele; N=other.ele\n\
-    \n        L=[[0]*self.col for _ in range(self.row)]\n        for i in range(self.row):\n\
-    \            Li,Mi,Ni=L[i],M[i],N[i]\n            for j in range(self.col):\n\
-    \                Li[j]=Mi[j]-Ni[j]\n        return Modulo_Matrix(L)\n\n    def\
-    \ __isub__(self,other):\n        M=self.ele; N=other.ele\n\n        for i in range(self.row):\n\
-    \            Mi,Ni=M[i],N[i]\n            for j in range(self.col):\n        \
-    \        Mi[j]-=Ni[j]\n                Mi[j]%=Mod\n        return self\n\n   \
-    \ #\u4E57\u6CD5\n    def __mul__(self, other):\n        if isinstance(other, Modulo_Matrix):\n\
-    \            assert self.col == other.row, f\"\u5DE6\u5074\u306E\u5217\u3068\u53F3\
-    \u5074\u306E\u884C\u304C\u4E00\u81F4\u3057\u307E\u305B\u3093 (left: {self.col},\
-    \ right:{other.row}).\"\n\n            A = self.ele; B = other.ele\n         \
-    \   C = [[0] * other.col for _ in range(self.row)]\n\n            for i in range(self.row):\n\
-    \                Ai = A[i]\n                Ci = C[i]\n                for k in\
-    \ range(self.col):\n                    a_ik = Ai[k]\n                    Bk =\
-    \ B[k]\n                    for j in range(other.col):\n                     \
-    \   Ci[j] = (Ci[j] + a_ik * Bk[j]) % Mod\n            return Modulo_Matrix(C)\n\
-    \        elif isinstance(other,int):\n            return self.__scale__(other)\n\
+    \n    #\u52A0\u6CD5\n    def __add__(self, other):\n        C = [None] * self.row\n\
+    \        for i, (Ai, Bi) in enumerate(zip(self.ele, other.ele)):\n           \
+    \ C[i] = [Ai[j] + Bi[j] for j in range(self.col)]\n\n        return Modulo_Matrix(C)\n\
+    \n    def __iadd__(self,other):\n        M=self.ele; N=other.ele\n\n        for\
+    \ i in range(self.row):\n            Mi,Ni=M[i],N[i]\n            for j in range(self.col):\n\
+    \                Mi[j]+=Ni[j]\n                Mi[j]%=Mod\n        return self\n\
+    \n    #\u6E1B\u6CD5\n    def __sub__(self,other):\n        C = [None] * self.row\n\
+    \        for i, (Ai, Bi) in enumerate(zip(self.ele, other.ele)):\n           \
+    \ C[i] = [Ai[j] - Bi[j] for j in range(self.col)]\n\n        return Modulo_Matrix(C)\n\
+    \n    def __isub__(self,other):\n        M=self.ele; N=other.ele\n\n        for\
+    \ i in range(self.row):\n            Mi,Ni=M[i],N[i]\n            for j in range(self.col):\n\
+    \                Mi[j]-=Ni[j]\n                Mi[j]%=Mod\n        return self\n\
+    \n    #\u4E57\u6CD5\n    def __mul__(self, other):\n        if isinstance(other,\
+    \ Modulo_Matrix):\n            assert self.col == other.row, f\"\u5DE6\u5074\u306E\
+    \u5217\u3068\u53F3\u5074\u306E\u884C\u304C\u4E00\u81F4\u3057\u307E\u305B\u3093\
+    \ (left: {self.col}, right:{other.row}).\"\n\n            A = self.ele; B = other.ele\n\
+    \            C = [[0] * other.col for _ in range(self.row)]\n\n            for\
+    \ i in range(self.row):\n                Ai = A[i]\n                Ci = C[i]\n\
+    \                for k in range(self.col):\n                    a_ik = Ai[k]\n\
+    \                    Bk = B[k]\n                    for j in range(other.col):\n\
+    \                        Ci[j] = (Ci[j] + a_ik * Bk[j]) % Mod\n            return\
+    \ Modulo_Matrix(C)\n        elif isinstance(other,int):\n            return self.__scale__(other)\n\
     \n    def __rmul__(self,other):\n        if isinstance(other,int):\n         \
     \   return self.__scale__(other)\n\n    def inverse(self):\n        assert self.row==self.col,\"\
     \u6B63\u65B9\u884C\u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093.\"\n\n    \
@@ -76,12 +74,11 @@ data:
     \ i==j: continue\n                c=T[i][j]\n                Ti,Ri=T[i],R[i]\n\
     \                for k in range(N):\n                    Ti[k]-=Tj[k]*c; Ti[k]%=Mod\n\
     \                    Ri[k]-=Rj[k]*c; Ri[k]%=Mod\n        return Modulo_Matrix(R)\n\
-    \n    #\u30B9\u30AB\u30E9\u30FC\u500D\n    def __scale__(self,r):\n        M=self.ele\n\
-    \        r%=Mod\n        L=[[(r*M[i][j])%Mod for j in range(self.col)] for i in\
-    \ range(self.row)]\n        return Modulo_Matrix(L)\n\n    #\u7D2F\u4E57\n   \
-    \ def __pow__(self, n):\n        assert self.row==self.col, \"\u6B63\u65B9\u884C\
-    \u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093.\"\n\n        sgn = 1 if n >=\
-    \ 0 else -1\n        n = abs(n)\n\n        C = Modulo_Matrix.Identity_Matrix(self.row)\n\
+    \n    #\u30B9\u30AB\u30E9\u30FC\u500D\n    def __scale__(self, r):\n        r\
+    \ %= Mod\n        return Modulo_Matrix([[r * m_ij for m_ij in Mi] for Mi in self.ele])\n\
+    \n    #\u7D2F\u4E57\n    def __pow__(self, n):\n        assert self.row==self.col,\
+    \ \"\u6B63\u65B9\u884C\u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093.\"\n\n\
+    \        sgn = 1 if n >= 0 else -1\n        n = abs(n)\n\n        C = Modulo_Matrix.Identity_Matrix(self.row)\n\
     \        tmp = self\n        while n:\n            if n & 1:\n               \
     \ C = C * tmp\n            tmp = tmp * tmp\n            n >>= 1\n\n        return\
     \ C if sgn == 1 else C.inverse()\n\n    #\u7B49\u53F7\n    def __eq__(self,other):\n\
@@ -193,7 +190,7 @@ data:
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py
   requiredBy: []
-  timestamp: '2024-02-25 00:15:07+09:00'
+  timestamp: '2024-02-25 10:36:05+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Inverse.test.py

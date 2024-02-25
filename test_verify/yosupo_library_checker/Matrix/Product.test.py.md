@@ -33,7 +33,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Matrix/Product.test.py
   requiredBy: []
-  timestamp: '2024-02-25 00:15:07+09:00'
+  timestamp: '2024-02-25 10:36:05+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Matrix/Product.test.py
