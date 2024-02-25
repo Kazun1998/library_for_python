@@ -160,50 +160,6 @@ def Bellman_Ford_All(D, start):
             break
     return T
 
-#Warshall–Floyd
-def Warshall_Floyd(D):
-    """ Warshall-Floyd 法を用いて, 全点間距離を求める.
-
-    D: 重み付き有向グラフ
-    """
-
-    def three_loop():
-        for u in range(N):
-            Tu=T[u]
-            for v in range(N):
-                Tv=T[v]
-                for w in range(N):
-                    Tv[w]=min(Tv[w],Tv[u]+Tu[w])
-
-    inf=float("inf"); N=D.vertex_count()
-
-    T=[[0]*N for _ in range(N)]
-    adj_out=D.adjacent_out
-    for u in range(N):
-        Tu=T[u]
-        E=adj_out[u]
-        for v in range(N):
-            if v==u:
-                Tu[v]=0
-            elif v in E:
-                Tu[v]=E[v]
-            else:
-                Tu[v]=inf
-
-    three_loop()
-
-    flag=1
-    for v in range(N):
-        if T[v][v]<0:
-            T[v][v]=-inf
-            flag=0
-
-    if flag==1:
-        return T
-    else:
-        three_loop()
-        return T
-
 #巡回セールスマン問題を解く.
 def Traveling_Salesman_Problem(D):
     """ 巡回セールスマン問題を解く. """
