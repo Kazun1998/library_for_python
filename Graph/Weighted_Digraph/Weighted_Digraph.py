@@ -123,43 +123,6 @@ def Dijkstra_All(D, start, with_path=False):
         return  T
 
 #Bellman_Ford
-def Bellman_Ford(D, start, goal):
-    """ Bellman_Ford 法を用いて, start から goal までの距離を求める (返り値が -inf になる場合がある).
-
-    D:有向グラフ
-    start: 始点, goal: 終点
-    """
-
-    inf=float("inf")
-    N=D.vertex_count()
-    T=[inf]*N; T[start]=0
-
-    adj_out=D.adjacent_out
-    E=[]
-    for u in range(N):
-        F=adj_out[u]
-        for v,cost in F.items():
-            E.append((u,v,cost))
-
-    for k in range(N):
-        update=0
-        for u,v,c in E:
-            if T[v]>T[u]+c:
-                T[v]=T[u]+c
-                update=1
-        if update==0:
-            return T[goal]
-
-    for _ in range(N):
-        update=0
-        for u,v,c in E:
-            if T[v]>T[u]+c:
-                T[v]=-inf
-                update=1
-        if update==0:
-            break
-    return T[goal]
-
 def Bellman_Ford_All(D, start):
     """ Bellman_Ford 法を用いて, 単一始点 start からの距離を求める (返り値が -inf になる場合がある).
 
