@@ -327,6 +327,9 @@ data:
       path: Integer/Feature.py
       title: Integer/Feature.py
     - icon: ':warning:'
+      path: Integer/Find.py
+      title: Integer/Find.py
+    - icon: ':warning:'
       path: Integer/Modulo.py
       title: Integer/Modulo.py
     - icon: ':warning:'
