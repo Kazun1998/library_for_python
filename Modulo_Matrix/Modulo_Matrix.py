@@ -45,15 +45,12 @@ class Modulo_Matrix():
         return self.__scale__(-1)
 
     #加法
-    def __add__(self,other):
-        M=self.ele; N=other.ele
+    def __add__(self, other):
+        C = [None] * self.row
+        for i, (Ai, Bi) in enumerate(zip(self.ele, other.ele)):
+            C[i] = [Ai[j] + Bi[j] for j in range(self.col)]
 
-        L=[[0]*self.col for _ in range(self.row)]
-        for i in range(self.row):
-            Li,Mi,Ni=L[i],M[i],N[i]
-            for j in range(self.col):
-                Li[j]=Mi[j]+Ni[j]
-        return Modulo_Matrix(L)
+        return Modulo_Matrix(C)
 
     def __iadd__(self,other):
         M=self.ele; N=other.ele
@@ -67,14 +64,11 @@ class Modulo_Matrix():
 
     #減法
     def __sub__(self,other):
-        M=self.ele; N=other.ele
+        C = [None] * self.row
+        for i, (Ai, Bi) in enumerate(zip(self.ele, other.ele)):
+            C[i] = [Ai[j] - Bi[j] for j in range(self.col)]
 
-        L=[[0]*self.col for _ in range(self.row)]
-        for i in range(self.row):
-            Li,Mi,Ni=L[i],M[i],N[i]
-            for j in range(self.col):
-                Li[j]=Mi[j]-Ni[j]
-        return Modulo_Matrix(L)
+        return Modulo_Matrix(C)
 
     def __isub__(self,other):
         M=self.ele; N=other.ele
@@ -143,11 +137,9 @@ class Modulo_Matrix():
         return Modulo_Matrix(R)
 
     #スカラー倍
-    def __scale__(self,r):
-        M=self.ele
-        r%=Mod
-        L=[[(r*M[i][j])%Mod for j in range(self.col)] for i in range(self.row)]
-        return Modulo_Matrix(L)
+    def __scale__(self, r):
+        r %= Mod
+        return Modulo_Matrix([[r * m_ij for m_ij in Mi] for Mi in self.ele])
 
     #累乗
     def __pow__(self, n):
