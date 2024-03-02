@@ -307,14 +307,36 @@ data:
     - icon: ':warning:'
       path: Graph/Weighted_Digraph.py
       title: Graph/Weighted_Digraph.py
-    - icon: ':warning:'
-      path: Graph/Weighted_Graph.py
-      title: Graph/Weighted_Graph.py
   - name: Graph/Graph
     pages:
     - icon: ':warning:'
       path: Graph/Graph/Graph.py
       title: Graph
+  - name: Graph/Weighted_Digraph
+    pages:
+    - icon: ':warning:'
+      path: Graph/Weighted_Digraph/Bellman_Ford.py
+      title: Graph/Weighted_Digraph/Bellman_Ford.py
+    - icon: ':warning:'
+      path: Graph/Weighted_Digraph/Dijkstra.py
+      title: Graph/Weighted_Digraph/Dijkstra.py
+    - icon: ':warning:'
+      path: Graph/Weighted_Digraph/Traveling_Salesman.py
+      title: Graph/Weighted_Digraph/Traveling_Salesman.py
+    - icon: ':warning:'
+      path: Graph/Weighted_Digraph/Warshall_Floyd.py
+      title: Graph/Weighted_Digraph/Warshall_Floyd.py
+    - icon: ':warning:'
+      path: Graph/Weighted_Digraph/Weighted_Digraph.py
+      title: Graph/Weighted_Digraph/Weighted_Digraph.py
+  - name: Graph/Weighted_Graph
+    pages:
+    - icon: ':warning:'
+      path: Graph/Weighted_Graph/Minimum_Spanning_Tree.py
+      title: Graph/Weighted_Graph/Minimum_Spanning_Tree.py
+    - icon: ':warning:'
+      path: Graph/Weighted_Graph/Weighted_Graph.py
+      title: Graph/Weighted_Graph/Weighted_Graph.py
   - name: Integer
     pages:
     - icon: ':warning:'
