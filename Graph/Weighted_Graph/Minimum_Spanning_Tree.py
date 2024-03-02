@@ -1,6 +1,6 @@
 from Weighted_Graph import Weigthed_Graph
 
-#最小全域木をクラシカル法で求める.
+# 最小全域木をクラシカル法で求める.
 def Minimum_Spanning_Tree_by_Kruskal(G: Weigthed_Graph):
     """ グラフ G の最小全域木をクラシカル法で求める.
 
@@ -14,17 +14,14 @@ def Minimum_Spanning_Tree_by_Kruskal(G: Weigthed_Graph):
     depth = [0] * N
 
     def find(x):
-        if UF[x] == x:
-            return x
+        y = x
+        while UF[y] != y:
+            y = UF[y]
 
-        A=[x]
-        while x != UF[x]:
-            x = UF[x]
-            A.append(x)
+        while UF[x] != y:
+            x, UF[x] = UF[x], y
 
-        for a in A:
-            UF[a]=x
-        return x
+        return y
 
     def union(x, y):
         x = find(x)
@@ -65,3 +62,35 @@ def Minimum_Spanning_Tree_by_Kruskal(G: Weigthed_Graph):
             continue
 
     return { 'weight': sum(w[id] for id in edges), 'edges': edges }
+
+# 最小全域木をプリム法で求める.
+def Minimum_Spanning_Tree_by_Prim(G: Weigthed_Graph):
+    """ グラフ G の最小全域木をプリム法で求める.
+    """
+    from heapq import heapify, heappop, heappush
+    N = G.vertex_count()
+
+    used = [0] * N; used[0] = 1
+    Q = [(w, 0, y, id) for y, w, id in G.adjacent[0]]
+    heapify(Q)
+
+    weight = 0
+    remain = N - 1
+    edges = []
+
+    while remain:
+        c, _, b, id = heappop(Q)
+
+        if used[b]:
+            continue
+
+        remain -= 1
+        weight += c
+        edges.append(id)
+
+        used[b] = 1
+        for v, w, id in G.adjacent[b]:
+            if not used[v]:
+                heappush(Q, (w, b, v, id))
+
+    return { 'weight': weight, 'edges': edges }
