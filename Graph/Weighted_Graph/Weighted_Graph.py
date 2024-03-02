@@ -1,14 +1,18 @@
 class Weigthed_Graph:
+    """ 重み [なし] 有向グラフを生成する.
+
+    """
+
     #入力定義
-    def __init__(self, N=0, allow_multi=False, initialize=None, multi_edge=None):
+    def __init__(self, N = 0, edge_offset = 0):
+        """ 重み [なし] 有向グラフを生成する.
 
-        self.edge_number=0
+        N: 頂点数
+        """
 
-        self.allow_multi=allow_multi
-        self.initialize=initialize
-        self.multi_edge=multi_edge
-
-        self.adjacent=[{} for _ in range(N)]
+        self.adjacent = [[] for _ in range(N)]
+        self.edge_offset = edge_offset
+        self.edge_count = 0
 
     #頂点の追加
     def add_vertex(self):
@@ -16,7 +20,7 @@ class Weigthed_Graph:
 
         """
         self.adjacent.append({})
-        return self.order()-1
+        return self.order() - 1
 
     def add_vertices(self, k):
         """ 頂点を k 個追加する.
@@ -24,35 +28,19 @@ class Weigthed_Graph:
         k: int
         """
 
-        n=self.order()
+        n = self.order()
         self.adjacent.extend([{} for _ in range(k)])
-        return list(range(n,n+k))
+        return list(range(n, n + k))
 
     #辺の追加
-    def add_edge(self, u, v, weight=1):
+    def add_edge(self, u, v, weight = 1):
         """ 重さが weight の辺 uv を加える. """
 
-        if self.allow_multi:
-            self.edge_number+=1
-            self.adjacent[u][v]=self.multi_edge(self.adjacent[u].get(v,self.initialize), weight)
-            self.adjacent[v][u]=self.multi_edge(self.adjacent[v].get(u,self.initialize), weight)
-        else:
-            if not self.edge_exist(u,v):
-                self.edge_number+=1
-            self.adjacent[u][v]=weight
-            self.adjacent[v][u]=weight
-
-    #辺を除く
-    def remove_edge(self,u,v):
-        """ 辺 uv が存在するならば取り除く. """
-
-        if self.edge_exist(u,v):
-            del self.adjacent[u][v]
-            del self.adjacent[v][u]
-            self.edge_number-=1
-            return  True
-        else:
-            return False
+        id = self.edge_offset + self.edge_count
+        self.adjacent[u].append((v, weight, id))
+        self.adjacent[v].append((u, weight, id))
+        self.edge_count += 1
+        return id
 
     #頂点を除く
 
@@ -64,14 +52,11 @@ class Weigthed_Graph:
 
     #グラフに辺が存在するか否か
     def edge_exist(self, u, v):
-        """ 辺 uv が存在するかどうかを判定する. """
-
-        return v in self.adjacent[u]
+        pass
 
     #近傍
     def neighbohood(self,v):
-        """ 頂点 v の近傍を返す. """
-        return list(self.adjacent[v].keys())
+        pass
 
 
     #頂点数
@@ -87,20 +72,21 @@ class Weigthed_Graph:
     def edge_count(self):
         """ 辺の本数 (サイズ) を出力する."""
 
-        return self.edge_number
+        return self.edge_count
 
     def size(self):
         """ サイズ (辺の本数) を出力する. """
 
-        return self.edge_number
+        return self.edge_count
 
-    #頂点vを含む連結成分
+    def edge_yielder(self):
+        generated = set()
+        for u in range(self.order()):
+            for v, w, id in self.adjacent[u]:
+                if id not in generated:
+                    generated.add(id)
+                    yield (u, v, w, id)
 
-    #距離
-
-    #最短路
-
-    #何かしらの頂点を選ぶ.
 
 #Dijkstra
 def Dijkstra(G, From, To, with_path=False):
@@ -310,88 +296,6 @@ def Tree_Diameter(T, Mode=False):
         return (d,(u,v))
     else:
         return d
-
-#最小全域木をクラシカル法で求める.
-def Minimum_Spanning_Tree_by_Kruskal(G,Mode=0):
-    """ グラフ G の最小全域木をクラシカル法で求める.
-
-    G: グラフ
-    Mode=0 → 重さのみ
-    Mode=1 → 重さと使う辺
-    Mode=2 → 重さと最小全域木
-    """
-
-    N=G.vertex_count()
-    #Union-Findを定義する.
-    U=list(range(N))
-    R=[1]*N
-
-    def find(x):
-        if U[x]==x:
-            return x
-
-        A=[x]
-        while x!=U[x]:
-            x=U[x]
-            A.append(x)
-
-        for a in A:
-            U[a]=x
-        return x
-
-    def union(x,y):
-        x=find(x)
-        y=find(y)
-
-        if x==y:
-            return
-
-        if R[x]>R[y]:
-            U[y]=x
-        else:
-            U[x]=y
-            if R[x]==R[y]:
-                R[y]+=1
-
-    def same(x,y):
-        return find(x)==find(y)
-
-    E=set()
-    adj=G.adjacent
-    for x in range(N):
-        adj_x=adj[x]
-        for y in adj_x:
-            if x<y:
-                E.add((x,y,adj_x[y]))
-    E=sorted(E,key=lambda x:x[-1])
-
-    W=0
-    if Mode==1:
-        F=[]
-    elif Mode==2:
-        T=Weigthed_Graph(N)
-
-    count=N-1
-    for x,y,w in E:
-        if not same(x,y):
-            count-=1
-            union(x,y)
-            W+=w
-
-            if Mode==1:
-                F.append((x,y))
-            elif Mode==2:
-                T.add_edge(x,y,w)
-
-            if count==0:
-                break
-
-    if Mode==0:
-        return W
-    elif Mode==1:
-        return W,F
-    else:
-        return W,T
 
 def Minimum_Spanning_Tree_by_Prim(G,Mode=0):
     """ グラフ G の最小全域木をプリム法で求める.
