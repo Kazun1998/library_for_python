@@ -1,14 +1,13 @@
 class Graph:
-    __slots__ = ("adjacent", "deg", "edge_offset", "edge_alive")
+    __slots__ = ("adjacent", "deg", "__size")
 
     #入力定義
-    def __init__(self, N = 0, edge_offset = 0):
+    def __init__(self, N = 0):
         """ N 頂点の空グラフ (多重辺なし) を生成する."""
 
         self.adjacent = [[] for _ in range(N)]
         self.deg = [0] * N
-        self.edge_alive = []
-        self.edge_offset = edge_offset
+        self.__size = 0
 
     #頂点の追加
     def add_vertex(self):
@@ -35,19 +34,16 @@ class Graph:
         return list(range(n, n + k))
 
     #辺の追加
-    def add_edge(self, u, v):
+    def add_edge(self, u, v, label = None):
         """ 無向辺 uv を加える"""
 
-        id = len(self.edge_alive)
-        self.adjacent[u].append((v, id))
+        self.adjacent[u].append((v, label))
         if u != v:
-            self.adjacent[v].append((u, id))
+            self.adjacent[v].append((u, label))
 
         self.deg[u] += 1
         self.deg[v] += 1
-        self.edge_alive.append(True)
-
-        return id
+        self.__size += 1
 
     #Walkの追加
     def add_walk(self, *walk):
@@ -62,14 +58,13 @@ class Graph:
         self.add_edge(cycle[-1], cycle[0])
 
     def partner_yield(self, v):
-        for x, id in self.adjacent[v]:
-            if self.edge_alive[id]:
-                yield x
+        for w, _ in self.adjacent[v]:
+            yield w
 
     def partner(self, v):
-        return list(self.partner_yield(v))
+        return [w for w, _ in self.adjacent[v]]
 
-    def partner_with_index_yield(self, v):
+    def partner_with_label_yield(self, v):
         for x, id in self.adjacent[v]:
             if self.edge_alive[id]:
                 yield (x, id)
@@ -79,7 +74,7 @@ class Graph:
     #近傍
     def neighborhood(self, v):
         """ 頂点 v の近傍を求める. """
-        return set(x for x in self.partner_yield(v))
+        return set(self.partner_yield(v))
 
     #次数
     def degree(self, v):
@@ -99,12 +94,12 @@ class Graph:
     def edge_count(self):
         """ 辺の本数 (サイズ) を出力する."""
 
-        return len(self.edge_alive) - self.edge_offset
+        return self.__size
 
     def size(self):
         """ サイズ (辺の本数) を出力する. """
 
-        return len(self.edge_alive) - self.edge_offset
+        return self.__size
 
     #頂点vを含む連結成分
     def connected_component(self, v):
@@ -124,7 +119,7 @@ class Graph:
         return [x for x in range(N) if comp[x]]
 
     #距離
-    def distance(self, u, v, default):
+    def distance(self, u, v, default = -1):
         """ 2頂点 u,v 間の距離を求める."""
 
         if u == v:
@@ -149,7 +144,7 @@ class Graph:
         return default
 
     #ある1点からの距離
-    def distance_all(self,u,default=-1):
+    def distance_all(self, u, default = -1):
         """ 頂点 u からの距離を求める."""
 
         from collections import deque
@@ -201,30 +196,10 @@ class Graph:
         return None
 
     def edge_yielder(self):
-        u = [0] * len(self.edge_alive); v = [0] * len(self.edge_alive)
-        for x in range(self.order()):
-            adj = self.adjacent[x]
-            ids = self.edge_ids[x]
+        pass
 
-            for k in range(len(adj)):
-                id = ids[k]
-                u[id] = min(x, adj[k])
-                v[id] = max(x, adj[k])
-
-        for id in range(len(self.edge_alive)):
-            if self.edge_alive[id]:
-                yield (u[id], v[id])
-
-    def edge_yielder_with_index(self):
-        u = [-1] * len(self.edge_alive); v = [-1] * len(self.edge_alive)
-        for x in range(self.order()):
-            for y, id in self.partner_with_index_yield(x):
-                u[id] = min(x, y)
-                v[id] = max(x, y)
-
-        for id in range(len(self.edge_alive)):
-            if self.edge_alive[id]:
-                yield (id, u[id], v[id])
+    def edge_yielder_with_label(self):
+        pass
 
 #==========
 #グラフの生成
@@ -244,8 +219,8 @@ def Directed_Sum(*Graphs):
 
     H = Graph(total_order)
     for G in Graphs:
-        for u, v in G.edge_yielder():
-            H.add_edge(u + order_offset, v + order_offset)
+        for u, v, t in G.edge_yielder():
+            H.add_edge(u + order_offset, v + order_offset, t)
         order_offset += G.order()
 
     return H
