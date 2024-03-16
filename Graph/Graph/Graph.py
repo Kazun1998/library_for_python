@@ -196,7 +196,10 @@ class Graph:
         return None
 
     def edge_yielder(self):
-        pass
+        for u in range(self.size):
+            for v in self.partner(u):
+                if u <= v:
+                    yield (u, v)
 
     def edge_yielder_with_label(self):
         pass
