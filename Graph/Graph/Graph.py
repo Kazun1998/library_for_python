@@ -282,42 +282,37 @@ def Tree_Diameter(T: Graph, Mode = False):
         return d
 
 #連結成分に分解
-def Connected_Component_Decomposition(G: Graph, mode = 0):
+def Connected_Component_Decomposition(G: Graph):
     """ 連結成分毎に分解する.
 
     G: Graph
-    mode:0 → 連結成分, 1 → 連結成分番号, 2 → (連結成分, 連結成分番号)"""
+    """
 
 
-    comp_id = [-1] * G.order()
+    group = [-1] * G.order()
     comps = []
 
-    def dfs(start, id):
+    def dfs(start, g):
         stack = [start]
-        comp_id[start] = id
+        group[start] = g
         comp = []
 
         while stack:
             x = stack.pop()
             comp.append(x)
-            for y in G.neighborhood(x):
-                if comp_id[y] == -1:
-                    comp_id[y] = id
+            for y in G.partner_yield(x):
+                if group[y] == -1:
+                    group[y] = g
                     stack.append(y)
         comps.append(comp)
 
-    id = 0
+    g = 0
     for x in range(G.order()):
-        if comp_id[x] == -1:
-            dfs(x, id)
-            id += 1
+        if group[x] == -1:
+            dfs(x, g)
+            g += 1
 
-    if mode == 0:
-        return comps
-    elif mode == 1:
-            return comp_id
-    elif mode == 2:
-            return (comps, comp_id)
+    return { 'components': comps, 'group': group }
 
 #連結成分の個数
 def Connected_Component_Number(G: Graph):
