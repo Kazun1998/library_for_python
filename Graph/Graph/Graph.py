@@ -362,36 +362,37 @@ def Is_Bipartite_Graph(G: Graph):
     return True
 
 #2部グラフの部集合に分割
-def Bipartite_Separate(G):
+def Bipartite_Separate(G: Graph):
     """ 2部グラフの頂点を部集合に分割する. """
 
-    N=G.vertex_count()
-    T=[0]*N
-    adj=G.adjacent
+    N = G.order()
+    color = [0] * N
 
-    Bip=[]
+    separates = []
     for v in range(N):
-        if T[v]==0:
-            T[v]=1
-            S=[v]
-            A=[]; B=[]
-            while S:
-                u=S.pop()
+        if color[v] != 0:
+            continue
 
-                if T[u]==1:
-                    A.append(u)
-                else:
-                    B.append(u)
+        color[v] = 1
+        S = [v]
+        A = []; B = []
+        while S:
+            u = S.pop()
 
-                for w in adj[u]:
-                    if T[w]==0:
-                        T[w]=-T[u]
-                        S.append(w)
-                    elif T[w]==T[u]:
-                        return None
-            Bip.append((A,B))
+            if color[u]==1:
+                A.append(u)
+            else:
+                B.append(u)
 
-    return Bip
+            for w in G.partner_yield(u):
+                if color[w] == 0:
+                    color[w] = -color[u]
+                    S.append(w)
+                elif color[w] == color[u]:
+                    return None
+        separates.append((A,B))
+
+    return separates
 
 #オイラーグラフ?
 def Is_Eulerian_Graph(G: Graph):
