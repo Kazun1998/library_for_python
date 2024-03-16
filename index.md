@@ -161,9 +161,6 @@ data:
       title: "Strongly Connected Components (\u5F37\u9023\u7D50\u6210\u5206\u5206\u89E3\
         )"
     - icon: ':warning:'
-      path: Subset_Sum.py
-      title: Subset_Sum.py
-    - icon: ':warning:'
       path: Topological_Sort.py
       title: Topological_Sort.py
     - icon: ':warning:'
@@ -469,6 +466,17 @@ data:
     - icon: ':warning:'
       path: String/Suffix_Array.py
       title: String/Suffix_Array.py
+  - name: Subset_Sum
+    pages:
+    - icon: ':warning:'
+      path: Subset_Sum/Count.py
+      title: Subset_Sum/Count.py
+    - icon: ':warning:'
+      path: Subset_Sum/Decision.py
+      title: Subset_Sum/Decision.py
+    - icon: ':warning:'
+      path: Subset_Sum/Find.py
+      title: Subset_Sum/Find.py
   - name: Summation
     pages:
     - icon: ':heavy_check_mark:'
