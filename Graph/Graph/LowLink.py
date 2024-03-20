@@ -4,8 +4,6 @@ def Lowlink(G: Graph):
     """ G の ord, lowlink を求める.
 
     G: Graph
-
-    output: (ord, lowlink)
     """
 
     N = G.order()
@@ -17,7 +15,7 @@ def Lowlink(G: Graph):
         ord[start] = low[start] = t
         t += 1
         tower.append(start)
-        stack = [(start, v, j) for v, j in G.partner_with_index_yield(start)]
+        stack = [(start, v, j) for v, j in G.partner_with_label_yield(start)]
         while stack:
             u, v, j = stack.pop()
             if ord[v] != -1:
@@ -28,7 +26,7 @@ def Lowlink(G: Graph):
             tower.append(v)
             children[u].append(v)
             t += 1
-            stack.extend([(v, w, k) for w, k in G.partner_with_index_yield(v) if k != j])
+            stack.extend([(v, w, k) for w, k in G.partner_with_label_yield(v) if k != j])
         return t
 
     t = 0
@@ -51,7 +49,7 @@ def Bridge(G: Graph):
 
     data = Lowlink(G)
     ord = data['ord']; low = data['low']
-    return [id for id, u, v in G.edge_yielder_with_index() if (ord[u] < low[v]) or (ord[v] < low[u])]
+    return [t for u, v, t in G.edge_yielder_with_label() if (ord[u] < low[v]) or (ord[v] < low[u])]
 
 # 関節点の列挙
 def Articulation_Point(G):
