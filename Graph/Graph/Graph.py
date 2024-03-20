@@ -65,11 +65,7 @@ class Graph:
         return [w for w, _ in self.adjacent[v]]
 
     def partner_with_label_yield(self, v):
-        for x, id in self.adjacent[v]:
-            if self.edge_alive[id]:
-                yield (x, id)
-
-        return [(x, id) for (x, id) in self.adjacent[v] if self.edge_alive[id]]
+        yield from self.adjacent[v]
 
     #近傍
     def neighborhood(self, v):
@@ -178,7 +174,7 @@ class Graph:
         while queue:
             x = queue.popleft()
             for y in self.partner_yield(x):
-                if prev[x] != -1:
+                if prev[y] != -1:
                     continue
 
                 prev[y] = x
@@ -196,13 +192,16 @@ class Graph:
         return None
 
     def edge_yielder(self):
-        for u in range(self.size):
-            for v in self.partner(u):
+        for u in range(self.order()):
+            for v in self.partner_yield(u):
                 if u <= v:
                     yield (u, v)
 
     def edge_yielder_with_label(self):
-        pass
+        for u in range(self.order()):
+            for v, label in self.partner_with_label_yield(u):
+                if u <= v:
+                    yield (u, v, label)
 
 #==========
 #グラフの生成
