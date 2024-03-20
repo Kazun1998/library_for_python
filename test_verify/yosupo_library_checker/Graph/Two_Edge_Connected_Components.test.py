@@ -2,7 +2,7 @@
 
 #==================================================
 from Graph.Graph.Graph import Graph as Undirected_Graph
-from Graph.Graph.Cycle import *
+from Graph.Graph.Lowlink import *
 
 import sys
 input=sys.stdin.readline
