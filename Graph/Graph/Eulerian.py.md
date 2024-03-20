@@ -3,12 +3,12 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
     title: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.2/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -30,24 +30,25 @@ data:
     \ = [G.degree(v) for v in range(N)]\n\n    odd_vertex = [v for v in range(N) if\
     \ remain[v] % 2 == 1]\n    if len(odd_vertex) > 2:\n        return { 'vertex':\
     \ None, 'edge': None }\n    elif len(odd_vertex) == 2:\n        start, goal =\
-    \ odd_vertex\n    else:\n        start = goal = 0\n\n    adj = [[edge for edge\
-    \ in G.adjacent[x]] for x in range(N)]\n    seen = set()\n\n    def dfs(start):\n\
-    \        path = []\n\n        x = start\n        while True:\n            if not\
-    \ adj[x]:\n                break\n\n            y, i = adj[x].pop()\n        \
-    \    if i in seen:\n                continue\n\n            seen.add(i)\n    \
-    \        path.append((x, y, i))\n            remain[x] -= 1; remain[y] -= 1\n\
-    \            x = y\n        return path\n\n    stack = dfs(start)\n    edge =\
-    \ []\n    vertex = [goal]\n    while stack:\n        u, _, j = stack.pop()\n \
-    \       vertex.append(u)\n        edge.append(j)\n\n        if remain[u]:\n  \
-    \          stack.extend(dfs(u))\n\n    if len(edge) == G.size():\n        return\
-    \ { 'vertex': vertex, 'edge': edge }\n    else:\n        return { 'vertex': None,\
-    \ 'edge': None }\n"
+    \ odd_vertex\n    else:\n        for v in range(N):\n            if remain[v]:\n\
+    \                start = goal = v\n                break\n        else:\n    \
+    \        start = goal = 0\n\n    adj = [[edge for edge in G.adjacent[x]] for x\
+    \ in range(N)]\n    seen = set()\n\n    def dfs(start):\n        path = []\n\n\
+    \        x = start\n        while True:\n            if not adj[x]:\n        \
+    \        break\n\n            y, i = adj[x].pop()\n            if i in seen:\n\
+    \                continue\n\n            seen.add(i)\n            path.append((x,\
+    \ y, i))\n            remain[x] -= 1; remain[y] -= 1\n            x = y\n    \
+    \    return path\n\n    stack = dfs(start)\n    edge = []\n    vertex = [goal]\n\
+    \    while stack:\n        u, _, j = stack.pop()\n        vertex.append(u)\n \
+    \       edge.append(j)\n\n        if remain[u]:\n            stack.extend(dfs(u))\n\
+    \n    if len(edge) == G.size():\n        return { 'vertex': vertex, 'edge': edge\
+    \ }\n    else:\n        return { 'vertex': None, 'edge': None }\n"
   dependsOn: []
   isVerificationFile: false
   path: Graph/Graph/Eulerian.py
   requiredBy: []
-  timestamp: '2024-03-20 22:03:14+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  timestamp: '2024-03-20 23:15:33+09:00'
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
 documentation_of: Graph/Graph/Eulerian.py

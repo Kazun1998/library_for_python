@@ -1,17 +1,17 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: Graph/Graph/Eulerian.py
     title: Graph/Graph/Eulerian.py
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: Graph/Graph/Graph.py
     title: Graph
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/eulerian_trail_undirected
     links:
@@ -38,8 +38,8 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
   requiredBy: []
-  timestamp: '2024-03-20 22:23:03+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2024-03-20 23:16:45+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
 layout: document

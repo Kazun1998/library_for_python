@@ -309,10 +309,10 @@ data:
     - icon: ':warning:'
       path: Graph/Graph/Cycle.py
       title: Graph/Graph/Cycle.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: Graph/Graph/Eulerian.py
       title: Graph/Graph/Eulerian.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: Graph/Graph/Graph.py
       title: Graph
     - icon: ':warning:'
@@ -623,7 +623,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py
       title: test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
       title: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
   - name: test_verify/yosupo_library_checker/Math
