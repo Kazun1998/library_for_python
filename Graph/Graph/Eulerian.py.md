@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _extendedVerifiedWith:
+  - icon: ':x:'
+    path: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
+    title: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.2/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -44,8 +47,9 @@ data:
   path: Graph/Graph/Eulerian.py
   requiredBy: []
   timestamp: '2024-03-20 22:03:14+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_WA
+  verifiedWith:
+  - test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
 documentation_of: Graph/Graph/Eulerian.py
 layout: document
 redirect_from:
