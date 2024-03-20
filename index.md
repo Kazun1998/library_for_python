@@ -658,6 +658,9 @@ data:
       path: test_verify/yosupo_library_checker/Matrix/Inverse.test.py
       title: test_verify/yosupo_library_checker/Matrix/Inverse.test.py
     - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Matrix/Power.test.py
+      title: test_verify/yosupo_library_checker/Matrix/Power.test.py
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Matrix/Product.test.py
       title: test_verify/yosupo_library_checker/Matrix/Product.test.py
   - name: test_verify/yosupo_library_checker/Polynomial
