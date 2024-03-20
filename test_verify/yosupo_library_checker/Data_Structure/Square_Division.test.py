@@ -1,7 +1,7 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/static_range_sum
 
 #==================================================
-from Division.Square_Divion import *
+from Division.Square_Division import *
 
 import sys
 input=sys.stdin.readline
