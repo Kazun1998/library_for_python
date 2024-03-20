@@ -249,6 +249,14 @@ data:
     - icon: ':heavy_check_mark:'
       path: Convolution/XOR_Convolution.py
       title: Xor Convolution
+  - name: Division
+    pages:
+    - icon: ':warning:'
+      path: Division/Segment_Division.py
+      title: Division/Segment_Division.py
+    - icon: ':heavy_check_mark:'
+      path: Division/Square_Division.py
+      title: Division/Square_Division.py
   - name: Dynamic Programming
     pages:
     - icon: ':warning:'
@@ -612,6 +620,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Sparse_Table.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Sparse_Table.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Square_Division.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Square_Division.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
