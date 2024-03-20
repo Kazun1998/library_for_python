@@ -28,17 +28,17 @@ data:
     \ sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n#==================================================\n\
     def verify():\n    N, M = map(int, input().split())\n\n    G = Undirected_Graph(N)\n\
     \    for j in range(M):\n        u, v = map(int, input().split())\n        G.add_edge(u,\
-    \ v, j)\n\n    euler = Find_Eulerian_Trail(G)\n    if euler['vertex'] is None:\n\
+    \ v, j)\n\n    euler = Find_Eulerian_Trail(G)\n\n    if euler['vertex'] is None:\n\
     \        print(\"No\")\n    else:\n        print('Yes')\n        print(*euler['vertex'])\n\
     \        print(*euler['edge'])\n\n#==================================================\n\
     T = int(input())\nfor _ in range(T):\n    verify()\n"
   dependsOn:
-  - Graph/Graph/Graph.py
   - Graph/Graph/Eulerian.py
+  - Graph/Graph/Graph.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
   requiredBy: []
-  timestamp: '2024-03-20 23:16:45+09:00'
+  timestamp: '2024-03-20 23:23:46+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
