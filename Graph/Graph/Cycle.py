@@ -12,7 +12,7 @@ def Find_Cycle(G: Graph):
     upper = [-1] * N
     def dfs(start):
         seen[start] = True
-        stack = [(start, v, j) for v, j in G.partner_with_index_yield(start)]
+        stack = [(start, v, j) for v, j in G.partner_with_label_yield(start)]
         while stack:
             u, v, j = stack.pop()
 
@@ -29,7 +29,7 @@ def Find_Cycle(G: Graph):
             parent[v] = u
             upper[v] = j
 
-            stack.extend([(v, w, k) for w, k in G.partner_with_index_yield(v) if k != j])
+            stack.extend([(v, w, k) for w, k in G.partner_with_label_yield(v) if k != j])
         return None, None
 
     for x in range(N):
