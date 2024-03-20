@@ -306,7 +306,7 @@ data:
       title: Graph/Weighted_Digraph.py
   - name: Graph/Graph
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Graph/Graph/Cycle.py
       title: Graph/Graph/Cycle.py
     - icon: ':heavy_check_mark:'
@@ -315,7 +315,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: Graph/Graph/Graph.py
       title: Graph
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Graph/Graph/LowLink.py
       title: Graph/Graph/LowLink.py
   - name: Graph/Weighted_Digraph
@@ -624,8 +624,14 @@ data:
       path: test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py
       title: test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py
     - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Graph/Two_Edge_Connected_Components.test.py
+      title: test_verify/yosupo_library_checker/Graph/Two_Edge_Connected_Components.test.py
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
       title: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Graph/Undirected_Find_Cycle.test.py
+      title: test_verify/yosupo_library_checker/Graph/Undirected_Find_Cycle.test.py
   - name: test_verify/yosupo_library_checker/Math
     pages:
     - icon: ':heavy_check_mark:'
