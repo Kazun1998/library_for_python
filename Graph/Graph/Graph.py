@@ -427,9 +427,9 @@ def Find_Hamiltonian_Graph(G):
     pass
 
 #クリーク
-def Clique(G: Graph, calc, merge, unit, empty=False):
+def Clique(G: Graph, calc, merge, unit, empty = False):
     """
-    グラフ G に対する Clique C 全てに対する calc (C) を計算し, merge でマージする.
+    グラフ G に対する Clique C 全てに対する calc(C) を計算し, merge でマージする.
 
     G: Graph
     calc: calc(C) Clique である部分集合 C に対する値
