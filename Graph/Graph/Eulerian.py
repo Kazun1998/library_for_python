@@ -22,7 +22,12 @@ def Find_Eulerian_Trail(G: Graph):
     elif len(odd_vertex) == 2:
         start, goal = odd_vertex
     else:
-        start = goal = 0
+        for v in range(N):
+            if remain[v]:
+                start = goal = v
+                break
+        else:
+            start = goal = 0
 
     adj = [[edge for edge in G.adjacent[x]] for x in range(N)]
     seen = set()
