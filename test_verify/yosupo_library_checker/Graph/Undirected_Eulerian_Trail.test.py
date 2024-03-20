@@ -1,6 +1,7 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/eulerian_trail_undirected
 
 #==================================================
+from Graph.Graph.Graph import *
 from Graph.Graph.Eulerian import *
 
 import sys
