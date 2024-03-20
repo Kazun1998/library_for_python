@@ -310,6 +310,9 @@ data:
       path: Graph/Graph/Cycle.py
       title: Graph/Graph/Cycle.py
     - icon: ':warning:'
+      path: Graph/Graph/Eulerian.py
+      title: Graph/Graph/Eulerian.py
+    - icon: ':warning:'
       path: Graph/Graph/Graph.py
       title: Graph
     - icon: ':warning:'

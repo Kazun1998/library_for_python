@@ -153,17 +153,7 @@ data:
     \                if color[w] == 0:\n                    color[w] = -color[u]\n\
     \                    S.append(w)\n                elif color[w] == color[u]:\n\
     \                    return None\n        separates.append((A,B))\n\n    return\
-    \ separates\n\n#\u30AA\u30A4\u30E9\u30FC\u30B0\u30E9\u30D5?\ndef Is_Eulerian_Graph(G:\
-    \ Graph):\n    \"\"\" \u30B0\u30E9\u30D5 G \u304C\u30AA\u30A4\u30E9\u30FC\u30B0\
-    \u30E9\u30D5\u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B. \"\"\"\n \
-    \   return all(G.degree(v) % 2 == 0 for v in range(G.order())) and Is_Connected(G)\n\
-    \n#\u6E96\u30AA\u30A4\u30E9\u30FC\u30B0\u30E9\u30D5?\ndef Is_Semi_Eulerian_Graph(G:\
-    \ Graph):\n    \"\"\" \u30B0\u30E9\u30D5 G \u304C\u6E96\u30AA\u30A4\u30E9\u30FC\
-    \u30B0\u30E9\u30D5\u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B. \"\"\
-    \"\n    return len([v for v in range(G.order()) if G.degree(v) % 2 == 0]) == 2\
-    \ and Is_Connected(G)\n\n#Euler \u8DEF\u3092\u898B\u3064\u3051\u308B\ndef Find_Eulerian_Trail(G):\n\
-    \    pass\n\n\n#Euler\u9589\u8DEF\u3092\u898B\u3064\u3051\u308B\ndef Find_Eulerian_Cycle(G):\n\
-    \    pass\n\n#\u30CF\u30DF\u30EB\u30C8\u30F3\u30B0\u30E9\u30D5?\ndef Is_Hamiltonian_Graph(G):\n\
+    \ separates\n\n#\u30CF\u30DF\u30EB\u30C8\u30F3\u30B0\u30E9\u30D5?\ndef Is_Hamiltonian_Graph(G):\n\
     \    \"\"\" \u30CF\u30DF\u30EB\u30C8\u30F3\u30B0\u30E9\u30D5 (\u5168\u3066\u306E\
     \u9802\u70B9\u30921\u56DE\u305A\u3064\u901A\u308B\u30B5\u30A4\u30AF\u30EB\u3092\
     \u542B\u3080\u30B0\u30E9\u30D5) \u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\
@@ -288,7 +278,7 @@ data:
   isVerificationFile: false
   path: Graph/Graph/Graph.py
   requiredBy: []
-  timestamp: '2024-03-20 20:51:30+09:00'
+  timestamp: '2024-03-20 20:56:58+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Graph/Graph/Graph.py
