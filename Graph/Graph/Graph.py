@@ -521,7 +521,7 @@ def Clique(G: Graph, calc, merge, unit, empty=False):
     return X
 
 # 三角形
-def Triangle(G: Graph , calc, merge, unit):
+def Triangle(G: Graph, calc, merge, unit):
     """
     calc: calc(i,j,k) 3頂点 i,j,k からなる頂点に対する値
     merge: merge(x,y) x,y のマージの方法
@@ -535,7 +535,7 @@ def Triangle(G: Graph , calc, merge, unit):
 
     deg=G.degree
     for i in range(N):
-        for j in G.neighborhood(i):
+        for j in G.partner_yield(i):
             if (deg(i)>deg(j)) or (deg(i)==deg(j) and i>j):
                 A[i].append(j)
 
