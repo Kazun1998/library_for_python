@@ -307,8 +307,14 @@ data:
   - name: Graph/Graph
     pages:
     - icon: ':warning:'
+      path: Graph/Graph/Cycle.py
+      title: Graph/Graph/Cycle.py
+    - icon: ':warning:'
       path: Graph/Graph/Graph.py
       title: Graph
+    - icon: ':warning:'
+      path: Graph/Graph/LowLink.py
+      title: Graph/Graph/LowLink.py
   - name: Graph/Weighted_Digraph
     pages:
     - icon: ':warning:'
