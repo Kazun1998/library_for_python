@@ -119,9 +119,7 @@ def Two_Edge_Connected_Components(G: Graph):
     G: Graph
     """
 
-    bridge = [False] * (G.edge_offset + G.size())
-    for j in Bridge(G):
-        bridge[j] = True
+    bridges = set(Bridge(G))
 
     comps = []
     t = 0
@@ -135,12 +133,12 @@ def Two_Edge_Connected_Components(G: Graph):
         stack = [x]
         while stack:
             u = stack.pop()
-            for v, j in G.partner_with_index_yield(u):
-                if (not bridge[j]) and (comp_id[v] == -1):
+            for v, j in G.partner_with_label_yield(u):
+                if (j not in bridges) and (comp_id[v] == -1):
                     comp_id[v] = t
                     c.append(v)
                     stack.append(v)
         comps.append(c)
         t += 1
 
-    return { 'comp_id': comp_id, 'comps': comps }
+    return { 'group': comp_id, 'comps': comps }
