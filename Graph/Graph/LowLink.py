@@ -52,16 +52,16 @@ def Bridge(G: Graph):
     return [t for u, v, t in G.edge_yielder_with_label() if (ord[u] < low[v]) or (ord[v] < low[u])]
 
 # 関節点の列挙
-def Articulation_Point(G):
+def Articulation_Point(G: Graph):
     from collections import deque
 
     N=G.vertex_count()
-    A=[]; A_append=A.append
+    A=[]
     ord=[-1]*N; low=[-1]*N
     flag=[0]*N
-    adj=G.adjacent
 
-    parent=[-1]*N; children=[[] for _ in range(N)]
+    parent=[-1]*N
+    children=[[] for _ in range(N)]
 
     #BFSパート
     for v in range(N):
@@ -83,7 +83,7 @@ def Articulation_Point(G):
             k+=1
             flag[u]=1
 
-            for w in adj[u]:
+            for w in G.partner_yield(u):
                 if not flag[w]:
                     S.append(w)
                     parent[w]=u
@@ -95,19 +95,19 @@ def Articulation_Point(G):
             children[parent[w]].append(w)
 
         for w in T[:0:-1]:
-            for x in adj[w]:
+            for x in G.partner_yield(w):
                 if w==v or x!=parent[w]:
                     low[w]=min(low[w],low[x],ord[x])
 
         #根での判定
         if len(children[v])>=2:
-            A_append(v)
+            A.append(v)
 
         #根以外の判定
         for w in T[:0:-1]:
             for u in children[w]:
                 if ord[w]<=low[u]:
-                    A_append(w)
+                    A.append(w)
                     break
     return A
 
