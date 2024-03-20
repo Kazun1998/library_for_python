@@ -18,6 +18,7 @@ def verify():
         G.add_edge(u, v, j)
 
     euler = Find_Eulerian_Trail(G)
+
     if euler['vertex'] is None:
         print("No")
     else:
