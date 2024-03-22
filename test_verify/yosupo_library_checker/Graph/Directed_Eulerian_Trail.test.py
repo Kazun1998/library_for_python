@@ -1,7 +1,7 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/eulerian_trail_directed
 
 #==================================================
-from Graph.Digraph.DiGraph import Digraph as Directed_Graph
+from Graph.Digraph.Digraph import Digraph as Directed_Graph
 from Graph.DigGraph.Eulerian import Find_Directed_Eulerial_Trail
 
 import sys
