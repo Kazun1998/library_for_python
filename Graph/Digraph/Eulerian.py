@@ -1,4 +1,4 @@
-def Find_Directed_Eulerian_Trail(D: Digraph):
+def Find_Directed_Eulerian_Trail(D):
     N = D.order()
 
     remain = [D.out_degree(v) for v in range(N)]
