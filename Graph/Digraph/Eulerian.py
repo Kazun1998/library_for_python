@@ -1,5 +1,3 @@
-from Digraph import *
-
 def Find_Directed_Eulerian_Trail(D: Digraph):
     N = D.order()
 
