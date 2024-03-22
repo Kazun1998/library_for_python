@@ -2,7 +2,7 @@
 
 #==================================================
 from Graph.Digraph.Digraph import Digraph as Directed_Graph
-from Graph.DigGraph.Eulerian import Find_Directed_Eulerial_Trail
+from Graph.Digraph.Eulerian import Find_Directed_Eulerial_Trail
 
 import sys
 input=sys.stdin.readline
