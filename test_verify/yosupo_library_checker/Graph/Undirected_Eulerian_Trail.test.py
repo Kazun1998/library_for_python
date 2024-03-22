@@ -2,7 +2,7 @@
 
 #==================================================
 import sys
-sys.path.append('~')
+sys.path.append('~/Graph/Digraph')
 
 from Graph.Graph.Graph import Graph as Undirected_Graph
 from Graph.Graph.Eulerian import *
