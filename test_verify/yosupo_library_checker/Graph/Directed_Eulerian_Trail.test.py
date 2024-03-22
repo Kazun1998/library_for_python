@@ -17,7 +17,7 @@ def verify():
         u, v = map(int, input().split())
         D.add_arc(u, v, j)
 
-    euler = Find_Directed_Eulerial_Trail(D)
+    euler = Find_Directed_Eulerian_Trail(D)
 
     if euler['vertex'] is None:
         print("No")
