@@ -24,7 +24,7 @@ def verify():
     else:
         print('Yes')
         print(*euler['vertex'])
-        print(*euler['edge'])
+        print(*euler['arc'])
 
 #==================================================
 T = int(input())
