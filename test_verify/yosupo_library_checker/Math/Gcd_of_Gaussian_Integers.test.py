@@ -1,7 +1,7 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/gcd_of_gaussian_integers
 
 #==================================================
-from Gaussian_Integer import *
+from Gaussian_Integer import Gaussian_Integer, gcd
 
 import sys
 input=sys.stdin.readline
@@ -15,4 +15,4 @@ def verify():
 
 #==================================================
 T = int(input())
-write("\n".join(verify()))
+write("\n".join([verify() for _ in range(T)]))
