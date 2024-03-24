@@ -1,10 +1,7 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy:
-  - icon: ':warning:'
-    path: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
-    title: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
+  _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Matrix/Determinant.test.py
@@ -12,6 +9,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Matrix/Inverse.test.py
     title: test_verify/yosupo_library_checker/Matrix/Inverse.test.py
+  - icon: ':heavy_check_mark:'
+    path: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
+    title: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Matrix/Power.test.py
     title: test_verify/yosupo_library_checker/Matrix/Power.test.py
@@ -192,12 +192,12 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py
-  requiredBy:
-  - test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
+  requiredBy: []
   timestamp: '2024-03-24 13:46:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Product.test.py
+  - test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
   - test_verify/yosupo_library_checker/Matrix/Power.test.py
   - test_verify/yosupo_library_checker/Matrix/Inverse.test.py
   - test_verify/yosupo_library_checker/Matrix/Determinant.test.py

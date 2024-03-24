@@ -8,7 +8,7 @@ data:
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/matrix_rank
     links:
@@ -29,16 +29,16 @@ data:
     verify()\n"
   dependsOn:
   - Modulo_Matrix/Modulo_Matrix.py
-  isVerificationFile: false
-  path: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
+  isVerificationFile: true
+  path: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
   requiredBy: []
-  timestamp: '2024-03-24 13:48:13+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
+  timestamp: '2024-03-24 14:34:30+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
+documentation_of: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
 layout: document
 redirect_from:
-- /library/test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
-- /library/test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py.html
-title: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
+- /verify/test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
+- /verify/test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py.html
+title: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
 ---

@@ -54,7 +54,7 @@ data:
     - icon: ':warning:'
       path: Function_Minimizer.py
       title: Function_Minimizer.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Gaussian_Integer.py
       title: Gaussian_Integer.py
     - icon: ':warning:'
@@ -541,16 +541,6 @@ data:
     - icon: ':heavy_check_mark:'
       path: Union_Find/Union_Find.py
       title: Union Find (Disjoint Set Union)
-  - name: test_verify/yosupo_library_checker/Math
-    pages:
-    - icon: ':warning:'
-      path: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.py
-      title: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.py
-  - name: test_verify/yosupo_library_checker/Matrix
-    pages:
-    - icon: ':warning:'
-      path: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
-      title: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
   verificationCategories:
   - name: test_verify/yosupo_library_checker/Convolution
     pages:
@@ -657,6 +647,9 @@ data:
       path: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
       title: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
     - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.test.py
+      title: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.test.py
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
       title: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
     - icon: ':heavy_check_mark:'
@@ -673,6 +666,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Matrix/Inverse.test.py
       title: test_verify/yosupo_library_checker/Matrix/Inverse.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
+      title: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Matrix/Power.test.py
       title: test_verify/yosupo_library_checker/Matrix/Power.test.py
