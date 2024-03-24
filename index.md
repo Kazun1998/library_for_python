@@ -546,6 +546,11 @@ data:
     - icon: ':warning:'
       path: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.py
       title: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.py
+  - name: test_verify/yosupo_library_checker/Matrix
+    pages:
+    - icon: ':warning:'
+      path: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
+      title: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
   verificationCategories:
   - name: test_verify/yosupo_library_checker/Convolution
     pages:

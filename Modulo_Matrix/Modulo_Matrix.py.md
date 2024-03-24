@@ -1,7 +1,10 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
+    title: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Matrix/Determinant.test.py
@@ -88,65 +91,62 @@ data:
     \        return self.ele==other.ele\n\n    #\u4E0D\u7B49\u53F7\n    def __neq__(self,other):\n\
     \        return not(self==other)\n\n    #\u8EE2\u7F6E\n    def transpose(self):\n\
     \        return Modulo_Matrix(list(map(list,zip(*self.ele))))\n\n    #\u884C\u57FA\
-    \u672C\u5909\u5F62\n    def row_reduce(self):\n        M=self\n        (R,C)=M.size\n\
-    \        T=[]\n\n        for i in range(R):\n            U=[]\n            for\
-    \ j in range(C):\n                U.append(M.ele[i][j])\n            T.append(U)\n\
-    \n        I=0\n        for J in range(C):\n            if T[I][J]==0:\n      \
-    \          for i in range(I+1,R):\n                    if T[i][J]!=0:\n      \
-    \                  T[i],T[I]=T[I],T[i]\n                        break\n\n    \
-    \        if T[I][J]!=0:\n                u=T[I][J]\n                u_inv=pow(u,\
-    \ -1, Mod)\n                for j in range(C):\n                    T[I][j]*=u_inv\n\
-    \                    T[I][j]%=Mod\n\n                for i in range(R):\n    \
-    \                if i!=I:\n                        v=T[i][J]\n               \
-    \         for j in range(C):\n                            T[i][j]-=v*T[I][j]\n\
-    \                            T[i][j]%=Mod\n                I+=1\n            \
-    \    if I==R:\n                    break\n\n        return Modulo_Matrix(T)\n\n\
-    \    #\u5217\u57FA\u672C\u5909\u5F62\n    def column_reduce(self):\n        M=self\n\
-    \        (R,C)=M.size\n\n        T=[]\n        for i in range(R):\n          \
-    \  U=[]\n            for j in range(C):\n                U.append(M.ele[i][j])\n\
-    \            T.append(U)\n\n        J=0\n        for I in range(R):\n        \
-    \    if T[I][J]==0:\n                for j in range(J+1,C):\n                \
-    \    if T[I][j]!=0:\n                        for k in range(R):\n            \
-    \                T[k][j],T[k][J]=T[k][J],T[k][j]\n                        break\n\
-    \n            if T[I][J]!=0:\n                u=T[I][J]\n                u_inv=pow(u,\
-    \ -1, Mod)\n                for i in range(R):\n                    T[i][J]*=u_inv\n\
-    \                    T[i][J]%=Mod\n\n                for j in range(C):\n    \
-    \                if j!=J:\n                        v=T[I][j]\n               \
-    \         for i in range(R):\n                            T[i][j]-=v*T[i][J]\n\
-    \                            T[i][j]%=Mod\n                J+=1\n            \
-    \    if J==C:\n                    break\n\n        return Modulo_Matrix(T)\n\n\
-    \    #\u884C\u5217\u306E\u968E\u6570\n    def rank(self):\n        M=self.row_reduce()\n\
-    \        (R,C)=M.size\n        T=M.ele\n\n        rnk=0\n        for i in range(R):\n\
-    \            f=False\n            for j in range(C):\n                if T[i][j]!=0:\n\
-    \                    f=True\n                    break\n\n            if f:\n\
-    \                rnk+=1\n            else:\n                break\n\n        return\
-    \ rnk\n\n    # \u5358\u5C04 ?\n    def is_injection(self):\n        return self.rank()\
-    \ == self.col\n\n    # \u5168\u5C04 ?\n    def is_surjective(self):\n        return\
-    \ self.rank() == self.row\n\n    # \u5168\u5358\u5C04 ?\n    def is_bijection(self):\n\
-    \        return self.col == self.row == self.rank()\n\n    #\u884C\u306E\u7D50\
-    \u5408\n    def row_union(self,other):\n        return Modulo_Matrix(self.ele+other.ele)\n\
-    \n    #\u5217\u306E\u7D50\u5408\n    def column_union(self,other):\n        E=[]\n\
-    \        for i in range(self.row):\n            E.append(self.ele[i]+other.ele[i])\n\
-    \n        return Modulo_Matrix(E)\n\n    def __getitem__(self,index):\n      \
-    \  if isinstance(index, int):\n            return self.ele[index]\n        else:\n\
-    \            return self.ele[index[0]][index[1]]\n\n    def __setitem__(self,index,val):\n\
-    \        assert isinstance(index,tuple) and len(index)==2\n        self.ele[index[0]][index[1]]=val\n\
-    \n#=================================================\n#\u6B63\u65B9\u884C\u5217\
-    ?\ndef Is_Square(M):\n    return M.row==M.col\n\n#\u5BFE\u89D2\u884C\u5217\ndef\
-    \ Diagonal_Matrix(D):\n    \"\"\" D \u306E\u7B2C i \u8981\u7D20\u304C (i,i) \u6210\
-    \u5206\u3067\u3042\u308B\u5BFE\u89D2\u884C\u5217\u3092\u751F\u6210\u3059\u308B\
-    .\n\n    D: \u30EA\u30B9\u30C8\n    \"\"\"\n\n    N=len(D)\n    return Modulo_Matrix([[D[i]\
-    \ if i==j else 0 for j in range(N)] for i in range(N)])\n\n#\u884C\u5217\u306E\
-    \u76F4\u548C\ndef Direct_Sum(*A):\n    \"\"\" A=[A_0, A_1, ..., A_{N-1}] \u306B\
-    \u5BFE\u3059\u308B\u76F4\u548C\u884C\u5217\u3092\u6C42\u3081\u308B.\n\n    \"\"\
-    \"\n\n    r=c=0\n    for a in A:\n        r+=a.row\n        c+=a.col\n\n    M=[[0]*c\
-    \ for _ in range(r)]\n    x=y=0\n    for p in range(len(A)):\n        a=A[p]\n\
-    \        for i in range(a.row):\n            b=A[p].ele[i]\n            m=M[x+i]\n\
-    \            for j in range(a.col):\n                m[y+j]=b[j]\n        x+=a.row;\
-    \ y+=a.col\n    return Modulo_Matrix(M)\n\n#\u30AF\u30ED\u30CD\u30C3\u30AB\u30FC\
-    \u7A4D\ndef Kronecker_Product(*X):\n    A=[[1]]\n    for B in X:\n        A=[[A[i//B.row][j//B.col]*B[i%B.row][j%B.col]%Mod\
-    \ for j in range(len(A[0])*B.col)] for i in range(len(A)*B.row)]\n    return Modulo_Matrix(A)\n\
-    \n#\u30AF\u30ED\u30CD\u30C3\u30AB\u30FC\u548C\ndef Kronecker_Sum(*X):\n    A=Modulo_Matrix([[0]])\n\
+    \u672C\u5909\u5F62\n    def row_reduce(self):\n        (row, col) = self.size\n\
+    \n        T = deepcopy(self.ele)\n\n        I = 0\n        for J in range(col):\n\
+    \            if T[I][J] == 0:\n                for i in range(I + 1, row):\n \
+    \                   if T[i][J] != 0:\n                        T[i], T[I] = T[I],\
+    \ T[i]\n                        break\n                else:\n               \
+    \     continue\n\n            u = T[I][J]\n            u_inv = pow(u, -1, Mod)\n\
+    \            for j in range(col):\n                T[I][j] *= u_inv\n        \
+    \        T[I][j] %= Mod\n\n            for i in range(row):\n                if\
+    \ i == I:\n                    continue\n\n                v = T[i][J]\n     \
+    \           for j in range(col):\n                    T[i][j] -= v * T[I][j]\n\
+    \                    T[i][j] %= Mod\n            I += 1\n            if I == row:\n\
+    \                break\n\n        return Modulo_Matrix(T)\n\n    #\u5217\u57FA\
+    \u672C\u5909\u5F62\n    def column_reduce(self):\n        (row, col) = self.size\n\
+    \n        T = deepcopy(self.ele)\n\n        J = 0\n        for I in range(row):\n\
+    \            if T[I][J] ==0 :\n                for j in range(J + 1, col):\n \
+    \                   if T[I][j] != 0:\n                        for k in range(row):\n\
+    \                            T[k][j], T[k][J] = T[k][J], T[k][j]\n           \
+    \             break\n                else:\n                    continue\n\n \
+    \           u = T[I][J]\n            u_inv = pow(u, -1, Mod)\n            for\
+    \ i in range(row):\n                T[i][J] *= u_inv\n                T[i][J]\
+    \ %= Mod\n\n            for j in range(col):\n                if j != J:\n   \
+    \                 v = T[I][j]\n                    for i in range(row):\n    \
+    \                    T[i][j] -= v * T[i][J]\n                        T[i][j] %=\
+    \ Mod\n            J += 1\n            if J == col:\n                break\n\n\
+    \        return Modulo_Matrix(T)\n\n    #\u884C\u5217\u306E\u968E\u6570\n    def\
+    \ rank(self):\n        row_reduced = self.row_reduce()\n        (row, col) = row_reduced.size\n\
+    \n        rnk = 0\n        for i in range(row):\n            Ti = row_reduced.ele[i]\n\
+    \            if any(Ti[j] for j in range(col)):\n                rnk += 1\n\n\
+    \        return rnk\n\n    # \u5358\u5C04 ?\n    def is_injection(self):\n   \
+    \     return self.rank() == self.col\n\n    # \u5168\u5C04 ?\n    def is_surjective(self):\n\
+    \        return self.rank() == self.row\n\n    # \u5168\u5358\u5C04 ?\n    def\
+    \ is_bijection(self):\n        return self.col == self.row == self.rank()\n\n\
+    \    #\u884C\u306E\u7D50\u5408\n    def row_union(self,other):\n        return\
+    \ Modulo_Matrix(self.ele+other.ele)\n\n    #\u5217\u306E\u7D50\u5408\n    def\
+    \ column_union(self,other):\n        E=[]\n        for i in range(self.row):\n\
+    \            E.append(self.ele[i]+other.ele[i])\n\n        return Modulo_Matrix(E)\n\
+    \n    def __getitem__(self,index):\n        if isinstance(index, int):\n     \
+    \       return self.ele[index]\n        else:\n            return self.ele[index[0]][index[1]]\n\
+    \n    def __setitem__(self,index,val):\n        assert isinstance(index,tuple)\
+    \ and len(index)==2\n        self.ele[index[0]][index[1]]=val\n\n#=================================================\n\
+    #\u6B63\u65B9\u884C\u5217?\ndef Is_Square(M):\n    return M.row==M.col\n\n#\u5BFE\
+    \u89D2\u884C\u5217\ndef Diagonal_Matrix(D):\n    \"\"\" D \u306E\u7B2C i \u8981\
+    \u7D20\u304C (i,i) \u6210\u5206\u3067\u3042\u308B\u5BFE\u89D2\u884C\u5217\u3092\
+    \u751F\u6210\u3059\u308B.\n\n    D: \u30EA\u30B9\u30C8\n    \"\"\"\n\n    N=len(D)\n\
+    \    return Modulo_Matrix([[D[i] if i==j else 0 for j in range(N)] for i in range(N)])\n\
+    \n#\u884C\u5217\u306E\u76F4\u548C\ndef Direct_Sum(*A):\n    \"\"\" A=[A_0, A_1,\
+    \ ..., A_{N-1}] \u306B\u5BFE\u3059\u308B\u76F4\u548C\u884C\u5217\u3092\u6C42\u3081\
+    \u308B.\n\n    \"\"\"\n\n    r=c=0\n    for a in A:\n        r+=a.row\n      \
+    \  c+=a.col\n\n    M=[[0]*c for _ in range(r)]\n    x=y=0\n    for p in range(len(A)):\n\
+    \        a=A[p]\n        for i in range(a.row):\n            b=A[p].ele[i]\n \
+    \           m=M[x+i]\n            for j in range(a.col):\n                m[y+j]=b[j]\n\
+    \        x+=a.row; y+=a.col\n    return Modulo_Matrix(M)\n\n#\u30AF\u30ED\u30CD\
+    \u30C3\u30AB\u30FC\u7A4D\ndef Kronecker_Product(*X):\n    A=[[1]]\n    for B in\
+    \ X:\n        A=[[A[i//B.row][j//B.col]*B[i%B.row][j%B.col]%Mod for j in range(len(A[0])*B.col)]\
+    \ for i in range(len(A)*B.row)]\n    return Modulo_Matrix(A)\n\n#\u30AF\u30ED\u30CD\
+    \u30C3\u30AB\u30FC\u548C\ndef Kronecker_Sum(*X):\n    A=Modulo_Matrix([[0]])\n\
     \    for B in X:\n        A=Kronecker_Product(A, Modulo_Matrix.Identity_Matrix(B.row))+Kronecker_Product(Modulo_Matrix.Identity_Matrix(A.row),B)\n\
     \    return A\n\n#\u8DE1\ndef Trace(M):\n    \"\"\" \u6B63\u65B9\u884C\u5217 M\
     \ \u306E\u8DE1 (=\u5BFE\u89D2\u6210\u5206\u306E\u548C) \u3092\u6C42\u3081\u308B\
@@ -192,8 +192,9 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py
-  requiredBy: []
-  timestamp: '2024-02-25 10:36:05+09:00'
+  requiredBy:
+  - test_verify/yosupo_library_checker/Matrix/Matrix_Rank.py
+  timestamp: '2024-03-24 13:46:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Product.test.py
