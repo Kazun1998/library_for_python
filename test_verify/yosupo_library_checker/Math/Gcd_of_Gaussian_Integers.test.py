@@ -1,7 +1,7 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/gcd_of_gaussian_integers
 
 #==================================================
-from Gaussian_Integers import *
+from Gaussian_Integer import *
 
 import sys
 input=sys.stdin.readline
