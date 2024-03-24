@@ -10,7 +10,8 @@ write=sys.stdout.write
 #==================================================
 def verify():
     a, b, c, d = map(int, input().split())
-    return gcd(Gaussian_Integer(a, b), Gaussian_Integer(c, d))
+    g = gcd(Gaussian_Integer(a, b), Gaussian_Integer(c, d))
+    return f'{g.re} {g.im}'
 
 #==================================================
 T = int(input())
