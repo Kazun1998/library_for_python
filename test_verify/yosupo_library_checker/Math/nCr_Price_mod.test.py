@@ -1,7 +1,7 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/binomial_coefficient_prime_mod
 
 #==================================================
-from Enumeration import Enumeration
+from Enumeration import *
 
 import sys
 input=sys.stdin.readline
