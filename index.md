@@ -16,6 +16,9 @@ data:
       path: Bitset.py
       title: Bitset.py
     - icon: ':warning:'
+      path: Bitwise_Set.py
+      title: Bitwise_Set.py
+    - icon: ':warning:'
       path: Complex.py
       title: Complex.py
     - icon: ':warning:'
