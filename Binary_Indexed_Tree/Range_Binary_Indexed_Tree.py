@@ -28,7 +28,7 @@ class Range_Binary_Indexed_Tree():
         self.bit0.add(k, x)
 
     def update(self, k, x):
-        self.bit0.update(k, x)
+        self.bit0.add(k, self.op(self.neg(self.get(k)), x))
 
     def add_range(self, l, r, x):
         """ 第 l 要素から第 r 要素までに一様に x を加える.
