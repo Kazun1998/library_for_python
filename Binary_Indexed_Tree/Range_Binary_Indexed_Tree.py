@@ -28,7 +28,7 @@ class Range_Binary_Indexed_Tree():
         self.bit0.add(k, x)
 
     def update(self, k, x):
-        self.bit0.update(k, x)
+        self.bit0.add(k, self.op(self.neg(self.get(k)), x))
 
     def add_range(self, l, r, x):
         """ 第 l 要素から第 r 要素までに一様に x を加える.
@@ -53,12 +53,12 @@ class Range_Binary_Indexed_Tree():
         index: 先頭の要素の番号
         """
         if l > 0:
-            return self.__section(r) - self.__section(l - 1)
+            return self.op(self.__section(r), self.neg(self.__section(l - 1)))
         else:
             return self.__section(r)
 
     def __section(self, k):
-        return self.bit0.sum(0, k) + self.mul(k + 1, self.bit1.sum(0, k))
+        return self.op(self.bit0.sum(0, k), self.mul(k + 1, self.bit1.sum(0, k)))
 
     def all_sum(self):
         return self.sum(0, self.N - 1)
