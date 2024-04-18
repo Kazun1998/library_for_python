@@ -14,11 +14,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.2/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.12.2/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "class Modulo():\n    __slots__=(\"a\",\"n\")\n\n    def __init__(self, a,\
     \ n, mode=True):\n        if mode:\n            a%=n\n\n        self.a=a\n   \
@@ -170,66 +170,66 @@ data:
     \  while m>1:\n        if pow(t,2**(m-2))==1:\n            c=c*c\n           \
     \ m=m-1\n        else:\n            c,t,r,m=c*c,c*c*t,c*r,m-1\n\n    if All:\n\
     \        return (r,-r)\n    else:\n        return r\n\n#\u96E2\u6563\u5BFE\u6570\
-    \ndef Discrete_Log(A, B, default=-1):\n    \"\"\" A^X=B (mod M) \u3092\u6E80\u305F\
-    \u3059\u6700\u5C0F\u306E\u975E\u8CA0\u6574\u6570 X \u3092\u6C42\u3081\u308B.\n\
-    \n    [\u5165\u529B]\n    A:\u5E95\n    B:\n    [\u51FA\u529B]\n    A^X=B (mod\
+    \ndef Discrete_Log(A, B, default = -1):\n    \"\"\" A^X=B (mod M) \u3092\u6E80\
+    \u305F\u3059\u6700\u5C0F\u306E\u975E\u8CA0\u6574\u6570 X \u3092\u6C42\u3081\u308B\
+    .\n\n    [\u5165\u529B]\n    A:\u5E95\n    B:\n    [\u51FA\u529B]\n    A^X=B (mod\
     \ M)\u3092\u6E80\u305F\u3059\u975E\u8CA0\u6574\u6570 X \u304C\u5B58\u5728\u3059\
     \u308C\u3070\u305D\u306E\u4E2D\u3067\u6700\u5C0F\u306E\u3082\u306E\n    \u5B58\
-    \u5728\u3057\u306A\u3051\u308C\u3070 default\n    \"\"\"\n\n    if isinstance(B,int):\n\
-    \        B%=A.n\n    elif isinstance(B,Modulo):\n        assert A.n==B.n,\"A,B\u306E\
-    \u6CD5\u304C\u9055\u3044\u307E\u3059.\"\n        B=B.a\n    else:\n        raise\
-    \ TypeError\n\n    A,M=A.a,A.n\n\n    #A=0\u306E\u6642\u3092\u51E6\u7406\n   \
-    \ if M==1:\n        return 0\n    if B==1:\n        return 0\n    if A==B==0:\n\
-    \        return 1\n\n    D={1:0}\n    S=int(M**0.5)+2\n\n    #Baby-Step\n    Baby=1\n\
-    \    for i in range(S):\n        if Baby==B:\n            return i\n        D[(Baby*B)%M]=i\n\
-    \        Baby=(Baby*A)%M\n\n    #Giant-Step\n    Giant=1\n    H=pow(A,S,M)\n \
-    \   for i in range(1,S+1):\n        Giant=(Giant*H)%M\n        if Giant in D:\n\
-    \            j=D[Giant]\n            X=i*S-j\n            return X if pow(A,X,M)==B\
-    \ else default\n    return default\n\ndef Order(X):\n    \"\"\" X \u306E\u4F4D\
-    \u6570\u3092\u6C42\u3081\u308B. \u3064\u307E\u308A, X^k=[1] \u3092\u6E80\u305F\
-    \u3059\u6700\u5C0F\u306E\u6B63\u6574\u6570 k \u3092\u6C42\u3081\u308B.\n    \"\
-    \"\"\n    phi=1\n    N=X.n\n\n    e=(N&(-N)).bit_length()-1\n    if e>0:\n   \
-    \     phi=1<<(e-1)\n        N>>=e\n    else:\n        phi=1\n\n    e=0\n    while\
-    \ N%3==0:\n        e+=1\n        N//=3\n\n    if e>0:\n        phi*=pow(3,e-1)*2\n\
-    \n    flag=0\n    p=5\n    while p*p<=N:\n        if N%p==0:\n            e=0\n\
-    \            while N%p==0:\n                e+=1\n                N//=p\n\n  \
-    \          phi*=pow(p,e-1)*(p-1)\n\n        p+=2+2*flag\n        flag^=1\n\n \
-    \   if N>1:\n        phi*=N-1\n\n    a=float(\"inf\")\n    k=1\n    while k*k<=phi:\n\
-    \        if phi%k==0:\n            if k<a and pow(X,k)==1:\n                a=k\n\
-    \                break\n\n            if phi//k<a and pow(X,phi//k)==1:\n    \
-    \            a=phi//k\n        k+=1\n\n    return a\n\ndef Primitive_Root(p):\n\
-    \    \"\"\" Z/pZ \u4E0A\u306E\u539F\u59CB\u6839\u3092\u898B\u3064\u3051\u308B\n\
-    \n    p: \u7D20\u6570\n    \"\"\"\n    if p==2:\n        return 1\n    if p==998244353:\n\
-    \        return 3\n    if p==10**9+7:\n        return 5\n    if p==163577857:\n\
-    \        return 23\n    if p==167772161:\n        return 3\n    if p==469762049:\n\
-    \        return 3\n\n    fac=[]\n    q=2\n    v=p-1\n\n    while v>=q*q:\n   \
-    \     e=0\n        while v%q==0:\n            e+=1\n            v//=q\n\n    \
-    \    if e>0:\n            fac.append(q)\n        q+=1\n\n    if v>1:\n       \
-    \ fac.append(v)\n\n    g=2\n    while g<p:\n        if pow(g,p-1,p)!=1:\n    \
-    \        return None\n\n        flag=True\n        for q in fac:\n           \
-    \ if pow(g,(p-1)//q,p)==1:\n                flag=False\n                break\n\
-    \n        if flag:\n            return g\n\n        g+=1\n\n\"\"\"\n\u6570\u3048\
-    \u4E0A\u3052\u95A2\u9023\n\"\"\"\ndef Factor_Modulo(N, Mod, Mode=0):\n    \"\"\
-    \"\n    Mode=0: N! (mod Mod) \u3092\u6C42\u3081\u308B.\n    Mode=1: k! (mod Mod)\
-    \ (k=0,1,...,N) \u306E\u30EA\u30B9\u30C8\u3082\u51FA\u529B\u3059\u308B.\n\n  \
-    \  [\u8A08\u7B97\u91CF]\n    O(N)\n    \"\"\"\n\n    if Mode==0:\n        X=1\n\
-    \        for k in range(1,N+1):\n            X*=k; X%=Mod\n        return Modulo(X,Mod)\n\
-    \    else:\n        L=[Modulo(1,Mod)]*(N+1)\n        for k in range(1,N+1):\n\
-    \            L[k]=k*L[k-1]\n        return L\n\ndef Factor_Modulo_with_Inverse(N,\
-    \ Mod):\n    \"\"\" k=0,1,...,N \u306B\u5BFE\u3059\u308B k! (mod Mod) \u3068 (k!)^(-1)\
-    \ (mod Mod) \u306E\u30EA\u30B9\u30C8\u3092\u51FA\u529B\u3059\u308B.\n\n    [\u5165\
-    \u529B]\n    N, Mod: \u6574\u6570\n    Mod >0\n    [\u51FA\u529B]\n    \u9577\u3055\
-    \ N+1 \u306E\u30EA\u30B9\u30C8\u306E\u30BF\u30D7\u30EB (F,G): F[k]=k! (mod M),\
-    \ G[k]=(k!)^(-1) (mod M)\n    [\u8A08\u7B97\u91CF]\n    O(N+log Mod)\n    \"\"\
-    \"\n\n    assert Mod>0\n\n    F=Factor_Modulo(N,Mod,Mode=1)\n    G=[0]*(N+1)\n\
-    \n    G[-1]=F[-1].inverse()\n    for k in range(N,0,-1):\n        G[k-1]=k*G[k]\n\
-    \    return F,G\n\ndef Binomial_Coefficient_Modulo(n: int, r: int, Mod:int):\n\
-    \    \"\"\" nCr (mod Mod) \u3092\u611A\u76F4\u306A\u65B9\u6CD5\u3067\u6C42\u3081\
-    \u308B.\n\n    [\u5165\u529B]\n    n, r, Mod: \u6574\u6570\n    Mod>0\n    [\u51FA\
-    \u529B]\n    nCr (mod Mod)\n    [\u8A08\u7B97\u91CF]\n    O(r)\n    \"\"\"\n \
-    \   assert Mod>0\n    if r<0 or n<r:\n        return Modulo(0,Mod)\n\n    X=Y=1\n\
-    \n    r=min(r,n-r)\n    for i in range(r):\n        X*=n-i; X%=Mod\n        Y*=r-i;\
-    \ Y%=Mod\n    return Modulo(X,Mod)/Modulo(Y,Mod)\n\ndef Binomial_Coefficient_Modulo_List(n:int,\
+    \u5728\u3057\u306A\u3051\u308C\u3070 default\n    \"\"\"\n\n    A, M = A.a, A.n\n\
+    \n    if isinstance(B, int):\n        B %= M\n    elif isinstance(B, Modulo):\n\
+    \        assert M == B.n, \"A, B \u306E\u6CD5\u304C\u9055\u3044\u307E\u3059.\"\
+    \n        B = B.a % M\n    else:\n        raise TypeError\n\n    m = 0\n    while\
+    \ m * m < M:\n        m += 1\n\n    E = set()\n    y = B\n    for _ in range(m):\n\
+    \        y *= A; y %= M\n        E.add(y)\n\n    step = pow(A, m, M)\n    head\
+    \ = 1 % M\n    count = 0\n    for k in range(1, m + 1):\n        tail = head\n\
+    \        head = step * head % M\n\n        if head not in E:\n            continue\n\
+    \n        body = tail\n        for n in range((k - 1) * m, k * m):\n         \
+    \   if body == B:\n                return n\n\n            body = (A * body) %\
+    \ M\n\n        count += 1\n        if count == 2:\n            break\n\n    return\
+    \ default\n\ndef Order(X):\n    \"\"\" X \u306E\u4F4D\u6570\u3092\u6C42\u3081\u308B\
+    . \u3064\u307E\u308A, X^k=[1] \u3092\u6E80\u305F\u3059\u6700\u5C0F\u306E\u6B63\
+    \u6574\u6570 k \u3092\u6C42\u3081\u308B.\n    \"\"\"\n    phi=1\n    N=X.n\n\n\
+    \    e=(N&(-N)).bit_length()-1\n    if e>0:\n        phi=1<<(e-1)\n        N>>=e\n\
+    \    else:\n        phi=1\n\n    e=0\n    while N%3==0:\n        e+=1\n      \
+    \  N//=3\n\n    if e>0:\n        phi*=pow(3,e-1)*2\n\n    flag=0\n    p=5\n  \
+    \  while p*p<=N:\n        if N%p==0:\n            e=0\n            while N%p==0:\n\
+    \                e+=1\n                N//=p\n\n            phi*=pow(p,e-1)*(p-1)\n\
+    \n        p+=2+2*flag\n        flag^=1\n\n    if N>1:\n        phi*=N-1\n\n  \
+    \  a=float(\"inf\")\n    k=1\n    while k*k<=phi:\n        if phi%k==0:\n    \
+    \        if k<a and pow(X,k)==1:\n                a=k\n                break\n\
+    \n            if phi//k<a and pow(X,phi//k)==1:\n                a=phi//k\n  \
+    \      k+=1\n\n    return a\n\ndef Primitive_Root(p):\n    \"\"\" Z/pZ \u4E0A\u306E\
+    \u539F\u59CB\u6839\u3092\u898B\u3064\u3051\u308B\n\n    p: \u7D20\u6570\n    \"\
+    \"\"\n    if p==2:\n        return 1\n    if p==998244353:\n        return 3\n\
+    \    if p==10**9+7:\n        return 5\n    if p==163577857:\n        return 23\n\
+    \    if p==167772161:\n        return 3\n    if p==469762049:\n        return\
+    \ 3\n\n    fac=[]\n    q=2\n    v=p-1\n\n    while v>=q*q:\n        e=0\n    \
+    \    while v%q==0:\n            e+=1\n            v//=q\n\n        if e>0:\n \
+    \           fac.append(q)\n        q+=1\n\n    if v>1:\n        fac.append(v)\n\
+    \n    g=2\n    while g<p:\n        if pow(g,p-1,p)!=1:\n            return None\n\
+    \n        flag=True\n        for q in fac:\n            if pow(g,(p-1)//q,p)==1:\n\
+    \                flag=False\n                break\n\n        if flag:\n     \
+    \       return g\n\n        g+=1\n\n\"\"\"\n\u6570\u3048\u4E0A\u3052\u95A2\u9023\
+    \n\"\"\"\ndef Factor_Modulo(N, Mod, Mode=0):\n    \"\"\"\n    Mode=0: N! (mod\
+    \ Mod) \u3092\u6C42\u3081\u308B.\n    Mode=1: k! (mod Mod) (k=0,1,...,N) \u306E\
+    \u30EA\u30B9\u30C8\u3082\u51FA\u529B\u3059\u308B.\n\n    [\u8A08\u7B97\u91CF]\n\
+    \    O(N)\n    \"\"\"\n\n    if Mode==0:\n        X=1\n        for k in range(1,N+1):\n\
+    \            X*=k; X%=Mod\n        return Modulo(X,Mod)\n    else:\n        L=[Modulo(1,Mod)]*(N+1)\n\
+    \        for k in range(1,N+1):\n            L[k]=k*L[k-1]\n        return L\n\
+    \ndef Factor_Modulo_with_Inverse(N, Mod):\n    \"\"\" k=0,1,...,N \u306B\u5BFE\
+    \u3059\u308B k! (mod Mod) \u3068 (k!)^(-1) (mod Mod) \u306E\u30EA\u30B9\u30C8\u3092\
+    \u51FA\u529B\u3059\u308B.\n\n    [\u5165\u529B]\n    N, Mod: \u6574\u6570\n  \
+    \  Mod >0\n    [\u51FA\u529B]\n    \u9577\u3055 N+1 \u306E\u30EA\u30B9\u30C8\u306E\
+    \u30BF\u30D7\u30EB (F,G): F[k]=k! (mod M), G[k]=(k!)^(-1) (mod M)\n    [\u8A08\
+    \u7B97\u91CF]\n    O(N+log Mod)\n    \"\"\"\n\n    assert Mod>0\n\n    F=Factor_Modulo(N,Mod,Mode=1)\n\
+    \    G=[0]*(N+1)\n\n    G[-1]=F[-1].inverse()\n    for k in range(N,0,-1):\n \
+    \       G[k-1]=k*G[k]\n    return F,G\n\ndef Binomial_Coefficient_Modulo(n: int,\
+    \ r: int, Mod:int):\n    \"\"\" nCr (mod Mod) \u3092\u611A\u76F4\u306A\u65B9\u6CD5\
+    \u3067\u6C42\u3081\u308B.\n\n    [\u5165\u529B]\n    n, r, Mod: \u6574\u6570\n\
+    \    Mod>0\n    [\u51FA\u529B]\n    nCr (mod Mod)\n    [\u8A08\u7B97\u91CF]\n\
+    \    O(r)\n    \"\"\"\n    assert Mod>0\n    if r<0 or n<r:\n        return Modulo(0,Mod)\n\
+    \n    X=Y=1\n\n    r=min(r,n-r)\n    for i in range(r):\n        X*=n-i; X%=Mod\n\
+    \        Y*=r-i; Y%=Mod\n    return Modulo(X,Mod)/Modulo(Y,Mod)\n\ndef Binomial_Coefficient_Modulo_List(n:int,\
     \ Mod:int):\n    \"\"\" n \u3092\u56FA\u5B9A\u3057, r=0,1,...,n \u3068\u3057\u305F\
     \u3068\u304D\u306E nCr (mod Mod) \u306E\u30EA\u30B9\u30C8\u3092\u51FA\u529B\u3059\
     \u308B.\n\n    [\u5165\u529B]\n    n,Mod: \u6574\u6570\n    Mod>0\n    [\u51FA\
@@ -249,7 +249,7 @@ data:
   isVerificationFile: false
   path: Modulo.py
   requiredBy: []
-  timestamp: '2023-08-08 01:23:05+09:00'
+  timestamp: '2024-04-18 23:56:19+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
