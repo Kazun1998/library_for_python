@@ -289,18 +289,20 @@ data:
     \n        for t in  range(2*self.N-1):\n            X[t]=v\n            if R[v]==S[v]:\n\
     \                v=pa[v]\n            else:   #\u9032\u3081\u308B\n          \
     \      w=v\n                v=ch[v][S[v]]\n                S[w]+=1\n\n       \
-    \ self.euler_vertex=X\n        self.in_time=[-1]*(self.index+self.N)\n       \
-    \ self.out_time=[-1]*(self.index+self.N)\n        for t in range(2*self.N-1):\n\
-    \            v=X[t]\n            if self.in_time[v]==-1:\n                self.in_time[v]=self.out_time[v]=t\n\
-    \            else:\n                self.out_time[v]=t\n\n    def euler_tour_edge(self):\n\
-    \        \"\"\" \u30AA\u30A4\u30E9\u30FC\u30C4\u30A2\u30FC (edge) \u306B\u95A2\
-    \u3059\u308B\u8A08\u7B97\u3092\u884C\u3046.\n\n        (u, v, k): u \u304B\u3089\
-    \ v \u3078\u5411\u304B\u3046 (k=+1 \u306E\u3068\u304D\u306F\u8449\u3078\u9032\u3080\
-    \u5411\u304D, k=-1 \u306E\u3068\u304D\u306F\u6839\u3078\u9032\u3080\u5411\u304D\
-    )\n        \"\"\"\n\n        assert self.__after_seal_check()\n        if hasattr(self,\"\
-    euler_edge\"):\n            return\n\n        if not hasattr(self, \"euler_vertex\"\
-    ):\n            self.euler_tour_vertex()\n\n        self.euler_edge=[0]*(2*(self.N-1))\n\
-    \        euler=self.euler_vertex\n        pa=self.parent\n        for t in range(2*(self.N-1)):\n\
+    \ self.euler_vertex = X\n        self.in_time = [-1] * (self.index + self.N)\n\
+    \        self.out_time = [-1] * (self.index + self.N)\n\n        self.in_time[self.root]\
+    \ = 0\n        self.out_time[self.root] = 2 * self.N - 1\n\n        for t in range(1,\
+    \ 2 * self.N - 1):\n            if self.is_parent(X[t - 1], X[t]):\n         \
+    \       self.in_time[X[t]] = t\n            else:\n                self.out_time[X[t\
+    \ - 1]] = t\n\n    def euler_tour_edge(self):\n        \"\"\" \u30AA\u30A4\u30E9\
+    \u30FC\u30C4\u30A2\u30FC (edge) \u306B\u95A2\u3059\u308B\u8A08\u7B97\u3092\u884C\
+    \u3046.\n\n        (u, v, k): u \u304B\u3089 v \u3078\u5411\u304B\u3046 (k=+1\
+    \ \u306E\u3068\u304D\u306F\u8449\u3078\u9032\u3080\u5411\u304D, k=-1 \u306E\u3068\
+    \u304D\u306F\u6839\u3078\u9032\u3080\u5411\u304D)\n        \"\"\"\n\n        assert\
+    \ self.__after_seal_check()\n        if hasattr(self,\"euler_edge\"):\n      \
+    \      return\n\n        if not hasattr(self, \"euler_vertex\"):\n           \
+    \ self.euler_tour_vertex()\n\n        self.euler_edge=[0]*(2*(self.N-1))\n   \
+    \     euler=self.euler_vertex\n        pa=self.parent\n        for t in range(2*(self.N-1)):\n\
     \            u=euler[t]; v=euler[t+1]\n            k=1 if u==pa[v] else -1\n \
     \           self.euler_edge[t]=(u,v,k)\n\n    def centroid(self, all=False):\n\
     \        \"\"\" \u6728\u306E\u91CD\u5FC3\u3092\u6C42\u3081\u308B\n\n        all:\
@@ -373,7 +375,7 @@ data:
   isVerificationFile: false
   path: Tree/Tree.py
   requiredBy: []
-  timestamp: '2023-08-03 01:12:40+09:00'
+  timestamp: '2024-05-25 23:55:04+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py
