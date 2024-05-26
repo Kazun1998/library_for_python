@@ -16,83 +16,77 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "#\u7D20\u56E0\u6570\u5206\u89E3\ndef Prime_Factorization(N):\n    if N ==\
-    \ 0:\n        return [ [0, 1] ]\n\n    if N < 0:\n        factor = [ [-1, 1] ]\n\
-    \        N = abs(N)\n    else:\n        factor = [ ]\n\n    def exponents(n, p):\n\
-    \        e = 0\n        while n % p == 0:\n            e += 1\n            n //=\
-    \ p\n        return e, n\n\n    for p in [2, 3]:\n        e, N = exponents(N,\
-    \ p)\n        if e:\n            factor.append([p, e])\n\n    offset = 0\n   \
-    \ while offset * offset <= N:\n        p = offset + 5\n        e, N = exponents(N,\
-    \ p)\n        if e:\n            factor.append([p, e])\n\n        q = offset +\
-    \ 7\n        e, N = exponents(N, q)\n        if e:\n            factor.append([q,\
-    \ e])\n\n        offset += 6\n\n    if N > 1:\n        factor.append([N, 1])\n\
-    \n    return factor\n\n#\u6839\u57FA\ndef Radical(N):\n    \"\"\" N \u304C\u7D20\
-    \u56E0\u6570\u5206\u89E3 N=p^a*q^b*r^c ... \u3068\u306A\u308B\u3068\u304D, pqr...\
-    \ \u3092\u8FD4\u3059.\n\n    N: \u975E\u8CA0\u6574\u6570\n    \"\"\"\n\n    assert\
-    \ N>=0,\"N\u306F\u975E\u8CA0\u6574\u6570\u3067\u306F\u306A\u3044.\"\n    a=1\n\
-    \n    if N&1==0:\n        a*=2\n        while N&1==0:\n            N>>=1\n\n \
-    \   if N%3==0:\n        a*=3\n        while N%3==0:\n            N//=3\n\n   \
-    \ k=5\n    Flag=0\n    while k*k<=N:\n        if N%k==0:\n            a*=k\n \
-    \           while N%k==0:\n                N//=k\n        k+=2+2*Flag\n      \
-    \  Flag^=1\n\n    if N>1:\n        a*=N\n    return a\n\n#\u7D20\u56E0\u6570\u306E\
-    \u7A2E\u985E\ndef Prime_Factor_List(N):\n    \"\"\"N\u304C\u7D20\u56E0\u6570\u5206\
-    \u89E3 N=p^a*q^b*r^c ...\u3068\u306A\u308B\u3068\u304D,\u30EA\u30B9\u30C8[p,q,r,...]\u3092\
-    \u8FD4\u3059.\n    \"\"\"\n    N=abs(N)\n    X=[]\n    if N%2==0:\n        X.append(2)\n\
-    \        while N&1==0:\n            N>>=1\n\n    if N%3==0:\n        X.append(3)\n\
-    \        while N%3==0:\n            N//=3\n\n    p=5\n    Flag=1\n    while p*p<=N:\n\
-    \        if N%p==0:\n            X.append(p)\n            while N%p==0:\n    \
-    \            N//=p\n        p+=2 if Flag else 4\n        Flag^=1\n\n    if N!=1:\n\
-    \        X.append(N)\n    return X\n\n#\u7D20\u6570\u5224\u5B9A\ndef Is_Prime(N):\n\
-    \    N = abs(N)\n    if N <= 1:\n        return False\n\n    if (N == 2) or (N\
-    \ == 3) or (N == 5) or (N == 7):\n        return True\n\n    if not (N % 6 ==\
-    \ 1 or N % 6 == 5):\n        return False\n\n    offset = 0\n    while offset\
-    \ * offset <= N:\n        p = offset + 5\n        q = offset + 7\n        if (N\
-    \ % p == 0) or (N % q == 0):\n            return False\n        offset += 6\n\
-    \    return True\n\n#\u7D20\u6570\u5224\u5B9A for long long\ndef Is_Prime_for_long_long(N):\n\
-    \    if N<=1: return False\n    if N==2 or N==7 or N==61: return True\n    if\
-    \ N%2==0: return False\n\n    d=N-1\n    while d%2==0: d//=2\n\n    for a in (2,7,61):\n\
-    \        t=d\n        y=pow(a,t,N)\n        while t!=N-1 and y!=1 and y!=N-1:\n\
-    \            y=(y*y)%N\n            t<<=1\n        if y!=N-1 and t%2==0:\n   \
-    \         return False\n    return True\n\n#Miller-Rabin\u306E\u7D20\u6570\u5224\
-    \u5B9A\u6CD5\ndef Miller_Rabin_Primality_Test(N, Times=20):\n    \"\"\" Miller-Rabin\
-    \ \u306B\u3088\u308B\u6574\u6570 N \u306E\u7D20\u6570\u5224\u5B9A\u3092\u884C\u3046\
-    .\n\n    N: \u6574\u6570\n    \u203B True \u306F\u6B63\u78BA\u306B\u306F Probably\
-    \ True \u3067\u3042\u308B ( False \u306F \u78BA\u5B9A False ).\n    \"\"\"\n \
-    \   from random import randint as ri\n\n    if N==2: return True\n\n    if N==1\
-    \ or N%2==0: return False\n\n    q=N-1\n    k=0\n    while q&1==0:\n        k+=1\n\
-    \        q>>=1\n\n    for _ in range(Times):\n        m=ri(2,N-1)\n        y=pow(m,q,N)\n\
-    \        if y==1:\n            continue\n\n        flag=True\n        for i in\
-    \ range(k):\n            if (y+1)%N==0:\n                flag=False\n        \
-    \        break\n\n            y*=y\n            y%=N\n\n        if flag:\n   \
-    \         return False\n    return True\n\n#\u30DD\u30E9\u30FC\u30C9\u30FB\u30ED\
-    \u30FC\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u306B\u3088\u3063\u3066\u7D20\u56E0\
-    \u6570\u3092\u767A\u898B\u3059\u308B\n#\u53C2\u8003\u5143:https://judge.yosupo.jp/submission/6131\n\
-    def Find_Factor_Rho(N):\n    if N==1:\n        return 1\n    from math import\
-    \ gcd\n    m=1<<(N.bit_length()//8+1)\n\n    for c in range(1,99):\n        f=lambda\
-    \ x:(x*x+c)%N\n        y,r,q,g=2,1,1,1\n        while g==1:\n            x=y\n\
-    \            for i in range(r):\n                y=f(y)\n            k=0\n   \
-    \         while k<r and g==1:\n                for i in range(min(m, r - k)):\n\
-    \                    y=f(y)\n                    q=q*abs(x - y)%N\n          \
-    \      g=gcd(q,N)\n                k+=m\n            r <<=1\n\n        if g<N:\n\
-    \            if Miller_Rabin_Primality_Test(g):\n                return g\n  \
-    \          elif Miller_Rabin_Primality_Test(N//g):\n                return N//g\n\
-    \    return N\n\n#\u30DD\u30E9\u30FC\u30C9\u30FB\u30ED\u30FC\u30A2\u30EB\u30B4\
-    \u30EA\u30BA\u30E0\u306B\u3088\u308B\u7D20\u56E0\u6570\u5206\u89E3\n#\u53C2\u8003\
-    \u5143:https://judge.yosupo.jp/submission/6131\ndef Pollard_Rho_Prime_Factorization(N):\n\
-    \    I=2\n    res=[]\n    while I*I<=N:\n        if N%I==0:\n            k=0\n\
-    \            while N%I==0:\n                k+=1\n                N//=I\n    \
-    \        res.append([I,k])\n\n        I+=1+(I%2)\n\n        if I!=101 or N<2**20:\n\
-    \            continue\n\n        while N>1:\n            if Miller_Rabin_Primality_Test(N):\n\
-    \                res.append([N,1])\n                N=1\n            else:\n \
-    \               j=Find_Factor_Rho(N)\n                k=0\n                while\
-    \ N%j==0:\n                    N//=j\n                    k+=1\n             \
-    \   res.append([j,k])\n    if N>1:\n        res.append([N,1])\n    res.sort(key=lambda\
-    \ x:x[0])\n    return res\n\n#\u6B21\u306E\u7D20\u6570\ndef Next_Prime(N,K=1):\n\
-    \    \"\"\"\n    N \u3092\u4E0A\u56DE\u308B\u81EA\u7136\u6570\u306E\u3046\u3061\
-    , K \u756A\u76EE\u306B\u5C0F\u3055\u3044\u7D20\u6570\n\n    N: \u81EA\u7136\u6570\
-    \n    \"\"\"\n    if K>0:\n        while K>0:\n            N+=1\n            if\
-    \ Is_Prime(N):\n                K-=1\n    else:\n        while K<0:\n        \
-    \    N-=1\n            if Is_Prime(N):\n                K+=1\n    return N\n\n\
+  code: "class Prime:\n    class Pseudo_Prime_Generator:\n        def __init__(self):\n\
+    \            self.prime = 1\n            self.step = None\n\n        def __iter__(self):\n\
+    \            return self\n\n        def __next__(self):\n            if self.step:\n\
+    \                self.prime += self.step\n                self.step = 6 - self.step\n\
+    \            elif self.prime == 1:\n                self.prime = 2\n         \
+    \   elif self.prime == 2:\n                self.prime = 3\n            elif self.prime\
+    \ == 3:\n                self.prime = 5\n                self.step = 2\n     \
+    \       return self.prime\n\n    @staticmethod\n    def exponents(n, p):\n   \
+    \     e = 0\n        while n % p == 0:\n            e += 1\n            n //=\
+    \ p\n        return e, n\n\n    @classmethod\n    def prime_factorization(cls,\
+    \ N):\n        if N == 0:\n            return [[0, 1]]\n\n        factors = []\n\
+    \        if N < 0:\n            factors.append([-1, 1])\n            N = abs(N)\n\
+    \n        for p in [2, 3]:\n            e, N = cls.exponents(N, p)\n         \
+    \   if e:\n                factors.append([p, e])\n\n        offset = 6\n    \
+    \    while offset * offset <= N:\n            p = offset - 1\n            e, N\
+    \ = cls.exponents(N, p)\n            if e:\n                factors.append([p,\
+    \ e])\n\n            q = offset + 1\n            e, N = cls.exponents(N, q)\n\
+    \            if e:\n                factors.append([q, e])\n\n            offset\
+    \ += 6\n\n        if N > 1:\n            factors.append([N, 1])\n\n        return\
+    \ factors\n\n    @classmethod\n    def is_prime(cls, N):\n        N = abs(N)\n\
+    \        if N <= 1:\n            return False\n\n        if (N == 2) or (N ==\
+    \ 3) or (N == 5) or (N == 7):\n            return True\n\n        if not (N %\
+    \ 6 == 1 or N % 6 == 5):\n            return False\n\n        offset = 0\n   \
+    \     while offset * offset <= N:\n            if (N % (offset + 5) == 0) or (N\
+    \ % (offset + 7) == 0):\n                return False\n            offset += 6\n\
+    \        return True\n\n    @classmethod\n    def radical(cls, N):\n        rad\
+    \ = 1\n        for p, _ in cls.prime_factorization(N):\n            rad *= p\n\
+    \        return rad\n\n    @classmethod\n    def next_prime(cls, N, K):\n    \
+    \    if K > 0:\n            while K > 0:\n                N += 1\n           \
+    \     if cls.is_prime(N):\n                    K -= 1\n        else:\n       \
+    \     while K < 0:\n                N -= 1\n                if cls.is_prime(N):\n\
+    \                    K += 1\n        return N\n\n#\u7D20\u6570\u5224\u5B9A for\
+    \ long long\ndef Is_Prime_for_long_long(N):\n    if N<=1: return False\n    if\
+    \ N==2 or N==7 or N==61: return True\n    if N%2==0: return False\n\n    d=N-1\n\
+    \    while d%2==0: d//=2\n\n    for a in (2,7,61):\n        t=d\n        y=pow(a,t,N)\n\
+    \        while t!=N-1 and y!=1 and y!=N-1:\n            y=(y*y)%N\n          \
+    \  t<<=1\n        if y!=N-1 and t%2==0:\n            return False\n    return\
+    \ True\n\n#Miller-Rabin\u306E\u7D20\u6570\u5224\u5B9A\u6CD5\ndef Miller_Rabin_Primality_Test(N,\
+    \ Times=20):\n    \"\"\" Miller-Rabin \u306B\u3088\u308B\u6574\u6570 N \u306E\u7D20\
+    \u6570\u5224\u5B9A\u3092\u884C\u3046.\n\n    N: \u6574\u6570\n    \u203B True\
+    \ \u306F\u6B63\u78BA\u306B\u306F Probably True \u3067\u3042\u308B ( False \u306F\
+    \ \u78BA\u5B9A False ).\n    \"\"\"\n    from random import randint as ri\n\n\
+    \    if N==2: return True\n\n    if N==1 or N%2==0: return False\n\n    q=N-1\n\
+    \    k=0\n    while q&1==0:\n        k+=1\n        q>>=1\n\n    for _ in range(Times):\n\
+    \        m=ri(2,N-1)\n        y=pow(m,q,N)\n        if y==1:\n            continue\n\
+    \n        flag=True\n        for i in range(k):\n            if (y+1)%N==0:\n\
+    \                flag=False\n                break\n\n            y*=y\n     \
+    \       y%=N\n\n        if flag:\n            return False\n    return True\n\n\
+    #\u30DD\u30E9\u30FC\u30C9\u30FB\u30ED\u30FC\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\
+    \u306B\u3088\u3063\u3066\u7D20\u56E0\u6570\u3092\u767A\u898B\u3059\u308B\n#\u53C2\
+    \u8003\u5143:https://judge.yosupo.jp/submission/6131\ndef Find_Factor_Rho(N):\n\
+    \    if N==1:\n        return 1\n    from math import gcd\n    m=1<<(N.bit_length()//8+1)\n\
+    \n    for c in range(1,99):\n        f=lambda x:(x*x+c)%N\n        y,r,q,g=2,1,1,1\n\
+    \        while g==1:\n            x=y\n            for i in range(r):\n      \
+    \          y=f(y)\n            k=0\n            while k<r and g==1:\n        \
+    \        for i in range(min(m, r - k)):\n                    y=f(y)\n        \
+    \            q=q*abs(x - y)%N\n                g=gcd(q,N)\n                k+=m\n\
+    \            r <<=1\n\n        if g<N:\n            if Miller_Rabin_Primality_Test(g):\n\
+    \                return g\n            elif Miller_Rabin_Primality_Test(N//g):\n\
+    \                return N//g\n    return N\n\n#\u30DD\u30E9\u30FC\u30C9\u30FB\u30ED\
+    \u30FC\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u306B\u3088\u308B\u7D20\u56E0\u6570\
+    \u5206\u89E3\n#\u53C2\u8003\u5143:https://judge.yosupo.jp/submission/6131\ndef\
+    \ Pollard_Rho_Prime_Factorization(N):\n    I=2\n    res=[]\n    while I*I<=N:\n\
+    \        if N%I==0:\n            k=0\n            while N%I==0:\n            \
+    \    k+=1\n                N//=I\n            res.append([I,k])\n\n        I+=1+(I%2)\n\
+    \n        if I!=101 or N<2**20:\n            continue\n\n        while N>1:\n\
+    \            if Miller_Rabin_Primality_Test(N):\n                res.append([N,1])\n\
+    \                N=1\n            else:\n                j=Find_Factor_Rho(N)\n\
+    \                k=0\n                while N%j==0:\n                    N//=j\n\
+    \                    k+=1\n                res.append([j,k])\n    if N>1:\n  \
+    \      res.append([N,1])\n    res.sort(key=lambda x:x[0])\n    return res\n\n\
     #\u30A8\u30E9\u30C8\u30B9\u30C6\u30CD\u30B9\u306E\u7BE9\ndef Sieve_of_Eratosthenes(N):\n\
     \    \"\"\" N \u307E\u3067\u306E\u30A8\u30E9\u30C8\u30B9\u30C6\u30CD\u30B9\u306E\
     \u7BE9\u3092\u5B9F\u884C\n\n    [Input]\n    N:\u81EA\u7136\u6570\n\n    [Output]\n\
@@ -176,7 +170,7 @@ data:
   isVerificationFile: false
   path: Integer/Prime.py
   requiredBy: []
-  timestamp: '2023-08-10 01:13:38+09:00'
+  timestamp: '2024-05-26 14:15:37+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Integer/Prime.py
