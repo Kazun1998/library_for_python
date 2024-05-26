@@ -1,14 +1,26 @@
-#素因数分解
-def Prime_Factorization(N):
-    if N == 0:
-        return [ [0, 1] ]
+class Prime:
+    class Pseudo_Prime_Generator:
+        def __init__(self):
+            self.prime = 1
+            self.step = None
 
-    if N < 0:
-        factor = [ [-1, 1] ]
-        N = abs(N)
-    else:
-        factor = [ ]
+        def __iter__(self):
+            return self
 
+        def __next__(self):
+            if self.step:
+                self.prime += self.step
+                self.step = 6 - self.step
+            elif self.prime == 1:
+                self.prime = 2
+            elif self.prime == 2:
+                self.prime = 3
+            elif self.prime == 3:
+                self.prime = 5
+                self.step = 2
+            return self.prime
+
+    @staticmethod
     def exponents(n, p):
         e = 0
         while n % p == 0:
@@ -16,114 +28,79 @@ def Prime_Factorization(N):
             n //= p
         return e, n
 
-    for p in [2, 3]:
-        e, N = exponents(N, p)
-        if e:
-            factor.append([p, e])
+    @classmethod
+    def prime_factorization(cls, N):
+        if N == 0:
+            return [[0, 1]]
 
-    offset = 0
-    while offset * offset <= N:
-        p = offset + 5
-        e, N = exponents(N, p)
-        if e:
-            factor.append([p, e])
+        factors = []
+        if N < 0:
+            factors.append([-1, 1])
+            N = abs(N)
 
-        q = offset + 7
-        e, N = exponents(N, q)
-        if e:
-            factor.append([q, e])
+        for p in [2, 3]:
+            e, N = cls.exponents(N, p)
+            if e:
+                factors.append([p, e])
 
-        offset += 6
+        offset = 6
+        while offset * offset <= N:
+            p = offset - 1
+            e, N = cls.exponents(N, p)
+            if e:
+                factors.append([p, e])
 
-    if N > 1:
-        factor.append([N, 1])
+            q = offset + 1
+            e, N = cls.exponents(N, q)
+            if e:
+                factors.append([q, e])
 
-    return factor
+            offset += 6
 
-#根基
-def Radical(N):
-    """ N が素因数分解 N=p^a*q^b*r^c ... となるとき, pqr... を返す.
+        if N > 1:
+            factors.append([N, 1])
 
-    N: 非負整数
-    """
+        return factors
 
-    assert N>=0,"Nは非負整数ではない."
-    a=1
+    @classmethod
+    def is_prime(cls, N):
+        N = abs(N)
+        if N <= 1:
+            return False
 
-    if N&1==0:
-        a*=2
-        while N&1==0:
-            N>>=1
+        if (N == 2) or (N == 3) or (N == 5) or (N == 7):
+            return True
 
-    if N%3==0:
-        a*=3
-        while N%3==0:
-            N//=3
+        if not (N % 6 == 1 or N % 6 == 5):
+            return False
 
-    k=5
-    Flag=0
-    while k*k<=N:
-        if N%k==0:
-            a*=k
-            while N%k==0:
-                N//=k
-        k+=2+2*Flag
-        Flag^=1
-
-    if N>1:
-        a*=N
-    return a
-
-#素因数の種類
-def Prime_Factor_List(N):
-    """Nが素因数分解 N=p^a*q^b*r^c ...となるとき,リスト[p,q,r,...]を返す.
-    """
-    N=abs(N)
-    X=[]
-    if N%2==0:
-        X.append(2)
-        while N&1==0:
-            N>>=1
-
-    if N%3==0:
-        X.append(3)
-        while N%3==0:
-            N//=3
-
-    p=5
-    Flag=1
-    while p*p<=N:
-        if N%p==0:
-            X.append(p)
-            while N%p==0:
-                N//=p
-        p+=2 if Flag else 4
-        Flag^=1
-
-    if N!=1:
-        X.append(N)
-    return X
-
-#素数判定
-def Is_Prime(N):
-    N = abs(N)
-    if N <= 1:
-        return False
-
-    if (N == 2) or (N == 3) or (N == 5) or (N == 7):
+        offset = 0
+        while offset * offset <= N:
+            if (N % (offset + 5) == 0) or (N % (offset + 7) == 0):
+                return False
+            offset += 6
         return True
 
-    if not (N % 6 == 1 or N % 6 == 5):
-        return False
+    @classmethod
+    def radical(cls, N):
+        rad = 1
+        for p, _ in cls.prime_factorization(N):
+            rad *= p
+        return rad
 
-    offset = 0
-    while offset * offset <= N:
-        p = offset + 5
-        q = offset + 7
-        if (N % p == 0) or (N % q == 0):
-            return False
-        offset += 6
-    return True
+    @classmethod
+    def next_prime(cls, N, K):
+        if K > 0:
+            while K > 0:
+                N += 1
+                if cls.is_prime(N):
+                    K -= 1
+        else:
+            while K < 0:
+                N -= 1
+                if cls.is_prime(N):
+                    K += 1
+        return N
 
 #素数判定 for long long
 def Is_Prime_for_long_long(N):
@@ -246,25 +223,6 @@ def Pollard_Rho_Prime_Factorization(N):
         res.append([N,1])
     res.sort(key=lambda x:x[0])
     return res
-
-#次の素数
-def Next_Prime(N,K=1):
-    """
-    N を上回る自然数のうち, K 番目に小さい素数
-
-    N: 自然数
-    """
-    if K>0:
-        while K>0:
-            N+=1
-            if Is_Prime(N):
-                K-=1
-    else:
-        while K<0:
-            N-=1
-            if Is_Prime(N):
-                K+=1
-    return N
 
 #エラトステネスの篩
 def Sieve_of_Eratosthenes(N):
