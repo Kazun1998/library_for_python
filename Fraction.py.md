@@ -17,11 +17,11 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.4/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.12.4/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "from math import gcd\n\nclass Fraction():\n    reduction = False\n    expand\
     \ = False\n\n    \"\"\"\n    reduction : \u5206\u6570\u3092\u7D04\u5206\u3057\u305F\
@@ -108,9 +108,9 @@ data:
   isVerificationFile: false
   path: Fraction.py
   requiredBy:
-  - Quaternion.py
   - Vector3.py
   - Root.py
+  - Quaternion.py
   timestamp: '2023-08-09 23:41:14+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
