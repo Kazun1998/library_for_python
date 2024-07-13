@@ -31,12 +31,7 @@ class Rolling_Hash():
 
     def count(self, T, start=0):
         alpha=self.__hasher(T)
-
-        K=0
-        for i in range(start, len(self)-len(T)+1):
-            if alpha==self[i: i+len(T)]:
-                K+=1
-        return K
+        return len([i for i in range(start, len(self) - len(T) + 1) if self[i: i + len(T)] == alpha])
 
     def find(self, T, start=0):
         alpha=self.__hasher(T)
@@ -55,12 +50,10 @@ class Rolling_Hash():
         return -1
 
     def index(self, T, start=0):
-        alpha=self.__hasher(T)
-
-        for i in range(start, len(self)-len(T)+1):
-            if alpha==self[i: i+len(T)]:
-                return i
-        raise ValueError("substring not found")
+        ind = self.find(T)
+        if ind == -1:
+            raise ValueError("substring not found")
+        return ind
 
     def __getitem__(self, index):
         if index.__class__==int:
@@ -109,7 +102,7 @@ class Double_Rolling_Hash():
         return self.encode(a0,a1)
 
     def __hasher(self, X):
-        assert len(X) <= len(self)
+        assert len(X)<=len(self)
         a0=0; a1=0
         for x in X:
             a0 = (a0 * self.__base + self.hash_function(x)) % self.__mod0
@@ -134,12 +127,7 @@ class Double_Rolling_Hash():
 
     def count(self, T, start=0):
         alpha=self.__hasher(T)
-        K=0
-        T_len=len(T)
-        for i in range(start, len(self)-len(T)+1):
-            if alpha==self[i: i+T_len]:
-                K+=1
-        return K
+        return len([i for i in range(start, len(self) - len(T) + 1) if self[i: i + len(T)] == alpha])
 
     def find(self, T, start=0):
         alpha=self.__hasher(T)
@@ -158,12 +146,10 @@ class Double_Rolling_Hash():
         return -1
 
     def index(self, T, start=0):
-        alpha=self.__hasher(T)
-
-        for i in range(start, len(self)-len(T)+1):
-            if alpha==self[i: i+len(T)]:
-                return i
-        raise ValueError("substring not found")
+        ind = self.find(T)
+        if ind == -1:
+            raise ValueError("substring not found")
+        return ind
 
     def __len__(self):
         return self.__length
