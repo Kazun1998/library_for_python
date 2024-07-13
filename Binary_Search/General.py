@@ -1,10 +1,10 @@
 def General_Binary_Increase_Search_Integer(L, R, cond, default=None):
-    """ 条件式が単調増加であるとき, 整数上で二部探索を行う.
+    """ 条件式が単調増加であるとき, 整数上で二部探索を行い, cond(x) が真になる最小の整数 x を求める.
 
     L: 解の下限
     R: 解の上限
     cond: 条件(1変数関数, 広義単調増加を満たす)
-    default: Lで条件を満たさないときの返り値
+    default: R で条件を満たさない (つまり, [L, R] 上では常に偽) ときの返り値
     """
 
     if not(cond(R)):
@@ -23,12 +23,12 @@ def General_Binary_Increase_Search_Integer(L, R, cond, default=None):
     return R
 
 def General_Binary_Decrease_Search_Integer(L, R, cond, default=None):
-    """ 条件式が単調減少であるとき, 整数上で二部探索を行う.
+    """ 条件式が単調減少であるとき, 整数上で二部探索を行い, cond(x) が真になる最大の整数 x を求める.
 
     L: 解の下限
     R: 解の上限
     cond: 条件 (1変数関数, 広義単調減少 を満たす)
-    default: R で条件を満たさないときの返り値
+    default: L で条件を満たさない (つまり, [L, R] 上では常に偽) ときの返り値
     """
 
     if not(cond(L)):
@@ -47,14 +47,14 @@ def General_Binary_Decrease_Search_Integer(L, R, cond, default=None):
     return L
 
 def General_Binary_Increase_Search_Real(L, R, cond, ep, Times, default=None):
-    """ 条件式が単調増加であるとき, 実数上で一般的な二部探索を行う.
+    """ 条件式が単調増加であるとき, 実数上で一般的な二部探索を行い, cond(x) が真になる最小の実数 x の近似値を求める.
 
     L: 解の下限
     R: 解の上限
     cond: 条件(1変数関数, 広義単調増加を満たす)
     ep: 解の許容する誤差
     Times: 判定回数の上限
-    default: Lで条件を満たさないときの返り値
+    default: Rで条件を満たさない (つまり, [L, R] 上では常に偽) ときの返り値
     """
     if not(cond(R)):
         return default
@@ -73,14 +73,14 @@ def General_Binary_Increase_Search_Real(L, R, cond, ep, Times, default=None):
     return (L + R) / 2
 
 def General_Binary_Decrease_Search_Real(L, R, cond, ep, Times, default=None):
-    """ 条件式が単調減少であるとき, 実数上で一般的な二部探索を行う.
+    """ 条件式が単調減少であるとき, 実数上で一般的な二部探索を行い, cond(x) が真になる最第の実数 x の近似値を求める.
 
     L:解の下限
     R:解の上限
     cond:条件(1変数関数, 広義単調減少を満たす)
     ep: 解の許容する誤差
     Times: 判定回数の上限
-    default: Rで条件を満たさないときの返り値
+    default: L で条件を満たさない (つまり, [L, R] 上では常に偽) ときの返り値
     """
 
     if not(cond(L)):
