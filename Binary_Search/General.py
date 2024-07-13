@@ -4,7 +4,7 @@ def General_Binary_Increase_Search_Integer(L, R, cond, default=None):
     L: 解の下限
     R: 解の上限
     cond: 条件(1変数関数, 広義単調増加を満たす)
-    default: Lで条件を満たさないときの返り値
+    default: R で条件を満たさない (つまり, [L, R] 上では常に偽) ときの返り値
     """
 
     if not(cond(R)):
@@ -28,7 +28,7 @@ def General_Binary_Decrease_Search_Integer(L, R, cond, default=None):
     L: 解の下限
     R: 解の上限
     cond: 条件 (1変数関数, 広義単調減少 を満たす)
-    default: R で条件を満たさないときの返り値
+    default: L で条件を満たさない (つまり, [L, R] 上では常に偽) ときの返り値
     """
 
     if not(cond(L)):
@@ -54,7 +54,7 @@ def General_Binary_Increase_Search_Real(L, R, cond, ep, Times, default=None):
     cond: 条件(1変数関数, 広義単調増加を満たす)
     ep: 解の許容する誤差
     Times: 判定回数の上限
-    default: Lで条件を満たさないときの返り値
+    default: Rで条件を満たさない (つまり, [L, R] 上では常に偽) ときの返り値
     """
     if not(cond(R)):
         return default
@@ -80,7 +80,7 @@ def General_Binary_Decrease_Search_Real(L, R, cond, ep, Times, default=None):
     cond:条件(1変数関数, 広義単調減少を満たす)
     ep: 解の許容する誤差
     Times: 判定回数の上限
-    default: Rで条件を満たさないときの返り値
+    default: L で条件を満たさない (つまり, [L, R] 上では常に偽) ときの返り値
     """
 
     if not(cond(L)):
