@@ -109,8 +109,8 @@ data:
   path: Fraction.py
   requiredBy:
   - Vector3.py
-  - Root.py
   - Quaternion.py
+  - Root.py
   timestamp: '2023-08-09 23:41:14+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
