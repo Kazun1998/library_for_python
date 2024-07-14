@@ -1,32 +1,29 @@
 class Rolling_Hash():
-    def __init__(self,S, base, mod, type=0):
-        """ type=0: 整数列 (各要素は mod 未満), type=1: 文字列 (mod>(最大の文字コード))
+    def __init__(self,S, base, mod, hash_function = None):
+        """ 文字列 S に対する Rolling Hash を求める.
 
         """
 
-        self.mod=mod
-        self.base=base
-        self.length=len(S)
-        self.power=power=[1]*(len(S)+1)
-        self.type=type
+        self.mod = mod
+        self.base = base
+        self.length = len(S)
+        self.power = power = [1]*(len(S)+1)
+        self.hash_function = hash_function = hash_function if hash_function is not None else lambda x: x
 
-        L=len(S)
-        self.hash=h=[0]*(L+1)
+        length = len(S)
+        self.hash = h = [0] * (length + 1)
 
-        for i in range(L):
-            if type:
-                h[i+1]=(base*h[i]+ord(S[i]))%mod
-            else:
-                h[i+1]=(base*h[i]+S[i])%mod
+        for i in range(length):
+            h[i + 1] = (base * h[i] + hash_function(S[i])) % mod
 
-        for i in range(L):
-            power[i+1]=base*power[i]%mod
+        for i in range(length):
+            power[i + 1] = base * power[i] % mod
 
     def __hasher(self, X):
         assert len(X)<=len(self)
         h=0
         for i in range(len(X)):
-            h=(h*self.base+X[i])%self.mod
+            h = (h * self.base + self.hash_function(X[i])) % self.mod
         return h
 
     def get(self, l, r):
@@ -34,12 +31,7 @@ class Rolling_Hash():
 
     def count(self, T, start=0):
         alpha=self.__hasher(T)
-
-        K=0
-        for i in range(start, len(self)-len(T)+1):
-            if alpha==self[i: i+len(T)]:
-                K+=1
-        return K
+        return len([i for i in range(start, len(self) - len(T) + 1) if self[i: i + len(T)] == alpha])
 
     def find(self, T, start=0):
         alpha=self.__hasher(T)
@@ -58,12 +50,10 @@ class Rolling_Hash():
         return -1
 
     def index(self, T, start=0):
-        alpha=self.__hasher(T)
-
-        for i in range(start, len(self)-len(T)+1):
-            if alpha==self[i: i+len(T)]:
-                return i
-        raise ValueError("substring not found")
+        ind = self.find(T, start)
+        if ind == -1:
+            raise ValueError("substring not found")
+        return ind
 
     def __getitem__(self, index):
         if index.__class__==int:
@@ -93,15 +83,15 @@ class Rolling_Hash():
 
 #=================================================
 class Double_Rolling_Hash():
-    def __init__(self, S, base, mod0, mod1, type):
+    def __init__(self, S, base, mod0, mod1, hash_function = None):
         self.__length=len(S)
         self.__base=base
         self.__mod0=mod0
         self.__mod1=mod1
-        self.__type=type
+        self.hash_function = hash_function
 
-        self.rh0=Rolling_Hash(S, base, mod0, type)
-        self.rh1=Rolling_Hash(S, base, mod1, type)
+        self.rh0=Rolling_Hash(S, base, mod0, hash_function)
+        self.rh1=Rolling_Hash(S, base, mod1, hash_function)
 
     def encode(self, a0, a1):
         return a0*self.__mod1+a1
@@ -115,10 +105,9 @@ class Double_Rolling_Hash():
         assert len(X)<=len(self)
         a0=0; a1=0
         for x in X:
-            if self.__type==0:
-                a0=(a0*self.__base+x)%self.__mod0
-                a1=(a1*self.__base+x)%self.__mod1
-        return self.encode(a0,a1)
+            a0 = (a0 * self.__base + self.hash_function(x)) % self.__mod0
+            a1 = (a1 * self.__base + self.hash_function(x)) % self.__mod1
+        return self.encode(a0, a1)
 
     def __getitem__(self, index):
         if index.__class__==int:
@@ -138,12 +127,7 @@ class Double_Rolling_Hash():
 
     def count(self, T, start=0):
         alpha=self.__hasher(T)
-        K=0
-        T_len=len(T)
-        for i in range(start, len(self)-len(T)+1):
-            if alpha==self[i: i+T_len]:
-                K+=1
-        return K
+        return len([i for i in range(start, len(self) - len(T) + 1) if self[i: i + len(T)] == alpha])
 
     def find(self, T, start=0):
         alpha=self.__hasher(T)
@@ -162,12 +146,10 @@ class Double_Rolling_Hash():
         return -1
 
     def index(self, T, start=0):
-        alpha=self.__hasher(T)
-
-        for i in range(start, len(self)-len(T)+1):
-            if alpha==self[i: i+len(T)]:
-                return i
-        raise ValueError("substring not found")
+        ind = self.find(T, start)
+        if ind == -1:
+            raise ValueError("substring not found")
+        return ind
 
     def __len__(self):
         return self.__length
@@ -180,60 +162,36 @@ class Double_Rolling_Hash():
 
 #=================================================
 class Hasher():
-    def __init__(self, length, base, mod, type=0):
-        self.length=length
-        self.base=base
-        self.mod=mod
-        self.type=type
+    def __init__(self, length, base, mod, hash_function = None):
+        self.length = length
+        self.base = base
+        self.mod = mod
+        self.hash_function = hash_function = hash_function if hash_function is not None else lambda x: x
 
-        self.power=pw=[1]*length
+        self.power = pw = [1] * length
         for i in range(1, length):
-            pw[i]=(base*pw[i-1])%mod
+            pw[i] = (base * pw[i - 1]) % mod
 
     def __repr__(self):
-        return "length: {}\nbase: {}\nmod: {}".format(self.length, self.base, self.mod)
+        return f"[Hasher] length: {self.length}, base: {self.base}, mod: {self.mod}"
 
     def encode(self, S):
-        code=0; N=len(S)
+        hash_function = self.hash_function
+        N = len(S)
+        code=0
         for i in range(N):
-            if self.type:
-                code+=ord(S[i])*self.power[N-1-i]%self.mod
-            else:
-                code+=S[i]*self.power[N-1-i]%self.mod
+                code += hash_function(S[i]) * self.power[N - 1 - i] % self.mod
 
-        return code%self.mod
-
-    def decode(self, S):
-        pass
+        return code % self.mod
 
 #=================================================
 class Double_Hasher():
-    def __init__(self, length, base, mod0, mod1, type=0):
-        self.length=length
-        self.base=base
-        self.mod0=mod0
-        self.mod1=mod1
-        self.type=type
-
-        self.power0=pw0=[1]*length
-        self.power1=pw1=[1]*length
-        for i in range(1, length):
-            pw0[i]=(base*pw0[i-1])%mod0
-            pw1[i]=(base*pw1[i-1])%mod1
+    def __init__(self, length, base, mod0, mod1, hash_function = None):
+        self.hasher_0 = Hasher(length, base, mod0, hash_function)
+        self.hasher_1 = Hasher(length, base, mod1, hash_function)
 
     def __repr__(self):
-        return "length: {}\nbase: {}\nmod: {}".format(self.length, self.base, self.mod)
+        return f"[Double Hasher]: {self.hasher_0}, {self.hasher_1}"
 
     def encode(self, S):
-        code0=0; code1=0
-        N=len(S)
-        for i in range(N):
-            if self.type:
-                code0+=ord(S[i])*self.power0[N-1-i]%self.mod0
-                code1+=ord(S[i])*self.power1[N-1-i]%self.mod1
-            else:
-                code0+=S[i]*self.power0[N-1-i]%self.mod0
-                code1+=S[i]*self.power1[N-1-i]%self.mod1
-
-        code0%=self.mod0; code1%=self.mod1
-        return code1*self.mod0+code0
+        return self.hasher_0.encode(S) * self.hasher_1.mod + self.hasher_1.encode(S)
