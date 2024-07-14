@@ -50,7 +50,7 @@ class Rolling_Hash():
         return -1
 
     def index(self, T, start=0):
-        ind = self.find(T)
+        ind = self.find(T, start)
         if ind == -1:
             raise ValueError("substring not found")
         return ind
@@ -146,7 +146,7 @@ class Double_Rolling_Hash():
         return -1
 
     def index(self, T, start=0):
-        ind = self.find(T)
+        ind = self.find(T, start)
         if ind == -1:
             raise ValueError("substring not found")
         return ind
