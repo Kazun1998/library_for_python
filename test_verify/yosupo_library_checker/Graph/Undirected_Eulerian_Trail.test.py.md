@@ -33,8 +33,8 @@ data:
     \        print(*euler['edge'])\n\n#==================================================\n\
     T = int(input())\nfor _ in range(T):\n    verify()\n"
   dependsOn:
-  - Graph/Graph/Graph.py
   - Graph/Graph/Eulerian.py
+  - Graph/Graph/Graph.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
   requiredBy: []

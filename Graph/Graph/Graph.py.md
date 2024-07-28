@@ -291,8 +291,8 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Graph/Two_Edge_Connected_Components.test.py
-  - test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
   - test_verify/yosupo_library_checker/Graph/Undirected_Find_Cycle.test.py
+  - test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
 documentation_of: Graph/Graph/Graph.py
 layout: document
 title: Graph

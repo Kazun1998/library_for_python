@@ -14,48 +14,65 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.12.4/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "def Binary_Search_Low_Value(A, x, equal=False, sort=False, default=None):\n\
-    \    \"\"\" A \u306E x \u672A\u6E80\u306E\u8981\u7D20\u306E\u4E2D\u3067\u6700\u5927\
-    \u306E\u3082\u306E\u3092\u51FA\u529B\u3059\u308B.\n\n    A: \u30EA\u30B9\u30C8\
-    \n    x: \u8ABF\u3079\u308B\u8981\u7D20\n    sort: \u30BD\u30FC\u30C8\u3092\u3059\
-    \u308B\u5FC5\u8981\u304C\u3042\u308B\u304B\u3069\u3046\u304B (True \u3067\u5FC5\
-    \u8981)\n    equal: True \u306E\u3068\u304D\u306F x \"\u672A\u6E80\" \u304C x\
-    \ \"\u4EE5\u4E0B\" \u306B\u306A\u308B\n    \u203B \u5168\u3066\u306E\u8981\u7D20\
-    \u304C x \u4EE5\u4E0A (\u8D85\u3048\u308B) \u5834\u5408\u306F default \u304C\u8FD4\
-    \u3055\u308C\u308B.\n    \"\"\"\n\n    if sort:\n        A.sort()\n\n    if len(A)==0\
-    \ or A[0]>x or ((not equal) and A[0]==x):\n        return default\n\n    L,R=0,len(A)\n\
-    \    while R-L>1:\n        C=L+(R-L)//2\n        if A[C]<x or (equal and A[C]==x):\n\
-    \            L=C\n        else:\n            R=C\n\n    return A[L]\n\ndef Binary_Search_High_Value(A,\
-    \ x, equal=False, sort=False, default=None):\n    \"\"\" A \u306E x \u3092\u8D85\
-    \u3048\u308B\u8981\u7D20\u306E\u4E2D\u3067\u6700\u5C0F\u306E\u3082\u306E\u3092\
-    \u51FA\u529B\u3059\u308B.\n\n    A: \u30EA\u30B9\u30C8\n    x: \u8ABF\u3079\u308B\
-    \u8981\u7D20\n    sort: \u30BD\u30FC\u30C8\u3092\u3059\u308B\u5FC5\u8981\u304C\
-    \u3042\u308B\u304B\u3069\u3046\u304B (True \u3067\u5FC5\u8981)\n    equal: True\
-    \ \u306E\u3068\u304D\u306F x \"\u3092\u8D85\u3048\u308B\" \u304C x \"\u4EE5\u4E0A\
-    \" \u306B\u306A\u308B\n    \u203B \u5168\u3066\u306E\u8981\u7D20\u304C x \u4EE5\
-    \u4E0A (\u3092\u8D85\u3048\u308B) \u5834\u5408\u306F default \u304C\u8FD4\u3055\
-    \u308C\u308B.\n    \"\"\"\n\n    if sort:\n        A.sort()\n\n    if len(A)==0\
-    \ or A[-1]<x or ((not equal) and A[-1]==x):\n        return default\n\n    L,R=-1,len(A)-1\n\
-    \    while R-L>1:\n        C=L+(R-L)//2\n        if A[C]>x or (equal and A[C]==x):\n\
-    \            R=C\n        else:\n            L=C\n    K=len(A)-R\n    return A[-K]\n\
-    \ndef Binary_Search_High_Low_Value(A, x, low_equal=False, high_equal=False, sort=False,\
-    \ low_default=None, high_default=None):\n    \"\"\" A\u306E x \u672A\u6E80\u3067\
-    \u6700\u5927\u306E\u8981\u7D20 p \u3068 x \u3092\u8D85\u3048\u308B\u6700\u5C0F\
-    \u306E\u8981\u7D20 q \u3092\u898B\u3064\u3051, (p,q) \u3092\u51FA\u529B\u3059\u308B\
-    .\n\n    A: \u30EA\u30B9\u30C8\n    x: \u8ABF\u3079\u308B\u8981\u7D20\n    sort:\
-    \ \u30BD\u30FC\u30C8\u3092\u3059\u308B\u5FC5\u8981\u304C\u3042\u308B\u304B\u3069\
-    \u3046\u304B (True \u3067\u5FC5\u8981)\n    low_equal: True \u306E\u3068\u304D\
-    \u306F x \"\u672A\u6E80\" \u304C x \"\u4EE5\u4E0B\" \u306B\u306A\u308B\n    high_equal:\
-    \ True \u306E\u3068\u304D\u306F x \"\u3092\u8D85\u3048\u308B\" \u304C \"\u4EE5\
-    \u4E0A\" \u306B\u306A\u308B\n    \"\"\"\n\n    if sort:\n        A.sort()\n\n\
-    \    return (\n        Binary_Search_Low_Value(A,x,equal=low_equal,default=low_default),\n\
-    \        Binary_Search_High_Value(A,x,equal=high_equal,default=high_default)\n\
-    \        )\n"
+  code: "from bisect import bisect_left, bisect_right\n\ndef Binary_Search_Low_Value(A:\
+    \ list, x, equal = False, default = None, sort = False):\n    \"\"\" \u4E8C\u5206\
+    \u63A2\u7D22\u306B\u3088\u3063\u3066, A \u306E\u5143\u306E\u3046\u3061, x \u672A\
+    \u6E80\u306E\u8981\u7D20\u306E\u3046\u3061\u6700\u5927\u306E\u8981\u7D20\u3092\
+    \u6C42\u3081\u308B.\n\n    Args:\n        A (list): \u63A2\u7D22\u5BFE\u8C61\u306E\
+    \u30EA\u30B9\u30C8\n        x : \u95BE\u5024\n        equal (bool, optional):\
+    \ True \u306E\u3068\u304D\u306F\u300Cx \u672A\u6E80\u300D\u304C\u300Cx \u4EE5\u4E0B\
+    \u300D\u306B\u306A\u308B. Defaults to False.\n        default (optional): A \u306E\
+    \u5168\u3066\u306E\u8981\u7D20\u304C x \u4EE5\u4E0A (\u3088\u308A\u5927\u304D\u3044\
+    \u3068\u304D) \u306E\u8FD4\u308A\u5024. Defaults to None.\n        sort (bool,\
+    \ optional): A \u304C\u6607\u9806\u3067\u3042\u308B\u3053\u3068\u304C\u4FDD\u8A3C\
+    \u3055\u308C\u3066\u3044\u306A\u3044\u3068\u304D, True \u306B\u3059\u308B\u3053\
+    \u3068\u3067\u5B9F\u884C\u6642\u306B\u30BD\u30FC\u30C8\u3092\u884C\u3046. Defaults\
+    \ to False.\n    \"\"\"\n\n    if sort:\n        A.sort()\n\n    if equal:\n \
+    \       ind = bisect_right(A, x)\n    else:\n        ind = bisect_left(A, x)\n\
+    \n    return A[ind - 1] if ind > 0 else default\n\ndef Binary_Search_High_Value(A,\
+    \ x, equal = False, default = None, sort = False):\n    \"\"\" \u4E8C\u5206\u63A2\
+    \u7D22\u306B\u3088\u3063\u3066, A \u306E\u5143\u306E\u3046\u3061, x \u3088\u308A\
+    \u5927\u304D\u3044\u306E\u8981\u7D20\u306E\u3046\u3061\u6700\u5927\u306E\u8981\
+    \u7D20\u3092\u6C42\u3081\u308B.\n\n    Args:\n        A (list): \u63A2\u7D22\u5BFE\
+    \u8C61\u306E\u30EA\u30B9\u30C8\n        x : \u95BE\u5024\n        equal (bool,\
+    \ optional): True \u306E\u3068\u304D\u306F\u300Cx \u3088\u308A\u5927\u304D\u3044\
+    \u300D\u304C\u300Cx \u4EE5\u4E0A\u300D\u306B\u306A\u308B. Defaults to False.\n\
+    \        default (optional): A \u306E\u5168\u3066\u306E\u8981\u7D20\u304C x \u4EE5\
+    \u4E0B (\u672A\u6E80) \u306E\u8FD4\u308A\u5024. Defaults to None.\n        sort\
+    \ (bool, optional): A \u304C\u6607\u9806\u3067\u3042\u308B\u3053\u3068\u304C\u4FDD\
+    \u8A3C\u3055\u308C\u3066\u3044\u306A\u3044\u3068\u304D, True \u306B\u3059\u308B\
+    \u3053\u3068\u3067\u5B9F\u884C\u6642\u306B\u30BD\u30FC\u30C8\u3092\u884C\u3046\
+    . Defaults to False.\n    \"\"\"\n\n    if sort:\n        A.sort()\n\n    if equal:\n\
+    \        ind = bisect_left(A, x)\n    else:\n        ind = bisect_right(A, x)\n\
+    \n    return A[ind] if ind < len(A) else default\n\ndef Binary_Search_High_Low_Value(A:\
+    \ list, x, low_equal = False, high_equal = False, low_default = None, high_default\
+    \ = None, sort = False):\n    \"\"\" \u4E8C\u5206\u63A2\u7D22\u306B\u3088\u3063\
+    \u3066, A \u306E x \u672A\u6E80\u3067\u6700\u5927\u306E\u8981\u7D20 p \u3068 x\
+    \ \u3088\u308A\u5927\u304D\u3044\u6700\u5C0F\u306E\u8981\u7D20 q \u3092\u6C42\u3081\
+    , (p, q) \u3092\u51FA\u529B\u3059\u308B.\n\n    Args:\n        A (list): \u635C\
+    \u7D22\u5BFE\u8C61\u306E\u30EA\u30B9\u30C8\n        x : \u95BE\u5024\n       \
+    \ low_equal (bool, optional): True \u306E\u3068\u304D\u306F\u300Cx \u672A\u6E80\
+    \u300D\u304C\u300Cx \u4EE5\u4E0B\u300D\u306B\u306A\u308B. Defaults to False.\n\
+    \        high_equal (bool, optional):  True \u306E\u3068\u304D\u306F\u300Cx \u3088\
+    \u308A\u5927\u304D\u3044\u300D\u304C\u300Cx \u4EE5\u4E0A\u300D\u306B\u306A\u308B\
+    . Defaults to False.\n        low_default (optional): A \u306E\u5168\u3066\u306E\
+    \u8981\u7D20\u304C x \u4EE5\u4E0A (\u3088\u308A\u5927\u304D\u3044\u3068\u304D\
+    ) \u306E\u8FD4\u308A\u5024. Defaults to None.\n        high_default (optional):\
+    \ A \u306E\u5168\u3066\u306E\u8981\u7D20\u304C x \u4EE5\u4E0B (\u672A\u6E80) \u306E\
+    \u8FD4\u308A\u5024. Defaults to None.\n        sort (bool, optional): A \u304C\
+    \u6607\u9806\u3067\u3042\u308B\u3053\u3068\u304C\u4FDD\u8A3C\u3055\u308C\u3066\
+    \u3044\u306A\u3044\u3068\u304D, True \u306B\u3059\u308B\u3053\u3068\u3067\u5B9F\
+    \u884C\u6642\u306B\u30BD\u30FC\u30C8\u3092\u884C\u3046. Defaults to False.\n\n\
+    \    Returns:\n        (p, q): p: A \u306E x \u672A\u6E80\u3067\u6700\u5927\u306E\
+    \u8981\u7D20, q: x \u3088\u308A\u5927\u304D\u3044\u6700\u5C0F\u306E\u8981\u7D20\
+    \n    \"\"\"\n\n    if sort:\n        A.sort()\n\n    return (\n        Binary_Search_Low_Value(A,\
+    \ x, equal = low_equal, default = low_default),\n        Binary_Search_High_Value(A,\
+    \ x, equal = high_equal, default = high_default)\n        )\n"
   dependsOn: []
   isVerificationFile: false
   path: Binary_Search/Value.py
   requiredBy: []
-  timestamp: '2022-09-10 17:07:59+09:00'
+  timestamp: '2024-07-28 11:06:05+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Binary_Search/Value.py
