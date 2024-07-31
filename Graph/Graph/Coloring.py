@@ -1,6 +1,15 @@
 from Graph import *
 
 def Chromatic_Number(G: Graph):
+    """ G の彩色数を求める.
+
+    Args:
+        G (Graph): 無向グラフ
+
+    Returns:
+        G: 彩色数
+    """
+
     N = G.order()
 
     def zeta(X):
