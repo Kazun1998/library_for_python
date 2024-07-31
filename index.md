@@ -317,6 +317,9 @@ data:
       title: Graph/Weighted_Digraph.py
   - name: Graph/Graph
     pages:
+    - icon: ':warning:'
+      path: Graph/Graph/Coloring.py
+      title: Graph/Graph/Coloring.py
     - icon: ':heavy_check_mark:'
       path: Graph/Graph/Cycle.py
       title: Graph/Graph/Cycle.py
