@@ -60,3 +60,15 @@ def Chromatic_Number(G: Graph):
 
         if dp[k][-1]:
             return k
+
+def Clique_Cover_Number(G: Graph):
+    """ G をクリークで分割するために必要なクリークの数の最小値を求める.
+    この値は G の補グラフの彩色数と一致する.
+
+    Args:
+        G (Graph): 無向グラフ
+
+    Returns:
+        int
+    """
+    return Clique_Cover_Number(Complement_Graph(G))
