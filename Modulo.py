@@ -461,7 +461,7 @@ def Sqrt(X, All=False):
         return r
 
 #離散対数
-def Discrete_Log(A, B, default=-1):
+def Discrete_Log(A, B, default = -1):
     """ A^X=B (mod M) を満たす最小の非負整数 X を求める.
 
     [入力]
@@ -472,44 +472,47 @@ def Discrete_Log(A, B, default=-1):
     存在しなければ default
     """
 
-    if isinstance(B,int):
-        B%=A.n
-    elif isinstance(B,Modulo):
-        assert A.n==B.n,"A,Bの法が違います."
-        B=B.a
+    A, M = A.a, A.n
+
+    if isinstance(B, int):
+        B %= M
+    elif isinstance(B, Modulo):
+        assert M == B.n, "A, B の法が違います."
+        B = B.a % M
     else:
         raise TypeError
 
-    A,M=A.a,A.n
+    m = 0
+    while m * m < M:
+        m += 1
 
-    #A=0の時を処理
-    if M==1:
-        return 0
-    if B==1:
-        return 0
-    if A==B==0:
-        return 1
+    E = set()
+    y = B
+    for _ in range(m):
+        y *= A; y %= M
+        E.add(y)
 
-    D={1:0}
-    S=int(M**0.5)+2
+    step = pow(A, m, M)
+    head = 1 % M
+    count = 0
+    for k in range(1, m + 1):
+        tail = head
+        head = step * head % M
 
-    #Baby-Step
-    Baby=1
-    for i in range(S):
-        if Baby==B:
-            return i
-        D[(Baby*B)%M]=i
-        Baby=(Baby*A)%M
+        if head not in E:
+            continue
 
-    #Giant-Step
-    Giant=1
-    H=pow(A,S,M)
-    for i in range(1,S+1):
-        Giant=(Giant*H)%M
-        if Giant in D:
-            j=D[Giant]
-            X=i*S-j
-            return X if pow(A,X,M)==B else default
+        body = tail
+        for n in range((k - 1) * m, k * m):
+            if body == B:
+                return n
+
+            body = (A * body) % M
+
+        count += 1
+        if count == 2:
+            break
+
     return default
 
 def Order(X):

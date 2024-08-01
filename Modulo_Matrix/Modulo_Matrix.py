@@ -82,23 +82,23 @@ class Modulo_Matrix():
 
     #乗法
     def __mul__(self, other):
-        if isinstance(other, Modulo_Matrix):
-            assert self.col == other.row, f"左側の列と右側の行が一致しません (left: {self.col}, right:{other.row})."
-
-            A = self.ele; B = other.ele
-            C = [[0] * other.col for _ in range(self.row)]
-
-            for i in range(self.row):
-                Ai = A[i]
-                Ci = C[i]
-                for k in range(self.col):
-                    a_ik = Ai[k]
-                    Bk = B[k]
-                    for j in range(other.col):
-                        Ci[j] = (Ci[j] + a_ik * Bk[j]) % Mod
-            return Modulo_Matrix(C)
-        elif isinstance(other,int):
+        if isinstance(other, int):
             return self.__scale__(other)
+
+        if not isinstance(other, Modulo_Matrix):
+            raise TypeError
+
+        assert self.col == other.row, f"左側の列と右側の行が一致しません (left: {self.col}, right:{other.row})."
+
+        A = self.ele; B = other.ele
+        C = [[0] * other.col for _ in range(self.row)]
+
+        for i, Ci in enumerate(C):
+            for k, a_ik in enumerate(A[i]):
+                for j, b_kj in enumerate(B[k]):
+                    Ci[j] = (Ci[j] + a_ik * b_kj) % Mod
+
+        return Modulo_Matrix(C)
 
     def __rmul__(self,other):
         if isinstance(other,int):
@@ -172,101 +172,85 @@ class Modulo_Matrix():
 
     #行基本変形
     def row_reduce(self):
-        M=self
-        (R,C)=M.size
-        T=[]
+        (row, col) = self.size
 
-        for i in range(R):
-            U=[]
-            for j in range(C):
-                U.append(M.ele[i][j])
-            T.append(U)
+        T = deepcopy(self.ele)
 
-        I=0
-        for J in range(C):
-            if T[I][J]==0:
-                for i in range(I+1,R):
-                    if T[i][J]!=0:
-                        T[i],T[I]=T[I],T[i]
+        I = 0
+        for J in range(col):
+            if T[I][J] == 0:
+                for i in range(I + 1, row):
+                    if T[i][J] != 0:
+                        T[i], T[I] = T[I], T[i]
                         break
+                else:
+                    continue
 
-            if T[I][J]!=0:
-                u=T[I][J]
-                u_inv=pow(u, -1, Mod)
-                for j in range(C):
-                    T[I][j]*=u_inv
-                    T[I][j]%=Mod
+            u = T[I][J]
+            u_inv = pow(u, -1, Mod)
+            for j in range(col):
+                T[I][j] *= u_inv
+                T[I][j] %= Mod
 
-                for i in range(R):
-                    if i!=I:
-                        v=T[i][J]
-                        for j in range(C):
-                            T[i][j]-=v*T[I][j]
-                            T[i][j]%=Mod
-                I+=1
-                if I==R:
-                    break
+            for i in range(row):
+                if i == I:
+                    continue
+
+                v = T[i][J]
+                for j in range(col):
+                    T[i][j] -= v * T[I][j]
+                    T[i][j] %= Mod
+            I += 1
+            if I == row:
+                break
 
         return Modulo_Matrix(T)
 
     #列基本変形
     def column_reduce(self):
-        M=self
-        (R,C)=M.size
+        (row, col) = self.size
 
-        T=[]
-        for i in range(R):
-            U=[]
-            for j in range(C):
-                U.append(M.ele[i][j])
-            T.append(U)
+        T = deepcopy(self.ele)
 
-        J=0
-        for I in range(R):
-            if T[I][J]==0:
-                for j in range(J+1,C):
-                    if T[I][j]!=0:
-                        for k in range(R):
-                            T[k][j],T[k][J]=T[k][J],T[k][j]
+        J = 0
+        for I in range(row):
+            if T[I][J] ==0 :
+                for j in range(J + 1, col):
+                    if T[I][j] != 0:
+                        for k in range(row):
+                            T[k][j], T[k][J] = T[k][J], T[k][j]
                         break
+                else:
+                    continue
 
-            if T[I][J]!=0:
-                u=T[I][J]
-                u_inv=pow(u, -1, Mod)
-                for i in range(R):
-                    T[i][J]*=u_inv
-                    T[i][J]%=Mod
+            u = T[I][J]
+            u_inv = pow(u, -1, Mod)
+            for i in range(row):
+                T[i][J] *= u_inv
+                T[i][J] %= Mod
 
-                for j in range(C):
-                    if j!=J:
-                        v=T[I][j]
-                        for i in range(R):
-                            T[i][j]-=v*T[i][J]
-                            T[i][j]%=Mod
-                J+=1
-                if J==C:
-                    break
+            for j in range(col):
+                if j != J:
+                    v = T[I][j]
+                    for i in range(row):
+                        T[i][j] -= v * T[i][J]
+                        T[i][j] %= Mod
+            J += 1
+            if J == col:
+                break
 
         return Modulo_Matrix(T)
 
     #行列の階数
     def rank(self):
-        M=self.row_reduce()
-        (R,C)=M.size
-        T=M.ele
+        row_reduced = self.row_reduce()
+        (row, col) = row_reduced.size
 
-        rnk=0
-        for i in range(R):
-            f=False
-            for j in range(C):
-                if T[i][j]!=0:
-                    f=True
-                    break
-
-            if f:
-                rnk+=1
-            else:
-                break
+        rnk = 0
+        for i in range(row):
+            Ti = row_reduced.ele[i]
+            if any(Ti[j] for j in range(col)):
+                rnk += 1
 
         return rnk
 

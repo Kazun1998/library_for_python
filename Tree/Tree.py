@@ -704,15 +704,18 @@ class Tree:
                 v=ch[v][S[v]]
                 S[w]+=1
 
-        self.euler_vertex=X
-        self.in_time=[-1]*(self.index+self.N)
-        self.out_time=[-1]*(self.index+self.N)
-        for t in range(2*self.N-1):
-            v=X[t]
-            if self.in_time[v]==-1:
-                self.in_time[v]=self.out_time[v]=t
+        self.euler_vertex = X
+        self.in_time = [-1] * (self.index + self.N)
+        self.out_time = [-1] * (self.index + self.N)
+
+        self.in_time[self.root] = 0
+        self.out_time[self.root] = 2 * self.N - 1
+
+        for t in range(1, 2 * self.N - 1):
+            if self.is_parent(X[t - 1], X[t]):
+                self.in_time[X[t]] = t
             else:
-                self.out_time[v]=t
+                self.out_time[X[t - 1]] = t
 
     def euler_tour_edge(self):
         """ オイラーツアー (edge) に関する計算を行う.
