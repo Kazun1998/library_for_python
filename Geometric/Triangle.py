@@ -1,33 +1,32 @@
 from Point import *
 
 class Triangle():
-    __slots__=["A","B","C","id"]
-    ep=1e-9
-    def __init__(self,A,B,C):
+    __slots__ = ("A", "B", "C")
+
+    def __init__(self, A, B, C):
         """ 3点 A,B,C を頂点とする三角形を生成する.
 
         A,B,C: Point
         """
 
         assert A!=B and B!=C and C!=A
-        self.A=A
-        self.B=B
-        self.C=C
-        self.id=6
+        self.A = A
+        self.B = B
+        self.C = C
 
     def __str__(self):
-        return "[Triangle] {}, {}, {}".format(self.A,self.B,self.C)
+        return f"[Triangle] {self.A}, {self.B}, {self.C}"
 
-    __repr__=__str__
+    __repr__ = __str__
 
     def area(self):
-        return abs((self.B-self.A).det(self.C-self.A)/2)
+        return abs((self.B - self.A).det(self.C - self.A) / 2)
 
     def three_edges(self):
         """ 辺 BC, CA, AB の長さを求める.
 
         """
-        return abs(self.B-self.C),abs(self.C-self.A),abs(self.A-self.B)
+        return abs(self.B - self.C), abs(self.C - self.A), abs(self.A - self.B)
 
 #=== 三角形の心
 def Center_of_Gravity(T):
@@ -44,14 +43,12 @@ def CircumCenter(T):
     T: Triangle
     """
 
-    da=(T.B-T.C).norm_2()
-    db=(T.C-T.A).norm_2()
-    dc=(T.A-T.B).norm_2()
-    ta=da*(-da+db+dc)
-    tb=db*(da-db+dc)
-    tc=dc*(da+db-dc)
-    s=ta+tb+tc
-    return (ta/s)*T.A+(tb/s)*T.B+(tc/s)*T.C
+    alpha = complex(*T.A) - complex(*T.C)
+    beta = complex(*T.B) - complex(*T.C)
+
+    zeta = alpha * beta * (alpha.conjugate() - beta.conjugate()) / (alpha.conjugate() * beta - alpha * beta.conjugate())
+    zeta += complex(*T.C)
+    return Point(zeta.real, zeta.imag)
 
 def InnerCenter(T):
     """ 三角形 T の内心を求める.
@@ -86,9 +83,9 @@ def is_Acute_Triangle(T):
     T: Triangle
     """
 
-    a,b,c=T.three_edges()
-    m=max(a,b,c)
-    return compare(a*a+b*b+c*c-2*m*m,0,T.ep)==1
+    a, b, c = T.three_edges()
+    m = max(a, b, c)
+    return sign(a * a + b * b + c * c - 2 * m * m) == 1
 
 def is_Right_Triangle(T):
     """ 三角形 T が直角三角形かどうかを判定する.
@@ -96,9 +93,9 @@ def is_Right_Triangle(T):
     T: Triangle
     """
 
-    a,b,c=T.three_edges()
-    m=max(a,b,c)
-    return compare(a*a+b*b+c*c-2*m*m,0,T.ep)==0
+    a, b, c = T.three_edges()
+    m = max(a, b, c)
+    return sign(a * a + b * b + c * c - 2 * m * m) == 0
 
 def is_Obtuse_Triangle(T):
     """ 三角形 T が鈍角三角形かどうかを判定する.
@@ -106,9 +103,9 @@ def is_Obtuse_Triangle(T):
     T: Triangle
     """
 
-    a,b,c=T.three_edges()
-    m=max(a,b,c)
-    return compare(a*a+b*b+c*c-2*m*m,0,T.ep)==-1
+    a, b, c = T.three_edges()
+    m = max(a, b, c)
+    return sign(a * a + b * b + c * c - 2 * m * m) == -1
 
 def Triangle_Division_by_Angle(T):
     """ 三角形 T が鋭角か直角か鈍角かを判定する.
@@ -120,9 +117,9 @@ def Triangle_Division_by_Angle(T):
     1: 鋭角, 0: 直角, -1: 鈍角
     """
 
-    a,b,c=T.three_edges()
-    m=max(a,b,c)
-    return compare(a*a+b*b+c*c-2*m*m,0,T.ep)
+    a, b, c = T.three_edges()
+    m = max(a, b, c)
+    return sign(a * a + b * b + c * c - 2 * m * m)
 
 def is_Isosceles_Triangle(T):
     """ 三角形 T が二等辺三角形かを判定する.
@@ -131,8 +128,8 @@ def is_Isosceles_Triangle(T):
     T: Triangle
     """
 
-    a,b,c=T.three_edges()
-    return compare(a,b,T.ep)==0 or compare(b,c,T.ep)==0 or compare(c,a,T.ep)==0
+    a, b, c = T.three_edges()
+    return compare(a, b)==0 or compare(b, c) == 0 or compare(c, a) == 0
 
 def is_Isosceles_Right_Triangle(T):
     """ 三角形 T が直角二等辺三角形かを判定する.
@@ -151,8 +148,8 @@ def is_Equilateral_Triangle(T):
     T: Triangle
     """
 
-    a,b,c=T.three_edges()
-    return compare(a,b,T.ep)==0 and compare(b,c,T.ep)==0 and compare(c,a,T.ep)==0
+    a, b, c = T.three_edges()
+    return compare(a, b) == 0 and compare(b, c) == 0 and compare(c, a) == 0
 
 #=== 三角形の決定
 def SSS_Triangle(a, b, c):
@@ -160,50 +157,54 @@ def SSS_Triangle(a, b, c):
 
     a,b,c: int or float
     """
-    assert 2*max(a,b,c)<a+b+c
+    assert compare(a + b + c, 2 * max(a, b, c)) == 1
 
-    t=a+b+c
+    t = a + b + c
 
-    A=Point(); B=Point(c,0)
-    C=Point((-a*a+b*b+c*c)/(2*c), sqrt(t*(t-2*a)*(t-2*b)*(t-2*c))/(2*c))
-    return Triangle(A,B,C)
+    A = Point()
+    B = Point(c, 0)
+    C = Point((-a * a + b * b + c * c) / (2 * c), sqrt(t * (t - 2 * a) * (t - 2 * b) * (t - 2 * c)) / (2 * c))
+    return Triangle(A, B, C)
 
 def SAS_Triangle(a, gamma, b):
-    """ 2 辺の長さが a,b で ,間の角度が gamma である三角形を生成する.
+    """ 2 辺の長さが a,b で, 間の角度が gamma である三角形を生成する.
 
     a,b: int or float
     gamma: int or float
     """
 
-    t=sqrt(a*a+b*b-2*a*b*cos(gamma))
+    t = sqrt(a * a + b * b - 2 * a * b * cos(gamma))
 
-    A=Point(); B=Point(t,0)
-    C=Point((b*b-a*b*cos(gamma))/t, (a*b*sin(gamma))/t)
-    return Triangle(A,B,C)
+    A=Point()
+    B=Point(t, 0)
+    C=Point((b * b - a * b * cos(gamma)) / t, (a * b * sin(gamma)) / t)
+    return Triangle(A, B, C)
 
-def ASA_Triangle(alpha ,c, beta):
+def ASA_Triangle(alpha, c, beta):
     """ 1辺の長さが c で, 両端の角度が alpha, beta である三角形を生成する.
 
     c: int or float
     alpha, beta: int or float (alpha+beta<pi)
     """
 
-    assert alpha+beta<pi
-    t=sin(beta)/sin(alpha+beta)
+    assert compare(alpha + beta, pi) == -1
+    t=sin(beta) / sin(alpha + beta)
 
-    A=Point(); B=Point(c,0)
-    C=Point(c*t*cos(alpha), c*t*sin(alpha))
-    return Triangle(A,B,C)
+    A = Point()
+    B = Point(c, 0)
+    C = Point(c * t * cos(alpha), c * t * sin(alpha))
+    return Triangle(A, B, C)
 
 def AAS_Triangle(alpha, beta, a):
-    """ 1辺の長さが a で, 2つの角が alpha, beta である三角形を生成する (a の対角が alpha).
+    """ 1辺の長さが a で, 2つの角が alpha, beta である三角形を生成する (a の対角が alpha, 辺 BC の長さが a).
 
     a: int or float
-    alpha ,beta: int or float
+    alpha, beta: int or float
     """
 
-    assert alpha+beta<pi
+    assert compare(alpha + beta, pi)
 
-    A=Point(); B=Point(a*sin(alpha+beta)/sin(alpha),0)
-    C=Point(a*sin(beta)*cos(alpha)/ sin(alpha), a*sin(beta))
-    return Triangle(A,B,C)
+    A = Point()
+    B = Point(a * sin(alpha +beta) / sin(alpha), 0)
+    C = Point(a * sin(beta) * cos(alpha) / sin(alpha), a * sin(beta))
+    return Triangle(A, B, C)
