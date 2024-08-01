@@ -82,23 +82,23 @@ class Modulo_Matrix():
 
     #乗法
     def __mul__(self, other):
-        if isinstance(other, Modulo_Matrix):
-            assert self.col == other.row, f"左側の列と右側の行が一致しません (left: {self.col}, right:{other.row})."
-
-            A = self.ele; B = other.ele
-            C = [[0] * other.col for _ in range(self.row)]
-
-            for i in range(self.row):
-                Ai = A[i]
-                Ci = C[i]
-                for k in range(self.col):
-                    a_ik = Ai[k]
-                    Bk = B[k]
-                    for j in range(other.col):
-                        Ci[j] = (Ci[j] + a_ik * Bk[j]) % Mod
-            return Modulo_Matrix(C)
-        elif isinstance(other,int):
+        if isinstance(other, int):
             return self.__scale__(other)
+
+        if not isinstance(other, Modulo_Matrix):
+            raise TypeError
+
+        assert self.col == other.row, f"左側の列と右側の行が一致しません (left: {self.col}, right:{other.row})."
+
+        A = self.ele; B = other.ele
+        C = [[0] * other.col for _ in range(self.row)]
+
+        for i, Ci in enumerate(C):
+            for k, a_ik in enumerate(A[i]):
+                for j, b_kj in enumerate(B[k]):
+                    Ci[j] = (Ci[j] + a_ik * b_kj) % Mod
+
+        return Modulo_Matrix(C)
 
     def __rmul__(self,other):
         if isinstance(other,int):
