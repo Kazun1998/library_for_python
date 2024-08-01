@@ -32,7 +32,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
   requiredBy: []
-  timestamp: '2024-03-24 14:34:30+09:00'
+  timestamp: '2024-08-02 00:08:17+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py

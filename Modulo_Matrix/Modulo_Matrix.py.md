@@ -56,33 +56,32 @@ data:
     \ i in range(self.row):\n            Mi,Ni=M[i],N[i]\n            for j in range(self.col):\n\
     \                Mi[j]-=Ni[j]\n                Mi[j]%=Mod\n        return self\n\
     \n    #\u4E57\u6CD5\n    def __mul__(self, other):\n        if isinstance(other,\
-    \ Modulo_Matrix):\n            assert self.col == other.row, f\"\u5DE6\u5074\u306E\
-    \u5217\u3068\u53F3\u5074\u306E\u884C\u304C\u4E00\u81F4\u3057\u307E\u305B\u3093\
-    \ (left: {self.col}, right:{other.row}).\"\n\n            A = self.ele; B = other.ele\n\
-    \            C = [[0] * other.col for _ in range(self.row)]\n\n            for\
-    \ i in range(self.row):\n                Ai = A[i]\n                Ci = C[i]\n\
-    \                for k in range(self.col):\n                    a_ik = Ai[k]\n\
-    \                    Bk = B[k]\n                    for j in range(other.col):\n\
-    \                        Ci[j] = (Ci[j] + a_ik * Bk[j]) % Mod\n            return\
-    \ Modulo_Matrix(C)\n        elif isinstance(other,int):\n            return self.__scale__(other)\n\
-    \n    def __rmul__(self,other):\n        if isinstance(other,int):\n         \
-    \   return self.__scale__(other)\n\n    def inverse(self):\n        assert self.row==self.col,\"\
-    \u6B63\u65B9\u884C\u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093.\"\n\n    \
-    \    M=self\n        N=M.row\n        R=[[1 if i==j else 0 for j in range(N)]\
-    \ for i in range(N)]\n        T=deepcopy(M.ele)\n\n        for j in range(N):\n\
-    \            if T[j][j]==0:\n                for i in range(j+1,N):\n        \
-    \            if T[i][j]:\n                        break\n                else:\n\
-    \                    assert 0, \"\u6B63\u5247\u884C\u5217\u3067\u306F\u3042\u308A\
-    \u307E\u305B\u3093\"\n\n                T[j],T[i]=T[i],T[j]\n                R[j],R[i]=R[i],R[j]\n\
-    \            Tj,Rj=T[j],R[j]\n            inv=pow(Tj[j], -1, Mod)\n          \
-    \  for k in range(N):\n                Tj[k]*=inv; Tj[k]%=Mod\n              \
-    \  Rj[k]*=inv; Rj[k]%=Mod\n            for i in range(N):\n                if\
-    \ i==j: continue\n                c=T[i][j]\n                Ti,Ri=T[i],R[i]\n\
-    \                for k in range(N):\n                    Ti[k]-=Tj[k]*c; Ti[k]%=Mod\n\
-    \                    Ri[k]-=Rj[k]*c; Ri[k]%=Mod\n        return Modulo_Matrix(R)\n\
-    \n    #\u30B9\u30AB\u30E9\u30FC\u500D\n    def __scale__(self, r):\n        r\
-    \ %= Mod\n        return Modulo_Matrix([[r * m_ij for m_ij in Mi] for Mi in self.ele])\n\
-    \n    #\u7D2F\u4E57\n    def __pow__(self, n):\n        assert self.row==self.col,\
+    \ int):\n            return self.__scale__(other)\n\n        if not isinstance(other,\
+    \ Modulo_Matrix):\n            raise TypeError\n\n        assert self.col == other.row,\
+    \ f\"\u5DE6\u5074\u306E\u5217\u3068\u53F3\u5074\u306E\u884C\u304C\u4E00\u81F4\u3057\
+    \u307E\u305B\u3093 (left: {self.col}, right:{other.row}).\"\n\n        A = self.ele;\
+    \ B = other.ele\n        C = [[0] * other.col for _ in range(self.row)]\n\n  \
+    \      for i, Ci in enumerate(C):\n            for k, a_ik in enumerate(A[i]):\n\
+    \                for j, b_kj in enumerate(B[k]):\n                    Ci[j] =\
+    \ (Ci[j] + a_ik * b_kj) % Mod\n\n        return Modulo_Matrix(C)\n\n    def __rmul__(self,other):\n\
+    \        if isinstance(other,int):\n            return self.__scale__(other)\n\
+    \n    def inverse(self):\n        assert self.row==self.col,\"\u6B63\u65B9\u884C\
+    \u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093.\"\n\n        M=self\n      \
+    \  N=M.row\n        R=[[1 if i==j else 0 for j in range(N)] for i in range(N)]\n\
+    \        T=deepcopy(M.ele)\n\n        for j in range(N):\n            if T[j][j]==0:\n\
+    \                for i in range(j+1,N):\n                    if T[i][j]:\n   \
+    \                     break\n                else:\n                    assert\
+    \ 0, \"\u6B63\u5247\u884C\u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093\"\n\n\
+    \                T[j],T[i]=T[i],T[j]\n                R[j],R[i]=R[i],R[j]\n  \
+    \          Tj,Rj=T[j],R[j]\n            inv=pow(Tj[j], -1, Mod)\n            for\
+    \ k in range(N):\n                Tj[k]*=inv; Tj[k]%=Mod\n                Rj[k]*=inv;\
+    \ Rj[k]%=Mod\n            for i in range(N):\n                if i==j: continue\n\
+    \                c=T[i][j]\n                Ti,Ri=T[i],R[i]\n                for\
+    \ k in range(N):\n                    Ti[k]-=Tj[k]*c; Ti[k]%=Mod\n           \
+    \         Ri[k]-=Rj[k]*c; Ri[k]%=Mod\n        return Modulo_Matrix(R)\n\n    #\u30B9\
+    \u30AB\u30E9\u30FC\u500D\n    def __scale__(self, r):\n        r %= Mod\n    \
+    \    return Modulo_Matrix([[r * m_ij for m_ij in Mi] for Mi in self.ele])\n\n\
+    \    #\u7D2F\u4E57\n    def __pow__(self, n):\n        assert self.row==self.col,\
     \ \"\u6B63\u65B9\u884C\u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093.\"\n\n\
     \        sgn = 1 if n >= 0 else -1\n        n = abs(n)\n\n        C = Modulo_Matrix.Identity_Matrix(self.row)\n\
     \        tmp = self\n        while n:\n            if n & 1:\n               \
@@ -193,7 +192,7 @@ data:
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py
   requiredBy: []
-  timestamp: '2024-03-24 13:46:48+09:00'
+  timestamp: '2024-08-02 00:08:17+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Product.test.py
