@@ -443,6 +443,9 @@ data:
       title: Segment Tree
   - name: Sequence
     pages:
+    - icon: ':heavy_check_mark:'
+      path: Sequence/Cartesian_Tree.py
+      title: Sequence/Cartesian_Tree.py
     - icon: ':warning:'
       path: Sequence/Hamming_Distance.py
       title: Hamming Distance
@@ -573,6 +576,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Data_Structure/Cartesian_Tree.test.py
+      title: test_verify/yosupo_library_checker/Data_Structure/Cartesian_Tree.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
