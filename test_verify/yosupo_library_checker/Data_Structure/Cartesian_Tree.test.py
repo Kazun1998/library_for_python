@@ -12,6 +12,5 @@ def verify():
     A = list(map(int, input().split()))
     print(*[t if t != -1 else i for i, t in enumerate(Cartesian_Tree(A).parent)])
 
-
 #==================================================
 verify()
