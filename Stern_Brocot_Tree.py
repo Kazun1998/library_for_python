@@ -75,6 +75,14 @@ class Stern_Brocot_Tree:
     def range(cls, a: int, b: int):
         return cls.decode_interval(cls.encode(a, b))
 
+    @classmethod
+    def binary_search_range_increase(cls, N, cond):
+        """ 単調増加な check において, cond(x) = T がとなる最小の x を挟む分子と分母が N 以下の有理数を求める.
+
+        Args:
+            cond: 2 変数関数で, cond(a, b) は cond(a / b) を意味する.
+        """
+
 class Stern_Brocot_Tree_Node:
     def __init__(self):
         pass
