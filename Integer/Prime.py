@@ -122,41 +122,49 @@ def Is_Prime_for_long_long(N):
     return True
 
 #Miller-Rabinの素数判定法
-def Miller_Rabin_Primality_Test(N, Times=20):
-    """ Miller-Rabin による整数 N の素数判定を行う.
+def Miller_Rabin_Primality_Test(N, trial = 20):
+    """ Miller-Rabin の方法によって, N が素数かどうかを判定する.
 
-    N: 整数
-    ※ True は正確には Probably True である ( False は 確定 False ).
+    Args:
+        N (int): 正の整数
+        trial (int, optional): N が素数であることを確認するために行う判定回数. Defaults to 20.
+
+    Returns:
+        bool: False は確定的 False, True は確率的 True
     """
+
     from random import randint as ri
 
-    if N==2: return True
+    if N == 2:
+        return True
 
-    if N==1 or N%2==0: return False
+    if N == 1 or N % 2 == 0:
+        return False
 
-    q=N-1
-    k=0
-    while q&1==0:
-        k+=1
-        q>>=1
+    q = N - 1
+    k = 0
+    while q & 1 == 0:
+        k += 1
+        q >>= 1
 
-    for _ in range(Times):
-        m=ri(2,N-1)
-        y=pow(m,q,N)
-        if y==1:
+    for _ in range(trial):
+        m = ri(2, N - 1)
+        y = pow(m, q, N)
+        if y == 1:
             continue
 
-        flag=True
-        for i in range(k):
-            if (y+1)%N==0:
+        flag = True
+        for _1 in range(k):
+            if (y + 1) % N == 0:
                 flag=False
                 break
 
-            y*=y
-            y%=N
+            y *= y
+            y %= N
 
         if flag:
             return False
+
     return True
 
 #ポラード・ローアルゴリズムによって素因数を発見する
