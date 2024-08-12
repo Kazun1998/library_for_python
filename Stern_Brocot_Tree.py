@@ -83,6 +83,40 @@ class Stern_Brocot_Tree:
             cond: 2 変数関数で, cond(a, b) は cond(a / b) を意味する.
         """
 
+        def right_search(p, q, r, s):
+            lower = 0
+            upper = (N - p) // r + 1
+
+            while upper - lower > 1:
+                d = (lower + upper) // 2
+                if (p + d * r <= N) and (q + d * s <= N) and not cond(p + d * r, q + d * s):
+                    lower = d
+                else:
+                    upper = d
+            return lower
+
+        def left_search(p, q, r, s):
+            lower = 0
+            upper = (N - p) // r + 1
+
+            while upper - lower > 1:
+                d = (lower + upper) // 2
+                if (r + d * p <= N) and (s + d * q <= N) and cond(r + d * p, s + d * q):
+                    lower = d
+                else:
+                    upper = d
+            return lower
+
+        p, q, r, s = 0, 1, 1, 0
+        while p + r <= N and q + s <= N:
+            d = right_search(p, q, r, s)
+            p += d * r; q += d * s
+
+            d = left_search(p, q, r, s)
+            r += d * p; s += d * q
+
+        return p, q, r, s
+
 class Stern_Brocot_Tree_Node:
     def __init__(self):
         pass
