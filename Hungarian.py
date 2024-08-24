@@ -1,18 +1,18 @@
-def Hungarian(A, minimize=False, mode=False):
-    """ 行列 A に対してハンガリアン法を適用し, 最大値を求める.
+def Hungarian(A, maximize = True):
+    """ 行列 A に対して, Hungarian 法を適用して, 割当問題の最適解を求める.
 
-    A: 行列
-    minimize: True にすると, 最小値を求める
-    mode: True にすると, 最大値 (最小値) を達成する例も出力する.
+    Args:
+        A: 行列
+        maximize (bool, optional): True ならば最大値, False ならば最小値を求める.
+        mode (bool, optional): _description_. Defaults to False.
 
-    Reference: https://judge.yosupo.jp/submission/34963
+    Reference:
+        https://judge.yosupo.jp/submission/34963
     """
-    if minimize:
-        if mode:
-            score, x=Hungarian([[-a_ij for a_ij in Ai] for Ai in A], False, True)
-            return -score,x
-        else:
-            return -Hungarian([[-a_ij for a_ij in Ai] for Ai in A], False, False)
+
+    if not maximize:
+        pre_sol = Hungarian(A, True)
+        return { 'value': -pre_sol['value'], 'assignment': pre_sol['assignment'] }
 
     inf=1<<31
     N=len(A)
@@ -55,8 +55,4 @@ def Hungarian(A, minimize=False, mode=False):
         else:
             i += 1
 
-    score=0
-    for i,j in enumerate(x):
-        score+=A[i][j]
-
-    return (score,x) if mode else score
+    return { 'value': sum(A[i][j] for i, j in enumerate(x)), 'assignment': x}
