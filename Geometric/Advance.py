@@ -2,11 +2,10 @@ from Point import *
 from Circle import *
 from Triangle import *
 
-def Minimum_Enclosing_Circle(S,Times=100):
+def Minimum_Enclosing_Circle(S, Times = 100):
     """点の集合 S における最小内包円を求める.
     """
 
-    ep=max_ep(*S)
     if len(S)==1:
         return Circle(S[0],0)
     elif len(S)==2:
@@ -16,11 +15,11 @@ def Minimum_Enclosing_Circle(S,Times=100):
         A,B,C=S
         a=abs(B-C); b=abs(C-A); c=abs(A-B)
         a2=a*a; b2=b*b; c2=c*c
-        if compare(a2,b2+c2,ep)==1:
+        if compare(a2, b2 + c2) == 1:
             return Minimum_Enclosing_Circle([B,C])
-        elif compare(b2,c2+a2,ep)==1:
+        elif compare(b2, c2 + a2) == 1:
             return Minimum_Enclosing_Circle([C,A])
-        elif compare(c2,a2+b2,ep)==1:
+        elif compare(c2, a2 + b2) == 1:
             return Minimum_Enclosing_Circle([A,B])
         else:
             ta=a2*(-a2+b2+c2)

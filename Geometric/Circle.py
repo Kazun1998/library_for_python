@@ -3,10 +3,9 @@ from Line import *
 from Affine import *
 
 class Circle():
-    __slots__=["center","radius","id"]
+    __slots__ = ("center", "radius")
 
-    ep=1e-9
-    def __init__(self,Center:Point,Radius:float):
+    def __init__(self, Center: Point, Radius: float):
         """ 2点 P を中心とする半径 r の円を生成する.
 
         P: Point
@@ -14,53 +13,44 @@ class Circle():
         """
         assert Radius>=0
 
-        self.center=Center
-        self.radius=Radius
-        self.id=5
+        self.center = Center
+        self.radius = Radius
+
 
     def __str__(self):
-        return "[Circle] Center: {}, Radius: {}".format(self.center,self.radius)
+        return f"[Circle] Center: {self.center}, Radius: {self.radius}"
 
-    __repr__=__str__
+    __repr__ = __str__
 
     def __contains__(self,Point):
-        return compare(abs(Point-self.center),self.radius,self.ep)==0
+        return compare(abs(Point-self.center), self.radius) == 0
 
 #=== 交差判定
-def has_Intersection_between_Circle_and_Segment(C,L,endpoint=True):
+def has_Intersection_between_Circle_and_Segment(C, S, endpoint = True):
     """円 C と線分 L の交差判定を行う.
 
     """
 
-    c=C.center
-    ep=max(C.ep,L.ep)
-    flag1=(compare(
-        Distance_between_Point_and_Segment(c,L),
-        C.radius,
-        ep)<=0)
-    flag2=(compare(max(abs(c-L.begin),abs(c-L.end)),C.radius,ep)>=0)
+    c = C.center
+    flag1 = compare(Distance_between_Point_and_Segment(c, S), C.radius) <= 0
+    flag2 = compare(max(abs(c-S.begin), abs(c-S.end)), C.radius) >= 0
     return flag1 and flag2
 
 def has_Intersection_between_Circle_and_Line(C,L):
     """円 C と直線 L の交差判定を行う.
 
     """
-    return compare(
-        Distance_between_Point_and_Line(C.center,L),
-        C.radius,
-        max(C.ep,L.ep)
-        )<=0
+    return compare(Distance_between_Point_and_Line(C.center, L), C.radius) <= 0
 
 def has_Intersection_between_Circle_and_Circle(C,D):
     """2つの円 C,D の交差判定を行う.
 
     """
 
-    r=C.radius; s=D.radius;
-    d=abs(C.center-D.center)
-    ep=max(C.ep,D.ep)
+    r = C.radius; s = D.radius;
+    d = abs(C.center - D.center)
 
-    return compare(d,abs(r-s),ep)>=0 and compare(d,r+s,ep)<=0
+    return compare(d, abs(r-s)) >= 0 and compare(d, r+s) <= 0
 
 #=== 交点を求める
 def Intersection_between_Circle_and_Line(C,L):
@@ -123,27 +113,27 @@ def Tangent_to_Circle_from_Point(P,C):
 def Common_Tangent_between_Circle_and_Circle(C,D):
     """ 円 C,D の共通接線を求める."""
 
-    ep=max(C.ep,D.ep)
-    r=C.radius; s=D.radius
-    d=abs(C.center-D.center)
+    r = C.radius; s = D.radius
+    d = abs(C.center - D.center)
 
-    X=[]
+    X = []
 
-    K=Circle(Point(),r)
-    if compare(d,abs(r-s),ep)>=0:
-        a=r*(r-s)/d
-        b=sqrt(max(0,r*r-a*a))
+    K = Circle(Point(), r)
+    if compare(d, abs(r-s)) >= 0:
+        a = r * (r - s) / d
+        b = sqrt(max(0, r * r - a * a))
 
-        X.append(Tangent_to_Circle_on_Point(Point(a,b),K))
-        X.append(Tangent_to_Circle_on_Point(Point(a,-b),K))
-    if compare(d,abs(r+s),ep)>=0:
-        a=r*(r+s)/d
-        b=sqrt(max(0,r*r-a*a))
+        X.append(Tangent_to_Circle_on_Point(Point(a, b), K))
+        X.append(Tangent_to_Circle_on_Point(Point(a, -b), K))
 
-        X.append(Tangent_to_Circle_on_Point(Point(a,b),K))
-        X.append(Tangent_to_Circle_on_Point(Point(a,-b),K))
+    if compare(d, abs(r+s)) >= 0:
+        a = r * (r + s) / d
+        b = sqrt(max(0, r * r - a * a))
 
-    F=Translation_and_Rotate_Affine_Determine(Point(),Point(d,0),C.center,D.center)
+        X.append(Tangent_to_Circle_on_Point( Point(a, b), K))
+        X.append(Tangent_to_Circle_on_Point( Point(a, -b), K))
+
+    F = Translation_and_Rotate_Affine_Determine(Point(), Point(d, 0), C.center, D.center)
     return [F[l] for l in X]
 
 #=== 2つの円の位置関係を求める.
@@ -161,45 +151,44 @@ def Relationship_between_Circle_and_Circle(C: Circle, D:Circle):
     0: 含んでいる
     """
 
-    d=abs(C.center-D.center)
-    r=C.radius; s=D.radius
-    ep=max(C.ep, D.ep)
+    d = abs(C.center - D.center)
+    r = C.radius; s = D.radius
 
-    alpha=compare(d,r+s,ep)
-    if alpha==1:
-        return 4
-    elif alpha==0:
-        return 3
-    else:
-        beta=compare(d,abs(r-s),ep)
-        if beta==1:
-            return 2
-        elif beta==0:
-            return 1
-        else:
-            return 0
+    match compare(d, r + s):
+        case 1:
+            return 4
+        case 0:
+            return 3
+        case _:
+            match compare(d, abs(r - s)):
+                case 1:
+                    return 2
+                case 0:
+                    return 1
+                case _:
+                    return 0
 
 #=== 共通部分
-def Circles_Intersection_Area(C,D):
+def Circles_Intersection_Area(C, D):
     """ 2つの円 C, D の共通部分の面積を求める.
 
     C, D: Circle
     """
 
-    d=abs(C.P-D.P)
-    r=C.r; s=D.r
-    ep=max(C.ep, D.ep)
+    d = abs(C.center - D.center)
+    r = C.radius; s = D.radius
 
-    if compare(d,r+s,ep)==1:
+    if compare(d, r+s) == 1: #共通部分なし
         return 0
-    if compare(d,abs(r-s),ep)==-1:
-        a=min(r,s)
-        return pi*a*a
 
-    alpha=acos((d*d+r*r-s*s)/(2*d*r))
-    beta =acos((d*d-r*r+s*s)/(2*d*s))
+    if compare(d, abs(r - s)) == -1: #一方が他方を含んでいる
+        a = min(r, s)
+        return pi * a * a
 
-    X=r*r*alpha
-    Y=s*s*beta
-    Z=d*r*sin(alpha)
+    alpha = acos((d * d + r * r - s * s) / (2 * d * r))
+    beta = acos((d * d - r * r + s * s) / (2 * d * s))
+
+    X = r * r * alpha
+    Y = s * s * beta
+    Z = d * r * sin(alpha)
     return X+Y-Z
