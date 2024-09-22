@@ -28,6 +28,9 @@ data:
       path: Cumulative_2D.py
       title: Cumulative_2D.py
     - icon: ':warning:'
+      path: Cyclic_List.py
+      title: Cyclic_List.py
+    - icon: ':warning:'
       path: Date.py
       title: Date.py
     - icon: ':warning:'
