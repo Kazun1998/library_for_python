@@ -85,17 +85,22 @@ data:
     \n    fact_inv=[0]*(N+1); fact_inv[-1]=pow(fact[-1], -1, Mod)\n    for i in range(N-1,-1,-1):\n\
     \        fact_inv[i]=(i+1)*fact_inv[i+1]%Mod\n\n    A=[pow(i,N,Mod)*fact_inv[i]%Mod\
     \ for i in range(N+1)]\n    B=[fact_inv[i] if i&1==0 else -fact_inv[i] for i in\
-    \ range(N+1)]\n    return Calc.Convolution(A,B)[:N+1]\n\ndef Bell(N, mode=0):\n\
+    \ range(N+1)]\n    return Calc.Convolution(A,B)[:N+1]\n\ndef Bell(N, mode = False):\n\
     \    \"\"\" Bell \u6570 (\u96C6\u5408 {1,2,...,N} \u306E\u5206\u5272\u306E\u65B9\
-    \u6CD5) B[N] \u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n    F=Exp(Exp(Modulo_Polynomial([0,1],N+1))-1).Poly\n\
-    \    fact=1\n    for i in range(1,N+1):\n        fact=(i*fact)%Mod\n        F[i]=(fact*F[i])%Mod\n\
-    \n    if mode:\n        return F\n    else:\n        return F[N]\n\ndef Motzkin(N,\
-    \ mode=0):\n    \"\"\" Motzkin \u6570 (\u5186\u5468\u4E0A\u306E\u533A\u5225\u304C\
-    \u3064\u304F\u76F8\u7570\u306A\u308B N \u70B9\u3092\u7DDA\u5206\u3092\u3069\u306E\
-    2\u3064\u3082\u5171\u901A\u90E8\u5206\u304C\u306A\u3044 (N \u70B9\u3067\u5171\u6709\
-    \u3082\u7981\u6B62) \u3067\u7D50\u3076\u65B9\u6CD5 (\u7D50\u3070\u308C\u306A\u3044\
-    \u70B9\u304C\u3042\u3063\u3066\u3082\u3088\u3044) \u306E\u6570.\n\n    \"\"\"\n\
-    \n    two_inv=pow(2, -1, Mod)\n    F=((Modulo_Polynomial([1,-1], N+3)-Sqrt(Modulo_Polynomial([1,-2,-3],\
+    \u6CD5) B[N] \u3092\u6C42\u3081\u308B.\n\n    \"\"\"\n    # Bell(X) = exp(exp(X)\
+    \ - 1)\n\n    fact = [1] * (N + 1)\n    for k in range(1, N + 1):\n        fact[k]\
+    \ = (k * fact[k - 1]) % Mod\n\n    fact_inv = [1] * (N + 1)\n    fact_inv[-1]\
+    \ = pow(fact[-1], -1, Mod)\n    for k in range(N - 1, 0, -1):\n        fact_inv[k]\
+    \ = (k + 1) * fact_inv[k + 1] % Mod\n\n    # G = exp(X) - 1\n    G = [0] + fact_inv[1:]\n\
+    \n    # F = exp(G) = exp(exp(X) - 1)\n    F = Exp(Modulo_Polynomial(G, N + 1)).Poly\n\
+    \n    for k in range(1, N + 1):\n        F[k] = fact[k] * F[k] % Mod\n\n    if\
+    \ mode:\n        return F\n    else:\n        return F[N]\n\ndef Motzkin(N, mode=0):\n\
+    \    \"\"\" Motzkin \u6570 (\u5186\u5468\u4E0A\u306E\u533A\u5225\u304C\u3064\u304F\
+    \u76F8\u7570\u306A\u308B N \u70B9\u3092\u7DDA\u5206\u3092\u3069\u306E2\u3064\u3082\
+    \u5171\u901A\u90E8\u5206\u304C\u306A\u3044 (N \u70B9\u3067\u5171\u6709\u3082\u7981\
+    \u6B62) \u3067\u7D50\u3076\u65B9\u6CD5 (\u7D50\u3070\u308C\u306A\u3044\u70B9\u304C\
+    \u3042\u3063\u3066\u3082\u3088\u3044) \u306E\u6570.\n\n    \"\"\"\n\n    two_inv=pow(2,\
+    \ -1, Mod)\n    F=((Modulo_Polynomial([1,-1], N+3)-Sqrt(Modulo_Polynomial([1,-2,-3],\
     \ N+3)))*two_inv)>>2\n\n    if mode:\n        return F.Poly[:N+1]\n    else:\n\
     \        return F[N]\n\n#===\ndef Subset_Sum(X, K):\n    \"\"\" X \u306E\u8981\
     \u7D20\u306E\u3046\u3061, \u4EFB\u610F\u500B\u3092\u7528\u3044\u3066, \u548C\u304C\
@@ -124,7 +129,7 @@ data:
   isVerificationFile: false
   path: Modulo_Sequence/Modulo_Sequence.py
   requiredBy: []
-  timestamp: '2023-08-06 21:39:33+09:00'
+  timestamp: '2024-11-12 23:35:35+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Modulo_Sequence/Modulo_Sequence.py
