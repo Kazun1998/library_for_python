@@ -209,15 +209,29 @@ def Stirling_2nd(N):
     B=[fact_inv[i] if i&1==0 else -fact_inv[i] for i in range(N+1)]
     return Calc.Convolution(A,B)[:N+1]
 
-def Bell(N, mode=0):
+def Bell(N, mode = False):
     """ Bell 数 (集合 {1,2,...,N} の分割の方法) B[N] を求める.
 
     """
-    F=Exp(Exp(Modulo_Polynomial([0,1],N+1))-1).Poly
-    fact=1
-    for i in range(1,N+1):
-        fact=(i*fact)%Mod
-        F[i]=(fact*F[i])%Mod
+    # Bell(X) = exp(exp(X) - 1)
+
+    fact = [1] * (N + 1)
+    for k in range(1, N + 1):
+        fact[k] = (k * fact[k - 1]) % Mod
+
+    fact_inv = [1] * (N + 1)
+    fact_inv[-1] = pow(fact[-1], -1, Mod)
+    for k in range(N - 1, 0, -1):
+        fact_inv[k] = (k + 1) * fact_inv[k + 1] % Mod
+
+    # G = exp(X) - 1
+    G = [0] + fact_inv[1:]
+
+    # F = exp(G) = exp(exp(X) - 1)
+    F = Exp(Modulo_Polynomial(G, N + 1)).Poly
+
+    for k in range(1, N + 1):
+        F[k] = fact[k] * F[k] % Mod
 
     if mode:
         return F
