@@ -43,3 +43,34 @@ class Bitwise_Set:
         """
 
         yield from cls.betweenset_yield(S, cls.universal_set(n))
+
+    @classmethod
+    def build(cls, E):
+        """ 集合 E を表す整数を返す.
+        """
+
+        return sum(1 << k for k in E)
+
+    @classmethod
+    def bit(cls, A, k):
+        return (A >> k) & 1
+
+    @classmethod
+    def add(cls, A, k):
+        return A | (1 << k)
+
+    @classmethod
+    def remove(cls, A, k):
+        return A & (~ (1 << k))
+
+    @classmethod
+    def switch(cls, A, k):
+        return A ^ (1 << k)
+
+    @classmethod
+    def popcount(cls, A: int):
+        return A.bit_count()
+
+    @classmethod
+    def get_min(self, A: int):
+        return (A & (-A)).bit_length() - 1
