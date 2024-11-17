@@ -1,5 +1,9 @@
 from copy import deepcopy
 
+class SingularMatrixError(Exception):
+    def __str__(self):
+        return "非正則行列の逆行列を求めようとしました."
+
 class Modulo_Matrix():
     __slots__=("ele","row","col","size")
 
@@ -105,36 +109,51 @@ class Modulo_Matrix():
             return self.__scale__(other)
 
     def inverse(self):
-        assert self.row==self.col,"正方行列ではありません."
+        inverse, _ = self.inverse_with_determinant()
+        if self is None:
+            raise SingularMatrixError()
 
-        M=self
-        N=M.row
-        R=[[1 if i==j else 0 for j in range(N)] for i in range(N)]
-        T=deepcopy(M.ele)
+        return inverse
+
+    def inverse_with_determinant(self):
+        assert self.row == self.col,"正方行列ではありません."
+
+        M = self
+        N = M.row
+        R = [[1 if i == j else 0 for j in range(N)] for i in range(N)]
+        T = deepcopy(M.ele)
+        det = 1
 
         for j in range(N):
-            if T[j][j]==0:
+            if T[j][j] == 0:
                 for i in range(j+1,N):
                     if T[i][j]:
                         break
                 else:
-                    assert 0, "正則行列ではありません"
+                    return None, 0
 
-                T[j],T[i]=T[i],T[j]
-                R[j],R[i]=R[i],R[j]
-            Tj,Rj=T[j],R[j]
-            inv=pow(Tj[j], -1, Mod)
+                T[j], T[i] = T[i], T[j]
+                R[j], R[i] = R[i], R[j]
+                det = -det
+
+            Tj, Rj = T[j] ,R[j]
+            inv = pow(Tj[j], -1, Mod)
             for k in range(N):
-                Tj[k]*=inv; Tj[k]%=Mod
-                Rj[k]*=inv; Rj[k]%=Mod
+                Tj[k] *=inv; Tj[k] %= Mod
+                Rj[k] *=inv; Rj[k] %= Mod
+                det = (inv * det) % Mod
+
             for i in range(N):
-                if i==j: continue
-                c=T[i][j]
-                Ti,Ri=T[i],R[i]
+                if i == j:
+                    continue
+
+                c = T[i][j]
+                Ti, Ri = T[i], R[i]
                 for k in range(N):
-                    Ti[k]-=Tj[k]*c; Ti[k]%=Mod
-                    Ri[k]-=Rj[k]*c; Ri[k]%=Mod
-        return Modulo_Matrix(R)
+                    Ti[k] -= Tj[k] * c; Ti[k] %= Mod
+                    Ri[k] -= Rj[k] * c; Ri[k] %= Mod
+
+        return Modulo_Matrix(R), det
 
     #スカラー倍
     def __scale__(self, r):
