@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: Modulo_Matrix/Modulo_Matrix.py
     title: Modulo_Matrix
   _extendedRequiredBy: []
@@ -31,7 +31,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Matrix/Determinant.test.py
   requiredBy: []
-  timestamp: '2024-08-02 00:08:17+09:00'
+  timestamp: '2024-11-17 18:19:32+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Matrix/Determinant.test.py

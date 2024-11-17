@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: Modulo_Matrix/Modulo_Matrix.py
     title: Modulo_Matrix
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/matrix_product
     links:
@@ -33,8 +33,8 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Matrix/Product.test.py
   requiredBy: []
-  timestamp: '2024-08-02 00:08:17+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2024-11-17 18:19:32+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Matrix/Product.test.py
 layout: document

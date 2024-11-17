@@ -4,6 +4,9 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: test_verify/yosupo_library_checker/Matrix/Adjugate_Matrix.test.py
+    title: test_verify/yosupo_library_checker/Matrix/Adjugate_Matrix.test.py
+  - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Matrix/Determinant.test.py
     title: test_verify/yosupo_library_checker/Matrix/Determinant.test.py
   - icon: ':heavy_check_mark:'
@@ -15,12 +18,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Matrix/Power.test.py
     title: test_verify/yosupo_library_checker/Matrix/Power.test.py
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test_verify/yosupo_library_checker/Matrix/Product.test.py
     title: test_verify/yosupo_library_checker/Matrix/Product.test.py
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -29,25 +32,28 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "from copy import deepcopy\n\nclass Modulo_Matrix():\n    __slots__=(\"ele\"\
-    ,\"row\",\"col\",\"size\")\n\n    #\u5165\u529B\n    def __init__(self,M):\n \
-    \       \"\"\" \u884C\u5217 M \u306E\u5B9A\u7FA9\n\n        M: \u884C\u5217\n\
-    \        \u203B Mod: \u6CD5\u306F\u30B0\u30ED\u30FC\u30D0\u30EB\u5909\u6570\u304B\
-    \u3089\u6307\u5B9A\n        \"\"\"\n\n        self.ele=[[x%Mod for x in X] for\
-    \ X in M]\n        R=len(M)\n        if R!=0:\n            C=len(M[0])\n     \
-    \   else:\n            C=0\n        self.row=R\n        self.col=C\n        self.size=(R,C)\n\
-    \n    #\u51FA\u529B\n    def __str__(self):\n        return \"[\"+\"\\n\".join(map(str,self.ele))+\"\
-    ]\"\n\n    def __repr__(self):\n        return str(self)\n\n    # \u96F6\u884C\
-    \u5217, \u5358\u4F4D\u884C\u5217\n    @classmethod\n    def Zero_Matrix(cls, row,\
-    \ col):\n        return Modulo_Matrix([[0] * col for _ in range(row)])\n\n   \
-    \ @classmethod\n    def Identity_Matrix(cls, N):\n        return Modulo_Matrix([[1\
-    \ if i==j else 0 for j in range(N)] for i in range(N)])\n\n    #+,-\n    def __pos__(self):\n\
-    \        return self\n\n    def __neg__(self):\n        return self.__scale__(-1)\n\
-    \n    #\u52A0\u6CD5\n    def __add__(self, other):\n        C = [None] * self.row\n\
-    \        for i, (Ai, Bi) in enumerate(zip(self.ele, other.ele)):\n           \
-    \ C[i] = [Ai[j] + Bi[j] for j in range(self.col)]\n\n        return Modulo_Matrix(C)\n\
-    \n    def __iadd__(self,other):\n        M=self.ele; N=other.ele\n\n        for\
-    \ i in range(self.row):\n            Mi,Ni=M[i],N[i]\n            for j in range(self.col):\n\
+  code: "from copy import deepcopy\n\nclass SingularMatrixError(Exception):\n    def\
+    \ __str__(self):\n        return \"\u975E\u6B63\u5247\u884C\u5217\u306E\u9006\u884C\
+    \u5217\u3092\u6C42\u3081\u3088\u3046\u3068\u3057\u307E\u3057\u305F.\"\n\nclass\
+    \ Modulo_Matrix():\n    __slots__=(\"ele\",\"row\",\"col\",\"size\")\n\n    #\u5165\
+    \u529B\n    def __init__(self,M):\n        \"\"\" \u884C\u5217 M \u306E\u5B9A\u7FA9\
+    \n\n        M: \u884C\u5217\n        \u203B Mod: \u6CD5\u306F\u30B0\u30ED\u30FC\
+    \u30D0\u30EB\u5909\u6570\u304B\u3089\u6307\u5B9A\n        \"\"\"\n\n        self.ele=[[x%Mod\
+    \ for x in X] for X in M]\n        R=len(M)\n        if R!=0:\n            C=len(M[0])\n\
+    \        else:\n            C=0\n        self.row=R\n        self.col=C\n    \
+    \    self.size=(R,C)\n\n    #\u51FA\u529B\n    def __str__(self):\n        return\
+    \ \"[\"+\"\\n\".join(map(str,self.ele))+\"]\"\n\n    def __repr__(self):\n   \
+    \     return str(self)\n\n    # \u96F6\u884C\u5217, \u5358\u4F4D\u884C\u5217\n\
+    \    @classmethod\n    def Zero_Matrix(cls, row, col):\n        return Modulo_Matrix([[0]\
+    \ * col for _ in range(row)])\n\n    @classmethod\n    def Identity_Matrix(cls,\
+    \ N):\n        return Modulo_Matrix([[1 if i==j else 0 for j in range(N)] for\
+    \ i in range(N)])\n\n    #+,-\n    def __pos__(self):\n        return self\n\n\
+    \    def __neg__(self):\n        return self.__scale__(-1)\n\n    #\u52A0\u6CD5\
+    \n    def __add__(self, other):\n        C = [None] * self.row\n        for i,\
+    \ (Ai, Bi) in enumerate(zip(self.ele, other.ele)):\n            C[i] = [Ai[j]\
+    \ + Bi[j] for j in range(self.col)]\n\n        return Modulo_Matrix(C)\n\n   \
+    \ def __iadd__(self,other):\n        M=self.ele; N=other.ele\n\n        for i\
+    \ in range(self.row):\n            Mi,Ni=M[i],N[i]\n            for j in range(self.col):\n\
     \                Mi[j]+=Ni[j]\n                Mi[j]%=Mod\n        return self\n\
     \n    #\u6E1B\u6CD5\n    def __sub__(self,other):\n        C = [None] * self.row\n\
     \        for i, (Ai, Bi) in enumerate(zip(self.ele, other.ele)):\n           \
@@ -65,20 +71,25 @@ data:
     \                for j, b_kj in enumerate(B[k]):\n                    Ci[j] =\
     \ (Ci[j] + a_ik * b_kj) % Mod\n\n        return Modulo_Matrix(C)\n\n    def __rmul__(self,other):\n\
     \        if isinstance(other,int):\n            return self.__scale__(other)\n\
-    \n    def inverse(self):\n        assert self.row==self.col,\"\u6B63\u65B9\u884C\
-    \u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093.\"\n\n        M=self\n      \
-    \  N=M.row\n        R=[[1 if i==j else 0 for j in range(N)] for i in range(N)]\n\
-    \        T=deepcopy(M.ele)\n\n        for j in range(N):\n            if T[j][j]==0:\n\
-    \                for i in range(j+1,N):\n                    if T[i][j]:\n   \
-    \                     break\n                else:\n                    assert\
-    \ 0, \"\u6B63\u5247\u884C\u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093\"\n\n\
-    \                T[j],T[i]=T[i],T[j]\n                R[j],R[i]=R[i],R[j]\n  \
-    \          Tj,Rj=T[j],R[j]\n            inv=pow(Tj[j], -1, Mod)\n            for\
-    \ k in range(N):\n                Tj[k]*=inv; Tj[k]%=Mod\n                Rj[k]*=inv;\
-    \ Rj[k]%=Mod\n            for i in range(N):\n                if i==j: continue\n\
-    \                c=T[i][j]\n                Ti,Ri=T[i],R[i]\n                for\
-    \ k in range(N):\n                    Ti[k]-=Tj[k]*c; Ti[k]%=Mod\n           \
-    \         Ri[k]-=Rj[k]*c; Ri[k]%=Mod\n        return Modulo_Matrix(R)\n\n    #\u30B9\
+    \n    def inverse(self):\n        inverse, _ = self.inverse_with_determinant()\n\
+    \        if self is None:\n            raise SingularMatrixError()\n\n       \
+    \ return inverse\n\n    def inverse_with_determinant(self):\n        assert self.row\
+    \ == self.col,\"\u6B63\u65B9\u884C\u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093\
+    .\"\n\n        M = self\n        N = M.row\n        R = [[1 if i == j else 0 for\
+    \ j in range(N)] for i in range(N)]\n        T = deepcopy(M.ele)\n        det\
+    \ = 1\n\n        for j in range(N):\n            if T[j][j] == 0:\n          \
+    \      for i in range(j+1,N):\n                    if T[i][j]:\n             \
+    \           break\n                else:\n                    return None, 0\n\
+    \n                T[j], T[i] = T[i], T[j]\n                R[j], R[i] = R[i],\
+    \ R[j]\n                det = -det % Mod\n\n            Tj, Rj = T[j] ,R[j]\n\
+    \            inv = pow(Tj[j], -1, Mod)\n            det = (Tj[j] * det) % Mod\n\
+    \n            for k in range(N):\n                Tj[k] *=inv; Tj[k] %= Mod\n\
+    \                Rj[k] *=inv; Rj[k] %= Mod\n\n            for i in range(N):\n\
+    \                if i == j:\n                    continue\n\n                c\
+    \ = T[i][j]\n                Ti, Ri = T[i], R[i]\n                for k in range(N):\n\
+    \                    Ti[k] -= Tj[k] * c; Ti[k] %= Mod\n                    Ri[k]\
+    \ -= Rj[k] * c; Ri[k] %= Mod\n\n        for i in range(N):\n            det =\
+    \ (T[i][i] * det) % Mod\n\n        return Modulo_Matrix(R), det\n\n    #\u30B9\
     \u30AB\u30E9\u30FC\u500D\n    def __scale__(self, r):\n        r %= Mod\n    \
     \    return Modulo_Matrix([[r * m_ij for m_ij in Mi] for Mi in self.ele])\n\n\
     \    #\u7D2F\u4E57\n    def __pow__(self, n):\n        assert self.row==self.col,\
@@ -187,17 +198,28 @@ data:
     \          p*=-T[j+1][j]; p%=Mod\n            c=p*T[j][i]%Mod\n            for\
     \ k in range(j+1):\n                P[k]+=c*dp[j][k]\n                P[k]%=Mod\n\
     \    P=dp[-1]\n    for i in range(N+1):\n        if i%2:\n            P[~i]*=-1;\
-    \ P[~i]%=Mod\n    return P\n\n#===\nMod=998244353\n"
+    \ P[~i]%=Mod\n    return P\n\ndef Adjugate_Matrix(A):\n    \"\"\" A \u306E\u4F59\
+    \u56E0\u5B50\u884C\u5217 adj A := ((-1)^(i+j) det A_{i,j}) \u3092\u6C42\u3081\u308B\
+    .\n\n    Args:\n        A (Matrix): \u6B63\u65B9\u884C\u5217\n    \"\"\"\n\n \
+    \   from random import randint\n\n    N = A.row\n    A_ext = [[0] * (N + 1) for\
+    \ _ in range(N + 1)]\n    for i in range(N):\n        for j in range(N):\n   \
+    \         A_ext[i][j] = A[i][j]\n\n    for i in range(N):\n        A_ext[i][N]\
+    \ = A_ext[N][i] = randint(0, Mod - 1)\n\n    A_ext_inv, det = Modulo_Matrix(A_ext).inverse_with_determinant()\n\
+    \n    if A_ext_inv is None:\n        return Modulo_Matrix.Zero_Matrix(N, N)\n\n\
+    \    adj = [[det * ((A_ext_inv[N][N] * A_ext_inv[i][j] - A_ext_inv[i][N] * A_ext_inv[N][j])\
+    \ % Mod) for j in range(N)] for i in range(N)]\n    return Modulo_Matrix(adj)\n\
+    \n#===\nMod=998244353\n"
   dependsOn: []
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py
   requiredBy: []
-  timestamp: '2024-08-02 00:08:17+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2024-11-17 18:19:32+09:00'
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Inverse.test.py
   - test_verify/yosupo_library_checker/Matrix/Power.test.py
   - test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
+  - test_verify/yosupo_library_checker/Matrix/Adjugate_Matrix.test.py
   - test_verify/yosupo_library_checker/Matrix/Determinant.test.py
   - test_verify/yosupo_library_checker/Matrix/Product.test.py
 documentation_of: Modulo_Matrix/Modulo_Matrix.py
