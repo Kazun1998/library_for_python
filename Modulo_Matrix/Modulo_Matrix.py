@@ -485,5 +485,30 @@ def Characteristic_Polynomial(M):
             P[~i]*=-1; P[~i]%=Mod
     return P
 
+def Adjugate_Matrix(A):
+    """ A の余因子行列 adj A := ((-1)^(i+j) det A_{i,j}) を求める.
+
+    Args:
+        A (Matrix): 正方行列
+    """
+
+    from random import randint
+
+    N = A.row
+    A_ext = [[0] * (N + 1) for _ in range(N + 1)]
+    for i in range(N):
+        for j in range(N):
+            A_ext[i][j] = A[i][j]
+
+    for i in range(N):
+        A_ext[i][N] = A_ext[N][i] = randint(0, Mod - 1)
+
+    A_ext_inv, det = A_ext.inverse_with_determinant()
+    if A_ext_inv:
+        return Modulo_Matrix.Zero_Matrix(N, N)
+
+    adj = [[det * (A_ext_inv[N][N] * A_ext_inv[i][j] - A_ext_inv[i][N] * A_ext_inv[N][j]) % Mod for j in range(N)] for i in range(N)]
+    return Modulo_Matrix(adj)
+
 #===
 Mod=998244353
