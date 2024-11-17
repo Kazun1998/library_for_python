@@ -134,14 +134,15 @@ class Modulo_Matrix():
 
                 T[j], T[i] = T[i], T[j]
                 R[j], R[i] = R[i], R[j]
-                det = -det
+                det = -det % Mod
 
             Tj, Rj = T[j] ,R[j]
             inv = pow(Tj[j], -1, Mod)
+            det = (Tj[j] * det) % Mod
+
             for k in range(N):
                 Tj[k] *=inv; Tj[k] %= Mod
                 Rj[k] *=inv; Rj[k] %= Mod
-                det = (inv * det) % Mod
 
             for i in range(N):
                 if i == j:
@@ -152,6 +153,9 @@ class Modulo_Matrix():
                 for k in range(N):
                     Ti[k] -= Tj[k] * c; Ti[k] %= Mod
                     Ri[k] -= Rj[k] * c; Ri[k] %= Mod
+
+        for i in range(N):
+            det = (T[i][i] * det) % Mod
 
         return Modulo_Matrix(R), det
 
@@ -503,11 +507,12 @@ def Adjugate_Matrix(A):
     for i in range(N):
         A_ext[i][N] = A_ext[N][i] = randint(0, Mod - 1)
 
-    A_ext_inv, det = A_ext.inverse_with_determinant()
-    if A_ext_inv:
+    A_ext_inv, det = Modulo_Matrix(A_ext).inverse_with_determinant()
+
+    if A_ext_inv is None:
         return Modulo_Matrix.Zero_Matrix(N, N)
 
-    adj = [[det * (A_ext_inv[N][N] * A_ext_inv[i][j] - A_ext_inv[i][N] * A_ext_inv[N][j]) % Mod for j in range(N)] for i in range(N)]
+    adj = [[det * ((A_ext_inv[N][N] * A_ext_inv[i][j] - A_ext_inv[i][N] * A_ext_inv[N][j]) % Mod) for j in range(N)] for i in range(N)]
     return Modulo_Matrix(adj)
 
 #===
