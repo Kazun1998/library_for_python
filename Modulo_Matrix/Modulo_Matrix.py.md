@@ -18,12 +18,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Matrix/Power.test.py
     title: test_verify/yosupo_library_checker/Matrix/Power.test.py
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Matrix/Product.test.py
     title: test_verify/yosupo_library_checker/Matrix/Product.test.py
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
@@ -214,7 +214,7 @@ data:
   path: Modulo_Matrix/Modulo_Matrix.py
   requiredBy: []
   timestamp: '2024-11-17 18:19:32+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Inverse.test.py
   - test_verify/yosupo_library_checker/Matrix/Power.test.py
