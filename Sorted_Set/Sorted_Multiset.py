@@ -40,6 +40,9 @@ class Sorted_Multiset:
     def __bool__(self):
         return bool(self.N)
 
+    def is_empty(self):
+        return self.N == 0
+
     def __str__(self):
         string=str(list(self))
         return "{"+string[1:-1]+"}"
@@ -215,6 +218,9 @@ class Sorted_Multiset:
 
         equal=True ならば, a < value が a <= value になる.
         """
+
+        if self.is_empty():
+            return 0
 
         count=0
         if equal:

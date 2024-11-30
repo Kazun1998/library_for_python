@@ -1,5 +1,9 @@
 from copy import deepcopy
 
+class SingularMatrixError(Exception):
+    def __str__(self):
+        return "非正則行列の逆行列を求めようとしました."
+
 class Modulo_Matrix():
     __slots__=("ele","row","col","size")
 
@@ -82,59 +86,78 @@ class Modulo_Matrix():
 
     #乗法
     def __mul__(self, other):
-        if isinstance(other, Modulo_Matrix):
-            assert self.col == other.row, f"左側の列と右側の行が一致しません (left: {self.col}, right:{other.row})."
-
-            A = self.ele; B = other.ele
-            C = [[0] * other.col for _ in range(self.row)]
-
-            for i in range(self.row):
-                Ai = A[i]
-                Ci = C[i]
-                for k in range(self.col):
-                    a_ik = Ai[k]
-                    Bk = B[k]
-                    for j in range(other.col):
-                        Ci[j] = (Ci[j] + a_ik * Bk[j]) % Mod
-            return Modulo_Matrix(C)
-        elif isinstance(other,int):
+        if isinstance(other, int):
             return self.__scale__(other)
+
+        if not isinstance(other, Modulo_Matrix):
+            raise TypeError
+
+        assert self.col == other.row, f"左側の列と右側の行が一致しません (left: {self.col}, right:{other.row})."
+
+        A = self.ele; B = other.ele
+        C = [[0] * other.col for _ in range(self.row)]
+
+        for i, Ci in enumerate(C):
+            for k, a_ik in enumerate(A[i]):
+                for j, b_kj in enumerate(B[k]):
+                    Ci[j] = (Ci[j] + a_ik * b_kj) % Mod
+
+        return Modulo_Matrix(C)
 
     def __rmul__(self,other):
         if isinstance(other,int):
             return self.__scale__(other)
 
     def inverse(self):
-        assert self.row==self.col,"正方行列ではありません."
+        inverse, _ = self.inverse_with_determinant()
+        if self is None:
+            raise SingularMatrixError()
 
-        M=self
-        N=M.row
-        R=[[1 if i==j else 0 for j in range(N)] for i in range(N)]
-        T=deepcopy(M.ele)
+        return inverse
+
+    def inverse_with_determinant(self):
+        assert self.row == self.col,"正方行列ではありません."
+
+        M = self
+        N = M.row
+        R = [[1 if i == j else 0 for j in range(N)] for i in range(N)]
+        T = deepcopy(M.ele)
+        det = 1
 
         for j in range(N):
-            if T[j][j]==0:
+            if T[j][j] == 0:
                 for i in range(j+1,N):
                     if T[i][j]:
                         break
                 else:
-                    assert 0, "正則行列ではありません"
+                    return None, 0
 
-                T[j],T[i]=T[i],T[j]
-                R[j],R[i]=R[i],R[j]
-            Tj,Rj=T[j],R[j]
-            inv=pow(Tj[j], -1, Mod)
+                T[j], T[i] = T[i], T[j]
+                R[j], R[i] = R[i], R[j]
+                det = -det % Mod
+
+            Tj, Rj = T[j] ,R[j]
+            inv = pow(Tj[j], -1, Mod)
+            det = (Tj[j] * det) % Mod
+
             for k in range(N):
-                Tj[k]*=inv; Tj[k]%=Mod
-                Rj[k]*=inv; Rj[k]%=Mod
+                Tj[k] *=inv; Tj[k] %= Mod
+                Rj[k] *=inv; Rj[k] %= Mod
+
             for i in range(N):
-                if i==j: continue
-                c=T[i][j]
-                Ti,Ri=T[i],R[i]
+                if i == j:
+                    continue
+
+                c = T[i][j]
+                Ti, Ri = T[i], R[i]
                 for k in range(N):
-                    Ti[k]-=Tj[k]*c; Ti[k]%=Mod
-                    Ri[k]-=Rj[k]*c; Ri[k]%=Mod
-        return Modulo_Matrix(R)
+                    Ti[k] -= Tj[k] * c; Ti[k] %= Mod
+                    Ri[k] -= Rj[k] * c; Ri[k] %= Mod
+
+        for i in range(N):
+            det = (T[i][i] * det) % Mod
+
+        return Modulo_Matrix(R), det
 
     #スカラー倍
     def __scale__(self, r):
@@ -172,101 +195,85 @@ class Modulo_Matrix():
 
     #行基本変形
     def row_reduce(self):
-        M=self
-        (R,C)=M.size
-        T=[]
+        (row, col) = self.size
 
-        for i in range(R):
-            U=[]
-            for j in range(C):
-                U.append(M.ele[i][j])
-            T.append(U)
+        T = deepcopy(self.ele)
 
-        I=0
-        for J in range(C):
-            if T[I][J]==0:
-                for i in range(I+1,R):
-                    if T[i][J]!=0:
-                        T[i],T[I]=T[I],T[i]
+        I = 0
+        for J in range(col):
+            if T[I][J] == 0:
+                for i in range(I + 1, row):
+                    if T[i][J] != 0:
+                        T[i], T[I] = T[I], T[i]
                         break
+                else:
+                    continue
 
-            if T[I][J]!=0:
-                u=T[I][J]
-                u_inv=pow(u, -1, Mod)
-                for j in range(C):
-                    T[I][j]*=u_inv
-                    T[I][j]%=Mod
+            u = T[I][J]
+            u_inv = pow(u, -1, Mod)
+            for j in range(col):
+                T[I][j] *= u_inv
+                T[I][j] %= Mod
 
-                for i in range(R):
-                    if i!=I:
-                        v=T[i][J]
-                        for j in range(C):
-                            T[i][j]-=v*T[I][j]
-                            T[i][j]%=Mod
-                I+=1
-                if I==R:
-                    break
+            for i in range(row):
+                if i == I:
+                    continue
+
+                v = T[i][J]
+                for j in range(col):
+                    T[i][j] -= v * T[I][j]
+                    T[i][j] %= Mod
+            I += 1
+            if I == row:
+                break
 
         return Modulo_Matrix(T)
 
     #列基本変形
     def column_reduce(self):
-        M=self
-        (R,C)=M.size
+        (row, col) = self.size
 
-        T=[]
-        for i in range(R):
-            U=[]
-            for j in range(C):
-                U.append(M.ele[i][j])
-            T.append(U)
+        T = deepcopy(self.ele)
 
-        J=0
-        for I in range(R):
-            if T[I][J]==0:
-                for j in range(J+1,C):
-                    if T[I][j]!=0:
-                        for k in range(R):
-                            T[k][j],T[k][J]=T[k][J],T[k][j]
+        J = 0
+        for I in range(row):
+            if T[I][J] ==0 :
+                for j in range(J + 1, col):
+                    if T[I][j] != 0:
+                        for k in range(row):
+                            T[k][j], T[k][J] = T[k][J], T[k][j]
                         break
+                else:
+                    continue
 
-            if T[I][J]!=0:
-                u=T[I][J]
-                u_inv=pow(u, -1, Mod)
-                for i in range(R):
-                    T[i][J]*=u_inv
-                    T[i][J]%=Mod
+            u = T[I][J]
+            u_inv = pow(u, -1, Mod)
+            for i in range(row):
+                T[i][J] *= u_inv
+                T[i][J] %= Mod
 
-                for j in range(C):
-                    if j!=J:
-                        v=T[I][j]
-                        for i in range(R):
-                            T[i][j]-=v*T[i][J]
-                            T[i][j]%=Mod
-                J+=1
-                if J==C:
-                    break
+            for j in range(col):
+                if j != J:
+                    v = T[I][j]
+                    for i in range(row):
+                        T[i][j] -= v * T[i][J]
+                        T[i][j] %= Mod
+            J += 1
+            if J == col:
+                break
 
         return Modulo_Matrix(T)
 
     #行列の階数
     def rank(self):
-        M=self.row_reduce()
-        (R,C)=M.size
-        T=M.ele
+        row_reduced = self.row_reduce()
+        (row, col) = row_reduced.size
 
-        rnk=0
-        for i in range(R):
-            f=False
-            for j in range(C):
-                if T[i][j]!=0:
-                    f=True
-                    break
-
-            if f:
-                rnk+=1
-            else:
-                break
+        rnk = 0
+        for i in range(row):
+            Ti = row_reduced.ele[i]
+            if any(Ti[j] for j in range(col)):
+                rnk += 1
 
         return rnk
 
@@ -481,6 +488,32 @@ def Characteristic_Polynomial(M):
         if i%2:
             P[~i]*=-1; P[~i]%=Mod
     return P
+
+def Adjugate_Matrix(A):
+    """ A の余因子行列 adj A := ((-1)^(i+j) det A_{i,j}) を求める.
+
+    Args:
+        A (Matrix): 正方行列
+    """
+
+    from random import randint
+
+    N = A.row
+    A_ext = [[0] * (N + 1) for _ in range(N + 1)]
+    for i in range(N):
+        for j in range(N):
+            A_ext[i][j] = A[i][j]
+
+    for i in range(N):
+        A_ext[i][N] = A_ext[N][i] = randint(0, Mod - 1)
+
+    A_ext_inv, det = Modulo_Matrix(A_ext).inverse_with_determinant()
+
+    if A_ext_inv is None:
+        return Modulo_Matrix.Zero_Matrix(N, N)
+
+    adj = [[det * ((A_ext_inv[N][N] * A_ext_inv[i][j] - A_ext_inv[i][N] * A_ext_inv[N][j]) % Mod) for j in range(N)] for i in range(N)]
+    return Modulo_Matrix(adj)
 
 #===
 Mod=998244353
