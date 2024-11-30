@@ -1,117 +1,171 @@
-def Knapsack_01_Weight(items, weight):
-    """ 非常に軽い 01- ナップサック問題を解く.
+class Knapsack_item:
+    def __init__(self, value, weight):
+        self.value = value
+        self.weight = weight
 
-    items: (重さ, 価値) の形のタプル
-    weight: ナップサックの耐久重量
-    """
+    def __repr__(self):
+        return f"value: {self.value}, weight: {self.weight}"
 
-    dp = [0] * (weight + 1)
-    for item in items:
-        if item is None:
-            continue
+    __str__ = __repr__
 
-        w, v = item
-        for a in range(weight, w - 1, -1):
-            dp[a] = max(dp[a], dp[a - w] + v)
+class Knapsack_01:
+    @classmethod
+    def solve(cls, items, capacity):
+        """ 01-Knapsack 問題を解く
+        """
 
-    packed_value = max(dp)
-    packed_weight = dp.index(packed_value)
-    knapsack = []
-    for i, item in enumerate(items):
-        if item is None:
-            continue
+        n = len(items)
+        if n <= 40:
+            return cls.solve_small(items, capacity)
 
-        w, v = item
-        if (w <= packed_weight) and (dp[packed_weight] == dp[packed_weight - w] + v):
-            knapsack.append(i)
-            packed_weight -= w
+        cost_by_weight = n * capacity
+        cost_by_value = n * sum(item.value for item in items)
 
-    return { 'value': packed_value, 'knapsack': knapsack }
+        if cost_by_weight <= cost_by_value:
+            return cls.solve_weight(items, capacity)
+        else:
+            return cls.solve_value(items, capacity)
 
-def Knapsack_01_Value(items, weight):
-    """ 価値が非常に小さい 01-Knapsack 問題を解く.
+    @classmethod
+    def solve_weight(_, items: list[Knapsack_item], capacity: int):
+        """ 各アイテムの重さが軽い場合の 01-Knapsack 問題を解く.
 
-    items: (価値, 重さ) の形のタプル
-    weight: ナップサックの耐久重量
+        Args:
+            items (list[Knapsack_item]): アイテムのリスト
+            weight (int): ナップサックの容量
+        """
 
-    [計算量]
-    O(N sum(v))
-    """
+        dp = [0] * (capacity + 1)
+        for item in items:
+            if item is None:
+                continue
 
-    v_sum = sum(v for _, v in items)
+            for a in range(capacity, item.weight - 1, -1):
+                dp[a] = max(dp[a], dp[a - item.weight] + item.value)
 
-    dp = [weight + 1] * (v_sum + 1)
-    dp[0] = 0
-    for item in items:
-        if item is None:
-            continue
+        packed_value = max(dp)
+        packed_weight = dp.index(packed_value)
+        knapsack = []
+        for i, item in enumerate(items):
+            if item is None:
+                continue
 
-        w, v = item
-        for a in range(v_sum, v - 1, -1):
-            dp[a] = min(dp[a], dp[a - v] + w)
+            if (item.weight <= packed_weight) and (dp[packed_weight] == dp[packed_weight - item.weight] + item.value):
+                knapsack.append(i)
+                packed_weight -= item.weight
 
-    value = pointer = max(v for v in range(v_sum + 1) if dp[v] <= weight)
-    knapsack = []
-    for i, item in enumerate(items):
-        if item is None:
-            continue
+        return { 'value': packed_value, 'packed': knapsack }
 
-        w, v = item
-        if dp[pointer] == dp[pointer - v] + w:
-            knapsack.append(i)
-            pointer -= v
+    @classmethod
+    def solve_value(_, items: list[Knapsack_item], capacity: int):
+        """ 各アイテムの価値が小さい 01-Knapsack 問題を解く.
 
-    return { 'value': value, 'knapsack': knapsack }
+        Args:
+            items (list[Knapsack_item]): アイテムのリスト
+            weight (int): ナップサックの容量
+        """
 
-def Knapsack_01_Middle(List,Weight,Mode=False):
-    """個数が非常に少ない01-Knapsack Problemを (半分全列挙で) 解く.
+        value_sum = sum(item.value for item in items)
+        dp = [capacity + 1] * (value_sum + 1)
+        dp[0] = 0
 
-    List:各要素はタプル(v,w) の形で, vは価値, wは重さ
-    [計算量]
-    O(N 2^(N/2))
+        for item in items:
+            if item is None:
+                continue
 
-    [参考元]
-    https://tjkendev.github.io/procon-library/python/dp/knapsack-meet-in-the-middle.html
-    """
+            for a in range(value_sum, item.value - 1, -1):
+                dp[a] = min(dp[a], dp[a - item.value] + item.weight)
 
-    def subset_sum(S):
-        T={0:0}
-        for v,w in S:
-            T1=dict(T)
-            for key,val in T.items():
-                a=key+w
-                if a>Weight:
+        value = pointer = max(v for v in range(value_sum+ 1) if dp[v] <= capacity)
+        knapsack = []
+        for i, item in enumerate(items):
+            if item is None:
+                continue
+
+            if dp[pointer] == dp[pointer - item.value] + item.weight:
+                knapsack.append(i)
+                pointer -= item.value
+
+        return { 'value': value, 'packed': knapsack }
+
+    @classmethod
+    def __subset_sum(_, items: list[Knapsack_item], capacity: int):
+        def bit(x, k):
+            return (x >> k) & 1
+
+        memo = { }
+        n = len(items)
+        for E in range(1 << n):
+            partial_value = 0
+            partial_weight = 0
+
+            for i in range(n):
+                if bit(E, i) == 0:
                     continue
-                if a in T1:
-                    T1[a]=max(T1[a],val + v)
-                else:
-                    T1[a]=val+v
-            T=T1
 
-        v=-1
-        R=[]
-        for w in sorted(T):
-            if T[w]>v:
-                v=T[w]
-                R.append((v,w))
-        return R
+                partial_value += items[i].value
+                partial_weight += items[i].weight
 
-    def merge(S,T):
-        T=T[::-1]
-        it=iter(T)
-        v1,w1=next(it)
+            if partial_weight > capacity:
+                continue
 
-        t=0
+            if partial_weight in memo:
+                memoed_value, F = memo[partial_weight]
+                if memoed_value <= partial_value:
+                    memo[partial_weight] = (partial_value, F)
+            else:
+                memo[partial_weight] = (partial_value, E)
 
-        for v,w in S:
-            while w+w1>Weight:
-                v1,w1=next(it)
+        champion_value = -1
+        res = []
+        for key in sorted(memo):
+            value, E = memo[key]
+            if value <= champion_value:
+                continue
 
-            if t<v+v1:
-                t=v+v1
-        return t
+            res.append((value, key, E))
+            champion_value = value
+        return res
 
-    N=len(List)
-    A=subset_sum(List[:N//2])
-    B=subset_sum(List[N//2:])
-    return merge(A,B)
+    @classmethod
+    def __merge(cls, S, T, capacity):
+        T.reverse()
+        it = iter(T)
+        v1, w1, F = next(it)
+
+        t = 0
+        E0 = 0
+        F0 = 0
+
+        for v, w, E in S:
+            while w + w1 > capacity:
+                v1, w1, F = next(it)
+
+            if t < v + v1:
+                t = v + v1
+                E0 = E
+                F0 = F
+
+        return t, E0, F0
+
+    @classmethod
+    def solve_small(cls, items: list[Knapsack_item], capacity: int):
+        """ アイテムの個数が小さい 01-Knapsack 問題を解く.
+
+        Args:
+            items (list[Knapsack_item]): アイテムのリスト
+            capacity (int): ナップサックの容量
+
+        Reference:
+            https://tjkendev.github.io/procon-library/python/dp/knapsack-meet-in-the-middle.html
+        """
+
+        n = len(items)
+        A = cls.__subset_sum(items[:n//2], capacity)
+        B = cls.__subset_sum(items[n//2:], capacity)
+
+        value, E, F  = cls.__merge(A, B, capacity)
+        E_bit = [i for i in range(n // 2) if (E >> i) & 1 ]
+        F_bit = [j for j in range(n // 2, n) if (F >> j) & 1]
+
+        return { 'value': value, 'packed': E_bit + [f + n // 2 for f in F_bit] }
