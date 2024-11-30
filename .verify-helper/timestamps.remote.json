@@ -14,6 +14,7 @@
 "test_verify/yosupo_library_checker/Data_Structure/Double_Ended_Priority_Queue-Sorted_Multiset.test.py": "2024-06-26 00:19:30 +0900",
 "test_verify/yosupo_library_checker/Data_Structure/Dual_Segment_Tree.test.py": "2023-07-08 23:55:39 +0900",
 "test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py": "2023-03-20 04:05:01 +0900",
+"test_verify/yosupo_library_checker/Data_Structure/Longest_Increasing_Subsequence.test.py": "2024-12-01 02:14:44 +0900",
 "test_verify/yosupo_library_checker/Data_Structure/Number_of_Subsequences.test.py": "2022-11-26 05:09:30 +0900",
 "test_verify/yosupo_library_checker/Data_Structure/Predecessor_Problem-Ordered_Set.test.py": "2022-11-24 22:57:20 +0900",
 "test_verify/yosupo_library_checker/Data_Structure/Queue_Operate_All_Composite.test.py": "2023-08-03 01:41:13 +0900",
