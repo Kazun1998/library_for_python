@@ -24,16 +24,7 @@ class Trie_Tree():
 
         S: 列
         """
-        nodes=self.nodes
-        node_id=0
-        nodes[node_id].prefix_count+=1
-        for x in S:
-            if x not in nodes[node_id].next:
-                nodes[node_id].next[x]=len(nodes)
-                nodes.append(Trie_Node(x))
-            node_id=nodes[node_id].next[x]
-            nodes[node_id].prefix_count+=1
-        nodes[node_id].terminal_count+=1
+        return self.insert_continuation(S)
 
     def insert_continuation(self, S, start_id=0):
         """ 列 S を登録する. ただし, 登録の場所は start_id から始まるとする.
@@ -57,13 +48,7 @@ class Trie_Tree():
 
         S: 列
         """
-        nodes=self.nodes
-        node_id=0
-        for x in S:
-            if x not in nodes[node_id].next:
-                return 0
-            node_id=nodes[node_id].next[x]
-        return nodes[node_id].terminal_count
+        return self.count_continuation(S)
 
     def count_continuation(self,S,start_id=0):
         """ 列 S の数を数える. ただし, 検索の場所は start_id から始まるとする.
@@ -99,13 +84,7 @@ class Trie_Tree():
 
         S: 列
         """
-        nodes=self.nodes
-        node_id=0
-        for x in S:
-            if x not in nodes[node_id].next:
-                return False
-            node_id=nodes[node_id].next[x]
-        return True
+        return self.search_prefix_continuation(S)
 
     def search_prefix_continuation(self, S, start_id=0):
         """ S を prefix に持つ列が存在するかどうかを判定する. ただし, 検索の場所は start_id から始まるとする.
@@ -133,32 +112,27 @@ class Trie_Tree():
 
         S: 列
         """
-        nodes=self.nodes
-        node_id=0
-        for x in S:
-            if x not in nodes[node_id].next:
-                return 0
-            node_id=nodes[node_id].next[x]
+        return self.count_prefixing_continuation(S, equal)
 
-        N=nodes[node_id]
-        if equal:
-            return N.prefix_count
-        else:
-            return N.prefix_count-N.terminal_count
-
-    def count_prefixing_continuation(self,S,start_id=0):
+    def count_prefixing_continuation(self, S, equal = True, start_id=0):
         """ S が prefix になるような列の数を求める. ただし, 検索の場所は start_id から始まるとする.
 
         S: 列
         start_id: int
         """
-        nodes=self.nodes
-        node_id=start_id
+
+        nodes = self.nodes
+        node_id = start_id
         for x in S:
             if x not in nodes[node_id].next:
                 return 0
             node_id=nodes[node_id].next[x]
-        return nodes[node_id].prefix_count
+
+        N = nodes[node_id]
+        if equal:
+            return N.prefix_count
+        else:
+            return N.prefix_count - N.terminal_count
 
     def count_prefixed(self, S, equal=True):
         """ S を prefix にする列 (S=(S[0],...,S[k-1]) としたときのある t における S'=(S[0],...,S[t-1]) ) の数を求める.
