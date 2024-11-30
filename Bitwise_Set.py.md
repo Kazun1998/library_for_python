@@ -31,12 +31,20 @@ data:
     \            yield S | V\n\n    @classmethod\n    def superset_yield(cls, S, n):\n\
     \        \"\"\" S \u306E\u4E0A\u4F4D\u96C6\u5408\u306E\u30B8\u30A7\u30CD\u30EC\
     \u30FC\u30BF\u3092\u4F5C\u6210\u3059\u308B.\n        \"\"\"\n\n        yield from\
-    \ cls.betweenset_yield(S, cls.universal_set(n))\n"
+    \ cls.betweenset_yield(S, cls.universal_set(n))\n\n    @classmethod\n    def build(cls,\
+    \ E):\n        \"\"\" \u96C6\u5408 E \u3092\u8868\u3059\u6574\u6570\u3092\u8FD4\
+    \u3059.\n        \"\"\"\n\n        return sum(1 << k for k in E)\n\n    @classmethod\n\
+    \    def bit(cls, A, k):\n        return (A >> k) & 1\n\n    @classmethod\n  \
+    \  def add(cls, A, k):\n        return A | (1 << k)\n\n    @classmethod\n    def\
+    \ remove(cls, A, k):\n        return A & (~ (1 << k))\n\n    @classmethod\n  \
+    \  def switch(cls, A, k):\n        return A ^ (1 << k)\n\n    @classmethod\n \
+    \   def popcount(cls, A: int):\n        return A.bit_count()\n\n    @classmethod\n\
+    \    def get_min(self, A: int):\n        return (A & (-A)).bit_length() - 1\n"
   dependsOn: []
   isVerificationFile: false
   path: Bitwise_Set.py
   requiredBy: []
-  timestamp: '2024-04-14 15:00:11+09:00'
+  timestamp: '2024-11-16 23:59:30+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Bitwise_Set.py
