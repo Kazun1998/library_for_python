@@ -14,14 +14,17 @@ class Knapsack_01:
         """ 01-Knapsack 問題を解く
         """
 
-        n = len(items)
-        if n <= 40:
+        from math import log2
+
+        n = max(len(items), 1)
+        cost_by_middle = n * log2(n)
+        cost_by_weight = log2(n * max(capacity, 1))
+        cost_by_value = log2(n * max(sum(item.value for item in items), 1))
+        min_cost = min(cost_by_middle, cost_by_value, cost_by_weight)
+
+        if min_cost == cost_by_middle:
             return cls.solve_small(items, capacity)
-
-        cost_by_weight = n * capacity
-        cost_by_value = n * sum(item.value for item in items)
-
-        if cost_by_weight <= cost_by_value:
+        elif min_cost == cost_by_weight:
             return cls.solve_weight(items, capacity)
         else:
             return cls.solve_value(items, capacity)
