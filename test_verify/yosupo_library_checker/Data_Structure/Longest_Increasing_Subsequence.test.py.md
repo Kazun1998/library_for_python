@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: Sequence/Longest_Increasing_Subsequence.py
     title: Sequence/Longest_Increasing_Subsequence.py
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/longest_increasing_subsequence
     links:
@@ -21,18 +21,18 @@ data:
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/longest_increasing_subsequence\n\
     \n#==================================================\nfrom Sequence.Longest_Increasing_Subsequence\
-    \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
-    #==================================================\ndef verify():\n    N=int(input())\n\
-    \    A=list(map(int,input().split()))\n\n    K,_,I=Longest_Increasing_Subsequence(A,\
-    \ mode=True, equal=False)\n\n    print(K)\n    write(\" \".join(map(str,I)))\n\
-    \n\n#==================================================\nverify()\n"
+    \ import *\n\nimport sys\ninput = sys.stdin.readline\nwrite = sys.stdout.write\n\
+    \n#==================================================\ndef verify():\n    N =\
+    \ int(input())\n    A = list(map(int, input().split()))\n\n    res =Longest_Increasing_Subsequence(A,\
+    \ equal = False)\n\n    print(res['length'])\n    write(\" \".join(map(str, res['index'])))\n\
+    \n#==================================================\nverify()\n"
   dependsOn:
   - Sequence/Longest_Increasing_Subsequence.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Longest_Increasing_Subsequence.test.py
   requiredBy: []
-  timestamp: '2024-08-31 23:52:58+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2024-12-01 02:14:44+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Longest_Increasing_Subsequence.test.py
 layout: document
