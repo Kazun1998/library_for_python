@@ -461,7 +461,7 @@ data:
       path: Sequence/Longest_Common_Subsequence.py
       title: "Longest Common Subsequence (\u6700\u9577\u5171\u901A\u90E8\u5206\u5217\
         )"
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: Sequence/Longest_Increasing_Subsequence.py
       title: Sequence/Longest_Increasing_Subsequence.py
     - icon: ':heavy_check_mark:'
@@ -605,7 +605,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test_verify/yosupo_library_checker/Data_Structure/Longest_Increasing_Subsequence.test.py
       title: test_verify/yosupo_library_checker/Data_Structure/Longest_Increasing_Subsequence.test.py
     - icon: ':heavy_check_mark:'

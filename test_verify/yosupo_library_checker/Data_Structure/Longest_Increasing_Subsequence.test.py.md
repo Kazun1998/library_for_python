@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: Sequence/Longest_Increasing_Subsequence.py
     title: Sequence/Longest_Increasing_Subsequence.py
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/longest_increasing_subsequence
     links:
@@ -31,8 +31,8 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Longest_Increasing_Subsequence.test.py
   requiredBy: []
-  timestamp: '2022-11-25 03:35:39+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2024-08-31 23:52:58+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Longest_Increasing_Subsequence.test.py
 layout: document
