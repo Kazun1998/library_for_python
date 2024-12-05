@@ -110,7 +110,7 @@ class Modulo_Matrix():
 
     def inverse(self):
         inverse, _ = self.inverse_with_determinant()
-        if self is None:
+        if inverse is None:
             raise SingularMatrixError()
 
         return inverse
