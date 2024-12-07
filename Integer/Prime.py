@@ -147,6 +147,82 @@ class Prime:
 
         return primes
 
+    @classmethod
+    def interval_sieve_of_eratosthenes(cls, L: int, R: int) -> list[bool]:
+        """ L 以上 R 以下の整数に対して, エラトステネスの篩を実行し, 素数かどうかのリストを作成する.
+
+        Args:
+            L (int): 下限
+            R (int): 上限
+
+        Returns:
+            list[bool]: 第 k 項目は (k + L) が素数ならば True, 素数でなければ False
+        """
+
+
+        M = 1
+        while (M + 1) * (M + 1) <= R:
+            M += 1
+
+        X = [True] * (R - L + 1)
+
+        # 0 と 1 の例外
+        if L <= 0 <= R:
+            X[0 - L] = False
+        if L <= 1 <= R:
+            X[1 - L] = False
+
+        for p in cls.prime_list(M):
+            lower = max((L + p - 1) // p * p, p * p)
+            for x in range(lower, R + 1, p):
+                X[x - L] = False
+        return X
+
+    @classmethod
+    def interval_prime_factorization(cls, L: int, R: int) -> list[tuple[int]]:
+        """ L 以上 R 以下の全ての整数に対して, 素因数分解を行う.
+
+        Args:
+            L (int): 下限
+            R (int): 上限
+
+        Returns:
+            list[tuple[int]]: 第 x 項が [(p1, e1), (p2, e2), ...] であるとき, x = p1^e1 * p2^e2 * ... が素因数分解になる
+        """
+
+        assert 0 <= L <= R
+
+        M = 1
+        while (M + 1) * (M + 1) <= R:
+            M += 1
+
+        if L == 0:
+            zero_include_flag = 1
+            L = 1
+        else:
+            zero_include_flag = 0
+
+        A = list(range(L, R + 1))
+        X = [[] for _ in range(R-L+1)]
+
+        for p in cls.prime_list(M):
+            lower = (L + p - 1) // p * p
+            for x in range(lower, R + 1, p):
+                e = 0
+                while A[x - L] % p == 0:
+                    A[x - L] //= p
+                    e += 1
+                X[x - L].append((p, e))
+
+        for x in range(L, R + 1):
+            if A[x - L] != 1:
+                X[x - L].append((A[x - L], 1))
+
+        if zero_include_flag:
+            return [(0, 1)] + X
+        else:
+            return  X
+
 #素数判定 for long long
 def Is_Prime_for_long_long(N):
     if N<=1: return False
@@ -305,34 +381,6 @@ def Sieve_of_Eratosthenes(N):
         Flag^=1
     return T
 
-def Interval_Sieve_of_Eratosthenes(L,R):
-    """ L 以上 R 以下のエラトステネスの篩を実行
-
-    [Input]
-    N:自然数
-
-    [Output]
-    素数かどうかのリスト X: X[k]:=k+L が素数なら 1, 素数でないならば 0
-    """
-
-    M=1
-    while True:
-        if (M+1)*(M+1)>R:
-            break
-        M+=1
-
-    X=[1]*(R-L+1)
-
-    if L<=0<=R:
-        X[0-L]=0
-    if L<=1<=R:
-        X[1-L]=0
-
-    for p in Prime_List(M):
-        for x in range(max((L+p-1)//p*p,p*p),R+1,p):
-            X[x-L]=0
-    return X
-
 def Smallest_Prime_Factor(N):
     """ 0,1,2,...,N の最小の素因数のリスト (0,1 については 1 にしている)
     """
@@ -386,45 +434,6 @@ def Faster_Prime_Factorization(N,L):
             N//=a
         D.append([a,k])
     return D
-
-def Interval_Prime_Factorization(L,R):
-    """ x=L,L+1,...,R に対して素因数分解を行う.
-
-    """
-
-    assert 0<=L<=R
-
-    M=1
-    while True:
-        if (M+1)*(M+1)>R:
-            break
-        M+=1
-
-    if L==0:
-        flag=1
-        L=1
-    else:
-        flag=0
-
-    A=list(range(L,R+1))
-    X=[[] for _ in range(R-L+1)]
-
-    for p in Prime_List(M):
-        for x in range((L+p-1)//p*p,R+1,p):
-            k=0
-            while A[x-L]%p==0:
-                A[x-L]//=p
-                k+=1
-            X[x-L].append((p,k))
-
-    for x in range(L,R+1):
-        if A[x-L]!=1:
-            X[x-L].append((A[x-L],1))
-
-    if flag:
-        return [(0,1)]+X
-    else:
-        return  X
 
 #素数の個数
 #Thanks for pyranine
