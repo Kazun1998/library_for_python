@@ -102,6 +102,51 @@ class Prime:
                     K += 1
         return N
 
+    @classmethod
+    def prime_list(cls, N: int) -> list[int]:
+        """ N 以下の素数全てを昇順に列挙したリストを生成する.
+
+        Args:
+            N (int): 上限
+
+        Returns:
+            list[int]: 素数のリスト
+        """
+        # N = 0, 1, 2 の時は例外処理
+        if N == 0 or N == 1:
+            return []
+        elif N == 2:
+            return [2]
+
+        # N が 4 以上の偶数ならば, N を (N - 1) に置き換え, N を奇数としても問題ない.
+        if N % 2 == 0:
+            N -= 1
+
+        M = (N + 1) // 2
+
+        is_prime = [True] * M # is_prime[k] := 2k+1 は素数か?
+
+        # 9 以上の 3 の倍数を消す
+        for x in range(4, M, 3):
+            is_prime[x] = False
+
+        for p in cls.Pseudo_Prime_Generator():
+            if p <= 3:
+                continue
+            if p * p > N:
+                break
+
+            if not is_prime[(p - 1) >> 1]:
+                continue
+
+            for j in range((p * p - 1) >> 1, M, p):
+                is_prime[j] = False
+
+        primes = [(k << 1) | 1 for k in range(M) if is_prime[k]]
+        primes[0] = 2
+
+        return primes
+
 #素数判定 for long long
 def Is_Prime_for_long_long(N):
     if N<=1: return False
@@ -259,46 +304,6 @@ def Sieve_of_Eratosthenes(N):
         a+=2+2*Flag
         Flag^=1
     return T
-
-def Prime_List(N):
-    """ N 以下の素数を列挙
-
-    [Input]
-    N: 自然数
-
-    [Output]
-    N 以下の素数を昇順に並べたリスト [2,3,5,...]
-    """
-
-    if N==0 or N==1:
-        return []
-    elif N==2:
-        return [2]
-
-    if N%2==0:
-        N-=1
-
-    M=(N+1)//2
-
-    prime=[1]*M # prime[k]:=2k+1 は素数?
-
-    for x in range(4,M,3):
-        prime[x]=0
-
-    a=5
-    Flag=0
-    while a*a<=N:
-        if prime[(a-1)>>1]:
-            ii=(a*a-1)>>1
-            for j in range(ii,M,a):
-                prime[j]=0
-        a+=2+2*Flag
-        Flag^=1
-
-    X=[(k<<1)|1 for k in range(M) if prime[k]]
-    X[0]=2
-
-    return X
 
 def Interval_Sieve_of_Eratosthenes(L,R):
     """ L 以上 R 以下のエラトステネスの篩を実行
