@@ -1,7 +1,7 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/discrete_logarithm_mod
 
 #==================================================
-from Modulo import *
+from Modulo.Modulo import *
 
 import sys
 input=sys.stdin.readline
