@@ -387,6 +387,9 @@ data:
       path: Integer/Totient.py
       title: Totient Function
     - icon: ':warning:'
+      path: Integer/Tower.py
+      title: Integer/Tower.py
+    - icon: ':warning:'
       path: Integer/Value.py
       title: Integer/Value.py
   - name: Knapsack
