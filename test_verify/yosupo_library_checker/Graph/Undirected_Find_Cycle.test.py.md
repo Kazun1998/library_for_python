@@ -33,8 +33,8 @@ data:
     \        print(*cycle['edge'])\n\n#==================================================\n\
     verify()\n"
   dependsOn:
-  - Graph/Graph/Cycle.py
   - Graph/Graph/Graph.py
+  - Graph/Graph/Cycle.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Graph/Undirected_Find_Cycle.test.py
   requiredBy: []
