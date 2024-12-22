@@ -20,7 +20,6 @@ data:
     , \".join(map(repr,self.vertices))\n\n    __repr__=__str__\n\n    def area(self):\n\
     \        S=0\n        p=self.vertices\n        for i in range(len(p)-1):\n   \
     \         S+=p[i].det(p[i+1])\n        S+=p[-1].det(p[0])\n        return abs(S)/2\n\
-    \n            \np=lambda x,y:Point(x,y)\nX=[p(0,4),p(1,5),p(1,1),p(2,3),p(2,0),p(3,6),p(4,4),p(4,1),p(5,3),p(6,5),p(6,1),p(7,4)]\n\
     \ndef Convex_Hull(S,online=False):\n    \"\"\" S \u306E\u51F8\u5305\u3092\u6C42\
     \u3081\u308B.\n\n    [Input]\n    S: \u70B9\u306E\u30EA\u30B9\u30C8\n    online:\
     \ \u8FBA\u4E0A\u306E\u70B9\u3092\u8A8D\u3081\u308B\u304B.\n    \"\"\"\n\n    from\
@@ -39,7 +38,7 @@ data:
   isVerificationFile: false
   path: Geometric/Polygon.py
   requiredBy: []
-  timestamp: '2021-09-04 16:56:37+09:00'
+  timestamp: '2024-12-22 15:26:56+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Geometric/Polygon.py
