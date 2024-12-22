@@ -21,10 +21,6 @@ class Polygon:
         S+=p[-1].det(p[0])
         return abs(S)/2
 
-            
-p=lambda x,y:Point(x,y)
-X=[p(0,4),p(1,5),p(1,1),p(2,3),p(2,0),p(3,6),p(4,4),p(4,1),p(5,3),p(6,5),p(6,1),p(7,4)]
-
 def Convex_Hull(S,online=False):
     """ S の凸包を求める.
 
