@@ -22,16 +22,16 @@ data:
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/sum_of_floor_of_linear\n\
     \n#==================================================\nfrom Summation.Floor_Sum\
     \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
-    #==================================================\ndef verify():\n    T=int(input())\n\
-    \n    Ans=[0]*T\n    for t in range(T):\n        N,M,A,B=map(int,input().split())\n\
-    \        Ans[t]=floor_sum(A,B,M,N)\n\n    write(\"\\n\".join(map(str,Ans)))\n\n\
-    #==================================================\nverify()"
+    #==================================================\ndef verify():\n    T = int(input())\n\
+    \n    ans = [0]*T\n    for t in range(T):\n        N, M, A, B = map(int ,input().split())\n\
+    \        ans[t] = Floor_Sum.floor_sum(A, B, M, N)\n\n    write(\"\\n\".join(map(str,\
+    \ ans)))\n\n#==================================================\nverify()"
   dependsOn:
   - Summation/Floor_Sum.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
   requiredBy: []
-  timestamp: '2022-11-23 04:28:58+09:00'
+  timestamp: '2024-12-22 15:18:15+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py

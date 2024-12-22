@@ -17,19 +17,26 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.12.8/x64/lib/python3.12/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "def floor_sum(A, B, M, N):\n    \"\"\"sum_{i=0}^{N-1} floor((A*i+B)/M) \u3092\
-    \u6C42\u3081\u308B.\n    \"\"\"\n    T=0\n    while True:\n        T+=((N-1)*N//2)*(A//M)\n\
-    \        A%=M\n\n        T+=N*(B//M)\n        B%=M\n\n        y=(A*N+B)//M\n \
-    \       x=B-y*M\n\n        if y==0:\n            return T\n\n        T+=(N+x//A)*y\n\
-    \        A,B,M,N=M,x%A,A,y\n\ndef Floor_Sum(A: int, B: int, M: int, N: int, K=0):\n\
-    \    \"\"\"sum_{i=K}^N floor((A*i+B)/M) \u3092\u6C42\u3081\u308B.\n    \"\"\"\n\
-    \n    if K==0:\n        return floor_sum(A,B,M,N+1)\n    else:\n        return\
-    \ floor_sum(A,B,M,N+1)-floor_sum(A,B,M,K)\n"
+  code: "class Floor_Sum:\n    @staticmethod\n    def floor_sum(A: int, B: int, M:\
+    \ int, N: int) -> int:\n        \"\"\" sum_{i=0}^{N-1} floor((A * i + B) / M)\
+    \ \u3092\u6C42\u3081\u308B\n\n        Args:\n            A (int)\n           \
+    \ B (int)\n            M (int)\n            N (int)\n\n        Returns:\n    \
+    \        int\n        \"\"\"\n\n        total = 0\n        while True:\n     \
+    \       total += ((N - 1) * N // 2) * (A // M)\n            A %= M\n\n       \
+    \     total += N * (B // M)\n            B %= M\n\n            y = (A * N + B)\
+    \ // M\n            x = B - y * M\n\n            if y == 0:\n                return\
+    \ total\n\n            total += (N + x // A) * y\n            A, B, M, N = M,\
+    \ x%A, A, y\n\n    @classmethod\n    def floor_sum_interval(cls, A: int, B: int,\
+    \ M: int, L: int, R: int) -> int:\n        \"\"\" sum_{i=L}^R floor((A * i + B)\
+    \ / M) \u3092\u6C42\u3081\u308B\n\n        Args:\n            A (int)\n      \
+    \      B (int)\n            M (int)\n            L (int)\n            R (int)\n\
+    \n        Returns:\n            int\n        \"\"\"\n\n        return cls.floor_sum(A,\
+    \ A * L + B, M, R - L + 1)\n"
   dependsOn: []
   isVerificationFile: false
   path: Summation/Floor_Sum.py
   requiredBy: []
-  timestamp: '2022-11-23 04:24:29+09:00'
+  timestamp: '2024-12-22 15:18:10+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
