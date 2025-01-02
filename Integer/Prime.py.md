@@ -137,25 +137,29 @@ data:
     \                k=0\n                while N%j==0:\n                    N//=j\n\
     \                    k+=1\n                res.append([j,k])\n    if N>1:\n  \
     \      res.append([N,1])\n    res.sort(key=lambda x:x[0])\n    return res\n\n\
-    #\u30A8\u30E9\u30C8\u30B9\u30C6\u30CD\u30B9\u306E\u7BE9\ndef Sieve_of_Eratosthenes(N):\n\
-    \    \"\"\" N \u307E\u3067\u306E\u30A8\u30E9\u30C8\u30B9\u30C6\u30CD\u30B9\u306E\
-    \u7BE9\u3092\u5B9F\u884C\n\n    [Input]\n    N:\u81EA\u7136\u6570\n\n    [Output]\n\
-    \    \u7D20\u6570\u304B\u3069\u3046\u304B\u306E\u30EA\u30B9\u30C8 ([0,0,1,1,0,1,...])\n\
-    \    \"\"\"\n\n    if N==0:\n        return [0]\n\n    T=[1]*(N+1)\n    T[0]=T[1]=0\n\
-    \n    for x in range(4,N+1,2):\n        T[x]=0\n\n    for x in range(9,N+1,3):\n\
-    \        T[x]=0\n\n    a=5\n    Flag=0\n    while a*a<=N:\n        if T[a]:\n\
-    \            b=a*a\n            c=2*a\n            while b<=N:\n             \
-    \   T[b]=0\n                b+=c\n        a+=2+2*Flag\n        Flag^=1\n    return\
-    \ T\n\ndef Smallest_Prime_Factor(N):\n    \"\"\" 0,1,2,...,N \u306E\u6700\u5C0F\
-    \u306E\u7D20\u56E0\u6570\u306E\u30EA\u30B9\u30C8 (0,1 \u306B\u3064\u3044\u3066\
-    \u306F 1 \u306B\u3057\u3066\u3044\u308B)\n    \"\"\"\n\n    if N<=1:\n       \
-    \ return [1]*(N+1)\n\n    T=[0]*(N+1); T[0]=T[1]=1\n\n    for i in range(2, N+1,\
-    \ 2):\n        T[i]=2\n\n    for i in range(3, N+1, 6):\n        T[i]=3\n\n  \
-    \  prime=[2,3]\n    i=5; d=2\n    while i<=N:\n        if T[i]==0:\n         \
-    \   T[i]=i\n            prime.append(i)\n\n        for p in prime:\n         \
-    \   if i*p<=N:\n                T[i*p]=p\n            else:\n                break\n\
-    \            if p==T[i]:\n                break\n        i+=d; d=6-d\n    return\
-    \ T\n\ndef Faster_Prime_Factorization(N,L):\n    \"\"\" Smallest_Prime_Factors(N)\u3067\
+    # \u30A8\u30E9\u30C8\u30B9\u30C6\u30CD\u30B9\u306E\u7BE9\ndef Sieve_of_Eratosthenes(N:\
+    \ int) -> list[int]:\n    \"\"\" N \u4EE5\u4E0B\u306E\u975E\u8CA0\u6574\u6570\u306B\
+    \u5BFE\u3059\u308B Eratosthenes \u306E\u7BE9\u3092\u5B9F\u884C\u3059\u308B.\n\n\
+    \    Args:\n        N (int): \u4E0A\u9650\n\n    Returns:\n        list[int]:\
+    \ \u7B2C k \u9805\u306B\u3064\u3044\u3066, k \u304C\u7D20\u6570\u306A\u3089\u3070\
+    , \u7B2C k \u9805\u304C 1, k \u304C\u7D20\u6570\u3067\u306A\u3044\u306A\u3089\u3070\
+    , \u7B2C k \u9805\u304C 0 \u3067\u3042\u308B\u5217.\n    \"\"\"\n\n    if N ==\
+    \ 0:\n        return [0]\n\n    sieve = [1] * (N + 1)\n    sieve[0] = sieve[1]\
+    \ = 0\n\n    for x in range(2 * 2, N + 1, 2):\n        sieve[x] = 0\n\n    for\
+    \ x in range(3 * 3, N + 1, 6):\n        sieve[x] = 0\n\n    p = 5\n    parity\
+    \ = 0\n    while p * p <= N:\n        if sieve[p]:\n            pointer = p *\
+    \ p\n            while pointer <= N:\n                sieve[pointer] = 0\n   \
+    \             pointer += 2 * p\n\n        p += 4 if parity else 2\n        parity\
+    \ ^= 1\n    return sieve\n\ndef Smallest_Prime_Factor(N):\n    \"\"\" 0,1,2,...,N\
+    \ \u306E\u6700\u5C0F\u306E\u7D20\u56E0\u6570\u306E\u30EA\u30B9\u30C8 (0,1 \u306B\
+    \u3064\u3044\u3066\u306F 1 \u306B\u3057\u3066\u3044\u308B)\n    \"\"\"\n\n   \
+    \ if N<=1:\n        return [1]*(N+1)\n\n    T=[0]*(N+1); T[0]=T[1]=1\n\n    for\
+    \ i in range(2, N+1, 2):\n        T[i]=2\n\n    for i in range(3, N+1, 6):\n \
+    \       T[i]=3\n\n    prime=[2,3]\n    i=5; d=2\n    while i<=N:\n        if T[i]==0:\n\
+    \            T[i]=i\n            prime.append(i)\n\n        for p in prime:\n\
+    \            if i*p<=N:\n                T[i*p]=p\n            else:\n       \
+    \         break\n            if p==T[i]:\n                break\n        i+=d;\
+    \ d=6-d\n    return T\n\ndef Faster_Prime_Factorization(N,L):\n    \"\"\" Smallest_Prime_Factors(N)\u3067\
     \u6C42\u3081\u305F\u30EA\u30B9\u30C8\u3092\u5229\u7528\u3057\u3066, N \u3092\u9AD8\
     \u901F\u7D20\u56E0\u6570\u5206\u89E3\u3059\u308B.\n\n    L: Smallest_Prime_Factors(N)\u3067\
     \u6C42\u3081\u305F\u30EA\u30B9\u30C8\n    \"\"\"\n    if N==0:\n        return\
@@ -192,7 +196,7 @@ data:
   isVerificationFile: false
   path: Integer/Prime.py
   requiredBy: []
-  timestamp: '2024-12-07 23:51:35+09:00'
+  timestamp: '2025-01-03 00:54:37+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Integer/Prime.py
