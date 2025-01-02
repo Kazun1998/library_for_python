@@ -21,45 +21,41 @@ class Polygon:
         S+=p[-1].det(p[0])
         return abs(S)/2
 
-            
-p=lambda x,y:Point(x,y)
-X=[p(0,4),p(1,5),p(1,1),p(2,3),p(2,0),p(3,6),p(4,4),p(4,1),p(5,3),p(6,5),p(6,1),p(7,4)]
+def Convex_Hull(S: list[Point], online = False) -> Polygon:
+    """ S の凸包を求める
 
-def Convex_Hull(S,online=False):
-    """ S の凸包を求める.
+    Args:
+        S (list[Point]): 点集合
+        online (bool, optional): False のとき, 内角が 180 度になるのを許容しない. Defaults to False.
 
-    [Input]
-    S: 点のリスト
-    online: 辺上の点を認めるか.
+    Returns:
+        Polygon: S の凸包
     """
 
-    from collections import deque
+    def cover(reverse_flag):
+        vertices = []
+        for P in (reversed(S) if reverse_flag else S):
+            if not online and vertices and vertices[-1] == P:
+                continue
 
-    T=sorted(S)
+            while len(vertices)>=2:
+                m = iSP(vertices[-2], vertices[-1], P)
+                if m == -1 or (not online and m == 2):
+                    vertices.pop()
+                else:
+                    break
+            vertices.append(P)
+        return vertices
+
+    S.sort()
 
     #上側
-    U=[]
-    for p in T[::-1]:
-        while len(U)>=2:
-            m=iSP(U[-2],U[-1],p)
-            if m==-1 or (not online and m==2):
-                U.pop()
-            else:
-                break
-        U.append(p)
+    upper = cover(True)
 
     #下側
-    L=[]
-    for q in T:
-        while len(L)>=2:
-            m=iSP(L[-2],L[-1],q)
-            if m==-1 or (not online and m==2):
-                L.pop()
-            else:
-                break
-        L.append(q)
+    lower = cover(False)
 
-    return Polygon(*(U+L[1:-1]))
+    return Polygon(*(upper + lower[1:-1]))
 
 def is_Convex(P: Polygon,rigit=True):
     """ 多角形 P が凸かどうかを判定する.
