@@ -473,6 +473,9 @@ data:
     - icon: ':warning:'
       path: Sequence/Run_Length_Encoding.py
       title: Run Length Encoding
+    - icon: ':warning:'
+      path: Sequence/Split.py
+      title: Sequence/Split.py
     - icon: ':heavy_check_mark:'
       path: Sequence/Subsequence_Count.py
       title: Sequence/Subsequence_Count.py
