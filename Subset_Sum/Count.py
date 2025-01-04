@@ -39,9 +39,9 @@ class Count_Sumset_Sum:
             list[int]: 長さ (S+1) の配列. 第 k~(0 <= k <= S) 項には, 合計が k になる多重部分集合の数が格納されている.
         """
 
-        A = list(map(abs, A))
-        K = S + sum(A)
+        B = list(map(abs, A))
+        K = S + sum(B)
         if (K < 0) or (K % 2 == 1):
             return 0
 
-        return cls.zero_one_dp(A, K // 2, Mod)[-1]
+        return cls.zero_one_dp(B, K // 2, Mod)[-1]

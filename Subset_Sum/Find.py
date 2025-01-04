@@ -13,10 +13,12 @@ class Find_Subset_Sum:
         """
 
         N = len(A)
-        dp = [[0] * (S + 1) for _ in range(N + 1)]; dp[0][0] = 1
+        dp = [None for _ in range(N + 1)]
+        dp[0] = [1] + [0] * S
 
         for i, a in enumerate(A, 1):
-            dp_i = dp[i]; dp_prev = dp[i - 1]
+            dp_i = dp[i] = (dp_prev := dp[i - 1]).copy()
+
             for x in range(S, a - 1, -1):
                 dp_i[x] = dp_prev[x] | dp_prev[x - a]
             for x in range(a - 1, -1, -1):
@@ -85,7 +87,8 @@ class Find_Subset_Sum:
             return E
 
         E = enumerate_sum(X)
-        for f, Q in enumerate_sum(Y).items():
+        F = enumerate_sum(Y)
+        for f, Q in F.items():
             if (e := S - f) not in E:
                 continue
 
