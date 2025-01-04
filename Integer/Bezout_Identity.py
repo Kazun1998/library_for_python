@@ -1,8 +1,6 @@
 class Bezout_Identity:
-    inf = float('inf')
-
     @staticmethod
-    def __extgcd(a: int, b: int) -> tuple[int, int, int]:
+    def __extgcd(a: int, b: int):
         s, t, u, v = 1, 0, 0, 1
         while b:
             q, a, b = a // b, b, a % b
@@ -10,85 +8,20 @@ class Bezout_Identity:
         return s, t, a
 
     @classmethod
-    def __inequality_geq(cls, a: int, b: int):
-        """ 不等式 a x >= b を解く.
-
-        Args:
-            a (int)
-            b (int)
-        """
-
-        if a > 0:
-            left = (b - 1) // a + 1 if abs(b) < cls.inf else b
-            return (left, cls.inf)
-        elif a < 0:
-            return cls.__inequality_leq(-a, -b)
-        else:
-            if 0 >= b:
-                return (-cls.inf, cls.inf)
-            else:
-                return (cls.inf, -cls.inf)
-
-    @classmethod
-    def __inequality_leq(cls, a: int, b: int):
-        """ 不等式 a x <= b を解く.
-
-        Args:
-            a (int)
-            b (int)
-        """
-
-        if a > 0:
-            right = b // a if abs(b) < cls.inf else b
-            return (-cls.inf, right)
-        elif a < 0:
-            return cls.__inequality_geq(-a, -b)
-        else:
-            if 0 <= b:
-                return (-cls.inf, cls.inf)
-            else:
-                return (cls.inf, -cls.inf)
-
-    @classmethod
     def __inequality_interval(cls, a: int, l: int, r: int):
         """ 不等式 l <= ax <= r, x in Z であることと, L <= x <= R が同値になる (L, R) を求める.
 
         Args:
-            a (int)
+            a (int): a != 0
             l (int)
             r (int)
         """
 
-        # ax >= l
-        sl, sr = cls.__inequality_geq(a, l)
+        if a > 0:
+            return (l + a - 1) // a, r // a
+        elif a < 0:
+            return cls.__inequality_interval(-a, -r, -l)
 
-        # ax <= r
-        tl, tr = cls.__inequality_leq(a, r)
-
-        return max(sl, tl), min(sr, tr)
-
-    @classmethod
-    def __is_finite(cls, x):
-        return abs(x) < cls.inf
-
-    @classmethod
-    def __fetch_example(cls, l, r):
-        """ l <= k <= r を満たす k の例を求める
-
-        Args:
-            l (int): 下端
-            r (int): 上端
-        """
-
-        assert l <= r
-        if cls.__is_finite(l):
-            return l
-        elif cls.__is_finite(r):
-            return r
-        elif l == -cls.inf and r == cls.inf:
-            return 0
-        else:
-            return l
 
     def __init__(self, a: int, b: int):
         """ a x + b y 型の Bezout 式を生成する.
@@ -165,7 +98,7 @@ class Bezout_Identity:
         # a = b = 0 のときは c = 0 しか解にならない.
         if a == b == 0:
             if c == 0:
-                return (self.__fetch_example(lx, rx), self.__fetch_example(rx, ry))
+                return (lx, rx)
             else:
                 return (None, None)
 
@@ -173,7 +106,7 @@ class Bezout_Identity:
         if b == 0:
             # 方程式は a x = c になる.
             if c % a == 0:
-                return (c // a, self.__fetch_example(ly, ry))
+                return (c // a,ly)
             else:
                 return (None, None)
 
@@ -181,7 +114,7 @@ class Bezout_Identity:
         if a == 0:
             # 方程式は b y = c になる.
             if c % b == 0:
-                return (self.__fetch_example(lx, rx), c // b)
+                return (lx, c // b)
             else:
                 return (None, None)
 
@@ -192,10 +125,9 @@ class Bezout_Identity:
             return None, None
 
         # lk <= k <= rk を満たす k の例を求める.
-        k = self.__fetch_example(lk, rk)
 
         # 解あり
-        return p0 + p1 * k, q0 + q1 * k
+        return p0 + p1 * lk, q0 + q1 * lk
 
     def count(self, c: int, lx: int, rx: int, ly: int, ry: int):
         _, _, _, _, lk, rk = self.solve(c, lx, rx, ly, ry)
@@ -203,3 +135,6 @@ class Bezout_Identity:
             return 0
         else:
             return rk - lk + 1
+
+for z in range(11):
+    print(z,Bezout_Identity(1,1).count(z, 0, 100, 0, 100))
