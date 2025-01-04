@@ -360,6 +360,9 @@ data:
   - name: Integer
     pages:
     - icon: ':warning:'
+      path: Integer/Digit.py
+      title: Integer/Digit.py
+    - icon: ':warning:'
       path: Integer/Divisors.py
       title: Integer/Divisors.py
     - icon: ':warning:'
