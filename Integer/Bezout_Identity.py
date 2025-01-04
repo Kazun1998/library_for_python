@@ -20,7 +20,8 @@ class Bezout_Identity:
         if a > 0:
             return (l + a - 1) // a, r // a
         elif a < 0:
-            return cls.__inequality_interval(-a, -r, -l)
+            a_neg = -a
+            return (-r + a_neg - 1) // a_neg, -l // a_neg
 
 
     def __init__(self, a: int, b: int):
@@ -135,6 +136,3 @@ class Bezout_Identity:
             return 0
         else:
             return rk - lk + 1
-
-for z in range(11):
-    print(z,Bezout_Identity(1,1).count(z, 0, 100, 0, 100))
