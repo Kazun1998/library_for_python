@@ -1,13 +1,10 @@
 # verification-helper: PROBLEM https://judge.yosupo.jp/problem/eulerian_trail_undirected
 
 #==================================================
-import sys
-sys.path.append('~/Graph/Digraph')
-
 from Graph.Graph.Graph import Graph as Undirected_Graph
 from Graph.Graph.Eulerian import *
 
-
+import sys
 input=sys.stdin.readline
 write=sys.stdout.write
 
