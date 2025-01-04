@@ -1,50 +1,106 @@
-def Subset_Sum_Zero_One_Find(A, S):
-    """ A の多重部分集合で, 和が S になる (0, 1) 列の例を求める.
+class Find_Subset_Sum:
+    @staticmethod
+    def zero_one_dp(A: list[int], S: int) -> list[int] | None:
+        """ 動的計画法で求める: sum(T[i] * A[i]) = S となる 01 列 T が存在するならば, その例を求める.\n
+        計算量 O(|A| S)
 
-    計算量: O(|A| S)
-    """
+        Args:
+            A (list[int]): 元となる数列
+            S (int): 目標となる合計
 
-    N = len(A)
-    DP = [[False]* (S + 1) for _ in range(N + 1)]; DP[0][0] = True
+        Returns:
+            list[int] | None: 存在するならば, そのような 01 列の例, 存在しないならば, None
+        """
 
-    for i, a in enumerate(A, 1):
-        DP_i = DP[i]; DP_prev = DP[i - 1]
-        for x in range(S, a - 1, -1):
-            DP_i[x] = DP_prev[x] | DP_prev[x - a]
-        for x in range(a - 1, -1, -1):
-            DP_i[x] = DP_prev[x]
+        N = len(A)
+        dp = [[0] * (S + 1) for _ in range(N + 1)]; dp[0][0] = 1
 
-    if not DP[N][S]:
-        return None
+        for i, a in enumerate(A, 1):
+            dp_i = dp[i]; dp_prev = dp[i - 1]
+            for x in range(S, a - 1, -1):
+                dp_i[x] = dp_prev[x] | dp_prev[x - a]
+            for x in range(a - 1, -1, -1):
+                dp_i[x] = dp_prev[x]
 
-    signs = []
-    pointer = S
-    for i, a in reversed(list(enumerate(A, 1))):
-        DP_prev = DP[i - 1]
-        if (pointer >= a) and DP_prev[pointer - a]:
-            signs.append(1)
-            pointer -= a
+        if not dp[N][S]:
+            return None
+
+        signs = []
+        pointer = S
+        for i, a in reversed(list(enumerate(A, 1))):
+            dp_prev = dp[i - 1]
+            if (pointer >= a) and dp_prev[pointer - a]:
+                signs.append(1)
+                pointer -= a
+            else:
+                signs.append(0)
+
+        signs.reverse()
+        return signs
+
+    @classmethod
+    def plus_minus_dp(cls, A: list[int], S: int) -> list[int] | None:
+        """ 動的計画法で求める: sum(T[i] * A[i]) = S となる +- 列 T が存在するならば, その例を求める.\n
+        計算量 O(|A| S)
+
+        Args:
+            A (list[int]): 元となる数列
+            S (int): 目標となる合計
+
+        Returns:
+            list[int] | None: 存在するならば, そのような +- 列の例, 存在しないならば, None
+        """
+
+        p = [1 if a >= 0 else -1 for a in A]
+        B = list(map(abs, A))
+
+        K = S + sum(B)
+        if (K < 0) or (K % 2 == 1):
+            return None
+
+        signs = cls.zero_one_dp(B, K // 2)
+        if signs is not None:
+            return [p[i] * (2 * s - 1) for i, s in enumerate(signs)]
         else:
-            signs.append(0)
+            return None
 
-    signs.reverse()
-    return signs
+    @staticmethod
+    def zero_one_middle(A: list[int], S: int) -> list[int] | None:
+        N = len(A)
+        X = A[:N//2]; Y = A[N//2:]
 
-def Subset_Sum_Plus_Minus_One_Find(A, K):
-    """ 以下を満たす A の分割 X, Y の個数を求める: sum(X) - sum(Y) = K.
+        def bit(X, k):
+            return (X >> k) & 1
 
-    計算量: O(|A|(sum(A)+K))
-    """
+        def enumerate_sum(B):
+            N = len(B)
+            E = {}
+            for S in range(1 << N):
+                S_copy = S
+                res = 0
+                for i in range(N):
+                    res += B[i] if S & 1 else 0
+                    S >>= 1
+                E[res] = S_copy
+            return E
 
-    p = [1 if a >= 0 else -1 for a in A]
-    B = list(map(abs, A))
+        E = enumerate_sum(X)
+        for f, Q in enumerate_sum(Y).items():
+            if (e := S - f) not in E:
+                continue
 
-    L = K + sum(B)
-    if (L < 0) or (L % 2 == 1):
+            P = E[e]
+            return [bit(P, k) for k in range(len(X))] + [bit(Q, l) for l in range(len(Y))]
+
         return None
 
-    signs = Subset_Sum_Zero_One_Find(B, L // 2)
-    if signs is not None:
-        return [p[i] * (2 * s - 1) for i, s in enumerate(signs)]
-    else:
-        return None
+    @classmethod
+    def plus_minus_middle(cls, A: list[int], S: int) -> list[int] | None:
+        K = S + sum(A)
+        if K % 2 == 1:
+            return None
+
+        if (P := cls.zero_one_middle(A, K // 2)) is None:
+            return None
+
+        return [1 if p else -1 for p in P]
