@@ -345,41 +345,41 @@ def Pollard_Rho_Prime_Factorization(N):
     res.sort(key=lambda x:x[0])
     return res
 
-#エラトステネスの篩
-def Sieve_of_Eratosthenes(N):
-    """ N までのエラトステネスの篩を実行
+# エラトステネスの篩
+def Sieve_of_Eratosthenes(N: int) -> list[int]:
+    """ N 以下の非負整数に対する Eratosthenes の篩を実行する.
 
-    [Input]
-    N:自然数
+    Args:
+        N (int): 上限
 
-    [Output]
-    素数かどうかのリスト ([0,0,1,1,0,1,...])
+    Returns:
+        list[int]: 第 k 項について, k が素数ならば, 第 k 項が 1, k が素数でないならば, 第 k 項が 0 である列.
     """
 
-    if N==0:
+    if N == 0:
         return [0]
 
-    T=[1]*(N+1)
-    T[0]=T[1]=0
+    sieve = [1] * (N + 1)
+    sieve[0] = sieve[1] = 0
 
-    for x in range(4,N+1,2):
-        T[x]=0
+    for x in range(2 * 2, N + 1, 2):
+        sieve[x] = 0
 
-    for x in range(9,N+1,3):
-        T[x]=0
+    for x in range(3 * 3, N + 1, 6):
+        sieve[x] = 0
 
-    a=5
-    Flag=0
-    while a*a<=N:
-        if T[a]:
-            b=a*a
-            c=2*a
-            while b<=N:
-                T[b]=0
-                b+=c
-        a+=2+2*Flag
-        Flag^=1
-    return T
+    p = 5
+    parity = 0
+    while p * p <= N:
+        if sieve[p]:
+            pointer = p * p
+            while pointer <= N:
+                sieve[pointer] = 0
+                pointer += 2 * p
+
+        p += 4 if parity else 2
+        parity ^= 1
+    return sieve
 
 def Smallest_Prime_Factor(N):
     """ 0,1,2,...,N の最小の素因数のリスト (0,1 については 1 にしている)
