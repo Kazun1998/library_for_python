@@ -560,9 +560,6 @@ def Making_Graph(N,E):
         G.add_edge(*e)
     return G
 
-#Pathグラフ
-
-
 #Cycleグラフ
 def Cycle_Graph(N):
     """ N 頂点からなるサイクルグラフを生成する. """
