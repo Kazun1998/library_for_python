@@ -9,6 +9,23 @@ class Graph:
         self.deg = [0] * N
         self.__size = 0
 
+    @classmethod
+    def construct_from_edge_edges(cls, N: int, edges: list[tuple[int, int]]) -> "Graph":
+        """ 隣接リストから N 頂点の無向グラフを生成する.
+
+        Args:
+            N (int): 位数
+            adjacent (list[int]): 隣接リスト
+
+        Returns:
+            Graph: 隣接リストからなる無向グラフ
+        """
+
+        G: cls = cls(N)
+        for u, v in edges:
+            G.add_edge(u, v)
+        return G
+
     #頂点の追加
     def add_vertex(self):
         """ 頂点を追加する.
