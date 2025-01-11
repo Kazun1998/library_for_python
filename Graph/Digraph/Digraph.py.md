@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _extendedVerifiedWith:
+  - icon: ':x:'
+    path: test_verify/yosupo_library_checker/Graph/Directed_Eulerian_Trail.test.py
+    title: test_verify/yosupo_library_checker/Graph/Directed_Eulerian_Trail.test.py
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links:
     - https://judge.yosupo.jp/submission/23992
@@ -17,104 +20,90 @@ data:
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "class Digraph:\n    \"\"\"\u91CD\u307F[\u306A\u3057]\u6709\u5411\u30B0\u30E9\
     \u30D5\u3092\u751F\u6210\u3059\u308B.\n\n    \"\"\"\n\n    #\u5165\u529B\u5B9A\
-    \u7FA9\n    def __init__(self, N=0):\n        \"\"\" N \u9802\u70B9\u306E\u7A7A\
-    \u30B0\u30E9\u30D5\u3092\u751F\u6210\u3059\u308B. \"\"\"\n\n\n        self.arc_number=0\n\
-    \        self.adjacent_out=[set() for v in range(N)]#\u51FA\u8FD1\u508D(v\u304C\
-    \u59CB\u70B9)\n        self.adjacent_in=[set() for v in range(N)] #\u5165\u8FD1\
-    \u508D(v\u304C\u7D42\u70B9)\n\n    #\u9802\u70B9\u306E\u8FFD\u52A0\n    def add_vertex(self):\n\
-    \        \"\"\" \u9802\u70B9\u3092\u8FFD\u52A0\u3059\u308B.\n\n        \"\"\"\n\
-    \        self.adjacent_out.append(set())\n        self.adjacent_in.append(set())\n\
-    \        return self.order()-1\n\n    def add_vertices(self, k=1):\n        \"\
-    \"\" \u9802\u70B9\u3092 k \u500B\u8FFD\u52A0\u3059\u308B.\n\n        k: int\n\
-    \        \"\"\"\n        n=self.order()\n        self.adjacent_out.extend([set()\
-    \ for _ in range(k)])\n        self.adjacent_in.extend([set() for _ in range(k)])\n\
-    \        return list(range(n,n+k))\n\n    #\u8FBA\u306E\u8FFD\u52A0\n    def add_arc(self,\
-    \ source, target, mode=0):\n        if target not in self.adjacent_out[source]:\n\
-    \            self.adjacent_out[source].add(target)\n            self.adjacent_in[target].add(source)\n\
-    \            self.arc_number+=1\n            if mode:\n                return\
-    \ self.arc_number-1\n        else:\n            if mode:\n                return\
-    \ -1\n    #\u8FBA\u3092\u9664\u304F\n    def remove_arc(self, source, target):\n\
-    \        if target in self.adjacent_out[source]:\n            self.adjacent_out[source].discard(target)\n\
-    \            self.adjacent_in[target].discard(source)\n            self.arc_number-=1\n\
-    \n    def reset_vertex(self, u):\n        \"\"\" \u9802\u70B9 u \u306B\u63A5\u7D9A\
-    \u3057\u3066\u3044\u308B\u8FBA\u3092\u5168\u3066\u6D88\u3059.\"\"\"\n\n      \
-    \  X=self.adjacent_out[u].copy()\n        for v in X:\n            self.remove_arc(u,v)\n\
-    \n        X=self.adjacent_in[u].copy()\n        for w in X:\n            self.remove_arc(w,u)\n\
-    \n\n    #Walk\u306E\u8FFD\u52A0\n    def add_walk(self,*walk):\n        \"\"\"\
-    \ \u6709\u5411\u6B69\u9053 walk=(w[0], ..., w[n-1]) \u3092\u8FFD\u52A0\u3059\u308B\
-    . \"\"\"\n\n        N=len(walk)\n        for k in range(N-1):\n            self.add_arc(walk[k],walk[k+1])\n\
-    \n    #Cycle\u306E\u8FFD\u52A0\n    def add_cycle(self,*cycle):\n        \"\"\"\
-    \ \u6709\u5411\u30B5\u30A4\u30AF\u30EB cycle=(c[0] ..., c[n-1]) \u3092\u8FFD\u52A0\
-    \u3059\u308B. \"\"\"\n\n        self.add_walk(*cycle)\n        self.add_arc(cycle[-1],cycle[0])\n\
-    \n    #\u30B0\u30E9\u30D5\u306B\u8FBA\u304C\u5B58\u5728\u3059\u308B\u304B\u5426\
-    \u304B\n    def arc_exist(self, u, v):\n        \"\"\" \u6709\u5411\u8FBA u ->\
-    \ v \u306F\u5B58\u5728\u3059\u308B\u304B? \"\"\"\n        return (v in self.adjacent_out[u])\n\
-    \n    #\u8FD1\u508D\n    def neighbohood(self,v):\n        \"\"\"v\u306E\u51FA\
-    \u8FD1\u508D, \u5165\u8FD1\u508D\u3092\u51FA\u529B\u3059\u308B.\n\n        Input:\n\
-    \        v:\u9802\u70B9\n\n        Output:\n        (\u51FA\u8FD1\u508D, \u5165\
-    \u8FD1\u508D)\n        \"\"\"\n        return (self.adjacent_out[v],self.adjacent_in[v])\n\
-    \n    #\u51FA\u6B21\u6570\n    def out_degree(self,v):\n        return len(self.adjacent_out[v])\n\
-    \n    #\u5165\u6B21\u6570\n    def in_degree(self,v):\n        return len(self.adjacent_in[v])\n\
-    \n    #\u6B21\u6570\n    def degree(self,v):\n        return (self.out_degree(v),self.in_degree(v))\n\
-    \n    #\u76F8\u5BFE\u6B21\u6570\n    def relative_degree(self,v):\n        return\
-    \ self.out_degree(v)-self.in_degree(v)\n\n    #\u9802\u70B9\u6570\n    def vertex_count(self):\n\
+    \u7FA9\n    def __init__(self, N = 0):\n        \"\"\" N \u9802\u70B9\u306E\u6709\
+    \u5411\u7A7A\u30B0\u30E9\u30D5\u3092\u751F\u6210\u3059\u308B. \"\"\"\n\n     \
+    \   self.adjacent_out = [[] for _ in range(N)] #\u51FA\u8FD1\u508D (v \u304C\u59CB\
+    \u70B9)\n        self.adjacent_in = [[] for _ in range(N)] #\u5165\u8FD1\u508D\
+    \ (v \u304C\u7D42\u70B9)\n        self.__size = 0\n\n    #\u9802\u70B9\u306E\u8FFD\
+    \u52A0\n    def add_vertex(self):\n        \"\"\" \u9802\u70B9\u3092\u8FFD\u52A0\
+    \u3059\u308B.\n\n        \"\"\"\n        self.adjacent_out.append([])\n      \
+    \  self.adjacent_in.append([])\n        return self.order() - 1\n\n    def add_vertices(self,\
+    \ k = 1):\n        \"\"\" \u9802\u70B9\u3092 k \u500B\u8FFD\u52A0\u3059\u308B\
+    .\n\n        k: int\n        \"\"\"\n        n = self.order()\n        self.adjacent_out.extend([[]\
+    \ for _ in range(k)])\n        self.adjacent_in.extend([[] for _ in range(k)])\n\
+    \        return list(range(n, n + k))\n\n    #\u8FBA\u306E\u8FFD\u52A0\n    def\
+    \ add_arc(self, source, target, label = None):\n        self.adjacent_out[source].append((target,\
+    \ label))\n        self.adjacent_in[target].append((source, label))\n        self.__size\
+    \ += 1\n\n    #Walk\u306E\u8FFD\u52A0\n    def add_walk(self,*walk):\n       \
+    \ \"\"\" \u6709\u5411\u6B69\u9053 walk=(w[0], ..., w[n-1]) \u3092\u8FFD\u52A0\u3059\
+    \u308B. \"\"\"\n\n        for i in range(len(walk) - 1):\n            self.add_arc(walk[i],\
+    \ walk[i + 1])\n\n    #Cycle\u306E\u8FFD\u52A0\n    def add_cycle(self,*cycle):\n\
+    \        \"\"\" \u6709\u5411\u30B5\u30A4\u30AF\u30EB cycle=(c[0] ..., c[n-1])\
+    \ \u3092\u8FFD\u52A0\u3059\u308B. \"\"\"\n\n        self.add_walk(*cycle)\n  \
+    \      self.add_arc(cycle[-1], cycle[0])\n\n    #\u8FD1\u508D\n    def out_partner_yield(self,\
+    \ v):\n        for w, _ in self.adjacent_out[v]:\n            yield w\n\n    def\
+    \ out_partner_with_label_yield(self, v):\n        yield from self.adjacent_out[v]\n\
+    \n    def in_partner_yield(self, v):\n        for w, _ in self.adjacent_in[v]:\n\
+    \            yield w\n\n    def in_partner_with_label_yield(self, v):\n      \
+    \  yield from self.adjacent_in[v]\n\n    #\u51FA\u6B21\u6570\n    def out_degree(self,v):\n\
+    \        return len(self.adjacent_out[v])\n\n    #\u5165\u6B21\u6570\n    def\
+    \ in_degree(self,v):\n        return len(self.adjacent_in[v])\n\n    #\u6B21\u6570\
+    \n    def degree(self,v):\n        return (self.out_degree(v), self.in_degree(v))\n\
+    \n    #\u76F8\u5BFE\u6B21\u6570\n    def relative_degree(self, v):\n        return\
+    \ self.out_degree(v) - self.in_degree(v)\n\n    #\u9802\u70B9\u6570\n    def vertex_count(self):\n\
     \        \"\"\" \u30B0\u30E9\u30D5\u306E\u9802\u70B9\u6570 (\u4F4D\u6570) \u3092\
     \u6C42\u3081\u308B.\"\"\"\n        return len(self.adjacent_out)\n\n    def order(self):\n\
     \        \"\"\" \u30B0\u30E9\u30D5\u306E\u4F4D\u6570 (\u9802\u70B9\u6570) \u3092\
     \u6C42\u3081\u308B.\"\"\"\n        return len(self.adjacent_out)\n\n    #\u8FBA\
     \u6570\n    def arc_count(self):\n        \"\"\" \u30B0\u30E9\u30D5\u306E\u8FBA\
-    \u6570 (\u30B5\u30A4\u30BA) \u3092\u6C42\u3081\u308B.\"\"\"\n        return self.arc_number\n\
+    \u6570 (\u30B5\u30A4\u30BA) \u3092\u6C42\u3081\u308B.\"\"\"\n        return self.__size\n\
     \n    def size(self):\n        \"\"\" \u30B0\u30E9\u30D5\u306E\u30B5\u30A4\u30BA\
-    \ (\u8FBA\u6570) \u3092\u6C42\u3081\u308B. \"\"\"\n        return self.arc_number\n\
+    \ (\u8FBA\u6570) \u3092\u6C42\u3081\u308B. \"\"\"\n        return self.__size\n\
     \n    #\u9802\u70B9v\u306B\u5230\u9054\u53EF\u80FD\u306A\u9802\u70B9\n    def\
-    \ reachable_to(self,v):\n        \"\"\" \u9802\u70B9 v \u306B\u5230\u9054\u53EF\
-    \u80FD\u306A\u9802\u70B9\u3092\u6C42\u3081\u308B. \"\"\"\n        from collections\
-    \ import deque\n\n        N=self.vertex_count()\n        T=[0]*N; T[v]=1\n   \
-    \     Q=deque([v])\n        while Q:\n            x=Q.pop()\n            for y\
-    \ in self.adjacent_in[x]:\n                if not T[y]:\n                    T[y]=1\n\
-    \                    Q.append(y)\n        return [x for x in range(N) if T[x]]\n\
-    \n    #\u9802\u70B9v\u304B\u3089\u5230\u9054\u53EF\u80FD\u306A\u9802\u70B9\n \
-    \   def reachable_from(self,v):\n        \"\"\" \u9802\u70B9 v \u3078\u5230\u9054\
-    \u53EF\u80FD\u306A\u9802\u70B9\u3092\u6C42\u3081\u308B. \"\"\"\n        from collections\
-    \ import deque\n\n        N=self.vertex_count()\n        T=[0]*N; T[v]=1\n   \
-    \     Q=deque([v])\n        while Q:\n            x=Q.pop()\n            for y\
-    \ in self.adjacent_out[x]:\n                if not T[y]:\n                   \
-    \ T[y]=1\n                    Q.append(y)\n        return [x for x in range(N)\
-    \ if T[x]]\n\n    #\u9802\u70B9 u,v \u306E\u8DDD\u96E2\u3092\u6C42\u3081\u308B\
-    .\n    def distance(self,u,v):\n        if u==v:\n            return 0\n\n   \
-    \     from collections import deque\n        inf=float(\"inf\")\n        N=self.vertex_count()\n\
-    \        adj_out=self.adjacent_out\n        T=[inf]*N; T[u]=0\n\n        Q=deque([u])\n\
-    \        while Q:\n            w=Q.popleft()\n            for x in adj_out[w]:\n\
-    \                if T[x]==inf:\n                    T[x]=T[w]+1\n            \
-    \        Q.append(x)\n                    if x==v:\n                        return\
-    \ T[x]\n        return inf\n\n    #\u3042\u308B1\u70B9\u304B\u3089\u306E\u8DDD\
-    \u96E2\n    def distance_all(self,u):\n        \"\"\" \u9802\u70B9 u \u304B\u3089\
-    \u306E\u8DDD\u96E2\u3092\u6C42\u3081\u308B.\"\"\"\n\n        from collections\
-    \ import deque\n        inf=float(\"inf\")\n        adj_out=self.adjacent_out\n\
-    \        T=[inf]*self.vertex_count(); T[u]=0\n\n        Q=deque([u])\n       \
-    \ while Q:\n            w=Q.popleft()\n            for x in adj_out[w]:\n    \
-    \            if T[x]==inf:\n                    T[x]=T[w]+1\n                \
-    \    Q.append(x)\n        return T\n\n    def shortest_path(self,u,v, dist=False):\n\
+    \ reachable_to(self, v):\n        \"\"\" \u9802\u70B9 v \u306B\u5230\u9054\u53EF\
+    \u80FD\u306A\u9802\u70B9\u3092\u6C42\u3081\u308B. \"\"\"\n        N = self.order()\n\
+    \n        reach = [0] * N; reach[v] = 1\n        stack = [v]\n        while stack:\n\
+    \            x = stack.pop()\n            for y in self.in_partner_yield(x):\n\
+    \                if reach[y]:\n                    continue\n\n              \
+    \  reach[y] = 1\n                stack.append(y)\n\n        return [x for x in\
+    \ range(N) if reach[x]]\n\n    #\u9802\u70B9v\u304B\u3089\u5230\u9054\u53EF\u80FD\
+    \u306A\u9802\u70B9\n    def reachable_from(self, v):\n        \"\"\" \u9802\u70B9\
+    \ v \u304B\u3089\u5230\u9054\u53EF\u80FD\u306A\u9802\u70B9\u3092\u6C42\u3081\u308B\
+    . \"\"\"\n        N = self.order()\n\n        reach = [0] * N; reach[v] = 1\n\
+    \        stack = [v]\n        while stack:\n            x = stack.pop()\n    \
+    \        for y in self.out_partner_yield(x):\n                if reach[y]:\n \
+    \                   continue\n\n                reach[y] = 1\n               \
+    \ stack.append(y)\n\n        return [x for x in range(N) if reach[x]]\n\n    #\u9802\
+    \u70B9 u,v \u306E\u8DDD\u96E2\u3092\u6C42\u3081\u308B.\n    def distance(self,\
+    \ u, v, default = -1):\n        from collections import deque\n\n        dist\
+    \ = [-1] * self.vertex_count()\n        dist[u] = 0\n\n        Q = deque([u])\n\
+    \        while Q:\n            x = Q.popleft()\n            for y in self.in_partner_yield(x):\n\
+    \                if dist[y] != -1:\n                    continue\n\n         \
+    \       dist[y] = dist[x] + 1\n                Q.append(y)\n\n               \
+    \ if y == v:\n                    return dist[y]\n\n        return default\n\n\
+    \    #\u3042\u308B1\u70B9\u304B\u3089\u306E\u8DDD\u96E2\n    def distance_all(self,\
+    \ u, default):\n        \"\"\" \u9802\u70B9 u \u304B\u3089\u306E\u8DDD\u96E2\u3092\
+    \u305D\u308C\u305E\u308C\u306E\u9802\u70B9\u306B\u3064\u3044\u3066\u6C42\u3081\
+    \u308B.\"\"\"\n\n        from collections import deque\n\n        dist = [-1]\
+    \ * self.vertex_count()\n        dist[u] = 0\n\n        Q = deque([u])\n     \
+    \   while Q:\n            x = Q.popleft()\n            for y in self.in_partner_yield(x):\n\
+    \                if dist[y] != -1:\n                    continue\n\n         \
+    \       dist[y] = dist[x] + 1\n                Q.append(y)\n\n        return [d\
+    \ if d != -1 else default for d in dist]\n\n    def shortest_path(self, u, v):\n\
     \        \"\"\" u \u304B\u3089 v \u3078\u306E\u6700\u77ED\u8DEF\u3092\u6C42\u3081\
-    \u308B (\u5B58\u5728\u3057\u306A\u3044\u5834\u5408\u306F None).\n\n        dist:\
-    \ False \u2192 shortest_path \u306E\u307F, True \u2192 (dist, shortest_path)\"\
-    \"\"\n\n        if u==v:\n            if dist:\n                return (0,[u])\n\
-    \            else:\n                return [u]\n\n        from collections import\
-    \ deque\n        inf=float(\"inf\")\n\n        adj_in=self.adjacent_in\n     \
-    \   T=[-1]*self.vertex_count()\n\n        Q=deque([v]); T[v]=v\n        while\
-    \ Q:\n            w=Q.popleft()\n            for x in adj_in[w]:\n           \
-    \     if T[x]==-1:\n                    T[x]=w\n                    Q.append(x)\n\
-    \                    if x==u:\n                        P=[u]\n               \
-    \         a=u\n                        while a!=v:\n                         \
-    \   a=T[a]\n                            P.append(a)\n                        if\
-    \ dist:\n                            return (len(P)-1,P)\n                   \
-    \     else:\n                            return P\n        if dist:\n        \
-    \    return (inf,None)\n        else:\n            return None\n\n    #\u6DF1\u3044\
-    \u30B3\u30D4\u30FC\n    def deepcopy(self):\n        from copy import deepcopy\n\
-    \        D=Digraph(self.vertex_count())\n        D.arc_number=self.arc_count()\n\
-    \        D.adjacent_out=deepcopy(self.adjacent_out)\n        D.adjacent_in=deepcopy(self.adjacent_in)\n\
-    \        return D\n\n#================================================\n#Dijkstra\n\
-    def One_Point_Distance(D, From, with_path=False):\n    \"\"\" \u5358\u4E00\u59CB\
+    \u308B (\u5B58\u5728\u3057\u306A\u3044\u5834\u5408\u306F None).\n\n        \"\"\
+    \"\n\n        if u == v:\n            return u\n\n        from collections import\
+    \ deque\n\n        prev = [None] * self.order()\n\n        Q = deque([u])\n\n\
+    \        while Q and (prev[v] is None):\n            x = Q.popleft()\n       \
+    \     for y, j in self.out_partner_with_label_yield(x):\n                if prev[y]\
+    \ is not None:\n                    continue\n\n                prev[y] = (x,\
+    \ j)\n                Q.append(y)\n\n        if prev[v] is not None:\n       \
+    \     vertex = [v]\n            arc = []\n            while v != u:\n        \
+    \        v, i = prev[v]\n                vertex.append(v)\n                arc.append(i)\n\
+    \n            vertex.reverse(); arc.reverse()\n            return { 'vertex':\
+    \ vertex, 'arc': arc }\n        else:\n            return { 'vertex': None, 'arc':\
+    \ None }\n\n#================================================\n#Dijkstra\ndef\
+    \ One_Point_Distance(D, From, with_path=False):\n    \"\"\" \u5358\u4E00\u59CB\
     \u70B9 From \u304B\u3089\u306E\u8DDD\u96E2\u3092\u6C42\u3081\u308B.\n\n    D:\
     \ \u8FBA\u306E\u91CD\u307F\u304C\u5168\u3066\u975E\u8CA0\u306E\u6709\u5411\u30B0\
     \u30E9\u30D5\n    From:\u59CB\u70B9\n    with_path:\u6700\u77ED\u8DEF\u3082\u542B\
@@ -288,15 +277,16 @@ data:
     \  prefunc(u)\n"
   dependsOn: []
   isVerificationFile: false
-  path: Graph/Digraph.py
+  path: Graph/Digraph/Digraph.py
   requiredBy: []
-  timestamp: '2022-04-16 12:03:09+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
-documentation_of: Graph/Digraph.py
+  timestamp: '2024-03-22 23:26:50+09:00'
+  verificationStatus: LIBRARY_ALL_WA
+  verifiedWith:
+  - test_verify/yosupo_library_checker/Graph/Directed_Eulerian_Trail.test.py
+documentation_of: Graph/Digraph/Digraph.py
 layout: document
 redirect_from:
-- /library/Graph/Digraph.py
-- /library/Graph/Digraph.py.html
-title: Graph/Digraph.py
+- /library/Graph/Digraph/Digraph.py
+- /library/Graph/Digraph/Digraph.py.html
+title: Graph/Digraph/Digraph.py
 ---

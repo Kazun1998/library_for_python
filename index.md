@@ -307,14 +307,14 @@ data:
     - icon: ':warning:'
       path: Geometric/Triangle.py
       title: Geometric/Triangle.py
-  - name: Graph
+  - name: Graph/Digraph
     pages:
-    - icon: ':warning:'
-      path: Graph/Digraph.py
-      title: Graph/Digraph.py
-    - icon: ':warning:'
-      path: Graph/Weighted_Digraph.py
-      title: Graph/Weighted_Digraph.py
+    - icon: ':x:'
+      path: Graph/Digraph/Digraph.py
+      title: Graph/Digraph/Digraph.py
+    - icon: ':x:'
+      path: Graph/Digraph/Eulerian.py
+      title: Graph/Digraph/Eulerian.py
   - name: Graph/Graph
     pages:
     - icon: ':warning:'
@@ -349,8 +349,16 @@ data:
     - icon: ':warning:'
       path: Graph/Weighted_Digraph/Weighted_Digraph.py
       title: Graph/Weighted_Digraph/Weighted_Digraph.py
+  - name: Graph
+    pages:
+    - icon: ':warning:'
+      path: Graph/Weighted_Digraph.py
+      title: Graph/Weighted_Digraph.py
   - name: Graph/Weighted_Graph
     pages:
+    - icon: ':warning:'
+      path: Graph/Weighted_Graph/Dijkstra.py
+      title: Graph/Weighted_Graph/Dijkstra.py
     - icon: ':warning:'
       path: Graph/Weighted_Graph/Minimum_Spanning_Tree.py
       title: Graph/Weighted_Graph/Minimum_Spanning_Tree.py
@@ -649,6 +657,9 @@ data:
       title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
   - name: test_verify/yosupo_library_checker/Graph
     pages:
+    - icon: ':x:'
+      path: test_verify/yosupo_library_checker/Graph/Directed_Eulerian_Trail.test.py
+      title: test_verify/yosupo_library_checker/Graph/Directed_Eulerian_Trail.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
       title: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py

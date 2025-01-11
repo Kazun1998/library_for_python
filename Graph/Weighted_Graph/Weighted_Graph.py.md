@@ -101,24 +101,25 @@ data:
     \        if S&(1<<v):\n                continue\n\n            E=T[S|1<<v]\n \
     \           cost=G.adjacent[v]\n\n            for w,c in cost.items():\n     \
     \           if v!=w and G.edge_exist(v,w) and E[v]>F[w]+c:\n                 \
-    \   E[v]=F[w]+c\n    return T[-1][0]\n\n#\u6728\u306E\u76F4\u5F84\u3092\u6C42\u3081\
-    \u308B.\ndef Tree_Diameter(T, Mode=False):\n    \"\"\" \u91CD\u307F\u4ED8\u304D\
-    \u6728 T \u306E\u76F4\u5F84\u3092\u6C42\u3081\u308B.\n\n    T: \u6728\n\n    (\u51FA\
-    \u529B\u306E\u7D50\u679C)\n    Mode=True  \u2192 (\u76F4\u5F84, (\u76F4\u5F84\u3092\
-    \u6210\u3059\u7AEF\u70B91, \u76F4\u5F84\u3092\u6210\u3059\u7AEF\u70B92))\n   \
-    \ Mode=False \u2192 \u76F4\u5F84\n    \"\"\"\n    from collections import deque\n\
-    \n    def bfs(x):\n        dist=[-1]*N; dist[x]=0\n        adj=T.adjacent\n  \
-    \      Q=deque([x])\n\n        while Q:\n            x=Q.popleft()\n         \
-    \   for y,c in adj[x].items():\n                if dist[y]==-1:\n            \
-    \        dist[y]=dist[x]+c\n                    Q.append(y)\n\n        z=max(range(N),key=lambda\
-    \ x:dist[x])\n        return z,dist[z]\n\n    N=T.vertex_count()\n    u,_=bfs(0)\n\
-    \    v,d=bfs(u)\n\n    if Mode:\n        return (d,(u,v))\n    else:\n       \
-    \ return d\n\n"
+    \   E[v]=F[w]+c\n    return T[-1][0]\n\n# \u6728\u306E\u76F4\u5F84\u3092\u6C42\
+    \u3081\u308B.\ndef Tree_Diameter(T: Weigthed_Graph):\n    \"\"\" \u6728 T \u306E\
+    \u76F4\u5F84\u53CA\u3073, \u76F4\u5F84\u3092\u306A\u3059\u30D1\u30B9\u3092\u8FD4\
+    \u3059.\n\n    Args:\n        T (Weigthed_Graph): \u6728\n    \"\"\"\n\n    def\
+    \ bfs(x: int, mode: bool):\n        dist = [-1] * N; dist[x] = 0\n        adj\
+    \ = T.adjacent\n        S = [x]\n        prev = [-1] * N\n\n        while S:\n\
+    \            x = S.pop()\n            for y, c, _ in adj[x]:\n               \
+    \ if dist[y] == -1:\n                    dist[y] = dist[x] + c\n             \
+    \       S.append(y)\n                    prev[y] = x\n\n        furthest = max(range(N),\
+    \ key = lambda v: dist[v])\n        if not mode:\n            return furthest\n\
+    \n        path = [furthest]\n        v = furthest\n        while prev[v] != -1:\n\
+    \            v = prev[v]\n            path.append(v)\n\n        return dist[furthest],\
+    \ path[::-1]\n\n    N = T.vertex_count()\n    u = bfs(0, False)\n    diameter,\
+    \ path = bfs(u, True)\n\n    return { 'diameter': diameter, 'path': path }\n"
   dependsOn: []
   isVerificationFile: false
   path: Graph/Weighted_Graph/Weighted_Graph.py
   requiredBy: []
-  timestamp: '2024-03-03 01:24:05+09:00'
+  timestamp: '2025-01-03 08:32:23+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Graph/Weighted_Graph/Weighted_Graph.py
