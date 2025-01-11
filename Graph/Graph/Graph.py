@@ -534,30 +534,6 @@ def Triangle(G: Graph, calc, merge, unit):
             used[k]=False
     return X
 
-#=================================================
-#特別なグラフ
-#=================================================
-#完全グラフの作成
-def Complete_Graph(N):
-    """ N 頂点の完全グラフを生成する. """
-
-    G=Graph(N)
-    for u in range(N):
-        for v in range(u+1,N):
-            G.add_edge(u,v)
-    return G
-
-#完全2部グラフ
-def Complete_Bipartite_Graph(M,N):
-    """ M,N 頂点の完全2部グラフを生成する. """
-
-    G=Graph(M+N)
-
-    for a in range(M):
-        for b in range(M,M+N):
-            G.add_edge(a,b)
-    return G
-
 #グラフ作成
 def Making_Graph(N,E):
     """ 辺の情報 E からグラフを生成する. """
@@ -567,56 +543,8 @@ def Making_Graph(N,E):
         G.add_edge(*e)
     return G
 
-#ペテルセングラフ
-def Petersen_Graph(N=5,K=2):
-    """ (n,k) -型のペテルセングラフを紹介する. """
-
-    G=Graph(2*N)
-
-    for i in range(N):
-        G.add_edge(i,(i+1)%N)
-        G.add_edge(i,i+N)
-
-        j=(i+K)%N
-        G.add_edge(i+N,j+N)
-    return G
-
-#格子グラフ
-def Grid_Graph(M, N):
-    """ M x N マスのグラフを生成する.  """
-
-    G=Graph(M*N)
-
-    for p in range(M*N):
-        if p%N!=N-1:
-            G.add_edge(p,p+1)
-        if p<(M-1)*N:
-            G.add_edge(p,p+N)
-    return G
-
-#トーラス
-def Torus_Graph(M, N):
-    """ M x N のトーラスグラフを生成する. """
-
-    G=Graph(M*N)
-    for i in range(M):
-        for j in range(N):
-            p=i*N+j
-            q=i*N+(j+1)%N
-            r=((i+1)%M)*N+j
-
-            G.add_edge(p,q)
-            G.add_edge(p,r)
-    return G
-
 #Pathグラフ
-def Path_Graph(N):
-    """ N 頂点からなるパスグラフを生成する. """
 
-    P=Graph(N)
-    for i in range(N-1):
-        P.add_edge(i,i+1)
-    return P
 
 #Cycleグラフ
 def Cycle_Graph(N):
@@ -626,65 +554,6 @@ def Cycle_Graph(N):
     for i in range(N):
         C.add_edge(i, (i+1)%N)
     return C
-
-#Circulant グラフ
-def Circulant_Graph(N, *J):
-    """ N 頂点, J ジャンプの巡回グラフを生成する."""
-
-    C=Graph(N)
-    for j in J:
-        for v in range(N):
-            w=(v+j)%N
-            C.add_edge(v,w)
-    return C
-
-#Starグラフ
-def Star_Graph(N):
-    """ 葉を N 個持つスターグラフを生成する. """
-
-    S=Graph(N+1)
-    for i in range(1,N+1):
-        S.add_edge(0,i)
-    return S
-
-#Wheelグラフ
-def Wheel_Graph(N):
-    """ 外周部が N 頂点からなる車輪グラフを生成する. """
-
-    W=Graph(N+1)
-    for i in range(1,N+1):
-        W.add_edge(0,i)
-
-    for j in range(N):
-        W.add_edge(j%N+1,(j+1)%N+1)
-    return W
-
-#騎士巡回グラフ
-def Knight_Tour_Graph(M, N, s=1, t=2):
-    """ M x N のチェス盤に (s,t)-Knight が移動するグラフを生成する.
-    """
-
-    G=Graph(M*N)
-
-    H=[(s,t),(t,s),(s,-t),(t,-s)]
-
-    for a,b in H:
-        for i in range(max(0,-a),min(M,M-a)):
-            for j in range(max(0,-b),min(N,N-b)):
-                p=i*N+j; q=(i+a)*N+(j+b)
-                G.add_edge(p,q)
-    return G
-
-#完全k分木
-def Complete_Kary_Tree(n,k=2):
-    """ 深さが n の完全 k 分木を生成する. """
-
-    m=(k**n-1)//(k-1)
-    T=Graph(m)
-
-    for i in range(1,m):
-        T.add_edge((i-1)//k,i)
-    return T
 
 #==========
 # グラフの走査
