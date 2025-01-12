@@ -62,23 +62,24 @@ class Prime:
 
         return factors
 
-    @classmethod
-    def is_prime(cls, N):
-        N = abs(N)
-        if N <= 1:
-            return False
-
-        if (N == 2) or (N == 3) or (N == 5) or (N == 7):
+    @staticmethod
+    def is_prime(N: int) -> bool:
+        if N <= 3:
+            return N >= 2
+        elif N == 5:
             return True
-
-        if not (N % 6 == 1 or N % 6 == 5):
+        elif (N % 2 == 0) or (N % 3 == 0) or (N % 5 == 0):
             return False
 
-        offset = 0
-        while offset * offset <= N:
-            if (N % (offset + 5) == 0) or (N % (offset + 7) == 0):
+        p = 7
+        while p * p <= N:
+            judge = (N % p == 0) or (N % (p + 4) == 0) or (N % (p + 6) == 0) or (N % (p + 10) == 0)
+            judge |= (N % (p + 12) == 0) or (N % (p + 16) == 0) or (N % (p + 22) == 0) or (N % (p + 24) == 0)
+
+            if judge:
                 return False
-            offset += 6
+
+            p += 30
         return True
 
     @classmethod
