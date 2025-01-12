@@ -206,16 +206,16 @@ data:
     \ + (log K) pi(N))\n\n    Args:\n        N (int): \u5E95\u306E\u4E0A\u9650\n \
     \       K (int): \u6307\u6570\n        M (int): \u9664\u6570\n\n    Returns:\n\
     \        list[int]: \u7B2C x \u9805\u306F x^K mod M \u306E\u5024\u304C\u8A18\u9332\
-    \u3055\u308C\u308B.\n    \"\"\"\n\n    if N == 0:\n        return [0]\n\n    spf\
-    \ = Sieve_of_Eratosthenes.smallest_prime_factor(N)\n\n    A = [0] * (N + 1)\n\
-    \    A[1] = pow(1, K, M)\n\n    for x in range(2, N + 1):\n        if spf[x] ==\
-    \ x:\n            A[x] = pow(x, K, M)\n        else:\n            A[x] = A[spf[x]]\
-    \ * A[x // spf[x]] % M\n\n    return A\n"
+    \u3055\u308C\u308B.\n    \"\"\"\n\n    if N == 0:\n        return [pow(0, K, M)]\n\
+    \n    spf = Sieve_of_Eratosthenes.smallest_prime_factor(N)\n\n    A = [0] * (N\
+    \ + 1)\n    A[0] = pow(0, K, M); A[1] = pow(1, K, M)\n\n    for x in range(2,\
+    \ N + 1):\n        if spf[x] == x:\n            A[x] = pow(x, K, M)\n        else:\n\
+    \            A[x] = A[spf[x]] * A[x // spf[x]] % M\n\n    return A\n"
   dependsOn: []
   isVerificationFile: false
   path: Integer/Prime.py
   requiredBy: []
-  timestamp: '2025-01-12 15:15:12+09:00'
+  timestamp: '2025-01-12 18:26:36+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Integer/Prime.py
