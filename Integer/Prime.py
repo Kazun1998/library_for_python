@@ -534,12 +534,12 @@ def Power_List(N: int, K: int, M: int) -> list[int]:
     """
 
     if N == 0:
-        return [0]
+        return [pow(0, K, M)]
 
     spf = Sieve_of_Eratosthenes.smallest_prime_factor(N)
 
     A = [0] * (N + 1)
-    A[1] = pow(1, K, M)
+    A[0] = pow(0, K, M); A[1] = pow(1, K, M)
 
     for x in range(2, N + 1):
         if spf[x] == x:
