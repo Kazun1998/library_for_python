@@ -346,95 +346,118 @@ def Pollard_Rho_Prime_Factorization(N):
     res.sort(key=lambda x:x[0])
     return res
 
-# エラトステネスの篩
-def Sieve_of_Eratosthenes(N: int) -> list[int]:
-    """ N 以下の非負整数に対する Eratosthenes の篩を実行する.
+class Sieve_of_Eratosthenes:
+    @staticmethod
+    def list(N: int):
+        """ N 以下の非負整数に対する Eratosthenes の篩を実行する.
 
-    Args:
-        N (int): 上限
+        Args:
+            N (int): 上限
 
-    Returns:
-        list[int]: 第 k 項について, k が素数ならば, 第 k 項が 1, k が素数でないならば, 第 k 項が 0 である列.
-    """
+        Returns:
+            list[int]: 第 k 項について, k が素数ならば, 第 k 項が 1, k が素数でないならば, 第 k 項が 0 である列.
+        """
 
-    if N == 0:
-        return [0]
+        if N == 0:
+            return [0]
 
-    sieve = [1] * (N + 1)
-    sieve[0] = sieve[1] = 0
+        sieve = [1] * (N + 1)
+        sieve[0] = sieve[1] = 0
 
-    for x in range(2 * 2, N + 1, 2):
-        sieve[x] = 0
+        for x in range(2 * 2, N + 1, 2):
+            sieve[x] = 0
 
-    for x in range(3 * 3, N + 1, 6):
-        sieve[x] = 0
+        for x in range(3 * 3, N + 1, 6):
+            sieve[x] = 0
 
-    p = 5
-    parity = 0
-    while p * p <= N:
-        if sieve[p]:
-            pointer = p * p
-            while pointer <= N:
-                sieve[pointer] = 0
-                pointer += 2 * p
+        p = 5
+        parity = 0
+        while p * p <= N:
+            if sieve[p]:
+                pointer = p * p
+                while pointer <= N:
+                    sieve[pointer] = 0
+                    pointer += 2 * p
 
-        p += 4 if parity else 2
-        parity ^= 1
-    return sieve
+            p += 4 if parity else 2
+            parity ^= 1
+        return sieve
 
-def Smallest_Prime_Factor(N):
-    """ 0,1,2,...,N の最小の素因数のリスト (0,1 については 1 にしている)
-    """
+    @staticmethod
+    def smallest_prime_factor(N: int):
+        """ 0, 1, ..., N について最小の素因数のリストを求める
 
-    if N<=1:
-        return [1]*(N+1)
+        Args:
+            N (int): 上限
 
-    T=[0]*(N+1); T[0]=T[1]=1
+        Returns:
+            list[int]: 第 k 項は k の最小の素因数であるリスト (k = 0, 1 の場合は 1 とする)
+        """
 
-    for i in range(2, N+1, 2):
-        T[i]=2
+        if N <= 1:
+            return [1] * (N + 1)
 
-    for i in range(3, N+1, 6):
-        T[i]=3
+        # spf: smallest prime factor
+        spf = [0] * (N + 1); spf[0] = spf[1] = 1
 
-    prime=[2,3]
-    i=5; d=2
-    while i<=N:
-        if T[i]==0:
-            T[i]=i
-            prime.append(i)
+        for x in range(2, N + 1, 2):
+            spf[x] = 2
 
-        for p in prime:
-            if i*p<=N:
-                T[i*p]=p
-            else:
-                break
-            if p==T[i]:
-                break
-        i+=d; d=6-d
-    return T
+        for x in range(3, N + 1, 6):
+            spf[x] = 3
 
-def Faster_Prime_Factorization(N,L):
-    """ Smallest_Prime_Factors(N)で求めたリストを利用して, N を高速素因数分解する.
+        primes = [2, 3]
+        parity = 0
+        x = 5
+        while x <= N:
+            if spf[x] == 0:
+                spf[x] = x
+                primes.append(x)
 
-    L: Smallest_Prime_Factors(N)で求めたリスト
-    """
-    if N==0:
-        return [[0,1]]
-    elif N>0:
-        D=[]
-    else:
-        D=[[-1,1]]
-        N=abs(N)
+            for p in primes:
+                if x * p <= N:
+                    spf[x * p] = p
+                else:
+                    break
 
-    while N>1:
-        a=L[N]
-        k=0
-        while L[N]==a:
-            k+=1
-            N//=a
-        D.append([a,k])
-    return D
+                if p == spf[x]:
+                    break
+
+            x += 4 if parity else 2
+            parity ^= 1
+
+        return spf
+
+    @staticmethod
+    def faster_prime_factorization(N: int, spf: list) -> list:
+        """ smallest_prime_factor で求めた最小の素因数リストを利用して, N を高速で素因数分解する.
+
+        Args:
+            N (int): 素因数分解の対象
+            spf (list[int]): smallest_prime_factor で求めた最小の素因数リスト
+
+        Returns:
+            list[list[int]]: 素因数分解の結果
+        """
+
+        if N == 0:
+            return [[0, 1]]
+
+        factors = []
+        if N < 0:
+            factors.append([-1, 1])
+            N = abs(N)
+
+        while N > 1:
+            p = spf[N]
+            e = 0
+            while spf[N] == p:
+                e += 1
+                N //= p
+
+            factors.append([p, e])
+
+        return factors
 
 #素数の個数
 #Thanks for pyranine
@@ -496,21 +519,32 @@ def Prime_Pi(N):
     return larges[0]
 
 #K乗リスト
-def Power_List(N,K,Mod):
-    """ i=0,1,...,N における i^K (mod Mod) のリストを求める.
-    [計算量] O(N log log N+pi(N) log K)
-    N,K,Mod: int
+def Power_List(N: int, K: int, M: int) -> list[int]:
+    """ x = 0, 1, ..., N に対する x^K mod M を求める.
+
+    計算量: O(N log log N + (log K) pi(N))
+
+    Args:
+        N (int): 底の上限
+        K (int): 指数
+        M (int): 除数
+
+    Returns:
+        list[int]: 第 x 項は x^K mod M の値が記録される.
     """
 
-    if N==0:
+    if N == 0:
         return [0]
 
-    S=Smallest_Prime_Factor(N)
-    A=[0]*(N+1); A[1]=pow(1,K,Mod)
+    spf = Sieve_of_Eratosthenes.smallest_prime_factor(N)
 
-    for i in range(2,N+1):
-        if S[i]<i:
-            A[i]=A[S[i]]*A[i//S[i]]%Mod
+    A = [0] * (N + 1)
+    A[1] = pow(1, K, M)
+
+    for x in range(2, N + 1):
+        if spf[x] == x:
+            A[x] = pow(x, K, M)
         else:
-            A[i]=pow(i,K,Mod)
+            A[x] = A[spf[x]] * A[x // spf[x]] % M
+
     return A
