@@ -309,10 +309,10 @@ data:
       title: Geometric/Triangle.py
   - name: Graph/Digraph
     pages:
-    - icon: ':x:'
+    - icon: ':warning:'
       path: Graph/Digraph/Digraph.py
       title: Graph/Digraph/Digraph.py
-    - icon: ':x:'
+    - icon: ':warning:'
       path: Graph/Digraph/Eulerian.py
       title: Graph/Digraph/Eulerian.py
   - name: Graph/Graph
@@ -657,9 +657,6 @@ data:
       title: test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
   - name: test_verify/yosupo_library_checker/Graph
     pages:
-    - icon: ':x:'
-      path: test_verify/yosupo_library_checker/Graph/Directed_Eulerian_Trail.test.py
-      title: test_verify/yosupo_library_checker/Graph/Directed_Eulerian_Trail.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
       title: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py

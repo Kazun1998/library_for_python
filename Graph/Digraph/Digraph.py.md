@@ -2,13 +2,10 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith:
-  - icon: ':x:'
-    path: test_verify/yosupo_library_checker/Graph/Directed_Eulerian_Trail.test.py
-    title: test_verify/yosupo_library_checker/Graph/Directed_Eulerian_Trail.test.py
-  _isVerificationFailed: true
+  _extendedVerifiedWith: []
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':warning:'
   attributes:
     links:
     - https://judge.yosupo.jp/submission/23992
@@ -280,9 +277,8 @@ data:
   path: Graph/Digraph/Digraph.py
   requiredBy: []
   timestamp: '2024-03-22 23:26:50+09:00'
-  verificationStatus: LIBRARY_ALL_WA
-  verifiedWith:
-  - test_verify/yosupo_library_checker/Graph/Directed_Eulerian_Trail.test.py
+  verificationStatus: LIBRARY_NO_TESTS
+  verifiedWith: []
 documentation_of: Graph/Digraph/Digraph.py
 layout: document
 redirect_from:
