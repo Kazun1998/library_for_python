@@ -527,6 +527,9 @@ data:
       title: Subset_Sum/Find.py
   - name: Summation
     pages:
+    - icon: ':warning:'
+      path: Summation/Count.py
+      title: Summation/Count.py
     - icon: ':heavy_check_mark:'
       path: Summation/Floor_Sum.py
       title: Floor Sum
