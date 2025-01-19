@@ -199,6 +199,25 @@ class Lazy_Evaluation_Tree():
     def all_product(self):
         return self.product(0, self.N - 1)
 
+    def max_right(self, left: int, cond):
+        """ 以下の2つをともに満たす x の1つを返す.\n
+        (1) r = left or cond(data[left] * data[left + 1] * ... * data[r - 1]): True
+        (2) r = N or cond(data[left] * data[left + 1] * ... * data[r]): False
+        ※ cond が単調減少の時, cond(data[left] * ... * data[r - 1]): True を満たす最大の r となる.
+
+        Args:
+            left (int): 左端
+            cond: 条件式 (cond(unit) = True を要求)
+        """
+
+        assert 0 <= left <= self.N
+        assert cond(self.unit)
+
+        if left == self.N:
+            return self.N
+
+        left += self.N
+
     #リフレッシュ
     def refresh(self):
         """ 遅延セグメント木の遅延情報をリセットする.
@@ -218,3 +237,7 @@ class Lazy_Evaluation_Tree():
 
     def __setitem__(self, k: int, x):
         self.update(k, x)
+
+from operator import add
+S = Lazy_Evaluation_Tree(list(range(16)), max, 0, add, add, 0)
+print(S.max_right(16, lambda x: x <= 13))
