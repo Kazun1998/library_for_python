@@ -51,3 +51,41 @@ class Sum_Count:
                 return linear_sum(1, - 2 * l + 1, a, b)
             else:
                 return linear_sum(-1, 2 * r + 1, a, b)
+
+    @staticmethod
+    def range_sum_dp(ranges, S: int, Mod: int = None):
+        """ ranges = [(a_0, b_0), (a_1, b_1), ..., (a_{N-1}, b_{N-1})] としたとき,
+        a_i <= x_i <= b_i, x_0 + x_1 + ... + x_{N-1} = y を満たす整数の組の数を y = 0, 1, ..., S に対して求める.
+        (Mod が None でないときは, 組の数を Mod で割った余り.)
+
+        Args:
+            ranges: (a, b) の形のタプル
+            S (int): 上限
+            Mod (int, optional): 法. Defaults to None.
+        """
+
+        dp = [0] * (S + 1); dp[0] = 1
+        prev_cum = [0] * (S + 1)
+
+        for a, b in ranges:
+            # dp の累積和を取る
+            prev_cum[0] = dp[0]
+            for x in range(1, S + 1):
+                prev_cum[x] = prev_cum[x - 1] + dp[x]
+
+            if Mod is not None:
+                for x in range(S):
+                    prev_cum[x] %= Mod
+
+            for x in range(S + 1):
+                if x < a:
+                    dp[x] = 0
+                elif x <= b:
+                    dp[x] = prev_cum[x - a]
+                else:
+                    dp[x] = prev_cum[x - a] - prev_cum[x - b - 1]
+
+        if Mod is None:
+            return dp
+        else:
+            return [y % Mod for y in dp]

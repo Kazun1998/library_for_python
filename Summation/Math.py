@@ -161,41 +161,6 @@ class Sum:
 
 #==================================================
 #Sum_Count系
-def Range_Sum_DP(Range, S, Mod=None, Mode=0):
-    """Range=[(A_0,B_0),...,(A_{N-1}, B_{N-1})] としとたき,
-    A_i<=X_i<=B_i, X_0+...+X_{n-1}=S を満たす組の個数を動的計画法で求める.
-
-    0<=A_i<=B_i
-    0<=S
-    計算量: O(NS)
-    """
-
-    D=[0]*(S+1); D[0]=1
-    E=[1]*(S+1)
-
-    for a,b in Range:
-        assert 0<=a<=b
-
-        for i in range(S+1):
-            if i<a:
-                D[i]=0
-            elif i<=b:
-                D[i]=E[i-a]
-            else:
-                D[i]=E[i-a]-E[i-b-1]
-
-        E[0]=D[0]
-        for i in range(1,S+1):
-            E[i]=D[i]+E[i-1]
-
-        if Mod!=None:
-            E[i]%=Mod
-
-    if Mode:
-        return D
-    else:
-        return D[S]
-
 def Range_Sum_Inclusion(Range, S, Mod=None):
     """Range=[(A_0,B_0),...,(A_{N-1}, B_{N-1})] としとたき,
     A_i<=X_i<=B_i, X_0+...+X_{n-1}=S を満たす組の個数を包除原理で求める.
