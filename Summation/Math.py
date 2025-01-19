@@ -1,183 +1,166 @@
-#==================================================
-#Sum系
-def Linear_Sum(a, b, L, R):
-    """ Sum_{i=L}^R (ai+b) を求める.
-    """
+class Sum:
+    @staticmethod
+    def linear(a: int, b: int, l: int, r: int) -> int:
+        """ sum_{k=l}^r (a k + b) を求める
 
-    if L<=R:
-        return (a*(L+R)+2*b)*(R-L+1)//2
-    else:
-        return 0
+        Args:
+            a (int): 1 次の項
+            b (int): 定数項
+            l (int):
+            r (int):
 
-def Box_Sum_Count(P, Q, R, S, K):
-    """P<=X<=Q, R<=Y<=S, X+Y=K を満たす整数の組 (X,Y) の個数を出力する.
+        Returns:
+            int: 総和
+        """
 
-    P,Q,R,S:int (P<=Q, R<=S)
-    """
-    A=max(0,K-(P  +R  )+1)
-    B=max(0,K-(Q+1+R  )+1)
-    C=max(0,K-(P  +S+1)+1)
-    D=max(0,K-(Q+1+S+1)+1)
-    return A-B-C+D
+        return (a * (l + r) + 2 * b) * (r - l + 1) // 2 if l <= r else 0
 
-def Interval_Sum_Count(L, R, X):
-    """L<=x,y<=R を満たす2つの整数x,yのうち, x+y=X を満たす組(x,y) の個数を出力する.
+    @classmethod
+    def max_linear(cls, a: int, b: int, c: int, d: int, l: int, r: int) -> int:
+        """ sum_{k = l}^r max(a k + b, c k + d) を求める.
 
-    L,R:Int (L<=R)
-    X:Int
-    """
+        Args:
+            a (int):
+            b (int):
+            c (int):
+            d (int):
+            l (int):
+            r (int):
 
-    if L>R:
-        return 0
+        Returns:
+            int:
+        """
 
-    if 2*L<=X<=L+R:
-        return X-2*L+1
-    elif L+R<=X<=2*R:
-        return 2*R+1-X
-    else:
-        return 0
+        if l > r:
+            return 0
 
-def Interval_Sum_Count_Sum(L, R, A, B):
-    """L<=x,y<=R を満たす2つの整数x,yのうち, A<=x+y<=B を満たす組(x,y) の個数を出力する.
+        if a == c:
+            return cls.linear(a, max(b, d), l, r)
 
-    L,R:Int (L<=R)
-    A,B:Int (A<=B)
-    """
+        if a < c:
+            a, b, c, d = c, d, a, b
 
-    if L>R or A>B:
-        return 0
+        if a * l + b > c * l + d:
+            return cls.linear(a, b, l, r)
+        elif a * r + b < c * r + d:
+            return cls.linear(c, d, l, r)
 
-    A=max(A,2*L)
-    B=min(B,2*R)
-    if B<2*L or 2*R<A:
-        return 0
+        m = (d - b) // (a - c)
+        return cls.linear(c, d, l, m) + cls.linear(a, b, m + 1, r)
 
-    if A<=L+R<B:
-        return Linear_Sum(1,-2*L+1,A,L+R)+Linear_Sum(-1,2*R+1,L+R+1,B)
-    else:
-        if B<=L+R:
-            return Linear_Sum(1,-2*L+1,A,B)
-        else:
-            return Linear_Sum(-1,2*R+1,A,B)
+    @classmethod
+    def min_linear(cls, a: int, b: int, c: int, d: int, l: int, r: int):
+        """ sum_{k = l}^r min(a k + b, c k + d) を求める.
 
-def Bound_Sum(a, b, D, U, L, R):
-    """ p[k]:=max(D,min(ak+b,U)) としたとき, Sum_{k=L}^R p[k] を求める.
+        Args:
+            a (int):
+            b (int):
+            c (int):
+            d (int):
+            l (int):
+            r (int):
 
-    a,b :int
-    D,U (D<=U) : int :抑え込む範囲
-    L,R (L<=R) : int :和を取る範囲
-    """
+        Returns:
+            int:
+        """
 
-    assert D<=U and L<=R
+        return -cls.max_linear(-a, -b, -c, -d, l, r)
 
-    if a==0:
-        return max(D,min(b,U))*(R-L+1)
+    @classmethod
+    def linear_lower_cut(cls, a: int, b: int, d: int, l: int, r: int) -> int:
+        """ sum_{k=l}^r max(ak+b, d) を求める.
 
-    if a>0:
-        alpha=(D-b+a-1)//a
-        beta =(U-b)//a
+        Args:
+            a (int):
+            b (int):
+            d (int):
+            l (int):
+            r (int):
 
-        if R<alpha:
-            return D*(R-L+1)
-        elif beta<L:
-            return U*(R-L+1)
+        Returns:
+            int:
+        """
 
-        X=0
-        if L<alpha:
-            X+=D*(alpha-L)
-            L=alpha
-        if beta<R:
-            X+=U*(R-beta)
-            R=beta
-    else:
-        a_abs=-a
-        alpha=(b-U+a_abs-1)//a_abs
-        beta =(b-D)//a_abs
+        return cls.max_linear(a, b, 0, d, l, r)
 
-        if R<alpha:
-            return U*(R-L+1)
-        elif beta<L:
-            return D*(R-L+1)
+    @classmethod
+    def linear_upper_cut(cls, a: int, b: int, u: int, l: int, r: int) -> int:
+        """ sum_{k=l}^r min(ak+b, u) を求める.
 
-        X=0
-        if L<alpha:
-            X+=U*(alpha-L)
-            L=alpha
-        if beta<R:
-            X+=D*(R-beta)
-            R=beta
-    X+=Linear_Sum(a,b,L,R)
-    return X
+        Args:
+            a (int):
+            b (int):
+            d (int):
+            l (int):
+            r (int):
 
-def Linear_Max_Sum(a, b, c, d, L, R):
-    """ sum_{k=L}^R max(ak+b,ck+d) を求める.
+        Returns:
+            int:
+        """
 
-    a,b,c,d:int
-    L,R:int (L<=R)
-    """
+        return cls.min_linear(a, b, 0, u, l, r)
 
-    if L>R:
-        return 0
+    @classmethod
+    def bound(cls, a: int, b: int, d: int, u: int, l: int, r: int) -> int:
+        """ p[k]:=ak+b, q[k]:= u (u <= p[k]), d (d>=p[k]), p[k] (otherwise) としたとき, sum_{k = l}^r q[k] を求める.
 
-    if a==c:
-        return Linear_Sum(a,max(b,d),L,R)
-    if c>a:
-        a,b,c,d=c,d,a,b
+        Args:
+            a (int):
+            b (int):
+            d (int):
+            u (int):
+            l (int):
+            r (int):
 
-    if a*L+b>c*L+d:
-        return Linear_Sum(a,b,L,R)
+        Returns:
+            int:
+        """
+        assert d <= u
 
-    if a*R+b<c*R+d:
-        return Linear_Sum(c,d,L,R)
+        if l > r:
+            return 0
 
-    m=(d-b)//(a-c)
-    return Linear_Sum(c,d,L,m)+Linear_Sum(a,b,m+1,R)
+        if a == 0:
+            return max(d, min(b, u)) * (r - l + 1)
 
-def Linear_Min_Sum(a, b, c, d, L, R):
-    """ sum_{k=L}^R min(ak+b,ck+d) を求める.
+        X = 0
+        if a > 0:
+            s = (d - b + a -1) // a
+            t = (u - b) // a
 
-    a,b,c,d:int
-    L,R:int (L<=R)
-    """
-    return -Linear_Max_Sum(-a,-b,-c,-d,L,R)
+            if r < s:
+                return d * (r - l + 1)
+            elif t < l:
+                return u * (r - l + 1)
+
+            if l < s:
+                X += d * (s - l)
+                l = s
+            if t < r:
+                X += u * (r - t)
+                r = t
+        elif a < 0:
+            a_abs = abs(a)
+            s = (b - u + a_abs - 1) // a_abs
+            t = (b - d) // a_abs
+
+            if r < s:
+                return u * (r - l + 1)
+            elif t < l:
+                return d * (r - l + 1)
+
+            if l < s:
+                X += u * (s - l)
+                l = s
+            if t < r:
+                X += d * (r - t)
+                r = t
+
+        X += cls.linear(a, b, l, r)
+        return X
 
 #==================================================
 #Sum_Count系
-def Range_Sum_DP(Range, S, Mod=None, Mode=0):
-    """Range=[(A_0,B_0),...,(A_{N-1}, B_{N-1})] としとたき,
-    A_i<=X_i<=B_i, X_0+...+X_{n-1}=S を満たす組の個数を動的計画法で求める.
-
-    0<=A_i<=B_i
-    0<=S
-    計算量: O(NS)
-    """
-
-    D=[0]*(S+1); D[0]=1
-    E=[1]*(S+1)
-
-    for a,b in Range:
-        assert 0<=a<=b
-
-        for i in range(S+1):
-            if i<a:
-                D[i]=0
-            elif i<=b:
-                D[i]=E[i-a]
-            else:
-                D[i]=E[i-a]-E[i-b-1]
-
-        E[0]=D[0]
-        for i in range(1,S+1):
-            E[i]=D[i]+E[i-1]
-
-        if Mod!=None:
-            E[i]%=Mod
-
-    if Mode:
-        return D
-    else:
-        return D[S]
-
 def Range_Sum_Inclusion(Range, S, Mod=None):
     """Range=[(A_0,B_0),...,(A_{N-1}, B_{N-1})] としとたき,
     A_i<=X_i<=B_i, X_0+...+X_{n-1}=S を満たす組の個数を包除原理で求める.

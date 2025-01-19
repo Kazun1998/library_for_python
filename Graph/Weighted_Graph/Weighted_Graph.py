@@ -261,39 +261,42 @@ def Traveling_Salesman_Problem(G):
                     E[v]=F[w]+c
     return T[-1][0]
 
-#木の直径を求める.
-def Tree_Diameter(T, Mode=False):
-    """ 重み付き木 T の直径を求める.
+# 木の直径を求める.
+def Tree_Diameter(T: Weigthed_Graph):
+    """ 木 T の直径及び, 直径をなすパスを返す.
 
-    T: 木
-
-    (出力の結果)
-    Mode=True  → (直径, (直径を成す端点1, 直径を成す端点2))
-    Mode=False → 直径
+    Args:
+        T (Weigthed_Graph): 木
     """
-    from collections import deque
 
-    def bfs(x):
-        dist=[-1]*N; dist[x]=0
-        adj=T.adjacent
-        Q=deque([x])
+    def bfs(x: int, mode: bool):
+        dist = [-1] * N; dist[x] = 0
+        adj = T.adjacent
+        S = [x]
+        prev = [-1] * N
 
-        while Q:
-            x=Q.popleft()
-            for y,c in adj[x].items():
-                if dist[y]==-1:
-                    dist[y]=dist[x]+c
-                    Q.append(y)
+        while S:
+            x = S.pop()
+            for y, c, _ in adj[x]:
+                if dist[y] == -1:
+                    dist[y] = dist[x] + c
+                    S.append(y)
+                    prev[y] = x
 
-        z=max(range(N),key=lambda x:dist[x])
-        return z,dist[z]
+        furthest = max(range(N), key = lambda v: dist[v])
+        if not mode:
+            return furthest
 
-    N=T.vertex_count()
-    u,_=bfs(0)
-    v,d=bfs(u)
+        path = [furthest]
+        v = furthest
+        while prev[v] != -1:
+            v = prev[v]
+            path.append(v)
 
-    if Mode:
-        return (d,(u,v))
-    else:
-        return d
+        return dist[furthest], path[::-1]
 
+    N = T.vertex_count()
+    u = bfs(0, False)
+    diameter, path = bfs(u, True)
+
+    return { 'diameter': diameter, 'path': path }
