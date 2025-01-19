@@ -72,19 +72,19 @@ data:
     \ (Ci[j] + a_ik * b_kj) % Mod\n\n        return Modulo_Matrix(C)\n\n    def __rmul__(self,other):\n\
     \        if isinstance(other,int):\n            return self.__scale__(other)\n\
     \n    def inverse(self):\n        inverse, _ = self.inverse_with_determinant()\n\
-    \        if self is None:\n            raise SingularMatrixError()\n\n       \
-    \ return inverse\n\n    def inverse_with_determinant(self):\n        assert self.row\
-    \ == self.col,\"\u6B63\u65B9\u884C\u5217\u3067\u306F\u3042\u308A\u307E\u305B\u3093\
-    .\"\n\n        M = self\n        N = M.row\n        R = [[1 if i == j else 0 for\
-    \ j in range(N)] for i in range(N)]\n        T = deepcopy(M.ele)\n        det\
-    \ = 1\n\n        for j in range(N):\n            if T[j][j] == 0:\n          \
-    \      for i in range(j+1,N):\n                    if T[i][j]:\n             \
-    \           break\n                else:\n                    return None, 0\n\
-    \n                T[j], T[i] = T[i], T[j]\n                R[j], R[i] = R[i],\
-    \ R[j]\n                det = -det % Mod\n\n            Tj, Rj = T[j] ,R[j]\n\
-    \            inv = pow(Tj[j], -1, Mod)\n            det = (Tj[j] * det) % Mod\n\
-    \n            for k in range(N):\n                Tj[k] *=inv; Tj[k] %= Mod\n\
-    \                Rj[k] *=inv; Rj[k] %= Mod\n\n            for i in range(N):\n\
+    \        if inverse is None:\n            raise SingularMatrixError()\n\n    \
+    \    return inverse\n\n    def inverse_with_determinant(self):\n        assert\
+    \ self.row == self.col,\"\u6B63\u65B9\u884C\u5217\u3067\u306F\u3042\u308A\u307E\
+    \u305B\u3093.\"\n\n        M = self\n        N = M.row\n        R = [[1 if i ==\
+    \ j else 0 for j in range(N)] for i in range(N)]\n        T = deepcopy(M.ele)\n\
+    \        det = 1\n\n        for j in range(N):\n            if T[j][j] == 0:\n\
+    \                for i in range(j+1,N):\n                    if T[i][j]:\n   \
+    \                     break\n                else:\n                    return\
+    \ None, 0\n\n                T[j], T[i] = T[i], T[j]\n                R[j], R[i]\
+    \ = R[i], R[j]\n                det = -det % Mod\n\n            Tj, Rj = T[j]\
+    \ ,R[j]\n            inv = pow(Tj[j], -1, Mod)\n            det = (Tj[j] * det)\
+    \ % Mod\n\n            for k in range(N):\n                Tj[k] *=inv; Tj[k]\
+    \ %= Mod\n                Rj[k] *=inv; Rj[k] %= Mod\n\n            for i in range(N):\n\
     \                if i == j:\n                    continue\n\n                c\
     \ = T[i][j]\n                Ti, Ri = T[i], R[i]\n                for k in range(N):\n\
     \                    Ti[k] -= Tj[k] * c; Ti[k] %= Mod\n                    Ri[k]\
@@ -213,7 +213,7 @@ data:
   isVerificationFile: false
   path: Modulo_Matrix/Modulo_Matrix.py
   requiredBy: []
-  timestamp: '2024-11-17 18:19:32+09:00'
+  timestamp: '2024-12-06 01:02:56+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Matrix/Determinant.test.py

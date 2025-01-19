@@ -32,7 +32,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Matrix/Adjugate_Matrix.test.py
   requiredBy: []
-  timestamp: '2024-11-17 18:21:27+09:00'
+  timestamp: '2024-12-06 01:02:56+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Matrix/Adjugate_Matrix.test.py

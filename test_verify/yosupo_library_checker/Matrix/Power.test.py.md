@@ -32,7 +32,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Matrix/Power.test.py
   requiredBy: []
-  timestamp: '2024-11-17 18:19:32+09:00'
+  timestamp: '2024-12-06 01:02:56+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Matrix/Power.test.py
