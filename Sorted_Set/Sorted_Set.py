@@ -182,16 +182,19 @@ class Sorted_Set:
 
     #=== previous, next
 
-    def previous(self, value, mode=False):
-        """ S にある value 未満で最大の要素を返す (存在しない場合は None)
+    def previous(self, value,  default = None, equal = False):
+        """ value 未満で最大の要素を出力する.
 
-        mode: True のときは "未満" が "以下" になる.
+        Args:
+            value : 閾値
+            equal (bool, optional): equal を True にすると, "未満" が "以下" になる. Defaults to False.
+            default (optional): 全ての要素が value 以上である時の返り値. Defaults to None.
         """
 
-        if self.N==0:
-            return None
+        if not self.N:
+            return default
 
-        if mode:
+        if equal:
             for A in reversed(self.list):
                 if A[0]<=value:
                     return A[bisect_right(A,value)-1]
@@ -200,16 +203,18 @@ class Sorted_Set:
                 if A[0]<value:
                     return A[bisect_left(A,value)-1]
 
-    def next(self, value, mode=False):
+        return default
+
+    def next(self, value,  default = None, equal = False):
         """ S にある value より大きい最小の要素を返す (存在しない場合は None)
 
         mode: True のときは "より大きい" が "以上" になる.
         """
 
-        if self.N==0:
-            return None
+        if not self.N:
+            return default
 
-        if mode:
+        if equal:
             for A in self.list:
                 if A[-1]>=value:
                     return A[bisect_left(A,value)]
@@ -217,6 +222,8 @@ class Sorted_Set:
             for A in self.list:
                 if A[-1]>value:
                     return A[bisect_right(A,value)]
+
+        return default
 
     #=== count
     def less_count(self, value, equal=False):
