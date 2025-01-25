@@ -64,8 +64,8 @@ data:
     \        return Vector3(-self.x,-self.y,-self.z)\n\n\n\n\n"
   dependsOn:
   - Quaternion.py
-  - Fraction.py
   - Complex.py
+  - Fraction.py
   isVerificationFile: false
   path: Vector3.py
   requiredBy: []

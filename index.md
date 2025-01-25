@@ -173,6 +173,9 @@ data:
       path: Two_SAT.py
       title: 2-SAT
     - icon: ':warning:'
+      path: Unique_Counter.py
+      title: Unique_Counter.py
+    - icon: ':warning:'
       path: Vector.py
       title: Vector.py
     - icon: ':warning:'
