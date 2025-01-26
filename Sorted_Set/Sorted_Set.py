@@ -26,13 +26,11 @@ class Sorted_Set:
 
     def __iter__(self):
         for A in self.list:
-            for a in A:
-                yield a
+            yield from A
 
     def __reversed__(self):
         for A in reversed(self.list):
-            for a in reversed(A):
-                yield a
+            yield from reversed(A)
 
     def __len__(self):
         return self.N
