@@ -14,26 +14,24 @@ data:
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.13.1/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "def Binary_Search_Find(A, x, sort=False):\n    \"\"\" \u4E8C\u5206\u63A2\u7D22\
-    \u306B\u3088\u3063\u3066, A \u306B x \u304C\u5B58\u5728\u3059\u308B\u304B\u3069\
-    \u3046\u304B\u3092\u8ABF\u3079\u308B.\n\n    A: \u30EA\u30B9\u30C8\n    x: \u8ABF\
-    \u3079\u308B\u8981\u7D20\n    sort: \u30BD\u30FC\u30C8\u3092\u3059\u308B\u5FC5\
-    \u8981\u304C\u3042\u308B\u304B\u3069\u3046\u304B(True\u3067\u5FC5\u8981)\n   \
-    \ \"\"\"\n    if sort:\n        A.sort()\n\n    if len(A)==0 or x<A[0] or A[-1]<x:\n\
-    \        return False\n\n    L,R=0,len(A)\n    while R-L>0:\n        C=L+(R-L)//2\n\
-    \        if x<A[C]:\n            R=C\n        elif x>A[C]:\n            L=C+1\n\
-    \        else:\n            return True\n    return False\n"
+  code: "from time import time\n\nclass Timer:\n    def __init__(self, time_limit:\
+    \ float, period: int = 1) -> \"Timer\":\n        self.started_at = time()\n  \
+    \      self.time_limit = time_limit\n        self.period = period\n        self.counter\
+    \ = period\n        self.t = 0\n\n    def __bool__(self) -> bool:\n        self.counter\
+    \ -= 1\n        if self.counter:\n            return True\n\n        self.counter\
+    \ = self.period\n        return time() - self.started_at <= self.time_limit\n\n\
+    \    def time(self) -> float:\n        return time() - self.started_at\n"
   dependsOn: []
   isVerificationFile: false
-  path: Binary_Search/Find.py
+  path: Heuristic/Timer.py
   requiredBy: []
-  timestamp: '2022-09-10 17:07:59+09:00'
+  timestamp: '2025-02-01 00:09:02+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
-documentation_of: Binary_Search/Find.py
+documentation_of: Heuristic/Timer.py
 layout: document
 redirect_from:
-- /library/Binary_Search/Find.py
-- /library/Binary_Search/Find.py.html
-title: Binary_Search/Find.py
+- /library/Heuristic/Timer.py
+- /library/Heuristic/Timer.py.html
+title: Heuristic/Timer.py
 ---

@@ -368,6 +368,17 @@ data:
     - icon: ':warning:'
       path: Graph/Weighted_Graph/Weighted_Graph.py
       title: Graph/Weighted_Graph/Weighted_Graph.py
+  - name: Heuristic
+    pages:
+    - icon: ':warning:'
+      path: Heuristic/Annealing.py
+      title: Heuristic/Annealing.py
+    - icon: ':warning:'
+      path: Heuristic/Config.py
+      title: Heuristic/Config.py
+    - icon: ':warning:'
+      path: Heuristic/Timer.py
+      title: Heuristic/Timer.py
   - name: Integer
     pages:
     - icon: ':warning:'
