@@ -20,68 +20,86 @@ data:
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.13.1/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Union_Find():\n    __slots__=(\"n\",\"parents\",\"rank\",\"edges\"\
-    ,\"__group_number\")\n    def __init__(self,N):\n        \"\"\" 0,1,...,N-1 \u3092\
-    \u8981\u7D20\u3068\u3057\u3066\u521D\u671F\u5316\u3059\u308B.\n\n        N: \u8981\
-    \u7D20\u6570\n        \"\"\"\n        self.n=N\n        self.parents=[-1]*N\n\
-    \        self.rank=[0]*N\n        self.edges=[0]*N\n        self.__group_number=N\n\
-    \n    def find(self, x):\n        \"\"\" \u8981\u7D20 x \u306E\u5C5E\u3057\u3066\
-    \u3044\u308B\u65CF\u3092\u8ABF\u3079\u308B.\n\n        x: \u8981\u7D20\n     \
-    \   \"\"\"\n\n        a=x\n        while self.parents[a]>=0:\n            a=self.parents[a]\n\
-    \n        while self.parents[x]>=0:\n            y=self.parents[x]\n         \
-    \   self.parents[x]=a\n            x=y\n\n        return a\n\n    def union(self,\
-    \ x, y, force = False):\n        \"\"\" \u8981\u7D20 x \u3068 \u8981\u7D20 y \u3092\
-    \u540C\u4E00\u8996\u3059\u308B.\n\n        Args:\n            x (int): \u8981\u7D20\
-    \ x\n            y (int): \u8981\u7D20 y\n            force (bool, optional):\
-    \ True \u306E\u5834\u5408, \u5FC5\u305A x \u304C\u4EE3\u8868\u5143\u306B\u306A\
-    \u308B\u3088\u3046\u306B\u30DE\u30FC\u30B8\u3059\u308B. Defaults to False.\n\n\
-    \        Returns:\n            bool: \u5143\u3005\u975E\u9023\u7D50\u306A\u3089\
-    \u3070 True, \u5143\u3005\u9023\u7D50\u306A\u3089\u3070 False.\n        \"\"\"\
-    \n        x=self.find(x)\n        y=self.find(y)\n\n        if x==y:\n       \
-    \     self.edges[x]+=1\n            return False\n\n        if (not force) and\
-    \ (self.rank[x] < self.rank[y]):\n            x,y=y,x\n\n        self.__group_number-=1\n\
-    \n        self.edges[x]+=self.edges[y]+1\n        self.edges[y]=0\n\n        self.parents[x]+=self.parents[y]\n\
-    \        self.parents[y]=x\n\n        if self.rank[x]==self.rank[y]:\n       \
-    \     self.rank[x]+=1\n        return True\n\n    def size(self, x):\n       \
-    \ \"\"\" \u8981\u7D20 x \u306E\u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\u8981\
-    \u7D20\u306E\u6570.\n\n        x: \u8981\u7D20\n        \"\"\"\n        return\
-    \ -self.parents[self.find(x)]\n\n    def same(self, x, y):\n        \"\"\" \u8981\
-    \u7D20 x,y \u306F\u540C\u4E00\u8996\u3055\u308C\u3066\u3044\u308B\u304B?\n\n \
-    \       x,y: \u8981\u7D20\n        \"\"\"\n        return self.find(x) == self.find(y)\n\
-    \n    def members(self, x):\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3057\u3066\
-    \u3044\u308B\u65CF\u306E\u8981\u7D20.\n        \u203B\u65CF\u306E\u8981\u7D20\u306E\
-    \u500B\u6570\u304C\u6B32\u3057\u3044\u3068\u304D\u306F size \u3092\u4F7F\u3046\
-    \u3053\u3068!!\n\n        x: \u8981\u7D20\n        \"\"\"\n        root = self.find(x)\n\
-    \        return [i for i in range(self.n) if self.find(i) == root]\n\n    def\
-    \ edge_count(self, x):\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3059\u308B\
-    \u65CF\u306E\u8FBA\u306E\u672C\u6570\u3092\u6C42\u3081\u308B.\n\n        x: \u8981\
-    \u7D20\n        \"\"\"\n        return self.edges[self.find(x)]\n\n    def is_tree(self,\
-    \ x):\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3059\u308B\u65CF\u304C\u6728\
-    \u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B.\n\n        x: \u8981\u7D20\
-    \n        \"\"\"\n        return self.size(x)==self.edges[self.find(x)]+1\n\n\
-    \    def tree_count(self):\n        \"\"\" \u6728\u306B\u306A\u3063\u3066\u3044\
-    \u308B\u5C5E\u306E\u500B\u6570\u3092\u6C42\u3081\u308B.\n        \"\"\"\n\n  \
-    \      return sum(self.is_tree(g) for g in self.representative())\n\n    def representative(self):\n\
-    \        \"\"\" \u4EE3\u8868\u5143\u306E\u30EA\u30B9\u30C8\n        \"\"\"\n \
-    \       return [i for i, x in enumerate(self.parents) if x < 0]\n\n    def group_count(self):\n\
-    \        \"\"\" \u65CF\u306E\u500B\u6570\n        \"\"\"\n\n        return self.__group_number\n\
-    \n    def all_group_members(self):\n        \"\"\" \u5168\u3066\u306E\u65CF\u306E\
-    \u51FA\u529B\n        \"\"\"\n        X={r:[] for r in self.representative()}\n\
-    \        for k in range(self.n):\n            X[self.find(k)].append(k)\n    \
-    \    return X\n\n    def group_list(self):\n        \"\"\" \u5404\u8981\u7D20\u304C\
-    \u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\u30EA\u30B9\u30C8\u3092\u51FA\u529B\
-    \u3059\u308B.\n\n        \"\"\"\n        return [self.find(x) for x in range(self.n)]\n\
-    \n    def refresh(self):\n        for i in range(self.n):\n            _=self.find(i)\n\
-    \n    def __str__(self):\n        return str(self.all_group_members().values())[13:-2]\n\
-    \n    def __repr__(self):\n        return \"Union Find : \"+str(self)\n\n    def\
-    \ __getitem__(self,index):\n        return self.find(index)\n\n    def __setitem__(self,x,y):\n\
-    \        self.union(x,y)\n"
+  code: "class Union_Find():\n    __slots__ = (\"n\", \"parents\", \"rank\", \"edges\"\
+    , \"__group_number\")\n\n    def __init__(self, N: int) -> None:\n        \"\"\
+    \" 0, 1, ..., (N - 1) \u3092\u8981\u7D20\u306B\u6301\u3064 Union Find \u3092\u751F\
+    \u6210\u3059\u308B.\n\n        Args:\n            N (int): \u8981\u7D20\u6570\n\
+    \        \"\"\"\n\n        self.n=N\n        self.parents=[-1]*N\n        self.rank=[0]*N\n\
+    \        self.edges=[0]*N\n        self.__group_number=N\n\n    def find(self,\
+    \ x: int) -> int:\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3057\u3066\u3044\
+    \u308B\u65CF\u3092\u8ABF\u3079\u308B\n\n        Args:\n            x (int): \u8981\
+    \u7D20\n\n        Returns:\n            int: x \u304C\u5C5E\u3057\u3066\u3044\u308B\
+    \u65CF\n        \"\"\"\n\n        a=x\n        while self.parents[a]>=0:\n   \
+    \         a=self.parents[a]\n\n        while self.parents[x]>=0:\n           \
+    \ y=self.parents[x]\n            self.parents[x]=a\n            x=y\n\n      \
+    \  return a\n\n    def union(self, x: int, y: int, force : bool = False) -> bool:\n\
+    \        \"\"\" \u8981\u7D20 x \u3068 \u8981\u7D20 y \u3092\u540C\u4E00\u8996\u3059\
+    \u308B.\n\n        Args:\n            x (int): \u8981\u7D20 x\n            y (int):\
+    \ \u8981\u7D20 y\n            force (bool, optional): True \u306E\u5834\u5408\
+    , \u5FC5\u305A x \u304C\u4EE3\u8868\u5143\u306B\u306A\u308B\u3088\u3046\u306B\u30DE\
+    \u30FC\u30B8\u3059\u308B. Defaults to False.\n\n        Returns:\n           \
+    \ bool: \u5143\u3005\u975E\u9023\u7D50\u306A\u3089\u3070 True, \u5143\u3005\u9023\
+    \u7D50\u306A\u3089\u3070 False.\n        \"\"\"\n        x=self.find(x)\n    \
+    \    y=self.find(y)\n\n        if x==y:\n            self.edges[x]+=1\n      \
+    \      return False\n\n        if (not force) and (self.rank[x] < self.rank[y]):\n\
+    \            x,y=y,x\n\n        self.__group_number-=1\n\n        self.edges[x]+=self.edges[y]+1\n\
+    \        self.edges[y]=0\n\n        self.parents[x]+=self.parents[y]\n       \
+    \ self.parents[y]=x\n\n        if self.rank[x]==self.rank[y]:\n            self.rank[x]+=1\n\
+    \        return True\n\n    def size(self, x: int) -> int:\n        \"\"\" \u8981\
+    \u7D20 x \u304C\u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\u30B5\u30A4\u30BA\u3092\
+    \u6C42\u3081\u308B\n\n        Args:\n            x (int): \u8981\u7D20\n\n   \
+    \     Returns:\n            int: \u8981\u7D20 x \u304C\u5C5E\u3057\u3066\u3044\
+    \u308B\u65CF\u306E\u30B5\u30A4\u30BA\n        \"\"\"\n        return -self.parents[self.find(x)]\n\
+    \n    def same(self, x: int, y: int) -> int:\n        \"\"\" \u8981\u7D20 x, y\
+    \ \u306F\u540C\u4E00\u8996\u3055\u308C\u3066\u3044\u308B\u304B?\n\n        Args:\n\
+    \            x (int): \u8981\u7D20\n            y (int): \u8981\u7D20\n\n    \
+    \    Returns:\n            int: x, y \u304C\u540C\u4E00\u8996\u3055\u308C\u3066\
+    \u3044\u308C\u3070 True, \u305D\u3046\u3067\u306A\u3051\u308C\u3070 False\n  \
+    \      \"\"\"\n        return self.find(x) == self.find(y)\n\n    def members(self,\
+    \ x: int) -> list[int]:\n        \"\"\" \u8981\u7D20 x \u3068\u540C\u4E00\u8996\
+    \u3055\u308C\u3066\u3044\u308B\u8981\u7D20\u306E\u30EA\u30B9\u30C8\n\n       \
+    \ Args:\n            x (int): \u8981\u7D20\n\n        Returns:\n            list[int]:\
+    \ \u8981\u7D20 x \u3068\u540C\u4E00\u8996\u3055\u308C\u3066\u3044\u308B\u8981\u7D20\
+    \u306E\u30EA\u30B9\u30C8\n        \"\"\"\n\n        root = self.find(x)\n    \
+    \    return [i for i in range(self.n) if self.find(i) == root]\n\n    def edge_count(self,\
+    \ x: int) -> int:\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3057\u3066\u3044\
+    \u308B\u65CF\u306B\u304A\u3051\u308B\u8FBA\u306E\u6570\u3092\u6C42\u3081\u308B\
+    .\n\n        Args:\n            x (int): \u8981\u7D20\n\n        Returns:\n  \
+    \          int: \u8981\u7D20 x \u304C\u5C5E\u3057\u3066\u3044\u308B\u65CF\u306B\
+    \u304A\u3051\u308B\u8FBA\u306E\u6570\u3092\u6C42\u3081\u308B\n        \"\"\"\n\
+    \n        return self.edges[self.find(x)]\n\n    def is_tree(self, x: int) ->\
+    \ bool:\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\u3059\u308B\u65CF\u304C\u6728\
+    \u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B.\n\n        Args:\n   \
+    \         x (int): \u8981\u7D20\n\n        Returns:\n            bool: \u6728\u306A\
+    \u3089\u3070 True, \u305D\u3046\u3067\u306A\u3051\u308C\u3070 False\n        \"\
+    \"\"\n\n        return self.size(x)==self.edges[self.find(x)]+1\n\n    def tree_count(self)\
+    \ -> int:\n        \"\"\" \u6728\u306B\u306A\u3063\u3066\u3044\u308B\u65CF\u306E\
+    \u6570\u3092\u8A08\u4E0A\u3059\u308B\n\n        Returns:\n            int: \u6728\
+    \u306B\u306A\u3063\u3066\u3044\u308B\u65CF\u306E\u6570\n        \"\"\"\n\n   \
+    \     return sum(self.is_tree(g) for g in self.representative())\n\n    def representative(self)\
+    \ -> list[int]:\n        \"\"\" \u4EE3\u8868\u5143\u306E\u30EA\u30B9\u30C8\n\n\
+    \        Returns:\n            list[int]: \u4EE3\u8868\u5143\u306E\u30EA\u30B9\
+    \u30C8\n        \"\"\"\n        return [i for i, x in enumerate(self.parents)\
+    \ if x < 0]\n\n    def group_count(self) -> int:\n        \"\"\" \u65CF\u306E\u500B\
+    \u6570\n\n        Returns:\n            int: \u65CF\u306E\u500B\u6570\n      \
+    \  \"\"\"\n\n        return self.__group_number\n\n    def all_group_members(self)\
+    \ -> dict[int, list[int]]:\n        \"\"\" \u5168\u3066\u306E\u65CF\u306E\u51FA\
+    \u529B\n        \"\"\"\n        X={r:[] for r in self.representative()}\n    \
+    \    for k in range(self.n):\n            X[self.find(k)].append(k)\n        return\
+    \ X\n\n    def group_list(self) -> list[int]:\n        \"\"\" \u5404\u8981\u7D20\
+    \u304C\u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\u30EA\u30B9\u30C8\u3092\u51FA\
+    \u529B\u3059\u308B.\n\n        \"\"\"\n        return [self.find(x) for x in range(self.n)]\n\
+    \n    def refresh(self) -> None:\n        for i in range(self.n):\n          \
+    \  _=self.find(i)\n\n    def __str__(self) -> str:\n        return str(list(self.all_group_members().values()))[1:\
+    \ -1]\n\n    def __repr__(self) -> str:\n        return f\"Union Find : {str(self)}\"\
+    \n\n    def __getitem__(self, index: int) -> int:\n        return self.find(index)\n\
+    \n    def __setitem__(self, x: int, y: int) -> None:\n        self.union(x, y)\n"
   dependsOn: []
   isVerificationFile: false
   path: Union_Find/Union_Find.py
   requiredBy:
   - Union_Find/Bipartite_Checker.py
-  timestamp: '2024-01-28 01:55:10+09:00'
+  timestamp: '2025-02-08 23:59:19+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
