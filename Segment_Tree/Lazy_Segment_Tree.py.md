@@ -83,17 +83,36 @@ data:
     \             L+=1\n\n            if R&1:\n                R-=1\n            \
     \    vR=op(eval_at(R), vR)\n\n            L>>=1\n            R>>=1\n\n       \
     \ return self.op(vL,vR)\n\n    def all_product(self):\n        return self.product(0,self.N-1)\n\
-    \n    #\u30EA\u30D5\u30EC\u30C3\u30B7\u30E5\n    def refresh(self):\n        lazy=self.lazy;\
-    \ comp=self.comp\n        for m in range(1,2*self.N):\n            self.data[m]=self._eval_at(m)\n\
-    \n            if m<self.N and self.lazy[m]!=self.id:\n                lazy[m<<1]=comp(lazy[m],\
-    \ lazy[m<<1])\n                lazy[m<<1|1]=comp(lazy[m], lazy[m<<1|1])\n    \
-    \        lazy[m]=self.id\n\n    def __getitem__(self,k):\n        return self.get(k)\n\
-    \n    def __setitem__(self,k,x):\n        self.update(k,x)\n"
+    \n    def max_right(self, left: int, cond) -> int:\n        \"\"\" \u4EE5\u4E0B\
+    \u306E (1), (2) \u3092\u6E80\u305F\u3059\u6574\u6570 r \u3092\u6C42\u3081\u308B\
+    .\n        (1) r=left or cond(data[left] data[left+1] ... data[r-1]): True\n \
+    \       (2) r=N or cond(data[left] data[left+1] ... data[r]): False\n\n      \
+    \  Args:\n            left (int): \u5DE6\u7AEF\n            cond : \u6761\u4EF6\
+    \n\n        Returns:\n            int: (1), (2) \u3092\u6E80\u305F\u3059\u6574\
+    \u6570 r\n        \"\"\"\n\n        assert 0 <= left <= self.N, f\"\u6DFB\u5B57\
+    \ ({left = }) \u304C\u7BC4\u56F2\u5916\"\n        assert cond(self.unit), \"\u5358\
+    \u4F4D\u5143\u304C\u6761\u4EF6\u3092\u6E80\u305F\u3055\u306A\u3044\"\n\n     \
+    \   if left == self.N:\n            return self.N\n\n        left += self.N\n\
+    \        sm = self.unit\n\n        op = self.op; data = self.data\n        first\
+    \ = True\n\n        self._propagate_above(left)\n\n        while first or (left\
+    \ & (-left)) != left:\n            first = False\n            while left % 2 ==\
+    \ 0:\n                left >>= 1\n\n            if not cond(op(sm, data[left])):\n\
+    \                while left < self.N:\n                    self._propagate_at(left)\n\
+    \                    left <<= 1\n                    self._propagate_at(left)\n\
+    \                    if cond(op(sm, data[left])):\n                        sm\
+    \ = op(sm, data[left])\n                        left += 1\n                return\
+    \ left - self.N\n            sm = op(sm, data[left])\n            left += 1\n\n\
+    \        return self.N\n\n    #\u30EA\u30D5\u30EC\u30C3\u30B7\u30E5\n    def refresh(self):\n\
+    \        lazy=self.lazy; comp=self.comp\n        for m in range(1,2*self.N):\n\
+    \            self.data[m]=self._eval_at(m)\n\n            if m<self.N and self.lazy[m]!=self.id:\n\
+    \                lazy[m<<1]=comp(lazy[m], lazy[m<<1])\n                lazy[m<<1|1]=comp(lazy[m],\
+    \ lazy[m<<1|1])\n            lazy[m]=self.id\n\n    def __getitem__(self,k):\n\
+    \        return self.get(k)\n\n    def __setitem__(self,k,x):\n        self.update(k,x)\n"
   dependsOn: []
   isVerificationFile: false
   path: Segment_Tree/Lazy_Segment_Tree.py
   requiredBy: []
-  timestamp: '2023-03-20 03:47:37+09:00'
+  timestamp: '2025-02-09 14:01:56+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
