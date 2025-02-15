@@ -17,11 +17,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.13.1/x64/lib/python3.13/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.13.2/x64/lib/python3.13/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.13.1/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.13.2/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "class Graph:\n    __slots__ = (\"adjacent\", \"deg\", \"__size\")\n\n   \
     \ #\u5165\u529B\u5B9A\u7FA9\n    def __init__(self, N = 0):\n        \"\"\" N\
@@ -291,8 +291,8 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Graph/Undirected_Find_Cycle.test.py
-  - test_verify/yosupo_library_checker/Graph/Two_Edge_Connected_Components.test.py
   - test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py
+  - test_verify/yosupo_library_checker/Graph/Two_Edge_Connected_Components.test.py
 documentation_of: Graph/Graph/Graph.py
 layout: document
 title: Graph
