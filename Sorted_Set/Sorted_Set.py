@@ -1,286 +1,361 @@
-" Reference: https://qiita.com/tatyam/items/492c70ac4c955c055602"
+# Reference: https://qiita.com/tatyam/items/492c70ac4c955c055602
 # ※ 計算量が O(sqrt(N)) per query なので, 過度な期待はしないこと.
 
+from typing import Generic, Iterable, Iterator, TypeVar
 from bisect import bisect_left, bisect_right
+
+T = TypeVar('T')
 class Sorted_Set:
-    BUCKET_RATIO=50
-    REBUILD_RATIO=170
+    BUCKET_RATIO = 16
+    SPLIT_RATIO = 24
 
-    def __init__(self, A=[]):
-        A=list(A)
-        if not all(A[i]<A[i+1] for i in range(len(A)-1)):
-            A=sorted(set(A))
-        self.__build(A)
-        return
+    def __init__(self, A: Iterable[T] = []) -> None:
+        A = list(A)
+        N = len(A)
 
-    def __build(self, A=None):
-        if A is None:
-            A=list(self)
+        # sort if necessary.
+        if any(A[i] > A[i + 1] for i in range(N - 1)):
+            A.sort()
 
-        self.N=N=len(A)
-        K=1
-        while self.BUCKET_RATIO*K*K<N:
-            K+=1
+        # unique if nexesarry.
+        if any(A[i] >= A[i + 1] for i in range(N - 1)):
+            A, B = [], A
+            for b in B:
+                if (not A) or (A[-1] != b):
+                    A.append(b)
 
-        self.list=[A[N*i//K: N*(i+1)//K] for i in range(K)]
+        N = self.size = len(A)
+        bucket_number = int(pow(N / self.BUCKET_RATIO, 0.5) + 1)
+        self.buckets = [ A[N * j // bucket_number: N * (j + 1) // bucket_number] for j in range(bucket_number)]
 
-    def __iter__(self):
-        for A in self.list:
-            yield from A
+    # Iterator
 
-    def __reversed__(self):
-        for A in reversed(self.list):
-            yield from reversed(A)
+    def __iter__(self) -> Iterator[T]:
+        for bucket in self.buckets:
+            yield from bucket
 
-    def __len__(self):
-        return self.N
+    def __reversed__(self) -> Iterator[T]:
+        for bucket in reversed(self.buckets):
+            yield from reversed(bucket)
 
-    def __bool__(self):
-        return bool(self.N)
+    # 長さ, bool
 
-    def is_empty(self):
-        return self.N == 0
+    def __len__(self) -> int:
+        return self.size
 
+    def __bool__(self) -> bool:
+        return self.size > 0
+
+    def is_empty(self) -> bool:
+        return self.size == 0
+
+    # 文字列
     def __str__(self):
-        string=str(list(self))
-        return "{"+string[1:-1]+"}"
+        return "{" + str(list(self)) + "}"
 
     def __repr__(self):
-        return "Sorted Set: "+str(self)
+        return f"Sorted Set: {str(self)}"
 
-    def __find_bucket(self, x):
-        for A in self.list:
-            if x<=A[-1]:
-                return A
-        else:
-            return A
+    # 場所
+    def __position(self, x: T) -> tuple[list[T], int, int]:
+        for index, bucket in enumerate(self.buckets):
+            if x <= bucket[-1]:
+                break
+        return (bucket, index, bisect_left(bucket, x))
 
-    def __contains__(self, x):
-        if self.N==0:
+    def __contains__(self, x: T) -> bool:
+        if self.is_empty():
             return False
 
-        A=self.__find_bucket(x)
-        i=bisect_left(A,x)
-        return i!=len(A) and A[i]==x
+        bucket, _, i = self.__position(x)
+        return (i != len(bucket)) and (bucket[i] == x)
 
-    def add(self, x):
-        if self.N==0:
-            self.list=[[x]]
-            self.N+=1
+    # 追加
+    def add(self, x: T) -> bool:
+        """ 要素 x を追加する.
+
+        Args:
+            x (T): 要素
+
+        Returns:
+            bool: 実際に追加されたならば True.
+        """
+
+        # 空集合のときのみ別処理
+        if self.is_empty():
+            self.buckets = [[x]]
+            self.size = 1
             return True
 
-        A=self.__find_bucket(x)
-        i=bisect_left(A, x)
+        bucket, p, i = self.__position(x)
 
-        if i!=len(A) and A[i]==x:
-            return False # x が既に存在するので...
-
-        A.insert(i,x)
-        self.N+=1
-
-        if len(A)>len(self.list)*self.REBUILD_RATIO:
-            self.__build()
-        return True
-
-    def discard(self, x):
-        if self.N==0:
+        # x はすでに存在するか?
+        if (i != len(bucket)) and (bucket[i] == x):
             return False
 
-        A=self.__find_bucket(x)
-        i=bisect_left(A, x)
-
-        if not(i!=len(A) and A[i]==x):
-            return False # x が存在しないので...
-
-        A.pop(i)
-        self.N-=1
-
-        if len(A)==0:
-            self.__build()
-
+        bucket.insert(i, x)
+        self.size += 1
+        if len(bucket) > len(self.buckets) * self.SPLIT_RATIO:
+            mid = len(bucket) >> 1
+            self.buckets[p: p + 1] = [bucket[:mid], bucket[mid:]]
         return True
 
-    def remove(self, x):
+    # 削除
+    def __pop(self, bucket: list[T], p: int, i: int) -> T:
+        res = bucket.pop(i)
+        self.size -= 1
+        if not bucket:
+            del self.buckets[p]
+        return res
+
+    def pop(self, i: int = -1) -> T:
+        if i < 0:
+            for p, bucket in enumerate(reversed(self.buckets)):
+                i += len(bucket)
+                if i >= 0:
+                    return self.__pop(bucket, p, i)
+        else:
+            for p, bucket in enumerate(self.buckets):
+                if i < len(bucket):
+                    return self.__pop(bucket, p, i)
+                i -= len(bucket)
+        raise IndexError
+
+    def discard(self, x: T) -> bool:
+        """ x を削除する (存在しない場合は何もしない).
+
+        Args:
+            x (T): 要素
+
+        Returns:
+            bool: 元の集合に存在するならば True
+        """
+        if self.is_empty():
+            return False
+
+        bucket, p, i = self.__position(x)
+        if not((i != len(bucket)) and (bucket[i] == x)):
+            return False
+
+        self.__pop(bucket, p, i)
+        return True
+
+    def remove(self, x: T) -> None:
+        """ 要素 x を削除する (存在しないならば KeyError)
+
+        Args:
+            x (T): _description_
+
+        Raises:
+            KeyError: 存在しない場合に発動
+        """
         if not self.discard(x):
             raise KeyError(x)
 
-    #=== get, pop
-
-    def __getitem__(self, index):
-        if index<0:
-            index+=self.N
-            if index<0:
-                raise IndexError("index out of range")
-
-        for A in self.list:
-            if index<len(A):
-                return A[index]
-            index-=len(A)
+    # get
+    def __getitem__(self, index: int) -> T:
+        if index < 0:
+            for bucket in reversed(self.buckets):
+                index += len(bucket)
+                if index >= 0:
+                    return bucket[index]
         else:
-            raise IndexError("index out of range")
+            for bucket in self.buckets:
+                if index < len(bucket):
+                    return bucket[index]
 
-    def get_min(self):
-        if self.N==0:
+        raise IndexError
+
+    def get_min(self) -> T:
+        if self.N == 0:
             raise ValueError("This is empty set.")
+        return self.buckets[0][0]
 
-        return self.list[0][0]
-
-    def pop_min(self):
-        if self.N==0:
+    def pop_min(self) -> T:
+        if self.N == 0:
             raise ValueError("This is empty set.")
+        return self.pop(0)
 
-        A=self.list[0]
-        value=A.pop(0)
-        self.N-=1
-
-        if len(A)==0:
-            self.__build()
-
-        return value
-
-    def get_max(self):
-        if self.N==0:
+    def get_max(self) -> T:
+        if self.N == 0:
             return ValueError("This is empty set.")
+        return self.buckets[-1][-1]
 
-        return self.list[-1][-1]
-
-    def pop_max(self):
+    def pop_max(self) -> T:
         if self.N==0:
             raise ValueError("This is empty set.")
-
-        A=self.list[-1]
-        value=A.pop(-1)
-        self.N-=1
-
-        if len(A)==0:
-            self.__build()
-
-        return value
+        return self.pop(-1)
 
     #=== k-th element
-    def kth_min(self, k):
-        """ k (0-indexed) 番目に小さい整数を求める.
+    def kth_min(self, k: int) -> T:
+        """ k 番目に小さい要素を求める.
 
-        k: int (0<=k<|S|)
+        Args:
+            k (int): index (0-indexed)
+
+        Returns:
+            T: k 番目に小さい要素
         """
-
-        assert 0<=k<len(self)
+        if 0 <= k < len(self):
+            raise IndexError
 
         return self[k]
 
-    def kth_max(self, k):
-        """ k (0-indexed) 番目に大きい整数を求める.
+    def kth_max(self, k: int) -> T:
+        """ k 番目に大きい要素を求める.
 
-        k: int (0<=k<|S|)
+        Args:
+            k (int): index (0-indexed)
+
+        Returns:
+            T: k 番目に大きい要素
         """
+        if 0 <= k < len(self):
+            raise IndexError
 
-        assert 0<=k<len(self)
-
-        return self[len(self)-1-k]
+        return self[-(k + 1)]
 
     #=== previous, next
 
-    def previous(self, value, default = None, equal = False):
+    def previous(self, value: T, default: T = None, equal: bool = False) -> T | None:
         """ value 未満で最大の要素を出力する.
 
         Args:
-            value : 閾値
+            value (T) : 閾値
+            default (T, optional): 全ての要素が value 以上である時の返り値. Defaults to None.
             equal (bool, optional): equal を True にすると, "未満" が "以下" になる. Defaults to False.
-            default (optional): 全ての要素が value 以上である時の返り値. Defaults to None.
+
+        Returns:
+            T | None: value 未満 (以下) の要素が存在するならばその最大値, 存在しないならば default.
         """
 
-        if not self.N:
+        if self.is_empty():
             return default
 
         if equal:
-            for A in reversed(self.list):
-                if A[0]<=value:
-                    return A[bisect_right(A,value)-1]
+            for bucket in reversed(self.buckets):
+                if bucket[0] <= value:
+                    return bucket[bisect_right(bucket, value) - 1]
         else:
-            for A in reversed(self.list):
-                if A[0]<value:
-                    return A[bisect_left(A,value)-1]
+            for bucket in reversed(self.buckets):
+                if bucket[0] < value:
+                    return bucket[bisect_left(bucket, value) - 1]
 
         return default
 
-    def next(self, value, default = None, equal = False):
+    def next(self, value: T, default: T = None, equal: bool = False) -> T | None:
         """ value より大きい最小の要素を出力する.
 
         Args:
-            value : 閾値
+            value (T) : 閾値
+            default (T, optional): 全ての要素が value 以下である時の返り値. Defaults to None.
             equal (bool, optional): equal を True にすると, "より大きい" が "以上" になる. Defaults to False.
-            default (optional): 全ての要素が value 以上である時の返り値. Defaults to None.
+
+        Returns:
+            T | None: value より大きい (以上) の要素が存在するならばその最小値, 存在しないならば default.
         """
 
         if not self.N:
             return default
 
         if equal:
-            for A in self.list:
-                if A[-1]>=value:
-                    return A[bisect_left(A,value)]
+            for bucket in self.buckets:
+                if bucket[-1] >= value:
+                    return bucket[bisect_left(bucket, value)]
         else:
-            for A in self.list:
-                if A[-1]>value:
-                    return A[bisect_right(A,value)]
+            for bucket in self.buckets:
+                if bucket[-1] > value:
+                    return bucket[bisect_right(bucket, value)]
 
         return default
 
     #=== count
-    def less_count(self, value, equal=False):
-        """ a < value となる S の元 a の個数を求める.
+    def less_count(self, value: T, equal: bool = False) -> int:
+        """ value 未満である要素の数を求める.
 
-        equal=True ならば, a < value が a <= value になる.
+        Args:
+            value (T): 要素
+            equal (bool, optional): True にすると, "未満" が "以下" になる. Defaults to False.
+
+        Returns:
+            int: value 未満 (以下) の要素数
         """
 
         if self.is_empty():
             return 0
 
-        count=0
+        count = 0
         if equal:
-            for A in self.list:
-                if A[-1]>value:
-                    return count+bisect_right(A, value)
-                count+=len(A)
+            for bucket in self.buckets:
+                if value < bucket[-1]:
+                    return count + bisect_right(bucket, value)
+                count += len(bucket)
         else:
-            for A in self.list:
-                if A[-1]>=value:
-                    return count+bisect_left(A, value)
-                count+=len(A)
+            for bucket in self.buckets:
+                if value <= bucket[-1]:
+                    return count + bisect_left(bucket, value)
+                count += len(bucket)
         return count
 
-    def more_count(self, value, equal=False):
-        """ a > value となる S の元 a の個数を求める.
+    def more_count(self, value: T, equal: bool = False) -> int:
+        """ value より大きい要素の数を求める.
 
-        equal=True ならば, a > value が a >= value になる.
+        Args:
+            value (T): 要素
+            equal (bool, optional): True にすると, "より大きい" が "以上" になる. Defaults to False.
+
+        Returns:
+            int: value 未満 (以下) の要素数
         """
 
-        return self.N-self.less_count(value, not equal)
+        return len(self) - self.less_count(value, not equal)
 
-    #===
-    def is_upper_bound(self, x, equal=True):
-        if self.N:
-            a=self.list[-1][-1]
-            return (a<x) or (bool(equal) and a==x)
-        else:
+    # bound
+    def is_upper_bound(self, x: T, equal = True) -> bool:
+        """ x はこの集合の上界 (全ての要素 a に対して, a <= x) か?
+
+        Args:
+            x (T): 要素
+            equal (bool, optional): False にした場合, 判定条件が a < x になる. Defaults to True.
+
+        Returns:
+            bool: 上界 ?
+        """
+
+        if self.is_empty():
             return True
+
+        a = self.get_max()
+        return (a < x) or (equal and a == x)
 
     def is_lower_bound(self, x, equal=True):
-        if self.N:
-            a=self.list[0][0]
-            return (x<a) or (bool(equal) and a==x)
-        else:
+        """ x はこの集合の下界 (全ての要素 a に対して, x <= a) か?
+
+        Args:
+            x (T): 要素
+            equal (bool, optional): False にした場合, 判定条件が x < a になる. Defaults to True.
+
+        Returns:
+            bool: 下界 ?
+        """
+
+        if self.is_empty():
             return True
 
+        a = self.get_min()
+        return (x < a) or (equal and a == x)
+
     #=== index
-    def index(self, value):
-        index=0
-        for A in self.list:
-            if A[-1]>value:
-                i=bisect_left(A, value)
-                if A[i]==value:
-                    return index+i
+    def index(self, value: T) -> int:
+        offset = 0
+        for bucket in self.buckets:
+            if value < bucket[-1]:
+                k = bisect_left(bucket, value)
+                if bucket[k] == value:
+                    return offset + k
                 else:
-                    raise ValueError("{} is not in Set".format(value))
-            index+=len(A)
-        raise ValueError("{} is not in Set".format(value))
+                    raise ValueError(f"{value} is not in Set.")
+
+            offset += len(bucket)
+        else:
+            raise ValueError(f"{value} is not in Set.")
