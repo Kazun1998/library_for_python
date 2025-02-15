@@ -182,6 +182,52 @@ class Lazy_Evaluation_Tree():
     def all_product(self):
         return self.product(0,self.N-1)
 
+    def max_right(self, left: int, cond) -> int:
+        """ 以下の (1), (2) を満たす整数 r を求める.
+        (1) r=left or cond(data[left] data[left+1] ... data[r-1]): True
+        (2) r=N or cond(data[left] data[left+1] ... data[r]): False
+
+        Args:
+            left (int): 左端
+            cond : 条件
+
+        Returns:
+            int: (1), (2) を満たす整数 r
+        """
+
+        assert 0 <= left <= self.N, f"添字 ({left = }) が範囲外"
+        assert cond(self.unit), "単位元が条件を満たさない"
+
+        if left == self.N:
+            return self.N
+
+        left += self.N
+        sm = self.unit
+
+        op = self.op; data = self.data
+        first = True
+
+        self._propagate_above(left)
+
+        while first or (left & (-left)) != left:
+            first = False
+            while left % 2 == 0:
+                left >>= 1
+
+            if not cond(op(sm, data[left])):
+                while left < self.N:
+                    self._propagate_at(left)
+                    left <<= 1
+                    self._propagate_at(left)
+                    if cond(op(sm, data[left])):
+                        sm = op(sm, data[left])
+                        left += 1
+                return left - self.N
+            sm = op(sm, data[left])
+            left += 1
+
+        return self.N
+
     #リフレッシュ
     def refresh(self):
         lazy=self.lazy; comp=self.comp
