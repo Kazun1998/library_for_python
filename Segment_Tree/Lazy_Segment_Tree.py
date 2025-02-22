@@ -6,9 +6,12 @@ unit=float("inf")
 act=lambda alpha,x:alpha
 comp=lambda alpha,beta:alpha
 """
+from typing import TypeVar, Callable, Generic
 
-class Lazy_Evaluation_Tree():
-    def __init__(self, L, op, unit, act, comp, id):
+M = TypeVar('M')
+F = TypeVar('F')
+class Lazy_Evaluation_Tree(Generic[M, F]):
+    def __init__(self, L: list[M], op: Callable[[M, M], M], unit: M, act: Callable[[F, M], M], comp: Callable[[F, F], F], id: F):
         """ op を演算, act を作用とする L を初期状態とする遅延セグメント木を作成する.
 
         [条件]
@@ -21,12 +24,12 @@ class Lazy_Evaluation_Tree():
         作用素は左から掛ける. 更新も左から.
 
         Args:
-            L (list): 遅延セグメント木の初期状態
-            op (func): 演算
-            unit (func): Monoid op における単位元
-            act (func): 作用素
-            comp (func): 作用素の合成
-            id (ele): act における単位元
+            L (list[M]): 初期状態
+            op (Callable[[M, M], M]): M の演算
+            unit (M): M の単位元
+            act (Callable[[F, M], M]): F から M への作用
+            comp (Callable[[F, F], F]): F 同士の合成
+            id (F): F の単位元
         """
 
         self.op = op
@@ -74,7 +77,15 @@ class Lazy_Evaluation_Tree():
             m >>= 1
             data[m] = op(eval_at(m << 1), eval_at(m << 1 | 1))
 
-    def get(self, k):
+    def get(self, k: int) -> M:
+        """ 第 k 要素を取得する
+
+        Args:
+            k (int): 要素の場所
+
+        Returns:
+            M: 第 k 要素
+        """
         m = k + self.N
         self._propagate_above(m)
         self.data[m] = self._eval_at(m)
@@ -82,15 +93,15 @@ class Lazy_Evaluation_Tree():
         return self.data[m]
 
     #作用
-    def action(self, l: int, r: int, alpha, left_closed: bool = True, right_closed: bool = True):
-        """ 第 l 要素から第 r 要素まで全てに alpha を作用させる.
+    def action(self, l: int, r: int, alpha: F, left_closed: bool = True, right_closed: bool = True) -> None:
+        """ 第 l 要素から第 r 要素まで全てに alpha を作用させる
 
         Args:
             l (int): 左端
             r (int): 右端
-            alpha: 作用
-            left_closed (bool, optional): 左端が閉区間か? (False は開区間). Defaults to True.
-            right_closed (bool, optional): 右端が閉区間か? (False は開区間). Defaults to True.
+            alpha (F): 作用させる値
+            left_closed (bool, optional): False にすると, 左端が開区間になる. Defaults to True.
+            right_closed (bool, optional): False にすると, 右端が開区間になる. Defaults to True.
         """
 
         L = l + self.N + (not left_closed)
@@ -132,12 +143,12 @@ class Lazy_Evaluation_Tree():
         self._recalc_above(L0)
         self._recalc_above(R0)
 
-    def update(self, k: int, x):
-        """ 第 k 要素を x に変更する.
+    def update(self, k: int, x: M) -> None:
+        """ 第 k 要素を x に更新する.
 
         Args:
-            k (int): 要素
-            x: 変更先
+            k (int): 要素の場所
+            x (M): 変更後の第 k 要素
         """
 
         m = k+self.N
@@ -146,16 +157,18 @@ class Lazy_Evaluation_Tree():
         self.lazy[m] = self.id
         self._recalc_above(m)
 
-    def product(self, l: int, r: int, left_closed: bool = True, right_closed: bool = True):
+    def product(self, l: int, r: int, left_closed: bool = True, right_closed: bool = True) -> M:
         """ 第 l 要素から第 r 要素までの総積を求める.
 
         Args:
             l (int): 左端
             r (int): 右端
-            left_closed (bool, optional): 左端が閉区間か? (False は開区間). Defaults to True.
-            right_closed (bool, optional): 右端が閉区間か? (False は開区間). Defaults to True.
-        """
+            left_closed (bool, optional): False にすると, 左端が開区間になる. Defaults to True.
+            right_closed (bool, optional): False にすると, 右端が開区間になる. Defaults to True.
 
+        Returns:
+            M: 総積
+        """
 
         L = l + self.N + (not left_closed)
         R = r + self.N + right_closed
@@ -196,11 +209,17 @@ class Lazy_Evaluation_Tree():
 
         return self.op(vL, vR)
 
-    def all_product(self):
+    def all_product(self) -> M:
+        """ この遅延セグメント木が持っている要素に関する総積を求める.
+
+        Returns:
+            M: 総積
+        """
+
         return self.product(0, self.N - 1)
 
-    def max_right(self, left: int, cond):
-        """ 以下の2つをともに満たす x の1つを返す.\n
+    def max_right(self, left: int, cond: Callable[[int], bool]) -> int:
+        """ 以下の2つをともに満たす r の1つを返す.\n
         (1) r = left or cond(data[left] * data[left + 1] * ... * data[r - 1]): True
         (2) r = N or cond(data[left] * data[left + 1] * ... * data[r]): False
         ※ cond が単調減少の時, cond(data[left] * ... * data[r - 1]): True を満たす最大の r となる.
@@ -208,6 +227,9 @@ class Lazy_Evaluation_Tree():
         Args:
             left (int): 左端
             cond: 条件式 (cond(unit) = True を要求)
+
+        Returns:
+            int: 条件を満たす r.
         """
 
         assert 0 <= left <= self.N
@@ -265,7 +287,7 @@ class Lazy_Evaluation_Tree():
         return self.N
 
     #リフレッシュ
-    def refresh(self):
+    def refresh(self) -> None:
         """ 遅延セグメント木の遅延情報をリセットする.
         """
 
@@ -278,12 +300,8 @@ class Lazy_Evaluation_Tree():
                 lazy[m << 1 | 1] = comp(lazy[m], lazy[m << 1 | 1])
             lazy[m] = self.id
 
-    def __getitem__(self, k: int):
+    def __getitem__(self, k: int) -> M:
         return self.get(k)
 
-    def __setitem__(self, k: int, x):
+    def __setitem__(self, k: int, x: M) -> None:
         self.update(k, x)
-
-from operator import add
-S = Lazy_Evaluation_Tree(list(range(16)), max, 0, add, add, 0)
-print(S.max_right(16, lambda x: x <= 13))
