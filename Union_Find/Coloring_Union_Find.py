@@ -126,26 +126,46 @@ class Coloring_Union_Find(Generic[M]):
 
     def roots(self) -> list[int]:
         """ 族の名前のリスト
+
+        Returns:
+            list[int]: 各要素が族のリスト
         """
         return [i for i,x in enumerate(self.parents) if x < 0]
 
     def group_count(self) -> int:
-        """ 族の個数
+        """ 族の個数 (len(self.roots) よりも高速)
+
+        Returns:
+            int: 族の個数
         """
         return self.__group_number
 
     def all_group_members(self) -> dict[int, list[int]]:
         """ 全ての族の出力
+
+        Returns:
+            dist[int, list[int]]: key が代表元, value が key が属する族の要素からなるリスト
         """
+
         X={r:[] for r in self.roots()}
         for k in range(self.n):
             X[self.find(k)].append(k)
         return X
 
     def list(self) -> list[M]:
+        """ 各要素が属している族の色のリスト
+
+        Returns:
+            list[M]: 各要素が属している族の色のリスト
+        """
         return [self.get(x) for x in range(self.n)]
 
     def map(self) -> dict[int, M]:
+        """ 代表元とその代表元が属している族の色の辞書
+
+        Returns:
+            dict[int, M]: key が代表元, value が key が属する族の色
+        """
         return { root: self.get(root) for root in self.roots()}
 
     def __str__(self) -> str:
