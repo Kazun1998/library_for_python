@@ -664,63 +664,61 @@ class Tree:
         """
 
         assert self.__after_seal_check()
-        if not hasattr(self, "tower"):
-            self.depth_search(False)
-
         for layer in self.tower[::-1]:
             yield from layer
 
-    def tree_dp_from_leaf(self,merge,unit,f,g,Mode=False):
-        """ 葉から木 DP 行う.
-
-        [input]
-        merge: 可換モノイドを成す2項演算 M x M -> M
-        unit: M の単位元
-        f: X x V x V → M: f(x,v,w): v が親, w が子
-        g: M x V → X: g(x,v)
-        Mode: False → 根の値のみ, True → 全ての値
+    def tree_dp_from_leaf(self, merge: Callable[[M, M], M], unit: M, f: Callable[[X, int, int], M], g: Callable[[M, int], X]) -> list[X]:
+        """ 葉からの木 DP を行う.
 
         [補足]
         頂点 v の子が x,y,z,..., w のとき, 更新式は * を merge として
-            dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*...*f(dp[w],v,w), v)
+            dp[v] = g(f(dp[x],v,x) * f(dp[y],v,y) * f(dp[z],v,z) * ... * f(dp[w],v,w), v)
         になる.
+
+        Args:
+            merge (Callable[[M, M], M]): 結果のマージ方法
+            unit (M): モノイド M の単位元
+            f (Callable[[X, int, int], M]): f: X x V x V → M: f(x,v,w): v が親, w が子
+            g (Callable[[M, int], X]): M x V → X: g(x,v)
+
+        Returns:
+            list[X]: 各 v in V に対して, v を根とする部分木に関する結果
         """
         assert self.__after_seal_check()
 
-        data=[unit]*(self.index+self.N)
-        ch=self.children
+        data = [unit] * (self.index + self.N)
+        ch = self.children
 
         for x in self.bottom_up():
             for y in ch[x]:
-                data[x]=merge(data[x], f(data[y], x, y))
-            data[x]=g(data[x], x)
+                data[x] = merge(data[x], f(data[y], x, y))
+            data[x] = g(data[x], x)
 
-        if Mode:
-            return data
-        else:
-            return data[self.root]
+        return data
 
-    def tree_dp_from_root(self, f, alpha):
-        """ 根から木 DP を行う.
+    def tree_dp_from_root(self, f: Callable[[X, int, int], X], alpha: X) -> list[X]:
+        """ 根からの木 DP を行う.
 
-        [input]
-        alpha: 初期値
-        f: X x V x V → X: f(x,v,w): v が親, w が子
+        更新式は,
+            dp[v] = alpha (v が根のとき), f(dp[v], parent[v], v) (v が根ではないとき)
 
-        [補足]
-        頂点 v の親が x のとき, 更新式は
-            dp[v]=f(dp[x],x,v) (x!=root), alpha (x==root)
-        になる.
+        Args:
+            f (Callable[[X, int, int], X]): v が根でないときの f(dp[v], parent[v], v).
+            alpha (X): 初期値. つまり, 根の値
+
+        Returns:
+            list[X]: 木 DP の結果
         """
+
         assert self.__after_seal_check()
 
-        data=[0]*(self.index+self.N)
-        ch=self.children
+        data = [None] * (self.index + self.N)
+        children = self.children
 
-        data[self.root]=alpha
+        data[self.root] = alpha
         for x in self.top_down():
-            for y in ch[x]:
-                data[y]=f(data[x],x,y)
+            for y in children[x]:
+                data[y] = f(data[x], x, y)
 
         return data
 
