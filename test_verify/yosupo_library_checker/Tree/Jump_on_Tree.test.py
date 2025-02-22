@@ -20,7 +20,7 @@ def verify():
     X=[0]*Q
     for q in range(Q):
         s,t,i=map(int,input().split())
-        X[q]=T.jump(s,t,i)
+        X[q]=T.jump(s,t,i, default=-1)
 
     write("\n".join(map(str,X)))
 
