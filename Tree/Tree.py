@@ -4,7 +4,7 @@ X = TypeVar('X')
 M = TypeVar('M')
 class Tree:
     __slots__=("__N", "__index", "parent", "__mutable",
-            "__root", "children", "__depth", "__tower", "upper_list", "des_count", "preorder_number",
+            "__root", "children", "__depth", "__tower", "upper_list", "__des_count", "preorder_number",
             "euler_vertex", "euler_edge", "in_time", "out_time", "lca_dst",
             "hld_hedge")
 
@@ -32,6 +32,10 @@ class Tree:
     @property
     def tower(self):
         return self.__tower
+
+    @property
+    def des_count(self):
+        return self.__des_count
 
     def __init__(self, N: int, index: int = 0):
         """ N 頂点 (index, index + 1, index + 2, ..., index + N - 1) を持つ木を生成する.
@@ -139,8 +143,15 @@ class Tree:
                 tower[depth[y]].append(y)
                 stack.append(y)
 
+        des_count = [0] * self.index + [1] * self.N
+        for layer in reversed(tower):
+            for x in layer:
+                for y in self.children[x]:
+                    des_count[x] += des_count[y]
+
         self.__depth = depth
         self.__tower = tower
+        self.__des_count = des_count
 
     def vertex_depth(self, x):
         """ 頂点 x の深さを求める."""
@@ -537,20 +548,6 @@ class Tree:
         else:
             return dep(u)+dep(v)-2*dep(self.lowest_common_ancestor_greedy(u,v))
 
-    def __descendant_count(self):
-        assert self.__after_seal_check()
-        if hasattr(self,"des_count"):
-            return
-
-        if not hasattr(self,"tower"):
-            self.depth_search(False)
-
-        self.des_count=[1]*(self.index+self.N)
-        pa=self.parent
-        for T in self.tower[:0:-1]:
-            for x in T:
-                self.des_count[pa[x]]+=self.des_count[x]
-        return
 
     def descendant_count(self, v: int) -> int:
         """ 頂点 v の子孫の数を求める.
