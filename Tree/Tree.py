@@ -8,6 +8,30 @@ class Tree:
             "euler_vertex", "euler_edge", "in_time", "out_time", "lca_dst",
             "hld_hedge")
 
+    @classmethod
+    def make_tree_from_adjacent_list(cls, N: int, adj: list[list[int]], root: int, index: int) -> "Tree":
+        T = Tree(N, index)
+        T.root_set(root)
+
+        seen = [False] * (N + index)
+        seen[root] = True
+
+        stack = [root]
+
+        while stack:
+            x = stack.pop()
+
+            for y in adj[x]:
+                if seen[y]:
+                    continue
+
+                T.parent_set(y, x)
+                stack.append(y)
+                seen[y] = True
+
+        T.seal()
+        return T
+
     # Property
     @property
     def N(self):
@@ -919,27 +943,6 @@ class Tree:
         return (X+self.distance(S[-1],S[0]))//2
 
 #=================================================
-def Making_Tree_from_Adjacent_List(N, A, root, index=0):
-    """ 隣接リストから木を作る."""
-
-    from collections import deque
-
-    T=Tree(N, index)
-    T.root_set(root)
-
-    S=[False]*(N+index); S[root]=True
-    Q=deque([root])
-    while Q:
-        v=Q.popleft()
-        for w in A[v]:
-            if not S[w]:
-                S[w]=True
-                T.parent_set(w,v)
-                Q.append(w)
-
-    T.seal()
-    return T
-
 def Making_Tree_from_Edges(N, E, root, index=0):
     """ 辺のリストから木を作る.
 
