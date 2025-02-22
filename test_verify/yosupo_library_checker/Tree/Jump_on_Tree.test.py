@@ -2,7 +2,7 @@
 
 #==================================================
 import sys
-from Tree.Tree import Tree
+from Tree.Tree import Making_Tree_from_Edges
 
 input=sys.stdin.readline
 write=sys.stdout.write
@@ -15,7 +15,7 @@ def verify():
         a,b=map(int,input().split())
         E.append((a,b))
 
-    T=Tree.make_tree_from_adjacent_list(N, E, 0, 0)
+    T=Making_Tree_from_Edges(N, E, 0, 0)
 
     X=[0]*Q
     for q in range(Q):
