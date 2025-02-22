@@ -1,25 +1,60 @@
+from typing import TypeVar, Generator, Callable
+
+X = TypeVar('X')
+M = TypeVar('M')
 class Tree:
-    __slots__=("N", "index", "parent", "__mutable",
-            "root", "children", "depth", "tower", "upper_list", "des_count", "preorder_number",
+    __slots__=("__N", "__index", "parent", "__mutable",
+            "__root", "children", "__depth", "__tower", "upper_list", "des_count", "preorder_number",
             "euler_vertex", "euler_edge", "in_time", "out_time", "lca_dst",
             "hld_hedge")
 
-    def __init__(self, N, index=0):
-        """ N 頂点 (index, index+1, ..., N-1+index) の根付き木を生成する. """
-        self.N=N
-        self.index=index
-        self.parent=[-1]*(N+index)
-        self.__mutable=True
+    # Property
+    @property
+    def N(self):
+        return self.__N
 
-    def vertex_exist(self, x):
+    @property
+    def index(self):
+        return self.__index
+
+    @property
+    def root(self):
+        return self.__root
+
+    @property
+    def mutable(self):
+        return self.__mutable
+
+    @property
+    def depth(self):
+        return self.__depth
+
+    @property
+    def tower(self):
+        return self.__tower
+
+    def __init__(self, N: int, index: int = 0):
+        """ N 頂点 (index, index + 1, index + 2, ..., index + N - 1) を持つ木を生成する.
+
+        Args:
+            N (int): 頂点数
+            index (int, optional): 最初の頂点番号. Defaults to 0.
+        """
+
+        self.__N = N
+        self.__index = index
+        self.parent = [-1] * (N + index)
+        self.__mutable = True
+
+    def vertex_exist(self, x: int) -> bool:
         """ 頂点 x が存在するかどうかを判定する. """
 
-        return self.index<=x<self.index+self.N
+        return self.index <= x < self.index + self.N
 
-    def __after_seal_check(self,*vertexes):
+    def __after_seal_check(self, *vertexes: int) -> bool:
         """ 木が確定していて, vertexes の頂点が存在するかどうかをチェックする. """
 
-        if self.__mutable:
+        if self.mutable:
             return False
 
         for v in vertexes:
@@ -27,100 +62,91 @@ class Tree:
                 return False
         return True
 
-    def is_mutable(self):
-        """ 木が確定して [いない] かどうかを返す. """
-        return self.__mutable
-
     #設定パート
-    def root_set(self, root):
-        """ 頂点 root を根に設定する."""
+    def root_set(self, root: int) -> None:
+        """ 頂点 root を根に設定する.
+
+        Args:
+            root (int): 根にする頂点
+        """
 
         assert self.vertex_exist(root)
-        assert self.__mutable
+        assert self.mutable
 
-        self.root=root
+        self.__root = root
 
-    def parent_set(self,x,y):
-        """ 頂点 x の親を y に設定する."""
+    def parent_set(self, x: int, y: int) -> None:
+        """ 頂点 x の親を頂点 y に設定する.
 
-        assert self.vertex_exist(x)
-        assert self.vertex_exist(y)
-        assert self.__mutable
-
-        self.parent[x]=y
-
-    def child_set(self, x, y):
-        """ 頂点 x の子の一つに y を設定する (頂点 x の方が親)."""
+        Args:
+            x (int): 子
+            y (int): 親
+        """
 
         assert self.vertex_exist(x)
         assert self.vertex_exist(y)
-        assert self.__mutable
+        assert self.mutable
 
-        self.parent[y]=x
+        self.parent[x] = y
+
+    def child_set(self, x: int, y: int) -> None:
+        """ 頂点 x の子の一つに頂点 y を設定する.
+
+        Args:
+            x (int): 親
+            y (int): 子
+        """
+
+        assert self.vertex_exist(x)
+        assert self.vertex_exist(y)
+        assert self.mutable
+
+        self.parent[y] = x
 
     def seal(self):
         """ 木の情報を確定させる (これ以降, 情報の変更は禁止)."""
 
-        assert self.__mutable
+        assert self.mutable
         assert hasattr(self, "root")
 
-        a=self.index
-        b=self.index+self.N
-        C=[[] for _ in range(b)]
+        children = [[] for _ in range(self.index + self.N)]
+        parent = self.parent
+        for v in range(self.index, self.index + self.N):
+            if v == self.root:
+                continue
 
-        p=self.parent
-        ve=self.vertex_exist
-        for i in range(a,b):
-            if i!=self.root:
-                assert ve(p[i])
-                C[p[i]].append(i)
+            assert self.vertex_exist(parent[v])
+            children[parent[v]].append(v)
 
-        self.__mutable=False
-        self.children=C
+        self.__mutable = False
+        self.children = children
+        self.__build_up()
 
-    #データを求める.
-    def depth_search(self, mode=True):
-        """ 木の深さを求める.
-
-        mode=True ならば, 各頂点の深さが記録されたリストを返す.
-        """
-
-        assert self.__after_seal_check()
-
-        if hasattr(self, "depth"):
-            if mode:
-                return self.depth
-            else:
-                return
-
+    # 木を build up する.
+    def __build_up(self):
         children = self.children
         depth = [-1] * (self.index+self.N)
         tower = [[] for _ in range(self.N)]
 
-        S = [self.root]
-        depth[self.root]=0
-        tower[0]=[self.root]
+        stack = [self.root]
+        depth[self.root] = 0
+        tower[0] = [self.root]
 
-        while S:
-            x = S.pop()
+        while stack:
+            x = stack.pop()
             for y in children[x]:
                 depth[y] = depth[x] + 1
                 tower[depth[y]].append(y)
-                S.append(y)
+                stack.append(y)
 
-        self.depth = depth
-        self.tower = tower
-
-        if mode:
-            return depth
+        self.__depth = depth
+        self.__tower = tower
 
     def vertex_depth(self, x):
         """ 頂点 x の深さを求める."""
 
         assert self.__after_seal_check(x)
 
-        if not hasattr(self, "depth"):
-            self.depth_search(mode=False)
         return self.depth[x]
 
     def __upper_list(self):
@@ -152,19 +178,28 @@ class Tree:
                 Z[x]=Y[Y[x]]
         self.upper_list=X
 
-    def upper(self, x, k, over=True):
+    def upper(self, x: int, k: int, over: bool = True) -> int:
         """ 頂点 x から見て k 個親の頂点を求める.
 
-        over: (頂点 x の深さ)<k のときに True ならば根を返し, False ならばエラーを吐く.
+        Args:
+            x (int): 元となる頂点
+            k (int): 遡る世代
+            over (bool, optional): (頂点 x の深さ) < k のときに True ならば根を返し, False ならばエラーを吐く. Defaults to True.
+
+        Raises:
+            ValueError: (頂点 x の深さ) < k かつ over = False のときにエラーを吐く.
+
+        Returns:
+            int: 頂点 x から見て k 個親の頂点
         """
 
         assert self.__after_seal_check(x)
-        assert 0<=k
+        assert 0 <= k
 
-        if not hasattr(self,"upper_list"):
+        if not hasattr(self, "upper_list"):
             self.__upper_list()
 
-        if self.vertex_depth(x)<k:
+        if self.vertex_depth(x) < k:
             if over:
                 return self.root
             else:
@@ -172,10 +207,10 @@ class Tree:
 
         i=0
         while k:
-            if k&1:
-                x=self.upper_list[i][x]
-            k>>=1
-            i+=1
+            if k & 1:
+                x = self.upper_list[i][x]
+            k >>= 1
+            i += 1
         return x
 
     def lowest_common_ancestor_greedy(self, x, y):
@@ -262,17 +297,28 @@ class Tree:
 
         return u if self.vertex_depth(u)<self.vertex_depth(v) else v
 
-    def degree(self,v):
-        """ 頂点 v の次数を求める. """
+    def degree(self, v: int) -> int:
+        """ 頂点 v の次数を求める.
+
+        Args:
+            v (int): 頂点
+
+        Returns:
+            int: 次数
+        """
 
         assert self.__after_seal_check(v)
-        if v==self.root:
+        if v == self.root:
             return len(self.children[v])
         else:
-            return len(self.children[v])+1
+            return len(self.children[v]) + 1
 
-    def diameter(self):
-        """ 木の直径を求める."""
+    def diameter(self) -> int:
+        """ 木の直径を求める.
+
+        Returns:
+            int: 直径
+        """
 
         assert self.__after_seal_check()
 
@@ -324,70 +370,117 @@ class Tree:
             Y.append(v)
         return X+Y[-2::-1]
 
-    def is_parent(self, u, v):
-        """ u は v の親か? """
+    def is_parent(self, u: int, v: int) -> bool:
+        """ 頂点 u は頂点 v の親か?
+
+        Args:
+            u (int): 元となる頂点
+            v (int): 親かどうかを判定する頂点
+
+        Returns:
+            bool: 親 ?
+        """
+
+        assert self.__after_seal_check(u, v)
+        return (v != self.root) and (u == self.parent[v])
+
+    def is_children(self, u: int, v: int) -> bool:
+        """ 頂点 u は頂点 v の子か?
+
+        Args:
+            u (int): 元となる頂点
+            v (int): 子かどうかを判定する頂点
+
+        Returns:
+            bool: 子 ?
+        """
+
+        assert self.__after_seal_check(u, v)
+        return self.is_parent(v, u)
+
+    def is_brother(self, u: int, v: int) -> bool:
+        """ 頂点 u と頂点 v は兄弟か?
+
+        Args:
+            u (int): 頂点 1
+            v (int): 頂点 2
+
+        Returns:
+            bool: 兄弟 ?
+        """
 
         assert self.__after_seal_check(u,v)
-        return v!=self.root and u==self.parent[v]
+        return (u != self.root) and (v != self.root) and (self.parent[u] == self.parent[v])
 
-    def is_children(self, u, v):
-        """ u は v の子か? """
+    def is_ancestor(self, u: int, v: int) -> bool:
+        """ 頂点 u は頂点 v の先祖か?
 
-        assert self.__after_seal_check(u,v)
-        return self.is_parent(v,u)
+        Args:
+            u (int): 元となる頂点
+            v (int): 先祖かどうかを判定する頂点
 
-    def is_brother(self,u,v):
-        """ 2つの頂点 u, v は兄弟 (親が同じ) か?  """
-
-        assert self.__after_seal_check(u,v)
-
-        if u==self.root or v==self.root:
-            return False
-        return self.parent[u]==self.parent[v]
-
-    def is_ancestor(self,u,v):
-        """ 頂点 u は頂点 v の先祖か? """
-
-        assert self.__after_seal_check(u,v)
-
-        dd=self.vertex_depth(v)-self.vertex_depth(u)
-        if dd<0:
-            return False
-
-        v=self.upper(v,dd)
-        return u==v
-
-    def is_descendant(self,u,v):
-        """ 頂点 u は頂点 v の子孫か? """
-
-        assert self.__after_seal_check(u,v)
-        return self.is_ancestor(v,u)
-
-    def direction(self, u, v):
-        """ 頂点 u から頂点 v (u!=v) へ向かうパスが頂点 u の次に通る頂点"""
-
-        assert self.__after_seal_check(u,v)
-        assert u!=v
-
-        if self.is_ancestor(u,v):
-            du=self.vertex_depth(u)
-            dv=self.vertex_depth(v)
-            return self.upper(v,dv-(du+1))
-        else:
-            return self.parent[u]
-
-    def jump(self, u, v, k, default=-1):
-        """ 頂点 u から頂点 v へ向かうパスにおいて k 番目 (0-indexed) に通る頂点 (パスの長さが k より大きい場合は default)
-
-        u: int
-        v: int
-        k: int
-        default=-1: int
+        Returns:
+            bool: 先祖 ?
         """
 
         assert self.__after_seal_check(u,v)
 
-        if k==0:
+        if (d := self.vertex_depth(v) - self.vertex_depth(u)) < 0:
+            return False
+
+        return u == self.upper(v,d)
+
+    def is_descendant(self, u: int, v: int) -> bool:
+        """ 頂点 u は頂点 v の子孫か?
+
+        Args:
+            u (int): 元となる頂点
+            v (int): 子孫かどうかを判定する頂点
+
+        Returns:
+            bool: 子孫 ?
+        """
+
+        assert self.__after_seal_check(u, v)
+        return self.is_ancestor(v, u)
+
+    def direction(self, u: int, v: int) -> int:
+        """ 頂点 u から頂点 v へのパス (u != v) に対して, 頂点 u の次に通る頂点
+
+        Args:
+            u (int): 始点
+            v (int): 終点
+
+        Returns:
+            int: 頂点 u の次に通る頂点
+        """
+
+        assert self.__after_seal_check(u,v)
+        assert u != v
+
+        if self.is_ancestor(u, v):
+            du = self.vertex_depth(u)
+            dv = self.vertex_depth(v)
+            return self.upper(v, dv - (du + 1))
+        else:
+            return self.parent[u]
+
+    def jump(self, u: int, v: int, k: int, default = None) -> int:
+        """ 頂点 u から頂点 v へ向かうパスにおいて k 番目 (0-indexed) に通る頂点 (パスの長さが k より大きい場合は default)
+
+        Args:
+            u (int): 始点
+            v (int): 終点
+            k (int): ジャンプの大きさ
+            default (Any, optional): パスの長さが k より大きい場合の返り値. Defaults to None.
+
+        Returns:
+            int: 頂点 u から頂点 v へ向かうパスにおいて k 番目 に通る頂点
+        """
+
+        assert self.__after_seal_check(u,v)
+
+        if k == 0:
             return u
 
         # lca を求める.
@@ -420,8 +513,15 @@ class Tree:
         else:
             return self.upper(v, (dist_uw+dist_wv)-k)
 
-    def is_leaf(self,v):
-        """ 頂点 v は葉? """
+    def is_leaf(self, v: int) -> bool:
+        """ 頂点 v は葉?
+
+        Args:
+            v (int): 葉かどうかを判断する頂点
+
+        Returns:
+            bool: 葉 ?
+        """
 
         return not bool(self.children[v])
 
@@ -452,14 +552,31 @@ class Tree:
                 self.des_count[pa[x]]+=self.des_count[x]
         return
 
-    def descendant_count(self, v):
-        """ 頂点 v の子孫の数を求める. """
+    def descendant_count(self, v: int) -> int:
+        """ 頂点 v の子孫の数を求める.
+
+        Args:
+            v (int): 頂点
+
+        Returns:
+            int: 子孫の数
+        """
+
         assert self.__after_seal_check(v)
         self.__descendant_count()
         return self.des_count[v]
 
-    def subtree_size(self, v):
-        """ 頂点 v を根とした部分根付き木のサイズを求める. """
+
+    def subtree_size(self, v: int) -> int:
+        """ 頂点 v を根とした部分根付き木のサイズを求める.
+
+        Args:
+            v (int): 頂点
+
+        Returns:
+            int: 部分根付き木のサイズ
+        """
+
         return self.descendant_count(v)
 
     def preorder(self,v):
@@ -527,18 +644,24 @@ class Tree:
                 S[w]+=1
                 yield (v, 1)
 
-    def top_down(self):
-        """ 木の根から yield する. """
+    def top_down(self) -> Generator[int, None, None]:
+        """ 頂点を根から生成するジェネレーターを生成する.
+
+        Yields:
+            Generator[int, None, None]: 根からのジェネレータ
+        """
 
         assert self.__after_seal_check()
-        if not hasattr(self, "tower"):
-            self.depth_search(False)
 
         for layer in self.tower:
             yield from layer
 
-    def bottom_up(self):
-        """ 木の葉から yield する. """
+    def bottom_up(self) -> Generator[int, None, None]:
+        """ 頂点を葉から生成するジェネレーターを生成する.
+
+        Yields:
+            Generator[int, None, None]: 葉からのジェネレータ
+        """
 
         assert self.__after_seal_check()
         if not hasattr(self, "tower"):
