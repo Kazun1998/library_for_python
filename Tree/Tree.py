@@ -719,7 +719,7 @@ class Tree:
 
         return data
 
-    def rerooting(self, merge, unit, f, g):
+    def rerooting(self, merge, unit, f, g, h):
         """ 全方位木 DP を行う.
 
         [input]
@@ -744,7 +744,7 @@ class Tree:
         pa=self.parent
 
         #DFSパート
-        lower=self.tree_dp_from_leaf(merge, unit, f, g, True)
+        lower=self.tree_dp_from_leaf(merge, unit, f, g)
 
         #BFSパート
         for v in self.top_down():
@@ -785,7 +785,7 @@ class Tree:
 
             for c in ch[v]:
                 a=merge(a, f(lower[c], v, c))
-            A[v]=g(a, v)
+            A[v]=h(a, v)
         return A
 
     def euler_tour_vertex(self, order=None):
