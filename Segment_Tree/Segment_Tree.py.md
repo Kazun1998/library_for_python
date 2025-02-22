@@ -17,74 +17,90 @@ data:
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.13.2/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Segment_Tree():\n    def __init__(self, L, op, unit):\n        \"\"\
-    \" op \u3092\u6F14\u7B97\u3068\u3059\u308B\u30EA\u30B9\u30C8 L \u306E Segment\
-    \ Tree \u3092\u4F5C\u6210\n\n        op: \u6F14\u7B97 (2\u5909\u6570\u95A2\u6570\
-    , Monoid)\n        unit: Monoid op \u306E\u5358\u4F4D\u5143 (xe=ex=x\u3092\u6E80\
-    \u305F\u3059e)\n        \"\"\"\n        self.op=op\n        self.unit=unit\n\n\
-    \        N=len(L); self.n=N\n        d=max(1,(N-1).bit_length())\n        k=1<<d\n\
+  code: "from typing import TypeVar, Generic, Callable, Iterator\n\nM = TypeVar('M')\n\
+    class Segment_Tree(Generic[M]):\n    def __init__(self, L: list[M], op: Callable[[M,\
+    \ M], M], unit: M):\n        \"\"\" op \u3092\u6F14\u7B97\u3068\u3059\u308B\u521D\
+    \u671F\u72B6\u614B L \u306E Segment Tree \u3092\u751F\u6210\u3059\u308B.\n\n \
+    \       Args:\n            L (list[M]): \u521D\u671F\u72B6\u614B\n           \
+    \ op (Callable[[M, M], M]): \u6F14\u7B97\n            unit (M): M \u306E\u5358\
+    \u4F4D\u5143\n        \"\"\"\n        self.op=op\n        self.unit=unit\n\n \
+    \       N=len(L); self.n=N\n        d=max(1,(N-1).bit_length())\n        k=1<<d\n\
     \n        self.data=data=[unit]*k+L+[unit]*(k-len(L))\n        self.N=k\n    \
     \    self.depth=d\n\n        for i in range(k-1,0,-1):\n            data[i]=op(data[i<<1],\
-    \ data[i<<1|1])\n\n    def get(self, k):\n        \"\"\" \u7B2C k \u8981\u7D20\
-    \u3092\u53D6\u5F97\n        \"\"\"\n        assert 0<=k<self.N,\"\u6DFB\u5B57\u304C\
-    \u7BC4\u56F2\u5916\"\n        return self.data[k+self.N]\n\n    def update(self,\
-    \ k, x):\n        \"\"\"\u7B2Ck\u8981\u7D20\u3092x\u306B\u5909\u3048,\u66F4\u65B0\
-    \u3092\u884C\u3046.\n\n        k:\u6570\u5217\u306E\u8981\u7D20\n        x:\u66F4\
-    \u65B0\u5F8C\u306E\u5024\n        \"\"\"\n        assert 0<=k<self.N,\"\u6DFB\u5B57\
-    \u304C\u7BC4\u56F2\u5916\"\n        m=k+self.N\n\n        data=self.data; op=self.op\n\
-    \        data[m]=x\n\n        while m>1:\n            m>>=1\n            data[m]=op(data[m<<1],\
-    \ data[m<<1|1])\n\n    def product(self, l, r, left_closed=True,right_closed=True):\n\
-    \        L=l+self.N+(not left_closed)\n        R=r+self.N+(right_closed)\n\n \
-    \       vL=self.unit\n        vR=self.unit\n\n        data=self.data; op=self.op\n\
-    \        while L<R:\n            if L&1:\n                vL=op(vL, data[L])\n\
-    \                L+=1\n\n            if R&1:\n                R-=1\n         \
-    \       vR=op(data[R], vR)\n\n            L>>=1\n            R>>=1\n\n       \
-    \ return op(vL,vR)\n\n    def all_product(self):\n        return self.data[1]\n\
-    \n    def max_right(self, left, cond):\n        \"\"\" \u4EE5\u4E0B\u306E2\u3064\
-    \u3092\u3068\u3082\u306B\u6E80\u305F\u3059 x \u306E1\u3064\u3092\u8FD4\u3059.\\\
-    n\n        (1) r=left or cond(data[left]*data[left+1]*...*data[r-1]): True\n \
-    \       (2) r=N or cond(data[left]*data[left+1]*...*data[r]): False\n        \u203B\
-    \ cond \u304C\u5358\u8ABF\u6E1B\u5C11\u306E\u6642, cond(data[left]*...*data[r-1])\
-    \ \u3092\u6E80\u305F\u3059\u6700\u5927\u306E r \u3068\u306A\u308B.\n\n       \
-    \ cond:\u95A2\u6570(\u5F15\u6570\u304C\u540C\u3058\u306A\u3089\u3070\u7D50\u679C\
-    \u3082\u540C\u3058)\n        cond(unit): True\n        0<=left<=N\n        \"\"\
-    \"\n\n        assert 0<=left<=self.N,\"\u6DFB\u5B57\u304C\u7BC4\u56F2\u5916\"\n\
-    \        assert cond(self.unit),\"\u5358\u4F4D\u5143\u304C\u6761\u4EF6\u3092\u6E80\
-    \u305F\u3055\u306A\u3044.\"\n\n        if left==self.N:\n            return self.N\n\
-    \n        left+=self.N\n        sm=self.unit\n\n        op=self.op; data=self.data\n\
-    \        first=True\n\n        while first or (left & (-left))!=left:\n      \
-    \      first=False\n            while left%2==0:\n                left>>=1\n \
-    \           if not cond(op(sm, data[left])):\n                while left<self.N:\n\
-    \                    left<<=1\n                    if cond(op(sm, data[left])):\n\
-    \                        sm=op(sm, data[left])\n                        left+=1\n\
-    \                return left-self.N\n            sm=op(sm, data[left])\n     \
-    \       left+=1\n        return self.N\n\n    def min_left(self, right, cond):\n\
-    \        \"\"\" \u4EE5\u4E0B\u306E2\u3064\u3092\u3068\u3082\u306B\u6E80\u305F\u3059\
-    \ y \u306E1\u3064\u3092\u8FD4\u3059.\\n\n        (1) l=right or cond(data[l]*data[l+1]*...*data[right-1]):\
-    \ True\n        (2) l=0 or cond(data[l-1]*data[l]*...*data[right-1]): False\n\
-    \        \u203B cond \u304C\u5358\u8ABF\u5897\u52A0\u306E\u6642, cond(data[l]*...*data[right-1])\
-    \ \u3092\u6E80\u305F\u3059\u6700\u5C0F\u306E l \u3068\u306A\u308B.\n\n       \
-    \ cond: \u95A2\u6570(\u5F15\u6570\u304C\u540C\u3058\u306A\u3089\u3070\u7D50\u679C\
-    \u3082\u540C\u3058)\n        cond(unit): True\n        0<=right<=N\n        \"\
-    \"\"\n        assert 0<=right<=self.N,\"\u6DFB\u5B57\u304C\u7BC4\u56F2\u5916\"\
-    \n        assert cond(self.unit),\"\u5358\u4F4D\u5143\u304C\u6761\u4EF6\u3092\u6E80\
-    \u305F\u3055\u306A\u3044.\"\n\n        if right==0:\n            return 0\n\n\
-    \        right+=self.N\n        sm=self.unit\n\n        op=self.op; data=self.data\n\
-    \        first=1\n        while first or (right & (-right))!=right:\n        \
-    \    first=0\n            right-=1\n            while right>1 and right&1:\n \
-    \               right>>=1\n\n            if not cond(op(data[right], sm)):\n \
-    \               while right<self.N:\n                    right=2*right+1\n   \
-    \                 if cond(op(data[right], sm)):\n                        sm=op(data[right],\
-    \ sm)\n                        right-=1\n                return right+1-self.N\n\
-    \            sm=op(data[right], sm)\n        return 0\n\n    def __getitem__(self,k):\n\
-    \        return self.get(k)\n\n    def __setitem__(self,k,x):\n        return\
-    \ self.update(k,x)\n\n    def __iter__(self):\n        for i in range(self.n):\n\
-    \            yield self.get(i)\n"
+    \ data[i<<1|1])\n\n    def get(self, k: int) -> M:\n        \"\"\" \u7B2C k \u8981\
+    \u7D20\u3092\u53D6\u5F97\u3059\u308B.\n\n        Args:\n            k (int): \u8981\
+    \u7D20\u306E\u5834\u6240\n\n        Returns:\n            M: \u7B2C k \u8981\u7D20\
+    \n        \"\"\"\n        assert 0<=k<self.N,\"\u6DFB\u5B57\u304C\u7BC4\u56F2\u5916\
+    \"\n        return self.data[k+self.N]\n\n    def update(self, k: int, x: M) ->\
+    \ None:\n        \"\"\" \u7B2C k \u8981\u7D20\u3092 x \u306B\u5909\u3048, \u66F4\
+    \u65B0\u3059\u308B.\n\n        Args:\n            k (int): \u8981\u7D20\u306E\u5834\
+    \u6240\n            x (M): \u66F4\u65B0\u5F8C\u306E\u7B2C k \u8981\u7D20\n   \
+    \     \"\"\"\n\n        assert 0<=k<self.N,\"\u6DFB\u5B57\u304C\u7BC4\u56F2\u5916\
+    \"\n        m=k+self.N\n\n        data=self.data; op=self.op\n        data[m]=x\n\
+    \n        while m>1:\n            m>>=1\n            data[m]=op(data[m<<1], data[m<<1|1])\n\
+    \n    def product(self, l: int, r: int, left_closed: bool = True, right_closed:\
+    \ bool = True) -> M:\n        \"\"\" \u7B2C l \u8981\u7D20\u304B\u3089\u7B2C r\
+    \ \u8981\u7D20\u307E\u3067\u306E\u7DCF\u7A4D\u3092\u6C42\u3081\u308B.\n\n    \
+    \    Args:\n            l (int): \u5DE6\u7AEF\n            r (int): \u53F3\u7AEF\
+    \n            left_closed (bool, optional): False \u306B\u3059\u308B\u3068, \u5DE6\
+    \u7AEF\u304C\u958B\u533A\u9593\u306B\u306A\u308B. Defaults to True.\n        \
+    \    right_closed (bool, optional): False \u306B\u3059\u308B\u3068, \u53F3\u7AEF\
+    \u304C\u958B\u533A\u9593\u306B\u306A\u308B. Defaults to True.\n\n        Returns:\n\
+    \            M: \u7B2C l \u8981\u7D20\u304B\u3089\u7B2C r \u8981\u7D20\u307E\u3067\
+    \u306E\u7A4D\n        \"\"\"\n\n        L=l+self.N+(not left_closed)\n       \
+    \ R=r+self.N+(right_closed)\n\n        vL=self.unit\n        vR=self.unit\n\n\
+    \        data=self.data; op=self.op\n        while L<R:\n            if L&1:\n\
+    \                vL=op(vL, data[L])\n                L+=1\n\n            if R&1:\n\
+    \                R-=1\n                vR=op(data[R], vR)\n\n            L>>=1\n\
+    \            R>>=1\n\n        return op(vL,vR)\n\n    def all_product(self) ->\
+    \ M:\n        return self.data[1]\n\n    def max_right(self, left: int, cond:\
+    \ Callable[[int], bool]) -> int:\n        \"\"\" \u4EE5\u4E0B\u306E2\u3064\u3092\
+    \u3068\u3082\u306B\u6E80\u305F\u3059 r \u306E1\u3064\u3092\u8FD4\u3059.\\n\n \
+    \       (1) r=left or cond(data[left]*data[left+1]*...*data[r-1]): True\\n\n \
+    \       (2) r=N or cond(data[left]*data[left+1]*...*data[r]): False\\n\n\n   \
+    \     \u203B cond \u304C\u5358\u8ABF\u6E1B\u5C11\u306E\u6642, cond(data[left]*...*data[r-1])\
+    \ \u3092\u6E80\u305F\u3059\u6700\u5927\u306E r \u3068\u306A\u308B.\\n\n      \
+    \  \u203B cond(unit) = True \u3092\u8AB2\u3059.\n\n        Args:\n           \
+    \ left (int): \u5DE6\u7AEF\n            cond (Callable[[int], bool]): \u6761\u4EF6\
+    \n\n        Returns:\n            int: r\n        \"\"\"\n\n        assert 0<=left<=self.N,\"\
+    \u6DFB\u5B57\u304C\u7BC4\u56F2\u5916\"\n        assert cond(self.unit),\"\u5358\
+    \u4F4D\u5143\u304C\u6761\u4EF6\u3092\u6E80\u305F\u3055\u306A\u3044.\"\n\n    \
+    \    if left==self.N:\n            return self.N\n\n        left+=self.N\n   \
+    \     sm=self.unit\n\n        op=self.op; data=self.data\n        first=True\n\
+    \n        while first or (left & (-left))!=left:\n            first=False\n  \
+    \          while left%2==0:\n                left>>=1\n            if not cond(op(sm,\
+    \ data[left])):\n                while left<self.N:\n                    left<<=1\n\
+    \                    if cond(op(sm, data[left])):\n                        sm=op(sm,\
+    \ data[left])\n                        left+=1\n                return left-self.N\n\
+    \            sm=op(sm, data[left])\n            left+=1\n        return self.N\n\
+    \n    def min_left(self, right: int, cond: Callable[[int], bool]) -> int:\n  \
+    \      \"\"\" \u4EE5\u4E0B\u306E 2 \u3064\u3092\u3068\u3082\u306B\u6E80\u305F\u3059\
+    \ l \u306E1\u3064\u3092\u8FD4\u3059.\\n\n        (1) l=right or cond(data[l]*data[l+1]*...*data[right-1]):\
+    \ True\\n\n        (2) l=0 or cond(data[l-1]*data[l]*...*data[right-1]): False\\\
+    n\n\n        \u203B cond \u304C\u5358\u8ABF\u5897\u52A0\u306E\u6642, cond(data[l]*...*data[right-1])\
+    \ \u3092\u6E80\u305F\u3059\u6700\u5C0F\u306E l \u3068\u306A\u308B.\\n\n      \
+    \  \u203B cond(unit) = True \u3092\u8AB2\u3059.\n\n        Args:\n           \
+    \ right (int): \u53F3\u7AEF\n            cond (Callable[[int], bool]): \u6761\u4EF6\
+    \n\n        Returns:\n            int: l\n        \"\"\"\n\n        assert 0<=right<=self.N,\"\
+    \u6DFB\u5B57\u304C\u7BC4\u56F2\u5916\"\n        assert cond(self.unit),\"\u5358\
+    \u4F4D\u5143\u304C\u6761\u4EF6\u3092\u6E80\u305F\u3055\u306A\u3044.\"\n\n    \
+    \    if right==0:\n            return 0\n\n        right+=self.N\n        sm=self.unit\n\
+    \n        op=self.op; data=self.data\n        first=1\n        while first or\
+    \ (right & (-right))!=right:\n            first=0\n            right-=1\n    \
+    \        while right>1 and right&1:\n                right>>=1\n\n           \
+    \ if not cond(op(data[right], sm)):\n                while right<self.N:\n   \
+    \                 right=2*right+1\n                    if cond(op(data[right],\
+    \ sm)):\n                        sm=op(data[right], sm)\n                    \
+    \    right-=1\n                return right+1-self.N\n            sm=op(data[right],\
+    \ sm)\n        return 0\n\n    def __getitem__(self, k: int) -> M:\n        return\
+    \ self.get(k)\n\n    def __setitem__(self, k: int, x: M) -> None:\n        return\
+    \ self.update(k,x)\n\n    def __iter__(self) -> Iterator[M]:\n        for i in\
+    \ range(self.n):\n            yield self.get(i)\n"
   dependsOn: []
   isVerificationFile: false
   path: Segment_Tree/Segment_Tree.py
   requiredBy: []
-  timestamp: '2023-03-20 03:47:37+09:00'
+  timestamp: '2025-02-22 11:32:25+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py

@@ -35,7 +35,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py
   requiredBy: []
-  timestamp: '2023-03-20 03:47:37+09:00'
+  timestamp: '2025-02-22 11:32:25+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Segment_Tree.test.py

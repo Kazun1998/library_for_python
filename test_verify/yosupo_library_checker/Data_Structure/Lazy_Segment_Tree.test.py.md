@@ -39,7 +39,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
   requiredBy: []
-  timestamp: '2025-02-09 14:01:56+09:00'
+  timestamp: '2025-02-22 11:17:09+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Lazy_Segment_Tree.test.py
