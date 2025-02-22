@@ -50,11 +50,11 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
         for i in range(k - 1, 0, -1):
             data[i] = op(data[i << 1], data[i << 1 | 1])
 
-    def _eval_at(self, m):
+    def _eval_at(self, m: int) -> None:
         return self.data[m] if self.lazy[m] == self.id else self.act(self.lazy[m], self.data[m])
 
     #配列の第m要素を下に伝搬
-    def _propagate_at(self, m):
+    def _propagate_at(self, m: int) -> None:
         self.data[m] = self._eval_at(m)
         lazy = self.lazy; comp = self.comp
 
@@ -65,12 +65,12 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
         lazy[m] = self.id
 
     #配列の第m要素より上を全て伝搬
-    def _propagate_above(self, m):
+    def _propagate_above(self, m: int) -> None:
         for h in range(m.bit_length() - 1, 0, -1):
             self._propagate_at(m >> h)
 
     #配列の第m要素より上を全て再計算
-    def _recalc_above(self, m):
+    def _recalc_above(self, m: int) -> None:
         data = self.data; op = self.op
         eval_at = self._eval_at
         while m > 1:
