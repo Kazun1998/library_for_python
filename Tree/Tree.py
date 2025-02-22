@@ -190,9 +190,6 @@ class Tree:
         if hasattr(self, "upper_list"):
             return
 
-        if not hasattr(self,"depth"):
-            self.depth_search(False)
-
         b=max(self.depth).bit_length()
         X=[[-1]*(self.index+self.N) for _ in range(b)]
 
@@ -280,7 +277,7 @@ class Tree:
         self.euler_tour_vertex()
         tour=self.euler_vertex
         D[0]=tour.copy()
-        dep=self.depth_search(True)
+        dep=self.depth
 
         for i in range(1, bit):
             shift=1<<i
