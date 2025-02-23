@@ -909,36 +909,49 @@ class Tree:
                     return v
         return G
 
-    def generated_subtree(self,S):
-        """ S を含む最小の部分木の頂点を求める. """
+    def generated_subtree(self, S: list[int]) -> list[int]:
+        """ S から生成する部分木を求める.
+
+        Args:
+            S (list[int]): 頂点集合の部分集合
+
+        Returns:
+            list[int]: 生成される部分木の頂点集合
+        """
+
         assert self.__after_seal_check(*S)
 
         if not hasattr(self, "in_time"):
             self.euler_tour_vertex()
 
-        S=sorted(set(S),key=lambda i:self.in_time[i])
-        K=len(S)
+        S = sorted(set(S), key = lambda v: self.in_time[v])
+        K = len(S)
 
-        T=set()
+        W = set()
         for i in range(K-1):
-            for a in self.path(S[i],S[i+1]):
-                T.add(a)
-        return sorted(T)
+            W |= set(self.path(S[i], S[i+1]))
+        return sorted(W)
 
-    def generated_subtree_size(self,S):
-        """ S を含む最小の部分木のサイズを求める. """
+    def generated_subtree_size(self, S: list[int]) -> int:
+        """ S から生成する部分木のサイズ (辺の数) を求める.
+
+        Args:
+            S (list[int]): 頂点集合の部分集合
+
+        Returns:
+            int: 生成される部分木の頂点集合
+        """
+
         assert self.__after_seal_check(*S)
 
         if not hasattr(self, "in_time"):
             self.euler_tour_vertex()
 
-        S=sorted(set(S),key=lambda i:self.in_time[i])
-        K=len(S)
+        S = sorted(set(S), key=lambda i: self.in_time[i])
+        K = len(S)
 
-        X=0
-        for i in range(K-1):
-            X+=self.distance(S[i],S[i+1])
-        return (X+self.distance(S[-1],S[0]))//2
+        dist_sum = sum(self.distance(S[i], S[i + 1]) for i in range(K - 1))
+        return (dist_sum + self.distance(S[-1], S[0])) // 2
 
 #=================================================
 def Spanning_Tree(N,E,root,index=0,exclude=False):
