@@ -50,5 +50,6 @@
 "test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py": "2023-08-06 21:52:53 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py": "2023-08-06 21:52:53 +0900",
 "test_verify/yosupo_library_checker/String/Z_Algorithm.test.py": "2022-11-26 04:03:20 +0900",
+"test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py": "2025-02-23 18:30:00 +0900",
 "test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py": "2025-02-23 17:50:35 +0900"
 }
