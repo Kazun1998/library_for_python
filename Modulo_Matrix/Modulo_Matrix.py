@@ -610,5 +610,3 @@ def Adjugate_Matrix(A):
 
 #===
 Mod=998244353
-A = Modulo_Matrix([[5,0],[0,1]])
-print(A.inverse_with_determinant())
