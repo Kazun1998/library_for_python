@@ -9,7 +9,7 @@ class Tree:
             "hld_hedge")
 
     @classmethod
-    def make_tree_from_adjacent_list(cls, N: int, adj: list[list[int]], root: int, index: int) -> "Tree":
+    def make_tree_from_adjacent_list(cls, N: int, adj: list[list[int]], root: int, index: int = 0) -> "Tree":
         T = Tree(N, index)
         T.root_set(root)
 
@@ -31,6 +31,14 @@ class Tree:
 
         T.seal()
         return T
+
+    @classmethod
+    def make_tree_from_edges(cls, N: int, edges: list[tuple[int, int]], root: int, index: int = 0) -> "Tree":
+        adj = [[] for _ in range(index + N)]
+        for u, v in edges:
+            adj[u].append(v)
+            adj[v].append(u)
+        return cls.make_tree_from_adjacent_list(N, adj, root, index)
 
     # Property
     @property
@@ -933,37 +941,6 @@ class Tree:
         return (X+self.distance(S[-1],S[0]))//2
 
 #=================================================
-def Making_Tree_from_Edges(N, E, root, index=0):
-    """ 辺のリストから木を作る.
-
-    N: 頂点数
-    E: 辺のリスト E=[(u[0],v[0]), ..., (u[N-2], v[N-2]) ]
-    root: 根
-    """
-
-    from collections import deque
-
-    A=[[] for _ in range(N+index)]
-    for u,v in E:
-        A[u].append(v)
-        A[v].append(u)
-
-    T=Tree(N, index)
-    T.root_set(root)
-
-    S=[False]*(N+index); S[root]=True
-    Q=deque([root])
-    while Q:
-        v=Q.popleft()
-        for w in A[v]:
-            if not S[w]:
-                S[w]=True
-                T.parent_set(w,v)
-                Q.append(w)
-
-    T.seal()
-    return T
-
 def Spanning_Tree(N,E,root,index=0,exclude=False):
     """ 連結なグラフから全域木をつくる.
 
