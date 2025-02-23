@@ -752,62 +752,55 @@ class Tree:
         ※ tree_dp_from_leaf と同じ形式
 
         [補足]
-        頂点 v の子が x,y,z,..., w のとき, 更新式は * を merge として
-            dp[v]=g(f(dp[x],v,x)*f(dp[y],v,y)*f(dp[z],v,z)*...*f(dp[w],v,w), v)
+        頂点 v の子が x,y,z,..., w のとき, 更新式は + を merge として
+            dp[v] = g(f(dp[x],v,x) + f(dp[y],v,y) + f(dp[z],v,z) + ... + f(dp[w],v,w), v) (v が根ではないとき)
+                    h(f(dp[x],v,x) + f(dp[y],v,y) + f(dp[z],v,z) + ... + f(dp[w],v,w), v) (v が根のとき)
         になる.
         """
         assert self.__after_seal_check()
 
-        upper=[unit]*(self.index+self.N)
-        lower=[unit]*(self.index+self.N)
-
-        ch=self.children
-        pa=self.parent
+        children = self.children
+        parent = self.parent
 
         #DFSパート
-        lower=self.tree_dp_from_leaf(merge, unit, f, g)
+        lower = self.tree_dp_from_leaf(merge, unit, f, g)
 
         #BFSパート
+        upper = [unit] * (self.index + self.N)
         for v in self.top_down():
-            cc=ch[v]
+            children_v = children[v]
 
             #累積マージ
-            deg=len(cc)
+            deg = len(children_v)
 
-            Left=[unit]; x=unit
-            for c in cc:
+            left = [unit]; x = unit
+            for c in children_v:
                 x=merge(x, f(lower[c], v, c))
-                Left.append(x)
+                left.append(x)
 
-            Right=[unit]; y=unit
-            for c in cc[::-1]:
-                y=merge(y, f(lower[c], v, c))
-                Right.append(y)
-            Right=Right[::-1]
+            right = [unit]; y = unit
+            for c in children_v[::-1]:
+                y = merge(y, f(lower[c], v, c))
+                right.append(y)
+            right = right[::-1]
 
             for i in range(deg):
-                c=cc[i]
+                c = children_v[i]
 
-                a=merge(Left[i], Right[i+1])
+                a = merge(left[i], right[i+1])
+                b = a if self.root else merge(a, f(upper[v], v, parent[v]))
+                upper[c] = g(b, v)
 
-                if v!=self.root:
-                    b=merge(a, f(upper[v], v, pa[v]))
-                else:
-                    b=a
+        result = [unit] * (self.index + self.N)
+        for v in range(self.index, self.index + self.N):
+            a = unit if v == self.root else f(upper[v], v, parent[v])
 
-                upper[c]=g(b, v)
+            for c in children[v]:
+                a = merge(a, f(lower[c], v, c))
 
-        A=[unit]*(self.index+self.N)
-        for v in range(self.index,self.index+self.N):
-            if v!=self.root:
-                a=f(upper[v], v, pa[v])
-            else:
-                a=unit
+            result[v] = h(a, v)
 
-            for c in ch[v]:
-                a=merge(a, f(lower[c], v, c))
-            A[v]=h(a, v)
-        return A
+        return result
 
     def euler_tour_vertex(self, order=None):
         """ オイラーツアー (vertex) に関する計算を行う.
