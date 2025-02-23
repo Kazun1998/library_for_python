@@ -5,25 +5,33 @@ class SingularMatrixError(Exception):
         return "非正則行列の逆行列を求めようとしました."
 
 class Modulo_Matrix():
-    __slots__=("ele","row","col","size")
+    __slots__ = ("ele", "__row", "__col")
+
+    # property
+    @property
+    def row(self):
+        return self.__row
+
+    @property
+    def col(self):
+        return self.__col
+
+    @property
+    def size(self):
+        return (self.row, self.col)
 
     #入力
-    def __init__(self,M):
-        """ 行列 M の定義
-
-        M: 行列
+    def __init__(self, M: list[list[int]]):
+        """ 行列 M を生成する.
         ※ Mod: 法はグローバル変数から指定
+
+        Args:
+            M (list[int]): 行列
         """
 
         self.ele=[[x%Mod for x in X] for X in M]
-        R=len(M)
-        if R!=0:
-            C=len(M[0])
-        else:
-            C=0
-        self.row=R
-        self.col=C
-        self.size=(R,C)
+        self.__row = len(M)
+        self.__col = len(M[0]) if self.row > 0 else 0
 
     #出力
     def __str__(self):
@@ -34,11 +42,30 @@ class Modulo_Matrix():
 
     # 零行列, 単位行列
     @classmethod
-    def Zero_Matrix(cls, row, col):
+    def Zero_Matrix(cls, row: int, col: int) -> "Modulo_Matrix":
+        """ row 行 col 列のゼロ行列を生成する.
+
+        Args:
+            row (int): 行
+            col (int): 列
+
+        Returns:
+            Modulo_Matrix: row 行 col 列のゼロ行列
+        """
+
         return Modulo_Matrix([[0] * col for _ in range(row)])
 
     @classmethod
-    def Identity_Matrix(cls, N):
+    def Identity_Matrix(cls, N: int) -> "Modulo_Matrix":
+        """ N 次の単位行列を生成する.
+
+        Args:
+            N (int): 次数
+
+        Returns:
+            Modulo_Matrix: N 次単位行列
+        """
+
         return Modulo_Matrix([[1 if i==j else 0 for j in range(N)] for i in range(N)])
 
     #+,-
@@ -108,14 +135,29 @@ class Modulo_Matrix():
         if isinstance(other,int):
             return self.__scale__(other)
 
-    def inverse(self):
+    def inverse(self) -> "Modulo_Matrix":
+        """ 逆行列を求める
+
+        Raises:
+            SingularMatrixError: 非正則行列の逆行列を求めようとしたときに発生
+
+        Returns:
+            Modulo_Matrix: 逆行列
+        """
+
         inverse, _ = self.inverse_with_determinant()
         if inverse is None:
             raise SingularMatrixError()
 
         return inverse
 
-    def inverse_with_determinant(self):
+    def inverse_with_determinant(self) -> tuple["Modulo_Matrix", int] | tuple[None, int]:
+        """ self の逆行列と self の行列式を求める.
+
+        Returns:
+            tuple["Modulo_Matrix", int] | tuple[None, int]: (逆行列 (非正則の場合は None), 行列式)
+        """
+
         assert self.row == self.col,"正方行列ではありません."
 
         M = self
@@ -160,7 +202,16 @@ class Modulo_Matrix():
         return Modulo_Matrix(R), det
 
     #スカラー倍
-    def __scale__(self, r):
+    def __scale__(self, r: int) -> "Modulo_Matrix":
+        """ r 倍する
+
+        Args:
+            r (int): スカラー倍
+
+        Returns:
+            Modulo_Matrix: r 倍
+        """
+
         r %= Mod
         return Modulo_Matrix([[r * m_ij for m_ij in Mi] for Mi in self.ele])
 
@@ -190,11 +241,23 @@ class Modulo_Matrix():
         return not(self==other)
 
     #転置
-    def transpose(self):
+    def transpose(self) -> "Modulo_Matrix":
+        """ 転置行列を求める.
+
+        Returns:
+            Modulo_Matrix: 転置行列
+        """
+
         return Modulo_Matrix(list(map(list,zip(*self.ele))))
 
     #行基本変形
-    def row_reduce(self):
+    def row_reduce(self) -> "Modulo_Matrix":
+        """ 行基本変形をできるだけ施した後の行列を求める.
+
+        Returns:
+            Modulo_Matrix: 行基本変形をできるだけ施した後の行列
+        """
+
         (row, col) = self.size
 
         T = deepcopy(self.ele)
@@ -230,7 +293,13 @@ class Modulo_Matrix():
         return Modulo_Matrix(T)
 
     #列基本変形
-    def column_reduce(self):
+    def column_reduce(self) -> "Modulo_Matrix":
+        """ 列基本変形をできるだけ施した後の行列を求める.
+
+        Returns:
+            Modulo_Matrix: 列基本変形をできるだけ施した後の行列
+        """
+
         (row, col) = self.size
 
         T = deepcopy(self.ele)
@@ -265,7 +334,13 @@ class Modulo_Matrix():
         return Modulo_Matrix(T)
 
     #行列の階数
-    def rank(self):
+    def rank(self) -> int:
+        """ 行列のランクを求める
+
+        Returns:
+            int: ランク
+        """
+
         row_reduced = self.row_reduce()
         (row, col) = row_reduced.size
 
@@ -279,14 +354,32 @@ class Modulo_Matrix():
 
     # 単射 ?
     def is_injection(self):
+        """ 行列が表す線形写像は単射?
+
+        Returns:
+            bool: 単射 ?
+        """
+
         return self.rank() == self.col
 
     # 全射 ?
     def is_surjective(self):
+        """ 行列が表す線形写像は全射?
+
+        Returns:
+            bool: 全射 ?
+        """
+
         return self.rank() == self.row
 
     # 全単射 ?
-    def is_bijection(self):
+    def is_bijection(self) -> bool:
+        """ 行列が表す線形写像は全単射?
+
+        Returns:
+            bool: 全単射 ?
+        """
+
         return self.col == self.row == self.rank()
 
     #行の結合
@@ -517,3 +610,5 @@ def Adjugate_Matrix(A):
 
 #===
 Mod=998244353
+A = Modulo_Matrix([[5,0],[0,1]])
+print(A.inverse_with_determinant())
