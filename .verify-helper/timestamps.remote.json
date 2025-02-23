@@ -36,6 +36,7 @@
 "test_verify/yosupo_library_checker/Math/Montmort_Number.test.py": "2022-11-25 11:47:07 +0900",
 "test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py": "2024-04-18 23:56:19 +0900",
 "test_verify/yosupo_library_checker/Math/Two_Sat.test.py": "2022-11-23 16:35:46 +0900",
+"test_verify/yosupo_library_checker/Matrix/Adjugate_Matrix.test.py": "2025-02-23 23:25:26 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Division.test.py": "2023-08-06 21:52:53 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Exp.test.py": "2023-08-06 21:52:53 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Inv.test.py": "2023-08-06 21:52:53 +0900",
