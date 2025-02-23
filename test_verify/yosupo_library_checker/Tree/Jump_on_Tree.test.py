@@ -15,7 +15,7 @@ def verify():
         a,b=map(int,input().split())
         E.append((a,b))
 
-    T=Tree.make_tree_from_adjacent_list(N, E, 0, 0)
+    T=Tree.make_tree_from_edges(N, E, 0, 0)
 
     X=[0]*Q
     for q in range(Q):
