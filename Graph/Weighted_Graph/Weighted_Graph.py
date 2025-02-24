@@ -9,6 +9,7 @@ class Weigthed_Graph:
 
         self.adjacent = [[] for _ in range(N)]
         self.__edge_count = 0
+        self.__ininity = 0
 
     # property
     @property
@@ -48,6 +49,10 @@ class Weigthed_Graph:
         """
         return self.__edge_count
 
+    @property
+    def inifinity(self) -> int:
+        return self.__ininity
+
     #頂点の追加
     def add_vertex(self):
         """ 頂点を追加する.
@@ -73,6 +78,7 @@ class Weigthed_Graph:
         self.adjacent[u].append((v, weight, label))
         self.adjacent[v].append((u, weight, label))
         self.__edge_count += 1
+        self.__ininity += 2 * max(0, weight)
         return id
 
     #頂点を除く
@@ -223,7 +229,7 @@ def Warshall_Floyd(G: Weigthed_Graph) -> list[list[int]]:
                 for w in range(N):
                     dv[w] = min(dv[w], dv[u] + du[w])
 
-    inf = float("inf")
+    inf = G.inifinity
     N = G.vertex_count
 
     dist = [[0 if i == j else inf for j in range(N)] for i in range(N)]
@@ -237,7 +243,7 @@ def Warshall_Floyd(G: Weigthed_Graph) -> list[list[int]]:
     if any(dist[v][v] < 0 for v in range(N)):
         for v in range(N):
             if dist[v][v] < 0:
-                dist[v][v] = - inf
+                dist[v][v] = - float('inf')
         three_loop()
 
     return dist
