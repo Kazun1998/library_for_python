@@ -63,16 +63,15 @@ class Weigthed_Graph:
         """
 
         n = self.order
-        self.adjacent.extend([{} for _ in range(k)])
+        self.adjacent.extend([[]for _ in range(k)])
         return list(range(n, n + k))
 
     #辺の追加
-    def add_edge(self, u, v, weight = 1):
+    def add_edge(self, u: int, v: int, weight: int = 1, label = None):
         """ 重さが weight の辺 uv を加える. """
 
-        id = self.edge_offset + self.edge_count
-        self.adjacent[u].append((v, weight, id))
-        self.adjacent[v].append((u, weight, id))
+        self.adjacent[u].append((v, weight, label))
+        self.adjacent[v].append((u, weight, label))
         self.__edge_count += 1
         return id
 
