@@ -1,18 +1,52 @@
 class Weigthed_Graph:
-    """ 重み [なし] 有向グラフを生成する.
-
-    """
-
     #入力定義
-    def __init__(self, N = 0, edge_offset = 0):
-        """ 重み [なし] 有向グラフを生成する.
+    def __init__(self, N: int = 0):
+        """ 重みあり無向グラフを生成する.
 
-        N: 頂点数
+        Args:
+            N (int, optional): 位数. Defaults to 0.
         """
 
         self.adjacent = [[] for _ in range(N)]
-        self.edge_offset = edge_offset
-        self.edge_count = 0
+        self.__edge_count = 0
+
+    # property
+    @property
+    def vertex_count(self) -> int:
+        """ グラフの頂点数 (位数) を出力する.
+
+        Returns:
+            int: 頂点数
+        """
+        return len(self.adjacent)
+
+    @property
+    def order(self) -> int:
+        """ グラフの位数 (頂点数) を出力する.
+
+        Returns:
+            int: 位数
+        """
+        return len(self.adjacent)
+
+    #辺数
+    @property
+    def edge_count(self) -> int:
+        """ 辺の本数 (サイズ) を出力する.
+
+        Returns:
+            int: 辺の本数
+        """
+        return self.__edge_count
+
+    @property
+    def size(self) -> int:
+        """ サイズ (辺の本数) を出力する.
+
+        Returns:
+            int: サイズ
+        """
+        return self.__edge_count
 
     #頂点の追加
     def add_vertex(self):
@@ -20,7 +54,7 @@ class Weigthed_Graph:
 
         """
         self.adjacent.append({})
-        return self.order() - 1
+        return self.order - 1
 
     def add_vertices(self, k):
         """ 頂点を k 個追加する.
@@ -28,7 +62,7 @@ class Weigthed_Graph:
         k: int
         """
 
-        n = self.order()
+        n = self.order
         self.adjacent.extend([{} for _ in range(k)])
         return list(range(n, n + k))
 
@@ -39,7 +73,7 @@ class Weigthed_Graph:
         id = self.edge_offset + self.edge_count
         self.adjacent[u].append((v, weight, id))
         self.adjacent[v].append((u, weight, id))
-        self.edge_count += 1
+        self.__edge_count += 1
         return id
 
     #頂点を除く
@@ -58,30 +92,9 @@ class Weigthed_Graph:
     def neighbohood(self,v):
         pass
 
-
-    #頂点数
-    def vertex_count(self):
-        """ グラフの頂点数 (位数) を出力する. """
-        return len(self.adjacent)
-
-    def order(self):
-        """ グラフの位数 (頂点数) を出力する. """
-        return len(self.adjacent)
-
-    #辺数
-    def edge_count(self):
-        """ 辺の本数 (サイズ) を出力する."""
-
-        return self.edge_count
-
-    def size(self):
-        """ サイズ (辺の本数) を出力する. """
-
-        return self.edge_count
-
     def edge_yielder(self):
         generated = set()
-        for u in range(self.order()):
+        for u in range(self.order):
             for v, w, id in self.adjacent[u]:
                 if id not in generated:
                     generated.add(id)
@@ -104,7 +117,7 @@ def Dijkstra(G, From, To, with_path=False):
     from heapq import heappush,heappop
 
     inf=float("inf")
-    N=G.vertex_count()
+    N=G.vertex_count
     adj=G.adjacent
 
     T=[inf]*N; T[From]=0
@@ -163,7 +176,7 @@ def Dijkstra_All(G, From, with_path=False):
     from heapq import heappush,heappop
 
     inf=float("inf")
-    N=G.vertex_count()
+    N=G.vertex_count
     adj=G.adjacent
 
     T=[inf]*N; T[From]=0
@@ -210,7 +223,7 @@ def Warshall_Floyd(G):
                 for w in range(N):
                     Tv[w]=min(Tv[w],Tv[u]+Tu[w])
 
-    inf=float("inf"); N=G.vertex_count()
+    inf=float("inf"); N=G.vertex_count
 
     T=[[0]*N for _ in range(N)]
     adj=G.adjacent
@@ -241,7 +254,7 @@ def Warshall_Floyd(G):
 
 #巡回セールスマン問題を解く.
 def Traveling_Salesman_Problem(G):
-    N=G.vertex_count()
+    N=G.vertex_count
 
     inf=float("inf")
     T=[[inf]*N for _ in range(1<<N)]
@@ -295,7 +308,7 @@ def Tree_Diameter(T: Weigthed_Graph):
 
         return dist[furthest], path[::-1]
 
-    N = T.vertex_count()
+    N = T.vertex_count
     u = bfs(0, False)
     diameter, path = bfs(u, True)
 
