@@ -1,10 +1,17 @@
-class Binary_Indexed_Tree():
-    def __init__(self, L, op, zero, neg):
-        """ op を演算とする N 項の Binary Indexed Tree を作成
-        op: 演算 (2変数関数, 可換群)
-        zero: 群 op の単位元 (x+e=e+x=x を満たす e)
-        neg : 群 op の逆元 (1変数関数, x+neg(x)=neg(x)+x=e をみたす neg(x))
+from typing import TypeVar, Generic, Callable
+
+G = TypeVar('G')
+class Binary_Indexed_Tree(Generic[G]):
+    def __init__(self, L: list[G], op: Callable[[G, G], G], zero: G, neg: Callable[[G], G]):
+        """ op を群 G の演算として L から Binary Indexed Tree を生成する.
+
+        Args:
+            L (list[G]): 初期状態
+            op (Callable[[G, G], G]): 群演算
+            zero (G): 群 G における単位元 (任意の x in G に対して, x + e = e + x = x となる e in G)
+            neg (Callable[[G], G]): x in G における逆元 (x + y = y + x = e となる y) を求める関数
         """
+
         self.op=op
         self.zero=zero
         self.neg=neg
@@ -21,31 +28,37 @@ class Binary_Indexed_Tree():
                 X[q]=op(X[q], X[p])
         self.data=X
 
-    def get(self, k):
-        """ 第 k 要素の値を出力する.
+    def get(self, k: int) -> G:
+        """ 第 k 項を求める.
 
-        k    : 数列の要素
-        index: 先頭の要素の番号
+        Args:
+            k (int): 要素の位置
+
+        Returns:
+            G: 第 k 項
         """
         return self.sum(k, k)
 
-    def add(self, k, x):
-        """ 第 k 要素に x を加え, 更新を行う.
+    def add(self, k: int, x: G) -> None:
+        """ 第 k 項に x を加え, 更新する.
 
-        k    : 数列の要素
-        x    : 加える値
+        Args:
+            k (int): 要素の位置
+            x (G): 加える G の要素
         """
+
         data=self.data; op=self.op
         p=k+1
         while p<=self.N:
             data[p]=op(self.data[p], x)
             p+=p&(-p)
 
-    def update(self, k, x):
-        """ 第 k 要素を x に変え, 更新を行う.
+    def update(self, k: int, x: G) -> None:
+        """ 第 k 項を x に変えて更新する.
 
-        k: 数列の要素
-        x: 更新後の値
+        Args:
+            k (int): 要素の位置
+            x (G): 更新先の値
         """
 
         a=self.get(k)
@@ -53,12 +66,17 @@ class Binary_Indexed_Tree():
 
         self.add(k,y)
 
-    def sum(self, l, r):
-        """ 第 l 要素から第 r 要素までの総和を求める.
-        ※ l != 0 を使うならば, 群でなくてはならない.
-        l: 始まり
-        r: 終わり
+    def sum(self, l: int, r: int) -> G:
+        """ 第 l 項から第 r 項までの総和を求める (ただし, l != 0 のときは G が群でなくてはならない).
+
+        Args:
+            l (int): 左端
+            r (int): 右端
+
+        Returns:
+            G: 総和
         """
+
         l=l+1 if 0<=l else 1
         r=r+1 if r<self.N else self.N
 
@@ -69,8 +87,16 @@ class Binary_Indexed_Tree():
         else:
             return self.op(self.neg(self.__section(l-1)), self.__section(r))
 
-    def __section(self, x):
-        """ B[0]+...+B[x] を求める. """
+    def __section(self, x: int) -> G:
+        """ B[0] + B[1] + ... + B[x] を求める.
+
+        Args:
+            x (int): 右端
+
+        Returns:
+            G: 総和
+        """
+
         data=self.data; op=self.op
         S=self.zero
         while x>0:
@@ -78,23 +104,32 @@ class Binary_Indexed_Tree():
             x-=x&(-x)
         return S
 
-    def all_sum(self):
+    def all_sum(self) -> G:
+        """ B[0] + B[1] + ... + B[len(B) - 1] を求める.
+
+        Returns:
+            G: 総和
+        """
         return self.sum(0, self.N-1)
 
-    def binary_search(self, cond):
-        """ cond(B[0]+...+B[k]) が True となるような最小の k を返す.
+    def binary_search(self, cond: Callable[[int], bool]) -> int:
+        """ cond(B[0] + B[1] + ... + B[k]) が True になる最小の k を止める.
 
-        cond: 単調増加
+        ※ G は順序群である必要がある.
+        ※ cond(zero) = True のとき, 返り値は -1 とする.
+        ※ cond(B[0] + ... + B[k]) なる k が (0 <= k < N に) 存在しない場合, 返り値は N とする.
 
-        ※ cond(zero)=True の場合の返り値は -1 とする.
-        ※ cond(B[0]+...+B[k]) なる k が (0<=k<N に) 存在しない場合の返り値は N とする.
+        Args:
+            cond (Callable[[int], bool]): 単調増加な条件
+
+        Returns:
+            int: cond(B[0] + B[1] + ... + B[k]) が True になる最小の k
         """
 
         if cond(self.zero):
             return -1
 
         j=0
-        r=self.N
         t=1<<self.log
         data=self.data; op=self.op
         alpha=self.zero
@@ -109,13 +144,13 @@ class Binary_Indexed_Tree():
 
         return j
 
-    def __getitem__(self, index):
+    def __getitem__(self, index) -> G:
         if isinstance(index, int):
             return self.get(index)
         else:
             return [self.get(t) for t in index]
 
-    def __setitem__(self, index, val):
+    def __setitem__(self, index: int, val: G):
         self.update(index, val)
 
     def __iter__(self):

@@ -1,20 +1,27 @@
 class Union_Find():
-    __slots__=("n","parents","rank","edges","__group_number")
-    def __init__(self,N):
-        """ 0,1,...,N-1 を要素として初期化する.
+    __slots__ = ("n", "parents", "rank", "edges", "__group_number")
 
-        N: 要素数
+    def __init__(self, N: int) -> None:
+        """ 0, 1, ..., (N - 1) を要素に持つ Union Find を生成する.
+
+        Args:
+            N (int): 要素数
         """
+
         self.n=N
         self.parents=[-1]*N
         self.rank=[0]*N
         self.edges=[0]*N
         self.__group_number=N
 
-    def find(self, x):
-        """ 要素 x の属している族を調べる.
+    def find(self, x: int) -> int:
+        """ 要素 x が属している族を調べる
 
-        x: 要素
+        Args:
+            x (int): 要素
+
+        Returns:
+            int: x が属している族
         """
 
         a=x
@@ -28,7 +35,7 @@ class Union_Find():
 
         return a
 
-    def union(self, x, y, force = False):
+    def union(self, x: int, y: int, force : bool = False) -> bool:
         """ 要素 x と 要素 y を同一視する.
 
         Args:
@@ -61,61 +68,93 @@ class Union_Find():
             self.rank[x]+=1
         return True
 
-    def size(self, x):
-        """ 要素 x の属している族の要素の数.
+    def size(self, x: int) -> int:
+        """ 要素 x が属している族のサイズを求める
 
-        x: 要素
+        Args:
+            x (int): 要素
+
+        Returns:
+            int: 要素 x が属している族のサイズ
         """
         return -self.parents[self.find(x)]
 
-    def same(self, x, y):
-        """ 要素 x,y は同一視されているか?
+    def same(self, x: int, y: int) -> int:
+        """ 要素 x, y は同一視されているか?
 
-        x,y: 要素
+        Args:
+            x (int): 要素
+            y (int): 要素
+
+        Returns:
+            int: x, y が同一視されていれば True, そうでなければ False
         """
         return self.find(x) == self.find(y)
 
-    def members(self, x):
-        """ 要素 x が属している族の要素.
-        ※族の要素の個数が欲しいときは size を使うこと!!
+    def members(self, x: int) -> list[int]:
+        """ 要素 x と同一視されている要素のリスト
 
-        x: 要素
+        Args:
+            x (int): 要素
+
+        Returns:
+            list[int]: 要素 x と同一視されている要素のリスト
         """
+
         root = self.find(x)
         return [i for i in range(self.n) if self.find(i) == root]
 
-    def edge_count(self, x):
-        """ 要素 x が属する族の辺の本数を求める.
+    def edge_count(self, x: int) -> int:
+        """ 要素 x が属している族における辺の数を求める.
 
-        x: 要素
+        Args:
+            x (int): 要素
+
+        Returns:
+            int: 要素 x が属している族における辺の数を求める
         """
+
         return self.edges[self.find(x)]
 
-    def is_tree(self, x):
+    def is_tree(self, x: int) -> bool:
         """ 要素 x が属する族が木かどうかを判定する.
 
-        x: 要素
+        Args:
+            x (int): 要素
+
+        Returns:
+            bool: 木ならば True, そうでなければ False
         """
+
         return self.size(x)==self.edges[self.find(x)]+1
 
-    def tree_count(self):
-        """ 木になっている属の個数を求める.
+    def tree_count(self) -> int:
+        """ 木になっている族の数を計上する
+
+        Returns:
+            int: 木になっている族の数
         """
 
         return sum(self.is_tree(g) for g in self.representative())
 
-    def representative(self):
+    def representative(self) -> list[int]:
         """ 代表元のリスト
+
+        Returns:
+            list[int]: 代表元のリスト
         """
         return [i for i, x in enumerate(self.parents) if x < 0]
 
-    def group_count(self):
+    def group_count(self) -> int:
         """ 族の個数
+
+        Returns:
+            int: 族の個数
         """
 
         return self.__group_number
 
-    def all_group_members(self):
+    def all_group_members(self) -> dict[int, list[int]]:
         """ 全ての族の出力
         """
         X={r:[] for r in self.representative()}
@@ -123,24 +162,24 @@ class Union_Find():
             X[self.find(k)].append(k)
         return X
 
-    def group_list(self):
+    def group_list(self) -> list[int]:
         """ 各要素が属している族のリストを出力する.
 
         """
         return [self.find(x) for x in range(self.n)]
 
-    def refresh(self):
+    def refresh(self) -> None:
         for i in range(self.n):
             _=self.find(i)
 
-    def __str__(self):
-        return str(self.all_group_members().values())[13:-2]
+    def __str__(self) -> str:
+        return str(list(self.all_group_members().values()))[1: -1]
 
-    def __repr__(self):
-        return "Union Find : "+str(self)
+    def __repr__(self) -> str:
+        return f"Union Find : {str(self)}"
 
-    def __getitem__(self,index):
+    def __getitem__(self, index: int) -> int:
         return self.find(index)
 
-    def __setitem__(self,x,y):
-        self.union(x,y)
+    def __setitem__(self, x: int, y: int) -> None:
+        self.union(x, y)
