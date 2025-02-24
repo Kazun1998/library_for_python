@@ -6,7 +6,7 @@ def Lowlink(G: Graph):
     G: Graph
     """
 
-    N = G.order()
+    N = G.order
     tower = []
     children = [[] for _ in range(N)]
     ord = [-1] * N
@@ -30,7 +30,7 @@ def Lowlink(G: Graph):
         return t
 
     t = 0
-    for x in range(G.order()):
+    for x in range(G.order):
         if ord[x] == -1:
             t = dfs(x, t)
 
@@ -123,8 +123,8 @@ def Two_Edge_Connected_Components(G: Graph):
 
     comps = []
     t = 0
-    comp_id = [-1] * G.order()
-    for x in range(G.order()):
+    comp_id = [-1] * G.order
+    for x in range(G.order):
         if comp_id[x] != -1:
             continue
 

@@ -2,10 +2,10 @@ from Graph import *
 
 # Cycleが存在する?
 def Is_Exist_Cycle(G: Graph):
-    return G.order() < G.size() + Connected_Component_Number(G)
+    return G.order < G.size + Connected_Component_Number(G)
 
 def Find_Cycle(G: Graph):
-    N = G.order()
+    N = G.order
 
     seen = [False] * N
     parent = [-1] * N

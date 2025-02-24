@@ -3,16 +3,16 @@ from Graph import *
 #オイラーグラフ?
 def Is_Eulerian_Graph(G: Graph):
     """ グラフ G がオイラーグラフかどうかを判定する. """
-    return all(G.degree(v) % 2 == 0 for v in range(G.order())) and Is_Connected(G)
+    return all(G.degree(v) % 2 == 0 for v in range(G.order)) and Is_Connected(G)
 
 #準オイラーグラフ?
 def Is_Semi_Eulerian_Graph(G: Graph):
     """ グラフ G が準オイラーグラフかどうかを判定する. """
-    return len([v for v in range(G.order()) if G.degree(v) % 2 == 0]) == 2 and Is_Connected(G)
+    return len([v for v in range(G.order) if G.degree(v) % 2 == 0]) == 2 and Is_Connected(G)
 
 #Euler (閉) 路を見つける
 def Find_Eulerian_Trail(G: Graph):
-    N = G.order()
+    N = G.order
 
     remain = [G.degree(v) for v in range(N)]
 
@@ -61,7 +61,7 @@ def Find_Eulerian_Trail(G: Graph):
         if remain[u]:
             stack.extend(dfs(u))
 
-    if len(edge) == G.size():
+    if len(edge) == G.size:
         return { 'vertex': vertex, 'edge': edge }
     else:
         return { 'vertex': None, 'edge': None }

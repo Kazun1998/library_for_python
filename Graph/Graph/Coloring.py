@@ -10,7 +10,7 @@ def Chromatic_Number(G: Graph):
         G: 彩色数
     """
 
-    N = G.order()
+    N = G.order
 
     def zeta(X):
         Y = X.copy()

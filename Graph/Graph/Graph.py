@@ -21,10 +21,50 @@ class Graph:
             Graph: 隣接リストからなる無向グラフ
         """
 
-        G: cls = cls(N)
+        G: Graph = Graph(N)
         for u, v in edges:
             G.add_edge(u, v)
         return G
+
+    # property
+    @property
+    def vertex_count(self) -> int:
+        """ グラフの頂点数 (位数) を出力する.
+
+        Returns:
+            int: 頂点数
+        """
+        return len(self.adjacent)
+
+    @property
+    def order(self) -> int:
+        """ グラフの位数 (頂点数) を出力する.
+
+        Returns:
+            int: 位数
+        """
+        return len(self.adjacent)
+
+    #辺数
+    @property
+    def edge_count(self) -> int:
+        """ グラフの辺の本数 (サイズ) を出力する.
+
+        Returns:
+            int: 辺の本数
+        """
+
+        return self.__size
+
+    @property
+    def size(self):
+        """ グラフのサイズ (辺の本数) を出力する.
+
+        Returns:
+            int: サイズ
+        """
+
+        return self.__size
 
     #頂点の追加
     def add_vertex(self):
@@ -35,7 +75,7 @@ class Graph:
         self.adjacent.append([])
         self.deg.append(0)
 
-        return self.order() - 1
+        return self.order - 1
 
     def add_vertices(self, k):
         """ 頂点を k 個追加する.
@@ -43,7 +83,7 @@ class Graph:
         k: int
         """
 
-        n = self.order()
+        n = self.order
 
         self.adjacent.extend([[] for _ in range(k)])
         self.deg.extend([0] * k)
@@ -94,31 +134,11 @@ class Graph:
         """ 頂点 v の次数を求める. """
         return self.deg[v]
 
-    #頂点数
-    def vertex_count(self):
-        """ グラフの頂点数 (位数) を出力する. """
-        return len(self.adjacent)
-
-    def order(self):
-        """ グラフの位数 (頂点数) を出力する. """
-        return len(self.adjacent)
-
-    #辺数
-    def edge_count(self):
-        """ 辺の本数 (サイズ) を出力する."""
-
-        return self.__size
-
-    def size(self):
-        """ サイズ (辺の本数) を出力する. """
-
-        return self.__size
-
     #頂点vを含む連結成分
     def connected_component(self, v):
         """ 頂点 v を含む連結成分を出力する."""
 
-        N = self.order()
+        N = self.order
 
         stack = [v]
         comp = [0] * N; comp[v] = 1
@@ -140,7 +160,7 @@ class Graph:
 
         from collections import deque
 
-        N = self.order()
+        N = self.order
         dist = [-1] * N; dist[u]=0
 
         queue = deque([u])
@@ -162,7 +182,7 @@ class Graph:
 
         from collections import deque
 
-        N = self.order()
+        N = self.order
         dist = [-1] * N; dist[u]=0
 
         queue = deque([u])
@@ -184,7 +204,7 @@ class Graph:
 
         from collections import deque
 
-        prev = [-1] * self.order()
+        prev = [-1] * self.order
         prev[u] = u
 
         queue = deque([u])
@@ -209,13 +229,13 @@ class Graph:
         return None
 
     def edge_yielder(self):
-        for u in range(self.order()):
+        for u in range(self.order):
             for v in self.partner_yield(u):
                 if u <= v:
                     yield (u, v)
 
     def edge_yielder_with_label(self):
-        for u in range(self.order()):
+        for u in range(self.order):
             for v, label in self.partner_with_label_yield(u):
                 if u <= v:
                     yield (u, v, label)
@@ -233,14 +253,14 @@ def Random_Graph(N, p=0.5, self_loop=False, seed=None):
     pass
 
 def Directed_Sum(*Graphs):
-    total_order = sum(G.order() for G in Graphs)
+    total_order = sum(G.order for G in Graphs)
     order_offset = 0
 
     H = Graph(total_order)
     for G in Graphs:
         for u, v, t in G.edge_yielder():
             H.add_edge(u + order_offset, v + order_offset, t)
-        order_offset += G.order()
+        order_offset += G.order
 
     return H
 
@@ -253,19 +273,19 @@ def Is_Connected(G: Graph):
         G (Graph)
     """
 
-    return (G.order() == 0) or all(d >= 0 for d in G.distance_all(0))
+    return (G.order == 0) or all(d >= 0 for d in G.distance_all(0))
 
 #=====
 #森?
 def Is_Forest(G: Graph):
     """ 森かどうか判定する. """
 
-    return G.order() == G.size() + Connected_Component_Number(G)
+    return G.order == G.size + Connected_Component_Number(G)
 
 #木?
 def Is_Tree(G: Graph):
     """ 木かどうか判定する. """
-    return (G.size() == G.order() - 1) and Is_Connected(G)
+    return (G.size == G.order - 1) and Is_Connected(G)
 
 #木の直径
 def Tree_Diameter(T: Graph, Mode = False):
@@ -279,7 +299,7 @@ def Tree_Diameter(T: Graph, Mode = False):
     """
 
     def bfs(x):
-        dist = [-1] * T.order(); dist[x] = 0
+        dist = [-1] * T.order; dist[x] = 0
         stack = [x]
         while stack:
             u = stack.pop()
@@ -289,7 +309,7 @@ def Tree_Diameter(T: Graph, Mode = False):
                     dist[v] = dist[u] + 1
                     stack.append(v)
 
-        y = max(range(T.order()), key = lambda x: dist[x])
+        y = max(range(T.order), key = lambda x: dist[x])
         return y, dist[y]
 
     u, _ = bfs(0)
@@ -308,7 +328,7 @@ def Connected_Component_Decomposition(G: Graph):
     """
 
 
-    group = [-1] * G.order()
+    group = [-1] * G.order
     comps = []
 
     def dfs(start, g):
@@ -326,7 +346,7 @@ def Connected_Component_Decomposition(G: Graph):
         comps.append(comp)
 
     g = 0
-    for x in range(G.order()):
+    for x in range(G.order):
         if group[x] == -1:
             dfs(x, g)
             g += 1
@@ -337,7 +357,7 @@ def Connected_Component_Decomposition(G: Graph):
 def Connected_Component_Number(G: Graph):
     """ 連結成分の個数を求める. """
 
-    seen = [False] * G.order()
+    seen = [False] * G.order
 
     def bfs(start):
         seen[start] = True
@@ -351,7 +371,7 @@ def Connected_Component_Number(G: Graph):
                     stack.append(y)
 
     count = 0
-    for x in range(G.order()):
+    for x in range(G.order):
         if not seen[x]:
             count += 1
             bfs(x)
@@ -362,9 +382,9 @@ def Connected_Component_Number(G: Graph):
 def Is_Bipartite_Graph(G: Graph):
     """ 2部グラフかどうかを判定する. """
 
-    seen = [0] * G.order()
+    seen = [0] * G.order
 
-    for v in range(G.order()):
+    for v in range(G.order):
         if seen[v] != 0:
             continue
 
@@ -384,7 +404,7 @@ def Is_Bipartite_Graph(G: Graph):
 def Bipartite_Separate(G: Graph):
     """ 2部グラフの頂点を部集合に分割する. """
 
-    N = G.order()
+    N = G.order
     color = [0] * N
 
     separates = []
@@ -437,7 +457,7 @@ def Clique(G: Graph, calc, merge, unit, empty = False):
     計算量: O(2^{sqrt(2M)} N)
     """
 
-    N=G.order(); M=G.size()
+    N=G.order; M=G.size
     deg=[G.degree(v) for v in range(N)]; V=[1]*N
 
     M_sqrt=0
@@ -528,7 +548,7 @@ def Triangle(G: Graph, calc, merge, unit):
     計算量: O(M sqrt(2M))
     """
 
-    N=G.order()
+    N=G.order
     A=[[] for _ in range(N)]
 
     deg=G.degree
@@ -588,7 +608,8 @@ def Depth_First_Search_yielder(G):
 
     from collections import deque
 
-    N=G.vertex_count(); adj=[list(a) for a in G.adjacent]
+    N=G.order
+    adj=[list(a) for a in G.adjacent]
     T=[0]*N; R=[0]*N; parent=[-1]*N
 
     for x in range(N):
