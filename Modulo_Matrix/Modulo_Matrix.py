@@ -353,7 +353,7 @@ class Modulo_Matrix():
         return rnk
 
     # 単射 ?
-    def is_injection(self):
+    def is_injection(self) -> bool:
         """ 行列が表す線形写像は単射?
 
         Returns:
@@ -363,7 +363,7 @@ class Modulo_Matrix():
         return self.rank() == self.col
 
     # 全射 ?
-    def is_surjective(self):
+    def is_surjective(self) -> bool:
         """ 行列が表す線形写像は全射?
 
         Returns:
@@ -406,14 +406,27 @@ class Modulo_Matrix():
 
 #=================================================
 #正方行列?
-def Is_Square(M):
-    return M.row==M.col
+def Is_Square(M: Modulo_Matrix) -> bool:
+    """ M は正方行列か?
+
+    Args:
+        M (Modulo_Matrix): 行列
+
+    Returns:
+        bool: 正方行列 ?
+    """
+
+    return M.row == M.col
 
 #対角行列
-def Diagonal_Matrix(D):
-    """ D の第 i 要素が (i,i) 成分である対角行列を生成する.
+def Diagonal_Matrix(D: list[int]) -> Modulo_Matrix:
+    """ D の第 i 成分が (i, i) 成分になる対角行列を生成する.
 
-    D: リスト
+    Args:
+        D (list[int]): 対角成分のリスト
+
+    Returns:
+        Modulo_Matrix: 対角行列
     """
 
     N=len(D)
@@ -457,8 +470,15 @@ def Kronecker_Sum(*X):
     return A
 
 #跡
-def Trace(M):
-    """ 正方行列 M の跡 (=対角成分の和) を求める. """
+def Trace(M: Modulo_Matrix) -> int:
+    """ 正方行列 M の跡 (対角成分の和) を求める.
+
+    Args:
+        M (Modulo_Matrix): 正方行列
+
+    Returns:
+        int: 跡
+    """
 
     assert Is_Square(M)
 
@@ -468,8 +488,15 @@ def Trace(M):
         T%=Mod
     return T
 
-def Determinant(M):
-    """ 正方行列 M の行列式 (素数 mod) を求める."""
+def Determinant(M: Modulo_Matrix) -> int:
+    """ 正方行列 M の行列式 (素数 mod) を求める.
+
+    Args:
+        M (Modulo_Matrix): 正方行列
+
+    Returns:
+        int: 行列式 (mod 素数)
+    """
 
     assert Is_Square(M)
 
@@ -500,9 +527,15 @@ def Determinant(M):
         det%=Mod
     return det
 
-def Determinant_Arbitrary_Mod(A):
-    """ 正方行列 M の行列式 (任意 mod) を求める."""
+def Determinant_Arbitrary_Mod(A: Modulo_Matrix) -> int:
+    """ 正方行列 M の行列式 (任意 mod) を求める.
 
+    Args:
+        M (Modulo_Matrix): 正方行列
+
+    Returns:
+        int: 行列式 (mod 任意)
+    """
     N=A.row
     A=deepcopy(A.ele)
     det=1
@@ -526,10 +559,14 @@ def Determinant_Arbitrary_Mod(A):
             break
     return det
 
-def Characteristic_Polynomial(M):
-    """ M の固有多項式を sum(P[i] X^i) としたとき, P を求める.
+def Characteristic_Polynomial(M: Modulo_Matrix) -> list[int]:
+    """ 正方行列 M の固有多項式を sum(P[i] X^i) としたとき, P を求める.
 
-    M: Modulo Matrix
+    Args:
+        M (Modulo_Matrix): 正方行列
+
+    Returns:
+        list[int]: 固有多項式を sum(P[i] X^i) としたときの P を求める.
     """
 
     T=deepcopy(M.ele)
@@ -582,11 +619,14 @@ def Characteristic_Polynomial(M):
             P[~i]*=-1; P[~i]%=Mod
     return P
 
-def Adjugate_Matrix(A):
-    """ A の余因子行列 adj A := ((-1)^(i+j) det A_{i,j}) を求める.
+def Adjugate_Matrix(A: Modulo_Matrix) -> Modulo_Matrix:
+    """ 正方行列 A の余因子行列 adj A := ((-1)^(i+j) det A_{i,j}) を求める.
 
     Args:
-        A (Matrix): 正方行列
+        A (Modulo_Matrix): 正方行列
+
+    Returns:
+        Modulo_Matrix: 余因子行列
     """
 
     from random import randint
