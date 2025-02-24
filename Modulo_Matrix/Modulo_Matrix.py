@@ -481,12 +481,7 @@ def Trace(M: Modulo_Matrix) -> int:
     """
 
     assert Is_Square(M)
-
-    T=0
-    for i in range(M.row):
-        T+=M.ele[i][i]
-        T%=Mod
-    return T
+    return sum(M.ele[i][i] for i in range(M.row)) % Mod
 
 def Determinant(M: Modulo_Matrix) -> int:
     """ 正方行列 M の行列式 (素数 mod) を求める.
