@@ -208,49 +208,40 @@ def Dijkstra_All(G, From, with_path=False):
         return  T
 
 #Warshall–Floyd
-def Warshall_Floyd(G):
-    """ Warshall–Floyd 法を用いて, 全点間距離を求める.
+def Warshall_Floyd(G: Weigthed_Graph) -> list[list[int]]:
+    """ Warshall-Floyd 法を用いて, 全点間距離を求める.
 
-    G: 重み付き無向グラフ
-    ※負の辺が存在する場合, -inf が発生する.
+    Args:
+        G (Weigthed_Graph): 無向グラフ
+
+    Returns:
+        list[list[int]]: (i, j) 成分が i, j 間の距離. ただし, 負の閉路による影響を受ける場合は -inf
     """
 
     def three_loop():
-        for u in range(N):
-            Tu=T[u]
-            for v in range(N):
-                Tv=T[v]
+        for u, du in enumerate(dist):
+            for _, dv in enumerate(dist):
                 for w in range(N):
-                    Tv[w]=min(Tv[w],Tv[u]+Tu[w])
+                    dv[w] = min(dv[w], dv[u] + du[w])
 
-    inf=float("inf"); N=G.vertex_count
+    inf = float("inf")
+    N = G.vertex_count
 
-    T=[[0]*N for _ in range(N)]
-    adj=G.adjacent
+    dist = [[0 if i == j else inf for j in range(N)] for i in range(N)]
     for u in range(N):
-        Tu=T[u]
-        E=adj[u]
-        for v in range(N):
-            if v==u:
-                Tu[v]=0
-            elif v in E:
-                Tu[v]=E[v]
-            else:
-                Tu[v]=inf
+        dist_u = dist[u]
+        for v, w, _ in G.adjacent[u]:
+            dist_u[v] = min(dist_u[v], w)
 
     three_loop()
 
-    flag=1
-    for v in range(N):
-        if T[v][v]<0:
-            T[v][v]=-inf
-            flag=0
-
-    if flag==1:
-        return T
-    else:
+    if any(dist[v][v] < 0 for v in range(N)):
+        for v in range(N):
+            if dist[v][v] < 0:
+                dist[v][v] = - inf
         three_loop()
-        return T
+
+    return dist
 
 #巡回セールスマン問題を解く.
 def Traveling_Salesman_Problem(G):
