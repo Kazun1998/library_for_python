@@ -78,7 +78,7 @@ class Weigthed_Graph:
         self.adjacent[u].append((v, weight, label))
         self.adjacent[v].append((u, weight, label))
         self.__edge_count += 1
-        self.__ininity += 2 * max(0, weight)
+        self.__ininity += 2 * max(1, weight)
         return id
 
     #頂点を除く
