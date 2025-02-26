@@ -23,114 +23,130 @@ def compare(x: float, y: float, ep: float = epsilon) -> int:
     else:
         return 0
 
-class Point():
-    __slots__=["x","y","id"]
-    ep=1e-9
+def sign(x: float, ep: float = epsilon) -> int:
+    if x > epsilon:
+        return 1
+    elif x < -epsilon:
+        return -1
+    else:
+        return 0
 
-    def __init__(self,x=0,y=0):
-        self.x=x
-        self.y=y
-        self.id=0
+class Point:
+    __slots__ = ('x', 'y')
 
-    def sign(self,a):
-        return compare(a,0,self.ep)
+    def __init__(self, x: float = 0, y: float = 0):
+        self.x = x
+        self.y = y
 
     #文字列
     def __str__(self):
-        return "({}, {})".format(self.x,self.y)
+        return f"({self.x}, {self.y})"
 
-    __repr__=__str__
+    def __repr__(self):
+        return f"{self.__class__.__name__}(x = {self.x}, y = {self.y})"
 
     #Bool
     def __bool__(self):
-        return self.sign(self.x)!=0 or self.sign(self.y)!=0
+        return (sign(self.x) != 0) or (sign(self.y) != 0)
 
     #等号
-    def __eq__(self,other):
-        return self.sign(self.x-other.x)==0 and self.sign(self.y-other.y)==0
+    def __eq__(self, other: "Point") -> bool:
+        return (compare(self.x, other.x) == 0) and (compare(self.y, other.y) == 0)
 
     #不等号
-    def __ne__(self,other):
-        return not self==other
+    def __ne__(self, other: "Point") -> bool:
+        return not (self == other)
 
     #比較(<)
-    def __lt__(self,other):
-        T=self.sign(self.x-other.x)
-        if T:
-            return T<0
-        else:
-            return self.sign(self.y-other.y)<0
+    def __lt__(self, other: "Point") -> bool:
+        if (t := compare(self.x, other.x)):
+            return t < 0
+        return compare(self.y, other.y) < 0
 
     #比較(<=)
-    def __le__(self,other):
-        return self<other or self==other
+    def __le__(self, other: "Point") -> bool:
+        return self < other or self == other
 
     #比較(>)
-    def __gt__(self,other):
-        return other<self
+    def __gt__(self, other: "Point") -> bool:
+        return other < self
 
     #比較(>=)
-    def __ge__(self,other):
-        return other<=self
+    def __ge__(self, other: "Point") -> bool:
+        return other <= self
 
     #正と負
-    def __pos__(self):
+    def __pos__(self) -> "Point":
         return self
 
-    def __neg__(self):
-        return Point(-self.x,-self.y)
+    def __neg__(self) -> "Point":
+        return Point(-self.x, -self.y)
 
     #加法
-    def __add__(self,other):
-        return Point(self.x+other.x,self.y+other.y)
+    def __add__(self, other: "Point") -> "Point":
+        return Point(self.x + other.x, self.y + other.y)
 
-    def __iadd__(self,other):
-        self.x+=other.x
-        self.y+=other.y
+    def __iadd__(self, other: "Point") -> "Point":
+        self.x += other.x
+        self.y += other.y
         return self
 
     #減法
-    def __sub__(self,other):
-        return Point(self.x-other.x,self.y-other.y)
+    def __sub__(self, other: "Point") -> "Point":
+        return Point(self.x - other.x, self.y - other.y)
 
-    def __isub__(self,other):
-        self.x-=other.x
-        self.y-=other.y
+    def __isub__(self, other: "Point") -> "Point":
+        self.x -= other.x
+        self.y -= other.y
         return self
 
     #乗法
-    def __mul__(self,other):
-        x,y=self.x,self.y
-        u,v=other.x,other.y
-        return Point(x*u-y*v,x*v+y*u)
+    def __mul__(self, other: "Point") -> "Point":
+        x, y = self.x, self.y
+        u, v = other.x, other.y
+        return Point(x * u- y * v, x * v + y * u)
 
-    def __imul__(self, other):
-        return other*self
+    def __imul__(self, other: "Point") -> "Point":
+        return other * self
 
-    def __rmul__(self,other):
-        if isinstance(other,(int,float)):
-            return Point(other*self.x,other*self.y)
+    def __rmul__(self, other: int | float) -> "Point":
+        if isinstance(other, (int, float)):
+            return Point(other * self.x, other * self.y)
+        raise NotImplemented
 
     #除法
-    def __truediv__(self,other):
-        if other==0:
+    def __truediv__(self, other) -> "Point":
+        if other == 0:
             raise ZeroDivisionError
-        return Point(self.x/other,self.y/other)
+        return Point(self.x / other, self.y / other)
 
     #絶対値
-    def __abs__(self):
-        return sqrt(self.x*self.x+self.y*self.y)
+    def __abs__(self) -> float:
+        return sqrt(self.x * self.x + self.y * self.y)
 
-    norm=__abs__
+    norm = __abs__
 
-    def norm_2(self):
-        return self.x*self.x+self.y*self.y
+    def norm_2(self) -> float:
+        """ ノルムの 2 乗を求める
+
+        Returns:
+            float: ノルムの 2 乗
+        """
+        return self.x * self.x + self.y * self.y
 
     #回転
-    def rotate(self,theta):
-        x,y=self.x,self.y
-        s,c=sin(theta),cos(theta)
-        return Point(c*x-s*y,s*x+c*y)
+    def rotate(self, theta: float) -> "Point":
+        """ 原点中心に theta だけ回転させた後の点を求める.
+
+        Args:
+            theta (float): 回転角
+
+        Returns:
+            Point: 回転後の点
+        """
+        x, y = self.x, self.y
+        s, c = sin(theta), cos(theta)
+        return Point(c * x - s * y , s * x + c * y)
 
     def __iter__(self):
         yield self.x
@@ -139,32 +155,67 @@ class Point():
     def __hash__(self):
         return hash((self.x,self.y))
 
-    def latticization(self,delta=1e-7):
-        """ 格子点に十分近いならば, その格子点に吸い寄せる"""
+    def latticization(self, delta: float = 1e-7):
+        """ 点が格子点に十分近いとき, この点を格子点の点として修正する.
 
-        if abs(self.x-floor(self.x+0.5))<delta and abs(self.y-floor(self.y+0.5))<delta:
-            self.x=floor(self.x+0.5)
-            self.y=floor(self.y+0.5)
+        Args:
+            delta (float, optional): 判断のための閾値. Defaults to 1e-7.
+        """
+
+        if (abs(self.x - floor(self.x + 0.5)) < delta) and (abs(self.y-floor(self.y + 0.5)) < delta):
+            self.x = floor(self.x+0.5)
+            self.y = floor(self.y+0.5)
 
     def normalization(self):
-        a=abs(self)
-        self.x/=a
-        self.y/=a
+        """ 向きをそのままに, 長さを 1 に変換する.
+        """
 
-    def normal_unit_vector(self):
-        """ 単位法線ベクトルを求める"""
+        r = abs(self)
+        self.x /= r
+        self.y /= r
 
-        assert self
-        d=self.norm()
-        return Point(-self.y/d,self.x/d)
+    def normal_unit_vector(self) -> "Point":
+        """ 単位法線ベクトルを求める.
 
-    def dot(self,other):
-        return self.x*other.x+self.y*other.y
+        Returns:
+            Point: 単位法線ベクトル
+        """
 
-    def det(self,other):
-        return self.x*other.y-self.y*other.x
+        assert self, ValueError
 
-    def arg(self):
+        d = self.norm()
+        return Point(-self.y / d, self.x / d)
+
+    def dot(self, other: "Point") -> float:
+        """ 内積を求める
+
+        Args:
+            other (Point):
+
+        Returns:
+            Point: 内積
+        """
+        return self.x * other.x + self.y * other.y
+
+    def det(self, other: "Point") -> float:
+        """ 外積を求める
+
+        Args:
+            other (Point):
+
+        Returns:
+            float: 外積
+        """
+
+        return self.x * other.y - self.y * other.x
+
+    def arg(self) -> float:
+        """ 原点からみたこの点の偏角
+
+        Returns:
+            float: 偏角
+        """
+
         return atan2(self.y,self.x)
 
     def copy(self):
