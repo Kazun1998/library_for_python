@@ -1,13 +1,28 @@
 from Weighted_Digraph import *
 
-def Dijkstra(D: Weigthed_Digraph, start, goal, default = None):
+def Dijkstra(D: Weigthed_Digraph, start: int, goal: int, default = None) -> dict:
+    """ 重み付き有向グラフ D において, start から goal までの最短路を Dijkstra 法によって求める.
+
+    Args:
+        D (Weigthed_Digraph): 重み付き有向グラフ
+        start (int): 始点
+        goal (int): 終点
+        default (optional): start から goal までの歩道が存在しない場合の距離の帰り値. Defaults to None.
+
+    Returns:
+        dict:
+            dist: 最短路の長さ
+            arc: 最短路をなす弧の番号
+            vertex: 最短路をなす頂点の番号
+    """
+
     from heapq import heappush, heappop
 
-    inf = float('inf')
-    dist = [inf] * D.order(); dist[start] = 0
-    fix = [False] * D.order()
-    parent = [None] * D.order()
-    upper = [None] * D.order()
+    inf = D.inifinity
+    dist = D.initialize_list(inf); dist[start] = 0
+    fix = D.initialize_list(False)
+    parent = D.initialize_list(None)
+    upper = D.initialize_list(None)
 
     Q = [(0, start)]
     while Q:
