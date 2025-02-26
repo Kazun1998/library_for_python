@@ -12,6 +12,7 @@ class Weigthed_Digraph:
         self.adjacent_in = [[] for _ in range(N)] # 入近傍 (v が終点)
         self.__size = 0
         self.__arc_offset = arc_offset
+        self.__ininity = 0
 
     # property
 
@@ -36,6 +37,14 @@ class Weigthed_Digraph:
     def size(self) -> int:
         """ グラフのサイズ (辺数) を求める. """
         return self.__size
+
+    @property
+    def inifinity(self) -> int:
+        return self.__ininity
+
+    @inifinity.setter
+    def inifinity(self, value):
+        self.__ininity = value
 
     #頂点の追加
     def add_vertex(self) -> int:
@@ -75,6 +84,7 @@ class Weigthed_Digraph:
         self.adjacent_out[source].append((target, weight, id))
         self.adjacent_in[target].append((source, weight, id))
         self.__size += 1
+        self.__ininity += 2 * max(1, weight)
         return id
 
     #近傍
