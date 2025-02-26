@@ -53,6 +53,10 @@ class Weigthed_Graph:
     def inifinity(self) -> int:
         return self.__ininity
 
+    @inifinity.setter
+    def inifinity(self, value):
+        self.__ininity = value
+
     #頂点の追加
     def add_vertex(self):
         """ 頂点を追加する.
