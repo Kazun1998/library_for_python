@@ -140,6 +140,9 @@ class Weigthed_Digraph:
 
         return len(self.adjacent_out[v]) - len(self.adjacent_in[v])
 
+    def initialize_list(self, x) -> list:
+        return [x] * self.order
+
 #================================================
 #Dijkstra
 def Dijkstra_All(D, start, with_path=False):
@@ -184,43 +187,51 @@ def Dijkstra_All(D, start, with_path=False):
     else:
         return  T
 
-#Bellman_Ford
-def Bellman_Ford_All(D, start):
-    """ Bellman_Ford 法を用いて, 単一始点 start からの距離を求める (返り値が -inf になる場合がある).
+def Bellman_Ford_All(D: Weigthed_Digraph, start: int) -> list[int]:
+    """ Bellman-Ford 法を用いて, 各頂点への単一始点 start からの距離を求める (いくらでも小さくできる場合は -inf).
 
-    D: 有向グラフ
-    start: 始点
+    Args:
+        D (Weigthed_Digraph): 重み付き有向グラフ
+        start (int): 始点
+
+    Returns:
+        list[int]: 第 v 要素は頂点 v への start からの距離
     """
 
-    inf=float("inf")
-    N=D.vertex_count
-    T=[inf]*N; T[start]=0
+    inf = D.inifinity
+    N = D.order
 
-    adj_out=D.adjacent_out
-    E=[]
+    dist = D.initialize_list(inf)
+    dist[start] = 0
+
+    edges = []
     for u in range(N):
-        F=adj_out[u]
-        for v,cost in F.items():
-            E.append((u,v,cost))
+        for v, weight, _ in D.adjacent_out[u]:
+            edges.append((u, v, weight))
 
-    for k in range(N):
-        update=0
-        for u,v,c in E:
-            if T[v]>T[u]+c:
-                T[v]=T[u]+c
-                update=1
-        if update==0:
-            return T
+    def update_dist(negative_cycle: bool) -> bool:
+        updated = False
+        for u, v, weight in edges:
+            if dist[u] >= inf or not(dist[u] + weight < dist[v]):
+                continue
+
+            if negative_cycle:
+                dist[v] = - float('inf')
+            else:
+                dist[v] = dist[u] + weight
+            updated = True
+
+        return updated
 
     for _ in range(N):
-        update=0
-        for u,v,c in E:
-            if T[v]>T[u]+c:
-                T[v]=-inf
-                update=1
-        if update==0:
+        if not update_dist(False):
+            return dist
+
+    for _ in range(N):
+        if not update_dist(True):
             break
-    return T
+
+    return dist
 
 #FromからToへの(長さが丁度L or L以下の)Walkが存在するか否か
 def walk_exist(graph,From,To,L,just=False):
