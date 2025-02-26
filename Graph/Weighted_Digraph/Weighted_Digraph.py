@@ -1,82 +1,134 @@
 class Weigthed_Digraph:
-    """重み[付き]有向グラフを生成する.
-
-    """
     #入力定義
-    def __init__(self, N = 0, arc_offset = 0):
-        """ 重み[付き]有向グラフを生成する.
+    def __init__(self, N: int = 0, arc_offset: int = 0):
+        """ N 頂点の重み付き有向グラフを生成する.
 
-        N: 頂点数
+        Args:
+            N (int, optional): 頂点数. Defaults to 0.
+            arc_offset (int, optional): 弧番号の offset. Defaults to 0.
         """
 
-        self.adjacent_out = [[] for _ in range(N)] #出近傍 (v が始点)
-        self.adjacent_in = [[] for _ in range(N)] #入近傍 (v が終点)
-        self.arc_offset = arc_offset
-        self.arc_count = 0
+        self.adjacent_out = [[] for _ in range(N)] # 出近傍 (v が始点)
+        self.adjacent_in = [[] for _ in range(N)] # 入近傍 (v が終点)
+        self.__size = 0
+        self.__arc_offset = arc_offset
+
+    # property
+
+    # 頂点数
+    @property
+    def vertex_count(self) -> int:
+        """ グラフの頂点数 (位数) を求める."""
+        return len(self.adjacent_out)
+
+    @property
+    def order(self) -> int:
+        """ グラフの位数 (頂点数) を求める."""
+        return len(self.adjacent_out)
+
+    #辺数
+    @property
+    def arc_count(self) -> int:
+        """ グラフの辺数 (サイズ) を求める."""
+        return self.__size
+
+    @property
+    def size(self) -> int:
+        """ グラフのサイズ (辺数) を求める. """
+        return self.__size
 
     #頂点の追加
-    def add_vertex(self):
-        """ 頂点を追加する.
+    def add_vertex(self) -> int:
+        """ 頂点を 1 個追加して, その頂点の番号を返す.
 
+        Returns:
+            int: 追加した頂点の番号
         """
+
         self.adjacent_out.append([])
         self.adjacent_in.append([])
-        return self.order() - 1
+        return self.order - 1
 
-    def add_vertices(self, k):
-        """ 頂点を k 個追加する.
+    def add_vertices(self, k: int) -> list[int]:
+        """ 頂点を k 個追加して, その頂点の番号を返す.
 
-        k: int
+        Returns:
+            list[int]: 追加した k 個の頂点の番号のリスト
         """
 
-        n = self.order()
-        self.adjacent_out.extend([[] for _ in range(k)])
-        self.adjacent_in.extend([[] for _ in range(k)])
-        return list(range(n, n + k))
+        return [self.add_vertex() for _ in range(k)]
 
     #辺の追加
-    def add_arc(self, source, target, weight = 1):
-        id = self.arc_count + self.arc_offset
+    def add_arc(self, source: int, target: int, weight: int = 1) -> int:
+        """ source から target へ結ぶ重み weight の弧を追加し, 弧の番号を出力する.
+
+        Args:
+            source (int): 始点
+            target (int): 終点
+            weight (int, optional): 重み. Defaults to 1.
+
+        Returns:
+            int: 追加した弧の番号
+        """
+
+        id = self.arc_count + self.__arc_offset
         self.adjacent_out[source].append((target, weight, id))
         self.adjacent_in[target].append((source, weight, id))
-        self.arc_count += 1
+        self.__size += 1
         return id
 
     #近傍
 
     #出次数
-    def out_degree(self, v):
+    def out_degree(self, v: int) -> int:
+        """ 頂点 v の出次数 (v を始点とする有向辺の数) を求める
+
+        Args:
+            v (int): 頂点
+
+        Returns:
+            int: 出次数
+        """
+
         return len(self.adjacent_out[v])
 
     #入次数
-    def in_degree(self,v):
+    def in_degree(self, v: int) -> int:
+        """ 頂点 v の入次数 (v を終点とする有向辺の数) を求める
+
+        Args:
+            v (int): 頂点
+
+        Returns:
+            int: 入次数
+        """
         return len(self.adjacent_in[v])
 
     #次数
-    def degree(self,v):
+    def degree(self, v: int) -> tuple[int, int]:
+        """ 頂点 v について, タプル (出次数, 入次数) を求める
+
+        Args:
+            v (int): 頂点
+
+        Returns:
+            tuple[int, int]: (出次数, 入次数)
+        """
+
         return (len(self.adjacent_out[v]), len(self.adjacent_in[v]))
 
     #相対次数
-    def relative_degree(self, v):
+    def relative_degree(self, v: int) -> int:
+        """ 頂点 v について, (出次数) - (入次数) を求める
+
+        Args:
+            v (int): 頂点
+
+        Returns:
+            int: (出次数) - (入次数)
+        """
+
         return len(self.adjacent_out[v]) - len(self.adjacent_in[v])
-
-    #頂点数
-    def vertex_count(self):
-        """ グラフの頂点数 (位数) を求める."""
-        return len(self.adjacent_out)
-
-    def order(self):
-        """ グラフの位数 (頂点数) を求める."""
-        return len(self.adjacent_out)
-
-    #辺数
-    def arc_count(self):
-        """ グラフの辺数 (サイズ) を求める."""
-        return self.arc_count
-
-    def size(self):
-        """ グラフのサイズ (辺数) を求める. """
-        return self.arc_count
 
 #================================================
 #Dijkstra
@@ -94,7 +146,7 @@ def Dijkstra_All(D, start, with_path=False):
     from heapq import heappush,heappop
 
     inf=float("inf")
-    N=D.vertex_count()
+    N=D.vertex_count
     T=[inf]*N; T[start]=0
 
     if with_path:
@@ -131,7 +183,7 @@ def Bellman_Ford_All(D, start):
     """
 
     inf=float("inf")
-    N=D.vertex_count()
+    N=D.vertex_count
     T=[inf]*N; T[start]=0
 
     adj_out=D.adjacent_out
@@ -197,7 +249,7 @@ def Is_Connected(G):
 def Topological_Sort(D):
     from collections import deque
 
-    N=D.vertex_count()
+    N=D.vertex_count
     X=[D.in_degree(x) for x in range(N)]
     Q=deque([v for v in range(N) if X[v]==0])
 
@@ -220,7 +272,7 @@ def Topological_Sort(D):
 def Is_Directed_Acyclic_Graph(D):
     from collections import deque
 
-    N=D.vertex_count()
+    N=D.vertex_count
     X=[D.in_degree(x) for x in range(N)]
     Q=deque([v for v in range(N) if X[v]==0])
 
@@ -250,7 +302,7 @@ def Strongly_Connected_Component_Decomposition(D,Mode=0):
 
     ※0で帰ってくるリストは各強連結成分に関してトポロジカルソートである.
     """
-    N=D.vertex_count()
+    N=D.vertex_count
     Group=[0]*N
     Order=[]
     adj_out=D.adjacent_out; adj_in=D.adjacent_in
