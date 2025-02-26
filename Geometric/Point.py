@@ -1,27 +1,27 @@
 from math import sqrt,sin,cos,tan,asin,acos,atan2,pi,floor,gcd
 
-def compare(x,y,ep):
+epsilon = 1e-8
+def compare(x: float, y: float, ep: float = epsilon) -> int:
     """ x,y の大小比較をする. ただし, ep の誤差は同一視する.
 
-    [Input]
-    x,y: float
-    ep: float
+    Args:
+        x (float):
+        y (float):
+        ep (float, optional): 許容誤差. Defaults to epsilon.
 
-    [Output]
-    x>y: 1
-    x=y: 0
-    x<y: -1
+    Returns:
+        x < y のときは 1
+        x = y のときは 0
+        x > y のときは -1
     """
 
-    if x-y>ep: return 1
-    elif x-y<-ep: return -1
-    else: return 0
-
-def max_ep(*X):
-    e=-1
-    for x in X:
-        if x.ep>e:e=x.ep
-    return e
+    diff = x - y
+    if diff > ep:
+        return 1
+    elif diff < -ep:
+        return -1
+    else:
+        return 0
 
 class Point():
     __slots__=["x","y","id"]
@@ -182,16 +182,15 @@ def iSP(A,B,C):
     A-C-Bの順に並んでいる: 0
     """
 
-    ep=max_ep(A,B,C)
-    p=compare((B-A).det(C-A),0,ep)
+    p=compare((B-A).det(C-A),0)
     if p==1:
         return 1
     elif p==-1:
         return -1
     else:
-        if compare((B-A).dot(C-A),0,ep)==-1:
+        if compare((B-A).dot(C-A),0)==-1:
             return -2
-        if compare((A-B).dot(C-B),0,ep)==-1:
+        if compare((A-B).dot(C-B),0)==-1:
             return 2
         return 0
 
@@ -214,7 +213,7 @@ def Angle_Type(A,B,C):
     1: 鋭角, 0: 直角, -1: 鈍角
     """
 
-    return compare((A-B).dot(C-B),0,max_ep(A,B,C))
+    return compare((A-B).dot(C-B),0)
 
 def Inner(P,Q):
     """点P,Qの内積を求める.
@@ -269,12 +268,11 @@ def Argument_Sort(L):
 
     from functools import cmp_to_key
 
-    ep=max_ep(*L)
     def position(P):
-        m=compare(P.y,0,ep)
+        m=compare(P.y,0)
         if m==-1:
             return -1
-        elif m==0 and compare(P.x,0,ep)>=0:
+        elif m==0 and compare(P.x,0)>=0:
             return 0
         else:
             return 1
@@ -283,7 +281,7 @@ def Argument_Sort(L):
         a=position(P); b=position(Q)
         if a<b: return -1
         elif a>b: return 1
-        else:return -compare(P.det(Q),0,ep)
+        else:return -compare(P.det(Q),0)
 
     L.sort(key=cmp_to_key(cmp))
 

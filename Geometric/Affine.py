@@ -159,8 +159,6 @@ def Translation_and_Rotate_Affine_Determine(A,B,P,Q):
     ※ |AB|=|PQ| でなくてはならない.
     """
 
-    ep=max_ep(A,B,P,Q)
-
     assert abs(B-A)==abs(Q-P)
 
 
@@ -173,9 +171,7 @@ def Affine_Determine(A,B,C,P,Q,R):
     ※ A,B,C は同一直線上の点であってはいけない.
     """
 
-    ep=max_ep(A,B,C,P,Q,R)
-
-    assert compare((B-A).det(C-A),0,ep)
+    assert compare((B-A).det(C-A),0)
 
     q1,q2=Q-P; r1,r2=R-P
     b1,b2=B-A; c1,c2=C-A; det=b1*c2-b2*c1
