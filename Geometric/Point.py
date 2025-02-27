@@ -247,14 +247,19 @@ def iSP(A: Point, B: Point, C: Point) -> int:
         return 2
     return 0
 
-def Arg(P,Q=Point(0,0)):
-    """点 Q から見た点 P の偏角を求める.
+def Arg(P: Point, Q: Point = Point(0,0)) -> float:
+    """ 点 Q から見た点 P の偏角を求める.
 
-    P,Q: Point
+    Args:
+        P (Point): 点
+        Q (Point, optional): 基準点. Defaults to Point(0,0).
+
+    Returns:
+        float: 偏角
     """
 
-    R=P-Q
-    return atan2(R.y,R.x)
+    R = P - Q
+    return atan2(R.y, R.x)
 
 def Angle_Type(A,B,C):
     """ 角ABC が鋭角か直角か鈍角かを判定する.
