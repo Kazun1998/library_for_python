@@ -221,29 +221,31 @@ class Point:
     def copy(self):
         return Point(self.x,self.y)
 
-def iSP(A,B,C):
+def iSP(A: Point, B: Point, C: Point) -> int:
     """ A->B->C と進んだときの進行方向を見る. ※ B が中心
 
-    A,B,C: Point
+    Args:
+        A (Point): 始点
+        B (Point): 中継点
+        C (Point): 終点
 
-    左折 (反時計回り):+1
-    右折 (時計回り)   :-1
-    C-A-Bの順に並んでいる: -2
-    A-B-Cの順に並んでいる: 2
-    A-C-Bの順に並んでいる: 0
+    Returns:
+        int:
+            左折 (反時計回り): +1
+            右折 (時計回り): -1
+            C-A-B の順に並んでいる: -2
+            A-B-C の順に並んでいる: 2
+            A-C-B の順に並んでいる: 0
     """
 
-    p=compare((B-A).det(C-A),0)
-    if p==1:
-        return 1
-    elif p==-1:
-        return -1
-    else:
-        if compare((B-A).dot(C-A),0)==-1:
-            return -2
-        if compare((A-B).dot(C-B),0)==-1:
-            return 2
-        return 0
+    if (p := sign((B - A).det(C - A))) != 0:
+        return p
+
+    if sign((B - A).dot(C - A)) == -1:
+        return -2
+    if sign((A - B).dot(C - B)) == -1:
+        return 2
+    return 0
 
 def Arg(P,Q=Point(0,0)):
     """点 Q から見た点 P の偏角を求める.
