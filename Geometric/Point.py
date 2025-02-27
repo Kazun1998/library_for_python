@@ -337,14 +337,18 @@ def External_Division_Point(P: Point, Q: Point, a: float, b: float) -> Point:
     assert a - b != 0
     return (-b * P + a * Q) / (a - b)
 
-def MidPoint(P,Q):
-    """線分PQの中点を求める.
+def MidPoint(P: Point, Q: Point) -> Point:
+    """ 線分 PQ の中点を求める.
 
-    P,Q:Point
+    Args:
+        P (Point):
+        Q (Point):
+
+    Returns:
+        Point: 中点
     """
-    a=(P.x+Q.x)/2
-    b=(P.y+Q.y)/2
-    return Point(a,b)
+
+    return Point((P.x + Q.x) / 2, (P.y + Q.y) / 2)
 
 def Argument_Compare(P,Q):
     """ OQ が OP からみて反時計回りかどうかを判定する."""
