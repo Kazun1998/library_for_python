@@ -261,17 +261,22 @@ def Arg(P: Point, Q: Point = Point(0,0)) -> float:
     R = P - Q
     return atan2(R.y, R.x)
 
-def Angle_Type(A,B,C):
+def Angle_Type(A: Point, B: Point, C: Point) -> int:
     """ 角ABC が鋭角か直角か鈍角かを判定する.
 
-    [Input]
-    A,B,C: Point
+    Args:
+        A (Point):
+        B (Point):
+        C (Point):
 
-    [Output]
-    1: 鋭角, 0: 直角, -1: 鈍角
+    Returns:
+        int:
+            1: 鋭角
+            0: 直角
+            -1: 鈍角
     """
 
-    return compare((A-B).dot(C-B),0)
+    return sign((A-B).dot(C-B))
 
 def Inner(P,Q):
     """点P,Qの内積を求める.
