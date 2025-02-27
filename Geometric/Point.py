@@ -291,12 +291,18 @@ def Inner(P: Point, Q: Point) -> float:
 
     return P.x * Q.x + P.y * Q.y
 
-def Det(P,Q):
-    """点P,Qが張る平行四辺形の符号付き面積を求める.
+def Det(P: Point, Q: Point) -> float:
+    """ 点 P と点 Q が貼る平行四辺形の符号付き面積 (外積) を求める.
 
-    P,Q:Point
+    Args:
+        P (Point):
+        Q (Point):
+
+    Returns:
+        float: 外積
     """
-    return P.x*Q.y-P.y*Q.x
+
+    return P.x * Q.y - P.y * Q.x
 
 def Internal_Division_Point(P,Q,p,q):
     """線分PQをp:qに内分する点を求める.
