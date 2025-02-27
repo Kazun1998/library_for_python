@@ -304,14 +304,22 @@ def Det(P: Point, Q: Point) -> float:
 
     return P.x * Q.y - P.y * Q.x
 
-def Internal_Division_Point(P,Q,p,q):
-    """線分PQをp:qに内分する点を求める.
+def Internal_Division_Point(P: Point, Q: Point, a: float, b: float) -> Point:
+    """ 線分 PQ を a:b に内分する点を求める.
 
-    P,Q:Point
-    p,q:int or float
+    Args:
+        P (Point):
+        Q (Point):
+        a (float): P 側の比率
+        b (float): Q 側の比率
+
+    Returns:
+        Point: 線分 PQ を a:b に内分する点を求める
     """
-    assert p+q
-    return (q*P+p*Q)/(p+q)
+
+    assert a + b != 0
+
+    return (b * P + a * Q) / (a + b)
 
 def External_Division_Point(P,Q,p,q):
     """線分PQをp:qに内分する点を求める.
