@@ -278,12 +278,18 @@ def Angle_Type(A: Point, B: Point, C: Point) -> int:
 
     return sign((A-B).dot(C-B))
 
-def Inner(P,Q):
-    """点P,Qの内積を求める.
+def Inner(P: Point, Q: Point) -> float:
+    """ 点 P と点 Q の内積を求める.
 
-    P,Q:Point
+    Args:
+        P (Point):
+        Q (Point):
+
+    Returns:
+        float: 内積
     """
-    return P.x*Q.x+P.y*Q.y
+
+    return P.x * Q.x + P.y * Q.y
 
 def Det(P,Q):
     """点P,Qが張る平行四辺形の符号付き面積を求める.
