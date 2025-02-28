@@ -350,9 +350,17 @@ def MidPoint(P: Point, Q: Point) -> Point:
 
     return Point((P.x + Q.x) / 2, (P.y + Q.y) / 2)
 
-def Argument_Compare(P,Q):
-    """ OQ が OP からみて反時計回りかどうかを判定する."""
-    return compare(Q.det(P),0,max(P.ep,Q.ep))
+def Argument_Compare(P: Point, Q: Point)  -> bool:
+    """ OQ が OP からみて反時計回りかどうか?
+
+    Args:
+        P (Point): 基準点
+        Q (Point): 判定点
+
+    Returns:
+        bool: 反時計回りならば True
+    """
+    return sign(Q.det(P))
 
 def Argument_Sort(L):
     """ 点を偏角ソートする.
