@@ -70,37 +70,47 @@ class Ray():
     def counter_vectorize(self):
         return self.begin-self.end
 
-class Line():
-    __slots__=["begin","end","id"]
+class Line:
+    __slots__ = ("begin", "end")
 
-    ep=1e-9
-    def __init__(self,P,Q):
-        """2点 P, Q (P!=Q) を通る直線を生成する.
+    def __init__(self, P: Point, Q: Point):
+        """ 2 点 P, Q を通る直線を生成する.
 
-        P,Q: Point
+        Args:
+            P (Point): 始点
+            Q (Point): 終点
         """
-        assert P!=Q
-        self.begin=P
-        self.end=Q
-        self.id=4
+        assert P != Q
+        self.begin = P
+        self.end = Q
 
-    def __str__(self):
-        return "[Line] {}, {}".format(self.begin,self.end)
+    def __str__(self) -> str:
+        return f"[Line] {self.begin}, {self.end}"
 
-    __repr__=__str__
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({repr(self.begin)}, {repr(self.end)})"
 
-    def __eq__(self,other):
-        a=self.begin; b=self.end; c=other.begin; d=other.end
-        return (b-a).det(c-d)==0 and (b-a).det(c-a)==0
+    def __iter__(self):
+        yield self.begin
+        yield self.end
 
-    def __contains__(self,point):
-        return abs(iSP(self.begin,point,self.end))!=1
+    def __eq__(self, other: "Line") -> bool:
+        return (other.bein in self) and (other.end in self)
 
-    def vectorize(self):
-        return self.end-self.begin
+    def __contains__(self, point: Point) -> bool:
+        return abs(iSP(self.begin, point, self.end)) != 1
 
-    def counter_vectorize(self):
-        return self.begin-self.end
+    def vectorize(self) -> Point:
+        """ この直線の方向ベクトルを求める.
+
+        Returns:
+            Point: 方向ベクトル
+        """
+
+        return self.end - self.begin
+
+    def counter_vectorize(self) -> Point:
+        return self.begin - self.end
 
 #=== 生成
 def Line_from_General_Form(a,b,c):
