@@ -2,26 +2,26 @@ from Point import *
 from Line import *
 from Affine import *
 
-class Circle():
-    __slots__=["center","radius","id"]
+class Circle:
+    __slots__ = ("center", "radius")
 
-    ep=1e-9
-    def __init__(self,Center:Point,Radius:float):
-        """ 2点 P を中心とする半径 r の円を生成する.
+    def __init__(self, center: Point, radius: float):
+        """ 点 center を中心とする半径 radius の円を生成する.
 
-        P: Point
-        r>=0
+        Args:
+            center (Point): 中心
+            radius (float): 半径
         """
-        assert Radius>=0
+        assert radius >= 0
 
-        self.center=Center
-        self.radius=Radius
-        self.id=5
+        self.center = center
+        self.radius = radius
 
-    def __str__(self):
-        return "[Circle] Center: {}, Radius: {}".format(self.center,self.radius)
+    def __str__(self) -> str:
+        return f"[Circle] center: {self.center}, radius: {self.radius}"
 
-    __repr__=__str__
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(center = {repr(self.center)}, radius = {repr(self.radius)})"
 
     def __contains__(self,Point):
         return compare(abs(Point-self.center),self.radius,self.ep)==0
