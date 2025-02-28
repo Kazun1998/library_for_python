@@ -21,7 +21,7 @@ class Potentilized_Union_Find(Generic[G]):
         self.__group_number = N
 
         self.op = op
-        self.diff : Callable[[int, int], G] = lambda u, v: self.op(u, self.neg(v)) # diff(u, v) = U(u) - U(v)
+        self.diff : Callable[[G, G], G] = lambda u, v: self.op(u, self.neg(v)) # diff(u, v) = U(u) - U(v)
         self.zero = zero
         self.neg = neg
 
@@ -130,6 +130,27 @@ class Potentilized_Union_Find(Generic[G]):
         """
 
         return self.find(x) == self.find(y)
+
+    def is_possible(self, x: int, y: int, a: G) -> bool:
+        """ U(y) - U(x) = a となり得るか?
+        (x, y の属する族のポテンシャルが矛盾していたら確定 False)
+
+        Args:
+            x (int):
+            y (int):
+            a (G):
+
+        Returns:
+            bool: なり得るならば True, そうでなければ False
+        """
+
+        if not(self.is_valid(x) and self.is_valid(y)):
+            return False
+
+        if not self.same(x, y):
+            return True
+
+        return self.diff(self.pot[y], self.pot[x]) == a
 
     def members(self, x: int) -> list[int]:
         """ 要素 x と同一視されている要素のリスト
