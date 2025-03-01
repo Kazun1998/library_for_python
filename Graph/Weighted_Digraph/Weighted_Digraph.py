@@ -9,7 +9,6 @@ class Weigthed_Digraph:
         """
 
         self.adjacent_out = [[] for _ in range(N)] # 出近傍 (v が始点)
-        self.adjacent_in = [[] for _ in range(N)] # 入近傍 (v が終点)
         self.__size = 0
         self.__arc_offset = arc_offset
         self.__infinity = 0
@@ -55,7 +54,6 @@ class Weigthed_Digraph:
         """
 
         self.adjacent_out.append([])
-        self.adjacent_in.append([])
         return self.order - 1
 
     def add_vertices(self, k: int) -> list[int]:
@@ -82,7 +80,6 @@ class Weigthed_Digraph:
 
         id = self.arc_count + self.__arc_offset
         self.adjacent_out[source].append((target, weight, id))
-        self.adjacent_in[target].append((source, weight, id))
         self.__size += 1
         self.__infinity += 2 * max(1, weight)
         return id
@@ -101,44 +98,6 @@ class Weigthed_Digraph:
         """
 
         return len(self.adjacent_out[v])
-
-    #入次数
-    def in_degree(self, v: int) -> int:
-        """ 頂点 v の入次数 (v を終点とする有向辺の数) を求める
-
-        Args:
-            v (int): 頂点
-
-        Returns:
-            int: 入次数
-        """
-        return len(self.adjacent_in[v])
-
-    #次数
-    def degree(self, v: int) -> tuple[int, int]:
-        """ 頂点 v について, タプル (出次数, 入次数) を求める
-
-        Args:
-            v (int): 頂点
-
-        Returns:
-            tuple[int, int]: (出次数, 入次数)
-        """
-
-        return (len(self.adjacent_out[v]), len(self.adjacent_in[v]))
-
-    #相対次数
-    def relative_degree(self, v: int) -> int:
-        """ 頂点 v について, (出次数) - (入次数) を求める
-
-        Args:
-            v (int): 頂点
-
-        Returns:
-            int: (出次数) - (入次数)
-        """
-
-        return len(self.adjacent_out[v]) - len(self.adjacent_in[v])
 
     def initialize_list(self, x) -> list:
         return [x] * self.order
@@ -200,16 +159,7 @@ def Inverse_Graph(D):
 
     D:有向グラフ
     """
-    from copy import deepcopy
-
-    F=Weigthed_Digraph(D.vertex)
-
-    F.arc_number=D.arc_number
-    F.vertex_number=D.vertex_number
-
-    F.adjacent_in=deepcopy(D.adjacent_out)
-    F.adjacent_out=deepcopy(D.adjacent_in)
-    return F
+    raise NotImplementedError
 
 #補グラフの作成
 def Complement_Graph(G):
@@ -268,84 +218,6 @@ def Is_Directed_Acyclic_Graph(D):
 #Cycleを縮約
 def Cycle_Reduction(D):
     pass
-
-#強連結成分に分解
-def Strongly_Connected_Component_Decomposition(D,Mode=0):
-    """有向グラフDを強連結成分に分解
-
-    Mode:
-    0(Defalt)---各強連結成分の頂点のリスト
-    1        ---各頂点が属している強連結成分の番号
-    2        ---0,1の両方
-
-    ※0で帰ってくるリストは各強連結成分に関してトポロジカルソートである.
-    """
-    N=D.vertex_count
-    Group=[0]*N
-    Order=[]
-    adj_out=D.adjacent_out; adj_in=D.adjacent_in
-
-    for v in range(N):
-        if Group[v]==-1:
-            continue
-
-        S=[v]
-        Group[v]=-1
-
-        while S:
-            u=S.pop()
-            for w in adj_out[u]:
-                if Group[w]:
-                    continue
-
-                Group[w]=-1
-                S.append(u)
-                S.append(w)
-                break
-            else:
-                Order.append(u)
-
-    k=0
-    for v in Order[::-1]:
-        if Group[v]!=-1:
-            continue
-
-        S=[v]
-        Group[v]=k
-
-        while S:
-            u=S.pop()
-            for w in adj_in[u]:
-                if Group[w]!=-1:
-                    continue
-
-                Group[w]=k
-                S.append(w)
-        k+=1
-
-    if Mode==0 or Mode==2:
-        T=[[] for _ in range(k)]
-        for v in range(N):
-            T[Group[v]].append(v)
-
-    if Mode==0:
-        return T
-    elif Mode==1:
-        return Group
-    else:
-        return (Group,T)
-
-#強連結成分の代表元
-def Strongly_Connected_Component_Representative(D):
-    X=Strongly_Connected_Component_Decomposition(D)
-    return [C[0] for C in X]
-
-#強連結成分の個数
-def Strongly_Connected_Component_Number(D):
-    """有向グラフDの強連結成分の個数
-
-    """
-    return len(Strongly_Connected_Component_Decomposition(D))
 
 #Cycleが存在する?
 def Is_Exist_Cycle(D):
