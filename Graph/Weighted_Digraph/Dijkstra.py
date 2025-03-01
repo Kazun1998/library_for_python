@@ -53,3 +53,39 @@ def Dijkstra(D: Weigthed_Digraph, start: int, goal: int, default = None) -> dict
         vertex.append(x)
 
     return {'dist': dist[goal], 'arc': arc[::-1], 'vertex': vertex[::-1]}
+
+def Dijkstra_All(D: Weigthed_Digraph, start: int, default = None) -> dict:
+    """ 重み付き有向グラフ D について, start を始点とする距離を各頂点について求める.
+
+    Args:
+        D (Weigthed_Digraph): 重み付き有向グラフ (全ての辺の重みが正であることを要求する)
+        start (int): 始点
+        default (optional): 到達不能の場合の返り値. Defaults to None.
+
+    Returns:
+        dict
+    """
+
+    from heapq import heappop, heappush
+
+    N = D.order
+    dist = D.initialize_list(D.inifinity)
+    dist[start] = 0
+
+    prev = D.initialize_list(None)
+    prev[start] = start
+
+    Q = [(0, start)]
+    while Q:
+        d, x = heappop(Q)
+
+        if d > dist[x]:
+            continue
+
+        for y, w, _ in D.adjacent_out[x]:
+            if d + w < dist[y]:
+                dist[y] = d + w
+                heappush(Q, (dist[y], y))
+                prev[y] = x
+
+    return { 'dist': [dist[x] if dist[x] < D.infinity else default for x in range(N)], 'prev': prev }

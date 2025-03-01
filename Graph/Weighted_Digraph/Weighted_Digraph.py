@@ -144,49 +144,6 @@ class Weigthed_Digraph:
         return [x] * self.order
 
 #================================================
-#Dijkstra
-def Dijkstra_All(D, start, with_path=False):
-    """ Dijksta 法を用いて, 単一始点 start からの距離を求める.
-
-    D: 辺の重みが全て非負の有向グラフ
-    start: 始点, to: 終点
-    with_path: 最短路も含めて出力するか?
-
-    (出力の結果)
-    with_path=True → (距離, 最短経路の辿る際の前の頂点)
-    with_path=False → 距離
-    """
-    from heapq import heappush,heappop
-
-    inf=float("inf")
-    N=D.vertex_count
-    T=[inf]*N; T[start]=0
-
-    if with_path:
-        prev=[None]*N
-        prev[start]=start
-
-    adj_out=D.adjacent_out
-    Q=[(0, start)]
-    while Q:
-        c,u=heappop(Q)
-        if T[u]<c:
-            continue
-
-        E=adj_out[u]
-        for v in E:
-            if T[v]>c+E[v]:
-                T[v]=c+E[v]
-                heappush(Q,(T[v],v))
-
-                if with_path:
-                    prev[v]=u
-
-    if with_path:
-        return (T,prev)
-    else:
-        return  T
-
 def Bellman_Ford_All(D: Weigthed_Digraph, start: int) -> list[int]:
     """ Bellman-Ford 法を用いて, 各頂点への単一始点 start からの距離を求める (いくらでも小さくできる場合は -inf).
 
