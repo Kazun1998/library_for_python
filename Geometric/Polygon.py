@@ -1,25 +1,24 @@
 from Point import *
 
 class Polygon:
-    __slots__=["vertices","id"]
-    ep=1e-9
+    __slots__ = ("vertices", )
 
-    def __init__(self,*Points):
-        self.vertices=list(Points)
-        self.id=7
+    def __init__(self, *points: Point):
+        self.vertices = list(points)
 
     def __str__(self):
-        return "[Polygon] "+", ".join(map(repr,self.vertices))
+        return f"[Polygon] {', '.join(map(str, self.vertices))}"
 
-    __repr__=__str__
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({', '.join(map(repr, self.vertices))})"
 
     def area(self):
-        S=0
-        p=self.vertices
-        for i in range(len(p)-1):
-            S+=p[i].det(p[i+1])
-        S+=p[-1].det(p[0])
-        return abs(S)/2
+        S = 0
+        vertices = self.vertices
+        for i in range(len(vertices) - 1):
+            S += vertices[i].det(vertices[i + 1])
+        S += vertices[-1].det(vertices[0])
+        return abs(S) / 2
 
 def Convex_Hull(S: list[Point], online = False) -> Polygon:
     """ S の凸包を求める
