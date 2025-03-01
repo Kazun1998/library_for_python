@@ -15,83 +15,130 @@ data:
     \  File \"/opt/hostedtoolcache/Python/3.13.2/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "from Point import *\nfrom Line import *\nfrom Circle import *\nfrom Triangle\
-    \ import *\nfrom Polygon import *\n\nclass Affine():\n    def __init__(self,Mat=[[1,0],[0,1]],Vec=[0,0]):\n\
-    \        self.Mat=Mat\n        self.Vec=Vec\n\n    def __str__(self):\n      \
-    \  return \"Mat: {}, Vec:{}\".format(self.Mat,self.Vec)\n\n    __repr__=__str__\n\
-    \n    def __pos__(self):\n        return self\n\n    def __neg__(self):\n    \
-    \    [[a,b],[c,d]]=self.Mat\n        x,y=self.Vec\n        return Affine([[-a,-b],[-c,-d]],[-x,-y])\n\
-    \n    def __add__(self,other):\n        M=[[0,0],[0,0]]\n        M[0][0]=self.Mat[0][0]+other.Mat[0][0]\n\
-    \        M[0][1]=self.Mat[0][1]+other.Mat[0][1]\n        M[1][0]=self.Mat[1][0]+other.Mat[1][0]\n\
-    \        M[1][1]=self.Mat[1][1]+other.Mat[1][1]\n\n        v=[self.Vec[0]+other.Vec[0],\
-    \ self.Vec[1]+other.Vec[1]]\n\n        return Affine(M,v)\n\n    def __sub__(self,other):\n\
-    \        M=[[0,0],[0,0]]\n        M[0][0]=self.Mat[0][0]-other.Mat[0][0]\n   \
-    \     M[0][1]=self.Mat[0][1]-other.Mat[0][1]\n        M[1][0]=self.Mat[1][0]-other.Mat[1][0]\n\
-    \        M[1][1]=self.Mat[1][1]-other.Mat[1][1]\n\n        v=[self.Vec[0]-other.Vec[0],\
-    \ self.Vec[1]-other.Vec[1]]\n\n        return Affine(M,v)\n\n    def __mul__(self,other):\n\
-    \        M=[[0,0],[0,0]]\n        M[0][0]=self.Mat[0][0]*other.Mat[0][0]+self.Mat[0][1]*other.Mat[1][0]\n\
-    \        M[0][1]=self.Mat[0][0]*other.Mat[0][1]+self.Mat[0][1]*other.Mat[1][1]\n\
-    \        M[1][0]=self.Mat[1][0]*other.Mat[0][0]+self.Mat[1][1]*other.Mat[1][0]\n\
-    \        M[1][1]=self.Mat[1][0]*other.Mat[0][1]+self.Mat[1][1]*other.Mat[1][1]\n\
-    \n        v=[\n            self.Mat[0][0]*other.Vec[0]+self.Mat[0][1]*other.Vec[1]+self.Vec[0],\n\
-    \            self.Mat[1][0]*other.Vec[0]+self.Mat[1][1]*other.Vec[1]+self.Vec[1]\n\
-    \            ]\n        return Affine(M,v)\n\n    def __pow__(self,n):\n     \
-    \   if n<0:\n            return pow(self,-n).inverse()\n\n        A=self\n   \
-    \     B=Affine()\n        while n:\n            if n&1:\n                B*=A\n\
-    \            n>>=1\n            A*=A\n        return  B\n\n    def __eq__(self,other):\n\
-    \        return self.Mat==other.Mat and self.Vec==other.Vec\n\n    def inverse(self):\n\
-    \        [[a,b],[c,d]]=self.Mat\n        x,y=self.Vec\n\n        det=a*d-b*c\n\
-    \        p,q,r,s=d/det,-b/det,-c/det,a/det\n        return Affine([[p,q],[r,s]],[-(p*x+q*y),\
-    \ -(r*x+s*y)])\n\n    def integerization(self,delta=1e-7):\n        for i in [0,1]:\n\
-    \            for j in [0,1]:\n                if abs(self.Mat[i][j]-floor(self.Mat[i][j]+0.5))<delta:\n\
-    \                    self.Mat[i][j]=floor(self.Mat[i][j]+0.5)\n\n        if abs(self.Vec[0]-floor(self.Vec[0]+0.5))<delta:\n\
-    \            self.Vec[0]=floor(self.Vec[0]+0.5)\n\n        if abs(self.Vec[1]-floor(self.Vec[1]+0.5))<delta:\n\
-    \            self.Vec[1]=floor(self.Vec[1]+0.5)\n\n    def __getitem__(self,shape):\n\
-    \        return Action(self,shape)\n\n#=== \u4F5C\u7528\ndef Action(A: Affine,S):\n\
-    \    \"\"\" \u30A2\u30D5\u30A3\u30F3\u5909\u63DB A \u306B\u56F3\u5F62 S \u3092\
-    \u4F5C\u7528\u3055\u305B\u308B.\n\n    A: Affine\n    S: \u56F3\u5F62 (Point,\
-    \ Line_Segment, Triangle)\n    \"\"\"\n\n    if isinstance(S,Point):\n       \
-    \ [[a,b],[c,d]]=A.Mat\n        u,v=A.Vec\n        return Point(a*S.x+b*S.y+u,\
-    \ c*S.x+d*S.y+v)\n    elif isinstance(S,Segment):\n        return Segment(Action(A,S.begin),Action(A,S.end))\n\
-    \    elif isinstance(S,Ray):\n        return Ray(Action(A,S.begin),Action(A,S.end))\n\
-    \    elif isinstance(S,Line):\n        return Line(Action(A,S.begin),Action(A,S.end))\n\
-    \    elif isinstance(S,Circle):\n        pass\n    elif isinstance(S,Triangle):\n\
-    \        return Triangle(Action(A,S.A), Action(A,S.B), Action(A,S.C))\n    elif\
-    \ isinstance(S,Polygon):\n        return Polygon(*[Action(A,p) for p in S.vertices])\n\
-    \n#=== \u30A2\u30D5\u30A3\u30F3\u5909\u63DB\u306E\u751F\u6210\ndef Translation(x,y):\n\
-    \    \"\"\" (x,y) \u3060\u3051\u5E73\u884C\u79FB\u52D5\u3055\u305B\u308B\u30A2\
-    \u30D5\u30A3\u30F3\u5909\u63DB\u3092\u751F\u6210\u3059\u308B.\n    \"\"\"\n\n\
-    \    return Affine(Vec=[x,y])\n\ndef Point_Reflection(x=0,y=0):\n    \"\"\" \u70B9\
-    \ (x,y) \u306B\u95A2\u3059\u308B\u5BFE\u79F0\u79FB\u52D5\u3092\u3059\u308B\u30A2\
-    \u30D5\u30A3\u30F3\u5909\u63DB\u3092\u751F\u6210\u3059\u308B.\n    \"\"\"\n\n\
-    \    return Affine([[-1,0],[0,-1]],[2*x,2*y])\n\ndef Line_Reflection(a,b,c):\n\
-    \    \"\"\" \u76F4\u7DDA ax+by+c=0 \u306B\u95A2\u3059\u308B\u5BFE\u79F0\u79FB\u52D5\
-    \u3092\u3059\u308B\u30A2\u30D5\u30A3\u30F3\u5909\u63DB\u3092\u751F\u6210\u3059\
-    \u308B.\n    \"\"\"\n\n    assert (a!=0) or (b!=0)\n\n    k=a*a+b*b\n\n    p=(-a*a+b*b)/k;\
-    \ q=-2*a*b/k; r=-2*c/k\n    return Affine([[p,q],[q,-p]],[a*r,b*r])\n\ndef Rotation(theta,Px=0,Py=0):\n\
-    \    \"\"\" \u70B9 P=(Px,Py) \u5468\u308A\u3067 theta (\u6642\u8A08\u56DE\u308A\
-    ) \u306B\u56DE\u8EE2\u3055\u305B\u308B\u30A2\u30D5\u30A3\u30F3\u5909\u63DB\u3092\
-    \u751F\u6210\u3059\u308B.\n    \"\"\"\n    c=cos(theta); s=sin(theta)\n    return\
-    \ Affine([[c,-s],[s,c]], [(1-c)*Px+s*Py,-s*Px+(1-c)*Py])\n\n#=== \u30A2\u30D5\u30A3\
-    \u30F3\u5909\u63DB\u306E\u6C7A\u5B9A\ndef Translation_and_Rotate_Affine_Determine(A,B,P,Q):\n\
-    \    \"\"\" F(A)=P, F(B)=Q \u3068\u306A\u308B\u30A2\u30D5\u30A3\u30F3\u5909\u63DB\
-    \ F \u306E\u3046\u3061, \u5E73\u884C\u79FB\u52D5\u3068\u56DE\u8EE2\u3067\u751F\
-    \u6210\u3055\u308C\u308B\u3082\u306E\u3092\u751F\u6210\u3059\u308B.\n\n    A,B,P,Q:\
-    \ Point\n    \u203B |AB|=|PQ| \u3067\u306A\u304F\u3066\u306F\u306A\u3089\u306A\
-    \u3044.\n    \"\"\"\n\n    ep=max_ep(A,B,P,Q)\n\n    assert abs(B-A)==abs(Q-P)\n\
-    \n\n    return Rotation(Arg(Q,P)-Arg(B,A),*P)*Translation(*(P-A))\n\ndef Affine_Determine(A,B,C,P,Q,R):\n\
-    \    \"\"\" F(A)=P, F(B)=Q, F(C)=R \u3068\u306A\u308B\u30A2\u30D5\u30A3\u30F3\u5909\
-    \u63DB F \u3092\u6C42\u3081\u308B.\n\n    A,B,C,P,Q,R: Point\n    \u203B A,B,C\
-    \ \u306F\u540C\u4E00\u76F4\u7DDA\u4E0A\u306E\u70B9\u3067\u3042\u3063\u3066\u306F\
-    \u3044\u3051\u306A\u3044.\n    \"\"\"\n\n    ep=max_ep(A,B,C,P,Q,R)\n\n    assert\
-    \ compare((B-A).det(C-A),0,ep)\n\n    q1,q2=Q-P; r1,r2=R-P\n    b1,b2=B-A; c1,c2=C-A;\
-    \ det=b1*c2-b2*c1\n\n    M=[\n        [(q1*c2-r1*b2)/det, (-q1*c1+r1*b1)/det],\n\
-    \        [(q2*c2-r2*b2)/det, (-q2*c1+r2*b1)/det]\n        ]\n\n    v=[P.x-(M[0][0]*A.x+M[0][1]*A.y),\
-    \ P.y-(M[1][0]*A.x+M[1][1]*A.y)]\n\n    return Affine(M,v)\n"
+    \ import *\nfrom Polygon import *\n\nclass Affine:\n    __slots__ = ('mat', 'vec')\n\
+    \n    def __init__(self, mat: list[list[float]] = None, vec: list[float] = None):\n\
+    \        if mat is None:\n            mat = [[1, 0], [0, 1]]\n\n        if vec\
+    \ is None:\n            vec = [0, 0]\n\n        self.mat = mat\n        self.vec\
+    \ = vec\n\n    def __str__(self) -> str:\n        return f\"Matrix: {self.mat},\
+    \ Vector: {self.vec}\"\n\n    def __repr__(self) -> str:\n        return f\"{self.__class__.__name__}({self.mat},\
+    \ {self.vec})\"\n\n    def __iter__(self):\n        yield self.mat\n        yield\
+    \ self.vec\n\n    def __pos__(self) -> \"Affine\":\n        return self\n\n  \
+    \  def __neg__(self):\n        [[a,b],[c,d]], [x, y] = self\n        return Affine([[-a,\
+    \ -b], [-c, -d]], [-x, -y])\n\n    def __add__(self, other):\n        a = self.mat[0][0]\
+    \ + other.mat[0][0]\n        b = self.mat[0][1] + other.mat[0][1]\n        c =\
+    \ self.mat[1][0] + other.mat[1][0]\n        d = self.mat[1][1] + other.mat[1][1]\n\
+    \n        u = self.vec[0] + other.vec[1]\n        v = self.vec[1] + other.vec[1]\n\
+    \n        return Affine([[a, b], [c, d]], [u, v])\n\n    def __sub__(self,other):\n\
+    \        a = self.mat[0][0] - other.mat[0][0]\n        b = self.mat[0][1] - other.mat[0][1]\n\
+    \        c = self.mat[1][0] - other.mat[1][0]\n        d = self.mat[1][1] - other.mat[1][1]\n\
+    \n        u = self.vec[0] - other.vec[1]\n        v = self.vec[1] - other.vec[1]\n\
+    \n        return Affine([[a, b], [c, d]], [u, v])\n\n    def __mul__(self, other):\n\
+    \        a = self.mat[0][0] * other.mat[0][0] + self.mat[0][1] * other.mat[1][0]\n\
+    \        b = self.mat[0][0] * other.mat[0][1] + self.mat[0][1] * other.mat[1][1]\n\
+    \        c = self.mat[1][0] * other.mat[0][0] + self.mat[1][1] * other.mat[1][0]\n\
+    \        d = self.mat[1][0] * other.mat[0][1] + self.mat[1][1] * other.mat[1][1]\n\
+    \n        u = self.mat[0][0] * other.vec[0] + self.mat[0][1] * other.vec[1] +\
+    \ self.vec[0]\n        v = self.mat[1][0] * other.vec[0] + self.mat[1][1] * other.vec[1]\
+    \ + self.vec[1]\n\n        return Affine([[a, b], [c, d]], [u, v])\n\n    def\
+    \ __pow__(self, n):\n        if n < 0:\n            return pow(self, -n).inverse()\n\
+    \n        A = self\n        B = Affine()\n        while n:\n            if n &\
+    \ 1:\n                B *= A\n            n >>= 1\n            A *= A\n      \
+    \  return  B\n\n    def __eq__(self, other):\n        return self.mat == other.mat\
+    \ and self.vec == other.vec\n\n    def inverse(self) -> \"Affine\":\n        [[a,\
+    \ b], [c, d]], [x, y] = self\n\n        det = a * d - b * c\n        p, q, r,\
+    \ s = d / det, -b / det, -c / det, a/ det\n        return Affine([[p, q], [r,\
+    \ s]], [-(p * x  + q * y), -(r * x + s * y)])\n\n    def integerization(self,\
+    \ delta = 1e-7):\n        for i in [0, 1]:\n            for j in [0, 1]:\n   \
+    \             if abs(self.mat[i][j] - floor(self.mat[i][j] + 0.5)) < delta:\n\
+    \                    self.mat[i][j] = floor(self.mat[i][j] + 0.5)\n\n        if\
+    \ abs(self.vec[0] - floor(self.vec[0] + 0.5)) < delta:\n            self.vec[0]\
+    \ = floor(self.vec[0] + 0.5)\n\n        if abs(self.vec[1] - floor(self.vec[1]\
+    \ + 0.5)) < delta:\n            self.vec[1] = floor(self.vec[1] + 0.5)\n\n   \
+    \ def __getitem__(self, shape):\n        return Action(self, shape)\n\n#=== \u4F5C\
+    \u7528\ndef Action(A: Affine, S):\n    \"\"\" \u56F3\u5F62 S \u306B\u30A2\u30D5\
+    \u30A3\u30F3\u5909\u63DB A \u3092\u65BD\u3057\u305F\u5F8C\u306E\u7D50\u679C\u3092\
+    \u8FD4\u3059.\n\n    Args:\n        A (Affine): \u30A2\u30D5\u30A3\u30F3\u5909\
+    \u63DB\n        S : \u56F3\u5F62\n\n    Raises:\n        NotImplemented: \u30A2\
+    \u30D5\u30A3\u30F3\u5909\u63DB\u3067\u5186\u304C\u5186\u306B\u6620\u308B\u3068\
+    \u306F\u9650\u3089\u306A\u3044 (\u4E00\u822C\u306B\u306F\u6955\u5186)\n\n    Returns:\
+    \ \u30A2\u30D5\u30A3\u30F3\u5909\u63DB\u5F8C\u306E\u56F3\u5F62\n    \"\"\"\n\n\
+    \    if isinstance(S, Point):\n        [[a, b], [c, d]], [x, y] = A\n        return\
+    \ Point(a * S.x + b * S.y + x, c * S.x + d * S.y + y)\n    elif isinstance(S,\
+    \ Segment):\n        return Segment(Action(A, S.begin), Action(A, S.end))\n  \
+    \  elif isinstance(S, Ray):\n        return Ray(Action(A, S.begin), Action(A,\
+    \ S.end))\n    elif isinstance(S, Line):\n        return Line(Action(A, S.begin),\
+    \ Action(A, S.end))\n    elif isinstance(S, Circle):\n        raise NotImplemented\n\
+    \    elif isinstance(S, Triangle):\n        return Triangle(Action(A, S.A), Action(A,\
+    \ S.B), Action(A, S.C))\n    elif isinstance(S, Polygon):\n        return Polygon(*[Action(A,\
+    \ P) for P in S.vertices])\n\n#=== \u30A2\u30D5\u30A3\u30F3\u5909\u63DB\u306E\u751F\
+    \u6210\ndef Translation(x: float, y: float) -> Affine:\n    \"\"\" (x, y) \u3060\
+    \u3051\u5E73\u884C\u79FB\u52D5\u3055\u305B\u308B\u30A2\u30D5\u30A3\u30F3\u5909\
+    \u63DB\u3092\u6C42\u3081\u308B.\n\n    Args:\n        x (float): x \u5EA7\u6A19\
+    \u306E\u79FB\u52D5\u91CF\n        y (float): y \u5EA7\u6A19\u306E\u79FB\u52D5\u91CF\
+    \n\n    Returns:\n        Affine: (x, y) \u3060\u3051\u5E73\u884C\u79FB\u52D5\u3055\
+    \u305B\u308B\u30A2\u30D5\u30A3\u30F3\u5909\u63DB\n    \"\"\"\n    return Affine(vec=[x,\
+    \ y])\n\ndef Point_Reflection(x: float = 0, y: float = 0) -> Affine:\n    \"\"\
+    \" \u70B9 (x,y) \u306B\u95A2\u3059\u308B\u5BFE\u79F0\u79FB\u52D5\u3092\u3059\u308B\
+    \u30A2\u30D5\u30A3\u30F3\u5909\u63DB\u3092\u751F\u6210\u3059\u308B.\n\n    Args:\n\
+    \        x (float, optional): \u70B9\u306E x \u5EA7\u6A19. Defaults to 0.\n  \
+    \      y (float, optional): \u70B9\u306E y \u5EA7\u6A19. Defaults to 0.\n\n  \
+    \  Returns:\n        Affine: \u70B9 (x,y) \u306B\u95A2\u3059\u308B\u5BFE\u79F0\
+    \u79FB\u52D5\u3092\u3059\u308B\u30A2\u30D5\u30A3\u30F3\u5909\u63DB\n    \"\"\"\
+    \n\n    return Affine([[-1, 0], [0, -1]], [2 * x, 2 * y])\n\ndef Line_Reflection(a:\
+    \ float, b: float, c: float) -> Affine:\n    \"\"\" \u76F4\u7DDA a x + b y + c\
+    \ = 0 \u306B\u95A2\u3059\u308B\u5BFE\u79F0\u79FB\u52D5\u3092\u3059\u308B\u30A2\
+    \u30D5\u30A3\u30F3\u5909\u63DB\u3092\u751F\u6210\u3059\u308B.\n\n    Args:\n \
+    \       a (float):\n        b (float):\n        c (float):\n\n    Raises:\n  \
+    \      ValueError: a = b = 0 \u306E\u3068\u304D\u306B\u767A\u751F\n\n    Returns:\n\
+    \        Affine: \u76F4\u7DDA a x + b y + c = 0 \u306B\u95A2\u3059\u308B\u5BFE\
+    \u79F0\u79FB\u52D5\n    \"\"\"\n    if (sign(a) == 0) or (sign(b) == 0):\n   \
+    \     raise ValueError\n\n    k = a * a + b * b\n\n    p = (- a * a + b * b) /\
+    \ k\n    q = - 2 * a * b / k\n    r = - 2 * c / k\n\n    return Affine([[p, q],\
+    \ [q, -p]], [a * r , b * r])\n\ndef Rotation(theta: float, x: float = 0, y: float\
+    \ = 0) -> Affine:\n    \"\"\" \u70B9 (x, y) \u5468\u308A\u3067 theta (\u6642\u8A08\
+    \u56DE\u308A) \u306B\u56DE\u8EE2\u3055\u305B\u308B\u30A2\u30D5\u30A3\u30F3\u5909\
+    \u63DB\u3092\u751F\u6210\u3059\u308B.\n\n    Args:\n        theta (float): \u56DE\
+    \u8EE2\u89D2\n        x (float, optional): \u4E2D\u5FC3\u3068\u306A\u308B\u70B9\
+    \u306E x \u5EA7\u6A19. Defaults to 0.\n        y (float, optional): \u4E2D\u5FC3\
+    \u3068\u306A\u308B\u70B9\u306E y \u5EA7\u6A19. Defaults to 0.\n\n    Returns:\n\
+    \        Affine: \u70B9 (x, y) \u5468\u308A\u3067 theta (\u6642\u8A08\u56DE\u308A\
+    ) \u306B\u56DE\u8EE2\u3055\u305B\u308B\u30A2\u30D5\u30A3\u30F3\u5909\u63DB\n \
+    \   \"\"\"\n\n    c = cos(theta); s = sin(theta)\n    return Affine([[c, -s],\
+    \ [s, c]], [(1 - c) * x + s * y, -s * x + (1 - c) * y])\n\n#=== \u30A2\u30D5\u30A3\
+    \u30F3\u5909\u63DB\u306E\u6C7A\u5B9A\ndef Translation_and_Rotate_Affine_Determine(A:\
+    \ Point, B: Point, P: Point, Q: Point) -> Affine:\n    \"\"\" \u5E73\u884C\u79FB\
+    \u52D5\u3068\u56DE\u8EE2\u306E\u307F\u306B\u3088\u3063\u3066\u751F\u6210\u3055\
+    \u308C F(A) = P, F(B) = Q \u3092\u6E80\u305F\u3059\u30A2\u30D5\u30A3\u30F3\u5909\
+    \u63DB\u3092\u6C42\u3081\u308B.\n\n    Args:\n        A (Point):\n        B (Point):\n\
+    \        P (Point): F(A)\n        Q (Point): F(B)\n\n    Raises:\n        ValueError:\
+    \ |AB| = |PQ| \u3067\u306A\u304F\u3066\u306F\u306A\u3089\u306A\u3044.\n\n    Returns:\n\
+    \        Affine: \u5E73\u884C\u79FB\u52D5\u3068\u56DE\u8EE2\u306E\u307F\u306B\u3088\
+    \u3063\u3066\u751F\u6210\u3055\u308C F(A) = P, F(B) = Q \u3092\u6E80\u305F\u3059\
+    \n    \"\"\"\n\n    if not equal(abs(B - A), abs(Q - P)):\n        raise ValueError\n\
+    \n    return Rotation(Arg(Q, P) - Arg(B, A), *P) * Translation(*(P-A))\n\ndef\
+    \ Affine_Determine(A: Point, B: Point, C: Point, P: Point, Q: Point, R: Point)\
+    \ -> Affine:\n    \"\"\" \u5E73\u884C\u79FB\u52D5\u3068\u56DE\u8EE2\u306E\u307F\
+    \u306B\u3088\u3063\u3066\u751F\u6210\u3055\u308C F(A) = P, F(B) = Q, F(C) = R\
+    \ \u3092\u6E80\u305F\u3059\u30A2\u30D5\u30A3\u30F3\u5909\u63DB\u3092\u6C42\u3081\
+    \u308B.\n\n    Args:\n        A (Point):\n        B (Point):\n        C (Point):\n\
+    \        P (Point): F(A)\n        Q (Point): F(B)\n        R (Point): F(C)\n\n\
+    \    Raises:\n        ValueError: A, B, C \u306F\u540C\u4E00\u76F4\u7DDA\u4E0A\
+    \u306E 3 \u70B9\u3067\u3042\u3063\u3066\u306F\u3044\u3051\u306A\u3044.\n\n   \
+    \ Returns:\n        Affine: \u5E73\u884C\u79FB\u52D5\u3068\u56DE\u8EE2\u306E\u307F\
+    \u306B\u3088\u3063\u3066\u751F\u6210\u3055\u308C F(A) = P, F(B) = Q, F(C) = R\
+    \ \u3092\u6E80\u305F\u3059\u30A2\u30D5\u30A3\u30F3\u5909\u63DB\n    \"\"\"\n\n\
+    \    if equal((B - A).det(C - A)):\n        raise ValueError\n\n    q1, q2 = Q\
+    \ - P\n    r1, r2 = R - P\n    b1, b2 = B - A\n    c1, c2 = C - A\n    det = b1\
+    \ * c2 - b2 * c1\n\n    M = [\n            [(q1 * c2 - r1 * b2) / det, (-q1 *\
+    \ c1 + r1 * b1) / det],\n            [(q2 *c2 - r2 * b2) / det, (-q2 * c1 + r2\
+    \ * b1) / det]\n        ]\n\n    v = [\n            P.x - (M[0][0] * A.x + M[0][1]\
+    \ * A.y),\n            P.y - (M[1][0] * A.x + M[1][1] * A.y)\n        ]\n\n  \
+    \  return Affine(M, v)\n"
   dependsOn: []
   isVerificationFile: false
   path: Geometric/Affine.py
   requiredBy: []
-  timestamp: '2021-08-20 04:19:27+09:00'
+  timestamp: '2025-03-01 16:16:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Geometric/Affine.py

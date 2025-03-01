@@ -216,12 +216,12 @@ data:
   timestamp: '2024-12-06 01:02:56+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
-  - test_verify/yosupo_library_checker/Matrix/Adjugate_Matrix.test.py
   - test_verify/yosupo_library_checker/Matrix/Inverse.test.py
-  - test_verify/yosupo_library_checker/Matrix/Determinant.test.py
+  - test_verify/yosupo_library_checker/Matrix/Adjugate_Matrix.test.py
+  - test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
   - test_verify/yosupo_library_checker/Matrix/Product.test.py
   - test_verify/yosupo_library_checker/Matrix/Power.test.py
+  - test_verify/yosupo_library_checker/Matrix/Determinant.test.py
 documentation_of: Modulo_Matrix/Modulo_Matrix.py
 layout: document
 title: Modulo_Matrix
