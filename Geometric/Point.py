@@ -24,9 +24,9 @@ def compare(x: float, y: float, ep: float = epsilon) -> int:
         return 0
 
 def sign(x: float, ep: float = epsilon) -> int:
-    if x > epsilon:
+    if x > ep:
         return 1
-    elif x < -epsilon:
+    elif x < -ep:
         return -1
     else:
         return 0
