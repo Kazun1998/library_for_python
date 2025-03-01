@@ -1,131 +1,169 @@
-class Permutation():
-    def __init__(self, n, p=[]):
-        if p==[]:
-            self.p=[i for i in range(n)]
-            self.ind=[i for i in range(n)]
+class Permutation:
+    def __init__(self, n: int, p: list[int] = None):
+        """ N 要素の置換を生成する.
+
+        Args:
+            n (int): 要素数
+            p (list[int], optional): 初期状態. None のときは恒等置換になる. Defaults to None.
+        """
+
+        if p is None:
+            self.p = list(range(n))
+            self.ind = list(range(n))
         else:
-            self.p=p
-            self.ind=[0]*n
+            self.p = p
+            self.ind = [0] * n
 
             for i in range(n):
-                self.ind[p[i]]=i
+                self.ind[p[i]] = i
 
-        self.n=n
+        self._n = n
 
-    def __getitem__(self, k):
+    @property
+    def N(self) -> int:
+        return self._n
+
+    def __getitem__(self, k: int) -> int:
         return self.p[k]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.p)
 
-    def __repr__(self):
-        return "[Permutation] : "+str(self)
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.N}, {self.p})"
 
-    def __eq__(self,other):
-        return (self.n==other.n) and (self.p==other.p)
+    def __eq__(self, other: "Permutation") -> bool:
+        return (self.N == other.N) and (self.p == other.p)
 
     def __iter__(self):
         return iter(self.p)
 
-    def index(self, x):
+    def __len__(self) -> int:
+        return self.N
+
+    def index(self, x: int) -> int:
         return self.ind[x]
 
-    def __mul__(self,other):
-        assert self.n==other.n
+    def __mul__(self, other: "Permutation") -> "Permutation":
+        assert self.N == other.N
 
-        p=self.p; q=other.p
-        return Permutation(self.n,  [p[q[i]] for i in range(self.n)])
+        p = self.p
+        q = other.p
+        return Permutation(self.N,  [p[q[i]] for i in range(self.N)])
 
-    def __pow__(self, n):
-        if n<0:
-            return pow(self,-n).inverse()
+    def __pow__(self, k: int) -> "Permutation":
+        if k < 0:
+            return pow(self, -k).inverse()
 
-        a=list(range(self.n))
-        e=self.p[:]
+        N = len(self)
+        a = list(range(N))
+        e = self.p[:]
 
-        while n:
-            if n&1:
-                a=[a[e[i]] for i in range(self.n)]
-            e=[e[e[i]] for i in range(self.n)]
-            n>>=1
+        while k:
+            if k & 1:
+                a = [a[e[i]] for i in range(N)]
+            e = [e[e[i]] for i in range(N)]
+            k >>= 1
 
-        return Permutation(self.n, a)
-
-    def __truediv__(self,other):
-        pass
+        return Permutation(N, a)
 
     def sgn(self):
         """ 置換の符号を求める (偶置換 → 1, 奇置換 → -1)
 
         """
-        return -1 if self.minimum_transposition()%2 else 1
+        return -1 if self.minimum_transposition() % 2 else 1
 
     def inverse(self):
-        return Permutation(self.n, self.ind)
+        return Permutation(len(self), self.ind)
 
-    def inversion(self):
+    def inversion(self) -> int:
         """ 転倒数を求める.
+
+        Returns:
+            int: 転倒数
         """
 
-        BIT=[0]*(self.n+1)
-        Y=(self.n*(self.n-1))//2
+        BIT = [0] * (len(self) + 1)
+        y = (self.n * (self.n-1)) // 2
 
         for a in self.p:
-            s=a
-            while 1<=s:
-                Y-=BIT[s]
-                s-=s&(-s)
+            s = a
+            while 1 <= s:
+                y -= BIT[s]
+                s -= s & (-s)
 
-            r=a+1
-            while r<=self.n:
-                BIT[r]+=1
-                r+=r&(-r)
-        return Y
+            r = a + 1
+            while r <= self.n:
+                BIT[r] += 1
+                r += r & (-r)
+        return y
 
-    def swap(self, i, j):
-        """ i 番目と j 番目を交換する ※ i と j を交換ではない"""
+    def swap(self, i: int, j: int):
+        """ i 番目と j 番目を交換する (※ i と j を交換ではない)
+
+        Args:
+            i (int):
+            j (int):
+        """
 
         u=self.p[i]; v=self.p[j]
 
         self.p[i]=v; self.p[j]=u
         self.ind[v]=i; self.ind[u]=j
 
-    def transposition(self, u, v):
-        """ u と v を交換する ※ u 番目とv 番目ではない"""
+    def transposition(self, u: int, v: int):
+        """ u と v を交換する (※ u 番目と v 番目ではない)
+
+        Args:
+            u (int):
+            v (int):
+        """
 
         a=self.ind[u]; b=self.ind[v]
 
         self.p[a]=v; self.p[b]=u
         self.ind[u]=b; self.ind[v]=a
 
-    def minimum_transposition(self):
-        """ 互換の最小回数を求める. """
+    def minimum_transposition(self) -> int:
+        """ 互換の最小回数を求める.
 
-        return self.n-len(self.cycle_division())
+        Returns:
+            int: 互換の最小回数
+        """
 
-    def cycle_division(self, mode=True):
+        return len(self) - len(self.cycle_division())
+
+    def cycle_division(self, self_loop = True) -> list[list[int]]:
         """ 置換を巡回置換の積に分解する.
 
-        mode: 自己ループを入れるか否か"""
+        Args:
+            self_loop (bool, optional): 長さ 1 の自己ループを入れるかどうか. Defaults to True.
 
-        p=self.p
-        T=[False]*self.n
-        A=[]
+        Returns:
+            list[list[int]]: 各要素がサイクルになる.
+        """
 
-        for k in range(self.n):
-            if not T[k]:
-                a=[k]
+        N = len(self)
+        p = self.p
+        seen = [False] * N
+        cycles: list[list[int]] = []
 
-                T[k]=True
-                v=p[k]
-                while v!=k:
-                    T[v]=True
-                    a.append(v)
-                    v=p[v]
+        for k in range(N):
+            if seen[k]:
+                continue
 
-                if mode or len(a)>=2:
-                    A.append(a)
-        return A
+            cycle = [k]
+            seen[k] = True
+            v = k
+
+            while (v := p[v]) != k:
+                seen[v] = True
+                cycle.append(v)
+
+            if self_loop or len(cycle)>=2:
+                cycles.append(cycle)
+
+        return cycles
 
     def operate_list(self, list):
         assert self.n==len(list),"置換の長さとリストの長さが違います."
@@ -178,8 +216,15 @@ class Permutation():
                 x%=mod
             return x
 
-    def conjugate(self):
-        return Permutation(self.n, [self.n-1-x for x in self.p])
+    def conjugate(self) -> "Permutation":
+        """ 共役の互換を求める.
+
+        Returns:
+            Permutation: 共役の互換
+        """
+
+        N = len(self)
+        return Permutation(N, [N - 1 - x for x in self.p])
 
     def next(self):
         y=[]
