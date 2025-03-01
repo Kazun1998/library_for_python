@@ -10,9 +10,9 @@ def compare(x: float, y: float, ep: float = epsilon) -> int:
         ep (float, optional): 許容誤差. Defaults to epsilon.
 
     Returns:
-        x < y のときは 1
+        x > y のときは 1
         x = y のときは 0
-        x > y のときは -1
+        x < y のときは -1
     """
 
     diff = x - y
