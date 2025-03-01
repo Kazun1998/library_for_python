@@ -31,6 +31,9 @@ def sign(x: float, ep: float = epsilon) -> int:
     else:
         return 0
 
+def equal(x: float, y: float, ep: float = epsilon) -> bool:
+    return abs(x - y) < ep
+
 class Point:
     __slots__ = ('x', 'y')
 
