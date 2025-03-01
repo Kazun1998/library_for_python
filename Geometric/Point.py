@@ -54,7 +54,7 @@ class Point:
 
     #等号
     def __eq__(self, other: "Point") -> bool:
-        return (compare(self.x, other.x) == 0) and (compare(self.y, other.y) == 0)
+        return equal(self.x, other.x) and equal(self.y, other.y)
 
     #不等号
     def __ne__(self, other: "Point") -> bool:

@@ -23,8 +23,8 @@ class Circle:
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(center = {repr(self.center)}, radius = {repr(self.radius)})"
 
-    def __contains__(self,Point):
-        return compare(abs(Point-self.center),self.radius,self.ep)==0
+    def __contains__(self, Point):
+        return equal(abs(Point - self.center), self.radius)
 
 #=== 交差判定
 def has_Intersection_between_Circle_and_Segment(C,L,endpoint=True):
@@ -32,24 +32,16 @@ def has_Intersection_between_Circle_and_Segment(C,L,endpoint=True):
 
     """
 
-    c=C.center
-    ep=max(C.ep,L.ep)
-    flag1=(compare(
-        Distance_between_Point_and_Segment(c,L),
-        C.radius,
-        ep)<=0)
-    flag2=(compare(max(abs(c-L.begin),abs(c-L.end)),C.radius,ep)>=0)
+    c = C.center
+    flag1 = compare(Distance_between_Point_and_Segment(c, L), C.radius) <= 0
+    flag2 = compare(max(abs(c - L.begin), abs(c - L.end)), C.radius) >=0
     return flag1 and flag2
 
 def has_Intersection_between_Circle_and_Line(C,L):
     """円 C と直線 L の交差判定を行う.
 
     """
-    return compare(
-        Distance_between_Point_and_Line(C.center,L),
-        C.radius,
-        max(C.ep,L.ep)
-        )<=0
+    return compare(Distance_between_Point_and_Line(C.center,L), C.radius) <= 0
 
 def has_Intersection_between_Circle_and_Circle(C,D):
     """2つの円 C,D の交差判定を行う.
@@ -58,9 +50,8 @@ def has_Intersection_between_Circle_and_Circle(C,D):
 
     r=C.radius; s=D.radius;
     d=abs(C.center-D.center)
-    ep=max(C.ep,D.ep)
 
-    return compare(d,abs(r-s),ep)>=0 and compare(d,r+s,ep)<=0
+    return compare(d, abs(r - s)) >= 0 and compare(d, r + s) <= 0
 
 #=== 交点を求める
 def Intersection_between_Circle_and_Line(C,L):
@@ -123,20 +114,19 @@ def Tangent_to_Circle_from_Point(P,C):
 def Common_Tangent_between_Circle_and_Circle(C,D):
     """ 円 C,D の共通接線を求める."""
 
-    ep=max(C.ep,D.ep)
     r=C.radius; s=D.radius
     d=abs(C.center-D.center)
 
     X=[]
 
     K=Circle(Point(),r)
-    if compare(d,abs(r-s),ep)>=0:
+    if compare(d,abs(r-s))>=0:
         a=r*(r-s)/d
         b=sqrt(max(0,r*r-a*a))
 
         X.append(Tangent_to_Circle_on_Point(Point(a,b),K))
         X.append(Tangent_to_Circle_on_Point(Point(a,-b),K))
-    if compare(d,abs(r+s),ep)>=0:
+    if compare(d,abs(r+s))>=0:
         a=r*(r+s)/d
         b=sqrt(max(0,r*r-a*a))
 
@@ -147,31 +137,32 @@ def Common_Tangent_between_Circle_and_Circle(C,D):
     return [F[l] for l in X]
 
 #=== 2つの円の位置関係を求める.
-def Relationship_between_Circle_and_Circle(C: Circle, D:Circle):
-    """ 2つの円の位置関係を求める.
+def Relationship_between_Circle_and_Circle(C: Circle, D:Circle) -> int:
+    """ 2 つの円 C, D の位置関係を求める (返り値となる整数は 2 つの円の共通接線の本数と一致する).
 
-    [Input]
-    C,D: Circle
+    Args:
+        C (Circle):
+        D (Circle):
 
-    [Output]
-    4: 離れている
-    3: 外接
-    2: 交わっている
-    1: 内接
-    0: 含んでいる
+    Returns:
+        int:
+            4: 離れている
+            3: 外接
+            2: 交わっている
+            1: 内接
+            0: 含んでいる
     """
 
     d=abs(C.center-D.center)
     r=C.radius; s=D.radius
-    ep=max(C.ep, D.ep)
 
-    alpha=compare(d,r+s,ep)
+    alpha=compare(d,r+s)
     if alpha==1:
         return 4
     elif alpha==0:
         return 3
     else:
-        beta=compare(d,abs(r-s),ep)
+        beta=compare(d,abs(r-s))
         if beta==1:
             return 2
         elif beta==0:
@@ -180,26 +171,34 @@ def Relationship_between_Circle_and_Circle(C: Circle, D:Circle):
             return 0
 
 #=== 共通部分
-def Circles_Intersection_Area(C,D):
+def Circles_Intersection_Area(C: Circle, D: Circle) -> float:
     """ 2つの円 C, D の共通部分の面積を求める.
 
-    C, D: Circle
+    Args:
+        C (Circle): 円
+        D (Circle): 円
+
+    Returns:
+        float: 円 C と円 D の共通部分の面積
     """
 
-    d=abs(C.P-D.P)
-    r=C.r; s=D.r
-    ep=max(C.ep, D.ep)
+    d = abs(C.center - D.center)
+    r = C.radius
+    s = D.radius
 
-    if compare(d,r+s,ep)==1:
+    if compare(d, r + s) == 1:
+        # 2 つは離れている
         return 0
-    if compare(d,abs(r-s),ep)==-1:
-        a=min(r,s)
-        return pi*a*a
 
-    alpha=acos((d*d+r*r-s*s)/(2*d*r))
-    beta =acos((d*d-r*r+s*s)/(2*d*s))
+    if compare(d, abs(r - s)) == -1:
+        # 一方が他方を含んでいる
+        a = min(r, s)
+        return pi * a * a
 
-    X=r*r*alpha
-    Y=s*s*beta
-    Z=d*r*sin(alpha)
-    return X+Y-Z
+    alpha = acos((d * d + r * r - s * s) / (2 * d * r))
+    beta = acos((d * d - r * r + s * s) / (2 * d * s))
+
+    X = r *r * alpha
+    Y = s * s * beta
+    Z = d * r * sin(alpha)
+    return X + Y - Z

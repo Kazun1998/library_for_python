@@ -218,7 +218,7 @@ def Translation_and_Rotate_Affine_Determine(A: Point, B: Point, P: Point, Q: Poi
         Affine: 平行移動と回転のみによって生成され F(A) = P, F(B) = Q を満たす
     """
 
-    if compare(abs(B - A), abs(Q - P)):
+    if not equal(abs(B - A), abs(Q - P)):
         raise ValueError
 
     return Rotation(Arg(Q, P) - Arg(B, A), *P) * Translation(*(P-A))
@@ -241,7 +241,7 @@ def Affine_Determine(A: Point, B: Point, C: Point, P: Point, Q: Point, R: Point)
         Affine: 平行移動と回転のみによって生成され F(A) = P, F(B) = Q, F(C) = R を満たすアフィン変換
     """
 
-    if compare((B - A).det(C - A)) == 0:
+    if equal((B - A).det(C - A)):
         raise ValueError
 
     q1, q2 = Q - P

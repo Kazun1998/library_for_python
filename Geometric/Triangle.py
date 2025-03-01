@@ -178,7 +178,7 @@ def is_Isosceles_Triangle(T: Triangle) -> bool:
     """
 
     a, b, c = T.three_edges()
-    return (compare(a,b) == 0) or (compare(b, c) == 0) or (compare(c, a) == 0)
+    return equal(a, b) or equal(b, c) or equal(c, a)
 
 def is_Isosceles_Right_Triangle(T: Triangle) -> bool:
     """ 三角形 T が直角二等辺三角形かどうかを判定する.
@@ -204,7 +204,7 @@ def is_Equilateral_Triangle(T: Triangle) -> bool:
     """
 
     a, b, c = T.three_edges()
-    return compare(a,b) == 0 and compare(b, c) == 0 and compare(c, a) == 0
+    return equal(a, b) and equal(b, c) and equal(c, a)
 
 #=== 三角形の決定
 def SSS_Triangle(a: float, b: float, c: float) -> Triangle:
