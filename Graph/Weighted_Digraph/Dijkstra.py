@@ -18,7 +18,7 @@ def Dijkstra(D: Weigthed_Digraph, start: int, goal: int, default = None) -> dict
 
     from heapq import heappush, heappop
 
-    inf = D.inifinity
+    inf = D.infinity
     dist = D.initialize_list(inf); dist[start] = 0
     fix = D.initialize_list(False)
     parent = D.initialize_list(None)
