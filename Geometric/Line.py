@@ -3,7 +3,6 @@ from Point import *
 class Segment():
     __slots__=["begin","end","id"]
 
-    ep=1e-9
     def __init__(self,P,Q):
         """2点 P, Q (P!=Q) を端点とする線分を生成する.
 
@@ -37,7 +36,6 @@ class Segment():
 class Ray():
     __slots__=["begin","end","id"]
 
-    ep=1e-9
     def __init__(self,P,Q):
         """ P を端点とし, Q を通る半直線を通る.
 
@@ -70,37 +68,47 @@ class Ray():
     def counter_vectorize(self):
         return self.begin-self.end
 
-class Line():
-    __slots__=["begin","end","id"]
+class Line:
+    __slots__ = ("begin", "end")
 
-    ep=1e-9
-    def __init__(self,P,Q):
-        """2点 P, Q (P!=Q) を通る直線を生成する.
+    def __init__(self, P: Point, Q: Point):
+        """ 2 点 P, Q を通る直線を生成する.
 
-        P,Q: Point
+        Args:
+            P (Point): 始点
+            Q (Point): 終点
         """
-        assert P!=Q
-        self.begin=P
-        self.end=Q
-        self.id=4
+        assert P != Q
+        self.begin = P
+        self.end = Q
 
-    def __str__(self):
-        return "[Line] {}, {}".format(self.begin,self.end)
+    def __str__(self) -> str:
+        return f"[Line] {self.begin}, {self.end}"
 
-    __repr__=__str__
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({repr(self.begin)}, {repr(self.end)})"
 
-    def __eq__(self,other):
-        a=self.begin; b=self.end; c=other.begin; d=other.end
-        return (b-a).det(c-d)==0 and (b-a).det(c-a)==0
+    def __iter__(self):
+        yield self.begin
+        yield self.end
 
-    def __contains__(self,point):
-        return abs(iSP(self.begin,point,self.end))!=1
+    def __eq__(self, other: "Line") -> bool:
+        return (other.bein in self) and (other.end in self)
 
-    def vectorize(self):
-        return self.end-self.begin
+    def __contains__(self, point: Point) -> bool:
+        return abs(iSP(self.begin, point, self.end)) != 1
 
-    def counter_vectorize(self):
-        return self.begin-self.end
+    def vectorize(self) -> Point:
+        """ この直線の方向ベクトルを求める.
+
+        Returns:
+            Point: 方向ベクトル
+        """
+
+        return self.end - self.begin
+
+    def counter_vectorize(self) -> Point:
+        return self.begin - self.end
 
 #=== 生成
 def Line_from_General_Form(a,b,c):
@@ -128,9 +136,9 @@ def General_Form_from_Line(L, lattice=False):
     s=L.begin.x; t=L.begin.y
     v=L.vectorize(); alpha=v.x; beta=v.y
 
-    sgn=compare(beta,0,L.ep)
+    sgn=compare(beta,0)
     if sgn==0:
-        sgn=compare(-alpha,0,L.ep)
+        sgn=compare(-alpha,0)
 
     k=alpha*t-beta*s
     if lattice:
@@ -169,7 +177,7 @@ def has_Intersection_between_Line_and_Line(L,M):
     L,M: 直線
     """
 
-    return compare(L.vectorize().det(M.vectorize()),0,max(L.ep,M.ep))!=0
+    return not equal(L.vectorize().det(M.vectorize()), 0)
 
 #=== 交点を求める
 def Intersection_between_Line_and_Line(L,M,Mode=False):
@@ -216,7 +224,7 @@ def is_Parallel(L,M):
     """
 
     u=L.vectorize(); v=M.vectorize()
-    return compare(u.det(v),0,max(L.ep,M.ep))==0
+    return equal(u.det(v), 0)
 
 def is_Orthogonal(L,M):
     """2つの直線 (線分) L,M が直行するかどうかを判定する.
@@ -225,7 +233,7 @@ def is_Orthogonal(L,M):
     """
 
     u=L.vectorize(); v=M.vectorize()
-    return compare(u.dot(v),0,max(L.ep,M.ep))==0
+    return equal(u.dot(v), 0)
 
 #=== 点との距離
 def Distance_between_Point_and_Segment(P,L):
