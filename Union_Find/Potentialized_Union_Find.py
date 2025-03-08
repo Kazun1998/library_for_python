@@ -198,21 +198,18 @@ class Potentilized_Union_Find(Generic[G]):
 
         return all(self.is_valid(x) for x in range(self.n))
 
-    def is_forest(self, x):
+    def is_tree(self, x):
         """ 要素 x が属する族が森かどうかを判定する.
 
         x: 要素
         """
         return self.size(x)==self.edges[self.find(x)]+1
 
-    def is_tree(self, x: int) -> bool:
-        """ 要素 x が属する族が木かどうかを判定する.
-
-        Args:
-            x (int): 要素
+    def tree_count(self) -> int:
+        """ 木になっている族の数を計上する
 
         Returns:
-            bool: 木ならば True, そうでなければ False
+            int: 木になっている族の数
         """
 
         return sum(self.is_tree(g) for g in self.representative())
