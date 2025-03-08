@@ -38,6 +38,7 @@ class Sorted_Set(Generic[T]):
             K += 1
 
         self._buckets: list[list[T]] = [A[N * i // K: N * (i + 1) // K] for i in range(K)]
+        self._last : list[T] = [bucket[-1] for bucket in self._buckets]
 
     @property
     def N(self) -> int:
@@ -275,12 +276,12 @@ class Sorted_Set(Generic[T]):
 
     #=== previous, next
 
-    def previous(self, value: T, mode: bool = False) -> T | None:
+    def previous(self, value: T, equal: bool = False) -> T | None:
         """ value 未満の最大値を求める.
 
         Args:
             value (T): 閾値
-            mode (bool, optional): True にすると, "未満" が "以下"になる. Defaults to False.
+            equal (bool, optional): True にすると, "未満" が "以下"になる. Defaults to False.
 
         Returns:
             T | None: value 未満の最大値 (存在しない場合は None)
@@ -289,7 +290,7 @@ class Sorted_Set(Generic[T]):
         if self.is_empty():
             return None
 
-        if mode:
+        if equal:
             for A in reversed(self._buckets):
                 if A[0]<=value:
                     return A[bisect_right(A,value)-1]
@@ -298,7 +299,7 @@ class Sorted_Set(Generic[T]):
                 if A[0]<value:
                     return A[bisect_left(A,value)-1]
 
-    def next(self, value: T, mode: bool = False) -> T | None:
+    def next(self, value: T, equal: bool = False) -> T | None:
         """ value より大きい最小値を求める.
 
         Args:
@@ -312,7 +313,7 @@ class Sorted_Set(Generic[T]):
         if self.is_empty():
             return None
 
-        if mode:
+        if equal:
             for A in self._buckets:
                 if A[-1]>=value:
                     return A[bisect_left(A,value)]
