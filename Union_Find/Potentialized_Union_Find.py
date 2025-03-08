@@ -243,6 +243,15 @@ class Potentilized_Union_Find(Generic[G]):
             groups[self.find(x)].append(x)
         return groups
 
+    def group_list(self) -> list[int]:
+        """ 各要素について, その要素が属する族の代表元からなるリストを求める.
+
+        Returns:
+            list[int]: 第 x 要素は x が属する族の代表元.
+        """
+
+        return [self.find(x) for x in range(self.n)]
+
     def refresh(self):
         """ Union Find の情報を簡潔にする.
         """
