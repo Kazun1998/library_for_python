@@ -37,18 +37,18 @@ class Sorted_Set(Generic[T]):
         while self.BUCKET_RATIO * K * K < N:
             K += 1
 
-        self.list: list[list[T]] = [A[N * i // K: N * (i + 1) // K] for i in range(K)]
+        self._buckets: list[list[T]] = [A[N * i // K: N * (i + 1) // K] for i in range(K)]
 
     @property
     def N(self) -> int:
         return self._N
 
     def __iter__(self) -> Iterator[T]:
-        for A in self.list:
+        for A in self._buckets:
             yield from A
 
     def __reversed__(self) -> Iterator[T]:
-        for A in reversed(self.list):
+        for A in reversed(self._buckets):
             yield from reversed(A)
 
     def __len__(self) -> int:
@@ -72,7 +72,7 @@ class Sorted_Set(Generic[T]):
         return f"{self.__class__.__name__}({list(self)})"
 
     def __find_bucket(self, x):
-        for A in self.list:
+        for A in self._buckets:
             if x<=A[-1]:
                 return A
         else:
@@ -97,7 +97,7 @@ class Sorted_Set(Generic[T]):
         """
 
         if self.is_empty():
-            self.list=[[x]]
+            self._buckets=[[x]]
             self._N += 1
             return True
 
@@ -110,7 +110,7 @@ class Sorted_Set(Generic[T]):
         A.insert(i,x)
         self._N += 1
 
-        if len(A)>len(self.list)*self.REBUILD_RATIO:
+        if len(A)>len(self._buckets)*self.REBUILD_RATIO:
             self.__build()
         return True
 
@@ -161,7 +161,7 @@ class Sorted_Set(Generic[T]):
             if index<0:
                 raise IndexError("index out of range")
 
-        for A in self.list:
+        for A in self._buckets:
             if index<len(A):
                 return A[index]
             index-=len(A)
@@ -181,7 +181,7 @@ class Sorted_Set(Generic[T]):
         if self.is_empty():
             raise ValueError("This is empty set.")
 
-        return self.list[0][0]
+        return self._buckets[0][0]
 
     def pop_min(self) -> T:
         """ 最小値を削除し, その最小値を返り値とする.
@@ -196,7 +196,7 @@ class Sorted_Set(Generic[T]):
         if self.is_empty():
             raise ValueError("This is empty set.")
 
-        A=self.list[0]
+        A=self._buckets[0]
         value=A.pop(0)
         self._N -= 1
 
@@ -218,7 +218,7 @@ class Sorted_Set(Generic[T]):
         if self.is_empty():
             return ValueError("This is empty set.")
 
-        return self.list[-1][-1]
+        return self._buckets[-1][-1]
 
     def pop_max(self) -> T:
         """ 最大値を削除し, その最大値を返り値とする.
@@ -233,7 +233,7 @@ class Sorted_Set(Generic[T]):
         if self.is_empty():
             raise ValueError("This is empty set.")
 
-        A=self.list[-1]
+        A=self._buckets[-1]
         value=A.pop(-1)
         self._N -= 1
 
@@ -290,11 +290,11 @@ class Sorted_Set(Generic[T]):
             return None
 
         if mode:
-            for A in reversed(self.list):
+            for A in reversed(self._buckets):
                 if A[0]<=value:
                     return A[bisect_right(A,value)-1]
         else:
-            for A in reversed(self.list):
+            for A in reversed(self._buckets):
                 if A[0]<value:
                     return A[bisect_left(A,value)-1]
 
@@ -313,11 +313,11 @@ class Sorted_Set(Generic[T]):
             return None
 
         if mode:
-            for A in self.list:
+            for A in self._buckets:
                 if A[-1]>=value:
                     return A[bisect_left(A,value)]
         else:
-            for A in self.list:
+            for A in self._buckets:
                 if A[-1]>value:
                     return A[bisect_right(A,value)]
 
@@ -338,12 +338,12 @@ class Sorted_Set(Generic[T]):
 
         count=0
         if equal:
-            for A in self.list:
+            for A in self._buckets:
                 if A[-1]>value:
                     return count+bisect_right(A, value)
                 count+=len(A)
         else:
-            for A in self.list:
+            for A in self._buckets:
                 if A[-1]>=value:
                     return count+bisect_left(A, value)
                 count+=len(A)
@@ -377,7 +377,7 @@ class Sorted_Set(Generic[T]):
         if self.is_empty():
             return True
 
-        a=self.list[-1][-1]
+        a=self._buckets[-1][-1]
         return (a<x) or (bool(equal) and a==x)
 
     def is_lower_bound(self, x: T, equal: bool = True) -> bool:
@@ -394,7 +394,7 @@ class Sorted_Set(Generic[T]):
         if self.is_empty():
             return True
 
-        a=self.list[0][0]
+        a=self._buckets[0][0]
         return (x<a) or (bool(equal) and a==x)
 
 
@@ -413,7 +413,7 @@ class Sorted_Set(Generic[T]):
         """
 
         index=0
-        for A in self.list:
+        for A in self._buckets:
             if A[-1]>value:
                 i=bisect_left(A, value)
                 if A[i]==value:
