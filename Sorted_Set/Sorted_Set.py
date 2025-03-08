@@ -33,7 +33,7 @@ class Sorted_Set(Generic[T]):
             A = list(self)
 
         self._N = N = len(A)
-        K = 1
+        K = 0
         while self.BUCKET_RATIO * K * K < N:
             K += 1
 
@@ -67,25 +67,28 @@ class Sorted_Set(Generic[T]):
         return self.N == 0
 
     def __str__(self) -> str:
-        return str(set(self))
+        return f"{{{', '.join([str(x) for x in self])}}}"
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({list(self)})"
 
-    def __find_bucket(self, x):
-        for bucket in self._buckets:
-            if x <= bucket[-1]:
-                return bucket
-        else:
-            return bucket
+    def __find_bucket_index(self, x):
+        if self._last[-1] < x:
+            return len(self._last) -1
+
+        return bisect_left(self._last, x)
+
+    def _set_last(self, i: int, bucket: list[T]):
+        self._last[i] = bucket[-1]
 
     def __contains__(self, x: T) -> bool:
         if self.is_empty():
             return False
 
-        A=self.__find_bucket(x)
-        i=bisect_left(A,x)
-        return i!=len(A) and A[i]==x
+        i = self.__find_bucket_index(x)
+        A = self._buckets[i]
+        j = bisect_left(A, x)
+        return (j != len(A)) and (A[j] == x)
 
     def add(self, x: T) -> bool:
         """ 集合に要素 x を追加する.
@@ -99,20 +102,24 @@ class Sorted_Set(Generic[T]):
 
         if self.is_empty():
             self._buckets=[[x]]
+            self._last = [x]
             self._N += 1
             return True
 
-        A=self.__find_bucket(x)
-        i=bisect_left(A, x)
+        i = self.__find_bucket_index(x)
+        A = self._buckets[i]
+        j = bisect_left(A, x)
 
-        if i!=len(A) and A[i]==x:
+        if (j != len(A)) and (A[j] == x):
             return False # x が既に存在するので...
 
-        A.insert(i,x)
+        A.insert(j, x)
+        self._set_last(i, A)
         self._N += 1
 
         if len(A)>len(self._buckets)*self.REBUILD_RATIO:
             self.__build()
+
         return True
 
     def discard(self, x: T) -> bool:
@@ -128,16 +135,19 @@ class Sorted_Set(Generic[T]):
         if self.is_empty():
             return False
 
-        A=self.__find_bucket(x)
-        i=bisect_left(A, x)
+        i = self.__find_bucket_index(x)
+        A = self._buckets[i]
+        j = bisect_left(A, x)
 
-        if not(i!=len(A) and A[i]==x):
+        if not(j != len(A) and A[j] == x):
             return False # x が存在しないので...
 
-        A.pop(i)
+        A.pop(j)
         self._N -= 1
 
-        if len(A)==0:
+        if A:
+            self._set_last(i, A)
+        else:
             self.__build()
 
         return True
@@ -238,7 +248,9 @@ class Sorted_Set(Generic[T]):
         value=A.pop(-1)
         self._N -= 1
 
-        if len(A)==0:
+        if A:
+            self._set_last(len(self._buckets) - 1, A)
+        else:
             self.__build()
 
         return value
@@ -420,6 +432,6 @@ class Sorted_Set(Generic[T]):
                 if A[i]==value:
                     return index+i
                 else:
-                    raise ValueError("{} is not in Set".format(value))
+                    raise ValueError(f"{value} is not in Set")
             index+=len(A)
-        raise ValueError("{} is not in Set".format(value))
+        raise ValueError(f"{value} is not in Set")
