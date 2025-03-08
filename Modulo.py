@@ -1,55 +1,60 @@
-class Modulo():
-    __slots__=("a","n")
+class Modulo:
+    __slots__ = ("_a", "_n")
 
-    def __init__(self, a, n, mode=True):
+    @property
+    def a(self):
+        return self._a
+
+    @property
+    def n(self):
+        return self._n
+
+    def __init__(self, a: int, n: int, mode: bool = True):
         if mode:
-            a%=n
+            a %= n
 
-        self.a=a
-        self.n=n
+        self._a = a
+        self._n = n
 
     def __str__(self):
-        return "{} (mod {})".format(self.a, self.n)
+        return f"{self.a} (mod {self.n})"
 
     def __repr__(self):
-        return self.__str__()
+        return f"{self.__class__.__name__}({self.a}, {self.n})"
 
     #+,-
     def __pos__(self):
         return self
 
     def __neg__(self):
-        if self.a:
-            return Modulo(self.n-self.a, self.n,False)
-        else:
-            return  Modulo(0, self.n, False)
+        return Modulo(self.n - self.a, self.n, False) if self.a else Modulo(0, self.n, False)
 
     #等号,不等号
     def __eq__(self, other):
         if isinstance(other, Modulo):
-            return (self.a==other.a) and (self.n==other.n)
-        elif isinstance(other,int):
-            return (self.a-other)%self.n==0
+            return (self.a == other.a) and (self.n == other.n)
+        elif isinstance(other, int):
+            return (self.a - other) % self.n == 0
 
-    def __neq__(self,other):
-        return not(self==other)
+    def __neq__(self, other):
+        return not(self == other)
 
-    def __le__(self,other):
-        a,p=self.a,self.n
-        b,q=other.a,other.n
-        return (a-b)%q==0 and p%q==0
+    def __le__(self, other):
+        a, p = self.a, self.n
+        b, q = other.a, other.n
+        return (a - b) % q == 0 and p % q == 0
 
-    def __ge__(self,other):
-        return other<=self
+    def __ge__(self, other):
+        return other <= self
 
-    def __lt__(self,other):
-        return (self<=other) and (self!=other)
+    def __lt__(self, other):
+        return (self <= other) and (self != other)
 
-    def __gt__(self,other):
-        return (self>=other) and (self!=other)
+    def __gt__(self, other):
+        return (self >= other) and (self != other)
 
-    def __contains__(self,val):
-        return val%self.n==self.a
+    def __contains__(self, val):
+        return val % self.n == self.a
 
     #加法
     def __add__(self,other):
@@ -265,31 +270,36 @@ def Chinese_Remainder(X: Modulo):
 線形合同方程式関連
 """
 #法の合成
-def __modulo_composite__(p:Modulo, q:Modulo):
-    """2つの等式 x ≡ p.a (mod p.n), x ≡ q.a (mod q.n) をともに満たす x を全て求める.
+def __modulo_composite__(p: Modulo, q: Modulo) -> Modulo | None:
+    """ 2つの等式 x ≡ p.a (mod p.n), x ≡ q.a (mod q.n) をともに満たす x を全て求める.
+
+    Args:
+        p (Modulo):
+        q (Modulo):
+
+    Returns:
+        Modulo | None: 条件を満たすことが必要十分になる Modulo. 存在しない場合は None
     """
     from math import gcd
 
-    a,n=p.a,p.n
-    b,m=q.a,q.n
+    a, n = p.a, p.n
+    b, m = q.a, q.n
 
-    d=b-a
+    d = b - a
+    g = gcd(n, m)
 
-    g,h=n,m
-    while h:
-        g,h=h,g%h
-
-    if d%g:
+    if d % g:
         return None
-        #raise Modulo_Error("{}と{}は両立しません.".format(p,q))
 
-    n//=g;m//=g;d//=g
+    n //= g
+    m //= g
+    d //= g
 
     s = pow(n, -1, m)
 
-    return Modulo(a+(n*g)*d*s,n*m*g)
+    return Modulo(a + (n * g) * d * s, n * m *g)
 
-def Modulo_Composite(*X: Modulo):
+def Modulo_Composite(*X: Modulo) -> Modulo:
     """ N個の方程式 x ≡ a (mod n) を全て満たす x を mod の形で求める.
     """
     x=Modulo(0,1)
@@ -322,18 +332,26 @@ def Extended_Euclid(a: int, b: int):
     return (x, y, g)
 
 #1次合同方程式を解く
-def First_Order_Congruent_Equation(a: int, b: int, m: int):
-    """1次合同方程式 ax≡b (mod m) を求める.
+def First_Order_Congruent_Equation(a: int, b: int, m: int) -> Modulo:
+    """ 1次合同方程式 a x ≡ b (mod m) を求める.
 
-    a,b,m:整数
-    m!=0
+    Args:
+        a (int):
+        b (int):
+        m (int): m != 0
+
+    Returns:
+        Modulo: 条件を満たす X が存在しない場合は None.
     """
-    assert m
-    g=a; h=m
-    while h:
-        g, h = h, g % h
+    from math import gcd
 
-    if b%g:
+    if m == 0:
+        raise ValueError
+
+    g = gcd(a, m)
+
+    # 存在確認
+    if b % g:
         return None
 
     a, b, m = a // g, b // g, m // g
@@ -387,18 +405,22 @@ def Geometric_Sum(X, L, R):
 有限体の操作関連
 """
 #ルジャンドル記号
-def Legendre(X):
-    """ルジャンドル記号 (a/p) を返す.
+def Legendre(X: Modulo) -> int:
+    """ ルジャンドル記号 (a/p) を返す. ※ 法が素数のときのみ成立する.
 
-    ※法が素数のときのみ成立する.
+    Args:
+        X (Modulo):
+
+    Returns:
+        int:
+            X = 0 のときは 0
+            X が平方剰余のときは 1
+            X が平方非剰余のときは -1
     """
-
-    if X==0:
+    if 0 in X:
         return 0
-    elif pow(X,(X.n-1)//2)==1:
-        return 1
-    else:
-        return -1
+
+    return 1 if pow(X, (X.n - 1) // 2) == 1 else -1
 
 #根号
 def Sqrt(X, All=False):
@@ -461,15 +483,19 @@ def Sqrt(X, All=False):
         return r
 
 #離散対数
-def Discrete_Log(A, B, default = -1):
-    """ A^X=B (mod M) を満たす最小の非負整数 X を求める.
+def Discrete_Log(A: Modulo, B: Modulo | int, default: int = -1) -> int | None:
+    """ A^x ≡ B を満たす最小の非負整数 x を求める.
 
-    [入力]
-    A:底
-    B:
-    [出力]
-    A^X=B (mod M)を満たす非負整数 X が存在すればその中で最小のもの
-    存在しなければ default
+    Args:
+        A (Modulo): 底
+        B (Modulo | int): 真数
+        default (int, optional): 存在しないときの返り値. Defaults to -1.
+
+    Raises:
+        ValueError: A, B 共に Modulo のときは法を一致させなければならない.
+
+    Returns:
+        int | None: A^x ≡ B を満たす最小の非負整数 x (存在しない場合は default).
     """
 
     A, M = A.a, A.n
@@ -477,10 +503,11 @@ def Discrete_Log(A, B, default = -1):
     if isinstance(B, int):
         B %= M
     elif isinstance(B, Modulo):
-        assert M == B.n, "A, B の法が違います."
+        if M != B.n:
+            raise ValueError
         B = B.a % M
     else:
-        raise TypeError
+        raise NotImplementedError
 
     m = 0
     while m * m < M:
@@ -515,9 +542,17 @@ def Discrete_Log(A, B, default = -1):
 
     return default
 
-def Order(X):
-    """ X の位数を求める. つまり, X^k=[1] を満たす最小の正整数 k を求める.
+def Order(X: Modulo, defalut: int = -1) -> int:
+    """ X^k = 1 を満たす最小の正の整数 k を求める (存在しない場合は -1)
+
+    Args:
+        X (Modulo): 底
+        defalut (int, optional): 存在しない場合の値. Defaults to -1.
+
+    Returns:
+        int: X^k を満たす最小の k
     """
+
     phi=1
     N=X.n
 
@@ -565,7 +600,7 @@ def Order(X):
                 a=phi//k
         k+=1
 
-    return a
+    return a if a < float("inf") else defalut
 
 def Primitive_Root(p):
     """ Z/pZ 上の原始根を見つける
