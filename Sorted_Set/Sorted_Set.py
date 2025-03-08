@@ -28,7 +28,7 @@ class Sorted_Set(Generic[T]):
 
         self.__build(A)
 
-    def __build(self, A = None):
+    def __build(self, A: list = None):
         if A is None:
             A = list(self)
 
@@ -37,7 +37,7 @@ class Sorted_Set(Generic[T]):
         while self.BUCKET_RATIO * K * K < N:
             K += 1
 
-        self.list = [A[N * i // K: N * (i + 1) // K] for i in range(K)]
+        self.list: list[list[T]] = [A[N * i // K: N * (i + 1) // K] for i in range(K)]
 
     @property
     def N(self) -> int:
