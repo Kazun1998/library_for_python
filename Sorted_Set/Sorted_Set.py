@@ -73,11 +73,11 @@ class Sorted_Set(Generic[T]):
         return f"{self.__class__.__name__}({list(self)})"
 
     def __find_bucket(self, x):
-        for A in self._buckets:
-            if x<=A[-1]:
-                return A
+        for bucket in self._buckets:
+            if x <= bucket[-1]:
+                return bucket
         else:
-            return A
+            return bucket
 
     def __contains__(self, x: T) -> bool:
         if self.is_empty():
@@ -291,13 +291,13 @@ class Sorted_Set(Generic[T]):
             return None
 
         if equal:
-            for A in reversed(self._buckets):
-                if A[0]<=value:
-                    return A[bisect_right(A,value)-1]
+            for bucket in reversed(self._buckets):
+                if bucket[0] <= value:
+                    return bucket[bisect_right(bucket,value) - 1]
         else:
-            for A in reversed(self._buckets):
-                if A[0]<value:
-                    return A[bisect_left(A,value)-1]
+            for bucket in reversed(self._buckets):
+                if bucket[0] <value:
+                    return bucket[bisect_left(bucket, value) - 1]
 
     def next(self, value: T, equal: bool = False) -> T | None:
         """ value より大きい最小値を求める.
@@ -314,13 +314,13 @@ class Sorted_Set(Generic[T]):
             return None
 
         if equal:
-            for A in self._buckets:
-                if A[-1]>=value:
-                    return A[bisect_left(A,value)]
+            for bucket in self._buckets:
+                if bucket[-1] >= value:
+                    return bucket[bisect_left(bucket, value)]
         else:
-            for A in self._buckets:
-                if A[-1]>value:
-                    return A[bisect_right(A,value)]
+            for bucket in self._buckets:
+                if bucket[-1] > value:
+                    return bucket[bisect_right(bucket, value)]
 
     #=== count
     def less_count(self, value: T, equal: bool = False) -> int:
