@@ -1,4 +1,4 @@
-" Reference: https://qiita.com/tatyam/items/492c70ac4c955c055602"
+# Reference: https://qiita.com/tatyam/items/492c70ac4c955c055602
 # ※ 計算量が O(sqrt(N)) per query なので, 過度な期待はしないこと.
 
 from bisect import bisect_left, bisect_right
