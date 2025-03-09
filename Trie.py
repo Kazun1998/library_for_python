@@ -1,9 +1,14 @@
-class Trie_Node():
-    def __init__(self, item):
-        self.item=item
-        self.next={}
-        self.terminal_count=0
-        self.prefix_count=0
+from typing import TypeVar, Iterable, Generic
+
+T = TypeVar('T')
+class Trie_Node(Generic[T]):
+    __slots__ = ('_item', '_next', 'terminal_count', 'prefix_count')
+
+    def __init__(self, item: T | None):
+        self._item = item
+        self._next = {}
+        self.terminal_count = 0
+        self.prefix_count = 0
 
     def __str__(self):
         if self.terminal_count:
@@ -13,20 +18,28 @@ class Trie_Node():
 
     __repr__=__str__
 
-class Trie_Tree():
+    @property
+    def item(self):
+        return self._item
+
+    @property
+    def next(self):
+        return self._next
+
+class Trie_Tree(Generic[T]):
     def __init__(self):
         """ Trie 木を生成する."""
 
-        self.nodes=[Trie_Node(None)]
+        self.nodes = [Trie_Node(None)]
 
-    def insert(self, S):
+    def insert(self, S: Iterable[T]):
         """ 列 S を登録する.
 
         S: 列
         """
         return self.insert_continuation(S)
 
-    def insert_continuation(self, S, start_id=0):
+    def insert_continuation(self, S: Iterable[T], start_id: int = 0):
         """ 列 S を登録する. ただし, 登録の場所は start_id から始まるとする.
 
         S: 列
@@ -43,14 +56,14 @@ class Trie_Tree():
             nodes[node_id].prefix_count+=1
         nodes[node_id].terminal_count+=1
 
-    def count(self, S):
+    def count(self, S: Iterable[T]) -> int:
         """ 列 S の数を求める.
 
         S: 列
         """
         return self.count_continuation(S)
 
-    def count_continuation(self,S,start_id=0):
+    def count_continuation(self, S: Iterable[T], start_id = 0) -> int:
         """ 列 S の数を数える. ただし, 検索の場所は start_id から始まるとする.
 
         S: 列
@@ -64,14 +77,14 @@ class Trie_Tree():
             node_id=nodes[node_id].next[x]
         return nodes[node_id].terminal_count
 
-    def search(self, S):
+    def search(self, S: Iterable[T]) -> bool:
         """ 列 S が存在するかどうかを判定する.
 
         S: 列
         """
         return self.count(S)>0
 
-    def search_continuation(self,S,start_id=0):
+    def search_continuation(self, S: Iterable[T], start_id = 0) -> bool:
         """ 列 S が存在するかどうかを判定する. ただし, 検索の場所は start_id から始まるとする.
 
         S: 列
@@ -79,14 +92,14 @@ class Trie_Tree():
         """
         return self.count_continuation(S, start_id)>0
 
-    def search_prefix(self, S):
+    def search_prefix(self, S: Iterable[T]) -> bool:
         """ S を prefix に持つ列が存在するかどうかを判定する.
 
         S: 列
         """
         return self.search_prefix_continuation(S)
 
-    def search_prefix_continuation(self, S, start_id=0):
+    def search_prefix_continuation(self, S: Iterable[T], start_id: int = 0) -> bool:
         """ S を prefix に持つ列が存在するかどうかを判定する. ただし, 検索の場所は start_id から始まるとする.
 
         S: 列
@@ -100,21 +113,21 @@ class Trie_Tree():
             node_id=nodes[node_id].next[x]
         return True
 
-    def __contains__(self, S):
+    def __contains__(self, S: Iterable[T]) -> bool:
         """ 列 S が存在するかどうかを判定する.
 
         S: 列
         """
         return self.search(S)
 
-    def count_prefixing(self, S, equal=True):
+    def count_prefixing(self, S: Iterable[T], equal: bool = True) -> int:
         """ S が prefix になるような列 (前 |S| 項が S に一致する列) の数を求める.
 
         S: 列
         """
         return self.count_prefixing_continuation(S, equal)
 
-    def count_prefixing_continuation(self, S, equal = True, start_id=0):
+    def count_prefixing_continuation(self, S: Iterable[T], equal: bool = True, start_id: int = 0) -> int:
         """ S が prefix になるような列の数を求める. ただし, 検索の場所は start_id から始まるとする.
 
         S: 列
@@ -134,7 +147,7 @@ class Trie_Tree():
         else:
             return N.prefix_count - N.terminal_count
 
-    def count_prefixed(self, S, equal=True):
+    def count_prefixed(self, S: Iterable[T], equal: bool = True) -> int:
         """ S を prefix にする列 (S=(S[0],...,S[k-1]) としたときのある t における S'=(S[0],...,S[t-1]) ) の数を求める.
 
         S: 列
@@ -154,17 +167,17 @@ class Trie_Tree():
         else:
             return count-N.terminal_count
 
-    def count_all(self):
+    def count_all(self) -> int:
         """ 登録されている列の個数を求める.
         """
         return self.nodes[0].prefix_count
 
-    def size(self):
+    def size(self) -> int:
         """ トライ木における頂点数を求める.
         """
         return len(self.nodes)
 
-    def prefix_node_id(self,S):
+    def prefix_node_id(self, S: Iterable[T]) -> int:
         """ S が prefix になるのを担う頂点の番号を求める (存在しない場合 -1)
 
         S: 列
