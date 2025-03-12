@@ -953,7 +953,46 @@ class Tree:
         dist_sum = sum(self.distance(S[i], S[i + 1]) for i in range(K - 1))
         return (dist_sum + self.distance(S[-1], S[0])) // 2
 
-#=================================================
+    def subtree_hash(self, primes: list[int] = None, seed : list[int] = None, compress: bool = False) -> list:
+        if primes is None:
+            primes = [10 ** 9 + 7, 10 ** 9 + 9]
+
+        if seed is None:
+            from random import randint
+            r = (1 << 63) - 1
+            seed = [randint(0, r) for _ in range(self.N)]
+
+        def build(p: int):
+            h = [1] * self.N
+            height = [0] * self.N
+
+            for x in self.bottom_up():
+                # 高さ更新
+                height[x] = max((height[y] + 1 for y in self.children[x]), default = 0)
+
+                # hash 計算
+                a = seed[height[x]]
+                for y in self.children[x]:
+                    h[x] = h[x] * (a + h[y]) % p
+
+            return h
+
+        if not compress:
+            return list(zip(*[build(p) for p in primes]))
+
+        primes_prod = [1] * len(primes)
+        for i in range(len(primes_prod) - 1):
+            primes_prod[i + 1] = primes_prod[i] * primes[i]
+
+        def hash_compress(h):
+            k = 0
+            for i in range(len(primes)):
+                k = k * primes_prod[i] + h[i]
+            return k
+
+        return [hash_compress(h) for h in zip(*[build(p) for p in primes])]
+
+#==================================================
 def Spanning_Tree(N,E,root,index=0,exclude=False):
     """ 連結なグラフから全域木をつくる.
 
