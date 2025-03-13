@@ -25,15 +25,15 @@ data:
     write=sys.stdout.write\n\n#==================================================\n\
     def verify():\n    N,M=map(int,input().split())\n    S=Strongly_Connected_Components(N)\n\
     \    for _ in range(M):\n        a,b=map(int,input().split())\n        S.add_arc(a,b)\n\
-    \n    X=S.decomposition()\n    print(len(X))\n    for C in X:\n        write(\"\
-    {} {}\\n\".format(len(C),\" \".join(map(str,C))))\n#==================================================\n\
+    \n    S.decomposition()\n    print(len(S.components))\n    for component in S.components:\n\
+    \        write(f\"{len(component)} {' '.join(map(str, component))}\\n\")\n\n#==================================================\n\
     verify()\n"
   dependsOn:
   - Strongly_Connected_Components.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py
   requiredBy: []
-  timestamp: '2023-01-08 21:36:08+09:00'
+  timestamp: '2025-03-13 23:55:26+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py
