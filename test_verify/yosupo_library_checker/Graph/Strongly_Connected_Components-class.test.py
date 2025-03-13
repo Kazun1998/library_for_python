@@ -15,9 +15,10 @@ def verify():
         a,b=map(int,input().split())
         S.add_arc(a,b)
 
-    X=S.decomposition()
-    print(len(X))
-    for C in X:
-        write("{} {}\n".format(len(C)," ".join(map(str,C))))
+    S.decomposition()
+    print(len(S.components))
+    for component in S.components:
+        write(f"{len(component)} {' '.join(map(str, component))}\n")
+
 #==================================================
 verify()
