@@ -14,44 +14,58 @@ data:
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.13.2/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Topological_Sort:\n    __slots__=(\"N\",\"__arc\",\"__rev\", \"__reflexive\"\
-    )\n    def __init__(self, N: int, reflexive=False):\n        \"\"\" N \u9802\u70B9\
-    \u304B\u3089\u306A\u308B\u7A7A\u30B0\u30E9\u30D5\u3092\u751F\u6210\u3059\u308B\
-    .\n\n        N: \u9802\u70B9\u6570\n        reflexive: \u81EA\u5DF1\u30EB\u30FC\
-    \u30D7\u306E\u8FFD\u52A0\u3092\u8A8D\u3081\u308B\u304B? (False \u306E\u5834\u5408\
-    \u306F\u81EA\u5DF1\u30EB\u30FC\u30D7\u306F\u81EA\u52D5\u7684\u306B\u53D6\u308A\
-    \u9664\u304B\u308C\u308B.)\n        \"\"\"\n\n        self.N=N\n        self.__arc=[[]\
+  code: "class Topological_Sort:\n    __slots__=(\"__arc\", \"__rev\", \"__reflexive\"\
+    , \"__is_DAG\", \"__order\")\n\n    def __init__(self, N: int, reflexive: bool\
+    \ = False):\n        \"\"\" N \u9802\u70B9\u304B\u3089\u306A\u308B\u6709\u5411\
+    \u7A7A\u30B0\u30E9\u30D5\u3092\u751F\u6210\u3059\u308B.\n\n        Args:\n   \
+    \         N (int): \u9802\u70B9\u6570\n            reflexive (bool, optional):\
+    \ True \u306B\u3059\u308B\u3068, \u81EA\u5DF1\u30EB\u30FC\u30D7\u306E\u8FFD\u52A0\
+    \u3092\u8A8D\u3081\u308B. Defaults to False.\n        \"\"\"\n\n        self.__arc=[[]\
     \ for _ in  range(N)]\n        self.__rev=[[] for _ in range(N)]\n        self.__reflexive=reflexive\n\
-    \n    def add_arc(self, source: int, target: int):\n        \"\"\" \u6709\u5411\
-    \u8FBA source -> target \u3092\u8FFD\u52A0\u3059\u308B.\n\n        source: \u59CB\
-    \u70B9\n        target: \u7D42\u70B9\n        \"\"\"\n\n        if source==target\
-    \ and (not self.__reflexive):\n            return\n\n        self.__arc[source].append(target)\n\
-    \        self.__rev[target].append(source)\n\n    def add_vertex(self):\n    \
-    \    res=self.N\n        self.N+=1\n        self.__arc.append([])\n        self.__rev.append([])\n\
-    \        return res\n\n    def add_arc_multiple(self, sources, targets):\n   \
-    \     v=self.add_vertex()\n        for u in sources:\n            self.add_arc(u,v)\n\
-    \n        for w in targets:\n            self.add_arc(v,w)\n\n        return v\n\
-    \n    def sort(self):\n        \"\"\" \u30C8\u30DD\u30ED\u30B8\u30AB\u30EB\u30BD\
-    \u30FC\u30C8\u3092\u6C42\u3081\u308B\n\n        \u5B58\u5728\u3059\u308B\u306A\
-    \u3089\u3070\u30C8\u30DD\u30ED\u30B8\u30AB\u30EB\u30BD\u30FC\u30C8\u3092\u3057\
-    \u305F\u30EA\u30B9\u30C8, \u5B58\u5728\u3057\u306A\u3044\u306A\u3089\u3070 None\n\
-    \        \"\"\"\n\n        in_deg=[len(self.__rev[x]) for x in range(self.N)]\n\
-    \        Q=[x for x in range(self.N) if in_deg[x]==0]\n\n        S=[]\n      \
-    \  while Q:\n            u=Q.pop()\n            S.append(u)\n\n            for\
-    \ v in self.__arc[u]:\n                in_deg[v]-=1\n                if in_deg[v]==0:\n\
-    \                    Q.append(v)\n\n        return S if len(S)==self.N else None\n\
-    \n    def is_DAG(self):\n        \"\"\" DAG \u304C\u3069\u3046\u304B\u3092\u5224\
-    \u5B9A\u3059\u308B\n\n        DAG \u306A\u3089\u3070 True, \u975E DAG \u306A\u3089\
-    \u3070 False\n        \"\"\"\n\n        in_deg=[len(self.__rev[x]) for x in range(self.N)]\n\
-    \        Q=[x for x in range(self.N) if in_deg[x]==0]\n\n        K=0\n       \
-    \ while Q:\n            u=Q.pop()\n            K+=1\n\n            for v in self.__arc[u]:\n\
-    \                in_deg[v]-=1\n                if in_deg[v]==0:\n            \
-    \        Q.append(v)\n\n        return K==self.N\n"
+    \n    @property\n    def N(self):\n        return len(self.__arc)\n\n    @property\n\
+    \    def reflexive(self):\n        return self.__reflexive\n\n    def add_arc(self,\
+    \ source: int, target: int):\n        \"\"\" source \u304B\u3089 target \u3078\
+    \u306E\u5F27\u3092\u8FFD\u52A0\u3059\u308B.\n\n        Args:\n            source\
+    \ (int): \u59CB\u70B9\n            target (int): \u7D42\u70B9\n        \"\"\"\n\
+    \n        # \u81EA\u5DF1\u30EB\u30FC\u30D7\u3092\u8A8D\u3081\u306A\u3044\u5834\
+    \u5408\u306E source == target \u306E\u3068\u304D\u306F\u68C4\u5374\u3059\u308B\
+    .\n        if source == target and (not self.reflexive):\n            return\n\
+    \n        self.__arc[source].append(target)\n        self.__rev[target].append(source)\n\
+    \n    def add_vertex(self) -> int:\n        \"\"\" 1 \u9802\u70B9\u8FFD\u52A0\n\
+    \n        Returns:\n            int: \u8FFD\u52A0\u3055\u308C\u305F\u9802\u70B9\
+    \u306E\u9802\u70B9\u756A\u53F7\n        \"\"\"\n\n        self.__arc.append([])\n\
+    \        self.__rev.append([])\n        return self.N - 1\n\n    def add_arc_multiple(self,\
+    \ sources: list[int], targets: list[int]) -> int:\n        \"\"\" \u4EFB\u610F\
+    \u306E s in sources, t in targets \u306B\u5BFE\u3057\u3066, s \u304B\u3089 t \u3078\
+    \u306E\u5F27\u3092\u4F5C\u6210\u3059\u308B (\u4EEE\u60F3\u7684\u306B 1 \u9802\u70B9\
+    \u3092\u8FFD\u52A0\u3059\u308B).\n\n        Args:\n            sources (list[int]):\
+    \ \u59CB\u70B9\u306E\u30EA\u30B9\u30C8\n            targets (list[int]): \u7D42\
+    \u70B9\u306E\u30EA\u30B9\u30C8\n\n        Returns:\n            int: \u8D85\u9802\
+    \u70B9\u3068\u3057\u3066\u8FFD\u52A0\u3055\u308C\u305F\u9802\u70B9\u306E\u756A\
+    \u53F7\n        \"\"\"\n\n        # \u65B9\u91DD\n        # (1) \u8D85\u9802\u70B9\
+    \ x \u3092\u8FFD\u52A0\u3059\u308B.\n        # (2) \u4EFB\u610F\u306E s in sources\
+    \ \u306B\u5BFE\u3057\u3066, \u5F27 sx \u3092\u8FFD\u52A0\u3059\u308B.\n      \
+    \  # (3) \u4EFB\u610F\u306E t in targets \u306B\u5BFE\u3057\u3066, \u5F27 xt \u3092\
+    \u8FFD\u52A0\u3059\u308B.\n        # \u3053\u306E\u3088\u3046\u306B\u3059\u308B\
+    \u3053\u3068\u3067, \u8FFD\u52A0\u3059\u308B\u5F27\u306E\u6570\u3092 |sources|\
+    \ x |targets| \u304B\u3089 |sources| + |targets| \u306B\u843D\u3068\u305B\u308B\
+    .\n\n        x = self.add_vertex()\n        for s in sources:\n            self.add_arc(s,\
+    \ x)\n\n        for t in targets:\n            self.add_arc(x, t)\n\n    def calculate(self):\n\
+    \        \"\"\" DAG \u306B\u95A2\u3059\u308B\u8A08\u7B97\u3092\u884C\u3046.\n\
+    \        \"\"\"\n\n        in_deg = [len(self.__rev[x]) for x in range(self.N)]\n\
+    \        order = []\n        stack = [x for x in range(self.N) if in_deg[x] ==\
+    \ 0]\n\n        while stack:\n            x = stack.pop()\n            order.append(x)\n\
+    \n            for y in self.__arc[x]:\n                in_deg[y] -= 1\n      \
+    \          if in_deg[y] == 0:\n                    stack.append(y)\n\n       \
+    \ if len(order) == self.N:\n            self.__is_DAG = True\n            self.__order\
+    \ = order\n        else:\n            self.__is_DAG = False\n            self.__order\
+    \ = None\n\n    @property\n    def is_DAG(self):\n        return self.__is_DAG\n\
+    \n    @property\n    def order(self):\n        return self.__order\n"
   dependsOn: []
   isVerificationFile: false
   path: Topological_Sort.py
   requiredBy: []
-  timestamp: '2023-05-03 17:38:58+09:00'
+  timestamp: '2025-03-14 00:26:13+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Topological_Sort.py

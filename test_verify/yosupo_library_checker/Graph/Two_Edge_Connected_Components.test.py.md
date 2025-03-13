@@ -33,8 +33,8 @@ data:
     \    write(\"\\n\".join(map(writer, comps)))\n\n#==================================================\n\
     verify()\n"
   dependsOn:
-  - Graph/Graph/Graph.py
   - Graph/Graph/LowLink.py
+  - Graph/Graph/Graph.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Graph/Two_Edge_Connected_Components.test.py
   requiredBy: []
