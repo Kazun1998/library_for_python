@@ -182,50 +182,52 @@ class Permutation:
         return [list[self.__ind[i]] for i in range(self.N)]
 
 
-    def order(self, mod=None):
+    def order(self, mod: int = None) -> int:
         """ 位数を求める (mod を指定すると, mod で割った余りになる).
 
+        Args:
+            mod (int, optional): 指定すると, 出力が mod で割った余りになる. Defaults to None.
+
+        Returns:
+            int: 位数
         """
 
-        from math import gcd
-
-        if mod==None:
-            x=1
-            for m in self.cycle_division():
-                g=gcd(x,len(m))
-                x=(x//g)*len(m)
+        if mod is None:
+            from math import lcm
+            x = 1
+            for cycle in self.cycle_division():
+                x = lcm(x, len(cycle))
             return x
-        else:
-            def factor(n):
-                e=(n&(-n)).bit_length()-1
-                yield 2,e
 
-                n>>=e
+        def factor(n):
+            e = (n & (-n)).bit_length() - 1
+            yield 2, e
 
-                p=3
-                while p*p<=n:
-                    if n%p==0:
-                        e=0
-                        while n%p==0:
-                            n//=p
-                            e+=1
-                        yield p,e
-                    p+=2
+            n >>= e
 
-                if n>1:
-                    yield n,1
-                return
+            p = 3
+            while p * p <= n:
+                if n % p == 0:
+                    e = 0
+                    while n % p == 0:
+                        n //= p
+                        e += 1
+                    yield p, e
+                p += 2
 
-            T={}
-            for m in self.cycle_division():
-                for p,e in factor(len(m)):
-                    T[p]=max(T.get(p,0), e)
+            if n > 1:
+                yield n, 1
 
-            x=1
-            for p in T:
-                x*=pow(p, T[p], mod)
-                x%=mod
-            return x
+        power = {}
+        for cycle in self.cycle_division():
+            for p, e in factor(len(cycle)):
+                power[p] = max(power.get(p, 0), e)
+
+        x=1
+        for p, e in power.items():
+            x *= pow(p, e, mod)
+            x %= mod
+        return x
 
     def conjugate(self) -> "Permutation":
         """ 共役の互換を求める.
