@@ -176,8 +176,18 @@ class Permutation:
 
         return cycles
 
-    def operate_list(self, list):
-        assert self.N==len(list),"置換の長さとリストの長さが違います."
+    def operate_list(self, list: list) -> list:
+        """ 置換をリストに作用させる.
+
+        Args:
+            list (list): 作用先のリスト
+
+        Returns:
+            list: 作用後のリスト
+        """
+
+        if len(self) != len(list):
+            raise ValueError("置換の長さとリストの長さが違います.")
 
         return [list[self.__ind[i]] for i in range(self.N)]
 
