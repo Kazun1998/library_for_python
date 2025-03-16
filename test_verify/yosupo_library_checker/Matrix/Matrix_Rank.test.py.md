@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: Modulo_Matrix/Modulo_Matrix.py
     title: Modulo_Matrix
   _extendedRequiredBy: []
@@ -32,7 +32,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
   requiredBy: []
-  timestamp: '2024-12-06 01:02:56+09:00'
+  timestamp: '2025-02-24 11:37:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py

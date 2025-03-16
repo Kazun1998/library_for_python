@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: Modulo_Matrix/Modulo_Matrix.py
     title: Modulo_Matrix
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/pow_of_matrix
     links:
@@ -32,8 +32,8 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Matrix/Power.test.py
   requiredBy: []
-  timestamp: '2024-12-06 01:02:56+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2025-02-24 11:37:33+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Matrix/Power.test.py
 layout: document
