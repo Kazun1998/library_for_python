@@ -2,7 +2,7 @@ from Modulo_Matrix import *
 from Modulo_Vector import *
 
 class Modulo_Vector_Space:
-    def __init__(self, n: int):
+    def __init__(self, n: int, *vectors: "Modulo_Vector"):
         """ n 次元の F 係数数ベクトル空間を生成する. 最初はゼロ空間.
 
         Args:
@@ -11,7 +11,9 @@ class Modulo_Vector_Space:
 
         self.__n = n
         self.basis: list[Modulo_Vector] = []
-        self.__ind = []
+        self.__ind: list[int] = []
+
+        self.add_vectors(*vectors)
 
     @property
     def n(self):
@@ -58,6 +60,18 @@ class Modulo_Vector_Space:
         for i, u in zip(self.__ind, self.basis):
             v -= v[i] * u
         return v
+
+    def __str__(self):
+        if self.basis:
+            return f"dimention: {self.n}, basis: {', '.join(map(str, self.basis))}"
+        else:
+            return f"dimention: {self.n}, basis: (empty)"
+
+    def __repr__(self):
+        if self.basis:
+            return f"{self.__class__.__name__}({self.n}, {', '.join(map(repr, self.basis))})"
+        else:
+            return f"{self.__class__.__name__}({self.n})"
 
 #====================
 def Overall(n: int) -> Modulo_Vector_Space:
@@ -206,3 +220,31 @@ def Linear_System_Equations(A: Modulo_Matrix, b: Modulo_Vector) -> tuple[Modulo_
         for j in range(rnk):
             ker[i][p[j]]=-T[j][q[i]]%Mod
     return x,ker
+
+def Intersection(*V: Modulo_Vector_Space) -> Modulo_Vector_Space:
+    """ 共通部分のベクトル空間を求める.
+
+    Args:
+        V (Modulo_Vector_Space): 共通部分を求めるベクトル空間 (すべてのベクトル空間が属するベクトルのサイズが一致していなくてはならない)
+
+    Returns:
+        Modulo_Vector_Space: 共通部分を求めるベクトル空間
+    """
+
+    n = V[0].n
+    Y = Overall(n)
+
+    for X in V:
+        s = Y.dimension()
+
+        Z = Modulo_Vector_Space(n)
+        for b in Kernel_Space(Vectoric_Matrix(Y.basis + X.basis, column = True)).basis:
+            x = sum((b[i] * Y.basis[i] for i in range(s)), start = Zero_Vector(n))
+            Z.add_vectors(x)
+
+            if len(Z.basis) >= s:
+                break
+
+        Y = Z
+
+    return Y
