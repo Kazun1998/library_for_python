@@ -15,7 +15,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
     title: test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Matrix/Power.test.py
     title: test_verify/yosupo_library_checker/Matrix/Power.test.py
   - icon: ':x:'
