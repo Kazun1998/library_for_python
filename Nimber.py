@@ -14,7 +14,16 @@ class Nimber:
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.__x})"
 
+    def __pos__(self) -> "Nimber":
+        return Nimber(self.__x)
+
+    def __neg__(self) -> "Nimber":
+        return Nimber(self.__x)
+
     def __add__(self, other: "Nimber") -> "Nimber":
+        return Nimber(self.__x ^ other.__x)
+
+    def __sub__(self, other: "Nimber") -> "Nimber":
         return Nimber(self.__x ^ other.__x)
 
     def __mul__(self, other: "Nimber") -> "Nimber":
@@ -44,6 +53,9 @@ class Nimber:
             cls.__SMALL_NIM_PRODUCT_MEMO[x][y] = res
 
         return res
+
+    def __truediv__(self, other: "Nimber") -> "Nimber":
+        return self * other.inverse()
 
     @staticmethod
     def __floor_log(x: int) -> int:
