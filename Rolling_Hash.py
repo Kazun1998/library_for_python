@@ -1,7 +1,15 @@
-class Rolling_Hash():
-    def __init__(self,S, base, mod, hash_function = None):
-        """ 文字列 S に対する Rolling Hash を求める.
+from typing import TypeVar, Generic, Iterable, Callable
 
+T = TypeVar('T')
+class Rolling_Hash(Generic[T]):
+    def __init__(self, S: Iterable[T], base: int, mod: int, hash_function: Callable[[T], int] = None):
+        """ 列 S に対する Rolling Hash を生成する.
+
+        Args:
+            S (Iterable[T]): T の列
+            base (int): Rolling Hashの元となる底
+            mod (int): Rolling Hash の剰余
+            hash_function (Callable[[T], int] | None, optional): 各 x in T におけるハッシュ値. None のときは恒等関数になる. Defaults to None.
         """
 
         self.mod = mod
@@ -19,37 +27,46 @@ class Rolling_Hash():
         for i in range(length):
             power[i + 1] = base * power[i] % mod
 
-    def __hasher(self, X):
+    def __hasher(self, X: Iterable[T]) -> int:
         assert len(X)<=len(self)
         h=0
         for i in range(len(X)):
             h = (h * self.base + self.hash_function(X[i])) % self.mod
         return h
 
-    def get(self, l, r):
-        return (self.hash[r]-self.hash[l]*self.power[r-l])%self.mod
+    def get(self, l: int, r: int) -> int:
+        """ 連続部分列 [l, r) に関するハッシュ値を求める.
 
-    def count(self, T, start=0):
-        alpha=self.__hasher(T)
+        Args:
+            l (int): 左端 (閉区間)
+            r (int): 右端 (開区間)
+
+        Returns:
+            int: ハッシュ値
+        """
+        return (self.hash[r] - self.hash[l] * self.power[r - l]) % self.mod
+
+    def count(self, T: int, start: int = 0) -> int:
+        alpha = self.__hasher(T)
         return len([i for i in range(start, len(self) - len(T) + 1) if self[i: i + len(T)] == alpha])
 
-    def find(self, T, start=0):
-        alpha=self.__hasher(T)
+    def find(self, T: Iterable[T], start: int = 0) -> int:
+        alpha = self.__hasher(T)
 
-        for i in range(start, len(self)-len(T)+1):
-            if alpha==self[i: i+len(T)]:
+        for i in range(start, len(self) - len(T) + 1):
+            if alpha == self[i: i + len(T)]:
                 return i
         return -1
 
-    def rfind(self, T, start=0):
-        alpha=self.__hasher(T)
+    def rfind(self, T: Iterable[T], start: int = 0) -> int:
+        alpha = self.__hasher(T)
 
-        for i in range(len(self)-len(T), start-1, -1):
-            if alpha==self[i: i+len(T)]:
+        for i in range(len(self) - len(T), start - 1, -1):
+            if alpha == self[i: i + len(T)]:
                 return i
         return -1
 
-    def index(self, T, start=0):
+    def index(self, T: Iterable[T], start: int = 0) -> int:
         ind = self.find(T, start)
         if ind == -1:
             raise ValueError("substring not found")
@@ -71,10 +88,10 @@ class Rolling_Hash():
                 R+=len(self)
             return self.get(L,R)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.length
 
-    def docking(self, l0, r0, l1, r1):
+    def docking(self, l0: int, r0: int, l1: int, r1: int) -> int:
         """ [l0, r0) と [l1, r1) の部分列をドッキングしたハッシュを返す.
         """
 
@@ -82,26 +99,43 @@ class Rolling_Hash():
         return (h0*self.power[r1-l1]+h1)%self.mod
 
 #=================================================
-class Double_Rolling_Hash():
-    def __init__(self, S, base, mod0, mod1, hash_function = None):
+class Double_Rolling_Hash(Generic[T]):
+    def __init__(self, S: Iterable[T], base: int, mod0: int, mod1: int, hash_function: Callable[[T], int] = None):
         self.__length=len(S)
         self.__base=base
         self.__mod0=mod0
         self.__mod1=mod1
         self.hash_function = hash_function
 
-        self.rh0=Rolling_Hash(S, base, mod0, hash_function)
-        self.rh1=Rolling_Hash(S, base, mod1, hash_function)
+        self.rh0=Rolling_Hash[T](S, base, mod0, hash_function)
+        self.rh1=Rolling_Hash[T](S, base, mod1, hash_function)
 
-    def encode(self, a0, a1):
-        return a0*self.__mod1+a1
+    def encode(self, a0: int, a1: int) -> int:
+        """ mod0 に対するハッシュ値 a0 と mod1 に対するハッシュ値からの混合ハッシュ値を求める.
 
-    def get(self, l, r):
-        a0=self.rh0.get(l,r)
-        a1=self.rh1.get(l,r)
-        return self.encode(a0,a1)
+        Args:
+            a0 (int): mod0 に対するハッシュ値
+            a1 (int): mod1 に対するハッシュ値
 
-    def __hasher(self, X):
+        Returns:
+            int: 混合ハッシュ値
+        """
+        return a0 * self.__mod1 + a1
+
+    def get(self, l: int, r: int) -> int:
+        """ 連続部分列 [l, r) に関するハッシュ値を求める.
+
+        Args:
+            l (int): 左端 (閉区間)
+            r (int): 右端 (開区間)
+
+        Returns:
+            int: ハッシュ値
+        """
+
+        return self.encode(self.rh0.get(l, r), self.rh1.get(l, r))
+
+    def __hasher(self, X: Iterable[T]) -> int:
         assert len(X)<=len(self)
         a0=0; a1=0
         for x in X:
@@ -125,11 +159,11 @@ class Double_Rolling_Hash():
                 R+=len(self)
             return self.encode(self.rh0[L: R], self.rh1[L: R])
 
-    def count(self, T, start=0):
+    def count(self, T: Iterable[T], start: int = 0) -> int:
         alpha=self.__hasher(T)
         return len([i for i in range(start, len(self) - len(T) + 1) if self[i: i + len(T)] == alpha])
 
-    def find(self, T, start=0):
+    def find(self, T: Iterable[T], start: int = 0) -> int:
         alpha=self.__hasher(T)
 
         for i in range(start, len(self)-len(T)+1):
@@ -137,7 +171,7 @@ class Double_Rolling_Hash():
                 return i
         return -1
 
-    def rfind(self, T, start=0):
+    def rfind(self, T: Iterable[T], start: int = 0) -> int:
         alpha=self.__hasher(T)
 
         for i in range(len(self)-len(T), start-1, -1):
@@ -145,16 +179,16 @@ class Double_Rolling_Hash():
                 return i
         return -1
 
-    def index(self, T, start=0):
+    def index(self, T: Iterable[T], start: int = 0) -> int:
         ind = self.find(T, start)
         if ind == -1:
             raise ValueError("substring not found")
         return ind
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.__length
 
-    def docking(self, l0, r0, l1, r1):
+    def docking(self, l0: int, r0: int, l1: int, r1: int) -> int:
         """ ranges: tuple (l,r) からなるリスト, i 番目の (l,r) は部分列 [l,r) を意味する.
         """
 
