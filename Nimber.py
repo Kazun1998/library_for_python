@@ -5,6 +5,9 @@ class Nimber:
 
         self.__x = x
 
+    def __eq__(self, other: "Nimber") -> bool:
+        return self.__x == other.__x
+
     def __str__(self) -> str:
         return str(self.__x)
 
@@ -64,3 +67,42 @@ class Nimber:
 
     def __hash__(self) -> int:
         return hash(self.__x)
+
+    @classmethod
+    def __square_calc(cls, x: int, lv: int) -> int:
+        if lv <= 3 and cls.__SMALL_NIM_PRODUCT_MEMO[x][x] != -1:
+            return cls.__SMALL_NIM_PRODUCT_MEMO[x][x]
+
+        x1, x0 = cls.separate(x, lv)
+
+        x1_square = cls.__square_calc(x1, lv - 1)
+        x0_square = cls.__square_calc(x0, lv - 1)
+        e = 1 << (1 << (lv - 1))
+
+        res = (x1_square * e) ^ cls.__mul_calc(cls.__mul_calc(x1, x1, lv - 1), e >> 1, lv - 1) ^ x0_square
+        if lv <= 3:
+            cls.__SMALL_NIM_PRODUCT_MEMO[x][x] = res
+
+        return res
+
+    def square(self) -> "Nimber":
+        """ 自分自身の自乗を求める.
+
+        Returns:
+            Nimber: self * self
+        """
+        return Nimber(self.__square_calc(self.__x, self.level(self.__x)))
+
+    def __pow__(self, n: int) -> "Nimber":
+        x = self
+        y = Nimber(1)
+        while n:
+            if n & 1:
+                y *= x
+            x = x.square()
+            n >>= 1
+
+        return y
+
+    def inverse(self):
+        return pow(self, (1 << (1 << self.level(self.__x))) - 2)
