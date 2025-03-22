@@ -435,7 +435,7 @@ data:
       title: Min Cost Flow
   - name: Modulo_Matrix
     pages:
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: Modulo_Matrix/Modulo_Matrix.py
       title: Modulo_Matrix
     - icon: ':warning:'
@@ -729,7 +729,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Matrix/Power.test.py
       title: test_verify/yosupo_library_checker/Matrix/Power.test.py
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Matrix/Product.test.py
       title: test_verify/yosupo_library_checker/Matrix/Product.test.py
   - name: test_verify/yosupo_library_checker/Polynomial
