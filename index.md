@@ -495,6 +495,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: Sequence/Longest_Increasing_Subsequence.py
       title: Sequence/Longest_Increasing_Subsequence.py
+    - icon: ':warning:'
+      path: Sequence/Manacher.py
+      title: Sequence/Manacher.py
     - icon: ':heavy_check_mark:'
       path: Sequence/Montmort_Number.py
       title: Montmort Number
