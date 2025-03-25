@@ -10,15 +10,15 @@ documentation_of: //Nimber.py
 ## Theory
 
 非負整数 $n$ に対して,
-    $$ F_n := \{0, 1, \dots, 2^n - 1 \} $$
+    $$F_n := \{0, 1, \dots, 2^n - 1 \}$$
 とする.
 
 ### 加法
 
 $F_n$ 上の演算 $\oplus: F_n \times F_n \to F_n$ を
-    $$ x \oplus y := \mathrm{mex} \left(\{ a \oplus y \mid 0 \leq a < x \} \cup \{ x \oplus b \mid 0 \leq b < y \} \right)$$
+    $$x \oplus y := \mathrm{mex} \left(\{ a \oplus y \mid 0 \leq a < x \} \cup \{ x \oplus b \mid 0 \leq b < y \} \right)$$
 によって帰納的に定める. ただし, $S \subsetneq \mathbb{N}$ に対して, $S$ の最小除外数 $\mathrm{mex}~S$ を
-    $$ \mathrm{mex}~S := \min (\mathbb{N} \setminus S) $$
+    $$\mathrm{mex}~S := \min (\mathbb{N} \setminus S)$$
 で定義する.
 
 すると, $\oplus$ は Bitwise-XOR と一致する.
@@ -50,12 +50,11 @@ $F_{2^n}$ 上の演算 $\otimes: F_{2^n} \times F_{2^n} \to F_{2^n}$ を
 これらの性質により, $x, y \in F_{2^n}$ に対して, $x \oplus y$ の計算を次のようにして, $F_{2^{n-1}}$ 上の計算に帰着させることができる.
 
 まず, $x,y \in F_{2^n}$ より, $x, y$ はそれぞれ $x_0, x_1, y_0, y_1 \in F_{2^{n-1}}$ を用いて,
-    $$ x = x_1 e_{k-1} + x_0, \quad y = y_1 e_{k-1} + y_0 $$
+    $$x = x_1 e_{k-1} + x_0, \quad y = y_1 e_{k-1} + y_0$$
 と表せる.
 
 すると,
-$$
-\begin{align*}
+$$\begin{align*}
     x \otimes y
     &= (x_1 e_{k-1} + x_0) \otimes (y_1 e_{k-1} + y_0) \\
     &= (x_1 e_{k-1} \oplus x_0) \otimes (y_1 e_{k-1} \oplus y_0) \\
@@ -66,8 +65,7 @@ $$
     &= \left(((x_1 \otimes y_1 \oplus x_0 \otimes y_1 \oplus x_1 \otimes y_0 \oplus x_0 \otimes y_0) \oplus x_0 \otimes y_0) \otimes e_{k-1} \right) \oplus (x_1 \otimes y_1 \otimes e'_{k-1}) \oplus (x_0 \otimes y_0) \\
     &= \left(((x_1 \oplus x_0) \otimes (y_1 \oplus y_0) \oplus (x_0 \otimes y_0)) \otimes e_{k-1} \right) \oplus (x_1 \otimes y_1 \otimes e'_{k-1}) \oplus (x_0 \otimes y_0)\\
     &= \left(((x_1 \oplus x_0) \otimes (y_1 \oplus y_0) \oplus (x_0 \otimes y_0)) \times e_{k-1} \right) \oplus (x_1 \otimes y_1 \otimes e'_{k-1}) \oplus (x_0 \otimes y_0) \\
-\end{align*}
-$$
+\end{align*}$$
 
 となり,
     $$(x_1 \oplus x_0) \otimes (y_1 \oplus y_0), \quad x_0 \otimes y_0, \quad x_1 \otimes y_1 \otimes e'_{k-1}$$
