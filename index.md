@@ -108,9 +108,9 @@ data:
     - icon: ':warning:'
       path: MultiSet.py
       title: MultiSet.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Nimber.py
-      title: Nimber.py
+      title: Nimber
     - icon: ':warning:'
       path: Number.py
       title: Number.py
@@ -709,6 +709,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
       title: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Math/Nimber.test.py
+      title: test_verify/yosupo_library_checker/Math/Nimber.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
       title: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
