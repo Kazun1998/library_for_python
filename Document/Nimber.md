@@ -73,7 +73,7 @@ $$\begin{align*}
     &= (x_1 e_{k-1} \oplus x_0) \otimes (y_1 e_{k-1} \oplus y_0) \\
     &= (x_1 \otimes e_{k-1} \oplus x_0) \otimes (y_1 \otimes e_{k-1} \oplus y_0) \\
     &= \left((x_1 \otimes y_1) \otimes (e_{k-1} \otimes e_{k-1}) \right) \oplus \left((x_0 \otimes y_1 \oplus x_1 \otimes y_0) \otimes e_{k-1} \right) \oplus (x_0 \otimes y_0) \\
-    &= \left((x_1 \otimes y_1) \otimes (e_{k-1} \otimes e'_{k-1}) \right) \oplus \left((x_0 \otimes y_1 \oplus x_1 \otimes y_0) \otimes e_{k-1} \right) \oplus (x_0 \otimes y_0) \\
+    &= \left((x_1 \otimes y_1) \otimes (e_{k-1} \oplus e'_{k-1}) \right) \oplus \left((x_0 \otimes y_1 \oplus x_1 \otimes y_0) \otimes e_{k-1} \right) \oplus (x_0 \otimes y_0) \\
     &= \left((x_1 \otimes y_1 \oplus x_0 \otimes y_1 \oplus x_1 \otimes y_0) \otimes e_{k-1} \right) \oplus (x_1 \otimes y_1 \otimes e'_{k-1}) \oplus (x_0 \otimes y_0) \\
     &= \left(((x_1 \otimes y_1 \oplus x_0 \otimes y_1 \oplus x_1 \otimes y_0 \oplus x_0 \otimes y_0) \oplus x_0 \otimes y_0) \otimes e_{k-1} \right) \oplus (x_1 \otimes y_1 \otimes e'_{k-1}) \oplus (x_0 \otimes y_0) \\
     &= \left(((x_1 \oplus x_0) \otimes (y_1 \oplus y_0) \oplus (x_0 \otimes y_0)) \otimes e_{k-1} \right) \oplus (x_1 \otimes y_1 \otimes e'_{k-1}) \oplus (x_0 \otimes y_0)\\
