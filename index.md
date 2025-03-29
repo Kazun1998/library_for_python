@@ -595,6 +595,12 @@ data:
     - icon: ':heavy_check_mark:'
       path: Union_Find/Union_Find.py
       title: Union Find (Disjoint Set Union)
+    - icon: ':warning:'
+      path: Union_Find/Union_Find_Action.py
+      title: "Monoid \u4F5C\u7528\u4ED8\u304D Union Find"
+    - icon: ':warning:'
+      path: Union_Find/Union_Find_Group_Action.py
+      title: "\u7FA4\u4F5C\u7528\u4ED8\u304D Union Find"
   verificationCategories:
   - name: test_verify/yosupo_library_checker/Convolution
     pages:
