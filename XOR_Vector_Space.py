@@ -1,35 +1,50 @@
-"""
-[Tips]
-自然数全体の集合 N において, 加法と F_2 とのスカラー倍を
-    x+y:=x xor y, [0] x:=0, [1] x:=x
-と定めると, N は F_2 上のベクトル空間になる.
-"""
+# [Note]
+# 自然数全体の集合 N において, 加法と F_2 とのスカラー倍を
+#   (和) x + y := x xor y
+#   (スカラー倍) [0] x:=0, [1] x:=x
+# と定めると, N は F_2 上のベクトル空間になる.
+#
+# ただし, 実用上は, ある非負整数 k を用いて 2^k 未満の自然数全体の集合を V_k として空間を扱う.
+# この V_k は N の部分空間である.
 
 class XOR_Vector_Space:
-    def __init__(self):
-        self.basis=[]
+    def __init__(self, *vectors: int):
+        """ vectors からなる XOR ベクトル空間を生成する.
+        """
 
-    def __contains__(self, x):
+        self.basis: list[int] = []
+        self.add_vector(*vectors)
+        self.reduction()
+
+    def __contains__(self, x: int) -> bool:
         for v in self.basis:
-            x=min(x, x^v)
-        return x==0
+            x = min(x, x ^ v)
+        return x == 0
 
-    def __add__(self, other):
-        W=XOR_Vector_Space()
+    def __add__(self, other: "XOR_Vector_Space") -> "XOR_Vector_Space":
+        """ ベクトル空間の和を求める.
 
-        W.basis=self.basis[:]
-        W.add_vector(*other.bais)
-        return W
+        Args:
+            other (XOR_Vector_Space): ベクトル空間
 
-    def add_vector(self, *T):
+        Returns:
+            XOR_Vector_Space: 和空間
+        """
+
+        return XOR_Vector_Space(*(self.basis + other.basis))
+
+    def add_vector(self, *T: int):
         for x in T:
-            for v in self.basis:
-                x=min(x, x^v)
+            if (y := self.projection(x)):
+                self.basis.append(y)
 
-            if x:
-                self.basis.append(x)
+    def dimension(self) -> int:
+        """ 次元を求める.
 
-    def dimension(self):
+        Returns:
+            int: 次元
+        """
+
         return len(self.basis)
 
     def reduction(self):
@@ -41,43 +56,39 @@ class XOR_Vector_Space:
                     S[j] ^= S[i]
         self.basis = [s for s in S if s]
 
-    def projection(self, x):
+    def projection(self, x: int) -> int:
+        """ ベクトル空間への x の射影を求める.
+
+        Args:
+            x (int):
+
+        Returns:
+            int: 射影の結果
+        """
         for v in self.basis:
-            x=min(x, x^v)
+            x = min(x, x ^ v)
         return x
 
     def __repr__(self):
-        return f"[XOR Vector Space]: dim: {self.dimension()}, basis: {self.basis}"
+        return f"{self.__class__.__name__}({', '.join(map(str, self.basis))})"
 
-    def __le__(self, other):
-        return all(u in other for u in self.basis)
+    def is_subspace(self, V: "XOR_Vector_Space") -> bool:
+        """ V の部分空間か?
+
+        Args:
+            V (XOR_Vector_Space): XOR ベクトル空間
+
+        Returns:
+            bool: 部分空間 ?
+        """
+
+        return all(u in V for u in self.basis)
+
+    def __le__(self, other: "XOR_Vector_Space") -> bool:
+        return self.is_subspace(other)
 
     def __ge__(self,other):
         return other<=self
 
     def __eq__(self,other):
         return (self <= other) and self.dimension() == other.dimension()
-
-def Generate_Space(*S):
-    """ S によって生成される XOR ベクトル空間を求める.
-
-    """
-
-    V=XOR_Vector_Space()
-    V.add_vector(*S)
-    V.reduction()
-    return V
-
-def Get_Basis(*S):
-    """ S によって生成される XOR ベクトル空間 V において, S の部分集合でもあるV の基底を求める
-
-    """
-
-    B=[]
-    V=XOR_Vector_Space()
-    for v in S:
-        w=V.projection(v)
-        if w:
-            B.append(v)
-            V.basis.append(w)
-    return B
