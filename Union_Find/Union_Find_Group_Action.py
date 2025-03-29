@@ -2,18 +2,18 @@ from typing import TypeVar, Generic, Callable
 
 G = TypeVar('G')
 class Union_Find_Group_Action(Generic[G]):
-    def __init__(self, N: int, add: Callable[[G, G], G], zero: G, neg: Callable[[G], G]):
+    def __init__(self, N: int, op: Callable[[G, G], G], unit: G, inv: Callable[[G], G]):
         # Union Find で用いる変数
         self.__groups = [[x] for x in range(N)]
         self.__belong = [x for x in range(N)]
 
         # Group に関する値
-        self.__add = add
-        self.__neg = neg
+        self.__op = op
+        self.__inv = inv
 
         # Group の積に関する変数
-        self.__lazy = [zero for _ in range(N)]
-        self.__provisional = [zero for _ in range(N)]
+        self.__lazy = [unit for _ in range(N)]
+        self.__provisional = [unit for _ in range(N)]
 
     def find(self, x: int) -> int:
         """ 頂点 x が属する連結成分の代表元を求める.
@@ -45,10 +45,12 @@ class Union_Find_Group_Action(Generic[G]):
             x, y = y, x
 
         self.__groups[x].extend(self.__groups[y])
-
-        for z in self.__groups[y]:
+        memo = [self.get(z) for z in self.__groups[y]]
+        for z, b in zip(self.__groups[y], memo):
             self.__belong[z] = x
-            self.__provisional[z] = self.__add(self.__neg(self.__lazy[x]), self.__provisional[z])
+            self.update(z, b)
+
+        self.__groups[y].clear()
 
         return True
 
@@ -67,7 +69,7 @@ class Union_Find_Group_Action(Generic[G]):
         """
 
         x = self.find(x)
-        self.__lazy[x] = self.__add(a, self.__lazy[x])
+        self.__lazy[x] = self.__op(a, self.__lazy[x])
 
     def update(self, x: int, a: G):
         """ 頂点 x のラベルを a に更新する.
@@ -77,7 +79,7 @@ class Union_Find_Group_Action(Generic[G]):
             a (G): 変更後のラベル
         """
 
-        self.__provisional[x] = self.__add(self.__neg(self.__lazy[self.find(x)]), a)
+        self.__provisional[x] = self.__op(self.__inv(self.__lazy[self.find(x)]), a)
 
     def get(self, x: int) -> G:
         """ 頂点 x のラベルを取得する.
@@ -89,7 +91,7 @@ class Union_Find_Group_Action(Generic[G]):
             G: 頂点 x のラベル
         """
 
-        return self.__add(self.__lazy[self.find(x)], self.__provisional[x])
+        return self.__op(self.__lazy[self.find(x)], self.__provisional[x])
 
     def __getitem__(self, x: int) -> G:
         return self.get(x)
