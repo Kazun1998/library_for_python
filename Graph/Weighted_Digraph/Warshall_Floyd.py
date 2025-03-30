@@ -1,34 +1,34 @@
 from Weighted_Digraph import *
 
-def Warshall_Floyd(D: Weighted_Digraph):
+def Warshall_Floyd(D: Weighted_Digraph) -> list[list[int]]:
     """ Warshall-Floyd 法を用いて, 全点間距離を求める.
 
-    D: 重み付き有向グラフ
+    Args:
+        D (Weighted_Digraph): 無向グラフ
+
+    Returns:
+        list[list[int]]: (i, j) 成分が i, j 間の距離. ただし, 負の閉路による影響を受ける場合は -inf
     """
 
-    N = D.order()
-    inf = float('inf')
-
-    dist = [[0 if u == v else inf for v in range(N)] for u in range(N)]
-
     def three_loop():
-        for r in range(N):
-            dist_r = dist[r]
-            for p in range(N):
-                dist_p = dist[p]
-                for q in range(N):
-                    dist_p[q] = min(dist_p[q], dist_p[r] + dist_r[q])
+        for u, du in enumerate(dist):
+            for _, dv in enumerate(dist):
+                for w in range(N):
+                    dv[w] = min(dv[w], dv[u] + du[w])
 
-    for u in range(N):
-        dist_u = dist[u]
-        for v, w, _ in D.adjacent_out[u]:
-            dist_u[v] = min(dist_u[v], w)
+    inf = D.inifinity
+    N = D.vertex_count
+
+    dist = [[0 if i == j else inf for j in range(N)] for i in range(N)]
+    for arc in D.arcs_generator():
+        dist[arc.source][arc.target] = min(dist[arc.source][arc.target], arc.weight)
 
     three_loop()
 
-    if any(dist[u][u] < 0 for u in range(N)):
-        for u in [u for u in range(N) if dist[u][u] < 0]:
-            dist[u][u] = -inf
+    if any(dist[v][v] < 0 for v in range(N)):
+        for v in range(N):
+            if dist[v][v] < 0:
+                dist[v][v] = -float('inf')
         three_loop()
 
     return dist
