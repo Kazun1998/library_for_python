@@ -1,10 +1,10 @@
 from Weighted_Digraph import *
 
-def Traveling_Salesman(D: Weigthed_Digraph, default = -1):
+def Traveling_Salesman(D: Weighted_Digraph, default = -1):
     """ 巡回セールスマン問題を解く
 
     Args:
-        D (Weigthed_Digraph)
+        D (Weighted_Digraph)
     """
 
     N = D.order()

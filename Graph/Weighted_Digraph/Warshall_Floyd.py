@@ -1,6 +1,6 @@
 from Weighted_Digraph import *
 
-def Warshall_Floyd(D: Weigthed_Digraph):
+def Warshall_Floyd(D: Weighted_Digraph):
     """ Warshall-Floyd 法を用いて, 全点間距離を求める.
 
     D: 重み付き有向グラフ
