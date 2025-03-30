@@ -1,10 +1,10 @@
 from Weighted_Digraph import *
 
-def Dijkstra(D: Weigthed_Digraph, start: int, goal: int, default = None) -> dict:
+def Dijkstra(D: Weighted_Digraph, start: int, goal: int, default = None) -> dict:
     """ 重み付き有向グラフ D において, start から goal までの最短路を Dijkstra 法によって求める.
 
     Args:
-        D (Weigthed_Digraph): 重み付き有向グラフ
+        D (Weighted_Digraph): 重み付き有向グラフ
         start (int): 始点
         goal (int): 終点
         default (optional): start から goal までの歩道が存在しない場合の距離の帰り値. Defaults to None.
@@ -34,11 +34,13 @@ def Dijkstra(D: Weigthed_Digraph, start: int, goal: int, default = None) -> dict
         if x == goal:
             break
 
-        for y, w, id in D.adjacent_out[x]:
+        for arc in D.adjacent_out[x]:
+            y = arc.target
+            w = arc.weight
             if d + w < dist[y]:
                 dist[y] = d + w
                 parent[y] = x
-                upper[y] = id
+                upper[y] = arc
                 heappush(Q, (dist[y], y))
 
     if dist[goal] == inf:
@@ -54,11 +56,11 @@ def Dijkstra(D: Weigthed_Digraph, start: int, goal: int, default = None) -> dict
 
     return {'dist': dist[goal], 'arc': arc[::-1], 'vertex': vertex[::-1]}
 
-def Dijkstra_All(D: Weigthed_Digraph, start: int, default = None) -> dict:
+def Dijkstra_All(D: Weighted_Digraph, start: int, default = None) -> dict:
     """ 重み付き有向グラフ D について, start を始点とする距離を各頂点について求める.
 
     Args:
-        D (Weigthed_Digraph): 重み付き有向グラフ (全ての辺の重みが正であることを要求する)
+        D (Weighted_Digraph): 重み付き有向グラフ (全ての辺の重みが正であることを要求する)
         start (int): 始点
         default (optional): 到達不能の場合の返り値. Defaults to None.
 

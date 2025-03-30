@@ -1,4 +1,13 @@
-class Weigthed_Digraph:
+from dataclasses import dataclass
+
+@dataclass
+class Weighted_Arc:
+    id: int
+    source: int
+    target: int
+    weight: int
+
+class Weighted_Digraph:
     #入力定義
     def __init__(self, N: int = 0, arc_offset: int = 0):
         """ N 頂点の重み付き有向グラフを生成する.
@@ -8,8 +17,8 @@ class Weigthed_Digraph:
             arc_offset (int, optional): 弧番号の offset. Defaults to 0.
         """
 
-        self.adjacent_out = [[] for _ in range(N)] # 出近傍 (v が始点)
-        self.__size = 0
+        self.adjacent_out: list[list[Weighted_Arc]] = [[] for _ in range(N)] # 出近傍 (v が始点)
+        self.arcs = [None] * arc_offset
         self.__arc_offset = arc_offset
         self.__infinity = 0
 
@@ -30,12 +39,12 @@ class Weigthed_Digraph:
     @property
     def arc_count(self) -> int:
         """ グラフの辺数 (サイズ) を求める."""
-        return self.__size
+        return len(self.arcs) - self.__arc_offset
 
     @property
     def size(self) -> int:
         """ グラフのサイズ (辺数) を求める. """
-        return self.__size
+        return len(self.arcs) - len(self.__arc_offset)
 
     @property
     def inifinity(self) -> int:
@@ -79,9 +88,10 @@ class Weigthed_Digraph:
         """
 
         id = self.arc_count + self.__arc_offset
-        self.adjacent_out[source].append((target, weight, id))
-        self.__size += 1
-        self.__infinity += 2 * max(1, weight)
+        arc = Weighted_Arc(id, source, target, weight)
+        self.adjacent_out[source].append(arc)
+        self.arcs.append(arc)
+        self.__infinity += 2 * max(1, abs(weight))
         return id
 
     #近傍
@@ -102,12 +112,16 @@ class Weigthed_Digraph:
     def initialize_list(self, x) -> list:
         return [x] * self.order
 
+    def arcs_generator(self):
+        for j in range(self.__arc_offset, self.__arc_offset + self.arc_count):
+            yield self.arcs[j]
+
 #================================================
-def Bellman_Ford_All(D: Weigthed_Digraph, start: int) -> list[int]:
+def Bellman_Ford_All(D: Weighted_Digraph, start: int) -> list[int]:
     """ Bellman-Ford 法を用いて, 各頂点への単一始点 start からの距離を求める (いくらでも小さくできる場合は -inf).
 
     Args:
-        D (Weigthed_Digraph): 重み付き有向グラフ
+        D (Weighted_Digraph): 重み付き有向グラフ
         start (int): 始点
 
     Returns:

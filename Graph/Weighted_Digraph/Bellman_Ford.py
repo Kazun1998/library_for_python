@@ -1,34 +1,34 @@
 from Weighted_Digraph import *
 
-def Bellman_Fold(D: Weigthed_Digraph, start, goal, default = None):
-    N = D.order()
+def Bellman_Ford(D: Weighted_Digraph, start: int, goal: int, default = None) -> int:
+    inf = D.inifinity
+    N = D.order
 
-    arcs = []
-    for u in range(N):
-        arcs.extend([(u, v, w) for v, w, _ in D.adjacent_out[u]])
+    dist = D.initialize_list(inf)
+    dist[start] = 0
 
-    inf = float('inf')
-    dist = [inf] * N; dist[start] = 0
+    arcs = [(arc.source, arc.target, arc.weight) for arc in D.arcs_generator()]
 
-    for _ in range(N - 1):
+    def update_dist(negative_cycle: bool) -> bool:
         updated = False
-        for u, v, w in arcs:
-            if dist[u] + w < dist[v]:
-                dist[v] = dist[u] + w
-                updated = True
+        for source, target, weight in arcs:
+            if dist[source] >= inf or not(dist[source] + weight < dist[target]):
+                continue
 
-        if not updated:
-            break
+            if negative_cycle:
+                dist[target] = -float('inf')
+            else:
+                dist[target] = dist[source] + weight
+            updated = True
 
-    # 負閉路検出
+        return updated
+
     for _ in range(N):
-        updated = False
-        for u, v, w in arcs:
-            if dist[u] + w < dist[v]:
-                dist[v] = -inf
-                updated = True
+        if not update_dist(False):
+            return dist[goal] if dist[goal] < inf else default
 
-        if not updated:
+    for _ in range(N):
+        if not update_dist(True):
             break
 
-    return dist[goal]
+    return dist[goal] if dist[goal] < inf else default
