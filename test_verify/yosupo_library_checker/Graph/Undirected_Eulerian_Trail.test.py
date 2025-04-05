@@ -2,6 +2,7 @@
 
 #==================================================
 from Graph.Graph.Graph import Graph as Undirected_Graph
+from Graph.Graph.Graph import Edge
 from Graph.Graph.Eulerian import *
 
 import sys
@@ -13,18 +14,23 @@ def verify():
     N, M = map(int, input().split())
 
     G = Undirected_Graph(N)
-    for j in range(M):
+    for _ in range(M):
         u, v = map(int, input().split())
-        G.add_edge(u, v, j)
+        G.add_edge(u, v)
 
-    euler = Find_Eulerian_Trail(G)
+    eulerian_trail = Find_Eulerian_Trail(G)
 
-    if euler['vertex'] is None:
+    if eulerian_trail is None:
         print("No")
+        return
+
+    print("Yes")
+    if eulerian_trail:
+        print(eulerian_trail[0].source, *[edge.target for edge in eulerian_trail])
+        print(*[edge.id for edge in eulerian_trail])
     else:
-        print('Yes')
-        print(*euler['vertex'])
-        print(*euler['edge'])
+        print(0)
+        print()
 
 #==================================================
 T = int(input())

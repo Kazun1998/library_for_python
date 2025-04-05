@@ -2,6 +2,7 @@
 
 #==================================================
 from Graph.Graph.Graph import Graph as Undirected_Graph
+from Graph.Graph.Graph import Edge
 from Graph.Graph.Cycle import *
 
 import sys
@@ -11,7 +12,7 @@ write=sys.stdout.write
 #==================================================
 def verify():
     N, M = map(int, input().split())
-    G = Graph(N)
+    G = Undirected_Graph(N)
     for _ in range(M):
         a, b = map(int, input().split())
         G.add_edge(a, b)
