@@ -292,112 +292,48 @@ class Digraph:
 
         return [d if d != -1 else default for d in dist]
 
-    def shortest_path(self, u, v):
-        """ u から v への最短路を求める (存在しない場合は None).
+    def shortest_path(self, u: int, v: int) -> list[Arc]:
+        """ 頂点 u から頂点 v への最短路を求める.
 
+        Args:
+            u (int): 始点
+            v (int): 終点
+
+        Returns:
+            list[Arc]: 最短路 (存在しない場合は None)
         """
 
         if u == v:
-            return u
+            return []
 
         from collections import deque
 
-        prev = [None] * self.order()
+        prev: list[Arc] = [None] * self.order
 
         Q = deque([u])
 
         while Q and (prev[v] is None):
             x = Q.popleft()
-            for y, j in self.out_partner_with_label_yield(x):
+            for arc in self.adjacent_out[x]:
+                y = arc.target
+
                 if prev[y] is not None:
                     continue
 
-                prev[y] = (x, j)
+                prev[y] = arc
                 Q.append(y)
 
-        if prev[v] is not None:
-            vertex = [v]
-            arc = []
-            while v != u:
-                v, i = prev[v]
-                vertex.append(v)
-                arc.append(i)
+        if prev[v] is None:
+            return None
 
-            vertex.reverse(); arc.reverse()
-            return { 'vertex': vertex, 'arc': arc }
-        else:
-            return { 'vertex': None, 'arc': None }
+        path: list[Arc] = []
+        while v != u:
+            arc = prev[v]
+            path.append(arc)
+            v = arc.source
 
-#================================================
-#Dijkstra
-def One_Point_Distance(D, From, with_path=False):
-    """ 単一始点 From からの距離を求める.
-
-    D: 辺の重みが全て非負の有向グラフ
-    From:始点
-    with_path:最短路も含めて出力するか?
-
-    (出力の結果)
-    with_path=True → (距離, 最短経路の辿る際の前の頂点)
-    with_path=False → 距離
-    """
-
-    N=D.vertex_count(); inf=float("inf"); adj_out=D.adjacent_out
-    T=[inf]*N; T[From]=0
-
-    if with_path:
-        Prev=[None]*N
-
-    from collections import deque
-    Q=deque([From])
-    while Q:
-        u=Q.popleft()
-
-        for v in D.adjacent_out[u]:
-            if T[v]==inf:
-                T[v]=T[u]+1
-                Q.append(v)
-
-                if with_path:
-                    Prev[v]=u
-
-    if with_path:
-        return (T,Prev)
-    else:
-        return  T
-
-#Warshall–Floyd
-def Warshall_Floyd(D):
-    """Warshall–Floyd法を用いて,全点間距離を求める.
-
-    D: 有向グラフ
-    """
-
-    N=D.vertex_count(); inf=float("inf"); adj_out=D.adjacent_out
-    T=[[0]*N for _ in range(N)]
-
-    for u in range(N):
-        for v in range(N):
-            Tu=T[u]
-            if v==u:
-                T[u][v]=0
-            elif v in adj_out[u]:
-                T[u][v]=1
-            else:
-                T[u][v]=float("inf")
-
-    for u in range(N):
-        Tu=T[u]
-        for v in range(N):
-            Tv=T[v]
-            for w in range(N):
-                Tv[w]=min(Tv[w],Tv[u]+Tu[w])
-
-    return T
-
-#FromからToへの(長さが丁度L or L以下の)Walkが存在するか否か
-def walk_exist(graph,From,To,L,just=False):
-    pass
+        path.reverse()
+        return path
 
 #逆グラフの作成
 def Inverse_Graph(D):
@@ -409,59 +345,58 @@ def Inverse_Graph(D):
     E.adjacent_out,E.adjacent_in=E.adjacent_in,E.adjacent_out
     return E
 
-#補グラフの作成
-def Complement_Graph(G):
-    pass
+# Topological Sort
+def Topological_Sort(D: Digraph) -> list[int]:
+    """ D の Topological Sort を求める
 
-#n頂点のランダムグラフ
-def Random_Graph(n,p=0.5,seed=None):
-    pass
+    Args:
+        D (Digraph): 有向グラフ
 
-#連結グラフ?
-def Is_Connected(G):
-    pass
+    Returns:
+        list[int]: Topological Sort (存在しない場合は None)
+    """
 
-#Topologycal Sort
-def Topological_Sort(D):
-    from collections import deque
+    remain = [D.in_degree(x) for x in range(D.order)]
+    candidates = [v for v in range(D.order) if remain[v] == 0]
 
-    N=D.vertex_count()
-    X=[D.in_degree(x) for x in range(N)]
-    Q=deque([v for v in range(N) if X[v]==0])
+    sort = []
+    while candidates:
+        u = candidates.pop()
+        sort.append(u)
+        for arc in D.adjacent_out[u]:
+            v = arc.target
+            remain[v] -= 1
 
-    adj_out=D.adjacent_out
-    S=[]
-    while Q:
-        u=Q.pop()
-        S.append(u)
-        for v in adj_out[u]:
-            X[v]-=1
-            if X[v]==0:
-                Q.append(v)
+            if remain[v] == 0:
+                candidates.append(v)
 
-    if len(S)==N:
-        return S
-    else:
-        return None
+    return sort if len(sort) == D.order else None
 
 #DAG?
-def Is_Directed_Acyclic_Graph(D):
-    from collections import deque
+def Is_Directed_Acyclic_Graph(D: Digraph) -> bool:
+    """ D は DAG ?
 
-    N=D.vertex_count()
-    X=[D.in_degree(x) for x in range(N)]
-    Q=deque([v for v in range(N) if X[v]==0])
+    Args:
+        D (Digraph): 有向グラフ
 
-    S=0
-    while Q:
-        u=Q.pop()
-        S+=1
+    Returns:
+        bool: DAG ?
+    """
+
+    remain = [D.in_degree(x) for x in range(D.order)]
+    stack = [v for v in range(D.order) if remain[v] == 0]
+
+    for _ in range(D.order):
+        if not stack:
+            return False
+
+        u = stack.pop()
         for v in D.adjacent_out[u]:
-            X[v]-=1
-            if X[v]==0:
-                Q.append(v)
+            remain[v] -= 1
 
-    return S==N
+            if remain[v] == 0:
+                stack.append(v)
+    return True
 
 #Cycleを縮約
 def Cycle_Reduction(D):
