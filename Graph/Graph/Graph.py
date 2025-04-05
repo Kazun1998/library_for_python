@@ -192,6 +192,10 @@ class Graph:
         else:
             return edge
 
+    def edge_generator(self):
+        for i in range(self.__edge_offset, self.__edge_offset + self.size):
+            yield self.edges[i]
+
     #頂点vを含む連結成分
     def connected_component(self, v: int) -> list[int]:
         """ 頂点 v を含む連結成分を求める.

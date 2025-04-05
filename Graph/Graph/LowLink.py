@@ -15,9 +15,11 @@ def Lowlink(G: Graph):
         ord[start] = low[start] = t
         t += 1
         tower.append(start)
-        stack = [(start, v, j) for v, j in G.partner_with_label_yield(start)]
+        stack = [(start, edge.id) for edge in G.adjacent[start]]
         while stack:
-            u, v, j = stack.pop()
+            u, j = stack.pop()
+            edge = G.get_edge(j, u)
+            v = edge.target
             if ord[v] != -1:
                 low[u] = min(low[u], ord[v])
                 continue
@@ -26,7 +28,7 @@ def Lowlink(G: Graph):
             tower.append(v)
             children[u].append(v)
             t += 1
-            stack.extend([(v, w, k) for w, k in G.partner_with_label_yield(v) if k != j])
+            stack.extend([(v, e.id) for e in G.adjacent[v] if e.id != j])
         return t
 
     t = 0
@@ -41,104 +43,115 @@ def Lowlink(G: Graph):
     return { 'ord': ord, 'low': low }
 
 # 橋列挙
-def Bridge(G: Graph):
-    """ G にある橋の id を列挙する.
+def Bridge(G: Graph) -> list[Edge]:
+    """ G にある橋のリストを求める
 
-    G: Graph
+    Args:
+        G (Graph): グラフ
+
+    Returns:
+        list[Edge]: 橋のリスト
     """
 
     data = Lowlink(G)
-    ord = data['ord']; low = data['low']
-    return [t for u, v, t in G.edge_yielder_with_label() if (ord[u] < low[v]) or (ord[v] < low[u])]
+    ord = data['ord']
+    low = data['low']
+
+    return [edge for edge in G.edge_generator() if (ord[edge.source] < low[edge.target]) or (ord[edge.target] < low[edge.source])]
 
 # 関節点の列挙
-def Articulation_Point(G: Graph):
+def Articulation_Point(G: Graph) -> list[int]:
     from collections import deque
 
-    N=G.vertex_count()
-    A=[]
-    ord=[-1]*N; low=[-1]*N
-    flag=[0]*N
+    N = G.vertex_count
+    articulations: list[int] = []
+    ord = [-1] * N
+    low = [-1] * N
+    flag = [0] * N
 
-    parent=[-1]*N
-    children=[[] for _ in range(N)]
+    parent = [-1] * N
+    children: list[list[int]] = [[] for _ in range(N)]
 
     #BFSパート
     for v in range(N):
         if flag[v]:
             continue
 
-        k=0
-        S=deque([v])
-        T=[]
-        X=[]
+        k = 0
+        S = deque([v])
+        T = []
 
         while S:
-            u=S.pop()
+            u = S.pop()
             if flag[u]:
                 continue
 
             T.append(u)
-            ord[u]=k
-            k+=1
-            flag[u]=1
+            ord[u] = k
+            k += 1
+            flag[u] = 1
 
-            for w in G.partner_yield(u):
+            for edge in G.adjacent[u]:
+                w = edge.target
                 if not flag[w]:
                     S.append(w)
-                    parent[w]=u
+                    parent[w] = u
 
         for w in T:
-            low[w]=ord[w]
+            low[w] = ord[w]
 
         for w in T[:0:-1]:
             children[parent[w]].append(w)
 
         for w in T[:0:-1]:
-            for x in G.partner_yield(w):
-                if w==v or x!=parent[w]:
-                    low[w]=min(low[w],low[x],ord[x])
+            for edge in G.adjacent[w]:
+                x = edge.target
+                if (w == v) or (x != parent[w]):
+                    low[w] = min(low[w], low[x], ord[x])
 
         #根での判定
-        if len(children[v])>=2:
-            A.append(v)
+        if len(children[v]) >= 2:
+            articulations.append(v)
 
         #根以外の判定
         for w in T[:0:-1]:
             for u in children[w]:
-                if ord[w]<=low[u]:
-                    A.append(w)
+                if ord[w] <= low[u]:
+                    articulations.append(w)
                     break
-    return A
+    return articulations
 
-#二辺連結成分分解
-def Two_Edge_Connected_Components(G: Graph):
-    """グラフ G を二辺連結成分分解 (橋を含まない) する.
+# 二辺連結成分分解
+def Two_Edge_Connected_Components(G: Graph) -> list[int]:
+    """ グラフ G を二辺連結成分分分解する.
 
-    [input]
-    G: Graph
+    Args:
+        G (Graph): グラフ
+
+    Returns:
+        list[int]: 二重連結成分分解の頂点からなるリスト
     """
 
-    bridges = set(Bridge(G))
+    bridge_ids = set([edge.id for edge in Bridge(G)])
 
-    comps = []
-    t = 0
-    comp_id = [-1] * G.order
+    components = []
+    group = [None] * G.order
     for x in range(G.order):
-        if comp_id[x] != -1:
+        if group[x] is not None:
             continue
 
-        comp_id[x] = t
-        c = [x]
+        t = len(components)
+        group[x] = t
+        component = [x]
         stack = [x]
         while stack:
             u = stack.pop()
-            for v, j in G.partner_with_label_yield(u):
-                if (j not in bridges) and (comp_id[v] == -1):
-                    comp_id[v] = t
-                    c.append(v)
+            for edge in G.adjacent[u]:
+                v = edge.target
+                if (edge.id not in bridge_ids) and (group[v] is None):
+                    group[v] = t
+                    component.append(v)
                     stack.append(v)
-        comps.append(c)
-        t += 1
+        components.append(component)
 
-    return { 'group': comp_id, 'comps': comps }
+    return { 'group': group, 'components': components }
