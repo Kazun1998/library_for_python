@@ -4,6 +4,9 @@ class Edge:
         self.__source = source
         self.__target = target
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(id={self.id}, source={self.source}, target={self.target})"
+
     def fetch_reversal_edge(self) -> "Edge":
         reversal_edge = Edge(self.id, self.target, self.source)
         self.__reversal = reversal_edge
