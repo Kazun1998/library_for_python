@@ -26,10 +26,15 @@ class Digraph:
 
     #入力定義
     def __init__(self, N = 0, arc_offset: int = 0):
-        """ N 頂点の有向空グラフを生成する. """
+        """ N 頂点の有向グラフを生成する.
 
-        self.adjacent_out: list[list[Arc]] = [[] for _ in range(N)] #出近傍 (v が始点)
-        self.adjacent_in: list[list[Arc]] = [[] for _ in range(N)] #入近傍 (v が終点)
+        Args:
+            N (int, optional): 頂点数. Defaults to 0.
+            arc_offset (int, optional): 弧の番号のオフセット. Defaults to 0.
+        """
+
+        self.adjacent_out: list[list[Arc]] = [[] for _ in range(N)] # 出近傍 (v が始点)
+        self.adjacent_in: list[list[Arc]] = [[] for _ in range(N)] # 入近傍 (v が終点)
         self.__arc_offset = arc_offset
         self.__arcs: list[Arc] = [None] * arc_offset
 
@@ -137,89 +142,129 @@ class Digraph:
     def get_arc(self, id: int) -> Arc:
         return self.__arcs[id]
 
-    #近傍
-    def out_partner_yield(self, v):
-        for w, _ in self.adjacent_out[v]:
-            yield w
+    # 出次数
+    def out_degree(self, v: int) -> int:
+        """ 出次数 (頂点 v から出る弧の本数)
 
-    def out_partner_with_label_yield(self, v):
-        yield from self.adjacent_out[v]
+        Args:
+            v (int): 頂点
 
-    def in_partner_yield(self, v):
-        for w, _ in self.adjacent_in[v]:
-            yield w
-
-    def in_partner_with_label_yield(self, v):
-        yield from self.adjacent_in[v]
-
-    #出次数
-    def out_degree(self,v):
+        Returns:
+            int: 出次数
+        """
         return len(self.adjacent_out[v])
 
-    #入次数
-    def in_degree(self,v):
+    # 入次数
+    def in_degree(self,v) -> int:
+        """ 入次数 (頂点 v に入る弧の本数)
+
+        Args:
+            v (int): 頂点
+
+        Returns:
+            int: 入次数
+        """
         return len(self.adjacent_in[v])
 
-    #次数
+    # 次数
     def degree(self,v):
         return (self.out_degree(v), self.in_degree(v))
 
-    #相対次数
-    def relative_degree(self, v):
+    # 相対次数
+    def relative_degree(self, v: int) -> int:
+        """ 頂点 v における (出次数) - (入次数) を求める.
+
+        Args:
+            v (int): 頂点
+
+        Returns:
+            int: (出次数) - (入次数)
+        """
+
         return self.out_degree(v) - self.in_degree(v)
 
-    #頂点vに到達可能な頂点
-    def reachable_to(self, v):
-        """ 頂点 v に到達可能な頂点を求める. """
-        N = self.order()
+    # 頂点 v に到達可能な頂点
+    def reachable_to(self, v: int) -> list[int]:
+        """ 頂点 v に到達可能な頂点を求める.
 
-        reach = [0] * N; reach[v] = 1
+        Args:
+            v (int): 終点となる頂点
+
+        Returns:
+            list[int]: 頂点 v に到達可能な頂点のリスト
+        """
+
+        reach = [False] * self.order; reach[v] = True
         stack = [v]
+
         while stack:
             x = stack.pop()
-            for y in self.in_partner_yield(x):
+
+            for arc in self.adjacent_in[x]:
+                y = arc.source
+
                 if reach[y]:
                     continue
 
-                reach[y] = 1
+                reach[y] = True
                 stack.append(y)
 
-        return [x for x in range(N) if reach[x]]
+        return [x for x in range(self.order) if reach[x]]
 
-    #頂点vから到達可能な頂点
-    def reachable_from(self, v):
-        """ 頂点 v から到達可能な頂点を求める. """
-        N = self.order()
+    # 頂点 v から到達可能な頂点
+    def reachable_from(self, v: int) -> list[int]:
+        """ 頂点 v から到達可能な頂点を求める.
 
-        reach = [0] * N; reach[v] = 1
+        Args:
+            v (int): 始点となる頂点
+
+        Returns:
+            list[int]: 頂点 v から到達可能な頂点のリスト
+        """
+
+        reach = [False] * self.order; reach[v] = True
         stack = [v]
+
         while stack:
             x = stack.pop()
-            for y in self.out_partner_yield(x):
+
+            for arc in self.adjacent_out[x]:
+                y = arc.source
+
                 if reach[y]:
                     continue
 
-                reach[y] = 1
+                reach[y] = True
                 stack.append(y)
 
-        return [x for x in range(N) if reach[x]]
+        return [x for x in range(self.order) if reach[x]]
 
-    #頂点 u,v の距離を求める.
-    def distance(self, u, v, default = -1):
+    # 頂点 u,v の距離を求める.
+    def distance(self, u: int, v: int, default = -1) -> int:
+        """ 頂点 u から頂点 v への距離を求める.
+
+        Args:
+            u (int): 始点
+            v (int): 終点
+            default (int, optional): 存在しない場合の返り値. Defaults to -1.
+
+        Returns:
+            int: 距離
+        """
+
         from collections import deque
 
-        dist = [-1] * self.vertex_count()
+        dist = [-1] * self.order
         dist[u] = 0
 
-        Q = deque([u])
-        while Q:
-            x = Q.popleft()
-            for y in self.in_partner_yield(x):
-                if dist[y] != -1:
-                    continue
+        queue = deque([u])
+        while queue:
+            x = queue.popleft()
+            for arc in self.adjacent_out[x]:
+                y = arc.target
 
                 dist[y] = dist[x] + 1
-                Q.append(y)
+                queue.append(y)
 
                 if y == v:
                     return dist[y]
