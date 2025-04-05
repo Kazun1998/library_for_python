@@ -1,13 +1,41 @@
+class Edge:
+    def __init__(self, id: int, source: int, target: int):
+        self.__id = id
+        self.__source = source
+        self.__target = target
+
+    def fetch_reversal_edge(self) -> "Edge":
+        reversal_edge = Edge(self.id, self.target, self.source)
+        self.__reversal = reversal_edge
+        reversal_edge.__reversal = self
+
+    @property
+    def id(self) -> int:
+        return self.__id
+
+    @property
+    def source(self) -> int:
+        return self.__source
+
+    @property
+    def target(self) -> int:
+        return self.__target
+
+    @property
+    def reversal(self) -> "Edge":
+        return self.__reversal
+
 class Graph:
-    __slots__ = ("adjacent", "deg", "__size")
+    __slots__ = ("adjacent", "deg", "edges", "__edge_offset")
 
     #入力定義
-    def __init__(self, N = 0):
+    def __init__(self, N = 0, edge_offset: int = 0):
         """ N 頂点の空グラフ (多重辺なし) を生成する."""
 
-        self.adjacent = [[] for _ in range(N)]
+        self.adjacent: list[list[Edge]] = [[] for _ in range(N)]
+        self.edges: list[Edge] = [None] * edge_offset
         self.deg = [0] * N
-        self.__size = 0
+        self.__edge_offset = edge_offset
 
     @classmethod
     def construct_from_edge_edges(cls, N: int, edges: list[tuple[int, int]]) -> "Graph":
@@ -54,22 +82,24 @@ class Graph:
             int: 辺の本数
         """
 
-        return self.__size
+        return len(self.edges) - self.__edge_offset
 
     @property
-    def size(self):
+    def size(self) -> int:
         """ グラフのサイズ (辺の本数) を出力する.
 
         Returns:
             int: サイズ
         """
 
-        return self.__size
+        return len(self.edges) - self.__edge_offset
 
     #頂点の追加
-    def add_vertex(self):
-        """ 頂点を追加する.
+    def add_vertex(self) -> int:
+        """ 頂点を 1 個追加する.
 
+        Returns:
+            int: 追加された頂点の番号
         """
 
         self.adjacent.append([])
@@ -77,10 +107,14 @@ class Graph:
 
         return self.order - 1
 
-    def add_vertices(self, k):
+    def add_vertices(self, k: int) -> list[int]:
         """ 頂点を k 個追加する.
 
-        k: int
+        Args:
+            k (int): 追加する頂点の数
+
+        Returns:
+            list[int]: 追加された k 個の頂点の番号からなるリスト
         """
 
         n = self.order
@@ -91,154 +125,206 @@ class Graph:
         return list(range(n, n + k))
 
     #辺の追加
-    def add_edge(self, u, v, label = None):
-        """ 無向辺 uv を加える"""
+    def add_edge(self, u: int, v: int) -> "Edge":
+        """ 辺 uv を加える
 
-        self.adjacent[u].append((v, label))
+        Args:
+            u (int): 頂点
+            v (int): 頂点
+
+        Returns:
+            Edge: 追加された辺
+        """
+
+        id = len(self.edges)
+        edge = Edge(id, u, v)
+        self.adjacent[u].append(edge)
         if u != v:
-            self.adjacent[v].append((u, label))
+            edge.fetch_reversal_edge()
+            self.adjacent[v].append(edge.reversal)
 
         self.deg[u] += 1
         self.deg[v] += 1
-        self.__size += 1
+        self.edges.append(edge)
+        return edge
 
     #Walkの追加
-    def add_walk(self, *walk):
+    def add_walk(self, *walk: int):
         """ walk=(w[0],...,w[n-1]) に対して, n-1 本の辺 w[i]w[i+1] を加える."""
         for i in range(len(walk) - 1):
             self.add_edge(walk[i], walk[i + 1])
 
     #Cycleの追加
-    def add_cycle(self, *cycle):
+    def add_cycle(self, *cycle: int):
         """ cycle=(c[0], ..., c[n-1]) を加える. """
         self.add_walk(*cycle)
         self.add_edge(cycle[-1], cycle[0])
 
-    def partner_yield(self, v):
-        for w, _ in self.adjacent[v]:
-            yield w
-
-    def partner(self, v):
-        return [w for w, _ in self.adjacent[v]]
-
-    def partner_with_label_yield(self, v):
-        yield from self.adjacent[v]
-
-    #近傍
-    def neighborhood(self, v):
-        """ 頂点 v の近傍を求める. """
-        return set(self.partner_yield(v))
-
     #次数
-    def degree(self, v):
-        """ 頂点 v の次数を求める. """
+    def degree(self, v: int) -> int:
+        """ 頂点 v の次数を求める.
+
+        Args:
+            v (int): 頂点
+
+        Returns:
+            int: 頂点 v の次数
+        """
+
         return self.deg[v]
 
-    #頂点vを含む連結成分
-    def connected_component(self, v):
-        """ 頂点 v を含む連結成分を出力する."""
+    def get_edge(self, edge_id: int, source: int = None) -> Edge:
+        """ id が edge_id である辺を取得する.
 
-        N = self.order
+        Args:
+            edge_id (int): 取得する edge の番号
+
+        Returns:
+            Edge: edge
+        """
+
+        edge = self.edges[edge_id]
+        if source is not None and source != edge.source:
+            return edge.reversal
+        else:
+            return edge
+
+    #頂点vを含む連結成分
+    def connected_component(self, v: int) -> list[int]:
+        """ 頂点 v を含む連結成分を求める.
+
+        Args:
+            v (int): 頂点
+
+        Returns:
+            list[int]: 頂点 v を含む連結成分に含まれる頂点番号のリスト
+        """
 
         stack = [v]
-        comp = [0] * N; comp[v] = 1
+        comp = [False] * len(self.adjacent); comp[v] = True
         while stack:
             x = stack.pop()
-            for y in self.partner_yield(x):
-                if comp[y] == 0:
-                    comp[y] = 1
-                    stack.append(y)
+            for edge in self.adjacent[x]:
+                y = edge.target
+                if comp[y]:
+                    continue
 
-        return [x for x in range(N) if comp[x]]
+                comp[y] = True
+                stack.append(y)
+
+        return [x for x in range(len(self.adjacent)) if comp[x]]
 
     #距離
-    def distance(self, u, v, default = -1):
-        """ 2頂点 u,v 間の距離を求める."""
+    def distance(self, u: int, v: int, default = -1) -> int:
+        """ 2 頂点 u, v の距離を求める (存在しない場合は default)
+
+        Args:
+            u (int): 始点
+            v (int): 終点
+            default (int, optional): uv Path が存在しない場合の返り値. Defaults to -1.
+
+        Returns:
+            int: u, v 間の距離
+        """
+        from collections import deque
 
         if u == v:
             return 0
 
-        from collections import deque
-
-        N = self.order
-        dist = [-1] * N; dist[u]=0
+        dist = [-1] * self.order
+        dist[u] = 0
 
         queue = deque([u])
         while queue:
             x = queue.popleft()
-            for y in self.partner_yield(x):
-                if dist[y] == -1:
-                    dist[y] = dist[x] + 1
-                    queue.append(y)
+            for edge in self.adjacent[x]:
+                y = edge.target
+                if dist[y] != -1:
+                    continue
 
-                    if y == v:
-                        return dist[v]
+                dist[y] = dist[x] + 1
+                queue.append(y)
+
+                if y == v:
+                    return dist[v]
 
         return default
 
     #ある1点からの距離
-    def distance_all(self, u, default = -1):
-        """ 頂点 u からの距離を求める."""
+    def distance_all(self, u: int, default = -1) -> list[int]:
+        """ 全ての頂点について, 頂点 u からの距離を求める (u と非連結な場合は default になる).
+
+        Args:
+            u (int): 始点となる頂点
+            default (int, optional): 頂点 u と連結でない場合の格納値. Defaults to -1.
+
+        Returns:
+            list[int]: 第 v 要素は u, v 間の距離 (u, v が連結でない場合は default)
+        """
 
         from collections import deque
 
-        N = self.order
-        dist = [-1] * N; dist[u]=0
+        dist = [-1] * self.order
+        dist[u] = 0
 
         queue = deque([u])
         while queue:
             x = queue.popleft()
-            for y in self.partner_yield(x):
-                if dist[y] == -1:
-                    dist[y] = dist[x] + 1
-                    queue.append(y)
+            for edge in self.adjacent[x]:
+                y = edge.target
+                if dist[y] != -1:
+                    continue
 
-        return [dist[x] if dist[x] != -1 else default for x in range(N)]
+                dist[y] = dist[x] + 1
+                queue.append(y)
+
+        return [dist[x] if dist[x] != -1 else default for x in range(self.order)]
 
     #最短路
-    def shortest_path(self, u, v):
-        """ u から v への最短路を求める (存在しない場合は None). """
+    def shortest_path(self, u: int, v: int) -> list[Edge]:
+        """ 頂点 u から頂点 v への最短路を求める (存在しない場合は None)
+
+        Args:
+            u (int): 始点
+            v (int): 終点
+
+        Returns:
+            list[int]: 頂点 u から頂点 v への最短路. 存在しない場合は None
+        """
 
         if u == v:
-            return [u]
+            return []
 
         from collections import deque
 
-        prev = [-1] * self.order
+        prev: list[Edge] = [None] * self.order
         prev[u] = u
 
         queue = deque([u])
         while queue:
             x = queue.popleft()
-            for y in self.partner_yield(x):
-                if prev[y] != -1:
+            for edge in self.adjacent[x]:
+                y = edge.target
+
+                if prev[y] is not None:
                     continue
 
-                prev[y] = x
+                prev[y] = edge
                 queue.append(y)
 
-                if y != v:
-                    continue
+            if prev[v] is not None:
+                break
 
-                path = [v]
-                a = v
-                while a != u:
-                    a = prev[a]
-                    path.append(a)
-                return path[::-1]
-        return None
+        if prev[v] is None:
+            return None
 
-    def edge_yielder(self):
-        for u in range(self.order):
-            for v in self.partner_yield(u):
-                if u <= v:
-                    yield (u, v)
-
-    def edge_yielder_with_label(self):
-        for u in range(self.order):
-            for v, label in self.partner_with_label_yield(u):
-                if u <= v:
-                    yield (u, v, label)
+        path: list[Edge] = []
+        a = v
+        while a != u:
+            edge = prev[a]
+            path.append(edge)
+            a = edge.source
+        return path[::-1]
 
 #==========
 #グラフの生成

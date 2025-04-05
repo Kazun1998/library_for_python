@@ -1,9 +1,17 @@
 from Digraph import *
 
-def Find_Directed_Eulerian_Trail(D: Digraph):
-    N = D.order()
+def Find_Directed_Eulerian_Trail(D: Digraph) -> list[Arc]:
+    """ Euler (閉) 路を生成する.
 
-    remain = [D.out_degree(v) for v in range(N)]
+    Args:
+        D (Digraph): 有向グラフ
+
+    Returns:
+        list[Arc]: Euler (閉) 路
+    """
+    N = D.order
+
+    remain_out = [D.out_degree(v) for v in range(N)]
 
     start = goal = -1
     necessary = True
@@ -23,7 +31,7 @@ def Find_Directed_Eulerian_Trail(D: Digraph):
             goal = v
 
     if not necessary:
-        return { 'vertex': None, 'arc': None }
+        return None
 
     if start == -1:
         for v in range(N):
@@ -33,36 +41,36 @@ def Find_Directed_Eulerian_Trail(D: Digraph):
         else:
             start = goal = 0
 
-    adj_out = [[arc for arc in D.adjacent_out[x]] for x in range(N)]
+    adj_out = [[arc.id for arc in D.adjacent_out[x]] for x in range(N)]
 
     def dfs(start):
-        path = []
+        path: list[int] = []
 
         x = start
         while True:
             if not adj_out[x]:
                 break
 
-            y, i = adj_out[x].pop()
-            path.append((x, y, i))
-            remain[x] -= 1
-            x = y
+            arc_id = adj_out[x].pop()
+            arc = D.get_arc(arc_id)
+
+            path.append(arc_id)
+            remain_out[x] -= 1
+            x = arc.target
         return path
 
     stack = dfs(start)
-    arc = []
-    vertex = [goal]
+    eulerian_trail: list[Arc] = []
     while stack:
-        u, _, j = stack.pop()
-        vertex.append(u)
-        arc.append(j)
+        arc_id = stack.pop()
+        arc = D.get_arc(arc_id)
+        eulerian_trail.append(arc)
 
-        if remain[u]:
-            stack.extend(dfs(u))
+        if remain_out[arc.source]:
+            stack.extend(dfs(arc.source))
 
-    if len(arc) == D.size():
-        vertex.reverse()
-        arc.reverse()
-        return { 'vertex': vertex, 'arc': arc }
+    if len(eulerian_trail) == D.size:
+        eulerian_trail.reverse()
+        return eulerian_trail
     else:
-        return { 'vertex': None, 'arc': None }
+        return None
