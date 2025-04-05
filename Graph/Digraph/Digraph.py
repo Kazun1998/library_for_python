@@ -1,15 +1,74 @@
+class Arc:
+    def __init__(self, id: int, source: int, target: int):
+        self.__id = id
+        self.__source = source
+        self.__target = target
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(id={self.id}, source={self.source}, target={self.target})"
+
+    @property
+    def id(self) -> int:
+        return self.__id
+
+    @property
+    def source(self) -> int:
+        return self.__source
+
+    @property
+    def target(self) -> int:
+        return self.__target
+
 class Digraph:
     """重み[なし]有向グラフを生成する.
 
     """
 
     #入力定義
-    def __init__(self, N = 0):
+    def __init__(self, N = 0, arc_offset: int = 0):
         """ N 頂点の有向空グラフを生成する. """
 
-        self.adjacent_out = [[] for _ in range(N)] #出近傍 (v が始点)
-        self.adjacent_in = [[] for _ in range(N)] #入近傍 (v が終点)
-        self.__size = 0
+        self.adjacent_out: list[list[Arc]] = [[] for _ in range(N)] #出近傍 (v が始点)
+        self.adjacent_in: list[list[Arc]] = [[] for _ in range(N)] #入近傍 (v が終点)
+        self.__arc_offset = arc_offset
+        self.__arcs: list[Arc] = [None] * arc_offset
+
+    # propertry
+    @property
+    def order(self) -> int:
+        """ グラフの位数 (頂点数) を出力する.
+
+        Returns:
+            int: 位数
+        """
+        return len(self.adjacent_out)
+
+    @property
+    def vertex_count(self):
+        """ グラフの頂点数 (位数) を出力する.
+
+        Returns:
+            int: 頂点数
+        """
+        return len(self.adjacent_out)
+
+    @property
+    def size(self):
+        """ グラフのサイズ (辺の本数) を出力する.
+
+        Returns:
+            int: サイズ
+        """
+        return len(self.__arcs) - self.__arc_offset
+
+    @property
+    def arc_count(self):
+        """ グラフの辺の本数 (サイズ) を出力する.
+
+        Returns:
+            int: 辺の本数
+        """
+        return len(self.__arcs) - self.__arc_offset
 
     #頂点の追加
     def add_vertex(self):
@@ -18,37 +77,65 @@ class Digraph:
         """
         self.adjacent_out.append([])
         self.adjacent_in.append([])
-        return self.order() - 1
+        return self.order - 1
 
     def add_vertices(self, k = 1):
         """ 頂点を k 個追加する.
 
         k: int
         """
-        n = self.order()
+        n = self.order
         self.adjacent_out.extend([[] for _ in range(k)])
         self.adjacent_in.extend([[] for _ in range(k)])
         return list(range(n, n + k))
 
-    #辺の追加
-    def add_arc(self, source, target, label = None):
-        self.adjacent_out[source].append((target, label))
-        self.adjacent_in[target].append((source, label))
-        self.__size += 1
+    # 弧の追加
+    def add_arc(self, source: int, target: int) -> int:
+        """ source から target への弧を追加する.
 
-    #Walkの追加
-    def add_walk(self,*walk):
-        """ 有向歩道 walk=(w[0], ..., w[n-1]) を追加する. """
+        Args:
+            source (int): 始点
+            target (int): 終点
 
-        for i in range(len(walk) - 1):
-            self.add_arc(walk[i], walk[i + 1])
+        Returns:
+            int: 追加した弧の id
+        """
 
-    #Cycleの追加
-    def add_cycle(self,*cycle):
-        """ 有向サイクル cycle=(c[0] ..., c[n-1]) を追加する. """
+        id = len(self.__arcs)
+        arc = Arc(id, source, target)
+        self.adjacent_out[source].append(arc)
+        self.adjacent_in[target].append(arc)
+        self.__arcs.append(arc)
 
-        self.add_walk(*cycle)
-        self.add_arc(cycle[-1], cycle[0])
+        return arc
+
+    # Walk の追加
+    def add_walk(self, *walk: int) -> list[int]:
+        """ 有向歩道 walk = (w[0], w[1], .., w[k - 1]) を追加する.
+
+        Returns:
+            list[int]: 追加した (k - 1) 個の弧の id 番号からなる配列
+        """
+
+        return [self.add_arc(walk[i], walk[i + 1]) for i in range(len(walk) - 1)]
+
+    # Cycle の追加
+    def add_cycle(self, *cycle) -> list[int]:
+        """ 有向歩道 cycle = (c[0], c[1], .., c[k - 1], c[0]) を追加する.
+
+        Returns:
+            list[int]: 追加した k 個の弧の id 番号からなる配列
+        """
+
+        if len(cycle) == 0:
+            return []
+
+        arc_ids = self.add_walk(*cycle)
+        arc_ids.append(cycle[-1], cycle[0])
+        return arc_ids
+
+    def get_arc(self, id: int) -> Arc:
+        return self.__arcs[id]
 
     #近傍
     def out_partner_yield(self, v):
@@ -80,24 +167,6 @@ class Digraph:
     #相対次数
     def relative_degree(self, v):
         return self.out_degree(v) - self.in_degree(v)
-
-    #頂点数
-    def vertex_count(self):
-        """ グラフの頂点数 (位数) を求める."""
-        return len(self.adjacent_out)
-
-    def order(self):
-        """ グラフの位数 (頂点数) を求める."""
-        return len(self.adjacent_out)
-
-    #辺数
-    def arc_count(self):
-        """ グラフの辺数 (サイズ) を求める."""
-        return self.__size
-
-    def size(self):
-        """ グラフのサイズ (辺数) を求める. """
-        return self.__size
 
     #頂点vに到達可能な頂点
     def reachable_to(self, v):
