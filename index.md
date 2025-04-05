@@ -168,7 +168,7 @@ data:
         )"
     - icon: ':warning:'
       path: Topological_Sort.py
-      title: Topological_Sort.py
+      title: Topological Sort
     - icon: ':warning:'
       path: Trie.py
       title: Trie.py
