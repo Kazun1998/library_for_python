@@ -1,16 +1,19 @@
 from Modulo_Matrix import *
 
 class Modulo_Vector:
-    def __init__(self, vector):
+    def __init__(self, vector: list[int]):
         self.vec = [vi % Mod for vi in vector]
-        self.size = len(vector)
 
-        #出力
+    @property
+    def size(self) -> int:
+        return len(self.vec)
+
+    #出力
     def __str__(self):
         return str(self.vec)
 
     def __repr__(self):
-        return str(self)
+        return f"{self.__class__.__name__}({self.vec})"
 
     def __bool__(self):
         return any(self.vec)
@@ -49,7 +52,7 @@ class Modulo_Vector:
         return Modulo_Vector([r * vi for vi in self])
 
     #内積
-    def inner(self,other):
+    def inner(self, other: "Modulo_Vector") -> int:
         assert self.size == other.size, f"2つのベクトルのサイズが異なります. ({self.size}, {other.size})"
         return sum(vi * wi % Mod for vi, wi in zip(self, other)) % Mod
 
@@ -76,76 +79,109 @@ class Modulo_Vector:
         assert isinstance(index,int)
         self.vec[index]=val
 
-#=================================================
-def Zero_Vector(N):
-    """N 次元のゼロベクトルを出力する.
+    def is_zero(self) -> bool:
+        return not any(self.vec)
 
+#=================================================
+def Zero_Vector(N: int) -> Modulo_Vector:
+    """ N 次元のゼロベクトルを出力する.
+
+    Args:
+        N (int): 次元
+
+    Returns:
+        Modulo_Vector: N 次元ゼロベクトル
     """
+
     return Modulo_Vector([0]*N)
 
-def Standard_Basis(N, k):
-    """N 次元ベクトルの第 k 標準基底を出力する.
+def Standard_Basis(N: int, k: int) -> Modulo_Vector:
+    """ N 次元ベクトルの第 k 標準基底を出力する.
 
-    """
-    return Modulo_Vector([1 if i==k else 0 for i in range(N)])
+    Args:
+        N (int): 次元
+        k (int): 1 を立たせる成分
 
-def Vectoric_Matrix(V, Mode=True):
-    """
-
-    V: ベクトルのリスト
-    Mode: True → 行ベクトル, False → 列ベクトル
+    Returns:
+        Modulo_Vector: 第 k 成分のみ 1, それ以外はすべて 0 である N 次元ベクトル
     """
 
-    M=[v.vec for v in V]
-    if Mode==True:
-        M=[list(c) for c in zip(*M)]
-    return Modulo_Matrix(M)
+    return Modulo_Vector([1 if i == k else 0 for i in range(N)])
 
-def Matrix_Action(A,v):
-    """ 行列 Aとベクトル v の積 Av を求める.
+def Vectoric_Matrix(A: list[Modulo_Vector], column: bool = False) -> Modulo_Vector:
+    """ ベクトルのリスト A から行列を生成する. A の各要素が行ベクトルになる.
 
-    A: Matrix
-    v: Vector
+    Args:
+        A (list[Modulo_Vector]): ベクトルのリスト
+        column (bool, optional): True にすると, A の各要素が列ベクトルになる行列を出力する. Defaults to False.
+
+    Returns:
+        Modulo_Vector: 行 (列) ベクトルとした行列
     """
 
-    assert A.col==v.size
+    A = [a.vec for a in A]
+    if column:
+        A = [list(x) for x in zip(*A)]
+    return Modulo_Matrix(A)
 
-    v=v.vec
-    w=[0]*A.row
+def Matrix_Action(A: Modulo_Matrix, v: Modulo_Vector) -> Modulo_Vector:
+    """ 行列 A とベクトル v の積 Av を求める.
+
+    Args:
+        A (Modulo_Matrix): 行列
+        v (Modulo_Vector): ベクトル
+
+    Returns:
+        Modulo_Vector: Av
+    """
+
+    if A.col != v.size:
+        raise ValueError
+
+    v = v.vec
+    w = [0] * A.row
     for i in range(A.row):
-        a=A.ele[i]
-        for j in range(A.col):
-            w[i]+=a[j]*v[j]
-            w[i]%=Mod
+        a = A.ele[i]
+        w[i] = sum(a[j] * v[j] % Mod for j in range(A.col))
     return Modulo_Vector(w)
 
-def Row_Vector(A):
-    """ 行列 A の行ベクトルを生成する.
+def Row_Vector(A: Modulo_Matrix) -> list[Modulo_Vector]:
+    """ 行列 A の行ベクトルからなるリストを生成する.
 
-    A: Modulo_Matrix
+    Args:
+        A (Modulo_Matrix): 行列
+
+    Returns:
+        list[Modulo_Vector]: 行ベクトルからなるリスト
     """
 
     return [Modulo_Vector(v) for v in A.ele]
 
-def Column_Vector(A):
-    """ 行列 A の列ベクトルを生成する.
+def Column_Vector(A: Modulo_Matrix) -> list[Modulo_Vector]:
+    """ 行列 A の列ベクトルからなるリストを生成する.
 
-    A: Modulo_Matrix
+    Args:
+        A (Modulo_Matrix): 行列
+
+    Returns:
+        list[Modulo_Vector]: 列ベクトルからなるリスト
     """
 
     return [Modulo_Vector(v) for v in zip(*A.ele)]
 
-def Tensor_Product(u,v):
+def Tensor_Product(u: Modulo_Vector, v: Modulo_Vector) -> Modulo_Matrix:
     """ u,v のテンソル積 u (x) v を表すベクトルを求める.
 
-    u,v: vector
+    Args:
+        u (Modulo_Vector):
+        v (Modulo_Vector):
+
+    Returns:
+        Modulo_Matrix: テンソル積 u (x) v
     """
 
-    M=[[0]*len(v) for _ in range(len(u))]
+    M = [[0] * v.size for _ in range(u.size)]
 
-    for i in range(len(u)):
-        Mi=M[i]
-        for j in range(len(v)):
-            Mi[j]=u[i]*v[j]
+    for i in range(u.size):
+        M[i] = [u[i] * v[j] for j in range(v.size)]
     return Modulo_Matrix(M)
-

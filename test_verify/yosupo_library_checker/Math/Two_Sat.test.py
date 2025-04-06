@@ -9,38 +9,37 @@ write=sys.stdout.write
 
 #==================================================
 def verify():
-    p,cnf,N,M=input().split()
-    N=int(N); M=int(M)
+    p, cnf, N, M = input().split()
+    N = int(N); M = int(M)
 
-    T=Two_SAT(N)
+    T = Two_SAT(N)
     for _ in range(M):
-        a,b,zero=map(int,input().split())
+        a, b, zero = map(int,input().split())
 
-        if a>0:
-            a=a-1
+        if a > 0:
+            a = a - 1
         else:
-            a=~(-a-1)
+            a = ~(-a - 1)
 
-        if b>0:
-            b=b-1
+        if b > 0:
+            b = b - 1
         else:
-            b=~(-b-1)
+            b = ~(-b - 1)
 
-        T.add_or(a,b)
+        T.add_or(a, b)
 
-    X=T.is_satisfy(1)
-    if X:
-        print("s","SATISFIABLE")
-        V=[]
-        for i in range(N):
-            if X[i]:
-                V.append(i+1)
-            else:
-                V.append(-(i+1))
-        V.append(0)
-        print("v",*V)
-    else:
+    T.calculate()
+
+    if not T.is_satisfiable:
         print("s","UNSATISFIABLE")
+        return
+
+    print("s","SATISFIABLE")
+    ans = T.ans
+    V = [i + 1 if ans[i] else -(i + 1) for i in range(N)]
+    V.append(0)
+
+    print("v", *V)
 
 #==================================================
 verify()
