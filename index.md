@@ -80,7 +80,7 @@ data:
       title: Hungarian.py
     - icon: ':warning:'
       path: Imos.py
-      title: Imos.py
+      title: "Imos \u6CD5"
     - icon: ':warning:'
       path: Integer_Interval.py
       title: Integer_Interval.py
