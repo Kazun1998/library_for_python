@@ -22,21 +22,21 @@ data:
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/two_sat\n\n\
     #==================================================\nfrom Two_SAT import *\n\n\
     import sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n#==================================================\n\
-    def verify():\n    p,cnf,N,M=input().split()\n    N=int(N); M=int(M)\n\n    T=Two_SAT(N)\n\
-    \    for _ in range(M):\n        a,b,zero=map(int,input().split())\n\n       \
-    \ if a>0:\n            a=a-1\n        else:\n            a=~(-a-1)\n\n       \
-    \ if b>0:\n            b=b-1\n        else:\n            b=~(-b-1)\n\n       \
-    \ T.add_or(a,b)\n\n    X=T.is_satisfy(1)\n    if X:\n        print(\"s\",\"SATISFIABLE\"\
-    )\n        V=[]\n        for i in range(N):\n            if X[i]:\n          \
-    \      V.append(i+1)\n            else:\n                V.append(-(i+1))\n  \
-    \      V.append(0)\n        print(\"v\",*V)\n    else:\n        print(\"s\",\"\
-    UNSATISFIABLE\")\n\n#==================================================\nverify()"
+    def verify():\n    p, cnf, N, M = input().split()\n    N = int(N); M = int(M)\n\
+    \n    T = Two_SAT(N)\n    for _ in range(M):\n        a, b, zero = map(int,input().split())\n\
+    \n        if a > 0:\n            a = a - 1\n        else:\n            a = ~(-a\
+    \ - 1)\n\n        if b > 0:\n            b = b - 1\n        else:\n          \
+    \  b = ~(-b - 1)\n\n        T.add_or(a, b)\n\n    T.calculate()\n\n    if not\
+    \ T.is_satisfiable:\n        print(\"s\",\"UNSATISFIABLE\")\n        return\n\n\
+    \    print(\"s\",\"SATISFIABLE\")\n    ans = T.ans\n    V = [i + 1 if ans[i] else\
+    \ -(i + 1) for i in range(N)]\n    V.append(0)\n\n    print(\"v\", *V)\n\n#==================================================\n\
+    verify()\n"
   dependsOn:
   - Two_SAT.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Math/Two_Sat.test.py
   requiredBy: []
-  timestamp: '2022-11-23 16:35:46+09:00'
+  timestamp: '2025-04-06 12:46:13+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Math/Two_Sat.test.py
