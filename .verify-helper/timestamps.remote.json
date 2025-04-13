@@ -25,6 +25,7 @@
 "test_verify/yosupo_library_checker/Data_Structure/Sparse_Table.test.py": "2022-12-18 03:53:02 +0900",
 "test_verify/yosupo_library_checker/Data_Structure/Square_Division.test.py": "2024-03-21 00:27:42 +0900",
 "test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py": "2025-04-13 18:55:26 +0900",
+"test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py": "2025-04-13 21:36:07 +0900",
 "test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py": "2025-03-13 23:55:26 +0900",
 "test_verify/yosupo_library_checker/Graph/Two_Edge_Connected_Components.test.py": "2024-03-20 23:42:58 +0900",
 "test_verify/yosupo_library_checker/Graph/Undirected_Eulerian_Trail.test.py": "2024-03-20 23:23:46 +0900",
