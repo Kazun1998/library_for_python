@@ -1,6 +1,7 @@
 # 参考 URL
 # https://snuke.hatenablog.com/entry/2019/05/07/013609
 
+from random import shuffle
 class Bipartite_Matching:
     __slots__ = ("__M", "__N", "__edges", "__size", "__matching")
 
@@ -55,6 +56,9 @@ class Bipartite_Matching:
         Args:
             matching (bool, optional): True にすると, 最大マッチングの一例も一緒に求める. Defaults to False.
         """
+
+        for a in range(self.M):
+            shuffle(self.__edges[a])
 
         edge = self.__edges
         pre = [-1] * self.M
