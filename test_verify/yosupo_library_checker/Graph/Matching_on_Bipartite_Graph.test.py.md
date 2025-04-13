@@ -22,18 +22,19 @@ data:
   code: "# verification-helper: PROBLEM https://judge.yosupo.jp/problem/bipartitematching\n\
     \n#==================================================\nfrom Bipart_Matching import\
     \ *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n#==================================================\n\
-    def verify():\n    L,R,M=map(int,input().split())\n    G=Bipartite_Matching(L,R)\n\
-    \n    for _ in range(M):\n        a,b=map(int,input().split())\n        G.add_edge(a,b)\n\
-    \n    K,(A,B)=G.max_matching(1)\n\n    H=[]\n    for i in range(L):\n        if\
-    \ A[i]!=-1:\n            H.append((i,A[i]))\n\n    print(K)\n    def string(x):\n\
-    \        return \"{} {}\".format(x[0],x[1])\n\n    write(\"\\n\".join(map(string,H)))\n\
-    \    print()\n\n#==================================================\nverify()\n"
+    def verify():\n    L, R, M = map(int,input().split())\n    G = Bipartite_Matching(L,R)\n\
+    \n    for _ in range(M):\n        a, b=map(int,input().split())\n        G.add_edge(a,\
+    \ b)\n\n    G.calculate(True)\n\n    K = G.max_matching_size\n    A, B = G.max_matching\n\
+    \    H = []\n    for i in range(L):\n        if A[i] != -1:\n            H.append((i,\
+    \ A[i]))\n\n    print(K)\n    def string(x):\n        return \"{} {}\".format(x[0],\
+    \ x[1])\n\n    write(\"\\n\".join(map(string, H)))\n    print()\n\n#==================================================\n\
+    verify()\n"
   dependsOn:
   - Bipart_Matching.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
   requiredBy: []
-  timestamp: '2022-11-23 15:56:15+09:00'
+  timestamp: '2025-04-13 21:46:29+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py
