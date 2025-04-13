@@ -58,7 +58,7 @@ class Bipartite_Matching:
 
         edge = self.__edges
         pre = [-1] * self.M
-        root = [-1]* self.M
+        root = [-1] * self.M
         p = [-1] * self.M
         q = [-1] * self.N
 
