@@ -19,7 +19,7 @@ def verify():
     G.calculate(True)
 
     K = G.max_matching_size
-    A, B = G.max_matching_size
+    A, B = G.max_matching
     H = []
     for i in range(L):
         if A[i] != -1:
