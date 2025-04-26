@@ -16,80 +16,109 @@ data:
     \  File \"/opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "#Thansk for aaaaaaaaaa2230\n#URL: https://atcoder.jp/contests/practice2/submissions/17017372\n\
-    \nfrom collections import deque\nclass MaxFlow:\n    inf = float(\"inf\")\n\n\
-    \    class Arc:\n        def __init__(self, source, target, cap, base, direction,\
-    \ id):\n            self.source=source\n            self.target=target\n     \
-    \       self.cap = cap\n            self.base = base\n            self.rev = None\n\
-    \            self.direction=direction\n            self.id=id\n\n        def __repr__(self):\n\
-    \            if self.direction==1:\n                return \"id: {}, {} -> {},\
-    \ {} / {}\".format(self.id, self.source, self.target, self.cap, self.base)\n \
-    \           else:\n                return \"id: {}, {} <- {}, {} / {}\".format(self.id,\
-    \ self.target, self.source, self.cap, self.base)\n\n    def __init__(self, N=0):\n\
-    \        \"\"\" N \u9802\u70B9\u306E\u30D5\u30ED\u30FC\u5834\u3092\u751F\u6210\
-    \u3059\u308B.\n        \"\"\"\n\n        self.arc = [[] for _ in range(N)]\n \
-    \       self.__arc_list=[]\n\n    def add_vertex(self):\n        self.arc.append([])\n\
-    \        return self.vertex_count()-1\n\n    def add_vertices(self, k):\n    \
-    \    n=self.vertex_count()\n        self.arc.extend([[] for _ in range(k)])\n\
-    \        return list(range(n,n+k))\n\n    def add_arc(self, v, w, cap):\n    \
-    \    \"\"\" \u5BB9\u91CF cap \u306E\u6709\u5411\u8FBA v \u2192 w \u3092\u52A0\u3048\
-    \u308B.\n        \"\"\"\n\n        m=len(self.__arc_list)\n        a=self.Arc(v,w,cap,cap,1,m)\n\
-    \        b=self.Arc(w,v,0,cap,-1,m)\n        a.rev=b; b.rev=a\n        self.arc[v].append(a)\n\
-    \        self.arc[w].append(b)\n        self.__arc_list.append(a)\n        return\
-    \ m\n\n    def get_arc(self, i, mode=0):\n        \"\"\" i \u756A\u76EE\u306E\u8FBA\
-    \u306E\u60C5\u5831\u3092\u5F97\u308B.\n\n        \"\"\"\n\n        assert 0<=i<len(self.__arc_list)\n\
-    \        a=self.__arc_list[i]\n        if mode:\n            return a,a.rev\n\
-    \        else:\n            return a\n\n    def get_all_arcs(self):\n        return\
-    \ [self.get_arc(i) for i in range(len(self.__arc_list))]\n\n    def vertex_count(self):\n\
-    \        return len(self.arc)\n\n    def arc_count(self):\n        return len(self.__arc_list)\n\
-    \n    def change_arc(self, i, new_cap, new_flow):\n        \"\"\" i \u756A\u76EE\
-    \u306E\u8FBA\u306E\u60C5\u5831\u3092\u5909\u66F4\u3059\u308B.\n\n        \"\"\"\
-    \n\n        assert 0<=i<len(self.__arc_list)\n        assert 0<=new_flow<=new_cap\n\
-    \n        a=self.__arc_list[i]\n        a.base=new_cap; a.cap=new_cap-new_flow\n\
-    \        a.rev.base=new_cap; a.rev.cap=new_flow\n\n    def add_edge(self, v, w,\
-    \ cap):\n        \"\"\" \u5BB9\u91CF cap \u306E\u7121\u5411\u8FBA v \u2192 w \u3092\
-    \u52A0\u3048\u308B.\"\"\"\n        self.add_arc(v,w,cap)\n        self.add_arc(w,v,cap)\n\
-    \n    def __bfs(self, s, t):\n        level=self.level=[-1]*self.vertex_count()\n\
-    \        Q=deque([s])\n        level[s]=0\n        while Q:\n            v=Q.popleft()\n\
-    \            next_level=level[v]+1\n            for a in self.arc[v]:\n      \
-    \          if a.cap and level[a.target]==-1:\n                    level[a.target]=next_level\n\
-    \                    if a.target==t:\n                        return True\n  \
-    \                  Q.append(a.target)\n        return False\n\n    def __dfs(self,\
-    \ s, t, up):\n        arc = self.arc\n        it = self.it\n        level = self.level\n\
+    \nfrom collections import deque\n\nclass Arc:\n    def __init__(self, source:\
+    \ int, target: int, cap: int, base: int, direction: int, id: int):\n        self.source\
+    \ = source\n        self.target = target\n        self.cap = cap\n        self.base\
+    \ = base\n        self.rev: Arc = None\n        self.direction = direction # 1\
+    \ \u304C\u9806, -1 \u304C\u9006\u9806\n        self.id = id\n\n    def __repr__(self):\n\
+    \        return f\"{self.__class__.__name__}(source={self.source}, target={self.target},\
+    \ cap={self.cap}, base={self.base}, direction={self.direction}, id={self.id})\"\
+    \n\nclass Max_Flow:\n    inf = float(\"inf\")\n\n    def __init__(self, N: int\
+    \ = 0):\n        \"\"\" N \u9802\u70B9\u306E\u6700\u5927\u30D5\u30ED\u30FC\u3092\
+    \u7528\u610F\u3059\u308B.\n\n        Args:\n            N (int, optional): \u4F4D\
+    \u6570. Defaults to 0.\n        \"\"\"\n\n        self.arc: list[list[Arc]] =\
+    \ [[] for _ in range(N)]\n        self.__arc_list: list[Arc] =[]\n\n    @property\n\
+    \    def order(self) -> int:\n        \"\"\" \u4F4D\u6570\n\n        Returns:\n\
+    \            int: \u4F4D\u6570\n        \"\"\"\n        return len(self.arc)\n\
+    \n    @property\n    def vertex_count(self) -> int:\n        \"\"\" \u9802\u70B9\
+    \u6570\n\n        Returns:\n            int: \u9802\u70B9\u6570\n        \"\"\"\
+    \n        return len(self.arc)\n\n    @property\n    def size(self) -> int:\n\
+    \        \"\"\" \u30B5\u30A4\u30BA\n\n        Returns:\n            int: \u30B5\
+    \u30A4\u30BA\n        \"\"\"\n        return len(self.__arc_list)\n\n    @property\n\
+    \    def arc_count(self):\n        \"\"\" \u5F27\u306E\u6570\n\n        Returns:\n\
+    \            int: \u5F27\u306E\u6570\n        \"\"\"\n        return len(self.__arc_list)\n\
+    \n    def add_vertex(self) -> int:\n        \"\"\" \u9802\u70B9\u3092 1 \u500B\
+    \u8FFD\u52A0\u3059\u308B.\n\n        Returns:\n            int: \u8FFD\u52A0\u3057\
+    \u305F\u9802\u70B9\u306E\u756A\u53F7\n        \"\"\"\n\n        self.arc.append([])\n\
+    \        return self.vertex_count - 1\n\n    def add_vertices(self, k: int) ->\
+    \ int:\n        \"\"\" \u9802\u70B9\u3092 k \u500B\u8FFD\u52A0\u3059\u308B.\n\n\
+    \        Args:\n            k (int): \u8FFD\u52A0\u3059\u308B\u9802\u70B9\u306E\
+    \u6570\n\n        Returns:\n            int: \u8FFD\u52A0\u3059\u308B k \u500B\
+    \u306E\u9802\u70B9\u306E\u756A\u53F7\u304B\u3089\u306A\u308B\u30EA\u30B9\u30C8\
+    \n        \"\"\"\n\n        n = self.vertex_count\n        self.arc.extend([[]\
+    \ for _ in range(k)])\n        return list(range(n, n + k))\n\n    def add_arc(self,\
+    \ v: int, w: int, cap: int) -> int:\n        \"\"\" \u5BB9\u91CF cap \u306E\u5F27\
+    \ v \u2192 w \u3092\u8FFD\u52A0\u3059\u308B.\n\n        Args:\n            v (int):\
+    \ \u59CB\u70B9\n            w (int): \u7D42\u70B9\n            cap (int): \u5BB9\
+    \u91CF\n\n        Returns:\n            int: \u8FFD\u52A0\u3057\u305F\u5F27\u306E\
+    \u756A\u53F7\n        \"\"\"\n\n\n        m = self.size\n        arc = Arc(v,\
+    \ w, cap, cap, 1, m)\n        arc_rev = Arc(w, v, 0, cap, -1, m)\n        arc.rev\
+    \ = arc_rev\n        arc_rev.rev = arc\n        self.arc[v].append(arc)\n    \
+    \    self.arc[w].append(arc_rev)\n        self.__arc_list.append(arc)\n\n    \
+    \    return m\n\n    def get_arc(self, i: int) -> Arc:\n        \"\"\" i \u756A\
+    \u76EE\u306E\u5F27\u3092\u5F97\u308B.\n\n        Args:\n            i (int): \u5F27\
+    \u306E\u756A\u53F7\n\n        Returns:\n            Arc: \u5F27\n        \"\"\"\
+    \n\n        assert 0 <= i < self.size\n        return self.__arc_list[i]\n\n \
+    \   def get_all_arcs(self) -> list[Arc]:\n        return [self.get_arc(i) for\
+    \ i in range(self.size)]\n\n    def change_arc(self, i, new_cap, new_flow):\n\
+    \        \"\"\" i \u756A\u76EE\u306E\u8FBA\u306E\u60C5\u5831\u3092\u5909\u66F4\
+    \u3059\u308B.\n\n        \"\"\"\n\n        assert 0 <= i < self.size\n       \
+    \ assert 0 <= new_flow<=new_cap\n\n        a=self.__arc_list[i]\n        a.base=new_cap;\
+    \ a.cap=new_cap-new_flow\n        a.rev.base=new_cap; a.rev.cap=new_flow\n\n \
+    \   def add_edge(self, v, w, cap):\n        \"\"\" \u5BB9\u91CF cap \u306E\u7121\
+    \u5411\u8FBA v \u2192 w \u3092\u52A0\u3048\u308B.\"\"\"\n        self.add_arc(v,w,cap)\n\
+    \        self.add_arc(w,v,cap)\n\n    def __bfs(self, s: int, t: int) -> bool:\n\
+    \        level = self.level = [-1] * self.vertex_count\n        Q = deque([s])\n\
+    \        level[s] = 0\n        while Q:\n            v = Q.popleft()\n       \
+    \     next_level = level[v] + 1\n            for arc in self.arc[v]:\n       \
+    \         if not(arc.cap and level[arc.target] == -1):\n                    continue\n\
+    \n                level[arc.target] = next_level\n                if arc.target\
+    \ == t:\n                    return True\n\n                Q.append(arc.target)\n\
+    \n        return False\n\n    def __dfs(self, s: int, t: int, up: int) -> int:\n\
+    \        arc_to = self.arc\n        it = self.it\n        level = self.level\n\
     \n        st = deque([t])\n        while st:\n            v = st[-1]\n       \
-    \     if v == s:\n                st.pop()\n                flow = up\n      \
-    \          for w in st:\n                    a = arc[w][it[w]].rev\n         \
-    \           flow = min(flow, a.cap)\n                for w in st:\n          \
-    \          a = arc[w][it[w]]\n                    a.cap += flow\n            \
-    \        a.rev.cap -= flow\n                return flow\n            lv = level[v]-1\n\
-    \            while it[v] < len(arc[v]):\n                a = arc[v][it[v]]\n \
-    \               ra = a.rev\n                if ra.cap == 0 or lv != level[a.target]:\n\
+    \     if v == s:\n                break\n\n            lv = level[v]-1\n     \
+    \       while it[v] < len(arc_to[v]):\n                arc_rev = arc_to[v][it[v]]\n\
+    \                arc = arc_rev.rev\n                if arc.cap == 0 or lv != level[arc.source]:\n\
     \                    it[v] += 1\n                    continue\n              \
-    \  st.append(a.target)\n                break\n            if it[v] == len(arc[v]):\n\
-    \                st.pop()\n                level[v]=-1\n        return 0\n\n \
-    \   def max_flow(self, source, target, flow_limit=inf):\n        \"\"\" source\
-    \ \u304B\u3089 target \u306B\u9AD8\u3005 flow_limit \u306E\u6C34\u6D41\u3092\u6D41\
-    \u3059\u3068\u304D, \"\u65B0\u305F\u306B\u6D41\u308C\u308B\" \u6C34\u6D41\u306E\
-    \u5927\u304D\u3055\"\"\"\n\n        flow = 0\n        while flow < flow_limit\
-    \ and self.__bfs(source, target):\n            self.it = [0]*self.vertex_count()\n\
-    \            while flow < flow_limit:\n                f = self.__dfs(source,\
-    \ target, flow_limit-flow)\n                if f == 0:\n                    break\n\
-    \                flow += f\n        return flow\n\n    def get_flow(self, mode=0):\n\
-    \        if mode==0:\n            return [a.base-a.cap for a in self.__arc_list]\n\
-    \        else:\n            F=[[] for _ in range(self.vertex_count())]\n     \
-    \       for i,a in enumerate(self.__arc_list):\n                F[a.source].append((i,\
-    \ a.target, a.base-a.cap))\n            return F\n\n    def min_cut(self,s):\n\
-    \        \"\"\" s \u3092 0 \u306B\u542B\u3081\u308B\u6700\u5C0F\u30AB\u30C3\u30C8\
-    \u3092\u6C42\u3081\u308B.\n        \"\"\"\n\n        group = [1]*self.vertex_count()\n\
-    \        Q = deque([s])\n        while Q:\n            v = Q.pop()\n         \
-    \   group[v] = 0\n            for a in self.arc[v]:\n                if a.cap\
-    \ and group[a.target]:\n                    Q.append(a.target)\n        return\
-    \ group\n\n    def refresh(self):\n        for a in self.__arc_list:\n       \
-    \     a.cap=a.base\n            a.rev.cap=0\n"
+    \  st.append(arc.source)\n                break\n\n            if it[v] == len(arc_to[v]):\n\
+    \                st.pop()\n                level[v] = -1\n        else:\n    \
+    \        return 0\n\n        st.pop()\n        flow = up\n        for w in st:\n\
+    \            arc = arc_to[w][it[w]].rev\n            flow = min(flow, arc.cap)\n\
+    \n        for w in st:\n            arc_rev = arc_to[w][it[w]]\n            arc_rev.cap\
+    \ += flow\n            arc_rev.rev.cap -= flow\n\n        return flow\n\n    def\
+    \ max_flow(self, source: int, target: int, flow_limit: int = inf) -> int:\n  \
+    \      \"\"\" source \u304B\u3089 target \u3078 flow_limit \u3092\u4E0A\u9650\u3068\
+    \u3057\u3066\u6D41\u305B\u308B\u3060\u3051\u6D41\u3057\u305F\u3068\u304D\u306E\
+    \ \"\u8FFD\u52A0\u3067\u767A\u751F\u3059\u308B\" \u6D41\u91CF\u3092\u6C42\u3081\
+    \u308B.\n\n        Args:\n            source (int): \u59CB\u70B9\n           \
+    \ target (int): \u7D42\u70B9\n            flow_limit (int, optional): \u6D41\u91CF\
+    \u306E\u4E0A\u9650. Defaults to inf.\n\n        Returns:\n            int: \"\u8FFD\
+    \u52A0\u3067\u767A\u751F\u3059\u308B\" \u6D41\u91CF\n        \"\"\"\n\n      \
+    \  flow = 0\n        while flow < flow_limit and self.__bfs(source, target):\n\
+    \            self.it = [0] * self.vertex_count\n            while flow < flow_limit:\n\
+    \                f = self.__dfs(source, target, flow_limit - flow)\n         \
+    \       if f == 0:\n                    break\n                flow += f\n   \
+    \     return flow\n\n    def get_flow(self) -> list[list[tuple[int, int, int]]]:\n\
+    \        F = [[] for _ in range(self.vertex_count)]\n        for arc in self.__arc_list:\n\
+    \            F[arc.source].append((arc.id, arc.target, arc.base - arc.cap))\n\
+    \        return F\n\n    def min_cut(self, s: int) -> list[int]:\n        \"\"\
+    \" s \u3092 0 \u5074\u306B\u542B\u3081\u308B\u6700\u5C0F\u30AB\u30C3\u30C8\u3092\
+    \u6C42\u3081\u308B.\n\n        Args:\n            s (int): \u9802\u70B9\u756A\u53F7\
+    \n\n        Returns:\n            list[int]: 0, 1 \u304B\u3089\u306A\u308B\u9577\
+    \u3055\u304C\u4F4D\u6570\u306E\u30EA\u30B9\u30C8. \u6700\u5C0F\u30AB\u30C3\u30C8\
+    \u306F 0 \u5074\u3068 1 \u5074\u306B\u5206\u304B\u308C\u308B. \u9802\u70B9 s \u306F\
+    \u5FC5\u305A 0 \u5074\u306B\u306A\u308B.\n        \"\"\"\n\n        group = [1]\
+    \ * self.vertex_count\n        Q = deque([s])\n        while Q:\n            v\
+    \ = Q.pop()\n            group[v] = 0\n            for arc in self.arc[v]:\n \
+    \               if arc.cap and group[arc.target]:\n                    Q.append(arc.target)\n\
+    \        return group\n\n    def refresh(self):\n        for a in self.__arc_list:\n\
+    \            a.cap = a.base\n            a.rev.cap = 0\n"
   dependsOn: []
   isVerificationFile: false
   path: Flow/Flow.py
   requiredBy: []
-  timestamp: '2022-04-20 14:59:57+09:00'
+  timestamp: '2025-04-26 14:03:35+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Flow/Flow.py
