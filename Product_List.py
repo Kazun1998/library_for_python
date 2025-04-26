@@ -1,58 +1,88 @@
-class Product_List_2D:
-    def __init__(self, default, H, W):
-        """ H x W の直積リストを生成する. """
+from typing import TypeVar, Generic
 
-        self.H=H
-        self.W=W
-        self.list=[default]*(H*W)
+A = TypeVar('A')
+class Product_List_2D(Generic[A]):
+    def __init__(self, H: int, W: int, default: A = None):
+        """ H x W の直積リストを生成する.
 
-    def __len__(self):
-        return self.H*self.W
+        Args:
+            H (int): 第 1 引数
+            W (int): 第 2 引数
+            default (A, optional): 各要素の初期状態. Defaults to None.
+        """
 
-    def get(self, i, j):
-        if i<0:
-            i+=self.H
+        self._H = H
+        self._W = W
+        self._default = default
+        self._list = [default] * (H * W)
 
-        if j<0:
-            j+=self.W
+    @property
+    def H(self) -> int:
+        """ 第 1 引数の個数
 
-        return self.list[i*self.W+j]
+        Returns:
+            int: 第 1 引数の個数
+        """
+        return self._H
+
+    @property
+    def W(self) -> int:
+        """ 第 2 引数の個数
+
+        Returns:
+            int: 第 2 引数の個数
+        """
+        return self._W
+
+    def __to_index(self, i: int, j: int) -> bool:
+        if i < 0:
+            i = ~i
+        if j < 0:
+            j = ~j
+
+        if (0 <= i < self._H) and (0 <= j < self._W):
+            return i, j
+        else:
+            raise IndexError
+
+    def __len__(self) -> int:
+        return self.H * self.W
+
+    def get(self, i: int, j: int) -> A:
+        """ 第 (i, j) 要素を得る.
+
+        Args:
+            i (int): 第 1 引数
+            j (int): 第 2 引数
+
+        Returns:
+            A: 第 (i, j) 要素
+        """
+
+        i, j = self.__to_index(i, j)
+        return self._list[i * self.W + j]
 
     def get_all(self):
-        return [self.list[i*self.W: (i+1)*self.W] for i in range(self.H)]
+        return [self._list[i * self._W: (i + 1) * self._W] for i in range(self._H)]
 
-    def projection_H(self, i):
-        if i<0:
-            i+=self.H
+    def set(self, i: int, j: int, value: A) -> A:
+        """ 第 (i, j) 要素を value にする.
 
-        return self.list[i*self.W: (i+1)*self.W]
+        Args:
+            i (int): 第 1 引数
+            j (int): 第 2 引数
+            value (A): 更新後の要素
 
-    def set(self, i, j, value):
-        if i<0:
-            i+=self.H
+        Returns:
+            A: value
+        """
 
-        if j<0:
-            j+=self.W
+        i, j = self.__to_index(i, j)
+        self._list[i * self.W + j] = value
+        return value
 
-        self.list[i*self.W+j]=value
-
-    def set_once(self, i, A):
-        if i<0:
-            i+=self.H
-
-        index=i*self.W
-        for j in range(self.W):
-            self.list[index]=A[j]
-            index+=1
-
-    def __getitem__(self, index):
-        return self.get(index[0], index[1])
-
-    def __setitem__(self, index, value):
-        self.set(index[0], index[1], value)
-
-    def __repr__(self):
-        return "[Product List 2D] : Height: {}, Width: {}".format(self.H, self.W)
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(H={self.H}, W={self.W}, default={self._default})"
 
 class Product_List_3D:
     def __init__(self, default, H, W, D):
