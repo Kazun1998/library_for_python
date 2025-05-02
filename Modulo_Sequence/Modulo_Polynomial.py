@@ -1,34 +1,32 @@
-class Modulo_Polynomial():
-    __slots__=("Poly", "max_degree")
+class Modulo_Polynomial:
+    __slots__= ("poly", "max_degree")
 
-    def __init__(self, Poly=[], max_degree=2*10**5):
-        """ 多項式の定義
+    def __init__(self, poly: list[int] = None, max_degree: int = 2 * 10 ** 5):
+        """ 多項式を定義する (各係数の法 Mod はグローバル変数から指定する).
 
-        P: 係数のリスト
-        max_degree
-
-        ※Mod: 法はグローバル変数から指定
+        Args:
+            poly (list[int], optional): 係数のリスト. 第 d 要素は d 次の係数を表す. None のときは [0] と同義. Defaults to None.
+            max_degree (int, optional): (mod X^n) を考えるときの n. Defaults to 2*10**5.
         """
 
-        if Poly:
-            self.Poly=[p%Mod for p in Poly[:max_degree]]
-        else:
-            self.Poly=[0]
-        self.max_degree=max_degree
+        if poly is None:
+            poly = [0]
 
-    def __str__(self):
-        return str(self.Poly)
+        self.poly = [p%Mod for p in poly[:max_degree]]
+        self.max_degree = max_degree
 
-    def __repr__(self):
-        return self.__str__()
+    def __str__(self) -> str:
+        return str(self.poly)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.poly})"
 
     def __iter__(self):
-        yield from self.Poly
+        yield from self.poly
 
-    #=
-    def __eq__(self,other):
+    def __eq__(self, other: "Modulo_Polynomial") -> bool:
         from itertools import zip_longest
-        return all([a==b for a,b in zip_longest(self.Poly,other.Poly,fillvalue=0)])
+        return all([a == b for a, b in zip_longest(self.poly, other.poly, fillvalue = 0)])
 
     #+,-
     def __pos__(self):
@@ -40,66 +38,68 @@ class Modulo_Polynomial():
     #items
     def __getitem__(self, index):
         if isinstance(index, slice):
-            return Modulo_Polynomial(self.Poly[index], self.max_degree)
+            return Modulo_Polynomial(self.poly[index], self.max_degree)
         else:
             if index<0:
-                raise IndexError("index is negative (index: {})".format(index))
-            elif index>=len(self.Poly):
+                raise IndexError(f"index is negative (index: {index})")
+            elif index>=len(self.poly):
                 return 0
             else:
-                return self.Poly[index]
+                return self.poly[index]
 
     def __setitem__(self, index, value):
         if index<0:
-            raise IndexError("index is negative (index: {})".format(index))
+            raise IndexError(f"index is negative (index: {index})")
         elif index>=self.max_degree:
             return
 
-        if index>=len(self.Poly):
-            self.Poly+=[0]*(index-len(self.Poly)+1)
-        self.Poly[index]=value%Mod
+        if index>=len(self.poly):
+            self.poly+=[0]*(index-len(self.poly)+1)
+        self.poly[index]=value%Mod
 
     #Boole
     def __bool__(self):
-        return any(self.Poly)
+        return any(self.poly)
 
     #簡略化
     def reduce(self):
-        """ 高次の 0 を切り捨て
-
+        """ 先頭の 0 を削除する.
         """
 
-        P=self.Poly
-        for d in range(len(P)-1,-1,-1):
-            if P[d]:
-                break
-        self.resize(d+1)
-        return
+        poly = self.poly
+        while poly and (poly[-1] == 0):
+            poly.pop()
+
 
     #シフト
-    def __lshift__(self,other):
-        if other<0:
-            return self>>(-other)
+    def __lshift__(self, depth: int) -> "Modulo_Polynomial":
+        if depth < 0:
+            return self >> (-depth)
 
-        if other>self.max_degree:
-            return Modulo_Polynomial([0],self.max_degree)
+        if depth > self.max_degree:
+            return Modulo_Polynomial([0], self.max_degree)
 
-        G=[0]*other+self.Poly
-        return Modulo_Polynomial(G,self.max_degree)
+        return Modulo_Polynomial([0] * depth + self.poly, self.max_degree)
 
-    def __rshift__(self,other):
-        if other<0:
-            return  self<<(-other)
+    def __rshift__(self, depth: int) -> "Modulo_Polynomial":
+        if depth < 0:
+            return  self << (-depth)
 
-        return Modulo_Polynomial(self.Poly[other:],self.max_degree)
+        return Modulo_Polynomial(self.poly[depth:], self.max_degree)
 
     #次数
-    def degree(self):
-        P=self.Poly
-        for d in range(len(self.Poly)-1,-1,-1):
-            if P[d]:
+    def degree(self) -> int:
+        """ この多項式の次数を求める.
+
+        Returns:
+            int: 次数 (係数が 0 ではない最大次数)
+        """
+
+        for d in range(len(self.poly) - 1, -1, -1):
+            if self.poly[d]:
                 return d
-        return -float("inf")
+        else:
+            return -float("inf")
 
     #加法
     def __add__(self,other):
@@ -107,10 +107,10 @@ class Modulo_Polynomial():
 
         if Q.__class__==Modulo_Polynomial:
             N=min(P.max_degree,Q.max_degree)
-            A=P.Poly; B=Q.Poly
+            A=P.poly; B=Q.poly
         else:
             N=P.max_degree
-            A=P.Poly; B=Q
+            A=P.poly; B=Q
         return Modulo_Polynomial(Calc.Add(A,B),N)
 
     def __radd__(self,other):
@@ -121,10 +121,10 @@ class Modulo_Polynomial():
         P=self; Q=other
         if Q.__class__==Modulo_Polynomial:
             N=min(P.max_degree,Q.max_degree)
-            A=P.Poly; B=Q.Poly
+            A=P.poly; B=Q.poly
         else:
             N=P.max_degree
-            A=P.Poly; B=Q
+            A=P.poly; B=Q
         return Modulo_Polynomial(Calc.Sub(A,B),N)
 
     def __rsub__(self,other):
@@ -136,10 +136,10 @@ class Modulo_Polynomial():
         Q=other
         if Q.__class__==Modulo_Polynomial:
             a=b=0
-            for x in P.Poly:
+            for x in P.poly:
                 if x:
                     a+=1
-            for y in Q.Poly:
+            for y in Q.poly:
                 if y:
                     b+=1
 
@@ -147,7 +147,7 @@ class Modulo_Polynomial():
                 P,Q=Q,P
 
             P.reduce();Q.reduce()
-            U,V=P.Poly,Q.Poly
+            U,V=P.poly,Q.poly
             M=min(P.max_degree,Q.max_degree)
             if a<2*P.max_degree.bit_length():
                 B=[0]*(len(U)+len(V)-1)
@@ -178,7 +178,7 @@ class Modulo_Polynomial():
         self.reduce()
         other.reduce()
 
-        return Modulo_Polynomial(Calc.Floor_Div(self.Poly, other.Poly),
+        return Modulo_Polynomial(Calc.Floor_Div(self.poly, other.poly),
                                 max(self.max_degree, other.max_degree))
 
     def __rfloordiv__(self,other):
@@ -193,7 +193,7 @@ class Modulo_Polynomial():
         if not other:
             return ZeroDivisionError
         self.reduce(); other.reduce()
-        r=Modulo_Polynomial(Calc.Mod(self.Poly, other.Poly),
+        r=Modulo_Polynomial(Calc.Mod(self.poly, other.poly),
                             min(self.max_degree, other.max_degree))
         r.reduce()
         return r
@@ -232,20 +232,27 @@ class Modulo_Polynomial():
             P=Log(self)
             return Exp(P*other)
 
-    #逆元
-    def inverse(self, deg=None):
-        assert self.Poly[0], "定数項が0"
+    def inverse(self, deg: int = None) -> "Modulo_Polynomial":
+        """ この多項式の (mod X^d) での逆元を求める.
 
-        if deg==None:
-            deg=self.max_degree
+        Args:
+            deg (int, optional): 逆元の精度 ((mod X^d) の逆元を求める際の d) を指定する. None のときは元の多項式の精度をそのまま採用. Defaults to None.
 
-        return Modulo_Polynomial(Calc.Inverse(self.Poly, deg), self.max_degree)
+        Returns:
+            Modulo_Polynomial: _description_
+        """
+        assert self.poly[0], "定数項が0"
+
+        if deg is None:
+            deg = self.max_degree
+
+        return Modulo_Polynomial(Calc.Inverse(self.poly, deg), self.max_degree)
 
     #除法
     def __truediv__(self,other):
         if isinstance(other, Modulo_Polynomial):
-            if Calc.is_sparse(other.Poly):
-                d,f=Calc.coefficients_list(other.Poly)
+            if Calc.is_sparse(other.poly):
+                d,f=Calc.coefficients_list(other.poly)
                 K=len(d)
                 H=[0]*self.max_degree
 
@@ -268,66 +275,79 @@ class Modulo_Polynomial():
         else:
             return pow(other, -1, Mod)*self
 
-    def __rtruediv__(self,other):
+    def __rtruediv__(self, other: "Modulo_Polynomial") -> "Modulo_Polynomial":
         return other*self.inverse()
 
     #スカラー倍
-    def scale(self, s):
-        return Modulo_Polynomial(Calc.Times(self.Poly,s),self.max_degree)
+    def scale(self, s: int) -> "Modulo_Polynomial":
+        """ 多項式に s 倍を掛けた多項式を求める.
+
+        Args:
+            s (int): スカラー倍の係数
+
+        Returns:
+            Modulo_Polynomial: s 倍した多項式
+        """
+
+        return Modulo_Polynomial(Calc.Times(self.poly,s), self.max_degree)
 
     #最高次の係数
-    def leading_coefficient(self):
-        for x in self.Poly[::-1]:
-            if x:
-                return x
-        return 0
+    def leading_coefficient(self) -> int:
+        """ 最高次の係数を求める
 
-    def censor(self, N=-1, Return=False):
-        """ N 次以上の係数をカット
+        Returns:
+            int: 最高次の係数 (0 多項式の返り値は 0 とする)
         """
 
-        if N==-1:
-            N=self.max_degree
-
-        N=min(N, self.max_degree)
-
-        if Return:
-            return Modulo_Polynomial(self.Poly[:N],self.max_degree)
+        for a in self.poly[::-1]:
+            if a:
+                return a
         else:
-            self.Poly=self.Poly[:N]
+            return 0
 
-    def resize(self, N, Return=False):
-        """ 強制的に Poly の配列の長さを N にする.
+    def censor(self, m: int = None):
+        """ m 次以降の係数を切り捨てる.
 
+        Args:
+            m (int, optional): 切り捨てる精度. Defaults to None.
         """
 
-        N=min(N, self.max_degree)
-        P=self
-        if Return:
-            if len(P.Poly)>N:
-                E=P.Poly[:N]
-            else:
-                E=P.Poly+[0]*(N-len(P.Poly))
-            return Modulo_Polynomial(E,P.max_degree)
-        else:
-            if len(P.Poly)>N:
-                del P.Poly[N:]
-            else:
-                P.Poly+=[0]*(N-len(P.Poly))
+        if m is None:
+            m = self.max_degree
+
+        m = min(m, self.max_degree)
+        self.poly[:m]
+
+    def resize(self, m: int):
+        """ この多項式の情報を持っている配列の長さを m にする (短い場合は末尾に 0 を追加し, 長い場合は m 次以上を切り捨てる).
+
+        Args:
+            m (int): 次数
+        """
+        m = min(m, self.max_degree)
+        if len(self.poly) > m:
+            del self.poly[:m]
+        elif len(self.poly) < m:
+            self.poly.extend([0] * (m - len(self.poly)))
 
     #代入
-    def substitution(self, a):
-        """ a を (形式的に) 代入した値を求める.
+    def substitution(self, a: int) -> int:
+        """ 多項式の変数に a を形式的に代入した式の値を求める.
 
-        a: int
+        Args:
+            a (int): 代入する値
+
+        Returns:
+            int: 式の値
         """
 
-        y=0
-        t=1
-        for p in self.Poly:
-            y=(y+p*t)%Mod
-            t=(t*a)%Mod
-        return y
+        y = 0
+        a_pow = 1
+        for p in self.poly:
+            y += p * a_pow % Mod
+            a_pow = (a_pow * a) % Mod
+        return y % Mod
+
 #=================================================
 class Calculator:
     def __init__(self):
@@ -777,11 +797,11 @@ class Calculator:
 
 #以下 参考元https://judge.yosupo.jp/submission/28304
 def Differentiate(P):
-    G=[(k*a)%Mod for k,a in enumerate(P.Poly[1:],1)]+[0]
+    G=[(k*a)%Mod for k,a in enumerate(P.poly[1:],1)]+[0]
     return Modulo_Polynomial(G,P.max_degree)
 
 def Integrate(P):
-    F=P.Poly
+    F=P.poly
     N=len(F)
 
     Inv=[0]*(N+1)
@@ -798,7 +818,7 @@ def Integrate(P):
 累乗,指数,対数
 """
 def Log(P):
-    assert P.Poly[0]==1,"定数項が1ではない"
+    assert P.poly[0]==1,"定数項が1ではない"
     return Integrate(Differentiate(P)/P)
 
 def Exp(P):
@@ -813,7 +833,7 @@ def Exp(P):
         q,r=divmod(Mod,i)
         Inv[i]=(-q*Inv[r])%Mod
 
-    H=P.Poly; H+=[0]*(N-len(H))
+    H=P.poly; H+=[0]*(N-len(H))
     assert (not H) or H[0]==0,"定数項が0でない"
 
     if Calc.is_sparse(H):
@@ -872,7 +892,7 @@ def Exp(P):
     return Modulo_Polynomial(F[:N],P.max_degree)
 
 def Root(P,k):
-    assert P.Poly[0]==1, "定数項が1ではない"
+    assert P.poly[0]==1, "定数項が1ではない"
     k%=Mod
     assert k, "kが特異"
     k_inv=pow(k, -1, Mod)
@@ -934,7 +954,7 @@ def Power(P, M):
 
     assert M>=0
     N=P.max_degree
-    F=P.Poly
+    F=P.poly
     F+=[0]*((N+1)-len(F))
     for (deg,p) in enumerate(F):
         if p:
@@ -974,7 +994,7 @@ def Power(P, M):
             G[i+1]=g*Inv[i+1]%Mod
     else:
         Q=Modulo_Polynomial([(p_inv*a)%Mod for a in F[deg:]],P.max_degree)
-        G=Exp(M_mod*Log(Q)).Poly
+        G=Exp(M_mod*Log(Q)).poly
 
     pk=pow(p, M, Mod)
     G=[0]*(deg*M)+[(pk*a)%Mod for a in G]
@@ -1076,7 +1096,7 @@ def __sqrt(F, N):
 
 def Sqrt(P):
     N=P.max_degree
-    F=P.Poly
+    F=P.poly
     F+=[0]*(N-len(F))
 
     for d,p in enumerate(F):
@@ -1114,7 +1134,7 @@ def Composition(P,Q):
 
     X=[[1]]
     for i in range(k):
-        X.append(Calc.Convolution(X[-1],Q.Poly)[:deg+1])
+        X.append(Calc.Convolution(X[-1],Q.poly)[:deg+1])
 
     Y=[[0]*len(X[k]) for _ in range(k)]
     for i,y in enumerate(Y):
@@ -1145,7 +1165,7 @@ def Taylor_Shift(P, a):
     a: int
     """
 
-    N=len(P.Poly)-1
+    N=len(P.poly)-1
 
     fact=[0]*(N+1)
     fact[0]=1
@@ -1158,7 +1178,7 @@ def Taylor_Shift(P, a):
     for i in range(N-1,-1,-1):
         fact_inv[i]=(fact_inv[i+1]*(i+1))%Mod
 
-    F=P.Poly.copy()
+    F=P.poly.copy()
     for i in range(N+1):
         F[i]=(F[i]*fact[i])%Mod
 
@@ -1184,7 +1204,7 @@ def Polynominal_Coefficient(P,Q,N):
     https://arxiv.org/pdf/2008.08822.pdf
     """
 
-    P=P.Poly.copy(); Q=Q.Poly.copy()
+    P=P.poly.copy(); Q=Q.poly.copy()
     m=1<<((len(Q)-1).bit_length())
     P.extend([0]*(2*m-len(P)))
     Q.extend([0]*(2*m-len(Q)))
@@ -1234,7 +1254,7 @@ def Multipoint_Evaluation(P, X):
         G[i]=Calc.Convolution(G[2*i],G[2*i+1])
 
     for i in range(1, 2*size):
-        A=P.Poly if i==1 else G[i>>1]
+        A=P.poly if i==1 else G[i>>1]
         m=len(A)-len(G[i])+1
         v=Calc.Convolution(A[::-1][:m], Calc.Inverse(G[i][::-1],m))[m-1::-1]
         w=Calc.Convolution(v,G[i])
@@ -1308,7 +1328,7 @@ def _gcd(F,G):
         F,G=G,F%G
 
     a_inv=pow(F.leading_coefficient(), -1, Mod)
-    X=F.Poly
+    X=F.poly
     for i in range(len(X)):
         X[i]=(a_inv*X[i])%Mod
     return F
@@ -1325,7 +1345,7 @@ def lcm(*X):
     from functools import reduce
     L=reduce(_lcm,X)
     a_inv=pow(L.leading_coefficient(), -1, Mod)
-    X=L.Poly
+    X=L.poly
     for i in range(len(X)):
         X[i]=(a_inv*X[i])%Mod
     return L
@@ -1347,5 +1367,5 @@ def Slide_Convolution(A, B, cyclic=False):
         return Calc.Convolution(A,B[::-1])[M:N+1]
 
 #=================================================
-Mod=998244353
-Calc=Calculator()
+Mod = 998244353
+Calc = Calculator()

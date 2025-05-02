@@ -111,7 +111,7 @@ def Bernoulli(N, mode=0):
     """
 
     P=Exp(Modulo_Polynomial([0,1],N+2))[1:]
-    F=P.inverse().Poly[:-1]
+    F=P.inverse().poly[:-1]
 
     if mode==0:
         fact=1
@@ -172,7 +172,7 @@ def PartitionsQ(N, mode=0):
     if mode==0:
         return Exp(P)[N]
     else:
-        return Exp(P).Poly
+        return Exp(P).poly
 
 def Stirling_1st(N):
     """ k=0,1, ..., N に対する第 I 種 Stirling 数を求める.
@@ -190,7 +190,7 @@ def Stirling_1st(N):
             P=g(n//2)
             return P*Taylor_Shift(P, -n//2)
 
-    return g(N).Poly
+    return g(N).poly
 
 def Stirling_2nd(N):
     """ k=0,1, ..., N に対する第 II 種 Stirling 数 (区別のできる N 個のものを区別できない K 個のグループ (空グループ禁止) に分割する方法) を求める.
@@ -228,7 +228,7 @@ def Bell(N, mode = False):
     G = [0] + fact_inv[1:]
 
     # F = exp(G) = exp(exp(X) - 1)
-    F = Exp(Modulo_Polynomial(G, N + 1)).Poly
+    F = Exp(Modulo_Polynomial(G, N + 1)).poly
 
     for k in range(1, N + 1):
         F[k] = fact[k] * F[k] % Mod
@@ -247,7 +247,7 @@ def Motzkin(N, mode=0):
     F=((Modulo_Polynomial([1,-1], N+3)-Sqrt(Modulo_Polynomial([1,-2,-3], N+3)))*two_inv)>>2
 
     if mode:
-        return F.Poly[:N+1]
+        return F.poly[:N+1]
     else:
         return F[N]
 
@@ -280,7 +280,7 @@ def Subset_Sum(X, K):
                 j+=i
                 k+=1
     P=Modulo_Polynomial(F,K+1)
-    return Exp(P).Poly
+    return Exp(P).poly
 
 #===
 #多項式和
@@ -291,7 +291,7 @@ def Polynominal_Sigma(P):
 
     from itertools import accumulate
 
-    N=len(P.Poly)
+    N=len(P.poly)
     A=Multipoint_Evaluation(P, list(range(1,N+2)))
     A=list(accumulate(A,lambda x,y:(x+y)%Mod))
     return Polynominal_Interpolation(list(range(1,N+2)), A)
@@ -299,7 +299,7 @@ def Polynominal_Sigma(P):
 def Differences(P, k=1):
     """ P の k- 差分 D[k](P(n))=D[k-1](P(n+1)-P(n)), D[0](P)=P を求める. """
 
-    N=len(P.Poly)
+    N=len(P.poly)
 
     fact=[1]*(k+1)
     for i in range(1,k+1):
