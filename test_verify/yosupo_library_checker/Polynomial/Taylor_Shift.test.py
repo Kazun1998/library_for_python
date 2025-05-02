@@ -13,7 +13,7 @@ def verify():
     A=list(map(int,input().split()))
     A=Modulo_Polynomial(A,N)
 
-    write(" ".join(map(str,Taylor_Shift(A,c).Poly)))
+    write(" ".join(map(str,Taylor_Shift(A,c).poly)))
 
 #==================================================
 verify()
