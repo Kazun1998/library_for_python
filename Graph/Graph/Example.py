@@ -16,6 +16,21 @@ def Complete_Graph(N: int) -> Graph:
             G.add_edge(u, v)
     return G
 
+def Cycle(N: int) -> Graph:
+    """ N 頂点のサイクルグラフを作成する.
+
+    Args:
+        N (int): 位数
+
+    Returns:
+        Graph: N 頂点のサイクル C_N
+    """
+
+    C = Graph(N)
+    for i in range(N):
+        C.add_edge(i, (i + 1) % N)
+    return C
+
 def Complete_Bipartite_Graph(M: int, N: int) -> Graph:
     """ M 頂点と N 頂点の完全二部グラフ K_{M,N} を生成する.
 

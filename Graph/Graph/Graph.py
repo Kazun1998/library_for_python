@@ -359,25 +359,43 @@ def Directed_Sum(*Graphs):
 
 #==========
 #連結グラフ?
-def Is_Connected(G: Graph):
-    """ G は連結グラフ ?
+def Is_Connected(G: Graph) -> bool:
+    """ G は連結グラフ (0 頂点のグラフは連結とする) ?
 
     Args:
-        G (Graph)
+        G (Graph): 無向グラフ
+
+    Returns:
+        bool: 連結グラフ ?
     """
 
     return (G.order == 0) or all(d >= 0 for d in G.distance_all(0))
 
 #=====
 #森?
-def Is_Forest(G: Graph):
-    """ 森かどうか判定する. """
+def Is_Forest(G: Graph) -> bool:
+    """ グラフ G が森 (サイクルを持たない) かどうかを判定する.
+
+    Args:
+        G (Graph): 無向グラフ
+
+    Returns:
+        bool: 森?
+    """
 
     return G.order == G.size + Connected_Component_Number(G)
 
 #木?
-def Is_Tree(G: Graph):
-    """ 木かどうか判定する. """
+def Is_Tree(G: Graph) -> bool:
+    """ G が木 (連結な森) かどうかを判定する.
+
+    Args:
+        G (Graph): 無向グラフ
+
+    Returns:
+        bool: 木?
+    """
+
     return (G.size == G.order - 1) and Is_Connected(G)
 
 #木の直径
@@ -414,45 +432,66 @@ def Tree_Diameter(T: Graph, Mode = False):
         return d
 
 #連結成分に分解
-def Connected_Component_Decomposition(G: Graph):
-    """ 連結成分毎に分解する.
+def Connected_Component_Decomposition(G: Graph) -> dict[str, list[int]]:
+    """ 無向グラフ G を連結成分毎に分割する.
 
-    G: Graph
+    Args:
+        G (Graph): 無向グラフ
+
+    Returns:
+        dict[str, list[int]]: 'components', 'group' をキーに持つ辞書
+            'components': "各要素が連結成分であるリスト"のリスト
+            'group': 長さが位数のリストであり, 「頂点 x と頂点 y が同じ連結成分 iff group[x] == group[y]」を満たす
     """
 
+    group = [None] * G.order
+    components = []
 
-    group = [-1] * G.order
-    comps = []
+    def dfs(start: int, g: int):
+        """ start から DFS を行い, 到達した頂点にラベル g を付与する.
 
-    def dfs(start, g):
+        Args:
+            start (int): 開始の頂点
+            g (int): ラベル
+        """
+
         stack = [start]
         group[start] = g
-        comp = []
+        component = []
 
         while stack:
             x = stack.pop()
-            comp.append(x)
+            component.append(x)
             for y in G.partner_yield(x):
                 if group[y] == -1:
                     group[y] = g
                     stack.append(y)
-        comps.append(comp)
+        components.append(component)
 
     g = 0
     for x in range(G.order):
-        if group[x] == -1:
-            dfs(x, g)
-            g += 1
+        if group[x] is not None:
+            continue
 
-    return { 'components': comps, 'group': group }
+        dfs(x, g)
+        g += 1
+
+    return { 'components': components, 'group': group }
 
 #連結成分の個数
-def Connected_Component_Number(G: Graph):
-    """ 連結成分の個数を求める. """
+def Connected_Component_Number(G: Graph) -> int:
+    """ 無向グラフ G の連結成分の数を求める.
+
+    Args:
+        G (Graph): 無向グラフ
+
+    Returns:
+        int: 連結成分の数
+    """
 
     seen = [False] * G.order
 
-    def bfs(start):
+    def bfs(start: int):
         seen[start] = True
         stack = [start]
 
@@ -472,8 +511,15 @@ def Connected_Component_Number(G: Graph):
     return count
 
 #2部グラフ?
-def Is_Bipartite_Graph(G: Graph):
-    """ 2部グラフかどうかを判定する. """
+def Is_Bipartite_Graph(G: Graph) -> bool:
+    """ G は二部グラフ ?
+
+    Args:
+        G (Graph): 無向グラフ
+
+    Returns:
+        bool: 二部グラフ ?
+    """
 
     seen = [0] * G.order
 
@@ -494,8 +540,16 @@ def Is_Bipartite_Graph(G: Graph):
     return True
 
 #2部グラフの部集合に分割
-def Bipartite_Separate(G: Graph):
-    """ 2部グラフの頂点を部集合に分割する. """
+def Bipartite_Separate(G: Graph) -> list[tuple[list[int], list[int]]]:
+    """ 二部グラフ G を部集合に分割する.
+
+    Args:
+        G (Graph): 無向グラフ
+
+    Returns:
+        list[tuple[list[int], list[int]]]: [(A0, B0), (A1, B1), ..., (Ak, Bk)] の形のリスト
+            i = 0, 1, ..., k に対して, Ai と Bi は同じ連結成分に属し, Ai, Bi がそれぞれの部集合になる
+    """
 
     N = G.order
     color = [0] * N
@@ -516,7 +570,8 @@ def Bipartite_Separate(G: Graph):
             else:
                 B.append(u)
 
-            for w in G.partner_yield(u):
+            for edge in G.adjacent[u]:
+                w = edge.target
                 if color[w] == 0:
                     color[w] = -color[u]
                     S.append(w)
@@ -538,98 +593,117 @@ def Find_Hamiltonian_Graph(G):
     pass
 
 #クリーク
-def Clique(G: Graph, calc, merge, unit, empty = False):
-    """
-    グラフ G に対する Clique C 全てに対する calc(C) を計算し, merge でマージする.
+def Clique(G: Graph, calc, merge, unit, empty: bool = False):
+    """ グラフ G における Clique 全てに対する calc(C) を計算し, その結果を merge でマージする.
 
-    G: Graph
-    calc: calc(C) Clique である部分集合 C に対する値
-    merge: merge(x,y) x,y のマージの方法
-    empty: 空集合を Clique とするか?
+    Args:
+        G (Graph): 無向グラフ (単純グラフを想定)
+        calc (Callable[[list[int]], X]): Clique
+        merge (Callable[[X, X], X]): 結果をマージする演算
+        unit (X): X の単位元
+        empty (bool, optional): 空グラフを Clique として認めるか?. Defaults to False.
+
+    Returns:
+        X:
 
     計算量: O(2^{sqrt(2M)} N)
     """
 
-    N=G.order; M=G.size
-    deg=[G.degree(v) for v in range(N)]; V=[1]*N
+    N = G.order
+    M = G.size
+    deg = [G.degree(v) for v in range(N)]
+    arrival = [True] * N
 
-    M_sqrt=0
-    while (M_sqrt+1)**2<=2*M:
-        M_sqrt+=1
+    threshold = 0
+    while pow(threshold, 2) <= 2 * M:
+        threshold += 1
 
-    F = [[False] * N for _ in range(N)]
-    for u, v in G.edge_yielder():
-        F[u][v] = F[v][u] = True
+    F = [[0] * N for _ in range(N)]
+    for edge in G.edge_generator():
+        u = edge.source
+        v = edge.target
+        F[u][v] = F[v][u] = 1
 
-    X=unit
+    res = unit
     while True:
-        A=[]
-        for u in range(N):
-            if V[u] and deg[u]<M_sqrt:
-                for v in range(N):
-                    if u!=v and V[v] and F[u][v]:
-                        A.append(v)
-                A.append(u)
-                break
+        A = []
 
-        if not A:
+        # 次数が sqrt(2M) 以下で残っている頂点 u を探す
+        for u in range(N):
+            if not(arrival[u] and deg[u] < threshold):
+                continue
+
+            for v in range(N):
+                if u != v and arrival[v] and F[u][v]:
+                    A.append(v)
+            A.append(u)
+            break
+        else:
             break
 
-        K=len(A)-1
-        bit=[0]*K
+        # 頂点 u に接続している頂点についてを計算する
+        K = len(A) - 1
+        bit = [0] * K # bit[i] の j ビット目が 1 iff A[i] と A[j] は隣接して"いない"
+
         for i in range(K):
             for j in range(i):
                 if not F[A[i]][A[j]]:
-                    bit[i]|=1<<j
-                    bit[j]|=1<<i
+                    bit[i] |= 1 << j
+                    bit[j] |= 1 << i
 
+        # 頂点 u に接続している頂点の可能性 (2^K 通り) を全探索する
         for S in range(1<<K):
-            flag=1
+            flag = True
             for i in range(K):
-                if (S>>i)&1:
-                    flag&=(S&bit[i]==0)
+                if (S >> i) & 1:
+                    flag &= (S & bit[i] == 0)
 
-            if flag:
-                B=[A[-1]]
-                for i in range(K):
-                    if (S>>i)&1:
-                        B.append(A[i])
+            if not flag:
+                continue
 
-                X=merge(X,calc(B))
+            # 頂点 u と [A[x] for x in S] が Clique になる
+            clique = [A[i] for i in range(K) if (S >> i) & 1]
+            clique.append(A[-1])
 
-        V[A[-1]]=0; deg[A[-1]]=0
+            res = merge(res, calc(clique))
+
+        # 頂点 u を削除する
+        arrival[A[-1]] = False
+        deg[A[-1]] = 0
         for v in range(N):
-            if A[-1]!=v and V[v] and F[A[-1]][v]:
-                deg[v]-=1
+            if A[-1] != v and arrival[v] and F[A[-1]][v]:
+                deg[v] -= 1
 
-    A=[]
-    for u in range(N):
-        if V[u]:
-            A.append(u)
+    # 残りの頂点についてを探索する (残っている頂点は sqrt(2M) 個以下)
+    A = [u for u in range(N) if arrival[u]]
 
-    K=len(A)
-    bit=[0]*K
+    K = len(A)
+    bit = [0] * K
     for i in range(K):
         for j in range(i):
             if not F[A[i]][A[j]]:
-                bit[i]|=1<<j
-                bit[j]|=1<<i
+                bit[i] |= 1 << j
+                bit[j] |= 1 << i
 
-    for S in range(1<<K):
-        flag=1
+    for S in range(1 << K):
+        if S == 0:
+            # 空グラフに関する処理を別個で行う
+            if empty:
+                res = merge(res, calc([]))
+            continue
+
+        flag = True
         for i in range(K):
-            if (S>>i)&1:
-                flag&=(S&bit[i]==0)
+            if (S >> i) & 1:
+                flag &= (S & bit[i] == 0)
 
-        if flag and (S or empty):
-            B=[]
-            for i in range(K):
-                if (S>>i)&1:
-                    B.append(A[i])
+        if not flag:
+            continue
 
-            X=merge(X,calc(B))
+        clique = [A[i] for i in range(K) if (S >> i) & 1]
+        res = merge(res, calc(clique))
 
-    return X
+    return res
 
 # 三角形
 def Triangle(G: Graph, calc, merge, unit):
@@ -665,66 +739,83 @@ def Triangle(G: Graph, calc, merge, unit):
     return X
 
 #グラフ作成
-def Making_Graph(N,E):
-    """ 辺の情報 E からグラフを生成する. """
+def Making_Graph(N: int, edges: list[tuple[int, int]], edge_offset: int = 0) -> Graph:
+    """ 位数 N のグラフで辺のリスト edges からグラフを生成する.
 
-    G=Graph(N)
-    for e in E:
-        G.add_edge(*e)
+    Args:
+        N (int): 位数
+        edges (list[tuple[int, int]]): (u, v) のリスト. 1 つの要素が辺 uv に対応する.
+        edge_offset (int, optional): 辺番号のオフセット. Defaults to 0.
+
+    Returns:
+        Graph: 無向グラフ
+    """
+
+    G = Graph(N, edge_offset)
+    for edge in edges:
+        G.add_edge(*edge)
     return G
-
-#Cycleグラフ
-def Cycle_Graph(N):
-    """ N 頂点からなるサイクルグラフを生成する. """
-
-    C=Graph(N)
-    for i in range(N):
-        C.add_edge(i, (i+1)%N)
-    return C
 
 #==========
 # グラフの走査
 #==========
-def Depth_First_Search_yielder(G):
-    """ 深さ優先探索を行う.
+def Depth_First_Search(G: Graph):
+    """ 無向グラフ G に対して, 深さ優先探索の移動を generate する.
 
-    [Input]
-    G: グラフ
+    Args:
+        G (Graph): 無向グラフ.
 
-    [Output]
-    (-1, v, 1): v が探索開始の頂点である.
-    (u,v,1): u から v へ向かう辺で, DFS 木で葉に進む向きになる辺
-    (u,v,0): u から v へ向かう辺で後退辺 (DFS 木には不採用)
-    (u,v,-1): u から v へ向かう辺で, DFS 木では根に進む向きになる辺
-    (u,-1,-1): u から始まった DFS が終了
+    Notes:
+        各要素は (u, v, d, edge) の形
+            (-1, v,  1, None): v が探索開始の頂点である.
+            (u,  v,  1, edge): u から v へ向かう辺で, DFS 木で葉に進む向きになる辺
+            (u,  v,  0, edge): u から v へ向かう辺で後退辺 (DFS 木には不採用)
+            (u,  v, -1, edge): u から v へ向かう辺で, DFS 木では根に進む向きになる辺
+            (u, -1, -1, None): u から始まった DFS が終了
     """
 
-    from collections import deque
+    N = G.order
+    seen = [False] * N
+    progess = [0] * N
+    parent: list[int] = [None] * N
+    upper_edge: list[Edge] = [None] * N
 
-    N=G.order
-    adj=[list(a) for a in G.adjacent]
-    T=[0]*N; R=[0]*N; parent=[-1]*N
+    def dfs(start: int):
+        stack = [start]
+
+        # 探索開始
+        yield (None, start, 1, None)
+        while stack:
+            x = stack.pop()
+            seen[x] = True
+
+            while progess[x] < len(G.adjacent[x]):
+                edge = G.adjacent[x][progess[x]]
+                y = edge.target
+                progess[x] += 1
+
+                if (upper_edge[x] is not None) and (upper_edge[x].id == edge.id):
+                    continue
+
+                if not seen[y]:
+                    # 前進辺
+                    stack.append(x)
+                    stack.append(y)
+                    parent[y] = x
+                    upper_edge[y] = edge
+                    yield (x, y, 1, edge)
+                    break
+                else:
+                    # 後退辺
+                    yield (x, y, 0, edge)
+            else:
+                # 親に戻る
+                if parent[x] is not None:
+                    yield (x, parent[x], -1, upper_edge[x])
+
+        # 探索終了
+        yield (start, None, -1, None)
 
     for x in range(N):
-        if T[x]==0:
-            S=deque([x])
-
-            yield (-1, x, 1)
-            while S:
-                x=S.pop()
-                T[x]=1
-
-                while R[x]<len(adj[x]):
-                    y=adj[x][R[x]]
-                    R[x]+=1
-
-                    if T[y]==0:
-                        S.append(x); S.append(y)
-                        parent[y]=x
-                        yield (x,y,1)
-                        break
-                    else:
-                        yield (x,y,0)
-                else:
-                    yield (x, parent[x], -1)
-            yield (x, -1, -1)
+        if not seen[x]:
+            yield from dfs(x)
