@@ -926,75 +926,105 @@ def Log(P: Modulo_Polynomial) -> Modulo_Polynomial:
 
     return Integrate(Differentiate(P) / P)
 
-def Exp(P):
-    #参考元1:https://arxiv.org/pdf/1301.5804.pdf
-    #参考元2:https://opt-cp.com/fps-fast-algorithms/
+def Exp(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ 定数項が 0 である形式的ベキ級数 P に対する Exp(P) を求める.
+
+    Args:
+        P (Modulo_Polynomial): 定数項が 0 である形式的ベキ級数
+
+    Raises:
+        ValueError: 定数項が 0 ではない場合に発生
+
+    Returns:
+        Modulo_Polynomial: Exp(P)
+
+    References:
+        (1) https://arxiv.org/pdf/1301.5804.pdf
+        (2) https://opt-cp.com/fps-fast-algorithms/
+    """
+
     from itertools import zip_longest
-    N=P.max_degree
 
-    Inv=[0]*(2*N+1)
-    Inv[1]=1
-    for i in range(2,2*N+1):
-        q,r=divmod(Mod,i)
-        Inv[i]=(-q*Inv[r])%Mod
+    if P[0] != 0:
+        raise ValueError("定数項が 0 ではありません")
 
-    H=P.poly; H+=[0]*(N-len(H))
-    assert (not H) or H[0]==0,"定数項が0でない"
+    n = P.max_degree
+    inv = [0] * (2 * n + 1)
+    inv[1] = 1
+    for x in range(2, 2 * n + 1):
+        q, r = divmod(Mod, x)
+        inv[x] = (-q * inv[r]) % Mod
 
+    H = P.poly
+    H.extend([0] * (n - len(H)))
+
+    # 疎の場合にはそれ専用の処理を行う.
     if Calc.is_sparse(H):
-        # 疎だった場合
-        F=[0]*N; F[0]=1
-        d,f=Calc.coefficients_list(H)
-        K=len(d)
+        F = [0] * n
+        F[0] = 1
+
+        d, f = Calc.coefficients_list(H)
+        K = len(d)
 
         for t in range(K):
-            f[t]=(d[t]*f[t])%Mod
-            d[t]-=1
+            f[t] = (d[t] * f[t]) %Mod
+            d[t] -= 1
 
-        for i in range(1,N):
-            a=0
+        for i in range(1, n):
+            a = 0
             for j in range(K):
-                if d[j]<=i-1:
-                    a+=f[j]*F[(i-1)-d[j]]%Mod
-                else:
+                if d[j] > i - 1:
                     break
-            a%=Mod
-            F[i]=a*Inv[i]%Mod
-    else:
-        dH=[(k*a)%Mod for k,a in enumerate(H[1:],1)]
-        F,G,m=[1],[1],1
 
-        while m<=N:
-            #2.a'
-            if m>1:
-                E=Calc.convolution(F,Calc.autocorrelation(G)[:m])[:m]
-                G=[(2*a-b)%Mod for a,b in zip_longest(G,E,fillvalue=0)]
-            #2.b', 2.c'
-            C=Calc.convolution(F,dH[:m-1])
-            R=[0]*m
-            for i,a in enumerate(C):
-                R[i%m]+=a
-            R=[a%Mod for a in R]
-            #2.d'
-            dF=[(k*a)%Mod for k,a in enumerate(F[1:],1)]
-            D=[0]+[(a-b)%Mod for a,b in zip_longest(dF,R,fillvalue=0)]
-            S=[0]*m
-            for i,a in enumerate(D):
-                S[i%m]+=a
-            S=[a%Mod for a in S]
-            #2.e'
-            T=Calc.convolution(G,S)[:m]
-            #2.f'
-            E=[0]*(m-1)+T
-            E=[0]+[(Inv[k]*a)%Mod for k,a in enumerate(E,1)]
-            U=[(a-b)%Mod for a,b in zip_longest(H[:2*m],E,fillvalue=0)][m:]
-            #2.g'
-            V=Calc.convolution(F,U)[:m]
-            #2.h'
-            F.extend(V)
-            #2.i'
-            m<<=1
-    return Modulo_Polynomial(F[:N],P.max_degree)
+                a += f[j] * F[(i - 1) - d[j]] % Mod
+
+            a %= Mod
+            F[i] = a * inv[i] % Mod
+
+        return Modulo_Polynomial(F[:n], P.max_degree)
+
+    dH = [(k * a) % Mod for k, a in enumerate(H[1:], 1)]
+    F, G, m = [1], [1], 1
+
+    while m <= n:
+        #2.a'
+        if m > 1:
+            E = Calc.convolution(F, Calc.autocorrelation(G)[:m])[:m]
+            G = [(2 * a - b) % Mod for a, b in zip_longest(G, E, fillvalue = 0)]
+
+        #2.b', 2.c'
+        C = Calc.convolution(F, dH[:m - 1])
+        R = [0] * m
+        for i, a in enumerate(C):
+            R[i % m] += a
+        R = [a % Mod for a in R]
+
+        #2.d'
+        dF = [(k * a) % Mod for k, a in enumerate(F[1:], 1)]
+        D = [0] + [(a - b) % Mod for a, b in zip_longest(dF, R, fillvalue = 0)]
+        S = [0] * m
+        for i, a in enumerate(D):
+            S[i % m] += a
+        S = [a % Mod for a in S]
+
+        #2.e'
+        T = Calc.convolution(G, S)[:m]
+
+        #2.f'
+        E = [0] * (m - 1) + T
+        E = [0] + [(inv[k] * a) % Mod for k, a in enumerate(E, 1)]
+        U = [(a - b) % Mod for a, b in zip_longest(H[:2 * m], E, fillvalue = 0)][m:]
+
+        #2.g'
+        V = Calc.convolution(F, U)[:m]
+
+        #2.h'
+        F.extend(V)
+
+        #2.i'
+        m <<= 1
+
+    return Modulo_Polynomial(F[:n], P.max_degree)
 
 def Root(P,k):
     assert P.poly[0]==1, "定数項が1ではない"
