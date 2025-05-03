@@ -260,34 +260,37 @@ def Stirling_2nd(n: int) -> list[int]:
     g = [fact_inv[i] if i & 1 == 0 else -fact_inv[i] for i in range(n + 1)]
     return Calc.convolution(f, g)[:n + 1]
 
-def Bell(N, mode = False):
-    """ Bell 数 (集合 {1,2,...,N} の分割の方法) B[N] を求める.
+def Bell(n: int) -> list[int]:
+    """ Bell 数 Bell[k] ({1, 2, ..., k} の分割の数) を k = 0, 1, ..., n に対して求める.
 
+    Args:
+        n (int):
+
+    Returns:
+        list[int]: 第 k 項は Bell[k] に対応する.
     """
-    # Bell(X) = exp(exp(X) - 1)
 
-    fact = [1] * (N + 1)
-    for k in range(1, N + 1):
+    # Note: Bell(X) = exp(exp(X) - 1) である.
+
+    fact = [1] * (n + 1)
+    for k in range(1, n + 1):
         fact[k] = (k * fact[k - 1]) % Mod
 
-    fact_inv = [1] * (N + 1)
+    fact_inv = [1] * (n + 1)
     fact_inv[-1] = pow(fact[-1], -1, Mod)
-    for k in range(N - 1, 0, -1):
+    for k in range(n - 1, 0, -1):
         fact_inv[k] = (k + 1) * fact_inv[k + 1] % Mod
 
     # G = exp(X) - 1
-    G = [0] + fact_inv[1:]
+    g = [0] + fact_inv[1:]
 
     # F = exp(G) = exp(exp(X) - 1)
-    F = Exp(Modulo_Polynomial(G, N + 1)).poly
+    f = Exp(Modulo_Polynomial(g, n + 1)).poly
 
-    for k in range(1, N + 1):
-        F[k] = fact[k] * F[k] % Mod
+    for k in range(1, n + 1):
+        f[k] = fact[k] * f[k] % Mod
 
-    if mode:
-        return F
-    else:
-        return F[N]
+    return f
 
 def Motzkin(N, mode=0):
     """ Motzkin 数 (円周上の区別がつく相異なる N 点を線分をどの2つも共通部分がない (N 点で共有も禁止) で結ぶ方法 (結ばれない点があってもよい) の数.
