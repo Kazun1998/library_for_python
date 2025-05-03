@@ -1634,18 +1634,31 @@ def Polynominal_Interpolation(X: list[int], Y: list[int]) -> Modulo_Polynomial:
 
     return Modulo_Polynomial(U[1], n)
 
-def Slide_Convolution(A, B, cyclic=False):
+def Slide_Convolution(A: list[int], B: list[int], cyclic: bool = False) -> list[int]:
+    """ A = (a_i), B = (b_j) に対して, c_k = sum_{i - j = k} a_i b_j となる C = (c_k)_{k >= 0} を求める.
+
+    Args:
+        A (list[int]):
+        B (list[int]):
+        cyclic (bool, optional): True にすると, c_k の総和の範囲 i - j = k が i - j ≡ 0 (mod |A|) になる. Defaults to False.
+
+    Raises:
+        ValueError: |A| < |B| の場合に発生
+
+    Returns:
+        list[int]: C
     """
 
-    """
-    assert len(A)>=len(B)
+    if len(A) < len(B):
+        raise ValueError("len(A) >= len(B) でなくてはなりません")
 
-    N,M=len(A)-1,len(B)-1
+    n, m = len(A) - 1, len(B) - 1
+
     if cyclic:
-        A=A+A[:M]
-        return Calc.convolution(A,B[::-1])[M:N+M+1]
+        A = A + A[:m]
+        return Calc.convolution(A, B[::-1])[m: n + m + 1]
     else:
-        return Calc.convolution(A,B[::-1])[M:N+1]
+        return Calc.convolution(A, B[::-1])[m: n + 1]
 
 #=================================================
 Mod = 998244353
