@@ -110,32 +110,34 @@ def Cumulative(A: list[int], n: int) -> int:
 
     return Nth_Term_of_Linearly_Recurrent_Sequence(A, [1] * len(A), n)
 
-def Factorial_Modulo(N):
-    """ N! mod Mod を求める.
+def Factorial_Modulo(n: int) -> int:
+    """ n! を Mod で割った余りを求める.
 
+    Args:
+        n (int):
+
+    Returns:
+        int: n! を Mod で割った余り
     """
-    from collections import deque
 
-    if N==0:
+    if n == 0:
         return 1
-
-    if N>=Mod:
+    elif n >= Mod:
         return 0
 
-    M=0
-    while (M+1)*(M+1)<=N:
-        M+=1
+    n_sqrt = 0
+    while (n_sqrt + 1) * (n_sqrt + 1) <= n:
+        n_sqrt += 1
 
-    A=Calc.multiple_convolution(*[[i,1] for i in range(1,M+1)])
-    H=Multipoint_Evaluation(Modulo_Polynomial(A,M+1),
-                            [i*M for i in range(M)])
+    A = Calc.multiple_convolution(*[[i, 1] for i in range(1, n_sqrt + 1)])
+    H = Multipoint_Evaluation(Modulo_Polynomial(A, n_sqrt + 1), [i * n_sqrt for i in range(n_sqrt)])
 
-    X=1
+    X = 1
     for h in H:
-        X*=h; X%=Mod
+        X = (h * X) % Mod
 
-    for i in range(M*M+1, N+1):
-        X*=i; X%=Mod
+    for i in range(n_sqrt * n_sqrt + 1, n_sqrt + 1):
+        X = (i * X) % Mod
     return X
 
 #=== 特別な数列
