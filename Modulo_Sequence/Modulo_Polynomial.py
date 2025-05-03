@@ -908,9 +908,23 @@ def Integrate(P: Modulo_Polynomial, constant: int = 0) -> Modulo_Polynomial:
     return Modulo_Polynomial(integrate_poly, P.max_degree + 1)
 
 # 累乗,指数,対数
-def Log(P):
-    assert P.poly[0]==1,"定数項が1ではない"
-    return Integrate(Differentiate(P)/P)
+def Log(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ 定数項が 1 である形式的ベキ級数 P の対数 Log(P) を求める.
+
+    Args:
+        P (Modulo_Polynomial): 定数項が 1 である形式的ベキ級数
+
+    Raises:
+        ValueError: 定数項が 1 でないときに発生
+
+    Returns:
+        Modulo_Polynomial: Log(P)
+    """
+
+    if P[0] != 1:
+        raise ValueError("定数項が 1 ではありません")
+
+    return Integrate(Differentiate(P) / P)
 
 def Exp(P):
     #参考元1:https://arxiv.org/pdf/1301.5804.pdf
