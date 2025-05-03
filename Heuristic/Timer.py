@@ -16,5 +16,6 @@ class Timer:
         self.counter = self.period
         return time() - self.started_at <= self.time_limit
 
+    @property
     def time(self) -> float:
         return time() - self.started_at
