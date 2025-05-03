@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: Modulo_Sequence/Modulo_Polynomial.py
     title: Modulo Polynomial
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/polynomial_taylor_shift
     links:
@@ -24,15 +24,15 @@ data:
     \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
     #==================================================\ndef verify():\n    N,c=map(int,input().split())\n\
     \    A=list(map(int,input().split()))\n    A=Modulo_Polynomial(A,N)\n\n    write(\"\
-    \ \".join(map(str,Taylor_Shift(A,c).Poly)))\n\n#==================================================\n\
+    \ \".join(map(str,Taylor_Shift(A,c).poly)))\n\n#==================================================\n\
     verify()"
   dependsOn:
   - Modulo_Sequence/Modulo_Polynomial.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
   requiredBy: []
-  timestamp: '2023-08-06 21:52:53+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2025-05-04 01:20:29+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
 layout: document

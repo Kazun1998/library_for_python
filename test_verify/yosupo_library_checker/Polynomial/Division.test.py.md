@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: Modulo_Sequence/Modulo_Polynomial.py
     title: Modulo Polynomial
   _extendedRequiredBy: []
@@ -25,8 +25,8 @@ data:
     #==================================================\ndef verify():\n    N,M=map(int,input().split())\n\
     \    F=list(map(int,input().split()))\n    G=list(map(int,input().split()))\n\n\
     \    F=Modulo_Polynomial(F,N)\n    G=Modulo_Polynomial(G,M)\n\n    Q,R=divmod(F,G)\n\
-    \n    Q.reduce(); R.reduce()\n    Q=Q.Poly if Q.Poly!=[0] else []\n    R=R.Poly\
-    \ if R.Poly!=[0] else []\n\n    print(len(Q), len(R))\n    write(\" \".join(map(str,Q)));\
+    \n    Q.reduce(); R.reduce()\n    Q=Q.poly if Q.poly!=[0] else []\n    R=R.poly\
+    \ if R.poly!=[0] else []\n\n    print(len(Q), len(R))\n    write(\" \".join(map(str,Q)));\
     \ print()\n    write(\" \".join(map(str,R)))\n\n#==================================================\n\
     verify()\n"
   dependsOn:
@@ -34,7 +34,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Polynomial/Division.test.py
   requiredBy: []
-  timestamp: '2023-08-06 21:52:53+09:00'
+  timestamp: '2025-05-04 01:20:29+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Polynomial/Division.test.py

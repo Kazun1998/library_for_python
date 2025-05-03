@@ -452,7 +452,7 @@ data:
       title: Modulo_Matrix/Modulo_Vector_Space.py
   - name: Modulo_Sequence
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: Modulo_Sequence/Modulo_Polynomial.py
       title: Modulo Polynomial
     - icon: ':warning:'
@@ -761,13 +761,13 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Polynomial/Log.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Log.test.py
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test_verify/yosupo_library_checker/Polynomial/Power.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Power.test.py
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
       title: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
   - name: test_verify/yosupo_library_checker/String

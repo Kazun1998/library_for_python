@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: Modulo_Sequence/Modulo_Polynomial.py
     title: Modulo Polynomial
   _extendedRequiredBy: []
@@ -23,14 +23,14 @@ data:
     \n#==================================================\nfrom Modulo_Sequence.Modulo_Polynomial\
     \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
     #==================================================\ndef verify():\n    N=int(input())\n\
-    \    A=list(map(int,input().split()))\n    write(\" \".join(map(str,Calc.Inverse(A))))\n\
+    \    A=list(map(int,input().split()))\n    write(\" \".join(map(str,Calc.inverse(A))))\n\
     \n#==================================================\nverify()"
   dependsOn:
   - Modulo_Sequence/Modulo_Polynomial.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Polynomial/Inv.test.py
   requiredBy: []
-  timestamp: '2023-08-06 21:52:53+09:00'
+  timestamp: '2025-05-04 01:20:29+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Polynomial/Inv.test.py

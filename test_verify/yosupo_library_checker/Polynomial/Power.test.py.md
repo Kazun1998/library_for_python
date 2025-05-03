@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: Modulo_Sequence/Modulo_Polynomial.py
     title: Modulo Polynomial
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/pow_of_formal_power_series
     links:
@@ -23,7 +23,7 @@ data:
     \n#==================================================\nfrom Modulo_Sequence.Modulo_Polynomial\
     \ import *\n\nimport sys\ninput=sys.stdin.readline\nwrite=sys.stdout.write\n\n\
     #==================================================\ndef verify():\n    N,M=map(int,input().split())\n\
-    \    A=list(map(int,input().split()))\n    P=Modulo_Polynomial(A,N)\n    B=Power(P,M).Poly\n\
+    \    A=list(map(int,input().split()))\n    P=Modulo_Polynomial(A,N)\n    B=Power(P,M).poly\n\
     \    B.extend([0]*(N-len(B)))\n    write(\" \".join(map(str,B)))\n\n#==================================================\n\
     verify()"
   dependsOn:
@@ -31,8 +31,8 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Polynomial/Power.test.py
   requiredBy: []
-  timestamp: '2023-08-06 21:52:53+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2025-05-04 01:20:29+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Polynomial/Power.test.py
 layout: document

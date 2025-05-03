@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: Modulo_Sequence/Modulo_Polynomial.py
     title: Modulo Polynomial
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: py
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/product_of_polynomial_sequence
     links:
@@ -25,15 +25,15 @@ data:
     #==================================================\ndef verify():\n    N=int(input())\n\
     \    A=[None]*N\n\n    global Mod; Mod=998244353\n    global Calc; Calc=Calculator()\n\
     \n    D=0\n    for i in range(N):\n        d,*A[i]=map(int,input().split())\n\
-    \        D+=d\n\n    write(\" \".join(map(str, Calc.Multiple_Convolution(*A))))\n\
+    \        D+=d\n\n    write(\" \".join(map(str, Calc.multiple_convolution(*A))))\n\
     \n#==================================================\nverify()\n"
   dependsOn:
   - Modulo_Sequence/Modulo_Polynomial.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
   requiredBy: []
-  timestamp: '2023-08-06 21:52:53+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2025-05-04 01:20:29+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
 layout: document

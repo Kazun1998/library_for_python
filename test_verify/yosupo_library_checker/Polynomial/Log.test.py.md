@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: Modulo_Sequence/Modulo_Polynomial.py
     title: Modulo Polynomial
   _extendedRequiredBy: []
@@ -31,7 +31,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Polynomial/Log.test.py
   requiredBy: []
-  timestamp: '2023-08-06 21:52:53+09:00'
+  timestamp: '2025-05-04 01:20:29+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Polynomial/Log.test.py
