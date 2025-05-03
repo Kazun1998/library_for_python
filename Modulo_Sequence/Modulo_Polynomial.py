@@ -111,7 +111,7 @@ class Modulo_Polynomial:
         else:
             N=P.max_degree
             A=P.poly; B=Q
-        return Modulo_Polynomial(Calc.Add(A,B),N)
+        return Modulo_Polynomial(Calc.add(A, B), N)
 
     def __radd__(self, other) -> "Modulo_Polynomial":
         return self+other
