@@ -1531,37 +1531,45 @@ def Polynominal_Coefficient(P: Modulo_Polynomial, Q: Modulo_Polynomial, N: int) 
     else:
         return p[0] * pow(q[0], -1, Mod) % Mod
 
-def Multipoint_Evaluation(P, X):
-    """ 多項式 P に対して, X=[x[0], ..., x[N-1]] としたとき, [P(x[0]), ..., P(x[N-1])] を求める.
+def Multipoint_Evaluation(P: Modulo_Polynomial, X: list[int]) -> list[int]:
+    """ 多項式 P に対して, X = [x[0], ..., x[n - 1]] としたとき, [P(x[0]), ..., P(x[n - 1])] を求める.
+
+    Args:
+        P (Modulo_Polynomial): 多項式
+        X (list[int]): 引数のリスト
+
+    Returns:
+        int: 長さ n のリスト. 第 j 要素は P(x[j]) である.
     """
 
-    N=len(X)
-    size=1<<(N-1).bit_length()
+    n = len(X)
+    size = 1 << (n - 1).bit_length()
 
-    G=[[1] for _ in range(2*size)]
+    G = [[1] for _ in range(2*size)]
 
-    for i in range(N):
-        G[i+size]=[-X[i],1]
+    for i in range(n):
+        G[i + size] = [-X[i], 1]
 
-    for i in range(size-1,0,-1):
-        G[i]=Calc.convolution(G[2*i],G[2*i+1])
+    for i in range(size - 1, 0, -1):
+        G[i] = Calc.convolution(G[2*i], G[2*i+1])
 
     for i in range(1, 2*size):
-        A=P.poly if i==1 else G[i>>1]
-        m=len(A)-len(G[i])+1
-        v=Calc.convolution(A[::-1][:m], Calc.inverse(G[i][::-1],m))[m-1::-1]
-        w=Calc.convolution(v,G[i])
+        A = P.poly if i == 1 else G[i>>1]
+        m = len(A) - len(G[i]) + 1
+        v = Calc.convolution(A[::-1][:m], Calc.inverse(G[i][::-1],m))[m - 1::-1]
+        w = Calc.convolution(v, G[i])
 
-        G[i]=A.copy()
-        g=G[i]
+        G[i] = A.copy()
+        g = G[i]
 
         for j in range(len(w)):
-            g[j]-=w[j]; g[j]%=Mod
+            g[j] -= w[j]
+            g[j] %= Mod
 
-        while len(g)>1 and g[-1]==0:
+        while len(g) > 1 and g[-1] == 0:
             g.pop()
 
-    return [G[i+size][0] for i in range(N)]
+    return [G[i + size][0] for i in range(n)]
 
 def Polynominal_Interpolation(X, Y):
     """ N=|X|=|Y| とする. P(x_i)=y_i (0<=i<|X|-1) を満たす高々 (N-1) 次の多項式 P を求める.
