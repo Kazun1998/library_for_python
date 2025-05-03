@@ -1634,37 +1634,6 @@ def Polynominal_Interpolation(X: list[int], Y: list[int]) -> Modulo_Polynomial:
 
     return Modulo_Polynomial(U[1], n)
 
-#多項式同士の最大公約数
-def _gcd(F,G):
-    while G:
-        F,G=G,F%G
-
-    a_inv=pow(F.leading_coefficient(), -1, Mod)
-    X=F.poly
-    for i in range(len(X)):
-        X[i]=(a_inv*X[i])%Mod
-    return F
-
-def gcd(*X):
-    from functools import reduce
-    return reduce(_gcd,X)
-
-#多項式同士の最小公倍数
-def _lcm(F,G):
-    return (F//gcd(F,G))*G
-
-def lcm(*X):
-    from functools import reduce
-    L=reduce(_lcm,X)
-    a_inv=pow(L.leading_coefficient(), -1, Mod)
-    X=L.poly
-    for i in range(len(X)):
-        X[i]=(a_inv*X[i])%Mod
-    return L
-
-"""
-スライドさせる畳み込み
-"""
 def Slide_Convolution(A, B, cyclic=False):
     """
 
