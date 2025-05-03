@@ -1026,17 +1026,33 @@ def Exp(P: Modulo_Polynomial) -> Modulo_Polynomial:
 
     return Modulo_Polynomial(F[:n], P.max_degree)
 
-def Root(P,k):
-    assert P.poly[0]==1, "定数項が1ではない"
-    k%=Mod
-    assert k, "kが特異"
-    k_inv=pow(k, -1, Mod)
-    return Power(P,k_inv)
+def Root(P: Modulo_Polynomial, k: int) -> Modulo_Polynomial:
+    """ 定数項が 1 である形式的ベキ級数 P の k 乗根を求める
 
-"""
-三角関数
-"""
-#正弦
+    Args:
+        P (Modulo_Polynomial): 定数項が 1 である形式的ベキ級数
+        k (int): Mod の倍数ではない整数
+
+    Raises:
+        ValueError: 定数項が 0 でない場合に発生
+        ValueError: k が Mod の倍数である場合に発生
+
+    Returns:
+        Modulo_Polynomial: Q^k = P, [X^0]Q = 1 を満たす形式的ベキ級数 Q
+    """
+
+    if P[0] != 1:
+        raise ValueError("定数項が 1 ではありません")
+
+    k %= Mod
+    if k == 0:
+        raise ValueError("k が特異です")
+
+    return Power(P, pow(k, -1, Mod))
+
+
+# 三角関数
+# 正弦
 def Sin(P):
     I=Tonelli_Shanks(-1)
     B=I*P
