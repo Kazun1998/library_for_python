@@ -1122,32 +1122,60 @@ def Tan(P: Modulo_Polynomial) -> Modulo_Polynomial:
     return B_sin / B_cos
 
 #逆正弦
-def ArcSin(P):
-    #積分版
-    return Integrate(Differentiate(P)/Sqrt(1-P*P))
+def ArcSin(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ 定数項が 0 である形式的ベキ級数に対して, ArcSin(P) を求める.
 
-    #三角関数と指数関数の相互関係版
-    I=Tonelli_Shanks(-1)
-    return -I*Log(Sqrt(1-P*P)+I*P)
+    Args:
+        P (Modulo_Polynomial): 定数項が 0 である形式的ベキ級数
+
+    Raises:
+        ValueError: 定数項が 0 でない場合に発生
+
+    Returns:
+        Modulo_Polynomial: ArcSin(P)
+    """
+
+    if P[0] != 0:
+        raise ValueError("定数項が 0 ではありません")
+
+    return Integrate(Differentiate(P) / Sqrt(1 - P * P))
 
 #逆余弦
-def ArcCos(P):
-    #※使用時注意!!! (ArcCos(0)=pi/2 のため)
-    #積分版
-    return -Integrate(Differentiate(P)/Sqrt(1-P*P))
+def ArcCos(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ 定数項が 0 である形式的ベキ級数に対して, ArcCos(P) を求める. ※ 実際には, ArcCos(0) = pi / 2 であるため, 注意が必要である.
 
-    #三角関数と指数関数の相互関係版
-    I=Tonelli_Shanks(-1)
-    return I*Log(Sqrt(1-P*P)+I*P)
+    Args:
+        P (Modulo_Polynomial): 定数項が 0 である形式的ベキ級数
+
+    Raises:
+        ValueError: 定数項が 0 でない場合に発生
+
+    Returns:
+        Modulo_Polynomial: ArcCos(P) の 1 次以降の係数
+    """
+
+    if P[0] != 0:
+        raise ValueError("定数項が 0 ではありません")
+
+    return -ArcSin(P)
 
 #逆正接
-def ArcTan(P):
-    #積分版
-    return Integrate(Differentiate(P)/(1+P*P))
+def ArcTan(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ 定数項が 0 である形式的ベキ級数に対して, ArcTan(P) を求める.
+    Args:
+        P (Modulo_Polynomial): 定数項が 0 である形式的ベキ級数
 
-    #三角関数と指数関数の相互関係版
-    I=Tonelli_Shanks(-1)
-    return I*pow(2, -1, Mod)*Log((I+P)/(I-P))
+    Raises:
+        ValueError: 定数項が 0 でない場合に発生
+
+    Returns:
+        Modulo_Polynomial: ArcCos(P) の 1 次以降の係数
+    """
+
+    if P[0] != 0:
+        raise ValueError("定数項が 0 ではありません")
+
+    return Integrate(Differentiate(P) / (1 + P * P))
 
 def Power(P, M):
     """ P の M 乗を求める.
