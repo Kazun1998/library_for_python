@@ -307,35 +307,39 @@ def Motzkin(n: int) -> list[int]:
     return F.poly[:n + 1]
 
 #===
-def Subset_Sum(X, K):
-    """ X の要素のうち, 任意個を用いて, 和が k=0,1,...,K になる組み合わせの総数を Mod で割った余りを求める.
+def Subset_Sum(X: list[int], K: int) -> list[int]:
+    """ k = 0, 1, ..., K に対して, X の連続とは限らない部分列 Y のうち, sum(Y) = k となる Y の数 (場所が異なれば別としてカウント) を求める.
 
-    X: リスト
-    K: 非負整数
+    Args:
+        X (list[int]):
+        K (int):
+
+    Returns:
+        list[int]: 第 k 項は「X の連続とは限らない部分列 Y のうち, sum(Y) = k となる Y の数 (場所が異なれば別としてカウント)」
     """
-    A=[0]*(K+1)
+
+    chi = [0] * (K + 1)
     for x in X:
-        if x<=K:
-            A[x]+=1
+        if x <= K:
+            chi[x] += 1
 
-    Inv=[0]*(K+1)
-    Inv[1]=1
+    inv = [0] * (K+1)
+    inv[1] = 1
     for i in range(2,K+1):
-        Inv[i]=(-(Mod//i)*Inv[Mod%i])%Mod
+        q, r = divmod(Mod, i)
+        inv[i] = (-q * inv[r]) % Mod
 
-    F=[0]*(K+1)
+    f = [0] * (K + 1)
     for i in range(1,K+1):
-        if A[i]:
-            j=i
-            k=1
-            c=1
-            while j<=K:
-                F[j]=(F[j]+c*Inv[k]*A[i])%Mod
-                c*=-1
-                j+=i
-                k+=1
-    P=Modulo_Polynomial(F,K+1)
-    return Exp(P).poly
+        if chi[i] == 0:
+            continue
+
+        c = 1
+        for k in range(1, K // i + 1):
+            f[i * k] = (f[i * k] + c * inv[k] * chi[i]) % Mod
+            c *= -1
+
+    return Exp(Modulo_Polynomial(f, K + 1)).poly
 
 #===
 #多項式和
