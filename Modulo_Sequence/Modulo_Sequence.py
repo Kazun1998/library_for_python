@@ -93,7 +93,7 @@ def Factorial_Modulo(N):
     while (M+1)*(M+1)<=N:
         M+=1
 
-    A=Calc.Multiple_Convolution(*[[i,1] for i in range(1,M+1)])
+    A=Calc.multiple_convolution(*[[i,1] for i in range(1,M+1)])
     H=Multipoint_Evaluation(Modulo_Polynomial(A,M+1),
                             [i*M for i in range(M)])
 
@@ -143,9 +143,9 @@ def PartitionsP(N, mode=0):
         k+=1
 
     if mode==0:
-        return Calc.Inverse(F)[-1]
+        return Calc.inverse(F)[-1]
     else:
-        return Calc.Inverse(F)
+        return Calc.inverse(F)
 
 def PartitionsQ(N, mode=0):
     """ 各項が相異なる N の分割の数を求める.
@@ -207,7 +207,7 @@ def Stirling_2nd(N):
 
     A=[pow(i,N,Mod)*fact_inv[i]%Mod for i in range(N+1)]
     B=[fact_inv[i] if i&1==0 else -fact_inv[i] for i in range(N+1)]
-    return Calc.Convolution(A,B)[:N+1]
+    return Calc.convolution(A,B)[:N+1]
 
 def Bell(N, mode = False):
     """ Bell 数 (集合 {1,2,...,N} の分割の方法) B[N] を求める.
