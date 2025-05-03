@@ -869,9 +869,19 @@ class Calculator:
         return Calc.sub(F, Calc.convolution(Calc.flood_div(F, G), G))
 
 #以下 参考元https://judge.yosupo.jp/submission/28304
-def Differentiate(P):
-    G=[(k*a)%Mod for k,a in enumerate(P.poly[1:],1)]+[0]
-    return Modulo_Polynomial(G,P.max_degree)
+def Differentiate(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ 形式的ベキ級数 P の形式的微分 P' を求める.
+
+    Args:
+        P (Modulo_Polynomial): 形式的ベキ級数
+
+    Returns:
+        Modulo_Polynomial: 形式的微分 P'
+    """
+
+    poly = P.poly
+    diff_poly = [(k * poly[k]) % Mod for k in range(1, len(poly))]
+    return Modulo_Polynomial(diff_poly, P.max_degree)
 
 def Integrate(P):
     F=P.poly
