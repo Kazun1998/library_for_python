@@ -73,18 +73,29 @@ def Find_Linear_Recurrence(A: list[int]) -> list[int]:
 
     return [Mod - c if c else 0 for c in C[1:]]
 
-def Fibonacci(N):
-    """ Fibonacci 列の第 N 項を求める.
+def Fibonacci(n: int) -> int:
+    """ Fibonacci 列の第 n 項を求める.
 
+    Args:
+        n (int):
+
+    Returns:
+        int: Fibonacci 列の第 N 項
     """
-    return Nth_Term_of_Linearly_Recurrent_Sequence([0,1],[1,1],N)
 
-def Lucas(N):
-    """ Lucas 列の第 N 項を求める.
+    return Nth_Term_of_Linearly_Recurrent_Sequence([0, 1], [1, 1], n)
 
+def Lucas(n: int) -> int:
+    """ Lucas 列の第 n 項を求める.
+
+    Args:
+        n (int):
+
+    Returns:
+        int: Lucas 列の第 n 項
     """
 
-    return Nth_Term_of_Linearly_Recurrent_Sequence([2,1],[1,1],N)
+    return Nth_Term_of_Linearly_Recurrent_Sequence([2, 1], [1, 1], n)
 
 def Cumulative(A,N):
     """ d:=|A| として, 漸化式 A[i]=A[i-1]+...+A[i-d] で表される列 A の第 N 項を求める.
