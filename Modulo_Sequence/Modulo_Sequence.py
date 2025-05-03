@@ -34,36 +34,44 @@ def Nth_Term_of_Linearly_Recurrent_Sequence(A: list[int], C: list[int], n: int, 
     P[d] = 0
     return Polynominal_Coefficient(P, Q, n)
 
-def Find_Linear_Recurrence(A):
-    """ A から推定される最小の長さの関係式を求める.
+def Find_Linear_Recurrence(A: list[int]) -> list[int]:
+    """ 整数列 A から推定される最小の長さの線形漸化式を求める.
 
-    Reference: https://judge.yosupo.jp/submission/28692
+    Args:
+        A (list[int]): A の先頭
+
+    Returns:
+        list[int]: 整数列 A から推定される最小の長さの線形漸化式である. つまり, 以下を満たす.
+            A[i] = C[0] * A[i - 1] + C[1] * A[i - 2] + ... + C[d - 1] * A[i - d] (i >= len(A))
     """
 
-    N=len(A)
-    B=[1]; C=[1]
-    l=0; m=0; p=1
+    N = len(A)
+    B = [1]
+    C = [1]
+    l, m, p = 0, 0, 1
     for i in range(N):
-        m+=1
-        d=A[i]
-        for j in range(1,l+1):
-            d+=C[j]*A[i-j]
-            d%=Mod
-        if d==0:
+        m += 1
+        d = A[i]
+        for j in range(1, l + 1):
+            d += C[j] * A[i-j]
+            d %= Mod
+
+        if d == 0:
             continue
 
-        T=C.copy()
-        q=pow(p, -1, Mod)*d%Mod
-        C=C+[0]*(len(B)+m-len(C))
+        T = C.copy()
+        q = pow(p, -1, Mod) * d % Mod
+        C.extend([0] * (len(B) + m - len(C)))
 
         for j in range(len(B)):
-            C[j+m]-=q*B[j]
-            C[j+m]%=Mod
-        if 2*l<=i:
-            B=T
-            l,m,p=i+1-l,0,d
+            C[j + m] -= q * B[j]
+            C[j + m] %= Mod
 
-    return [Mod-c if c else 0 for c in C[1:]]
+        if 2 * l <= i:
+            B = T
+            l, m, p = i+1-l, 0, d
+
+    return [Mod - c if c else 0 for c in C[1:]]
 
 def Fibonacci(N):
     """ Fibonacci 列の第 N 項を求める.
