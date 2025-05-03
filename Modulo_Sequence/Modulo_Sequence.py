@@ -238,22 +238,27 @@ def Stirling_1st(n: int) -> list[int]:
 
     return g(n).poly
 
-def Stirling_2nd(N):
-    """ k=0,1, ..., N に対する第 II 種 Stirling 数 (区別のできる N 個のものを区別できない K 個のグループ (空グループ禁止) に分割する方法) を求める.
+def Stirling_2nd(n: int) -> list[int]:
+    """ k = 0, 1, ..., n に対する第 II 種 Stirling 数 S_{n, k} を求める.
 
+    Args:
+        n (int):
+
+    Returns:
+        list[int]: 長さが (n + 1) のリスト. 第 k 項が S_{n, k} を表す.
     """
 
-    fact=[0]*(N+1); fact[0]=1
-    for i in range(1,N+1):
-        fact[i]=i*fact[i-1]%Mod
+    fact = [0] * (n + 1); fact[0] = 1
+    for i in range(1, n + 1):
+        fact[i] = i * fact[i - 1] % Mod
 
-    fact_inv=[0]*(N+1); fact_inv[-1]=pow(fact[-1], -1, Mod)
-    for i in range(N-1,-1,-1):
-        fact_inv[i]=(i+1)*fact_inv[i+1]%Mod
+    fact_inv = [0] * (n + 1); fact_inv[-1] = pow(fact[-1], -1, Mod)
+    for i in range(n-1, -1, -1):
+        fact_inv[i] = (i + 1) * fact_inv[i + 1] % Mod
 
-    A=[pow(i,N,Mod)*fact_inv[i]%Mod for i in range(N+1)]
-    B=[fact_inv[i] if i&1==0 else -fact_inv[i] for i in range(N+1)]
-    return Calc.convolution(A,B)[:N+1]
+    f = [pow(i, n, Mod) * fact_inv [i] % Mod for i in range(n + 1)]
+    g = [fact_inv[i] if i & 1 == 0 else -fact_inv[i] for i in range(n + 1)]
+    return Calc.convolution(f, g)[:n + 1]
 
 def Bell(N, mode = False):
     """ Bell 数 (集合 {1,2,...,N} の分割の方法) B[N] を求める.
