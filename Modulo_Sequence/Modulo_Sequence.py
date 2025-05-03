@@ -1,30 +1,38 @@
 from Modulo_Polynomial import *
 
-#===漸化式
-def Nth_Term_of_Linearly_Recurrent_Sequence(A, C, N, offset=0):
-    """ A[i]=C[0]*A[i-1]+C[1]*A[i-2]+...+C[d-1]*A[i-d] で表される数列 (A[i]) の第 N 項を求める.
+def Nth_Term_of_Linearly_Recurrent_Sequence(A: list[int], C: list[int], n: int, offset: int = 0) -> int:
+    """ A[i] = C[0] * A[i - 1] + C[1] * A[i - 2] + ... + C[d - 1] * A[i - d] で表される数列 (A[i]) の第 n 項を求める.
 
-    A=(A[0], ..., A[d-1]): 最初の d 項
-    C=(C[0], ..., C[d-1]): 線形漸化式
-    N: 求める項数
-    offset: ずらす項数 (初項が第 offset 項になる)
+    Args:
+        A (list[int]): A = (A[0], ..., A[d - 1]): 最初の d 項
+        C (list[int]): C = (C[0], ..., C[d - 1]): 線形漸化式の係数
+        n (int): 求める項数
+        offset (int, optional): ずらす項数 (初項を第 offset 項とする). Defaults to 0.
+
+    Raises:
+        ValueError: len(A) != len(C) の場合に発生
+
+    Returns:
+        int: A[n]
     """
 
-    assert len(A)==len(C)
-    d=len(A)
+    if not len(A) == len(C):
+        raise ValueError("len(A) == len(C) でなくてはなりません")
 
-    N-=offset
+    d = len(A)
+    n -= offset
 
-    if N<0:
+    if n < 0:
         return 0
-    elif N<d:
-        return A[N]%Mod
+    elif n < d:
+        return A[n] % Mod
 
-    A=Modulo_Polynomial(A,d+1)
-    Q=Modulo_Polynomial([-C[i-1] if i else 1  for i in range(d+1)], d+1)
+    A = Modulo_Polynomial(A, d + 1)
+    Q = Modulo_Polynomial([-C[i - 1] if i else 1  for i in range(d + 1)], d + 1)
 
-    P=A*Q; P[d]=0
-    return Polynominal_Coefficient(P,Q,N)
+    P = A * Q
+    P[d] = 0
+    return Polynominal_Coefficient(P, Q, n)
 
 def Find_Linear_Recurrence(A):
     """ A から推定される最小の長さの関係式を求める.
