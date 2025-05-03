@@ -20,7 +20,7 @@ def verify():
         d,*A[i]=map(int,input().split())
         D+=d
 
-    write(" ".join(map(str, Calc.Multiple_Convolution(*A))))
+    write(" ".join(map(str, Calc.multiple_convolution(*A))))
 
 #==================================================
 verify()

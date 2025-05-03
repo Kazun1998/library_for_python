@@ -12,7 +12,7 @@ def verify():
     N,M=map(int,input().split())
     A=list(map(int,input().split()))
     P=Modulo_Polynomial(A,N)
-    B=Power(P,M).Poly
+    B=Power(P,M).poly
     B.extend([0]*(N-len(B)))
     write(" ".join(map(str,B)))
 
