@@ -1383,45 +1383,57 @@ def Sqrt(P):
         E=[0]*(d//2)+E
     return Modulo_Polynomial(E,P.max_degree)
 
-"""
-形式的ベキ級数に対する特別な操作
-"""
-def Composition(P,Q):
-    """ P o Q=P(Q) を求める (※ 順番注意) ([X^0]Q=0 でなくてはならない).
 
-    Reference: https://judge.yosupo.jp/submission/42372
+# 形式的ベキ級数に対する特別な操作
+def Composition(P: Modulo_Polynomial, Q: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ 形式的ベキ級数 P と定数項が 0 である形式的ベキ級数 0 に対して, P o Q = P(Q) を求める (※ 順番注意).
+
+    Args:
+        P (Modulo_Polynomial): 外側
+        Q (Modulo_Polynomial): 内側
+
+    Raises:
+        Modulo_Polynomial: Q の定数項が 0 でない時に発生
+
+    Returns:
+        Modulo_Polynomial: 合成 P o Q
+
+    Reference:
+        https://judge.yosupo.jp/submission/42372
     """
 
-    assert Q[0]==0
+    if Q[0] != 0:
+        raise Modulo_Polynomial
 
-    deg=min(P.max_degree, Q.max_degree)
-    k=int(deg**0.5+1)
-    d=(deg+k)//k
+    deg = min(P.max_degree, Q.max_degree)
+    k = int(deg ** 0.5 + 1)
+    d = (deg + k) // k
 
-    X=[[1]]
+    X = [[1]]
     for i in range(k):
-        X.append(Calc.convolution(X[-1],Q.poly)[:deg+1])
+        X.append(Calc.convolution(X[-1], Q.poly)[:deg + 1])
 
-    Y=[[0]*len(X[k]) for _ in range(k)]
-    for i,y in enumerate(Y):
-        for j,x in enumerate(X[:d]):
-            if i*d+j>deg:
+    Y = [[0] * len(X[k]) for _ in range(k)]
+    for i, y in enumerate(Y):
+        for j, x in enumerate(X[:d]):
+            if i * d + j > deg:
                 break
 
-            for t in range(deg+1):
-                if t>=len(x):
+            for t in range(deg + 1):
+                if t >= len(x):
                     break
-                if t<len(y):
-                    y[t]+=x[t]*P[i*d+j]%Mod
 
-    F=[0]*(deg+1)
-    Z=[1]
-    x=X[d]
+                if t < len(y):
+                    y[t] += x[t] * P[i * d + j] % Mod
+
+    F = [0] * (deg + 1)
+    Z = [1]
+    x = X[d]
     for i in range(k):
-        Y[i]=Calc.convolution(Y[i],Z)[:deg+1]
+        Y[i] = Calc.convolution(Y[i], Z)[:deg + 1]
         for j in range(len(Y[i])):
-            F[j]+=Y[i][j]
-        Z=Calc.convolution(Z,x)[:deg+1]
+            F[j] += Y[i][j]
+        Z = Calc.convolution(Z, x)[:deg + 1]
     return Modulo_Polynomial(F, deg)
 
 def Taylor_Shift(P, a):
