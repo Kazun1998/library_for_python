@@ -185,32 +185,35 @@ def PartitionsP(n: int) -> list[int]:
 
     return Calc.inverse(f)
 
-def PartitionsQ(N, mode=0):
-    """ 各項が相異なる N の分割の数を求める.
+def PartitionsQ(n: int) -> list[int]:
+    """ k = 0, 1,..., n に対して, 以下で定義される q(k) を求める.
+        q(k) := k を順序を区別せずに, なおかつ全ての項が異なる自然数の和に分ける場合の数
 
+    Args:
+        n (int):
+
+    Returns:
+        list[int]: 第 k 項が q(k) に対応する長さ (n + 1) の整数のリスト
     """
 
-    Inv=[0]*(N+1)
-    Inv[1]=1
-    for i in range(2,N+1):
-        Inv[i]=(-(Mod//i)*Inv[Mod%i])%Mod
+    inv = [0] * (n+1)
+    inv[1] = 1
+    for x in range(2, n + 1):
+        q, r = divmod(Mod, x)
+        inv[x] = (-q * inv[r]) % Mod
 
-    F=[0]*(N+1)
-    for i in range(1,N+1):
-        j=i
-        k=1
-        c=1
-        while j<=N:
-            F[j]=(F[j]+c*Inv[k])%Mod
-            c*=-1
-            j+=i
-            k+=1
-    P=Modulo_Polynomial(F,N+1)
-
-    if mode==0:
-        return Exp(P)[N]
-    else:
-        return Exp(P).poly
+    p = [0] * (n + 1)
+    for i in range(1, n + 1):
+        j = i
+        k = 1
+        c = 1
+        while j <= n:
+            p[j] = (p[j] + c * inv[k]) % Mod
+            c *= -1
+            j += i
+            k += 1
+    P = Modulo_Polynomial(p, n + 1)
+    return Exp(P).poly
 
 def Stirling_1st(N):
     """ k=0,1, ..., N に対する第 I 種 Stirling 数を求める.
