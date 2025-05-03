@@ -341,19 +341,23 @@ def Subset_Sum(X: list[int], K: int) -> list[int]:
 
     return Exp(Modulo_Polynomial(f, K + 1)).poly
 
-#===
-#多項式和
-def Polynominal_Sigma(P):
-    """ Q(n)=P(1)+P(2)+...+P(n) を満たす多項式 Q を求める.
+# 多項式和
+def Polynominal_Sigma(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ 多項式 P に対して, Q(n) = P(1) + P(2) + ... + P(n) を満たす多項式 Q を求める.
 
+    Args:
+        P (Modulo_Polynomial):
+
+    Returns:
+        Modulo_Polynomial: Q
     """
 
     from itertools import accumulate
 
-    N=len(P.poly)
-    A=Multipoint_Evaluation(P, list(range(1,N+2)))
-    A=list(accumulate(A,lambda x,y:(x+y)%Mod))
-    return Polynominal_Interpolation(list(range(1,N+2)), A)
+    n = len(P.poly)
+    y_pre = Multipoint_Evaluation(P, list(range(1, n + 2)))
+    y = list(accumulate(y_pre, lambda x, y: (x + y) % Mod))
+    return Polynominal_Interpolation(list(range(1, n + 2)), y)
 
 def Differences(P, k=1):
     """ P の k- 差分 D[k](P(n))=D[k-1](P(n+1)-P(n)), D[0](P)=P を求める. """
