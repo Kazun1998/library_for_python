@@ -1053,22 +1053,73 @@ def Root(P: Modulo_Polynomial, k: int) -> Modulo_Polynomial:
 
 # 三角関数
 # 正弦
-def Sin(P):
-    I=Tonelli_Shanks(-1)
-    B=I*P
-    C=Exp(B)-Exp(-B)
-    return C*pow(2*I, -1, Mod)
+def Sin(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ 定数項が 0 である形式的ベキ級数 P に対して, Sin(P) を求める.
+
+    Args:
+        P (Modulo_Polynomial): 定数項が 0 である形式的ベキ級数
+
+    Raises:
+        ValueError: 定数項が 0 でない場合に発生
+
+    Returns:
+        Modulo_Polynomial: Sin(P)
+    """
+
+    if P[0] != 0:
+        raise ValueError("定数項が 0 ではありません")
+
+    I = Tonelli_Shanks(-1)
+    B = I * P
+    B_exp = Exp(B)
+    C = B_exp - (1 / B_exp)
+    return C * pow(2 * I, -1, Mod)
 
 #余弦
-def Cos(P):
-    I=Tonelli_Shanks(-1)
-    B=I*P
-    C=Exp(B)+Exp(-B)
-    return C*pow(2, -1, Mod)
+def Cos(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ 定数項が 0 である形式的ベキ級数 P に対して, Cos(P) を求める.
+
+    Args:
+        P (Modulo_Polynomial): 定数項が 0 である形式的ベキ級数
+
+    Raises:
+        ValueError: 定数項が 0 でない場合に発生
+
+    Returns:
+        Modulo_Polynomial: Cos(P)
+    """
+    if P[0] != 0:
+        raise ValueError("定数項が 0 ではありません")
+
+    I = Tonelli_Shanks(-1)
+    B = I * P
+    B_exp = Exp(B)
+    C = B_exp + (1 / B_exp)
+    return C * pow(2, -1, Mod)
 
 #正接
-def Tan(P):
-    return Sin(P)/Cos(P)
+def Tan(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ 定数項が 0 である形式的ベキ級数 P に対して, Tan(P) を求める.
+
+    Args:
+        P (Modulo_Polynomial): 定数項が 0 である形式的ベキ級数
+
+    Raises:
+        ValueError: 定数項が 0 でない場合に発生
+
+    Returns:
+        Modulo_Polynomial: Tan(P)
+    """
+
+    if P[0] != 0:
+        raise ValueError("定数項が 0 ではありません")
+
+    I = Tonelli_Shanks(-1)
+    B = I * P
+    B_exp = Exp(B)
+    B_sin = (B_exp - 1 / B_exp) * pow(2 * I, -1, Mod)
+    B_cos = (B_exp + 1 / B_exp) * pow(2, -1, Mod)
+    return B_sin / B_cos
 
 #逆正弦
 def ArcSin(P):
