@@ -868,7 +868,7 @@ class Calculator:
 
         return Calc.sub(F, Calc.convolution(Calc.flood_div(F, G), G))
 
-#以下 参考元https://judge.yosupo.jp/submission/28304
+# 以下 参考元: https://judge.yosupo.jp/submission/28304
 def Differentiate(P: Modulo_Polynomial) -> Modulo_Polynomial:
     """ 形式的ベキ級数 P の形式的微分 P' を求める.
 
@@ -883,23 +883,31 @@ def Differentiate(P: Modulo_Polynomial) -> Modulo_Polynomial:
     diff_poly = [(k * poly[k]) % Mod for k in range(1, len(poly))]
     return Modulo_Polynomial(diff_poly, P.max_degree)
 
-def Integrate(P):
-    F=P.poly
-    N=len(F)
+def Integrate(P: Modulo_Polynomial, constant: int = 0) -> Modulo_Polynomial:
+    """ 形式的ベキ級数 P の形式的な不定積分 Int(P) を求める. ただし, 定数項は constant とする.
 
-    Inv=[0]*(N+1)
-    if N:
-        Inv[1]=1
-        for i in range(2,N+1):
-            q,r=divmod(Mod,i)
-            Inv[i]=(-q*Inv[r])%Mod
+    Args:
+        P (Modulo_Polynomial): 形式的ベキ級数
+        constant (int, optional): 定数項. Defaults to 0.
 
-    G=[0]+[(Inv[k]*a)%Mod for k,a in enumerate(F,1)]
-    return Modulo_Polynomial(G,P.max_degree)
+    Returns:
+        Modulo_Polynomial: P の形式的な不定積分
+    """
 
-"""
-累乗,指数,対数
-"""
+    if not P.poly:
+        return Modulo_Polynomial([constant], P.max_degree)
+
+    n = len(P.poly)
+    inv = [0] * (n + 1)
+    inv[1] = 1
+    for x in range(2, n + 1):
+        q, r = divmod(Mod, x)
+        inv[x] = (-q * inv[r]) % Mod
+
+    integrate_poly = [0] + [(inv[k] * a) % Mod for k, a in enumerate(P.poly,1)]
+    return Modulo_Polynomial(integrate_poly, P.max_degree + 1)
+
+# 累乗,指数,対数
 def Log(P):
     assert P.poly[0]==1,"定数項が1ではない"
     return Integrate(Differentiate(P)/P)
