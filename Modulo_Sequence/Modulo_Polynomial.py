@@ -1476,48 +1476,60 @@ def Taylor_Shift(P: Modulo_Polynomial, a: int) -> Modulo_Polynomial:
 
     return Modulo_Polynomial(h, P.max_degree)
 
-def Polynominal_Coefficient(P,Q,N):
+def Polynominal_Coefficient(P: Modulo_Polynomial, Q: Modulo_Polynomial, N: int) -> int:
     """ [X^N] P/Q を求める.
 
+    Args:
+        P (Modulo_Polynomial): 分子
+        Q (Modulo_Polynomial): 分母
+        N (int): 次数
+
+    Returns:
+        int: [X^N] P/Q
+
     References:
-    http://q.c.titech.ac.jp/docs/progs/polynomial_division.html
-    https://arxiv.org/abs/2008.08822
-    https://arxiv.org/pdf/2008.08822.pdf
+        http://q.c.titech.ac.jp/docs/progs/polynomial_division.html
+        https://arxiv.org/abs/2008.08822
+        https://arxiv.org/pdf/2008.08822.pdf
     """
 
-    P=P.poly.copy(); Q=Q.poly.copy()
-    m=1<<((len(Q)-1).bit_length())
-    P.extend([0]*(2*m-len(P)))
-    Q.extend([0]*(2*m-len(Q)))
+    p = P.poly.copy()
+    q = Q.poly.copy()
+    m = 1 << ((len(q)-1).bit_length())
+    p.extend([0] * (2 * m - len(p)))
+    q.extend([0] * (2 * m - len(q)))
 
     while N:
-        R=[Q[i] if i&1==0 else -Q[i] for i in range(2*m)]
+        r = [q[i] if i & 1 == 0 else -q[i] for i in range(2 * m)]
 
-        Calc.ntt(P); Calc.ntt(Q); Calc.ntt(R)
+        Calc.ntt(p)
+        Calc.ntt(q)
+        Calc.ntt(r)
         for i in range(2*m):
-            P[i]*=R[i]; P[i]%=Mod
-            Q[i]*=R[i]; Q[i]%=Mod
+            p[i] *= r[i]; p[i] %= Mod
+            q[i] *= r[i]; q[i] %= Mod
 
-        Calc.inverse_ntt(P); Calc.inverse_ntt(Q)
-        if N&1==0:
+        Calc.inverse_ntt(p)
+        Calc.inverse_ntt(q)
+        if N & 1 == 0:
             for i in range(m):
-                P[i]=P[2*i]
+                p[i] = p[2 * i]
         else:
             for i in range(m):
-                P[i]=P[2*i+1]
+                p[i] = p[2 * i + 1]
 
         for i in range(m):
-            Q[i]=Q[2*i]
+            q[i] = q[2 * i]
 
-        for i in range(m,2*m):
-            P[i]=Q[i]=0
+        for i in range(m, 2 * m):
+            p[i] = q[i] = 0
 
-        N>>=1
+        N >>= 1
 
-    if Q[0]==1:
-        return P[0]
+    if q[0] == 1:
+        return p[0]
     else:
-        return P[0]*pow(Q[0], -1, Mod)%Mod
+        return p[0] * pow(q[0], -1, Mod) % Mod
 
 def Multipoint_Evaluation(P, X):
     """ 多項式 P に対して, X=[x[0], ..., x[N-1]] としたとき, [P(x[0]), ..., P(x[N-1])] を求める.
