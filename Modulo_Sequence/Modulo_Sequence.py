@@ -97,12 +97,18 @@ def Lucas(n: int) -> int:
 
     return Nth_Term_of_Linearly_Recurrent_Sequence([2, 1], [1, 1], n)
 
-def Cumulative(A,N):
-    """ d:=|A| として, 漸化式 A[i]=A[i-1]+...+A[i-d] で表される列 A の第 N 項を求める.
+def Cumulative(A: list[int], n: int) -> int:
+    """ d := len(A) として, A[i + d] = A[i + d - 1] + ... + A[i] で定義される A に対して, A[n] を求める.
 
+    Args:
+        A (list[int]): A の先頭
+        n (int):
+
+    Returns:
+        int: A[n]
     """
 
-    return Nth_Term_of_Linearly_Recurrent_Sequence(A, [1]*len(A), N)
+    return Nth_Term_of_Linearly_Recurrent_Sequence(A, [1] * len(A), n)
 
 def Factorial_Modulo(N):
     """ N! mod Mod を求める.
