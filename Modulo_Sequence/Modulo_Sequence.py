@@ -215,23 +215,28 @@ def PartitionsQ(n: int) -> list[int]:
     P = Modulo_Polynomial(p, n + 1)
     return Exp(P).poly
 
-def Stirling_1st(N):
-    """ k=0,1, ..., N に対する第 I 種 Stirling 数を求める.
+def Stirling_1st(n: int) -> list[int]:
+    """ k = 0, 1, ..., n に対する第 I 種 Stirling 数 S_{n, k} を求める.
 
+    Args:
+        n (int):
+
+    Returns:
+        list[int]: 長さが (n + 1) のリスト. 第 k 項が S_{n, k} を表す.
     """
 
     def g(n):
         if n==0:
-            return Modulo_Polynomial([1],N+1)
+            return Modulo_Polynomial([1], n + 1)
         elif n==1:
-            return Modulo_Polynomial([0,1], N+1)
-        elif n&1:
-            return Modulo_Polynomial([-n+1, 1],N+1)*g(n-1)
+            return Modulo_Polynomial([0, 1], n + 1)
+        elif n % 2 == 1:
+            return Modulo_Polynomial([-n + 1, 1], n + 1) * g(n - 1)
         else:
-            P=g(n//2)
-            return P*Taylor_Shift(P, -n//2)
+            P = g(n // 2)
+            return P * Taylor_Shift(P, -n // 2)
 
-    return g(N).poly
+    return g(n).poly
 
 def Stirling_2nd(N):
     """ k=0,1, ..., N に対する第 II 種 Stirling 数 (区別のできる N 個のものを区別できない K 個のグループ (空グループ禁止) に分割する方法) を求める.
