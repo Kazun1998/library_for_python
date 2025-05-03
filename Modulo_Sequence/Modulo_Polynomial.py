@@ -12,7 +12,7 @@ class Modulo_Polynomial:
         if poly is None:
             poly = [0]
 
-        self.poly = [p%Mod for p in poly[:max_degree]]
+        self.poly: list[int] = [a % Mod for a in poly[:max_degree]]
         self.max_degree = max_degree
 
     def __str__(self) -> str:
