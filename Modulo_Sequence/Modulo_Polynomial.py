@@ -1436,42 +1436,45 @@ def Composition(P: Modulo_Polynomial, Q: Modulo_Polynomial) -> Modulo_Polynomial
         Z = Calc.convolution(Z, x)[:deg + 1]
     return Modulo_Polynomial(F, deg)
 
-def Taylor_Shift(P, a):
-    """与えられた多項式 P に対して, P(X+a) を求める.
+def Taylor_Shift(P: Modulo_Polynomial, a: int) -> Modulo_Polynomial:
+    """ 形式的ベキ級数 P と整数 a に対して, P(X + a) を求める.
 
-    P: Polynominal
-    a: int
+    Args:
+        P (Modulo_Polynomial): 形式的ベキ級数
+        a (int): 定数
+
+    Returns:
+        Modulo_Polynomial: P(X + a)
     """
 
-    N=len(P.poly)-1
+    n = len(P.poly) - 1
 
-    fact=[0]*(N+1)
-    fact[0]=1
-    for i in range(1,N+1):
-        fact[i]=(fact[i-1]*i)%Mod
+    fact = [0] * (n + 1)
+    fact[0] = 1
+    for i in range(1, n + 1):
+        fact[i] = (fact[i-1] * i) % Mod
 
-    fact_inv=[0]*(N+1)
-    fact_inv[-1]=pow(fact[-1], -1, Mod)
+    fact_inv = [0] * (n + 1)
+    fact_inv[-1] = pow(fact[-1], -1, Mod)
+    for i in range(n - 1, -1, -1):
+        fact_inv[i] = (fact_inv[i + 1] * (i + 1)) % Mod
 
-    for i in range(N-1,-1,-1):
-        fact_inv[i]=(fact_inv[i+1]*(i+1))%Mod
+    f = P.poly.copy()
+    for i in range(n+1):
+        f[i] = (f[i] * fact[i]) % Mod
 
-    F=P.poly.copy()
-    for i in range(N+1):
-        F[i]=(F[i]*fact[i])%Mod
+    g = [0] * (n + 1)
+    c = 1
+    for i in range(n+1):
+        g[i] = (c * fact_inv[i]) % Mod
+        c = (c * a) % Mod
+    g.reverse()
 
-    G=[0]*(N+1)
-    c=1
-    for i in range(N+1):
-        G[i]=(c*fact_inv[i])%Mod
-        c=(c*a)%Mod
-    G.reverse()
+    h = Calc.convolution(f, g)[n:]
+    for i in range(len(h)):
+        h[i] = (h[i] * fact_inv[i]) % Mod
 
-    H=Calc.convolution(F,G)[N:]
-    for i in range(len(H)):
-        H[i]=(H[i]*fact_inv[i])%Mod
-
-    return Modulo_Polynomial(H,P.max_degree)
+    return Modulo_Polynomial(h, P.max_degree)
 
 def Polynominal_Coefficient(P,Q,N):
     """ [X^N] P/Q を求める.
