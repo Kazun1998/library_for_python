@@ -292,18 +292,19 @@ def Bell(n: int) -> list[int]:
 
     return f
 
-def Motzkin(N, mode=0):
-    """ Motzkin 数 (円周上の区別がつく相異なる N 点を線分をどの2つも共通部分がない (N 点で共有も禁止) で結ぶ方法 (結ばれない点があってもよい) の数.
+def Motzkin(n: int) -> list[int]:
+    """ Motzkin 数 Mot[k] (円周上の区別がつく相異なる k 点を線分をどの2つも共通部分がない (k 点内で共有も禁止) で結ぶ方法 (結ばれない点があってもよい) の数) を k = 0, 1, ..., n に対して求める.
 
+    Args:
+        n (int):
+
+    Returns:
+        list[int]: 第 k 項は Mot[k] に対応する.
     """
 
-    two_inv=pow(2, -1, Mod)
-    F=((Modulo_Polynomial([1,-1], N+3)-Sqrt(Modulo_Polynomial([1,-2,-3], N+3)))*two_inv)>>2
-
-    if mode:
-        return F.poly[:N+1]
-    else:
-        return F[N]
+    two_inv = pow(2, -1, Mod)
+    F = ((Modulo_Polynomial([1, -1], n + 3) - Sqrt(Modulo_Polynomial([1,-2,-3], n + 3))) * two_inv) >> 2
+    return F.poly[:n + 1]
 
 #===
 def Subset_Sum(X, K):
