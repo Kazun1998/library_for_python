@@ -346,6 +346,22 @@ class Modulo_Polynomial:
             a_pow = (a_pow * a) % Mod
         return y % Mod
 
+    def order(self, default: int = None) -> int:
+        """ この形式的ベキ級数の位数 (係数が 0 でない次数のうちの最低次数) を求める.
+
+        Args:
+            default (int, optional): ゼロ多項式の返り値. Defaults to None.
+
+        Returns:
+            int: 位数
+        """
+
+        for d in range(len(self.poly)):
+            if self.poly[d]:
+                return d
+        else:
+            return default
+
 #=================================================
 class Calculator:
     def __init__(self):
@@ -1177,57 +1193,77 @@ def ArcTan(P: Modulo_Polynomial) -> Modulo_Polynomial:
 
     return Integrate(Differentiate(P) / (1 + P * P))
 
-def Power(P, M):
-    """ P の M 乗を求める.
+def Power(P: Modulo_Polynomial, M: int) -> Modulo_Polynomial:
+    """ 形式的ベキ級数 P の M 乗を求める.
 
+    Args:
+        P (Modulo_Polynomial): 形式的ベキ級数
+        M (int): 非負整数
+
+    Raises:
+        ValueError: M が負のときに発生
+
+    Returns:
+        Modulo_Polynomial: P の M 乗
     """
 
-    assert M>=0
-    N=P.max_degree
-    F=P.poly
-    F+=[0]*((N+1)-len(F))
-    for (deg,p) in enumerate(F):
-        if p:
-            break
-    else:
-        if M==0:
-            return Modulo_Polynomial([1], P.max_degree)
-        else:
-            return Modulo_Polynomial([0] ,P.max_degree)
+    if M < 0:
+        raise ValueError("M は非負でなくてはなりません")
+    elif M == 0:
+        # M = 0　のときは P^0 = 1 確定.
+        return Modulo_Polynomial([1], P.max_degree)
 
-    if deg*M>N:
+    n = P.max_degree
+    F = P.poly
+    F.extend([0] *((n + 1) - len(F)))
+
+    # 係数が 0 ではない最低次の次数とその係数を求める.
+    if (ord := P.order(-1)) == -1:
         return Modulo_Polynomial([0], P.max_degree)
 
-    p_inv=pow(p, -1, Mod)
-    M_mod=M%Mod
+    if ord * M > n:
+        # M 乗
+        return Modulo_Polynomial([0], P.max_degree)
+
+    lowest = F[ord]
+    lowest_inv = pow(lowest, -1, Mod)
+    M_mod = M % Mod
 
     if Calc.is_sparse(F):
         # P が疎な場合
-        H=[(p_inv*a)%Mod for a in F[deg:]]+[0]
-        Nh=len(H)-1
-        d,h=Calc.coefficients_list(H); K=len(d)
+        H = [(lowest_inv * a) % Mod for a in F[ord:]] + [0]
+        Nh = len(H) - 1
+        d, _ = Calc.coefficients_list(H)
+        K = len(d)
 
-        Inv=[0]*(Nh+1); Inv[1]=1
-        for i in range(2, Nh+1):
-            q,r=divmod(Mod, i)
-            Inv[i]=(-q*Inv[r])%Mod
+        inv = [0] * (Nh + 1)
+        inv[1] = 1
+        for x in range(2, Nh+1):
+            q, r = divmod(Mod, x)
+            inv[x] = (-q * inv[r]) % Mod
 
-        G=[0]*Nh; G[0]=1
-        for i in range(Nh-1):
-            g=(M_mod*(i+1)%Mod)*H[i+1]%Mod
+        G = [0] * Nh; G[0] = 1
+        for i in range(Nh - 1):
+            g = (M_mod * (i + 1) % Mod) * H[i + 1] % Mod
             for j in range(K):
-                if 1<=d[j]<=i:
-                    alpha=(d[j]*M_mod-(i-d[j]+1))%Mod
-                    beta=G[i+1-d[j]]*H[d[j]]%Mod
-                    g+=alpha*beta
-            g%=Mod
-            G[i+1]=g*Inv[i+1]%Mod
-    else:
-        Q=Modulo_Polynomial([(p_inv*a)%Mod for a in F[deg:]],P.max_degree)
-        G=Exp(M_mod*Log(Q)).poly
+                if not (1 <= d[j] <= i):
+                    continue
 
-    pk=pow(p, M, Mod)
-    G=[0]*(deg*M)+[(pk*a)%Mod for a in G]
+                alpha = (d[j] * M_mod - (i - d[j] + 1)) % Mod
+                beta = G[i + 1 - d[j]] * H[d[j]] % Mod
+                g += alpha * beta % Mod
+            g %= Mod
+
+            G[i + 1] = g * inv[i + 1] % Mod
+    else:
+        # P が密な場合
+        # P^M = Exp(M Log(P)) を利用する
+
+        Q = Modulo_Polynomial([(lowest_inv * a) % Mod for a in F[ord:]], P.max_degree)
+        G = Exp(M_mod*Log(Q)).poly
+
+    lowest_k = pow(lowest, M, Mod)
+    G = [0] * (ord * M) + [(lowest_k * a) % Mod for a in G]
     return Modulo_Polynomial(G, P.max_degree)
 
 #根号
