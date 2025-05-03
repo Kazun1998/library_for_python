@@ -161,27 +161,29 @@ def Bernoulli(N: int) -> list[int]:
 
     return f
 
-def PartitionsP(N, mode=0):
-    """分割数 p(0),...,p(N) (mod Mod) を求める.
+def PartitionsP(n: int) -> list[int]:
+    """ k = 0, 1,..., n に対して, 以下で定義される分割数 p(k) を求める.
+        p(k) := k を順序を区別せずに自然数の和に分ける場合の数
 
-    p(k):=kを順序を区別せずに自然数の和に分ける場合の数
+    Args:
+        n (int):
+
+    Returns:
+        list[int]: 第 k 項が p(k) に対応する長さ (n + 1) の整数のリスト
     """
 
-    F=[0]*(N+1)
-    F[0]=1
-    k=1
-    while k*(3*k-1)<=2*N:
-        m=-1 if k&1 else 1
-        F[k*(3*k-1)//2]+=m
+    f = [0] * (n + 1)
+    f[0] = 1
+    k = 1
+    while k * (3 * k - 1) <= 2 *n:
+        m = -1 if k & 1 else 1
+        f[k * (3 * k - 1) // 2] += m
 
-        if k*(3*k+1)<=2*N:
-            F[k*(3*k+1)//2]+=m
-        k+=1
+        if k * (3 * k + 1) <= 2 *n:
+            f[k * (3 * k + 1) // 2 ]+= m
+        k += 1
 
-    if mode==0:
-        return Calc.inverse(F)[-1]
-    else:
-        return Calc.inverse(F)
+    return Calc.inverse(f)
 
 def PartitionsQ(N, mode=0):
     """ 各項が相異なる N の分割の数を求める.
