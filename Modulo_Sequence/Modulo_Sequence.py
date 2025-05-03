@@ -140,25 +140,26 @@ def Factorial_Modulo(n: int) -> int:
         X = (i * X) % Mod
     return X
 
-#=== 特別な数列
-def Bernoulli(N, mode=0):
-    """ベルヌーイ数 B_0,B_1,...,B_N の (mod Mod) での値を求める.
+# 特別な数列
+def Bernoulli(N: int) -> list[int]:
+    """ Bernoulli 数 B[0], B[1], ..., B[N + 1] を求める.
+
+    Args:
+        N (int):
+
+    Returns:
+        list[int]: 第 d 項が B[d] に対応する長さ (N L 1) のリスト
     """
 
-    P=Exp(Modulo_Polynomial([0,1],N+2))[1:]
-    F=P.inverse().poly[:-1]
+    P = Exp(Modulo_Polynomial([0, 1], N + 2))[1:]
+    f = P.inverse().poly[:-1]
 
-    if mode==0:
-        fact=1
-        for i in range(2,N+1):
-            fact=(fact*i)%Mod
-        return F[-1]*fact%Mod
-    else:
-        fact=1
-        for i in range(N+1):
-            F[i]=(F[i]*fact)%Mod
-            fact=(fact*(i+1))%Mod
-        return F
+    fact = 1
+    for i in range(1, N + 1):
+        fact = (fact * i) % Mod
+        f[i] = (f[i] * fact) % Mod
+
+    return f
 
 def PartitionsP(N, mode=0):
     """分割数 p(0),...,p(N) (mod Mod) を求める.
