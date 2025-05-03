@@ -314,7 +314,7 @@ class Modulo_Polynomial:
             m = self.max_degree
 
         m = min(m, self.max_degree)
-        self.poly[:m]
+        del self.poly[m:]
 
     def resize(self, m: int):
         """ この多項式の情報を持っている配列の長さを m にする (短い場合は末尾に 0 を追加し, 長い場合は m 次以上を切り捨てる).
@@ -940,7 +940,9 @@ def Log(P: Modulo_Polynomial) -> Modulo_Polynomial:
     if P[0] != 1:
         raise ValueError("定数項が 1 ではありません")
 
-    return Integrate(Differentiate(P) / P)
+    Q = Integrate(Differentiate(P) / P)
+    Q.censor(P.max_degree)
+    return Q
 
 def Exp(P: Modulo_Polynomial) -> Modulo_Polynomial:
     """ 定数項が 0 である形式的ベキ級数 P に対する Exp(P) を求める.
