@@ -1571,57 +1571,68 @@ def Multipoint_Evaluation(P: Modulo_Polynomial, X: list[int]) -> list[int]:
 
     return [G[i + size][0] for i in range(n)]
 
-def Polynominal_Interpolation(X, Y):
-    """ N=|X|=|Y| とする. P(x_i)=y_i (0<=i<|X|-1) を満たす高々 (N-1) 次の多項式 P を求める.
+def Polynominal_Interpolation(X: list[int], Y: list[int]) -> Modulo_Polynomial:
+    """ n = |X| = |Y| とする. P(x_i) = y_i (0 <= i < n) を満たす高々 (n-1) 次の多項式 P を求める.
 
+    Args:
+        X (list[int]): X
+        Y (list[int]): Y
+
+    Raises:
+        ValueError: |X| != |Y| のときに発生
+
+    Returns:
+        Modulo_Polynomial: P(x_i) = y_i (0 <= i < n) を満たす高々 (n-1) 次の多項式 P
     """
 
-    assert len(X)==len(Y)
+    if len(X) != len(Y):
+        raise ValueError("X, Y の長さが等しくなければなりません")
 
-    N=len(X)
-    size=1<<(N-1).bit_length()
+    n = len(X)
+    size = 1 << (n - 1).bit_length()
 
-    T=[[1] for _ in range(2*size)]
+    T = [[1] for _ in range(2 * size)]
 
-    for i in range(N):
-        T[i+size]=[-X[i],1]
+    for i in range(n):
+        T[i + size] = [-X[i], 1]
 
-    for i in range(size-1,0,-1):
-        T[i]=Calc.convolution(T[2*i], T[2*i+1])
+    for i in range(size - 1, 0, -1):
+        T[i] = Calc.convolution(T[2 * i], T[2 * i + 1])
 
-    U=[[] for _ in range(2*size)]
-    U[1]=[k*a for k,a in enumerate(T[1][1:],1)]
+    U = [[] for _ in range(2 * size)]
+    U[1] = [k * a for k, a in enumerate(T[1][1:], 1)]
 
-    for i in range(2,N+size):
-        m=len(U[i//2])-len(T[i])+1
-        v=Calc.convolution(U[i//2][::-1][:m],Calc.inverse(T[i][::-1],m))[m-1::-1]
-        w=Calc.convolution(v,T[i])
+    for i in range(2, n + size):
+        m = len(U[i//2]) - len(T[i]) + 1
+        v = Calc.convolution(U[i // 2][::-1][:m], Calc.inverse(T[i][::-1], m))[m - 1::-1]
+        w = Calc.convolution(v, T[i])
 
-        U[i]=U[i//2].copy()
-        u=U[i]
+        U[i] = U[i//2].copy()
+        u = U[i]
         for j in range(len(w)):
-            u[j]-=w[j]; u[j]%=Mod
+            u[j] -= w[j]
+            u[j] %= Mod
 
-        while len(u)>1 and u[-1]==0:
+        while len(u) > 1 and u[-1] == 0:
             u.pop()
 
-    for i in range(N):
-        U[i+size]=[(Y[i]*pow(U[i+size][0], -1, Mod))%Mod]
+    for i in range(n):
+        U[i + size] = [(Y[i] * pow(U[i + size][0], -1, Mod)) % Mod]
 
-    for i in range(size-1,0,-1):
-        A=Calc.convolution(U[2*i], T[2*i+1])
-        B=Calc.convolution(T[2*i], U[2*i+1])
+    for i in range(size - 1, 0, -1):
+        A = Calc.convolution(U[2 * i], T[2 * i + 1])
+        B = Calc.convolution(T[2 * i], U[2 * i + 1])
 
-        m=min(len(A), len(B))
+        m = min(len(A), len(B))
 
-        u=[0]*m
+        u = [0] * m
         for j in range(m):
-            u[j]=(A[j]+B[j])%Mod
+            u[j] = (A[j] + B[j]) % Mod
         u.extend(A[m:])
         u.extend(B[m:])
-        U[i]=u
+        U[i] = u
 
-    return Modulo_Polynomial(U[1], N)
+    return Modulo_Polynomial(U[1], n)
 
 #多項式同士の最大公約数
 def _gcd(F,G):
