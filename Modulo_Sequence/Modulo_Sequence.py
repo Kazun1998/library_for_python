@@ -359,29 +359,41 @@ def Polynominal_Sigma(P: Modulo_Polynomial) -> Modulo_Polynomial:
     y = list(accumulate(y_pre, lambda x, y: (x + y) % Mod))
     return Polynominal_Interpolation(list(range(1, n + 2)), y)
 
-def Differences(P, k=1):
-    """ P の k- 差分 D[k](P(n))=D[k-1](P(n+1)-P(n)), D[0](P)=P を求める. """
+def Differences(P: Modulo_Polynomial, k: int = 1) -> Modulo_Polynomial:
+    """ 以下で定義される P の k 回差分 D^k(P) を求める.
+        D^t(P(n)) = D^{t-1}(P(n+1)-P(n)), D^0(P)=P.
 
-    N=len(P.poly)
+    Args:
+        P (Modulo_Polynomial):
+        k (int, optional): 差分の階数. Defaults to 1.
 
-    fact=[1]*(k+1)
-    for i in range(1,k+1):
-        fact[i]=i*fact[i-1]%Mod
+    Returns:
+        Modulo_Polynomial: D^k(P)
+    """
 
-    fact_inv=[1]*(k+1); fact_inv[-1]=pow(fact[i], -1, Mod)
-    for i in range(k-1,-1,-1):
-        fact_inv[i]=(i+1)*fact_inv[i+1]%Mod
+    n = len(P.poly)
 
-    Q=[0]*(N-k)
-    sgn=1 if k%2==0 else -1
+    fact = [1] * (k + 1)
+    for i in range(1, k + 1):
+        fact[i] = i * fact[i - 1] % Mod
 
-    for r in range(k+1):
-        alpha=sgn*fact[k]*(fact_inv[r]*fact_inv[k-r]%Mod)%Mod
-        for j in range(N-k):
-            Q[j]+=alpha*P[j]%Mod
+    fact_inv = [1] * (k + 1)
+    fact_inv[-1] = pow(fact[i], -1, Mod)
+    for i in range(k - 1, -1, -1):
+        fact_inv[i] = (i + 1) *fact_inv[i + 1] % Mod
 
-        if r!=k:
-            sgn*=-1
-            P=Taylor_Shift(P,1)
+    q = [0] * (n - k)
+    sgn = 1 if k % 2 == 0 else -1
 
-    return Modulo_Polynomial(Q,P.max_degree)
+    for r in range(k + 1):
+        alpha = sgn * fact[k] * (fact_inv[r] * fact_inv[k - r] % Mod) % Mod
+        for j in range(n - k):
+            q[j] += alpha * P[j] % Mod
+
+        if r == k:
+            break
+
+        sgn *= -1
+        P = Taylor_Shift(P, 1)
+
+    return Modulo_Polynomial(q, P.max_degree)
