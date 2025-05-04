@@ -1,11 +1,30 @@
-from dataclasses import dataclass
-
-@dataclass
 class Weighted_Arc:
-    id: int
-    source: int
-    target: int
-    weight: int
+    __slots__ = ('__id', '__source', '__target', '__weight')
+
+    def __init__(self, id: int, source: int, target: int, weight: int):
+        self.__id = id
+        self.__source = source
+        self.__target = target
+        self.__weight = weight
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(id={self.id}, source={self.source}, target={self.target}, weight={self.weight})"
+
+    @property
+    def id(self) -> int:
+        return self.__id
+
+    @property
+    def source(self) -> int:
+        return self.__source
+
+    @property
+    def target(self) -> int:
+        return self.__target
+
+    @property
+    def weight(self) -> int:
+        return self.__weight
 
 class Weighted_Digraph:
     #入力定義
@@ -18,7 +37,7 @@ class Weighted_Digraph:
         """
 
         self.adjacent_out: list[list[Weighted_Arc]] = [[] for _ in range(N)] # 出近傍 (v が始点)
-        self.arcs = [None] * arc_offset
+        self.arcs: list[Weighted_Arc] = [None] * arc_offset
         self.__arc_offset = arc_offset
         self.__infinity = 0
 
