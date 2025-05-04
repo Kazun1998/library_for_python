@@ -1269,7 +1269,7 @@ def Power(P: Modulo_Polynomial, M: int) -> Modulo_Polynomial:
     return Modulo_Polynomial(G, P.max_degree)
 
 #根号
-def Tonelli_Shanks(X, default=-1):
+def Tonelli_Shanks(X: int, default: int = -1) -> int:
     """ X=a (mod Mod) のとき, r*r=a (mod Mod) を満たす r を返す.
 
     ※法pが素数のときのみ有効
@@ -1283,43 +1283,43 @@ def Tonelli_Shanks(X, default=-1):
         ※法が素数のときのみ成立する.
         """
 
-        if X%Mod==0:
+        if X % Mod == 0:
             return 0
-        elif pow(X,(Mod-1)//2,Mod)==1:
+        elif pow(X, (Mod - 1) // 2, Mod) == 1:
             return 1
         else:
             return -1
 
-    X%=Mod
-    if Legendre(X)==-1:
+    X %= Mod
+    if Legendre(X) == -1:
         return default
 
     from random import randint as ri
-    if X==0:
+    if X == 0:
         return X
-    elif Mod==2:
+    elif Mod == 2:
         return X
-    elif Mod%4==3:
-        return pow(X,(Mod+1)//4,Mod)
+    elif Mod % 4 == 3:
+        return pow(X, (Mod + 1) // 4,Mod)
 
-    u=2
-    s=1
-    while (Mod-1)%(2*u)==0:
-        u*=2
-        s+=1
-    q=(Mod-1)//u
+    u = 2
+    s = 1
+    while (Mod - 1) % (2 * u) == 0:
+        u *= 2
+        s += 1
 
-    z=0
-    while pow(z,(Mod-1)//2,Mod)!=Mod-1:
-        z=ri(1,Mod-1)
+    q = (Mod - 1) // u
+    z = 0
+    while pow(z, (Mod - 1) // 2, Mod) != Mod - 1:
+        z = ri(1, Mod - 1)
 
-    m,c,t,r=s,pow(z,q,Mod),pow(X,q,Mod),pow(X,(q+1)//2,Mod)
-    while m>1:
-        if pow(t,2**(m-2),Mod)==1:
-            c=(c*c)%Mod
-            m=m-1
+    m, c, t, r = s, pow(z, q, Mod), pow(X, q, Mod), pow(X, (q + 1) // 2, Mod)
+    while m > 1:
+        if pow(t, pow(2, m - 2), Mod) == 1:
+            c = (c * c) % Mod
+            m = m - 1
         else:
-            c,t,r,m=(c*c)%Mod,(c*c*t)%Mod,(c*r)%Mod,m-1
+            c, t, r, m = (c * c) % Mod, (c * c * t) % Mod, (c * r) % Mod, m - 1
     return r
 
 #多項式の根号
