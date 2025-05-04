@@ -32,7 +32,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
   requiredBy: []
-  timestamp: '2025-05-04 01:20:29+09:00'
+  timestamp: '2025-05-04 10:58:23+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py

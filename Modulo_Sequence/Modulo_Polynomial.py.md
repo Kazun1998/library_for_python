@@ -556,71 +556,77 @@ data:
     \ * a) % Mod for a in F[ord:]], P.max_degree)\n        G = Exp(M_mod*Log(Q)).poly\n\
     \n    lowest_k = pow(lowest, M, Mod)\n    G = [0] * (ord * M) + [(lowest_k * a)\
     \ % Mod for a in G]\n    return Modulo_Polynomial(G, P.max_degree)\n\n#\u6839\u53F7\
-    \ndef Tonelli_Shanks(X, default=-1):\n    \"\"\" X=a (mod Mod) \u306E\u3068\u304D\
-    , r*r=a (mod Mod) \u3092\u6E80\u305F\u3059 r \u3092\u8FD4\u3059.\n\n    \u203B\
-    \u6CD5p\u304C\u7D20\u6570\u306E\u3068\u304D\u306E\u307F\u6709\u52B9\n    \u203B\
-    \u5B58\u5728\u3057\u306A\u3044\u3068\u304D\u306F default \u304C\u8FD4\u308A\u5024\
-    \n    \"\"\"\n\n    #\u30EB\u30B8\u30E3\u30F3\u30C9\u30EB\u8A18\u53F7\n    def\
-    \ Legendre(X):\n        \"\"\"\u30EB\u30B8\u30E3\u30F3\u30C9\u30EB\u8A18\u53F7\
-    \ (a/Mod) \u3092\u8FD4\u3059.\n\n        \u203B\u6CD5\u304C\u7D20\u6570\u306E\u3068\
-    \u304D\u306E\u307F\u6210\u7ACB\u3059\u308B.\n        \"\"\"\n\n        if X%Mod==0:\n\
-    \            return 0\n        elif pow(X,(Mod-1)//2,Mod)==1:\n            return\
-    \ 1\n        else:\n            return -1\n\n    X%=Mod\n    if Legendre(X)==-1:\n\
-    \        return default\n\n    from random import randint as ri\n    if X==0:\n\
-    \        return X\n    elif Mod==2:\n        return X\n    elif Mod%4==3:\n  \
-    \      return pow(X,(Mod+1)//4,Mod)\n\n    u=2\n    s=1\n    while (Mod-1)%(2*u)==0:\n\
-    \        u*=2\n        s+=1\n    q=(Mod-1)//u\n\n    z=0\n    while pow(z,(Mod-1)//2,Mod)!=Mod-1:\n\
-    \        z=ri(1,Mod-1)\n\n    m,c,t,r=s,pow(z,q,Mod),pow(X,q,Mod),pow(X,(q+1)//2,Mod)\n\
-    \    while m>1:\n        if pow(t,2**(m-2),Mod)==1:\n            c=(c*c)%Mod\n\
-    \            m=m-1\n        else:\n            c,t,r,m=(c*c)%Mod,(c*c*t)%Mod,(c*r)%Mod,m-1\n\
-    \    return r\n\n#\u591A\u9805\u5F0F\u306E\u6839\u53F7\ndef __sqrt(F, N):\n  \
-    \  F+=[0]*(N-len(F))\n    s=Tonelli_Shanks(F[0])\n    if s==-1:\n        return\
-    \ None\n\n    two_inv=pow(2, -1, Mod)\n\n    if not Calc.is_sparse(F):\n     \
-    \   # P \u304C\u758E\u306A\u5834\u5408\n        F.append(0)\n        d,f=Calc.coefficients_list(F);\
-    \ K=len(d)\n\n        Inv=[0]*(N+1); Inv[1]=1\n        for i in range(2, N+1):\n\
-    \            q,r=divmod(Mod, i)\n            Inv[i]=(-q*Inv[r])%Mod\n\n      \
-    \  G=[0]*N; G[0]=1\n        for i in range(N):\n            g=(two_inv*(i+1)%Mod)*F[i+1]%Mod\n\
-    \            for j in range(K):\n                if 1<=d[j]<=i:\n            \
-    \        alpha=(d[j]*two_inv-(i-d[j]+1))%Mod\n                    beta=G[i+1-d[j]]*F[d[j]]%Mod\n\
-    \                    g+=alpha*beta\n            g%=Mod\n            G[i+1]=g*Inv[i+1]%Mod\n\
-    \    else:\n        m=1\n        G=[min(s,Mod-s)]\n\n        while m<N:\n    \
-    \        G+=[0]*m\n            m<<=1\n            H=Calc.convolution(F[:m], Calc.inverse(G))\n\
-    \            G=[two_inv*(a+b)%Mod for a,b in zip(G,H)]\n    return G[:N]\n\ndef\
-    \ Sqrt(P):\n    N=P.max_degree\n    F=P.poly\n    F+=[0]*(N-len(F))\n\n    for\
-    \ d,p in enumerate(F):\n        if p:\n            break\n    else:\n        return\
-    \ Modulo_Polynomial([0],P.max_degree)\n\n    if d%2==1:\n        return\n\n  \
-    \  E=__sqrt(F[d:],N-d//2)\n\n    if E==None:\n        return\n\n    if d>0:\n\
-    \        E=[0]*(d//2)+E\n    return Modulo_Polynomial(E,P.max_degree)\n\n\n# \u5F62\
-    \u5F0F\u7684\u30D9\u30AD\u7D1A\u6570\u306B\u5BFE\u3059\u308B\u7279\u5225\u306A\
-    \u64CD\u4F5C\ndef Composition(P: Modulo_Polynomial, Q: Modulo_Polynomial) -> Modulo_Polynomial:\n\
-    \    \"\"\" \u5F62\u5F0F\u7684\u30D9\u30AD\u7D1A\u6570 P \u3068\u5B9A\u6570\u9805\
-    \u304C 0 \u3067\u3042\u308B\u5F62\u5F0F\u7684\u30D9\u30AD\u7D1A\u6570 0 \u306B\
-    \u5BFE\u3057\u3066, P o Q = P(Q) \u3092\u6C42\u3081\u308B (\u203B \u9806\u756A\
-    \u6CE8\u610F).\n\n    Args:\n        P (Modulo_Polynomial): \u5916\u5074\n   \
-    \     Q (Modulo_Polynomial): \u5185\u5074\n\n    Raises:\n        Modulo_Polynomial:\
-    \ Q \u306E\u5B9A\u6570\u9805\u304C 0 \u3067\u306A\u3044\u6642\u306B\u767A\u751F\
-    \n\n    Returns:\n        Modulo_Polynomial: \u5408\u6210 P o Q\n\n    Reference:\n\
-    \        https://judge.yosupo.jp/submission/42372\n    \"\"\"\n\n    if Q[0] !=\
-    \ 0:\n        raise Modulo_Polynomial\n\n    deg = min(P.max_degree, Q.max_degree)\n\
-    \    k = int(deg ** 0.5 + 1)\n    d = (deg + k) // k\n\n    X = [[1]]\n    for\
-    \ i in range(k):\n        X.append(Calc.convolution(X[-1], Q.poly)[:deg + 1])\n\
-    \n    Y = [[0] * len(X[k]) for _ in range(k)]\n    for i, y in enumerate(Y):\n\
-    \        for j, x in enumerate(X[:d]):\n            if i * d + j > deg:\n    \
-    \            break\n\n            for t in range(deg + 1):\n                if\
-    \ t >= len(x):\n                    break\n\n                if t < len(y):\n\
-    \                    y[t] += x[t] * P[i * d + j] % Mod\n\n    F = [0] * (deg +\
-    \ 1)\n    Z = [1]\n    x = X[d]\n    for i in range(k):\n        Y[i] = Calc.convolution(Y[i],\
-    \ Z)[:deg + 1]\n        for j in range(len(Y[i])):\n            F[j] += Y[i][j]\n\
-    \        Z = Calc.convolution(Z, x)[:deg + 1]\n    return Modulo_Polynomial(F,\
-    \ deg)\n\ndef Taylor_Shift(P: Modulo_Polynomial, a: int) -> Modulo_Polynomial:\n\
-    \    \"\"\" \u5F62\u5F0F\u7684\u30D9\u30AD\u7D1A\u6570 P \u3068\u6574\u6570 a\
-    \ \u306B\u5BFE\u3057\u3066, P(X + a) \u3092\u6C42\u3081\u308B.\n\n    Args:\n\
-    \        P (Modulo_Polynomial): \u5F62\u5F0F\u7684\u30D9\u30AD\u7D1A\u6570\n \
-    \       a (int): \u5B9A\u6570\n\n    Returns:\n        Modulo_Polynomial: P(X\
-    \ + a)\n    \"\"\"\n\n    n = len(P.poly) - 1\n\n    fact = [0] * (n + 1)\n  \
-    \  fact[0] = 1\n    for i in range(1, n + 1):\n        fact[i] = (fact[i-1] *\
-    \ i) % Mod\n\n    fact_inv = [0] * (n + 1)\n    fact_inv[-1] = pow(fact[-1], -1,\
-    \ Mod)\n    for i in range(n - 1, -1, -1):\n        fact_inv[i] = (fact_inv[i\
+    \ndef Tonelli_Shanks(X: int, default: int = -1) -> int:\n    \"\"\" X=a (mod Mod)\
+    \ \u306E\u3068\u304D, r*r=a (mod Mod) \u3092\u6E80\u305F\u3059 r \u3092\u8FD4\u3059\
+    .\n\n    \u203B\u6CD5p\u304C\u7D20\u6570\u306E\u3068\u304D\u306E\u307F\u6709\u52B9\
+    \n    \u203B\u5B58\u5728\u3057\u306A\u3044\u3068\u304D\u306F default \u304C\u8FD4\
+    \u308A\u5024\n    \"\"\"\n\n    #\u30EB\u30B8\u30E3\u30F3\u30C9\u30EB\u8A18\u53F7\
+    \n    def Legendre(X):\n        \"\"\"\u30EB\u30B8\u30E3\u30F3\u30C9\u30EB\u8A18\
+    \u53F7 (a/Mod) \u3092\u8FD4\u3059.\n\n        \u203B\u6CD5\u304C\u7D20\u6570\u306E\
+    \u3068\u304D\u306E\u307F\u6210\u7ACB\u3059\u308B.\n        \"\"\"\n\n        if\
+    \ X % Mod == 0:\n            return 0\n        elif pow(X, (Mod - 1) // 2, Mod)\
+    \ == 1:\n            return 1\n        else:\n            return -1\n\n    X %=\
+    \ Mod\n    if Legendre(X) == -1:\n        return default\n\n    from random import\
+    \ randint as ri\n    if X == 0:\n        return X\n    elif Mod == 2:\n      \
+    \  return X\n    elif Mod % 4 == 3:\n        return pow(X, (Mod + 1) // 4,Mod)\n\
+    \n    u = 2\n    s = 1\n    while (Mod - 1) % (2 * u) == 0:\n        u *= 2\n\
+    \        s += 1\n\n    q = (Mod - 1) // u\n    z = 0\n    while pow(z, (Mod -\
+    \ 1) // 2, Mod) != Mod - 1:\n        z = ri(1, Mod - 1)\n\n    m, c, t, r = s,\
+    \ pow(z, q, Mod), pow(X, q, Mod), pow(X, (q + 1) // 2, Mod)\n    while m > 1:\n\
+    \        if pow(t, pow(2, m - 2), Mod) == 1:\n            c = (c * c) % Mod\n\
+    \            m = m - 1\n        else:\n            c, t, r, m = (c * c) % Mod,\
+    \ (c * c * t) % Mod, (c * r) % Mod, m - 1\n    return r\n\n#\u591A\u9805\u5F0F\
+    \u306E\u6839\u53F7\ndef __sqrt(F, N):\n    F+=[0]*(N-len(F))\n    s=Tonelli_Shanks(F[0])\n\
+    \    if s==-1:\n        return None\n\n    two_inv=pow(2, -1, Mod)\n\n    if not\
+    \ Calc.is_sparse(F):\n        # P \u304C\u758E\u306A\u5834\u5408\n        F.append(0)\n\
+    \        d,f=Calc.coefficients_list(F); K=len(d)\n\n        Inv=[0]*(N+1); Inv[1]=1\n\
+    \        for i in range(2, N+1):\n            q,r=divmod(Mod, i)\n           \
+    \ Inv[i]=(-q*Inv[r])%Mod\n\n        G=[0]*N; G[0]=1\n        for i in range(N):\n\
+    \            g=(two_inv*(i+1)%Mod)*F[i+1]%Mod\n            for j in range(K):\n\
+    \                if 1<=d[j]<=i:\n                    alpha=(d[j]*two_inv-(i-d[j]+1))%Mod\n\
+    \                    beta=G[i+1-d[j]]*F[d[j]]%Mod\n                    g+=alpha*beta\n\
+    \            g%=Mod\n            G[i+1]=g*Inv[i+1]%Mod\n    else:\n        m=1\n\
+    \        G=[min(s,Mod-s)]\n\n        while m<N:\n            G+=[0]*m\n      \
+    \      m<<=1\n            H=Calc.convolution(F[:m], Calc.inverse(G))\n       \
+    \     G=[two_inv*(a+b)%Mod for a,b in zip(G,H)]\n    return G[:N]\n\ndef Sqrt(P:\
+    \ Modulo_Polynomial) -> Modulo_Polynomial:\n    \"\"\" Q^2 = P \u3092\u6E80\u305F\
+    \u3059\u5F62\u5F0F\u7684\u30D9\u30AD\u7D1A\u6570 Q \u3092\u6C42\u3081\u308B\n\n\
+    \    Args:\n        P (Modulo_Polynomial):\n\n    Returns:\n        Modulo_Polynomial:\
+    \ Q^2 = P \u3092\u6E80\u305F\u3059 Q\n    \"\"\"\n\n    N = P.max_degree\n   \
+    \ F = P.poly\n\n    for d, p in enumerate(F):\n        if p:\n            break\n\
+    \    else:\n        return Modulo_Polynomial([0], P.max_degree)\n\n    if d %\
+    \ 2 == 1:\n        return None\n\n    E = __sqrt(F[d:], N - d // 2)\n    if E\
+    \ is None:\n        return\n\n    E = [0] * (d // 2) + E\n    return Modulo_Polynomial(E,\
+    \ P.max_degree)\n\n\n# \u5F62\u5F0F\u7684\u30D9\u30AD\u7D1A\u6570\u306B\u5BFE\u3059\
+    \u308B\u7279\u5225\u306A\u64CD\u4F5C\ndef Composition(P: Modulo_Polynomial, Q:\
+    \ Modulo_Polynomial) -> Modulo_Polynomial:\n    \"\"\" \u5F62\u5F0F\u7684\u30D9\
+    \u30AD\u7D1A\u6570 P \u3068\u5B9A\u6570\u9805\u304C 0 \u3067\u3042\u308B\u5F62\
+    \u5F0F\u7684\u30D9\u30AD\u7D1A\u6570 0 \u306B\u5BFE\u3057\u3066, P o Q = P(Q)\
+    \ \u3092\u6C42\u3081\u308B (\u203B \u9806\u756A\u6CE8\u610F).\n\n    Args:\n \
+    \       P (Modulo_Polynomial): \u5916\u5074\n        Q (Modulo_Polynomial): \u5185\
+    \u5074\n\n    Raises:\n        Modulo_Polynomial: Q \u306E\u5B9A\u6570\u9805\u304C\
+    \ 0 \u3067\u306A\u3044\u6642\u306B\u767A\u751F\n\n    Returns:\n        Modulo_Polynomial:\
+    \ \u5408\u6210 P o Q\n\n    Reference:\n        https://judge.yosupo.jp/submission/42372\n\
+    \    \"\"\"\n\n    if Q[0] != 0:\n        raise Modulo_Polynomial\n\n    deg =\
+    \ min(P.max_degree, Q.max_degree)\n    k = int(deg ** 0.5 + 1)\n    d = (deg +\
+    \ k) // k\n\n    X = [[1]]\n    for i in range(k):\n        X.append(Calc.convolution(X[-1],\
+    \ Q.poly)[:deg + 1])\n\n    Y = [[0] * len(X[k]) for _ in range(k)]\n    for i,\
+    \ y in enumerate(Y):\n        for j, x in enumerate(X[:d]):\n            if i\
+    \ * d + j > deg:\n                break\n\n            for t in range(deg + 1):\n\
+    \                if t >= len(x):\n                    break\n\n              \
+    \  if t < len(y):\n                    y[t] += x[t] * P[i * d + j] % Mod\n\n \
+    \   F = [0] * (deg + 1)\n    Z = [1]\n    x = X[d]\n    for i in range(k):\n \
+    \       Y[i] = Calc.convolution(Y[i], Z)[:deg + 1]\n        for j in range(len(Y[i])):\n\
+    \            F[j] += Y[i][j]\n        Z = Calc.convolution(Z, x)[:deg + 1]\n \
+    \   return Modulo_Polynomial(F, deg)\n\ndef Taylor_Shift(P: Modulo_Polynomial,\
+    \ a: int) -> Modulo_Polynomial:\n    \"\"\" \u5F62\u5F0F\u7684\u30D9\u30AD\u7D1A\
+    \u6570 P \u3068\u6574\u6570 a \u306B\u5BFE\u3057\u3066, P(X + a) \u3092\u6C42\u3081\
+    \u308B.\n\n    Args:\n        P (Modulo_Polynomial): \u5F62\u5F0F\u7684\u30D9\u30AD\
+    \u7D1A\u6570\n        a (int): \u5B9A\u6570\n\n    Returns:\n        Modulo_Polynomial:\
+    \ P(X + a)\n    \"\"\"\n\n    n = len(P.poly) - 1\n\n    fact = [0] * (n + 1)\n\
+    \    fact[0] = 1\n    for i in range(1, n + 1):\n        fact[i] = (fact[i-1]\
+    \ * i) % Mod\n\n    fact_inv = [0] * (n + 1)\n    fact_inv[-1] = pow(fact[-1],\
+    \ -1, Mod)\n    for i in range(n - 1, -1, -1):\n        fact_inv[i] = (fact_inv[i\
     \ + 1] * (i + 1)) % Mod\n\n    f = P.poly.copy()\n    for i in range(n+1):\n \
     \       f[i] = (f[i] * fact[i]) % Mod\n\n    g = [0] * (n + 1)\n    c = 1\n  \
     \  for i in range(n+1):\n        g[i] = (c * fact_inv[i]) % Mod\n        c = (c\
@@ -700,7 +706,7 @@ data:
   isVerificationFile: false
   path: Modulo_Sequence/Modulo_Polynomial.py
   requiredBy: []
-  timestamp: '2025-05-04 01:20:29+09:00'
+  timestamp: '2025-05-04 10:58:23+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test_verify/yosupo_library_checker/Polynomial/Power.test.py
