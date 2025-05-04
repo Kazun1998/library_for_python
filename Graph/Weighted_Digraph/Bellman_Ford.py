@@ -1,7 +1,19 @@
 from Weighted_Digraph import *
 
-def Bellman_Ford(D: Weighted_Digraph, start: int, goal: int, default = None) -> int:
-    inf = D.inifinity
+def Bellman_Ford(D: Weighted_Digraph, start: int, goal: int, default: int = None) -> int:
+    """ 頂点 start から頂点 goal への最短路の長さを Bellman Ford 法で求める.
+
+    Args:
+        D (Weighted_Digraph): 重み付き有向グラフ
+        start (int): 始点
+        goal (int): 終点
+        default (int, optional): 頂点 start から頂点 goal へのパスが存在しない場合の返り値. Defaults to None.
+
+    Returns:
+        int: 頂点 start から頂点 goal への最短路の長さ
+    """
+
+    inf = D.infinity
     N = D.order
 
     dist = D.initialize_list(inf)
