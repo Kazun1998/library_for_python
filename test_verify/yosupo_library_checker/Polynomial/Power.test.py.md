@@ -6,9 +6,9 @@ data:
     title: Modulo Polynomial
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     PROBLEM: https://judge.yosupo.jp/problem/pow_of_formal_power_series
     links:
@@ -32,7 +32,7 @@ data:
   path: test_verify/yosupo_library_checker/Polynomial/Power.test.py
   requiredBy: []
   timestamp: '2025-05-04 10:58:23+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Polynomial/Power.test.py
 layout: document
