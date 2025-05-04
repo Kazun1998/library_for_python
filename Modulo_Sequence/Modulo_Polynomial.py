@@ -1362,28 +1362,34 @@ def __sqrt(F, N):
             G=[two_inv*(a+b)%Mod for a,b in zip(G,H)]
     return G[:N]
 
-def Sqrt(P):
-    N=P.max_degree
-    F=P.poly
-    F+=[0]*(N-len(F))
+def Sqrt(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ Q^2 = P を満たす形式的ベキ級数 Q を求める
 
-    for d,p in enumerate(F):
+    Args:
+        P (Modulo_Polynomial):
+
+    Returns:
+        Modulo_Polynomial: Q^2 = P を満たす Q
+    """
+
+    N = P.max_degree
+    F = P.poly
+
+    for d, p in enumerate(F):
         if p:
             break
     else:
-        return Modulo_Polynomial([0],P.max_degree)
+        return Modulo_Polynomial([0], P.max_degree)
 
-    if d%2==1:
+    if d % 2 == 1:
+        return None
+
+    E = __sqrt(F[d:], N - d // 2)
+    if E is None:
         return
 
-    E=__sqrt(F[d:],N-d//2)
-
-    if E==None:
-        return
-
-    if d>0:
-        E=[0]*(d//2)+E
-    return Modulo_Polynomial(E,P.max_degree)
+    E = [0] * (d // 2) + E
+    return Modulo_Polynomial(E, P.max_degree)
 
 
 # 形式的ベキ級数に対する特別な操作
