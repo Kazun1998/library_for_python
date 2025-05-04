@@ -1269,7 +1269,7 @@ def Power(P: Modulo_Polynomial, M: int) -> Modulo_Polynomial:
     return Modulo_Polynomial(G, P.max_degree)
 
 #根号
-def Tonelli_Shanks(X, default=-1):
+def Tonelli_Shanks(X: int, default: int = -1) -> int:
     """ X=a (mod Mod) のとき, r*r=a (mod Mod) を満たす r を返す.
 
     ※法pが素数のときのみ有効
@@ -1283,43 +1283,43 @@ def Tonelli_Shanks(X, default=-1):
         ※法が素数のときのみ成立する.
         """
 
-        if X%Mod==0:
+        if X % Mod == 0:
             return 0
-        elif pow(X,(Mod-1)//2,Mod)==1:
+        elif pow(X, (Mod - 1) // 2, Mod) == 1:
             return 1
         else:
             return -1
 
-    X%=Mod
-    if Legendre(X)==-1:
+    X %= Mod
+    if Legendre(X) == -1:
         return default
 
     from random import randint as ri
-    if X==0:
+    if X == 0:
         return X
-    elif Mod==2:
+    elif Mod == 2:
         return X
-    elif Mod%4==3:
-        return pow(X,(Mod+1)//4,Mod)
+    elif Mod % 4 == 3:
+        return pow(X, (Mod + 1) // 4,Mod)
 
-    u=2
-    s=1
-    while (Mod-1)%(2*u)==0:
-        u*=2
-        s+=1
-    q=(Mod-1)//u
+    u = 2
+    s = 1
+    while (Mod - 1) % (2 * u) == 0:
+        u *= 2
+        s += 1
 
-    z=0
-    while pow(z,(Mod-1)//2,Mod)!=Mod-1:
-        z=ri(1,Mod-1)
+    q = (Mod - 1) // u
+    z = 0
+    while pow(z, (Mod - 1) // 2, Mod) != Mod - 1:
+        z = ri(1, Mod - 1)
 
-    m,c,t,r=s,pow(z,q,Mod),pow(X,q,Mod),pow(X,(q+1)//2,Mod)
-    while m>1:
-        if pow(t,2**(m-2),Mod)==1:
-            c=(c*c)%Mod
-            m=m-1
+    m, c, t, r = s, pow(z, q, Mod), pow(X, q, Mod), pow(X, (q + 1) // 2, Mod)
+    while m > 1:
+        if pow(t, pow(2, m - 2), Mod) == 1:
+            c = (c * c) % Mod
+            m = m - 1
         else:
-            c,t,r,m=(c*c)%Mod,(c*c*t)%Mod,(c*r)%Mod,m-1
+            c, t, r, m = (c * c) % Mod, (c * c * t) % Mod, (c * r) % Mod, m - 1
     return r
 
 #多項式の根号
@@ -1362,28 +1362,34 @@ def __sqrt(F, N):
             G=[two_inv*(a+b)%Mod for a,b in zip(G,H)]
     return G[:N]
 
-def Sqrt(P):
-    N=P.max_degree
-    F=P.poly
-    F+=[0]*(N-len(F))
+def Sqrt(P: Modulo_Polynomial) -> Modulo_Polynomial:
+    """ Q^2 = P を満たす形式的ベキ級数 Q を求める
 
-    for d,p in enumerate(F):
+    Args:
+        P (Modulo_Polynomial):
+
+    Returns:
+        Modulo_Polynomial: Q^2 = P を満たす Q
+    """
+
+    N = P.max_degree
+    F = P.poly
+
+    for d, p in enumerate(F):
         if p:
             break
     else:
-        return Modulo_Polynomial([0],P.max_degree)
+        return Modulo_Polynomial([0], P.max_degree)
 
-    if d%2==1:
+    if d % 2 == 1:
+        return None
+
+    E = __sqrt(F[d:], N - d // 2)
+    if E is None:
         return
 
-    E=__sqrt(F[d:],N-d//2)
-
-    if E==None:
-        return
-
-    if d>0:
-        E=[0]*(d//2)+E
-    return Modulo_Polynomial(E,P.max_degree)
+    E = [0] * (d // 2) + E
+    return Modulo_Polynomial(E, P.max_degree)
 
 
 # 形式的ベキ級数に対する特別な操作
