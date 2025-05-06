@@ -154,67 +154,67 @@ class Weighted_Graph:
                     generated.add(id)
                     yield (u, v, w, id)
 
+    def initialize_list(self, x) -> list:
+        return [x] * self.vertex_count
 
 #Dijkstra
-def Dijkstra(G, From, To, with_path=False):
-    """ Dijksta 法を用いて, From から To までの距離を求める.
+def Dijkstra(G: Weighted_Graph, start: int, goal: int, with_path: bool = False) -> dict:
+    """ 頂点 start から頂点 goal への最短路の距離を求める.
 
-    G: 辺の重みが全て非負の無向グラフ
-    From: 始点
-    To: 終点
-    with_path: 最短路も含めて出力するか?
+    Args:
+        G (Weighted_Graph): 重み付き有向グラフ
+        start (int): 始点
+        goal (int): 終点
+        with_path (bool, optional): True にすると, 最短路も求める.. Defaults to False.
 
-    (出力の結果)
-    with_path=True  →(距離, 最短経路の辿る際の前の頂点)
-    with_path=False →距離
+    Returns:
+        dict:
+            dist: source → target 間の距離
+            path: 最短路のパス
     """
+
     from heapq import heappush,heappop
 
-    inf=float("inf")
-    N=G.vertex_count
-    adj=G.adjacent
+    inf = float("inf")
+    adj = G.adjacent
 
-    T=[inf]*N; T[From]=0
+    dist: list[int] = G.initialize_list(inf); dist[start] = 0
+    prev: list[Weighted_Edge] = G.initialize_list(None)
+    fix: list[bool] = G.initialize_list(False)
 
-    if with_path:
-        Prev=[-1]*N
-
-    Q=[(0,From)]
+    Q = [(0, start)]
 
     while Q:
-        c,u=heappop(Q)
+        d, v = heappop(Q)
 
-        if u==To:
+        if v == goal:
             break
 
-        if T[u]<c:
+        if fix[v]:
             continue
 
-        E=adj[u]
-        for v in E:
-            p=T[u]+E[v]
-            if T[v]>p:
-                T[v]=p
-                heappush(Q,(p,v))
+        fix[v] = True
 
-                if with_path:
-                    Prev[v]=u
+        for edge in adj[v]:
+            t = edge.target
+            if not dist[t] > d + edge.weight:
+                continue
 
-    if T[To]==inf:
-        if with_path:
-            return (inf,None)
-        else:
-            return inf
+            dist[t] = dist[v] + edge.weight
+            heappush(Q, (dist[t], t))
+            prev[t] = edge
 
-    if with_path:
-        path=[To]
-        u=To
-        while (Prev[u]!=None):
-            u=Prev[u]
-            path.append(u)
-        return (T[To],path[::-1])
-    else:
-        return T[To]
+    if (dist[goal] == inf) or (not with_path):
+        return { 'dist': dist[goal], 'path': None}
+
+    path = []
+    x = goal
+    while (edge := prev[x]) is not None:
+        path.append(edge)
+        x = edge.source
+
+    path.reverse()
+    return { 'dist': dist[goal], 'path': path }
 
 def Dijkstra_All(G, From, with_path=False):
     """ Dijksta 法を用いて, From から各頂点までの距離を求める.
