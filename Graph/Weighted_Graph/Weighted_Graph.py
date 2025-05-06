@@ -1,15 +1,55 @@
-class Weigthed_Graph:
+class Weighted_Edge:
+    __slots__ = ("__id", "__source", "__target", "__weight", "__reversal")
+
+    def __init__(self, id: int, source: int, target: int, weight: int):
+        self.__id = id
+        self.__source = source
+        self.__target = target
+        self.__weight = weight
+        self.__reversal: Weighted_Edge = None
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(id={self.id}, source={self.source}, target={self.target}, weight={self.weight})"
+
+    def fetch_reversal_edge(self) -> "Weighted_Edge":
+        reversal_edge = Weighted_Edge(self.id, self.target, self.source, self.weight)
+        self.__reversal = reversal_edge
+        reversal_edge.__reversal = self
+
+    @property
+    def id(self) -> int:
+        return self.__id
+
+    @property
+    def source(self) -> int:
+        return self.__source
+
+    @property
+    def target(self) -> int:
+        return self.__target
+
+    @property
+    def weight(self) -> int:
+        return self.__weight
+
+    @property
+    def reversal(self) -> "Weighted_Edge":
+        return self.__reversal
+
+class Weighted_Graph:
     #入力定義
-    def __init__(self, N: int = 0):
+    def __init__(self, N: int = 0, edge_offset: int = 0):
         """ 重みあり無向グラフを生成する.
 
         Args:
             N (int, optional): 位数. Defaults to 0.
+            edge_offset (int, optional): 辺のオフセット. Defaults to 0.
         """
 
-        self.adjacent = [[] for _ in range(N)]
-        self.__edge_count = 0
-        self.__ininity = 0
+        self.adjacent: list[list[Weighted_Edge]] = [[] for _ in range(N)]
+        self.__edge_count: int = 0
+        self.__edge_offset = edge_offset
+        self.__ininity: int = 0
 
     # property
     @property
@@ -76,11 +116,16 @@ class Weigthed_Graph:
         return list(range(n, n + k))
 
     #辺の追加
-    def add_edge(self, u: int, v: int, weight: int = 1, label = None):
-        """ 重さが weight の辺 uv を加える. """
+    def add_edge(self, u: int, v: int, weight: int = 1) -> int:
+        id = self.__edge_offset + self.edge_count
 
-        self.adjacent[u].append((v, weight, label))
-        self.adjacent[v].append((u, weight, label))
+        edge = Weighted_Edge(id, u, v, weight)
+        self.adjacent[u].append(edge)
+
+        if u != v:
+            edge.fetch_reversal_edge()
+            self.adjacent[v].append(edge.reversal)
+
         self.__edge_count += 1
         self.__ininity += 2 * max(1, weight)
         return id
@@ -217,7 +262,7 @@ def Dijkstra_All(G, From, with_path=False):
         return  T
 
 #Warshall–Floyd
-def Warshall_Floyd(G: Weigthed_Graph) -> list[list[int]]:
+def Warshall_Floyd(G: Weighted_Edge) -> list[list[int]]:
     """ Warshall-Floyd 法を用いて, 全点間距離を求める.
 
     Args:
@@ -275,38 +320,45 @@ def Traveling_Salesman_Problem(G):
     return T[-1][0]
 
 # 木の直径を求める.
-def Tree_Diameter(T: Weigthed_Graph):
-    """ 木 T の直径及び, 直径をなすパスを返す.
+def Tree_Diameter(T: Weighted_Graph) -> dict:
+    """ 木 T の直径及び直径をなすパスを求める.
 
     Args:
-        T (Weigthed_Graph): 木
+        T (Weighted_Graph): 木
+
+    Returns:
+        dict:
+            diameter: 直径
+            path: 直径をなすパス
     """
 
     def bfs(x: int, mode: bool):
-        dist = [-1] * N; dist[x] = 0
-        adj = T.adjacent
-        S = [x]
-        prev = [-1] * N
+        dist = [None] * N; dist[x] = 0
+        stack = [x]
+        prev: list[Weighted_Edge] = [None] * N
 
-        while S:
-            x = S.pop()
-            for y, c, _ in adj[x]:
-                if dist[y] == -1:
-                    dist[y] = dist[x] + c
-                    S.append(y)
-                    prev[y] = x
+        while stack:
+            x = stack.pop()
+            for edge in T.adjacent[x]:
+                if dist[edge.target] is not None:
+                    continue
+
+                dist[edge.target] = dist[x] + edge.weight
+                stack.append(edge.target)
+                prev[edge.target] = edge
 
         furthest = max(range(N), key = lambda v: dist[v])
         if not mode:
             return furthest
 
-        path = [furthest]
+        path: list[Weighted_Edge] = []
         v = furthest
-        while prev[v] != -1:
-            v = prev[v]
-            path.append(v)
+        while (edge := prev[v]) is not None:
+            path.append(edge)
+            v = edge.source
 
-        return dist[furthest], path[::-1]
+        path.reverse()
+        return dist[furthest], path
 
     N = T.vertex_count
     u = bfs(0, False)
