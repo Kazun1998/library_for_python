@@ -365,3 +365,71 @@ def Tree_Diameter(T: Weighted_Graph) -> dict:
     diameter, path = bfs(u, True)
 
     return { 'diameter': diameter, 'path': path }
+
+def Minimum_Steiner_Tree(G: Weighted_Graph, terminals: list[int]) -> dict:
+    """ 連結無向グラフ G の terminals に関する最小 Steiner 木の重みとその木をなす辺を求める.
+
+    Args:
+        G (Weighted_Graph): 連結無向グラフ
+        terminals (list[int]): 頂点の番号からなるリスト
+
+    Returns:
+        dict:
+            weight: 最小 Steiner 木の重み
+            edges: 最小 Steiner 木を成す辺のリスト
+    """
+    from heapq import heappop, heappush, heapify
+
+    n = G.order
+    k = len(terminals)
+
+    inf = G.inifinity
+    dp = [[inf] * n for _ in range(1 << k)]
+    prev = [[(None, None)] * n for _ in range(1 << k)]
+
+    for i in range(k):
+        dp[1 << i][terminals[i]] = 0
+
+    for A in range(1, 1 << k):
+        # 遷移 1
+        B = A
+        while (B := (B - 1) & A):
+            for v in range(n):
+                candaidate = dp[B][v] + dp[A ^ B][v]
+                if dp[A][v] > candaidate:
+                    dp[A][v] = candaidate
+                    prev[A][v] = (B, None)
+
+        # 遷移 2
+        Q = [(dp[A][v], v) for v in range(n)]
+        heapify(Q)
+
+        while Q:
+            d, v = heappop(Q)
+            if d > dp[A][v]:
+                continue
+
+            for j, edge in enumerate(G.adjacent[v]):
+                if dp[A][edge.target] > d + edge.weight:
+                    dp[A][edge.target] = d + edge.weight
+                    prev[A][edge.target] = (v, j)
+                    heappush(Q, (dp[A][edge.target], edge.target))
+
+    # 復元
+    stack = [((1 << k) - 1, terminals[0])]
+    edges = []
+    while stack:
+        A, v = stack.pop()
+
+        if prev[A][v][1] is None:
+            if prev[A][v][0] is None:
+                continue
+            B, _ = prev[A][v]
+            stack.append((B, v))
+            stack.append((A ^ B, v))
+        else:
+            x, j = prev[A][v]
+            edges.append(G.adjacent[x][j])
+            stack.append((A, x))
+
+    return { 'weight': min(dp[-1]), 'edges': edges }
