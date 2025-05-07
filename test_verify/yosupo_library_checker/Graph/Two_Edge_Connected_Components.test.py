@@ -15,7 +15,7 @@ def verify():
     G = Undirected_Graph(N)
     for j in range(M):
         a, b = map(int, input().split())
-        G.add_edge(a, b, j)
+        G.add_edge(a, b)
 
     comps = Two_Edge_Connected_Components(G)['comps']
 
