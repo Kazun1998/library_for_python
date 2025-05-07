@@ -27,6 +27,7 @@
 "test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py": "2025-04-13 18:55:26 +0900",
 "test_verify/yosupo_library_checker/Graph/Matching_on_Bipartite_Graph.test.py": "2025-04-13 21:46:29 +0900",
 "test_verify/yosupo_library_checker/Graph/Strongly_Connected_Components-class.test.py": "2025-03-13 23:55:26 +0900",
+"test_verify/yosupo_library_checker/Graph/Undirected_Find_Cycle.test.py": "2025-05-08 00:57:16 +0900",
 "test_verify/yosupo_library_checker/Math/Discrete_Log.test.py": "2024-04-18 23:56:19 +0900",
 "test_verify/yosupo_library_checker/Math/Floor_Sum.test.py": "2024-12-22 15:18:15 +0900",
 "test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.test.py": "2024-03-24 14:41:28 +0900",
