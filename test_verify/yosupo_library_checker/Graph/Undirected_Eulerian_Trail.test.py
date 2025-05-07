@@ -2,8 +2,7 @@
 
 #==================================================
 from Graph.Graph.Graph import Graph as Undirected_Graph
-from Graph.Graph.Graph import Edge
-from Graph.Graph.Eulerian import *
+from Graph.Graph.Graph import Find_Eulerian_Trail
 
 import sys
 input=sys.stdin.readline
