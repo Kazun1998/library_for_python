@@ -2,7 +2,7 @@
 
 #==================================================
 from Graph.Graph.Graph import Graph as Undirected_Graph
-from Graph.Graph.LowLink import *
+from Graph.Graph.Graph import Two_Edge_Connected_Components
 
 import sys
 input=sys.stdin.readline
