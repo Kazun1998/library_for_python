@@ -17,13 +17,13 @@ def verify():
         a, b = map(int, input().split())
         G.add_edge(a, b)
 
-    comps = Two_Edge_Connected_Components(G)['comps']
+    components = Two_Edge_Connected_Components(G)['components']
 
-    def writer(comp):
-        return f"{len(comp)} {' '.join(map(str, comp))}"
+    def writer(component):
+        return f"{len(component)} {' '.join(map(str, component))}"
 
-    print(len(comps))
-    write("\n".join(map(writer, comps)))
+    print(len(components))
+    write("\n".join(map(writer, components)))
 
 #==================================================
 verify()
