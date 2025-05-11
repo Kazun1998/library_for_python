@@ -306,7 +306,6 @@ def Modulo_Composite(*X: Modulo) -> Modulo:
         return Modulo(a + (n * g) * d * s, n * m *g)
 
     res = Modulo(0, 1)
-    
     for a in X:
         if (res := composite(res, a)) is None:
             break
