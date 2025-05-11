@@ -1,5 +1,5 @@
-class Union_Find():
-    __slots__ = ("n", "parents", "rank", "edges", "__group_number")
+class Union_Find:
+    __slots__ = ("__n", "parents", "rank", "edges", "__group_number")
 
     def __init__(self, N: int) -> None:
         """ 0, 1, ..., (N - 1) を要素に持つ Union Find を生成する.
@@ -8,11 +8,11 @@ class Union_Find():
             N (int): 要素数
         """
 
-        self.n=N
+        self.__n = N
         self.parents=[-1]*N
         self.rank=[0]*N
         self.edges=[0]*N
-        self.__group_number=N
+        self.__group_number = N
 
     def find(self, x: int) -> int:
         """ 要素 x が属している族を調べる
@@ -102,7 +102,7 @@ class Union_Find():
         """
 
         root = self.find(x)
-        return [i for i in range(self.n) if self.find(i) == root]
+        return [i for i in range(self.N) if self.find(i) == root]
 
     def edge_count(self, x: int) -> int:
         """ 要素 x が属している族における辺の数を求める.
@@ -145,7 +145,12 @@ class Union_Find():
         """
         return [i for i, x in enumerate(self.parents) if x < 0]
 
-    def group_count(self) -> int:
+    @property
+    def N(self):
+        return self.__n
+
+    @property
+    def group_number(self) -> int:
         """ 族の個数
 
         Returns:
@@ -158,7 +163,7 @@ class Union_Find():
         """ 全ての族の出力
         """
         X={r:[] for r in self.representative()}
-        for k in range(self.n):
+        for k in range(self.N):
             X[self.find(k)].append(k)
         return X
 
@@ -166,17 +171,17 @@ class Union_Find():
         """ 各要素が属している族のリストを出力する.
 
         """
-        return [self.find(x) for x in range(self.n)]
+        return [self.find(x) for x in range(self.N)]
 
     def refresh(self) -> None:
-        for i in range(self.n):
-            _=self.find(i)
+        for i in range(self.N):
+            self.find(i)
 
     def __str__(self) -> str:
         return str(list(self.all_group_members().values()))[1: -1]
 
     def __repr__(self) -> str:
-        return f"Union Find : {str(self)}"
+        return f"{self.__class__.__name__}({self.N})"
 
     def __getitem__(self, index: int) -> int:
         return self.find(index)
