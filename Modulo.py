@@ -440,64 +440,54 @@ def Legendre(X: Modulo) -> int:
     return 1 if pow(X, (X.n - 1) // 2) == 1 else -1
 
 #根号
-def Sqrt(X, All=False):
-    """ X=a (mod p) のとき, r*r=a (mod p) を満たす r を (存在すれば) 返す.
+def Sqrt(X: Modulo) -> Modulo:
+    """ r * r = a (mod p) を満たす r を (存在すれば) 求める.
 
-    [Input]
-    All: False ならば一方のみ, True ならば両方
-    ※ 法 p が素数のときのみ有効
-    ※ 存在しないときは None が返り値
+    Args:
+        X (Modulo):
+
+    Returns:
+        Modulo: 存在しない場合は None, 存在する場合は r * r = a を満たす r (のうちの 1 つ)
     """
-    if Legendre(X)==-1:
+
+    if Legendre(X) == -1:
         return None
 
-    a,p=X.a,X.n
-
-    if X==0:
+    p = X.n
+    if X == 0:
         return X
-    elif p==2:
+    elif p == 2:
         return X
-    elif p%8==3 or p%8==7:
-        r=pow(X,(p+1)//4)
-        if All:
-            return (r,-r)
+    elif p % 4 == 3:
+        return pow(X, (p + 1) // 4)
+    elif p % 8 == 5:
+        if pow(X, (p - 1) // 4) == 1:
+            return pow(X, (p + 3) // 8)
         else:
-            return r
-    elif p%8==5:
-        if pow(X,(p-1)//4)==1:
-            r=pow(X,(p+3)//8)
-        else:
-            r=pow(2,(p-1)//4,p)*pow(X,(p+3)//8)
-
-        if All:
-            return (r,-r)
-        else:
-            return r
+            return pow(2, (p - 1) // 4, p) * pow(X, (p + 3) // 8)
 
     from random import randint as ri
-    u=2
-    s=1
-    while (p-1)%(2*u)==0:
-        u*=2
-        s+=1
-    q=(p-1)//u
+    u = 2
+    s = 1
+    while (p - 1) % (2 * u) == 0:
+        u *= 2
+        s += 1
+    q = (p - 1) // u
 
-    z=Modulo(0,p)
-    while pow(z,(p-1)//2)!=-1:
-        z=Modulo(ri(1,p-1),p)
+    while True:
+        z = Modulo(ri(1, p - 1), p)
+        if pow(z, (p - 1) // 2) == 1:
+            break
 
-    m,c,t,r=s,z**q,X**q,pow(X,(q+1)//2)
-    while m>1:
-        if pow(t,2**(m-2))==1:
-            c=c*c
-            m=m-1
+    m, c, t, r = s, pow(z, q), pow(X, q), pow(X, (q + 1) // 2)
+    while m > 1:
+        if pow(t, pow(2, m - 2)) == 1:
+            c = c * c
+            m = m - 1
         else:
-            c,t,r,m=c*c,c*c*t,c*r,m-1
+            c, t, r, m = c * c, c * c * t, c * r, m - 1
 
-    if All:
-        return (r,-r)
-    else:
-        return r
+    return r
 
 #離散対数
 def Discrete_Log(A: Modulo, B: Modulo | int, default: int = -1) -> int | None:
