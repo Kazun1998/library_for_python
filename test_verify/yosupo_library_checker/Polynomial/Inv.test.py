@@ -11,7 +11,7 @@ write=sys.stdout.write
 def verify():
     N=int(input())
     A=list(map(int,input().split()))
-    write(" ".join(map(str,Calc.Inverse(A))))
+    write(" ".join(map(str,Calc.inverse(A))))
 
 #==================================================
 verify()

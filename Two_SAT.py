@@ -4,183 +4,225 @@
 """
 
 class Two_SAT:
-    def __init__(self, N=0):
+    def __init__(self, N: int = 0):
         """ N 変数の 2-SAT を定義する.
 
-        N: int
+        Args:
+            N (int, optional): 変数の数. Defaults to 0.
         """
 
-        self.N=N
-        self.var_num=N
-        self.__cost=2*N
+        self.N = N
+        self.var_num = N
 
-        self.arc=[[] for _ in range(2*N)]
-        self.rev=[[] for _ in range(2*N)]
+        self.arc: list[int] = [[] for _ in range(2 * N)]
+        self.rev: list[int] = [[] for _ in range(2 * N)]
 
-    def cost(self):
-        return self.__cost
+    def __var_to_index(self, v: int) -> int:
+        """ 反転の情報を含んだ変数番号から, arc, rev におけるインデックスを求める.
 
-    def var_to_index(self, v):
-        if v>=0:
-            return 2*v
-        else:
-            return 2*(-v-1)+1
+        Args:
+            v (int): 反転の情報を含んだ変数番号
 
-    def index_to_var(self, i):
-        if i%2:
-            return -(i+1)//2
-        else:
-            return i//2
-
-    def add_variable(self, k=1):
-        """ 新たに変数 k 個を加える.
+        Returns:
+            int: インデックス
         """
 
-        m=self.var_num
-        self.var_num+=k
-        self.__cost+=2*k
+        return 2 * v if v >= 0 else 2 * (-v - 1) + 1
 
-        self.arc+=[[] for _ in range(2*k)]
-        self.rev+=[[] for _ in range(2*k)]
+    def add_variable(self, k: int = 1) -> list[int]:
+        """ 新たに k 個の変数を追加する
 
-        return list(range(m, m+k))
+        Args:
+            k (int, optional): 追加する変数の数. Defaults to 1.
+
+        Returns:
+            list[int]: 追加された変数の頂点番号のリスト
+        """
+
+        m = self.var_num
+        self.var_num += k
+
+        self.arc.extend([[] for _ in range(2*k)])
+        self.rev.extend([[] for _ in range(2*k)])
+
+        return list(range(m, m + k))
 
     def __add_clause(self,i,j):
-        self.__cost+=1
-        self.arc[self.var_to_index(i)].append(self.var_to_index(j))
-        self.rev[self.var_to_index(j)].append(self.var_to_index(i))
+        self.arc[self.__var_to_index(i)].append(self.__var_to_index(j))
+        self.rev[self.__var_to_index(j)].append(self.__var_to_index(i))
 
-    def add_imply(self, i, j):
-        """ X_i -> X_j を加える.
+    def add_imply(self, i: int, j: int):
+        """ X_i -> X_j を追加する.
+
+        Args:
+            i (int): 変数番号
+            j (int): 変数番号
         """
+
         self.__add_clause(i, j)
         self.__add_clause(~j, ~i)
 
-    def add_or(self, i, j):
-        """ X_i or X_j を加える.
+    def add_or(self, i: int, j: int):
+        """ X_i or X_j を追加する.
+
+        Args:
+            i (int): 変数番号
+            j (int): 変数番号
         """
 
         self.add_imply(~i, j)
 
-    def add_nand(self, i, j):
-        """ not (X_i and X_j) を加える.
+    def add_nand(self, i: int, j: int):
+        """ not(X_i and X_j) を追加する
+
+        Args:
+            i (int): 変数番号
+            j (int): 変数番号
         """
 
         self.add_imply(i, ~j)
 
-    def add_equal(self, i, j):
-        """ X_i=X_j を追加する.
+    def add_equal(self, i: int, j: int):
+        """ X_i = X_j を追加する.
+
+        Args:
+            i (int): 変数番号
+            j (int): 変数番号
         """
 
         self.add_imply(i, j)
         self.add_imply(~i, ~j)
 
-    def add_not_equal(self, i, j):
+    def add_not_equal(self, i: int, j: int):
         """ X_i != X_j を追加する.
+
+        Args:
+            i (int): 変数番号
+            j (int): 変数番号
         """
+
         self.add_equal(i, ~j)
 
-    def add_equivalent(self, *I):
-        """ I=[i_0, ..., i_{k-1}] に対して, X_{i_0}=...=X_{i_{k-1}} を追加する.
+    def add_equivalent(self, *I: int):
+        """ I = [i_0, ..., i_{k-1}] に対して, X_{i_0} = ... = X_{i_{k-1}} を追加する.
+
+        Args:
+            I (int): 変数番号たち
         """
 
-        k=len(I)
-
-        if k<=1:
+        if len(I) <= 1:
             return
 
-        for j in range(k-1):
-            self.add_imply(I[j],I[j+1])
+        for j in range(len(I) - 1):
+            self.add_imply(I[j], I[j + 1])
+
         self.add_imply(I[-1],I[0])
 
-    def set_true(self, i):
+    def set_true(self, i: int):
         """ 変数 X_i を True にする.
+
+        Args:
+            i (int): 変数番号
         """
 
         self.__add_clause(~i, i)
 
-    def set_false(self, i):
+    def set_false(self, i: int):
         """ 変数 X_i を False にする.
+
+        Args:
+            i (int): 変数番号
         """
 
         self.__add_clause(i, ~i)
 
-    def at_most_one(self, *I):
-        """ X_i (i in I) を満たすような i は高々1つだけという条件を追加する.
+    def at_most_one(self, *I: int):
+        """X_i (i in I) を満たすような i は高々1つだけという条件を追加する.
+
+        Args:
+            I (int): 変数番号の配列
         """
 
-        k=len(I)
-
-        if k<=1:
+        # k = 1 のときの条件は無意味
+        if (k := len(I)) <= 1:
             return
 
-        A=self.add_variable(k)
+        A = self.add_variable(k)
 
-        self.add_imply(I[0],A[0])
-        for i in range(1,k):
-            self.add_imply(A[i-1],A[i])
-            self.add_imply(I[i],A[i])
-            self.add_nand(A[i-1],I[i])
+        self.add_imply(I[0], A[0])
+        for i in range(1, k):
+            self.add_imply(A[i - 1], A[i])
+            self.add_imply(I[i], A[i])
+            self.add_nand(A[i - 1],I[i])
 
-    def is_satisfy(self, Mode=0):
-        """ Two-SAT は充足可能?
+    def calculate(self):
+        n = self.var_num
+        group = [0] * (2 * n)
+        order = []
 
-        Mode:
-        0 (Defalt): 充足可能?
-        1: 充足可能ならば,その変数の割当を与える (不可能なときはNone).
-        2: 充足不能の原因である変数を全て挙げる.
-        """
-        N=self.var_num
-        Group=[0]*(2*N)
-        Order=[]
+        for s in range(2 * n):
+            if group[s]:
+                continue
 
-        for s in range(2*N):
-            if Group[s]:continue
+            stack = [s]
+            group[s] = -1
 
-            S=[s]
-            Group[s]=-1
-
-            while S:
-                u=S.pop()
+            while stack:
+                u = stack.pop()
                 for v in self.arc[u]:
-                    if Group[v]:continue
-                    Group[v]=-1
-                    S.append(u);S.append(v)
+                    if group[v]:
+                        continue
+
+                    group[v] = -1
+
+                    stack.append(u)
+                    stack.append(v)
                     break
                 else:
-                    Order.append(u)
+                    order.append(u)
 
-        K=0
-        for s in Order[::-1]:
-            if Group[s]!=-1:continue
+        k = 0
+        for s in reversed(order):
+            if group[s] != -1:
+                continue
 
-            S=[s]
-            Group[s]=K
+            stack = [s]
+            group[s] = k
 
-            while S:
-                u=S.pop()
+            while stack:
+                u = stack.pop()
                 for v in self.rev[u]:
-                    if Group[v]!=-1:continue
+                    if group[v] != -1:
+                        continue
 
-                    Group[v]=K
-                    S.append(v)
-            K+=1
+                    group[v] = k
+                    stack.append(v)
+            k += 1
 
-        if Mode==0:
-            for i in range(N):
-                if Group[2*i]==Group[2*i+1]:
-                    return False
-            return True
-        elif Mode==1:
-            T=[0]*N
-            for i in range(N):
-                if Group[2*i]>Group[2*i+1]:
-                    T[i]=1
-                elif Group[2*i]==Group[2*i+1]:
-                    return None
-            return T
-        elif Mode==2:
-            return [i for i in range(self.var_num) if Group[2*i]==Group[2*i+1]]
+        ans = [None] * n
+        for i in range(n):
+            if group[2 * i] > group[2 * i + 1]:
+                ans[i] = True
+            elif group[2 * i] < group[2 * i + 1]:
+                ans[i] = False
+            else:
+                self.__satisfiability = False
+                self.__ans = None
+                self.__self_contradiction = []
+                return
+        else:
+            self.__satisfiability = True
+            self.__ans = ans
+            self.__self_contradiction = [i for i in range(self.var_num) if group[2 * i] == group[2 * i + 1]]
 
-    def solve(self):
-        return self.is_satisfy(1)
+    @property
+    def is_satisfiable(self):
+        return self.__satisfiability
+
+    @property
+    def ans(self):
+        return self.__ans
+
+    @property
+    def self_contradiction(self):
+        return self.__self_contradiction
