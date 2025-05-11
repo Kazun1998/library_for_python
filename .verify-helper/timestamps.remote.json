@@ -49,6 +49,7 @@
 "test_verify/yosupo_library_checker/Polynomial/Log.test.py": "2025-05-04 10:58:23 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Power.test.py": "2025-05-04 10:58:23 +0900",
 "test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py": "2025-05-04 10:58:23 +0900",
+"test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py": "2025-05-04 10:58:23 +0900",
 "test_verify/yosupo_library_checker/String/Z_Algorithm.test.py": "2022-11-26 04:03:20 +0900",
 "test_verify/yosupo_library_checker/Tree/Jump_on_Tree.test.py": "2024-05-25 23:55:04 +0900",
 "test_verify/yosupo_library_checker/Tree/Lowest_Common_Ancestor.test.py": "2024-05-25 23:55:04 +0900"
