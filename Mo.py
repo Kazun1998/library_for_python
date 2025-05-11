@@ -65,14 +65,14 @@ class Mo:
                 l = left[q]
                 r = right[q]
 
-                for i in range(x, l):
-                    delete(i)
-
                 for i in range(x - 1, l - 1 , -1):
                     add(i)
 
                 for j in range(y, r):
                     add(j)
+
+                for i in range(x, l):
+                    delete(i)
 
                 for j in range(y - 1, r - 1, -1):
                     delete(j)
