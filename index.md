@@ -264,6 +264,9 @@ data:
   - name: Division
     pages:
     - icon: ':warning:'
+      path: Division/Abelian_Group_Square_Division.py
+      title: Division/Abelian_Group_Square_Division.py
+    - icon: ':warning:'
       path: Division/Segment_Division.py
       title: Division/Segment_Division.py
     - icon: ':heavy_check_mark:'
