@@ -29,7 +29,7 @@ class Prime:
         return e, n
 
     @classmethod
-    def prime_factorization(cls, N: int):
+    def prime_factorization(cls, N: int) -> list[tuple[int, int]]:
         if N == 0:
             return [(0, 1)]
 
