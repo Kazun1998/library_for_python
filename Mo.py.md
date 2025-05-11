@@ -43,12 +43,12 @@ data:
     \n        for i in range(bucket_count):\n            buckets[i].sort(key = lambda\
     \ q: right[q], reverse = i % 2)\n\n        x = y = 0\n        for bucket in buckets:\n\
     \            for q in bucket:\n                l = left[q]\n                r\
-    \ = right[q]\n\n                for i in range(x, l):\n                    delete(i)\n\
-    \n                for i in range(x - 1, l - 1 , -1):\n                    add(i)\n\
-    \n                for j in range(y, r):\n                    add(j)\n\n      \
-    \          for j in range(y - 1, r - 1, -1):\n                    delete(j)\n\n\
-    \                x = l\n                y = r\n                rem(q)\n\n    def\
-    \ calculate_noncommutative(self, add_left, add_right, delete_left, delete_right,\
+    \ = right[q]\n\n                for i in range(x - 1, l - 1 , -1):\n         \
+    \           add(i)\n\n                for j in range(y, r):\n                \
+    \    add(j)\n\n                for i in range(x, l):\n                    delete(i)\n\
+    \n                for j in range(y - 1, r - 1, -1):\n                    delete(j)\n\
+    \n                x = l\n                y = r\n                rem(q)\n\n   \
+    \ def calculate_noncommutative(self, add_left, add_right, delete_left, delete_right,\
     \ rem):\n        bucket_size = self.N // (min(self.N, int(self.query_count **\
     \ 0.5 + 0.5)))\n        bucket_count = (self.N + bucket_size - 1) // bucket_size\n\
     \        buckets = [[] for _ in range(bucket_count)]\n\n        left = self.left\n\
@@ -66,7 +66,7 @@ data:
   isVerificationFile: false
   path: Mo.py
   requiredBy: []
-  timestamp: '2025-05-11 00:35:53+09:00'
+  timestamp: '2025-05-11 11:48:02+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Mo.py
