@@ -1,18 +1,18 @@
 from Graph import *
 
-def Chromatic_Number(G: Graph):
-    """ G の彩色数を求める.
+def Chromatic_Number(G: Graph) -> int:
+    """ 自己ループを持たない無向グラフ G の彩色数を求める.
 
     Args:
-        G (Graph): 無向グラフ
+        G (Graph): 自己ループを持たない無向グラフ
 
     Returns:
-        G: 彩色数
+        int: 彩色数
     """
 
     N = G.order
 
-    def zeta(X):
+    def zeta(X: list[int]) -> list[int]:
         Y = X.copy()
         for x in range(N):
             b = (1 << x)
@@ -21,7 +21,7 @@ def Chromatic_Number(G: Graph):
                     Y[S] += Y[S ^ b]
         return Y
 
-    def mebious(Y):
+    def mebious(Y: list[int]) -> list[int]:
         X = Y.copy()
         for x in range(N):
             b = 1<< x
@@ -30,45 +30,62 @@ def Chromatic_Number(G: Graph):
                     X[S] -= X[S ^ b]
         return X
 
-    def convolution(A, B):
+    def convolution(A: list[int], B: list[int]) -> list[int]:
         return mebious([a * b for a, b in zip(zeta(A), zeta(B))])
 
-    def lowest_bit(x: int):
+    def lowest_bit(x: int) -> int:
         return (x & (-x)).bit_length() - 1
 
     bit = lambda x, k: (x >> k) & 1
 
-    def bits(x):
+    def bits(x: int) -> list[int]:
         return [k for k in range(N) if bit(x, k)]
 
-    edge = [[False] * N for _ in range(N)]
-    for u, v in G.edge_yielder():
-        edge[u][v] = edge[v][u] = True
+    edge_table = [[False] * N for _ in range(N)]
+    for edge in G.edge_generator():
+        u = edge.source
+        v = edge.target
+        edge_table[u][v] = edge_table[v][u] = True
 
     # 方針: dp[k][S] := 誘導グラフ G[S] は k 色で彩色可能 ?
 
     # Section I: dp[1][S] を求める. (iff S は独立集合?)
-    dp = [None];
-    dp.append([0] * (1 << N)); dp[1][0] = 1
-    dp_1 = dp[1]
+    dp_1 = [0] * (1 << N)
+    dp_1[0] = 1
     for S in range(1, 1 << N):
         x = lowest_bit(S)
         if not dp_1[S ^ (1 << x)]:
             continue
 
-        dp_1[S] = int(not any(edge[x][y] for y in bits(S ^ (1 << x))))
+        dp_1[S] = int(not any(edge_table[x][y] for y in bits(S ^ (1 << x))))
 
     # 空グラフの彩色数は 1
     if dp_1[-1]:
         return 1
 
-    # Section II: dp_k[V] が True になる最小の k を求める
-    for k in range(2, N + 1):
-        dp.append(convolution(dp_1, dp[-1]))
-        dp[k] = list(map(lambda x: 1 if x else 0, dp[-1]))
+    dp = { 1: dp_1 }
 
-        if dp[k][-1]:
-            return k
+    # Section II: k = 2, 4, 8, ..., に対して, dp_k[V] が True になるかどうかを判定する.
+    while True:
+        k = max(dp)
+        conv = convolution(dp[k], dp[k])
+        dp[2 * k] = [1 if x else 0 for x in conv]
+        if dp[2 * k][-1]:
+            break
+
+    # Section III: 二分探索によって彩色数を求める
+    prev = dp[k]
+    step = k >> 1
+    while step:
+        res = [1 if x else 0 for x in convolution(prev, dp[step])]
+        dp[k + step] = res
+        if not res[-1]:
+            k += step
+            prev = res
+
+        step >>= 1
+
+    return k + 1
 
 def Clique_Cover_Number(G: Graph):
     """ G をクリークで分割するために必要なクリークの数の最小値を求める.
