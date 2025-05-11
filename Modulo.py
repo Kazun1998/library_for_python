@@ -300,7 +300,10 @@ def __modulo_composite__(p: Modulo, q: Modulo) -> Modulo | None:
     return Modulo(a + (n * g) * d * s, n * m *g)
 
 def Modulo_Composite(*X: Modulo) -> Modulo:
-    """ N個の方程式 x ≡ a (mod n) を全て満たす x を mod の形で求める.
+    """ N 個の方程式 x ≡ a (mod n) の共通部分を求める.
+
+    Returns:
+        Modulo: 共通部分
     """
     x=Modulo(0,1)
     for a in X:
@@ -317,11 +320,17 @@ def Is_Included(X: Modulo, Y: Modulo):
     return (a-b)%q==0 and p%q==0
 
 #拡張Euclidの互除法
-def Extended_Euclid(a: int, b: int):
-    """ax+by=gcd(a, b) を満たす (x, y, gcd(a, b)) を 1 つ求める.
+def Extended_Euclid(a: int, b: int) -> tuple[int, int, int]:
+    """ a x + b y = gcd(a, b) を満たす整数の組 (x, y) を求める.
 
-    a,b:整数
+    Args:
+        a (int): 整数
+        b (int): 整数
+
+    Returns:
+        tuple[int, int, int]: (x, y, g) は a x + b y = g を満たす.
     """
+
     from math import gcd
     g = gcd(a, b)
     if g == 0:
@@ -359,12 +368,16 @@ def First_Order_Congruent_Equation(a: int, b: int, m: int) -> Modulo:
     return Modulo(b * c, m)
 
 #1次連立合同方程式を解く
-def First_Order_Simultaneous_Congruent_Equation(*X):
-    """1次合同方程式 a_i x≡b_i (mod m_i) を求める.
+def First_Order_Simultaneous_Congruent_Equation(*X: tuple[int, int, int]) -> Modulo:
+    """ 1 次合同方程式 a_i x ≡ b_i (mod m_i) を求める.
 
-    [Input]
-    X:(a,b,m) という形のタプル
+    Args:
+        X (list[tuple[int, int, int]]): (a, b, m) の形のタプル. (a, b, m) は ax ≡ b (mod m) を意味する.
+
+    Returns:
+        Modulo: 解
     """
+
     R=Modulo(0,1)
     for (a,b,m) in X:
         T=First_Order_Congruent_Equation(a,b,m)
