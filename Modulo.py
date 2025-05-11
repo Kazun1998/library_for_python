@@ -269,46 +269,48 @@ def Chinese_Remainder(X: Modulo):
 """
 線形合同方程式関連
 """
-#法の合成
-def __modulo_composite__(p: Modulo, q: Modulo) -> Modulo | None:
-    """ 2つの等式 x ≡ p.a (mod p.n), x ≡ q.a (mod q.n) をともに満たす x を全て求める.
-
-    Args:
-        p (Modulo):
-        q (Modulo):
-
-    Returns:
-        Modulo | None: 条件を満たすことが必要十分になる Modulo. 存在しない場合は None
-    """
-    from math import gcd
-
-    a, n = p.a, p.n
-    b, m = q.a, q.n
-
-    d = b - a
-    g = gcd(n, m)
-
-    if d % g:
-        return None
-
-    n //= g
-    m //= g
-    d //= g
-
-    s = pow(n, -1, m)
-
-    return Modulo(a + (n * g) * d * s, n * m *g)
-
 def Modulo_Composite(*X: Modulo) -> Modulo:
-    """ N 個の方程式 x ≡ a (mod n) の共通部分を求める.
+    """ N 個の Modulo の共通部分を求める.
 
     Returns:
         Modulo: 共通部分
     """
-    x=Modulo(0,1)
+
+    def composite(p: Modulo, q: Modulo) -> Modulo | None:
+        """ 2つの等式 x ≡ p.a (mod p.n), x ≡ q.a (mod q.n) をともに満たす x を全て求める.
+
+        Args:
+            p (Modulo):
+            q (Modulo):
+
+        Returns:
+            Modulo | None: 条件を満たすことが必要十分になる Modulo. 存在しない場合は None
+        """
+        from math import gcd
+
+        a, n = p.a, p.n
+        b, m = q.a, q.n
+
+        d = b - a
+        g = gcd(n, m)
+
+        if d % g:
+            return None
+
+        n //= g
+        m //= g
+        d //= g
+
+        s = pow(n, -1, m)
+
+        return Modulo(a + (n * g) * d * s, n * m *g)
+
+    res = Modulo(0, 1)
     for a in X:
-        x=__modulo_composite__(x,a)
-    return x
+        if (res := composite(res, a)) is None:
+            break
+
+    return res
 
 def Is_Included(X: Modulo, Y: Modulo):
     """ X を全て満たす整数は Y を全て満たすか?
