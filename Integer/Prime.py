@@ -29,36 +29,36 @@ class Prime:
         return e, n
 
     @classmethod
-    def prime_factorization(cls, N):
+    def prime_factorization(cls, N: int):
         if N == 0:
-            return [[0, 1]]
+            return [(0, 1)]
 
-        factors = []
+        factors: list[tuple[int, int]] = []
         if N < 0:
-            factors.append([-1, 1])
+            factors.append((-1, 1))
             N = abs(N)
 
         for p in [2, 3]:
             e, N = cls.exponents(N, p)
             if e:
-                factors.append([p, e])
+                factors.append((p, e))
 
         offset = 6
-        while offset * offset <= N:
+        while (offset - 1) * (offset - 1) <= N:
             p = offset - 1
             e, N = cls.exponents(N, p)
             if e:
-                factors.append([p, e])
+                factors.append((p, e))
 
             q = offset + 1
             e, N = cls.exponents(N, q)
             if e:
-                factors.append([q, e])
+                factors.append((q, e))
 
             offset += 6
 
         if N > 1:
-            factors.append([N, 1])
+            factors.append((N, 1))
 
         return factors
 
