@@ -31,7 +31,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.test.py
   requiredBy: []
-  timestamp: '2024-03-24 14:41:28+09:00'
+  timestamp: '2025-03-27 23:13:02+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.test.py
