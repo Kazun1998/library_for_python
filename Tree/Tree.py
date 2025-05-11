@@ -1048,46 +1048,75 @@ def Spanning_Tree(N,E,root,index=0,exclude=False):
 
     return T,L
 
-def Breath_First_Search_Tree(N, A, root, index=0):
+def Breath_First_Search_Tree(N: int, adjacency_list: list[int], root: int, offset: int = 0) -> Tree:
+    """adjacency_list を隣接リストとする root を根とする N 頂点の DFS 木を求める.
+
+    Args:
+        N (int): 位数
+        adjacency_list (list[int]): 隣接リスト
+        root (int): 根
+        offset (int, optional): 頂点番号のオフセット. Defaults to 0.
+
+    Returns:
+        Tree: DFS 木
+    """
+
     from collections import deque
 
-    T=Tree(N, index)
+    T = Tree(N, offset)
     T.root_set(root)
 
-    S=[False]*(N+index); S[root]=True
-    Q=deque([root])
-    while Q:
-        v=Q.popleft()
-        for w in A[v]:
-            if not S[w]:
-                S[w]=True
-                T.parent_set(w,v)
-                Q.append(w)
+    seen = [False] * (N + offset)
+    seen[root] = True
+
+    queue = deque([root])
+    while queue:
+        v = queue.popleft()
+        for w in adjacency_list[v]:
+            if seen[w]:
+                continue
+
+            seen[w] = True
+            T.parent_set(w, v)
+            queue.append(w)
 
     T.seal()
     return T
 
-def Depth_First_Search_Tree(N, A, root, index=0):
-    from collections import deque
+def Depth_First_Search_Tree(N: int, adjacency_list: list[int], root: int, offset: int = 0) -> Tree:
+    """adjacency_list を隣接リストとする root を根とする N 頂点の DFS 木を求める.
 
-    T=Tree(N,index); T.root_set(root)
+    Args:
+        N (int): 位数
+        adjacency_list (list[int]): 隣接リスト
+        root (int): 根
+        offset (int, optional): 頂点番号のオフセット. Defaults to 0.
 
-    X=[False]*(N+index); X[root]=True
-    R=[0]*(N+index)
+    Returns:
+        Tree: DFS 木
+    """
+    T = Tree(N, offset)
+    T.root_set(root)
 
-    S=deque([root])
-    while S:
-        v=S.pop()
-        X[v]=True
+    X = [False] * (N + offset)
+    X[root] = True
+    R = [0] * (N + offset)
 
-        while R[v]<len(A[v]):
-            w=A[v][R[v]]
-            R[v]+=1
+    stack = [root]
+    while stack:
+        v = stack.pop()
+        X[v] = True
 
-            if not X[w]:
-                S.append(v)
-                S.append(w)
-                T.child_set(v,w)
+        while R[v] < len(adjacency_list[v]):
+            w = adjacency_list[v][R[v]]
+            R[v] += 1
+
+            if X[w]:
                 continue
+
+            stack.append(v)
+            stack.append(w)
+            T.child_set(v, w)
+
     T.seal()
     return T
