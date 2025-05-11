@@ -30,6 +30,10 @@ def Chromatic_Number(G: Graph) -> int:
                     X[S] -= X[S ^ b]
         return X
 
+    def autocorrelation(A: list[int]) -> list[int]:
+        A_zeta = zeta(A)
+        return mebious([a * a for a in A_zeta])
+
     def convolution(A: list[int], B: list[int]) -> list[int]:
         return mebious([a * b for a, b in zip(zeta(A), zeta(B))])
 
@@ -68,7 +72,10 @@ def Chromatic_Number(G: Graph) -> int:
     # Section II: k = 2, 4, 8, ..., に対して, dp_k[V] が True になるかどうかを判定する.
     while True:
         k = max(dp)
-        conv = convolution(dp[k], dp[k])
+        if 2 * k > N:
+            break
+
+        conv = autocorrelation(dp[k])
         dp[2 * k] = [1 if x else 0 for x in conv]
         if dp[2 * k][-1]:
             break
@@ -77,6 +84,10 @@ def Chromatic_Number(G: Graph) -> int:
     prev = dp[k]
     step = k >> 1
     while step:
+        if k + step > N:
+            step >>= 1
+            continue
+
         res = [1 if x else 0 for x in convolution(prev, dp[step])]
         dp[k + step] = res
         if not res[-1]:
