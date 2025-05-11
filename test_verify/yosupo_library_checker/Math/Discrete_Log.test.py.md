@@ -31,7 +31,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
   requiredBy: []
-  timestamp: '2024-04-18 23:56:19+09:00'
+  timestamp: '2025-05-11 20:45:40+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
