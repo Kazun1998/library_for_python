@@ -306,6 +306,7 @@ def Modulo_Composite(*X: Modulo) -> Modulo:
         return Modulo(a + (n * g) * d * s, n * m *g)
 
     res = Modulo(0, 1)
+    
     for a in X:
         if (res := composite(res, a)) is None:
             break
@@ -380,13 +381,15 @@ def First_Order_Simultaneous_Congruent_Equation(*X: tuple[int, int, int]) -> Mod
         Modulo: 解
     """
 
-    R=Modulo(0,1)
-    for (a,b,m) in X:
-        T=First_Order_Congruent_Equation(a,b,m)
-        if T==None:
-            return None
-        R=__modulo_composite__(R,T)
-    return R
+    equations = []
+    for (a, b, m) in X:
+        t = First_Order_Congruent_Equation(a, b, m)
+        if t is None:
+            break
+
+        equations.append(t)
+
+    return Modulo_Composite(*equations)
 
 """
 総和
