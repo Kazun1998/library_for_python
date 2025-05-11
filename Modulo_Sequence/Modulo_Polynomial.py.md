@@ -21,12 +21,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
     title: test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links:
     - http://q.c.titech.ac.jp/docs/progs/polynomial_division.html
@@ -707,15 +707,15 @@ data:
   path: Modulo_Sequence/Modulo_Polynomial.py
   requiredBy: []
   timestamp: '2025-05-04 10:58:23+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/yosupo_library_checker/Polynomial/Power.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Exp.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Log.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Division.test.py
   - test_verify/yosupo_library_checker/Polynomial/Product_of_Polynomial_Sequence.test.py
   - test_verify/yosupo_library_checker/Polynomial/Inv.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Division.test.py
-  - test_verify/yosupo_library_checker/Polynomial/Log.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Exp.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Taylor_Shift.test.py
+  - test_verify/yosupo_library_checker/Polynomial/Power.test.py
 documentation_of: Modulo_Sequence/Modulo_Polynomial.py
 layout: document
 title: Modulo Polynomial

@@ -14,41 +14,59 @@ data:
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Mo:\n    def __init__(self, N):\n        \"\"\" \u7BC4\u56F2\u304C\
+  code: "class Mo:\n    def __init__(self, N: int):\n        \"\"\" \u7BC4\u56F2\u304C\
     \ 0 \u4EE5\u4E0A N \"\u672A\u6E80\" \u306E Mo's Algorithm \u306E\u6E96\u5099\u3092\
-    \u3059\u308B.\n\n        \"\"\"\n        self.N=N\n        self.Q=0\n        self.left=[]\n\
-    \        self.right=[]\n\n    def add_query(self, l, r):\n        \"\"\" \u9589\
-    \u533A\u9593 [l,r] \u306B\u5BFE\u3059\u308B\u30AF\u30A8\u30EA\u3092\u8FFD\u52A0\
-    \u3059\u308B.\n        \"\"\"\n\n        self.left.append(l)\n        self.right.append(r+1)\n\
-    \        self.Q+=1\n\n    def calculate(self, add, delete, rem):\n        \"\"\
-    \" \u30AF\u30A8\u30EA\u3092\u51E6\u7406\u3059\u308B.\n\n        \"\"\"\n\n   \
-    \     block_size=self.N//(min(self.N, int(self.Q**0.5+0.5)))\n        t=(self.N+block_size-1)//block_size\n\
-    \        B=[[] for _ in range(t)]\n\n        left=self.left; right=self.right\n\
-    \n        for q in range(self.Q):\n            B[left[q]//block_size].append(q)\n\
-    \n        for i in range(t):\n            B[i].sort(key=lambda q: right[q], reverse=i%2)\n\
-    \n        x=y=0\n        for b in B:\n            for q in b:\n              \
-    \  l=left[q]; r=right[q]\n                for i in range(x, l):\n            \
-    \        delete(i)\n\n                for i in range(x-1, l-1, -1):\n        \
-    \            add(i)\n\n                for j in range(y, r):\n               \
-    \     add(j)\n\n                for j in range(y-1, r-1, -1):\n              \
-    \      delete(j)\n\n                x=l; y=r\n                rem(q)\n       \
-    \ return\n\n    def calculate_noncommutative(self, add_left, add_right, delete_left,\
-    \ delete_right, rem):\n        block_size=self.N//(min(self.N, int(self.Q**0.5+0.5)))\n\
-    \        t=(self.N+block_size-1)//block_size\n        B=[[] for _ in range(t)]\n\
-    \n        left=self.left; right=self.right\n\n        for q in range(self.Q):\n\
-    \            B[left[q]//block_size].append(q)\n\n        for i in range(t):\n\
-    \            B[i].sort(key=lambda q: right[q], reverse=i%2)\n\n        x=y=0\n\
-    \        for b in B:\n            for q in b:\n                l=left[q]; r=right[q]\n\
-    \n                for i in range(x, l):\n                    delete_left(i)\n\n\
-    \                for i in range(x-1, l-1, -1):\n                    add_left(i)\n\
-    \n                for j in range(y, r):\n                    add_right(j)\n\n\
-    \                for j in range(y-1, r-1, -1):\n                    delete_right(j)\n\
-    \n                x=l; y=r\n                rem(q)\n        return\n"
+    \u3059\u308B.\n\n        Args:\n            N (int): \u7BC4\u56F2\u306E\u4E0A\u9650\
+    \ (N \u306F\u542B\u307E\u306A\u3044)\n        \"\"\"\n\n        self.__N = N\n\
+    \        self.__query_count = 0\n        self.left: list[int] = []\n        self.right:\
+    \ list[int] = []\n\n    @property\n    def N(self) -> int:\n        return self.__N\n\
+    \n    @property\n    def query_count(self) -> int:\n        \"\"\" \u73FE\u5728\
+    \u767B\u9332\u3055\u308C\u3066\u3044\u308B\u30AF\u30A8\u30EA\u306E\u6570\u3092\
+    \u51FA\u529B\u3059\u308B.\n\n        Returns:\n            int: \u73FE\u5728\u767B\
+    \u9332\u3055\u308C\u3066\u3044\u308B\u30AF\u30A8\u30EA\u306E\u6570\n        \"\
+    \"\"\n\n        return self.__query_count\n\n    def add_query(self, l: int, r:\
+    \ int):\n        \"\"\" \u9589\u533A\u9593 [l,r] \u306B\u5BFE\u3059\u308B\u30AF\
+    \u30A8\u30EA\u3092\u8FFD\u52A0\u3059\u308B.\n\n        Args:\n            l (int):\
+    \ \u5DE6\u7AEF\n            r (int): \u53F3\u7AEF\n        \"\"\"\n\n        self.left.append(l)\n\
+    \        self.right.append(r + 1)\n        self.__query_count += 1\n\n    def\
+    \ calculate(self, add, delete, rem):\n        \"\"\" \u30AF\u30A8\u30EA\u3092\u51E6\
+    \u7406\u3059\u308B.\n\n        Args:\n            add (Callable[[int]]): add(k):\
+    \ \u533A\u9593\u306B k \u3092\u8FFD\u52A0\u3059\u308B\u5834\u5408\u306E\u51E6\u7406\
+    \n            delete (Callable[[int]]): delete(k): \u533A\u753B\u304B\u3089 k\
+    \ \u3092\u524A\u9664\u3059\u308B\u5834\u5408\u306E\u51E6\u7406\n            rem\
+    \ (Callable[[int]]): query(q): \u7B2C q \u30AF\u30A8\u30EA (add_query \u306B\u8FFD\
+    \u52A0\u3057\u305F\u9806) \u306E\u51E6\u7406\n        \"\"\"\n\n        bucket_size\
+    \ = self.N // (min(self.N, int(self.query_count ** 0.5 + 0.5)))\n        bucket_count\
+    \ = (self.N + bucket_size - 1) // bucket_size\n        buckets = [[] for _ in\
+    \ range(bucket_count)]\n\n        left = self.left\n        right = self.right\n\
+    \n        for q in range(self.query_count):\n            buckets[left[q] // bucket_size].append(q)\n\
+    \n        for i in range(bucket_count):\n            buckets[i].sort(key = lambda\
+    \ q: right[q], reverse = i % 2)\n\n        x = y = 0\n        for bucket in buckets:\n\
+    \            for q in bucket:\n                l = left[q]\n                r\
+    \ = right[q]\n\n                for i in range(x, l):\n                    delete(i)\n\
+    \n                for i in range(x - 1, l - 1 , -1):\n                    add(i)\n\
+    \n                for j in range(y, r):\n                    add(j)\n\n      \
+    \          for j in range(y - 1, r - 1, -1):\n                    delete(j)\n\n\
+    \                x = l\n                y = r\n                rem(q)\n\n    def\
+    \ calculate_noncommutative(self, add_left, add_right, delete_left, delete_right,\
+    \ rem):\n        bucket_size = self.N // (min(self.N, int(self.query_count **\
+    \ 0.5 + 0.5)))\n        bucket_count = (self.N + bucket_size - 1) // bucket_size\n\
+    \        buckets = [[] for _ in range(bucket_count)]\n\n        left = self.left\n\
+    \        right = self.right\n\n        for q in range(self.query_count):\n   \
+    \         buckets[left[q] // bucket_size].append(q)\n\n        for i in range(bucket_count):\n\
+    \            buckets[i].sort(key=lambda q: right[q], reverse=i%2)\n\n        x\
+    \ = y = 0\n        for bucket in buckets:\n            for q in bucket:\n    \
+    \            l = left[q]\n                r = right[q]\n\n                for\
+    \ i in range(x, l):\n                    delete_left(i)\n\n                for\
+    \ i in range(x-1, l-1, -1):\n                    add_left(i)\n\n             \
+    \   for j in range(y, r):\n                    add_right(j)\n\n              \
+    \  for j in range(y-1, r-1, -1):\n                    delete_right(j)\n\n    \
+    \            x = l\n                y = r\n                rem(q)\n"
   dependsOn: []
   isVerificationFile: false
   path: Mo.py
   requiredBy: []
-  timestamp: '2023-06-17 23:31:23+09:00'
+  timestamp: '2025-05-11 00:35:53+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Mo.py
