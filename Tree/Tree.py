@@ -140,7 +140,8 @@ class Tree:
         self.parent[y] = x
 
     def seal(self):
-        """ 木の情報を確定させる (これ以降, 情報の変更は禁止)."""
+        """ 木の情報を確定させる (これ以降, 情報の変更は禁止).
+        """
 
         assert self.mutable
         assert hasattr(self, "root")
@@ -185,8 +186,15 @@ class Tree:
         self.__tower = tower
         self.__des_count = des_count
 
-    def vertex_depth(self, x):
-        """ 頂点 x の深さを求める."""
+    def vertex_depth(self, x: int) -> int:
+        """ 頂点 x の深さを求める
+
+        Args:
+            x (int): 頂点
+
+        Returns:
+            int: 頂点 x の深さ
+        """
 
         assert self.__after_seal_check(x)
 
@@ -253,8 +261,16 @@ class Tree:
             i += 1
         return x
 
-    def lowest_common_ancestor_greedy(self, x, y):
-        """頂点 x, y の最小共通先祖 (x,yに共通する先祖で最も深いもの) を "愚直に" 求める."""
+    def lowest_common_ancestor_greedy(self, x: int, y: int) -> int:
+        """ 頂点 x, y の最小共通先祖 (x, y に共通する先祖で最も深いもの) を "愚直に" 求める.
+
+        Args:
+            x (int): 頂点
+            y (int): 頂点
+
+        Returns:
+            int: 頂点 x, y の最小共通先祖
+        """
 
         assert self.__after_seal_check(x,y)
         dx=self.vertex_depth(x); dy=self.vertex_depth(y)
@@ -316,8 +332,16 @@ class Tree:
         self.lca_dst=D
         return
 
-    def lowest_common_ancestor(self, x, y):
-        """頂点 x, y の最小共通先祖 (x,yに共通する先祖で最も深いもの) を "高速に" 求める. """
+    def lowest_common_ancestor(self, x: int, y: int) -> int:
+        """ 頂点 x, y の最小共通先祖 (x, y に共通する先祖で最も深いもの) を "高速に" 求める.
+
+        Args:
+            x (int): 頂点
+            y (int): 頂点
+
+        Returns:
+            int: 頂点 x, y の最小共通先祖
+        """
 
         assert self.__after_seal_check(x,y)
         if not hasattr(self, "lca_dst"):
@@ -565,8 +589,17 @@ class Tree:
 
         return not bool(self.children[v])
 
-    def distance(self, u, v, faster=True):
-        """ 2頂点 u, v 間の距離を求める. """
+    def distance(self, u: int, v: int, faster: bool = True) -> int:
+        """ 2 頂点 u, v 間の距離を求める.
+
+        Args:
+            u (int): 頂点
+            v (int): 頂点
+            faster (bool, optional): True にした場合, 1 クエリ当たりの計算量が高速になる方法で求める (前計算に時間を要する). Defaults to True.
+
+        Returns:
+            int: _description_
+        """
 
         assert self.__after_seal_check(u,v)
 
@@ -701,11 +734,10 @@ class Tree:
             dp[v] = g(f(dp[x],v,x) * f(dp[y],v,y) * f(dp[z],v,z) * ... * f(dp[w],v,w), v)
         になる.
 
-        Args:
-            merge (Callable[[M, M], M]): 結果のマージ方法
-            unit (M): モノイド M の単位元
-            f (Callable[[X, int, int], M]): f: X x V x V → M: f(x,v,w): v が親, w が子
-            g (Callable[[M, int], X]): M x V → X: g(x,v)
+            merge (Callable[[M, M], M]): M の二項演算
+            unit (M): M の単位元
+            f (Callable[[X, int, int], M]): X x V x V → M; f(x, 親要素, 子要素) の形式
+            g (Callable[[M, int], X]): M x V → X; g(a, v)
 
         Returns:
             list[X]: 各 v in V に対して, v を根とする部分木に関する結果
@@ -748,22 +780,23 @@ class Tree:
 
         return data
 
-    def rerooting(self, merge, unit, f, g, h):
+    def rerooting(self, merge: Callable[[M, M], M], unit: M, f: Callable[[X, int, int], M], g: Callable[[M, int], X], h: Callable[[M, int], X]) -> list[X]:
         """ 全方位木 DP を行う.
 
-        [input]
-        merge: 可換モノイドを成す2項演算 M x M -> M
-        unit: M の単位元
-        f: X x V x V → M: f(x,v,w): v が親, w が子
-        g: M x V → X: g(x,v)
+        頂点 v の子が x ,y ,z, ..., w のとき, 更新式は + を merge として
+            dp[v] = g(f(dp[x], v, x) + f(dp[y], v, y) + f(dp[z], v, z) + ... + f(dp[w], v, w), v) (v が根ではないとき)
+                    h(f(dp[x], v, x) + f(dp[y], v, y) + f(dp[z], v, z) + ... + f(dp[w], v, w), v) (v が根のとき)
+        となる
 
-        ※ tree_dp_from_leaf と同じ形式
+        Args:
+            merge (Callable[[M, M], M]): M の二項演算
+            unit (M): M の単位元
+            f (Callable[[X, int, int], M]): X x V x V → M; f(x, 親要素, 子要素) の形式
+            g (Callable[[M, int], X]): M x V → X; g(a, v)
+            h (Callable[[M, int], X]): M x V → X; h(a, v)
 
-        [補足]
-        頂点 v の子が x,y,z,..., w のとき, 更新式は + を merge として
-            dp[v] = g(f(dp[x],v,x) + f(dp[y],v,y) + f(dp[z],v,z) + ... + f(dp[w],v,w), v) (v が根ではないとき)
-                    h(f(dp[x],v,x) + f(dp[y],v,y) + f(dp[z],v,z) + ... + f(dp[w],v,w), v) (v が根のとき)
-        になる.
+        Returns:
+            list[X]: 各 v in V に対して, v を根とする部分木に関する結果
         """
         assert self.__after_seal_check()
 
