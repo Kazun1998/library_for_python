@@ -26,25 +26,26 @@ data:
     \       return self.prime\n\n    @staticmethod\n    def exponents(n, p):\n   \
     \     e = 0\n        while n % p == 0:\n            e += 1\n            n //=\
     \ p\n        return e, n\n\n    @classmethod\n    def prime_factorization(cls,\
-    \ N):\n        if N == 0:\n            return [[0, 1]]\n\n        factors = []\n\
-    \        if N < 0:\n            factors.append([-1, 1])\n            N = abs(N)\n\
-    \n        for p in [2, 3]:\n            e, N = cls.exponents(N, p)\n         \
-    \   if e:\n                factors.append([p, e])\n\n        offset = 6\n    \
-    \    while offset * offset <= N:\n            p = offset - 1\n            e, N\
-    \ = cls.exponents(N, p)\n            if e:\n                factors.append([p,\
-    \ e])\n\n            q = offset + 1\n            e, N = cls.exponents(N, q)\n\
-    \            if e:\n                factors.append([q, e])\n\n            offset\
-    \ += 6\n\n        if N > 1:\n            factors.append([N, 1])\n\n        return\
-    \ factors\n\n    @staticmethod\n    def is_prime(N: int) -> bool:\n        if\
-    \ N <= 3:\n            return N >= 2\n        elif N == 5:\n            return\
-    \ True\n        elif (N % 2 == 0) or (N % 3 == 0) or (N % 5 == 0):\n         \
-    \   return False\n\n        p = 7\n        while p * p <= N:\n            judge\
-    \ = (N % p == 0) or (N % (p + 4) == 0) or (N % (p + 6) == 0) or (N % (p + 10)\
-    \ == 0)\n            judge |= (N % (p + 12) == 0) or (N % (p + 16) == 0) or (N\
-    \ % (p + 22) == 0) or (N % (p + 24) == 0)\n\n            if judge:\n         \
-    \       return False\n\n            p += 30\n        return True\n\n    @classmethod\n\
-    \    def radical(cls, N):\n        rad = 1\n        for p, _ in cls.prime_factorization(N):\n\
-    \            rad *= p\n        return rad\n\n    @classmethod\n    def next_prime(cls,\
+    \ N: int) -> list[tuple[int, int]]:\n        if N == 0:\n            return [(0,\
+    \ 1)]\n\n        factors: list[tuple[int, int]] = []\n        if N < 0:\n    \
+    \        factors.append((-1, 1))\n            N = abs(N)\n\n        for p in [2,\
+    \ 3]:\n            e, N = cls.exponents(N, p)\n            if e:\n           \
+    \     factors.append((p, e))\n\n        offset = 6\n        while (offset - 1)\
+    \ * (offset - 1) <= N:\n            p = offset - 1\n            e, N = cls.exponents(N,\
+    \ p)\n            if e:\n                factors.append((p, e))\n\n          \
+    \  q = offset + 1\n            e, N = cls.exponents(N, q)\n            if e:\n\
+    \                factors.append((q, e))\n\n            offset += 6\n\n       \
+    \ if N > 1:\n            factors.append((N, 1))\n\n        return factors\n\n\
+    \    @staticmethod\n    def is_prime(N: int) -> bool:\n        if N <= 3:\n  \
+    \          return N >= 2\n        elif N == 5:\n            return True\n    \
+    \    elif (N % 2 == 0) or (N % 3 == 0) or (N % 5 == 0):\n            return False\n\
+    \n        p = 7\n        while p * p <= N:\n            judge = (N % p == 0) or\
+    \ (N % (p + 4) == 0) or (N % (p + 6) == 0) or (N % (p + 10) == 0)\n          \
+    \  judge |= (N % (p + 12) == 0) or (N % (p + 16) == 0) or (N % (p + 22) == 0)\
+    \ or (N % (p + 24) == 0)\n\n            if judge:\n                return False\n\
+    \n            p += 30\n        return True\n\n    @classmethod\n    def radical(cls,\
+    \ N):\n        rad = 1\n        for p, _ in cls.prime_factorization(N):\n    \
+    \        rad *= p\n        return rad\n\n    @classmethod\n    def next_prime(cls,\
     \ N, K):\n        if K > 0:\n            while K > 0:\n                N += 1\n\
     \                if cls.is_prime(N):\n                    K -= 1\n        else:\n\
     \            while K < 0:\n                N -= 1\n                if cls.is_prime(N):\n\
@@ -105,17 +106,21 @@ data:
     \    y=pow(a,t,N)\n        while t!=N-1 and y!=1 and y!=N-1:\n            y=(y*y)%N\n\
     \            t<<=1\n        if y!=N-1 and t%2==0:\n            return False\n\
     \    return True\n\n#Miller-Rabin\u306E\u7D20\u6570\u5224\u5B9A\u6CD5\ndef Miller_Rabin_Primality_Test(N,\
-    \ Times=20):\n    \"\"\" Miller-Rabin \u306B\u3088\u308B\u6574\u6570 N \u306E\u7D20\
-    \u6570\u5224\u5B9A\u3092\u884C\u3046.\n\n    N: \u6574\u6570\n    \u203B True\
-    \ \u306F\u6B63\u78BA\u306B\u306F Probably True \u3067\u3042\u308B ( False \u306F\
-    \ \u78BA\u5B9A False ).\n    \"\"\"\n    from random import randint as ri\n\n\
-    \    if N==2: return True\n\n    if N==1 or N%2==0: return False\n\n    q=N-1\n\
-    \    k=0\n    while q&1==0:\n        k+=1\n        q>>=1\n\n    for _ in range(Times):\n\
-    \        m=ri(2,N-1)\n        y=pow(m,q,N)\n        if y==1:\n            continue\n\
-    \n        flag=True\n        for i in range(k):\n            if (y+1)%N==0:\n\
-    \                flag=False\n                break\n\n            y*=y\n     \
-    \       y%=N\n\n        if flag:\n            return False\n    return True\n\n\
-    #\u30DD\u30E9\u30FC\u30C9\u30FB\u30ED\u30FC\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\
+    \ trial = 20):\n    \"\"\" Miller-Rabin \u306E\u65B9\u6CD5\u306B\u3088\u3063\u3066\
+    , N \u304C\u7D20\u6570\u304B\u3069\u3046\u304B\u3092\u5224\u5B9A\u3059\u308B.\n\
+    \n    Args:\n        N (int): \u6B63\u306E\u6574\u6570\n        trial (int, optional):\
+    \ N \u304C\u7D20\u6570\u3067\u3042\u308B\u3053\u3068\u3092\u78BA\u8A8D\u3059\u308B\
+    \u305F\u3081\u306B\u884C\u3046\u5224\u5B9A\u56DE\u6570. Defaults to 20.\n\n  \
+    \  Returns:\n        bool: False \u306F\u78BA\u5B9A\u7684 False, True \u306F\u78BA\
+    \u7387\u7684 True\n    \"\"\"\n\n    from random import randint as ri\n\n    if\
+    \ N == 2:\n        return True\n\n    if N == 1 or N % 2 == 0:\n        return\
+    \ False\n\n    q = N - 1\n    k = 0\n    while q & 1 == 0:\n        k += 1\n \
+    \       q >>= 1\n\n    for _ in range(trial):\n        m = ri(2, N - 1)\n    \
+    \    y = pow(m, q, N)\n        if y == 1:\n            continue\n\n        flag\
+    \ = True\n        for _1 in range(k):\n            if (y + 1) % N == 0:\n    \
+    \            flag=False\n                break\n\n            y *= y\n       \
+    \     y %= N\n\n        if flag:\n            return False\n\n    return True\n\
+    \n#\u30DD\u30E9\u30FC\u30C9\u30FB\u30ED\u30FC\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\
     \u306B\u3088\u3063\u3066\u7D20\u56E0\u6570\u3092\u767A\u898B\u3059\u308B\n#\u53C2\
     \u8003\u5143:https://judge.yosupo.jp/submission/6131\ndef Find_Factor_Rho(N):\n\
     \    if N==1:\n        return 1\n    from math import gcd\n    m=1<<(N.bit_length()//8+1)\n\
@@ -215,7 +220,7 @@ data:
   isVerificationFile: false
   path: Integer/Prime.py
   requiredBy: []
-  timestamp: '2025-01-12 18:26:36+09:00'
+  timestamp: '2025-05-11 20:18:40+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Integer/Prime.py
