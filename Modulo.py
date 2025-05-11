@@ -2,11 +2,11 @@ class Modulo:
     __slots__ = ("_a", "_n")
 
     @property
-    def a(self):
+    def a(self) -> int:
         return self._a
 
     @property
-    def n(self):
+    def n(self) -> int:
         return self._n
 
     def __init__(self, a: int, n: int, mode: bool = True):
@@ -16,48 +16,48 @@ class Modulo:
         self._a = a
         self._n = n
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.a} (mod {self.n})"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.a}, {self.n})"
 
     #+,-
-    def __pos__(self):
+    def __pos__(self) -> "Modulo":
         return self
 
-    def __neg__(self):
+    def __neg__(self) -> "Modulo":
         return Modulo(self.n - self.a, self.n, False) if self.a else Modulo(0, self.n, False)
 
     #等号,不等号
-    def __eq__(self, other):
+    def __eq__(self, other: "Modulo") -> bool:
         if isinstance(other, Modulo):
             return (self.a == other.a) and (self.n == other.n)
         elif isinstance(other, int):
             return (self.a - other) % self.n == 0
 
-    def __neq__(self, other):
+    def __neq__(self, other: "Modulo") -> bool:
         return not(self == other)
 
-    def __le__(self, other):
+    def __le__(self, other: "Modulo") -> bool:
         a, p = self.a, self.n
         b, q = other.a, other.n
         return (a - b) % q == 0 and p % q == 0
 
-    def __ge__(self, other):
+    def __ge__(self, other: "Modulo") -> bool:
         return other <= self
 
-    def __lt__(self, other):
+    def __lt__(self, other: "Modulo") -> bool:
         return (self <= other) and (self != other)
 
-    def __gt__(self, other):
+    def __gt__(self, other: "Modulo") -> bool:
         return (self >= other) and (self != other)
 
-    def __contains__(self, val):
+    def __contains__(self, val) -> bool:
         return val % self.n == self.a
 
     #加法
-    def __add__(self,other):
+    def __add__(self, other: "Modulo") -> "Modulo":
         if isinstance(other,Modulo):
             assert self.n==other.n, "異なる法同士の演算です."
             y=other.a
@@ -69,14 +69,14 @@ class Modulo:
             b-=self.n
         return Modulo(b,self.n, False)
 
-    def __radd__(self,other):
+    def __radd__(self, other: "Modulo") -> "Modulo":
         if isinstance(other,int):
             b=self.a+(other%self.n)
             if b>=self.n:
                 b-=self.n
             return Modulo(b,self.n, False)
 
-    def __iadd__(self,other):
+    def __iadd__(self, other: "Modulo") -> "Modulo":
         if isinstance(other,Modulo):
             assert self.n==other.n, "異なる法同士の演算です."
             y=other.a
@@ -89,7 +89,7 @@ class Modulo:
         return self
 
     #減法
-    def __sub__(self,other):
+    def __sub__(self, other: "Modulo") -> "Modulo":
         if isinstance(other,Modulo):
             assert self.n==other.n, "異なる法同士の演算です."
             y=other.a
@@ -101,14 +101,14 @@ class Modulo:
             b+=self.n
         return Modulo(b,self.n, False)
 
-    def __rsub__(self,other):
+    def __rsub__(self, other: "Modulo") -> "Modulo":
         if isinstance(other,int):
             b=other%self.n-self.a
             if b<0:
                 b+=self.n
             return Modulo(b,self.n, False)
 
-    def __isub__(self,other):
+    def __isub__(self, other: "Modulo") -> "Modulo":
         if isinstance(other,Modulo):
             assert self.n==other.n, "異なる法同士の演算です."
             y=other.a
@@ -121,7 +121,7 @@ class Modulo:
         return self
 
     #乗法
-    def __mul__(self,other):
+    def __mul__(self, other: "Modulo") -> "Modulo":
         if isinstance(other,Modulo):
             assert self.n==other.n, "異なる法同士の演算です."
             y=other.a
@@ -130,11 +130,11 @@ class Modulo:
 
         return Modulo((self.a*y)%self.n, self.n, False)
 
-    def __rmul__(self,other):
+    def __rmul__(self, other: "Modulo") -> "Modulo":
         if isinstance(other,int):
             return Modulo((self.a*other)%self.n, self.n, False)
 
-    def __imul__(self,other):
+    def __imul__(self, other: "Modulo") -> "Modulo":
         if isinstance(other,Modulo):
             assert self.n==other.n, "異なる法同士の演算です."
             y=other.a
@@ -146,24 +146,24 @@ class Modulo:
         return self
 
     #Modulo逆数
-    def inverse(self):
+    def inverse(self) -> "Modulo":
         return self.modulo_inverse()
 
-    def modulo_inverse(self):
+    def modulo_inverse(self) -> "Modulo":
         try:
             return Modulo(pow(self.a, -1, self.n), self.n, False)
         except ValueError:
             raise ValueError(f"{self} の逆数が存在しません") from None
 
     #除法
-    def __truediv__(self,other):
+    def __truediv__(self,other) -> "Modulo":
         return self*(other.modulo_inverse())
 
-    def __rtruediv__(self,other):
+    def __rtruediv__(self,other) -> "Modulo":
         return other*(self.modulo_inverse())
 
     #累乗
-    def __pow__(self, other):
+    def __pow__(self, other: int) -> "Modulo":
         if isinstance(other, int):
             return Modulo(pow(self.a, other, self.n), self.n, False)
         else:
@@ -476,7 +476,7 @@ def Sqrt(X: Modulo) -> Modulo:
 
     while True:
         z = Modulo(ri(1, p - 1), p)
-        if pow(z, (p - 1) // 2) == 1:
+        if pow(z, (p - 1) // 2) == -1:
             break
 
     m, c, t, r = s, pow(z, q), pow(X, q), pow(X, (q + 1) // 2)
