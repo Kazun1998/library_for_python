@@ -44,7 +44,10 @@ class Modulo_Matrix():
             M (list[int]): 行列
         """
 
-        self.ele=[[x%Mod for x in X] for X in M]
+        if len(M) > 0 and not all(len(M_row) == len(M[0]) for M_row in M):
+            raise ValueError
+
+        self.ele = [[x % Mod for x in M_row] for M_row in M]
         self.__row = len(M)
         self.__col = len(M[0]) if self.row > 0 else 0
 
@@ -53,7 +56,7 @@ class Modulo_Matrix():
         return "["+"\n".join(map(str,self.ele))+"]"
 
     def __repr__(self):
-        return str(self)
+        return f"{self.__class__.__name__}({self.ele})"
 
     # 零行列, 単位行列
     @classmethod
