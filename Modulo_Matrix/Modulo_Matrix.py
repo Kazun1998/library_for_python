@@ -9,15 +9,30 @@ class Modulo_Matrix():
 
     # property
     @property
-    def row(self):
+    def row(self) -> int:
+        """ 行列の行数
+
+        Returns:
+            int: 行数
+        """
         return self.__row
 
     @property
-    def col(self):
+    def col(self) -> int:
+        """ 行列の列数
+
+        Returns:
+            int: 列数
+        """
         return self.__col
 
     @property
-    def size(self):
+    def size(self) -> tuple[int, int]:
+        """ 行列のサイズ
+
+        Returns:
+            tuple[int, int]: (行数, 列数)
+        """
         return (self.row, self.col)
 
     #入力
