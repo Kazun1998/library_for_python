@@ -513,31 +513,37 @@ def Determinant(M: Modulo_Matrix) -> int:
 
     assert Is_Square(M)
 
-    N=M.row
-    T=deepcopy(M.ele)
-    det=1
+    n = M.row
+    T = deepcopy(M.ele)
+    det = 1
 
-    for j in range(N):
-        if T[j][j]==0:
-            for i in range(j+1,N):
-                if T[i][j]:
-                    break
-            else:
+    def swap(j: int) -> bool:
+        for i in range(j + 1, n):
+            if T[i][j] == 0:
+                continue
+
+            T[j], T[i] = T[i], T[j]
+            det = -det
+            return True
+        return False
+
+    for j in range(n):
+        if T[j][j] == 0:
+            # 第 (j, j) 成分が 0 であるため, 第 (j + 1) 行目以降の第 i 行目で, 第 (i, j) 成分が 0 でないものを探す.
+            if not swap(j):
                 return 0
-            T[j],T[i]=T[i],T[j]
-            det=-det
-        Tj=T[j]
-        inv=pow(Tj[j], -1, Mod)
-        for i in range(j+1,N):
-            Ti=T[i]
-            c=-inv*Ti[j]%Mod
-            for k in range(N):
-                Ti[k]+=c*Tj[k]
-                Ti[k]%=Mod
 
-    for i in range(N):
-        det*=T[i][i]
-        det%=Mod
+        Tj = T[j]
+        inv = pow(Tj[j], -1, Mod)
+        for Ti in T[j + 1:]:
+            c = -inv * Ti[j] % Mod
+            for k in range(n):
+                Ti[k] += c * Tj[k]
+                Ti[k] %= Mod
+
+    for i in range(n):
+        det *= T[i][i]
+        det %= Mod
     return det
 
 def Determinant_Arbitrary_Mod(A: Modulo_Matrix) -> int:
