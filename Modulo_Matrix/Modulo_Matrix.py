@@ -94,14 +94,14 @@ class Modulo_Matrix():
         return self.__scale__(-1)
 
     #加法
-    def __add__(self, other):
+    def __add__(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
         C = [None] * self.row
         for i, (Ai, Bi) in enumerate(zip(self.ele, other.ele)):
             C[i] = [Ai[j] + Bi[j] for j in range(self.col)]
 
         return Modulo_Matrix(C)
 
-    def __iadd__(self,other):
+    def __iadd__(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
         M=self.ele; N=other.ele
 
         for i in range(self.row):
@@ -112,14 +112,14 @@ class Modulo_Matrix():
         return self
 
     #減法
-    def __sub__(self,other):
+    def __sub__(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
         C = [None] * self.row
         for i, (Ai, Bi) in enumerate(zip(self.ele, other.ele)):
             C[i] = [Ai[j] - Bi[j] for j in range(self.col)]
 
         return Modulo_Matrix(C)
 
-    def __isub__(self,other):
+    def __isub__(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
         M=self.ele; N=other.ele
 
         for i in range(self.row):
@@ -130,7 +130,7 @@ class Modulo_Matrix():
         return self
 
     #乗法
-    def __mul__(self, other):
+    def __mul__(self, other) -> "Modulo_Matrix":
         if isinstance(other, int):
             return self.__scale__(other)
 
@@ -149,7 +149,7 @@ class Modulo_Matrix():
 
         return Modulo_Matrix(C)
 
-    def __rmul__(self,other):
+    def __rmul__(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
         if isinstance(other,int):
             return self.__scale__(other)
 
@@ -234,7 +234,7 @@ class Modulo_Matrix():
         return Modulo_Matrix([[r * m_ij for m_ij in Mi] for Mi in self.ele])
 
     #累乗
-    def __pow__(self, n):
+    def __pow__(self, n: int) -> "Modulo_Matrix":
         assert self.row==self.col, "正方行列ではありません."
 
         sgn = 1 if n >= 0 else -1
@@ -251,12 +251,12 @@ class Modulo_Matrix():
         return C if sgn == 1 else C.inverse()
 
     #等号
-    def __eq__(self,other):
-        return self.ele==other.ele
+    def __eq__(self, other: "Modulo_Matrix") -> bool:
+        return self.ele == other.ele
 
     #不等号
-    def __neq__(self,other):
-        return not(self==other)
+    def __neq__(self, other: "Modulo_Matrix") -> bool:
+        return not self == other
 
     #転置
     def transpose(self) -> "Modulo_Matrix":
@@ -401,26 +401,26 @@ class Modulo_Matrix():
         return self.col == self.row == self.rank()
 
     #行の結合
-    def row_union(self,other):
-        return Modulo_Matrix(self.ele+other.ele)
+    def row_union(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
+        return Modulo_Matrix(self.ele + other.ele)
 
     #列の結合
-    def column_union(self,other):
-        E=[]
+    def column_union(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
+        ele = []
         for i in range(self.row):
-            E.append(self.ele[i]+other.ele[i])
+            ele.append(self.ele[i] + other.ele[i])
 
-        return Modulo_Matrix(E)
+        return Modulo_Matrix(ele)
 
-    def __getitem__(self,index):
+    def __getitem__(self, index):
         if isinstance(index, int):
             return self.ele[index]
         else:
             return self.ele[index[0]][index[1]]
 
-    def __setitem__(self,index,val):
-        assert isinstance(index,tuple) and len(index)==2
-        self.ele[index[0]][index[1]]=val
+    def __setitem__(self, index: tuple[int, int], val: int):
+        assert isinstance(index, tuple) and len(index) == 2
+        self.ele[index[0]][index[1]] = val % Mod
 
 #=================================================
 #正方行列?
