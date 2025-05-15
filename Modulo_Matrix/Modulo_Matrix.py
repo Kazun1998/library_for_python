@@ -531,6 +531,7 @@ def Determinant(M: Modulo_Matrix) -> int:
         if T[j][j] == 0:
             # 第 (j, j) 成分が 0 であるため, 第 (j + 1) 行目以降の第 i 行目で, 第 (i, j) 成分が 0 でないものを探す.
             if not swap(j):
+                # 第 j 列目について, 第 j 行目以降が全て 0 であるため, 行列式が 0 確定
                 return 0
 
         Tj = T[j]
