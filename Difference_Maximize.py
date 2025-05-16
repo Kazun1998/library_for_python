@@ -8,146 +8,126 @@ Note
 """
 
 class Difference_Maximize:
-    def __init__(self,N):
-        self.N=N
-        self.__arc=[[] for _ in range(N)]
-        self.Neg_edge=False
-        self.__cost=0
-        self.__taught_DAG=None
+    def __init__(self, n: int):
+        self.__n = n
+        self.__arcs = [[] for _ in range(n)]
+        self.__has_negative_arc = False
 
-    def cost(self):
-        return self.__cost
+    @property
+    def n(self) -> int:
+        return self.__n
 
-    def teaching_DAG(self,mode):
-        """ 与えられる状況に対応する有向グラフが DAG 確定かどうかを教える.
+    @property
+    def has_negative_arc(self) -> bool:
+        return self.__has_negative_arc
 
-        """
-        self.__is_DAG=mode
+    def __topological_sort(self) -> list[int]:
+        topological_sort = []
+        in_deg = [0] * self.n
 
-    def is_DAG(self):
-        arc=self.__arc
+        for s in range(self.n):
+            for t, _ in self.__arcs[s]:
+                in_deg[t] += 1
 
-        in_deg=[0]*self.N
-        for u in range(self.N):
-            for v,_ in arc[u]:
-                in_deg[v]+=1
+        stack = [v for v in range(self.n) if in_deg[v] == 0]
+        while stack:
+            x = stack.pop()
+            topological_sort.append(x)
 
-        Q=[x for x in range(self.N) if in_deg[x]==0]
+            for y, _ in self.__arcs[x]:
+                in_deg[y] -= 1
+                if in_deg[y] == 0:
+                    stack.append(y)
 
-        S=[]
-        while Q:
-            u=Q.pop()
-            S.append(u)
-
-            for v,_ in arc[u]:
-                in_deg[v]-=1
-                if in_deg[v]==0:
-                    Q.append(v)
-
-        return S if len(S)==self.N else None
-
-    def add_constraint(self,i,j,c):
-        """ x[i]-x[j] <=c という条件を付け加える.
-
-        """
-
-        assert 0<=i<self.N
-        assert 0<=j<self.N
-
-        if c<0:
-            self.Neg_edge=True
-
-        self.__arc[j].append((i,c))
-        self.__cost+=1
-
-    def solve(self, base_index=0, base_value=0):
-        """ x[base]=base_value を基準にして解を求める.
-
-        ※実行可能解が存在しない場合, 返り値はNoneになる.
-        """
-        inf=float("inf")
-        N=self.N
-        arc=self.__arc
-
-        if (self.__taught_DAG==None) or (self.__taught_DAG==True):
-            K=self.is_DAG()
+        if len(topological_sort) == self.n:
+            return topological_sort
         else:
-            K=None
-
-        if K!=None:
-            X=[inf]*N; X[base_index]=base_value
-            for p in K:
-                for q,c in arc[p]:
-                    if X[q]>X[p]+c:
-                        X[q]=X[p]+c
-            return X
-        elif self.Neg_edge:
-            X=[inf]*N; X[base_index]=base_value
-
-            for _ in range(N):
-                update=0
-                for p in range(N):
-                    for q,c in arc[p]:
-                        if X[q]>X[p]+c:
-                            X[q]=X[p]+c
-                            update=1
-
-                    if not update:
-                        return X
             return None
-        else:
-            from heapq import heapify, heappush, heappop
 
-            arc=self.__arc
-            X=[inf]*self.N
+    def inequality_constraint(self, i: int, j: int, c: int):
+        """ 不等式条件 X[i] - X[j] <= c を追加する.
 
-            X[base_index]=base_value
-            Q=[(base_value, base_index)]
-            while Q:
-                x,i=heappop(Q)
-
-                if x>X[i]:
-                    continue
-
-                for j,c in arc[i]:
-                    if X[i]+c<X[j]:
-                        X[j]=X[i]+c
-                        heappush(Q,(X[j],j))
-            return X
-
-    def solve_add_by_Warshall_Floyd(self):
-        """ 全ての p,q に対する x[q]-x[p] の最大化の結果を Warshall Floyd 法で求める.
-
-        [Output]
-        解が存在する場合
-        2次元リスト X が返される. max x[q]-x[p] の解は x[p]=0 を基準にして X[p][q] に記録される.
-
-        解が存在しない場合
-        None
+        Args:
+            i (int):
+            j (int):
+            c (int):
         """
 
-        inf=float("inf")
-        arc=self.__arc
-        N=self.N
+        assert 0 <= i < self.n
+        assert 0 <= j < self.n
 
-        X=[[inf]*N for _ in range(N)]
-        for p in range(N):
-            x=X[p]
-            x[p]=0
-            for q,cond in arc[p]:
-                if x[q]>cond:
-                    x[q]=cond
+        if c < 0:
+            self.__has_negative_arc = True
 
-        for k in range(N):
-            xk=X[k]
-            for p in range(N):
-                xp=X[p]
-                for q in range(N):
-                    if xp[q]>xp[k]+xk[q]:
-                        xp[q]=xp[k]+xk[q]
+        self.__arcs[j].append((i, c))
 
-        # 解答の存在 Check
-        for p in range(N):
-            if X[p][p]<0: return None
+    def equality_constraint(self, i: int, j: int, c: int):
+        """ 不等式条件 X[i] - X[j] = c を追加する.
 
-        return X
+        Args:
+            i (int):
+            j (int):
+            c (int):
+        """
+
+        self.inequality_constraint(i, j, c)
+        self.inequality_constraint(j, i, -c)
+
+    def solve(self, s: int) -> list[int]:
+        if (topological_sort := self.__topological_sort()) is None:
+            return self.solve_by_dp_on_dag(s, topological_sort)
+        elif self.has_negative_arc:
+            return self.solve_by_bellman_ford(s)
+        else:
+            return self.solve_by_dijkstra(s)
+
+    def solve_by_dp_on_dag(self, s: int, topological_sort: list[int]) -> list[int]:
+        inf = float("inf")
+        dist = [inf] * self.n; dist[s] = 0
+        for x in topological_sort:
+            for y, w in self.__arcs[x]:
+                dist[y] = min(dist[y], dist[x] + w)
+        return dist
+
+    def solve_by_bellman_ford(self, s: int) -> list[int]:
+        inf = float("inf")
+        dist = [inf] * self.n
+        dist[s] = 0
+
+        def update(negative_cycle = False):
+            updated = False
+            for p in range(self.n):
+                for q, c in self.__arcs[p]:
+                    if dist[q] > dist[p] + c:
+                        if negative_cycle:
+                            dist[q] = -inf
+                        else:
+                            dist[q] = dist[p] + c
+                        updated = True
+            return updated
+
+        for _ in range(self.n):
+            if not update():
+                return dist
+
+        for _ in range(self.n):
+            if not update(True):
+                return dist
+
+    def solve_by_dijkstra(self, s: int) -> list[int]:
+        from heapq import heappush, heappop
+
+        inf = float("inf")
+        dist = [inf] * self.n
+        dist[s] = 0
+        Q = [(0, s)]
+        while Q:
+            d, x = heappop(Q)
+            if d > dist[x]:
+                continue
+
+            for y, c in self.__arcs[x]:
+                if dist[y] > dist[x] + c:
+                    dist[y] = dist[x] + c
+                    heappush(Q, (dist[y], y))
+        return dist

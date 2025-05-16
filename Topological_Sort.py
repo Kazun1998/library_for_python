@@ -1,85 +1,104 @@
 class Topological_Sort:
-    __slots__=("N","__arc","__rev", "__reflexive")
-    def __init__(self, N: int, reflexive=False):
-        """ N 頂点からなる空グラフを生成する.
+    __slots__=("__arc", "__rev", "__reflexive", "__is_DAG", "__order")
 
-        N: 頂点数
-        reflexive: 自己ループの追加を認めるか? (False の場合は自己ループは自動的に取り除かれる.)
+    def __init__(self, N: int, reflexive: bool = False):
+        """ N 頂点からなる有向空グラフを生成する.
+
+        Args:
+            N (int): 頂点数
+            reflexive (bool, optional): True にすると, 自己ループの追加を認める. Defaults to False.
         """
 
-        self.N=N
         self.__arc=[[] for _ in  range(N)]
         self.__rev=[[] for _ in range(N)]
         self.__reflexive=reflexive
 
-    def add_arc(self, source: int, target: int):
-        """ 有向辺 source -> target を追加する.
+    @property
+    def N(self):
+        return len(self.__arc)
 
-        source: 始点
-        target: 終点
+    @property
+    def reflexive(self):
+        return self.__reflexive
+
+    def add_arc(self, source: int, target: int):
+        """ source から target への弧を追加する.
+
+        Args:
+            source (int): 始点
+            target (int): 終点
         """
 
-        if source==target and (not self.__reflexive):
+        # 自己ループを認めない場合の source == target のときは棄却する.
+        if source == target and (not self.reflexive):
             return
 
         self.__arc[source].append(target)
         self.__rev[target].append(source)
 
-    def add_vertex(self):
-        res=self.N
-        self.N+=1
+    def add_vertex(self) -> int:
+        """ 1 頂点追加
+
+        Returns:
+            int: 追加された頂点の頂点番号
+        """
+
         self.__arc.append([])
         self.__rev.append([])
-        return res
+        return self.N - 1
 
-    def add_arc_multiple(self, sources, targets):
-        v=self.add_vertex()
-        for u in sources:
-            self.add_arc(u,v)
+    def add_arc_multiple(self, sources: list[int], targets: list[int]) -> int:
+        """ 任意の s in sources, t in targets に対して, s から t への弧を作成する (仮想的に 1 頂点を追加する).
 
-        for w in targets:
-            self.add_arc(v,w)
+        Args:
+            sources (list[int]): 始点のリスト
+            targets (list[int]): 終点のリスト
 
-        return v
-
-    def sort(self):
-        """ トポロジカルソートを求める
-
-        存在するならばトポロジカルソートをしたリスト, 存在しないならば None
+        Returns:
+            int: 超頂点として追加された頂点の番号
         """
 
-        in_deg=[len(self.__rev[x]) for x in range(self.N)]
-        Q=[x for x in range(self.N) if in_deg[x]==0]
+        # 方針
+        # (1) 超頂点 x を追加する.
+        # (2) 任意の s in sources に対して, 弧 sx を追加する.
+        # (3) 任意の t in targets に対して, 弧 xt を追加する.
+        # このようにすることで, 追加する弧の数を |sources| x |targets| から |sources| + |targets| に落とせる.
 
-        S=[]
-        while Q:
-            u=Q.pop()
-            S.append(u)
+        x = self.add_vertex()
+        for s in sources:
+            self.add_arc(s, x)
 
-            for v in self.__arc[u]:
-                in_deg[v]-=1
-                if in_deg[v]==0:
-                    Q.append(v)
+        for t in targets:
+            self.add_arc(x, t)
 
-        return S if len(S)==self.N else None
+    def calculate(self):
+        """ DAG に関する計算を行う.
+        """
 
+        in_deg = [len(self.__rev[x]) for x in range(self.N)]
+        order = []
+        stack = [x for x in range(self.N) if in_deg[x] == 0]
+
+        while stack:
+            x = stack.pop()
+            order.append(x)
+
+            for y in self.__arc[x]:
+                in_deg[y] -= 1
+                if in_deg[y] == 0:
+                    stack.append(y)
+
+        if len(order) == self.N:
+            self.__is_DAG = True
+            self.__order = order
+        else:
+            self.__is_DAG = False
+            self.__order = None
+
+    @property
     def is_DAG(self):
-        """ DAG がどうかを判定する
+        return self.__is_DAG
 
-        DAG ならば True, 非 DAG ならば False
-        """
-
-        in_deg=[len(self.__rev[x]) for x in range(self.N)]
-        Q=[x for x in range(self.N) if in_deg[x]==0]
-
-        K=0
-        while Q:
-            u=Q.pop()
-            K+=1
-
-            for v in self.__arc[u]:
-                in_deg[v]-=1
-                if in_deg[v]==0:
-                    Q.append(v)
-
-        return K==self.N
+    @property
+    def order(self):
+        return self.__order
