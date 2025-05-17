@@ -1,17 +1,42 @@
-def Run_Length_Encoding(S):
-    """ Run Length 圧縮
+def Run_Length_Encoding(S) -> list:
+    """ 列 S に対する Run Length Encoding を行う.
 
-    S: 列
+    Args:
+        S: 列
+
+    Returns:
+        list: Run Length Encoding の結果
     """
+
     if not S:
         return []
 
-    R=[[S[0],1]]
+    RLE = []
+    l = 0
+    while l < len(S):
+        r = l + 1
+        while r < len(S) and S[r] == S[l]:
+            r += 1
 
-    for i in range(1,len(S)):
-        if R[-1][0]==S[i]:
-            R[-1][1]+=1
+        RLE.append((S[l], r - l))
+        l = r
+
+    return RLE
+
+def Alternating_Length_Encoding(S, first, second, equal = True) -> tuple[list[int], list[int]]:
+    x = []
+    y = []
+
+    if S[0] == second:
+        x.append(0)
+
+    for a, k in Run_Length_Encoding(S):
+        if a == first:
+            x.append(k)
         else:
-            R.append([S[i],1])
+            y.append(k)
 
-    return R
+    if equal and len(x) > len(y):
+        y.append(0)
+
+    return x, y
