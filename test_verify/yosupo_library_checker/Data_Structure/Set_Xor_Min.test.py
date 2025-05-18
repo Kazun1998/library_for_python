@@ -20,7 +20,7 @@ def verify():
             B.discard(x)
         elif c == 2:
             B ^= x
-            X.append(B.min())
+            ans.append(B.min())
             B ^= x
 
     write("\n".join(map(str, ans)))
