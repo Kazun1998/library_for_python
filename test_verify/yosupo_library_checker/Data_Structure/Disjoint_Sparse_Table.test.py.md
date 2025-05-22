@@ -23,17 +23,17 @@ data:
     \n#==================================================\nimport sys\n#sys.path.append('../')\n\
     from Disjoint_Sparse_Table import Disjoint_Sparse_Table\n\nimport sys\ninput=sys.stdin.readline\n\
     write=sys.stdout.write\n#==================================================\n\
-    def verify():\n    N,Q=map(int,input().split())\n    A=list(map(int,input().split()))\n\
-    \n    D=Disjoint_Sparse_Table(A,min)\n    Ans=[0]*Q\n    for q in range(Q):\n\
-    \        l,r=map(int,input().split())\n        Ans[q]=D.product(l,r,None,True,False)\n\
-    \n    write(\"\\n\".join(map(str,Ans)))\n\n#==================================================\n\
+    def verify():\n    N, Q = map(int, input().split())\n    A = list(map(int, input().split()))\n\
+    \n    D = Disjoint_Sparse_Table[int](A, min)\n    ans = [0] * Q\n    for q in\
+    \ range(Q):\n        l, r = map(int, input().split())\n        ans[q] = D.product(l,\
+    \ r, True, False, None)\n\n    write(\"\\n\".join(map(str, ans)))\n\n#==================================================\n\
     verify()\n"
   dependsOn:
   - Disjoint_Sparse_Table.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
   requiredBy: []
-  timestamp: '2023-03-20 03:47:37+09:00'
+  timestamp: '2025-05-23 00:20:04+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py

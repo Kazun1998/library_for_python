@@ -18,31 +18,44 @@ data:
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Disjoint_Sparse_Table:\n    \"\"\" \u53C2\u8003: https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html\
-    \ \"\"\"\n\n    def __init__(self, L, op):\n        \"\"\" L \u306E\u6F14\u7B97\
-    \ op \u306B\u5BFE\u3059\u308B Disjoint Sparse Table \u3092\u751F\u6210\u3059\u308B\
-    .\n\n        L: list\n        op: \u4E8C\u9805\u6F14\u7B97\n        \"\"\"\n\n\
-    \        self.op=op\n        self.size=N=len(L)\n        self.b=max(1,(N-1).bit_length())\n\
-    \n        self.table=[[0]*self.size for _ in range(self.b)]\n\n        tab=self.table[0]\n\
-    \        for i in range(self.size):\n            tab[i]=L[i]\n\n        shift=1\n\
-    \        for i in range(1,self.b):\n            shift<<=1\n            tab=self.table[i]\n\
-    \n            for j in range(0,N,2*shift):\n                t=min(j+shift,N)\n\
-    \                tab[t-1]=L[t-1]\n\n                for k in range(t-2,j-1,-1):\n\
-    \                    tab[k]=op(L[k],tab[k+1])\n\n                if N<=t:\n  \
-    \                  break\n\n                tab[t]=L[t]\n                r=min(t+shift,N)\n\
-    \n                for k in range(t+1,r):\n                    tab[k]=op(tab[k-1],L[k])\n\
-    \n    def product(self, l, r, default=None, left_close=True, right_close=True):\n\
-    \        \"\"\" l<=i<=r \u306B\u5BFE\u3059\u308B\u7A4D\u3092\u751F\u6210\u3059\
-    \u308B.\n\n        \"\"\"\n\n        if not left_close:\n            l+=1\n\n\
-    \        if not right_close:\n            r-=1\n\n        if l==r:\n         \
-    \   return self.table[0][l]\n        elif l>r:\n            return default\n\n\
-    \        p=(l^r).bit_length()-1\n        tab=self.table[p]\n        return self.op(tab[l],\
-    \ tab[r])\n"
+  code: "from typing import TypeVar, Generic, Callable\n\nS = TypeVar('S')\nclass\
+    \ Disjoint_Sparse_Table(Generic[S]):\n    # \u53C2\u8003: https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html\n\
+    \n    def __init__(self, A: list[S], op: Callable[[S, S], S]):\n        \"\"\"\
+    \ \u534A\u7FA4 S \u4E0A\u306E\u5217 A \u306B\u5BFE\u3059\u308B Disjoint Sparse\
+    \ Table \u3092\u751F\u6210\u3059\u308B.\n\n        Args:\n            A (list[S]):\
+    \ S \u4E0A\u306E\u5217\n            op (Callable[[S, S], S]): S \u306E\u6F14\u7B97\
+    \ (x, y) \u2192 xy\n        \"\"\"\n\n        self.__op = op\n        self.__size\
+    \ = N = len(A)\n        height = max(1, (N - 1).bit_length())\n\n        self.table:\
+    \ list[list[S]] = [[None] * self.size for _ in range(height)]\n\n        row =\
+    \ self.table[0]\n        for i in range(self.size):\n            row[i] = A[i]\n\
+    \n        shift = 1\n        for i in range(1, height):\n            shift <<=\
+    \ 1\n            row = self.table[i]\n\n            for j in range(0, N, 2 * shift):\n\
+    \                t = min(j + shift, N)\n                row[t - 1] = A[t-1]\n\n\
+    \                for k in range(t - 2, j - 1, -1):\n                    row[k]\
+    \ = op(A[k], row[k + 1])\n\n                if N <= t:\n                    break\n\
+    \n                row[t] = A[t]\n                r = min(t + shift, N)\n\n   \
+    \             for k in range(t + 1, r):\n                    row[k] = op(row[k\
+    \ - 1], A[k])\n\n    @property\n    def op(self) -> Callable[[S, S], S]:\n   \
+    \     return self.__op\n\n    @property\n    def size(self) -> int:\n        return\
+    \ self.__size\n\n    def product(self, l: int, r: int, left_close: bool = True,\
+    \ right_close: bool = True, default: bool = None) -> S:\n        \"\"\" \u7A4D\
+    \ A_l A_{l+1} ... A_r \u3092\u6C42\u3081\u308B.\n\n        Args:\n           \
+    \ l (int): \u5DE6\u7AEF\n            r (int): \u53F3\u7AEF\n            left_close\
+    \ (bool, optional): False \u306B\u3059\u308B\u3068, \u5DE6\u7AEF\u304C\u958B\u533A\
+    \u9593\u306B\u306A\u308B. Defaults to True.\n            right_close (bool, optional):\
+    \ False \u306B\u3059\u308B\u3068, \u53F3\u7AEF\u304C\u958B\u533A\u9593\u306B\u306A\
+    \u308B. Defaults to True.\n            default (bool, optional): \u533A\u9593\u304C\
+    \u7A7A\u306E\u5834\u5408\u306E\u8FD4\u308A\u5024. Defaults to None.\n\n      \
+    \  Returns:\n            S: \u7A4D A_l A_{l+1} ... A_r\n        \"\"\"\n     \
+    \   if not left_close:\n            l += 1\n\n        if not right_close:\n  \
+    \          r -= 1\n\n        if l == r:\n            return self.table[0][l]\n\
+    \        elif l > r:\n            return default\n\n        p = (l ^ r).bit_length()-1\n\
+    \        row = self.table[p]\n        return self.op(row[l], row[r])\n"
   dependsOn: []
   isVerificationFile: false
   path: Disjoint_Sparse_Table.py
   requiredBy: []
-  timestamp: '2023-03-20 03:47:37+09:00'
+  timestamp: '2025-05-23 00:15:43+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
