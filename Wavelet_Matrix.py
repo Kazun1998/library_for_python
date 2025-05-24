@@ -125,22 +125,23 @@ class Fully_Indexable_Dictionary:
 
 class Wavelet_Matrix:
     def __init__(self, X: list[int]):
-        """ X についての Wavelet 行列を作成する.
+        """ X に関する Wavelet Matrix を生成する.
 
+        Args:
+            X (list[int]): 整数からなるリスト
         """
 
         self.__n = N = len(X)
 
         self.value_list = sorted(set(X))
-        self.value_dict = { x: i for i,x in enumerate(self.value_list) }
-        Y=[self.value_dict[x] for x in X]
+        self.value_dict = { x: i for i, x in enumerate(self.value_list) }
 
-        self.bit_size=len(self.value_dict).bit_length()
-        self.max_value=(1<<self.bit_size)-1
+        self.__bit_size = len(self.value_dict).bit_length()
 
-        self.zero_count=[0]*self.bit_size
+        self.zero_count = [0] * self.bit_size
         self.dictionaries = [Fully_Indexable_Dictionary(N) for _ in range(self.bit_size)]
 
+        Y = [self.value_dict[x] for x in X]
         for lv in range(self.bit_size - 1, -1, -1):
             dictionary = self.dictionaries[~lv]
             left = []
@@ -192,13 +193,21 @@ class Wavelet_Matrix:
     def __len__(self) -> int:
         return self.__n
 
-    def rank(self, i, value):
+    @property
+    def bit_size(self) -> int:
+        return self.__bit_size
+
+    def rank(self, i: int, v: int) -> int:
         """ [0,i) にある value の個数を求める.
 
-        i: 右端 (第 i 要素を含まない)
-        value: 値
+        Args:
+            i (int): 右端 (第 i 要素は含まない)
+            v (int): 値
+
+        Returns:
+            int: [0, i) にある v の個数
         """
-        return self.range_rank(0,i,value)
+        return self.range_rank(0, i, v)
 
     def range_rank(self, l: int, r: int, v: int) -> int:
         """ [l, r) にある v の個数を求める.
@@ -242,8 +251,8 @@ class Wavelet_Matrix:
         if (value := self.value_dict.get(v, None)) is None:
             return default
 
-        p=self.begin[value]
-        index=p+k-1
+        p = self.begin[value]
+        index = p + k - 1
 
         for lv in range(self.bit_size):
             dictionary = self.dictionaries[~lv]
@@ -268,7 +277,7 @@ class Wavelet_Matrix:
             int: [l,r) における k (1-indexed) 番目に小さい値
         """
 
-        p=0
+        p = 0
         for lv in range(self.bit_size):
             dictionary = self.dictionaries[lv]
             alpha = dictionary.rank(r, 0) - dictionary.rank(l, 0)
