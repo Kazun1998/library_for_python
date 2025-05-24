@@ -31,7 +31,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Range_Kth_Smallest.test.py
   requiredBy: []
-  timestamp: '2022-11-23 16:55:38+09:00'
+  timestamp: '2025-05-24 11:39:51+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Range_Kth_Smallest.test.py
