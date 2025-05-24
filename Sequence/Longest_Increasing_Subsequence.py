@@ -1,4 +1,4 @@
-def Longest_Increasing_Subsequence(A, equal = False):
+def Longest_Increasing_Subsequence(A: list, equal = False) -> dict:
     """ A に対する LIS (最大狭義単調増加列) を求める
 
     Args:
@@ -20,22 +20,26 @@ def Longest_Increasing_Subsequence(A, equal = False):
     ind = [0] * len(A)
 
     for i, a in enumerate(A):
-        k = bis(L,a)
+        k = bis(L, a)
         if k == len(L):
             L.append(a)
         else:
             L[k] = a
 
-        ind[i]=k
+        ind[i] = k
 
-    X = []
+    LIS = []
     I = []
     j = len(L)-1
     for i in range(len(A) - 1, -1, -1):
-        if ind[i] == j:
-            j -= 1
-            X.append(A[i])
-            I.append(i)
+        if ind[i] != j:
+            continue
 
-    X.reverse(); I.reverse()
-    return { 'length': len(X), 'example': X, 'index': I }
+        j -= 1
+        LIS.append(A[i])
+        I.append(i)
+
+    LIS.reverse()
+    I.reverse()
+
+    return { 'length': len(LIS), 'example': LIS, 'index': I }
