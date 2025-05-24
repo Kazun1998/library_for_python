@@ -14,7 +14,7 @@ class Fully_Indexable_Dictionary:
         """
 
         self.__n = n
-        self.__bucket_number = (n - 1) // self.bucket_size
+        self.__bucket_number = (n - 1) // self.bucket_size + 1
         self.bit = [0] * self.bucket_number
         self.mask=[(1<<i)-1 for i in range(1<<5)]
 
@@ -57,7 +57,7 @@ class Fully_Indexable_Dictionary:
         # self.total[k] := 0, 1, ..., k - 1 番目の k 個のバケットにおける bit の総和
 
         self.total = [0] * self.bucket_number
-        for k in range(1, self.blocks):
+        for k in range(1, self.bucket_number):
             self.total[k] = self.total[k - 1] + self.__popcount(self.bit[k - 1])
 
     def access(self, index: int) -> int:
@@ -90,9 +90,9 @@ class Fully_Indexable_Dictionary:
         if index <= 0:
             return 0
 
-        index = min(index, self.N)
+        index = min(index, len(self))
 
-        if index < self.N:
+        if index < len(self):
             alpha = self.total[index >> 5] + self.__popcount(self.bit[index >> 5] & self.mask[index & 31])
         else:
             alpha = self.total[-1] + self.__popcount(self.bit[-1])
@@ -172,7 +172,7 @@ class Wavelet_Matrix:
         """
 
         if index < 0:
-            index += self.N
+            index += len(self)
 
         p = 0
         for lv in range(self.bit_size):
