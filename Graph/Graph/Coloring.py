@@ -67,11 +67,12 @@ def Chromatic_Number(G: Graph) -> int:
     if dp_1[-1]:
         return 1
 
-    dp = { 1: dp_1 }
+    dp = [None] * (2 * N)
+    dp[1] = dp_1
 
     # Section II: k = 2, 4, 8, ..., に対して, dp_k[V] が True になるかどうかを判定する.
     while True:
-        k = max(dp)
+        k = max(k for k in range(len(dp)) if dp[k] is not None)
         if 2 * k > N:
             break
 
