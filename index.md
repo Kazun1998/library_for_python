@@ -110,7 +110,7 @@ data:
       title: MultiSet.py
     - icon: ':heavy_check_mark:'
       path: Nimber.py
-      title: Nimber
+      title: Monotone Minima
     - icon: ':warning:'
       path: Number.py
       title: Number.py
@@ -461,6 +461,11 @@ data:
     - icon: ':warning:'
       path: Modulo_Sequence/Modulo_Sequence.py
       title: Modulo Sequence
+  - name: Monotone
+    pages:
+    - icon: ':warning:'
+      path: Monotone/Monotone_Minima.py
+      title: Monotone/Monotone_Minima.py
   - name: Ordered_Set
     pages:
     - icon: ':heavy_check_mark:'
