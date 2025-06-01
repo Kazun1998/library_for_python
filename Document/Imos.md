@@ -23,7 +23,7 @@ $$ D \left(\sum_{n=l}^r \boldsymbol{e}_n \right) = \sum_{n=l}^r D \boldsymbol{e}
 
 になる.
 
-従って, $Q$ 個の区間加算クエリの合計を $D$ で送った像は次のように, $2N$ 個の項の和で表すことができる.
+従って, $Q$ 個の区間加算クエリの合計を $D$ で送った像は次のように, $2Q$ 個の項の和で表すことができる.
 
 $$ \begin{align*}
   D \left(\sum_{q=1}^Q \left( \alpha_q \sum_{n={l_q}}^{r_q} \boldsymbol{e}_n \right) \right)
