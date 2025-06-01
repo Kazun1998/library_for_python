@@ -1,6 +1,6 @@
 ---
 title: Monotone Minima
-documentation_of: //Nimber.py
+documentation_of: //Monotone/Monotone_Minima.py
 ---
 
 ## Outline
@@ -23,7 +23,7 @@ $$ \min \left(\operatorname*{argmin}_{0 \leq j < M} a_{i,j} \right) $$
 Monotone_Minima(N: int, M: int, eval: Callable[[int, int], int]) -> list[int]
 ```
 
-* Monotone な行列 $A = (a_{i,j})$ に対して, 各 $0 \leq i < N$ に対する $\displaystyle \min \left(\operatorname*{argmin}_{0 \leq j < M} a_{i,j} \right)$ を求める.
+* Monotone な行列 $A = (a_{i,j})$ に対して, 各 $0 \leq i < N$ に対する $\displaystyle \min \left(\operatorname*{argmin}\_{0 \leq j < M} a_{i,j} \right)$ を求める.
 * **引数**
   * $N$: 行数
   * $M$: 列数
