@@ -46,7 +46,7 @@ class Imos_1:
 from collections import defaultdict
 class Sparse_Imos_1:
     def __init__(self):
-        self.dict=defaultdict(int)
+        self.dict = defaultdict(int)
 
     def add(self, l: int, r: int, x: int = 1):
         """ 閉区間 [l,r] に x を加算する.
@@ -63,7 +63,7 @@ class Sparse_Imos_1:
         self.dict[l] += x
         self.dict[r + 1] -= x
 
-    def cumulative_sum(self, since: int, until: int) -> list[tuple[int, int, int]]:
+    def cumulative(self, since: int, until: int) -> list[tuple[int, int, int]]:
         """ since から until までの累積和を求める.
 
         Args:
@@ -76,7 +76,7 @@ class Sparse_Imos_1:
         """
 
         res: list[tuple[int, int, int]] = []
-        S = 0
+        cum = 0
         t_old = since
         dic = self.dict
         for t in sorted(dic):
@@ -87,13 +87,13 @@ class Sparse_Imos_1:
                 continue
 
             if t_old <= t - 1:
-                res.append((S, t_old, t - 1))
+                res.append((cum, t_old, t - 1))
 
-            S += dic[t]
+            cum += dic[t]
             t_old = t
 
-        if t_old<=until:
-            res.append((S, t_old, until))
+        if t_old <= until:
+            res.append((cum, t_old, until))
 
         return res
 
