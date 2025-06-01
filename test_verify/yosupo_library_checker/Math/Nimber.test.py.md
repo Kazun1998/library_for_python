@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: Nimber.py
-    title: Monotone Minima
+    title: Nimber
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
