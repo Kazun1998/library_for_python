@@ -29,6 +29,10 @@ class Imos_1:
         if 0 <= r < len(self):
             self.__lazy[r + 1] -= x
 
+    def add_eternal(self, t: int, x: int = 1):
+        if 0 <= t < len(self):
+            self.__lazy[t] += x
+
     def cumulate(self) -> list[int]:
         """ 累積和を求める.
 
