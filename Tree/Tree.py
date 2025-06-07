@@ -83,12 +83,23 @@ class Tree:
         self.__mutable = True
 
     def vertex_exist(self, x: int) -> bool:
-        """ 頂点 x が存在するかどうかを判定する. """
+        """ 頂点 x が存在するかどうかを判定する.
+
+        Args:
+            x (int): 頂点の番号
+
+        Returns:
+            bool: 頂点 x は存在する.
+        """
 
         return self.index <= x < self.index + self.N
 
     def __after_seal_check(self, *vertexes: int) -> bool:
-        """ 木が確定していて, vertexes の頂点が存在するかどうかをチェックする. """
+        """ 木が確定していて, vertexes の頂点が存在するかどうかをチェックする.
+
+        Returns:
+            bool: 木が確定していて, vertexes の頂点が存在するか?
+        """
 
         if self.mutable:
             return False
