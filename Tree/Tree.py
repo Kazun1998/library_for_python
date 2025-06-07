@@ -58,10 +58,6 @@ class Tree:
         return self.__mutable
 
     @property
-    def depth(self):
-        return self.__depth
-
-    @property
     def tower(self):
         return self.__tower
 
@@ -197,7 +193,7 @@ class Tree:
         self.__tower = tower
         self.__des_count = des_count
 
-    def vertex_depth(self, x: int) -> int:
+    def depth(self, x: int) -> int:
         """ 頂点 x の深さを求める
 
         Args:
@@ -209,7 +205,7 @@ class Tree:
 
         assert self.__after_seal_check(x)
 
-        return self.depth[x]
+        return self.__depth[x]
 
     def __upper_list(self):
         assert self.__after_seal_check()
@@ -258,7 +254,7 @@ class Tree:
         if not hasattr(self, "upper_list"):
             self.__upper_list()
 
-        if self.vertex_depth(x) < k:
+        if self.depth(x) < k:
             if over:
                 return self.root
             else:
@@ -284,7 +280,7 @@ class Tree:
         """
 
         assert self.__after_seal_check(x,y)
-        dx=self.vertex_depth(x); dy=self.vertex_depth(y)
+        dx=self.depth(x); dy=self.depth(y)
 
         if dx<dy:
             dx,dy=dy,dx
@@ -370,7 +366,7 @@ class Tree:
         tab=self.lca_dst[p]
         u=tab[a]; v=tab[b]
 
-        return u if self.vertex_depth(u)<self.vertex_depth(v) else v
+        return u if self.depth(u)<self.depth(v) else v
 
     def degree(self, v: int) -> int:
         """ 頂点 v の次数を求める.
@@ -500,7 +496,7 @@ class Tree:
 
         assert self.__after_seal_check(u,v)
 
-        if (d := self.vertex_depth(v) - self.vertex_depth(u)) < 0:
+        if (d := self.depth(v) - self.depth(u)) < 0:
             return False
 
         return u == self.upper(v,d)
@@ -534,8 +530,8 @@ class Tree:
         assert u != v
 
         if self.is_ancestor(u, v):
-            du = self.vertex_depth(u)
-            dv = self.vertex_depth(v)
+            du = self.depth(u)
+            dv = self.depth(v)
             return self.upper(v, dv - (du + 1))
         else:
             return self.parent[u]
@@ -560,7 +556,7 @@ class Tree:
 
         # lca を求める.
         x=u; y=v
-        dx=self.vertex_depth(x); dy=self.vertex_depth(y)
+        dx=self.depth(x); dy=self.depth(y)
         if dx>dy:
             x,y=y,x
             dx,dy=dy,dx
@@ -578,8 +574,8 @@ class Tree:
                     x=px; y=py
             w=self.parent[x]
 
-        dist_uw=self.vertex_depth(u)-self.vertex_depth(w)
-        dist_wv=self.vertex_depth(v)-self.vertex_depth(w)
+        dist_uw=self.depth(u)-self.depth(w)
+        dist_wv=self.depth(v)-self.depth(w)
 
         if dist_uw+dist_wv<k:
             return default
@@ -614,7 +610,7 @@ class Tree:
 
         assert self.__after_seal_check(u,v)
 
-        dep=self.vertex_depth
+        dep=self.depth
 
         if faster:
             return dep(u)+dep(v)-2*dep(self.lowest_common_ancestor(u,v))
