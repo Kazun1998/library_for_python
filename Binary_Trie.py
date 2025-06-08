@@ -4,263 +4,306 @@ class Binary_Trie:
     https://judge.yosupo.jp/submission/53782
     """
 
-    def __init__(self, max_value, allow_multiple=False, query_number=None):
-        self.bit=max_value.bit_length()
-        self.upper=1<<self.bit
-        self.multi=allow_multiple
+    def __init__(self, max_value: int, allow_multiple: bool = False, query_number: int = None):
+        self.bit = max_value.bit_length()
+        self.upper = 1 << self.bit
+        self.multi = allow_multiple
 
-        if query_number!=None:
-            self.arc=[-1]*2*(self.bit*query_number+1)
-            self.size=[0]*(self.bit*query_number+1)
-            self.terminal=[0]*(self.bit*query_number+1)
+        if query_number is not None:
+            self.arc = [-1] * 2 * (self.bit * query_number + 1)
+            self.size = [0] * (self.bit*query_number + 1)
+            self.terminal = [0] * (self.bit*query_number + 1)
             self.id=0
         else:
-            self.arc=[-1,-1]
-            self.size=[0]
-            self.terminal=[0]
+            self.arc = [-1, -1]
+            self.size = [0]
+            self.terminal = [0]
 
-        self.query_number=query_number
-        self.v_list=[0]*(self.bit+1)
-        self.lazy_xor=0
+        self.query_number = query_number
+        self.v_list = [0] * (self.bit + 1)
+        self._lazy_xor = 0
 
-    def xor_all(self, x):
-        assert 0<=x<self.upper
-        self.lazy_xor^=x
+    @property
+    def lazy_xor(self) -> int:
+        return self._lazy_xor
 
-    def __ixor__(self, x):
+    def xor_all(self, x: int):
+        assert 0 <= x < self.upper
+        self._lazy_xor ^= x
+
+    def __ixor__(self, x: int):
         self.xor_all(x)
         return self
 
-    def insert(self, x):
-        """ x を追加する. """
+    def insert(self, x: int) -> bool:
+        """ x を追加する
 
-        assert 0<=x<self.upper
+        Args:
+            x (int): 追加する要素
 
-        x^=self.lazy_xor
-        v=0
+        Returns:
+            bool: 差分が発生したら True
+        """
+
+        assert 0 <= x < self.upper
+
+        x ^= self.lazy_xor
+        v = 0
         for i in reversed(range(self.bit)):
-            d=(x>>i)&1
-            if self.arc[2*v+d]==-1:
-                if self.query_number!=None:
-                    self.id+=1
-                    self.arc[2*v+d]=self.id
+            d = (x >> i) & 1
+            if self.arc[2 * v + d] == -1:
+                if self.query_number is not None:
+                    self.id += 1
+                    self.arc[2 * v + d] = self.id
                 else:
-                    self.arc[2*v+d]=len(self.size)
-                    self.arc.append(-1); self.arc.append(-1)
+                    self.arc[2 * v + d] = len(self.size)
+                    self.arc.extend([-1, -1])
                     self.terminal.append(0)
                     self.size.append(0)
 
-            v=self.arc[2*v+d]
-            self.v_list[i]=v
+            v = self.arc[2 * v + d]
+            self.v_list[i] = v
 
-        if self.multi or self.terminal[v]==0:
-            self.terminal[v]+=1
-            for w in self.v_list:
-                self.size[w]+=1
+        if self.terminal[v] > 0 and (not self.multi):
+            return False
 
-    def discard(self, x):
-        """ x が存在する場合, x を削除する. """
+        self.terminal[v] += 1
+        for w in self.v_list:
+            self.size[w] += 1
 
-        if not (0<=x<self.upper):
+        return True
+
+    def discard(self, x: int) -> bool:
+        """ x が存在する場合, x を (1 個) 削除する
+
+        Args:
+            x (int): 削除する要素
+
+        Returns:
+            bool: 差分が発し得したら True
+        """
+        if not (0 <= x < self.upper):
             return
 
-        x^=self.lazy_xor
-        v=0
+        x ^= self.lazy_xor
+        v = 0
         for i in reversed(range(self.bit)):
-            d=(x>>i)&1
-            if self.arc[2*v+d]==-1:
-                return
+            d = (x >> i) & 1
+            if self.arc[2*v+d] == -1:
+                return False
 
-            v=self.arc[2*v+d]
-            self.v_list[i]=v
+            v = self.arc[2 * v + d]
+            self.v_list[i] = v
 
-        if self.terminal[v]>0:
-            self.terminal[v]-=1
-            for w in self.v_list:
-                self.size[w]-=1
+        if self.terminal[v] == 0:
+            return False
 
-    def erase(self, x, k):
-        """ x を高々 k 回削除する (ただし, k=-1 のときは無限回)"""
+        self.terminal[v] -= 1
+        for w in self.v_list:
+            self.size[w] -= 1
 
-        assert -1<=k
-        if not (0<=x<self.upper):
-            return
+        return True
 
-        x^=self.lazy_xor
-        v=0
-        for i in reversed(range(self.bit)):
-            d=(x>>i)&1
-            if self.arc[2*v+d]==-1:
-                return
+    def erase(self, x: int, k: int) -> int:
+        """ x を高々 k 回削除する (ただし, k=-1 のときは無限回)
 
-            v=self.arc[2*v+d]
-            self.v_list[i]=v
+        Args:
+            x (int): 削除する要素
+            k (int): 削除する回数 (k = -1 のときは無限回)
 
-        if (k==-1) or (self.terminal[v]<k):
-            k=self.terminal[v]
+        Returns:
+            int: 実際に削除した回数
+        """
 
-        if self.terminal[v]>0:
-            self.terminal[v]-=k
-            for w in self.v_list:
-                self.size[w]-=k
-
-    def count(self, x):
-        """ x の個数を求める. """
-        if not (0<=x<self.upper):
+        assert -1 <= k
+        if not (0 <= x < self.upper):
             return 0
 
-        x^=self.lazy_xor
-        v=0
+        x ^= self.lazy_xor
+        v = 0
         for i in reversed(range(self.bit)):
-            d=(x>>i)&1
-            if self.arc[2*v+d]==-1:
+            d = (x>>i) & 1
+            if self.arc[2 * v + d] == -1:
                 return 0
-            v=self.arc[2*v+d]
+
+            v = self.arc[2 * v + d]
+            self.v_list[i] = v
+
+        if (k == -1) or (self.terminal[v] < k):
+            k = self.terminal[v]
+
+        self.terminal[v] -= k
+        for w in self.v_list:
+            self.size[w] -= k
+
+        return k
+
+    def count(self, x: int) -> int:
+        """ x の個数を求める
+
+        Args:
+            x (int): 要素
+
+        Returns:
+            int: 個数
+        """
+
+        if not (0 <= x < self.upper):
+            return 0
+
+        x ^= self.lazy_xor
+        v = 0
+        for i in reversed(range(self.bit)):
+            d = (x >> i) & 1
+            if self.arc[2 * v + d] == -1:
+                return 0
+
+            v = self.arc[2 * v + d]
         return self.terminal[v]
 
-    def __contains__(self, x):
+    def __contains__(self, x: int) -> bool:
         return bool(self.count(x))
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.size[0]
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return bool(len(self))
 
-    def less_count(self, x, equal=False):
-        """ x 未満の要素数を求める (equal=True のときは, "未満" が "以下" になる)"""
+    def less_count(self, x: int, equal: bool = False) -> int:
+        """ x 未満の要素数を求める.
 
-        x^=self.lazy_xor
+        Args:
+            x (int): 閾値
+            equal (bool, optional): True にすると, "未満" が "以下" になる. Defaults to False.
+
+        Returns:
+            int: x より大きい要素の数.
+        """
+
+        x ^= self.lazy_xor
         if equal:
-            x+=1
+            x += 1
 
-        if x<0:
+        if x < 0:
             return 0
 
-        if self.upper<=x:
+        if self.upper <= x:
             return len(self)
 
-        v=0
-        res=0
+        v = 0
+        res = 0
         for i in reversed(range(self.bit)):
-            d=(x>>i)&1
-            lc=self.arc[2*v]
-            rc=self.arc[2*v+1]
+            d = (x>>i) & 1
+            lc = self.arc[2 * v]
+            rc = self.arc[2 * v + 1]
 
-            if (self.lazy_xor>>i)&1:
-                lc,rc=rc,lc
+            if (self.lazy_xor >> i) & 1:
+                lc, rc = rc ,lc
 
             if d:
-                if lc!=-1:
-                    res+=self.size[lc]
-                if rc==-1:
+                if lc != -1:
+                    res += self.size[lc]
+                if rc == -1:
                     return res
-                v=rc
+                v = rc
             else:
-                if lc==-1:
+                if lc == -1:
                     return res
-                v=lc
+                v = lc
         return res
 
-    def more_count(self, x, equal=False):
-        """ x より大きい要素数を求める (equal=True のときは, "より大きい" が "以上" になる)"""
+    def more_count(self, x: int, equal: bool = False) -> int:
+        """ x より大きい要素数を求める.
 
-        return len(self)-self.less_count(x,not equal)
+        Args:
+            x (int): 閾値
+            equal (bool, optional): True にすると, "より大きい" が "以上" になる. Defaults to False.
 
-    def low_value(self, x, equal=False, default=None):
+        Returns:
+            int: x より大きい要素の数.
+        """
+
+        return len(self) - self.less_count(x, not equal)
+
+    def low_value(self, x: int, equal = False, default = None):
         """ x 未満の整数のうち, 最大の整数を求める (存在しない場合は default).
 
         equal: True のとき, "未満" が "以下" になる.
         """
 
-        x^=self.lazy_xor
+        x ^= self.lazy_xor
         if equal:
-            x+=1
+            x += 1
 
-        alpha=self.less_count(x,False)
-        if alpha==0:
+        alpha = self.less_count(x, False)
+
+        return self.kth_element(alpha - 1) if alpha > 0 else default
+
+    def high_value(self, x: int, equal: bool = False, default: int = None) -> int:
+        """ x より大きい整数のうち, 最小の整数を求める.
+
+        Args:
+            x (int): 閾値
+            equal (bool, optional): True にすると, "より大きい" が "以上" になる. Defaults to False.
+            default (int, optional): x より大きい整数が存在しない場合の返り値. Defaults to None.
+
+        Returns:
+            int: _description_
+        """
+        x ^= self.lazy_xor
+        if equal:
+            x -= 1
+
+        beta = self.more_count(x, False)
+        if beta == 0:
             return default
         else:
-            return self.kth_element(alpha,1)
+            return self.kth_element(-beta, 0)
 
-    def high_value(self, x, equal=False, default=None):
-        """ x より大きい整数のうち, 最小の整数を求める (存在しない場合は default)
+    def kth_element(self, k: int, default: int = None) -> int:
+        """ 昇順 k 番目を求める.
 
-        equal: True のとき, "より大きい" が "以上" になる.
+        Args:
+            k (int): 番号
+            default (int, optional): k 番目が存在しない場合の返り値. Defaults to None.
+
+        Returns:
+            int: 昇順 k 番目の要素
         """
+        if k < 0:
+            k += len(self)
 
-        x^=self.lazy_xor
-        if equal:
-            x-=1
-
-        beta=self.more_count(x,False)
-        if beta==0:
-            return default
-        else:
-            return self.kth_element(-beta,0)
-
-    def kth_element(self, k, index=0, default=-1):
-        """ index -indexed で k 番目に小さい値を求める.
-        ただし, index=0, k<0 のときは |k| 番目に大きい値になる.
-
-        """
-
-        if k<0:
-            k+=self.size[0]
-        k-=index
-        if not (0<=k<self.size[0]):
+        if not (0 <= k < len(self)):
             return default
 
-        v=0
-        res=0
+        v = 0
+        res = 0
         for i in reversed(range(self.bit)):
-            lc=self.arc[2*v]
-            rc=self.arc[2*v+1]
+            lc = self.arc[2 * v]
+            rc = self.arc[2 * v + 1]
 
-            if (self.lazy_xor>>i)&1:
-                lc,rc=rc,lc
+            if (self.lazy_xor >> i) & 1:
+                lc, rc = rc, lc
 
-            if lc==-1:
-                v=rc
-                res|=1<<i
-            elif self.size[lc]<=k:
-                k-=self.size[lc]
-                v=rc
-                res|=1<<i
+            if lc == -1:
+                v = rc
+                res |= 1 << i
+            elif self.size[lc] <= k:
+                k -= self.size[lc]
+                v = rc
+                res |= 1 << i
             else:
-                v=lc
+                v = lc
         return res
 
-    def get_min(self):
-        return self.kth_element(1,1)
+    @property
+    def min(self) -> int:
+        return self.kth_element(0)
 
-    def get_max(self):
+    @property
+    def max(self) -> int:
         return self.kth_element(-1)
 
-    def get_median(self, mode=0, func=None):
-        """ 中央値を求める.
-
-        [mode] 項の数が偶数のときの中央値の求め方を指定する (その 2値を a,b (a<=b) とする).
-        mode=-1 → a
-        mode= 0 → (a+b)/2 (float 型)
-        mode= 1 → b
-        mode=(その他) → その他 ( 2変数関数 func(a,b) で指定)
-        """
-
-        if len(self)%2==1:
-            return self.kth_element(len(self)//2)
-        else:
-            a=self.kth_element(len(self)//2)
-            b=self.kth_element(len(self)//2-1)
-
-            if mode==-1:
-                return a
-            elif mode==1:
-                return b
-            elif mode==0:
-                return (a+b)/2
-            else:
-                return func(a,b)
-
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> int:
         return self.kth_element(index)
