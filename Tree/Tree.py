@@ -846,7 +846,7 @@ class Tree:
                 c = children_v[i]
 
                 a = merge(left[i], right[i+1])
-                b = a if self.root else merge(a, f(upper[v], v, parent[v]))
+                b = a if self.is_root(v) else merge(a, f(upper[v], v, parent[v]))
                 upper[c] = g(b, v)
 
         result = [unit] * (self.index + self.N)
