@@ -154,7 +154,7 @@ class Tree:
         children = [[] for _ in range(self.index + self.N)]
         parent = self.parent
         for v in range(self.index, self.index + self.N):
-            if v == self.root:
+            if self.is_root(v):
                 continue
 
             assert self.vertex_exist(parent[v])
@@ -218,10 +218,10 @@ class Tree:
         p=self.parent
 
         for x in range(self.index,self.index+self.N):
-            if x!=self.root:
-                Y[x]=p[x]
+            if self.is_root(x):
+                Y[x] = self.root
             else:
-                Y[x]=self.root
+                Y[x] = p[x]
 
         for k in range(1,b):
             Y=X[k-1]
@@ -377,7 +377,7 @@ class Tree:
         """
 
         assert self.__after_seal_check(v)
-        if v == self.root:
+        if self.is_root(v):
             return len(self.children[v])
         else:
             return len(self.children[v]) + 1
@@ -439,6 +439,18 @@ class Tree:
             Y.append(v)
         return X+Y[-2::-1]
 
+    def is_root(self, x: int) -> bool:
+        """ 頂点 x は根 ?
+
+        Args:
+            x (int): 頂点
+
+        Returns:
+            bool: 頂点 x は根 ?
+        """
+
+        return x == self.root
+
     def is_parent(self, u: int, v: int) -> bool:
         """ 頂点 u は頂点 v の親か?
 
@@ -451,7 +463,7 @@ class Tree:
         """
 
         assert self.__after_seal_check(u, v)
-        return (v != self.root) and (u == self.parent[v])
+        return (not self.is_root(v)) and (u == self.parent[v])
 
     def is_children(self, u: int, v: int) -> bool:
         """ 頂点 u は頂点 v の子か?
@@ -479,7 +491,7 @@ class Tree:
         """
 
         assert self.__after_seal_check(u,v)
-        return (u != self.root) and (v != self.root) and (self.parent[u] == self.parent[v])
+        return (not self.is_root(u)) and (not self.is_root(v)) and (self.parent[u] == self.parent[v])
 
     def is_ancestor(self, u: int, v: int) -> bool:
         """ 頂点 u は頂点 v の先祖か?
@@ -560,7 +572,7 @@ class Tree:
             dx,dy=dy,dx
         y=self.upper(y, dy-dx)
 
-        if x==self.root or x==y:
+        if self.is_root(x) or x==y:
             w=x
         else:
             bit=dx.bit_length()
@@ -698,7 +710,7 @@ class Tree:
         while True:
             if R[v]==S[v]:  #もし, 進めないならば
                 yield (v,-1) #頂点vを出る
-                if v==self.root:
+                if self.is_root(v):
                     break
                 else:
                     v=pa[v]
@@ -839,7 +851,7 @@ class Tree:
 
         result = [unit] * (self.index + self.N)
         for v in range(self.index, self.index + self.N):
-            a = unit if v == self.root else f(upper[v], v, parent[v])
+            a = unit if self.is_root(v) else f(upper[v], v, parent[v])
 
             for c in children[v]:
                 a = merge(a, f(lower[c], v, c))
