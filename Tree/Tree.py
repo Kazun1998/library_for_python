@@ -1,4 +1,4 @@
-from typing import Generator, Callable
+from typing import Generator, Callable, Any
 
 class Tree:
     __slots__=("__N", "__index", "parent", "__mutable",
@@ -860,41 +860,49 @@ class Tree:
 
         return result
 
-    def euler_tour_vertex(self, order=None):
-        """ オイラーツアー (vertex) に関する計算を行う.
+    def euler_tour_vertex(self, order: Callable = None):
+        """ Euler Tour (vertex) に関する計算を行う.
 
-        order: 頂点の順番を指定する (破壊的)
+        計算結果はそれぞれ以下にインスタンス変数として保存される
+            euler_vertex: Euler Tour による頂点の訪問順
+            in_time: 親からその頂点に入った時刻
+            out_time: 親へその頂点から出た時刻
+
+        Args:
+            order (Callable, optional): 頂点の訪問順 (返り値が小さいほど先) ※ 破壊的. Defaults to None.
         """
 
         assert self.__after_seal_check()
-        if hasattr(self,"euler_vertex"):
+        if hasattr(self, "euler_vertex"):
             return
 
-        #最初
-        X=[-1]*(2*self.N-1) #X: Euler Tour (vertex) のリスト
+        # Euler Tour (vertex) のリスト
+        euler_tour = [-1] * (2 * self.N - 1)
 
-        v=self.root
+        children = self.children
+        if order is not None:
+            for v in range(self.index, self.index + self.N):
+                children[v].sort(key = order)
 
-        ch=self.children
-        if order!=None:
-            for i in range(self.index,self.index+self.N):
-                ch[i].sort(key=order)
+        parent = self.parent
 
-        pa=self.parent
+        R = [-1] * self.index + [len(children[x]) for x in range(self.index, self.index + self.N)]
+        S = [0] * (self.index + self.N)
+        v = self.root
 
-        R=[-1]*self.index+[len(ch[x]) for x in range(self.index,self.index+self.N)]
-        S=[0]*(self.index+self.N)
+        for t in range(2 * self.N - 1):
+            euler_tour[t] = v
+            if R[v] == S[v]:
+                # 親に戻る
+                v = parent[v]
+                continue
 
-        for t in  range(2*self.N-1):
-            X[t]=v
-            if R[v]==S[v]:
-                v=pa[v]
-            else:   #進める
-                w=v
-                v=ch[v][S[v]]
-                S[w]+=1
+            # 進める
+            w = v
+            v = children[v][S[v]]
+            S[w] += 1
 
-        self.euler_vertex = X
+        self.euler_vertex = euler_tour
         self.in_time = [-1] * (self.index + self.N)
         self.out_time = [-1] * (self.index + self.N)
 
@@ -902,10 +910,10 @@ class Tree:
         self.out_time[self.root] = 2 * self.N - 1
 
         for t in range(1, 2 * self.N - 1):
-            if self.is_parent(X[t - 1], X[t]):
-                self.in_time[X[t]] = t
+            if self.is_parent(euler_tour[t - 1], euler_tour[t]):
+                self.in_time[euler_tour[t]] = t
             else:
-                self.out_time[X[t - 1]] = t
+                self.out_time[euler_tour[t - 1]] = t
 
     def euler_tour_edge(self):
         """ オイラーツアー (edge) に関する計算を行う.
@@ -914,7 +922,7 @@ class Tree:
         """
 
         assert self.__after_seal_check()
-        if hasattr(self,"euler_edge"):
+        if hasattr(self, "euler_edge"):
             return
 
         if not hasattr(self, "euler_vertex"):
