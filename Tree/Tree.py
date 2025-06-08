@@ -992,6 +992,17 @@ class Tree:
         return (dist_sum + self.distance(S[-1], S[0])) // 2
 
     def subtree_hash(self, primes: list[int] = None, seed : list[int] = None, compress: bool = False) -> list:
+        """ 各頂点を根とする部分木に対するハッシュ値を生成する.
+
+        Args:
+            primes (list[int], optional): ハッシュ値を生成するために用いる素数のリスト. Defaults to None.
+            seed (list[int], optional): ハッシュ値を生成するためのシード値. Defaults to None.
+            compress (bool, optional): 生成されたハッシュ値を 1 つの整数にまとめるか?. Defaults to False.
+
+        Returns:
+            list: ハッシュ値のリスト
+        """
+
         if primes is None:
             primes = [10 ** 9 + 7, 10 ** 9 + 9]
 
