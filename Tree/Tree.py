@@ -1,7 +1,5 @@
-from typing import TypeVar, Generator, Callable
+from typing import Generator, Callable
 
-X = TypeVar('X')
-M = TypeVar('M')
 class Tree:
     __slots__=("__N", "__index", "parent", "__mutable",
             "__root", "children", "__depth", "__tower", "upper_list", "__des_count", "preorder_number",
@@ -733,7 +731,7 @@ class Tree:
         for layer in self.tower[::-1]:
             yield from layer
 
-    def tree_dp_from_leaf(self, merge: Callable[[M, M], M], unit: M, f: Callable[[X, int, int], M], g: Callable[[M, int], X]) -> list[X]:
+    def tree_dp_from_leaf(self, merge: Callable, unit, f: Callable, g: Callable) -> list:
         """ 葉からの木 DP を行う.
 
         [補足]
@@ -761,7 +759,7 @@ class Tree:
 
         return data
 
-    def tree_dp_from_root(self, f: Callable[[X, int, int], X], alpha: X) -> list[X]:
+    def tree_dp_from_root(self, f: Callable, alpha) -> list:
         """ 根からの木 DP を行う.
 
         更新式は,
@@ -787,7 +785,7 @@ class Tree:
 
         return data
 
-    def rerooting(self, merge: Callable[[M, M], M], unit: M, f: Callable[[X, int, int], M], g: Callable[[M, int], X], h: Callable[[M, int], X]) -> list[X]:
+    def rerooting(self, merge: Callable, unit, f: Callable, g: Callable, h: Callable) -> list:
         """ 全方位木 DP を行う.
 
         頂点 v の子が x ,y ,z, ..., w のとき, 更新式は + を merge として
