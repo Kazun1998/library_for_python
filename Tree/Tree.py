@@ -915,10 +915,14 @@ class Tree:
             else:
                 self.out_time[euler_tour[t - 1]] = t
 
-    def euler_tour_edge(self):
-        """ オイラーツアー (edge) に関する計算を行う.
+    def euler_tour_edge(self, order: Callable = None):
+        """ Euler Tour (vertex) に関する計算を行う.
 
-        (u, v, k): u から v へ向かう (k=+1 のときは葉へ進む向き, k=-1 のときは根へ進む向き)
+        計算結果はそれぞれ以下にインスタンス変数として保存される
+            euler_edge: (u, v, k) の形のタプルのリストであり, 以下を意味する.
+                u から v へ向かう (k = +1 のときは根から遠ざかる向き, k = -1 のときは根へ進む向き)
+        Args:
+            order (Callable, optional): 頂点の訪問順 (返り値が小さいほど先) ※ 破壊的. Defaults to None.
         """
 
         assert self.__after_seal_check()
@@ -926,15 +930,18 @@ class Tree:
             return
 
         if not hasattr(self, "euler_vertex"):
-            self.euler_tour_vertex()
+            self.euler_tour_vertex(order = order)
 
-        self.euler_edge=[0]*(2*(self.N-1))
-        euler=self.euler_vertex
-        pa=self.parent
-        for t in range(2*(self.N-1)):
-            u=euler[t]; v=euler[t+1]
-            k=1 if u==pa[v] else -1
-            self.euler_edge[t]=(u,v,k)
+        euler_edge = [None] * (2 * (self.N - 1))
+        euler_vertex = self.euler_vertex
+        parent = self.parent
+        for t in range(2 * (self.N - 1)):
+            u = euler_vertex[t]
+            v = euler_vertex[t + 1]
+            k = 1 if u == parent[v] else -1
+            self.euler_edge[t] = (u, v, k)
+
+        self.euler_edge = euler_edge
 
     def centroid(self, all=False):
         """ 木の重心を求める
