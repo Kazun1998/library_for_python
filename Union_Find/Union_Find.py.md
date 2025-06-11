@@ -26,30 +26,42 @@ data:
     \u6210\u3059\u308B.\n\n        Args:\n            N (int): \u8981\u7D20\u6570\n\
     \        \"\"\"\n\n        self.__n = N\n        self.parents=[-1]*N\n       \
     \ self.rank=[0]*N\n        self.edges=[0]*N\n        self.__group_number = N\n\
-    \n    def find(self, x: int) -> int:\n        \"\"\" \u8981\u7D20 x \u304C\u5C5E\
-    \u3057\u3066\u3044\u308B\u65CF\u3092\u8ABF\u3079\u308B\n\n        Args:\n    \
-    \        x (int): \u8981\u7D20\n\n        Returns:\n            int: x \u304C\u5C5E\
-    \u3057\u3066\u3044\u308B\u65CF\n        \"\"\"\n\n        a=x\n        while self.parents[a]>=0:\n\
-    \            a=self.parents[a]\n\n        while self.parents[x]>=0:\n        \
-    \    y=self.parents[x]\n            self.parents[x]=a\n            x=y\n\n   \
-    \     return a\n\n    def union(self, x: int, y: int, force : bool = False) ->\
-    \ bool:\n        \"\"\" \u8981\u7D20 x \u3068 \u8981\u7D20 y \u3092\u540C\u4E00\
-    \u8996\u3059\u308B.\n\n        Args:\n            x (int): \u8981\u7D20 x\n  \
-    \          y (int): \u8981\u7D20 y\n            force (bool, optional): True \u306E\
-    \u5834\u5408, \u5FC5\u305A x \u304C\u4EE3\u8868\u5143\u306B\u306A\u308B\u3088\u3046\
-    \u306B\u30DE\u30FC\u30B8\u3059\u308B. Defaults to False.\n\n        Returns:\n\
-    \            bool: \u5143\u3005\u975E\u9023\u7D50\u306A\u3089\u3070 True, \u5143\
-    \u3005\u9023\u7D50\u306A\u3089\u3070 False.\n        \"\"\"\n        x=self.find(x)\n\
-    \        y=self.find(y)\n\n        if x==y:\n            self.edges[x]+=1\n  \
-    \          return False\n\n        if (not force) and (self.rank[x] < self.rank[y]):\n\
-    \            x,y=y,x\n\n        self.__group_number-=1\n\n        self.edges[x]+=self.edges[y]+1\n\
-    \        self.edges[y]=0\n\n        self.parents[x]+=self.parents[y]\n       \
-    \ self.parents[y]=x\n\n        if self.rank[x]==self.rank[y]:\n            self.rank[x]+=1\n\
-    \        return True\n\n    def size(self, x: int) -> int:\n        \"\"\" \u8981\
-    \u7D20 x \u304C\u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\u30B5\u30A4\u30BA\u3092\
-    \u6C42\u3081\u308B\n\n        Args:\n            x (int): \u8981\u7D20\n\n   \
-    \     Returns:\n            int: \u8981\u7D20 x \u304C\u5C5E\u3057\u3066\u3044\
-    \u308B\u65CF\u306E\u30B5\u30A4\u30BA\n        \"\"\"\n        return -self.parents[self.find(x)]\n\
+    \n    def add_vertex(self) -> int:\n        \"\"\" \u9802\u70B9\u3092 1 \u500B\
+    \u8FFD\u52A0\u3059\u308B.\n\n        Returns:\n            int: \u8FFD\u52A0\u3055\
+    \u308C\u305F\u9802\u70B9\u306E\u756A\u53F7\n        \"\"\"\n\n        self.__n\
+    \ += 1\n        self.parents.append(-1)\n        self.rank.append(0)\n       \
+    \ self.edges.append(0)\n        self.__group_number += 1\n        return self.__n\
+    \ - 1\n\n    def add_vertices(self, k: int = 1) -> list[int]:\n        \"\"\"\
+    \ \u9802\u70B9\u3092 k \u500B\u8FFD\u52A0\u3059\u308B.\n\n        Args:\n    \
+    \        k (int, optional): \u8FFD\u52A0\u3059\u308B\u9802\u70B9\u306E\u500B\u6570\
+    . Defaults to 1.\n\n        Returns:\n            list[int]: \u8FFD\u52A0\u3055\
+    \u308C\u305F\u9802\u70B9\u306E\u756A\u53F7\u304B\u3089\u306A\u308B k \u8981\u7D20\
+    \u306E\u30EA\u30B9\u30C8\n        \"\"\"\n\n        return [self.add_vertex()\
+    \ for _ in range(k)]\n\n    def find(self, x: int) -> int:\n        \"\"\" \u8981\
+    \u7D20 x \u304C\u5C5E\u3057\u3066\u3044\u308B\u65CF\u3092\u8ABF\u3079\u308B\n\n\
+    \        Args:\n            x (int): \u8981\u7D20\n\n        Returns:\n      \
+    \      int: x \u304C\u5C5E\u3057\u3066\u3044\u308B\u65CF\n        \"\"\"\n\n \
+    \       a=x\n        while self.parents[a]>=0:\n            a=self.parents[a]\n\
+    \n        while self.parents[x]>=0:\n            y=self.parents[x]\n         \
+    \   self.parents[x]=a\n            x=y\n\n        return a\n\n    def union(self,\
+    \ x: int, y: int, force : bool = False) -> bool:\n        \"\"\" \u8981\u7D20\
+    \ x \u3068 \u8981\u7D20 y \u3092\u540C\u4E00\u8996\u3059\u308B.\n\n        Args:\n\
+    \            x (int): \u8981\u7D20 x\n            y (int): \u8981\u7D20 y\n  \
+    \          force (bool, optional): True \u306E\u5834\u5408, \u5FC5\u305A x \u304C\
+    \u4EE3\u8868\u5143\u306B\u306A\u308B\u3088\u3046\u306B\u30DE\u30FC\u30B8\u3059\
+    \u308B. Defaults to False.\n\n        Returns:\n            bool: \u5143\u3005\
+    \u975E\u9023\u7D50\u306A\u3089\u3070 True, \u5143\u3005\u9023\u7D50\u306A\u3089\
+    \u3070 False.\n        \"\"\"\n        x=self.find(x)\n        y=self.find(y)\n\
+    \n        if x==y:\n            self.edges[x]+=1\n            return False\n\n\
+    \        if (not force) and (self.rank[x] < self.rank[y]):\n            x,y=y,x\n\
+    \n        self.__group_number-=1\n\n        self.edges[x]+=self.edges[y]+1\n \
+    \       self.edges[y]=0\n\n        self.parents[x]+=self.parents[y]\n        self.parents[y]=x\n\
+    \n        if self.rank[x]==self.rank[y]:\n            self.rank[x]+=1\n      \
+    \  return True\n\n    def size(self, x: int) -> int:\n        \"\"\" \u8981\u7D20\
+    \ x \u304C\u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\u30B5\u30A4\u30BA\u3092\u6C42\
+    \u3081\u308B\n\n        Args:\n            x (int): \u8981\u7D20\n\n        Returns:\n\
+    \            int: \u8981\u7D20 x \u304C\u5C5E\u3057\u3066\u3044\u308B\u65CF\u306E\
+    \u30B5\u30A4\u30BA\n        \"\"\"\n        return -self.parents[self.find(x)]\n\
     \n    def same(self, x: int, y: int) -> int:\n        \"\"\" \u8981\u7D20 x, y\
     \ \u306F\u540C\u4E00\u8996\u3055\u308C\u3066\u3044\u308B\u304B?\n\n        Args:\n\
     \            x (int): \u8981\u7D20\n            y (int): \u8981\u7D20\n\n    \
@@ -100,7 +112,7 @@ data:
   path: Union_Find/Union_Find.py
   requiredBy:
   - Union_Find/Bipartite_Checker.py
-  timestamp: '2025-04-13 18:55:26+09:00'
+  timestamp: '2025-06-08 22:20:18+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Union_Find.test.py
