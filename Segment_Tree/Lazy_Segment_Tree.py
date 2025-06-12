@@ -8,10 +8,10 @@ comp=lambda alpha,beta:alpha
 """
 from typing import TypeVar, Callable, Generic
 
-M = TypeVar('M')
-F = TypeVar('F')
-class Lazy_Evaluation_Tree(Generic[M, F]):
-    def __init__(self, L: list[M], op: Callable[[M, M], M], unit: M, act: Callable[[F, M], M], comp: Callable[[F, F], F], id: F):
+Monoid = TypeVar('Monoid')
+Func = TypeVar('Func')
+class Lazy_Evaluation_Tree(Generic[Monoid, Func]):
+    def __init__(self, L: list[Monoid], op: Callable[[Monoid, Monoid], Monoid], unit: Monoid, act: Callable[[Func, Monoid], Monoid], comp: Callable[[Func, Func], Func], id: Func):
         """ op を演算, act を作用とする L を初期状態とする遅延セグメント木を作成する.
 
         [条件]
@@ -24,12 +24,12 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
         作用素は左から掛ける. 更新も左から.
 
         Args:
-            L (list[M]): 初期状態
-            op (Callable[[M, M], M]): M の演算
-            unit (M): M の単位元
-            act (Callable[[F, M], M]): F から M への作用
-            comp (Callable[[F, F], F]): F 同士の合成
-            id (F): F の単位元
+            L (list[Monoid]): 初期状態
+            op (Callable[[Monoid, Monoid], Monoid]): Monoid の演算
+            unit (Monoid): Monoid の単位元
+            act (Callable[[Func, Monoid], Monoid]): Func から Monoid への作用
+            comp (Callable[[Func, Func], Func]): Func 同士の合成
+            id (Func): Func の単位元
         """
 
         self.op = op
@@ -77,14 +77,14 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
             m >>= 1
             data[m] = op(eval_at(m << 1), eval_at(m << 1 | 1))
 
-    def get(self, k: int) -> M:
+    def get(self, k: int) -> Monoid:
         """ 第 k 要素を取得する
 
         Args:
             k (int): 要素の場所
 
         Returns:
-            M: 第 k 要素
+            Monoid: 第 k 要素
         """
         m = k + self.N
         self._propagate_above(m)
@@ -93,13 +93,13 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
         return self.data[m]
 
     #作用
-    def action(self, l: int, r: int, alpha: F, left_closed: bool = True, right_closed: bool = True) -> None:
+    def action(self, l: int, r: int, alpha: Func, left_closed: bool = True, right_closed: bool = True) -> None:
         """ 第 l 要素から第 r 要素まで全てに alpha を作用させる
 
         Args:
             l (int): 左端
             r (int): 右端
-            alpha (F): 作用させる値
+            alpha (Func): 作用させる値
             left_closed (bool, optional): False にすると, 左端が開区間になる. Defaults to True.
             right_closed (bool, optional): False にすると, 右端が開区間になる. Defaults to True.
         """
@@ -143,12 +143,12 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
         self._recalc_above(L0)
         self._recalc_above(R0)
 
-    def update(self, k: int, x: M) -> None:
+    def update(self, k: int, x: Monoid) -> None:
         """ 第 k 要素を x に更新する.
 
         Args:
             k (int): 要素の場所
-            x (M): 変更後の第 k 要素
+            x (Monoid): 変更後の第 k 要素
         """
 
         m = k+self.N
@@ -157,7 +157,7 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
         self.lazy[m] = self.id
         self._recalc_above(m)
 
-    def product(self, l: int, r: int, left_closed: bool = True, right_closed: bool = True) -> M:
+    def product(self, l: int, r: int, left_closed: bool = True, right_closed: bool = True) -> Monoid:
         """ 第 l 要素から第 r 要素までの総積を求める.
 
         Args:
@@ -167,7 +167,7 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
             right_closed (bool, optional): False にすると, 右端が開区間になる. Defaults to True.
 
         Returns:
-            M: 総積
+            Monoid: 総積
         """
 
         L = l + self.N + (not left_closed)
@@ -209,11 +209,11 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
 
         return self.op(vL, vR)
 
-    def all_product(self) -> M:
+    def all_product(self) -> Monoid:
         """ この遅延セグメント木が持っている要素に関する総積を求める.
 
         Returns:
-            M: 総積
+            Monoid: 総積
         """
 
         return self.product(0, self.N - 1)
@@ -300,8 +300,8 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
                 lazy[m << 1 | 1] = comp(lazy[m], lazy[m << 1 | 1])
             lazy[m] = self.id
 
-    def __getitem__(self, k: int) -> M:
+    def __getitem__(self, k: int) -> Monoid:
         return self.get(k)
 
-    def __setitem__(self, k: int, x: M) -> None:
+    def __setitem__(self, k: int, x: Monoid) -> None:
         self.update(k, x)
