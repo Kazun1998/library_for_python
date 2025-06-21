@@ -17,27 +17,34 @@ data:
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "class Hash_Table:\n    __slots__=(\"table\", \"seed\")\n\n    def __init__(self):\n\
-    \        from random import randint\n        self.table={}\n        self.seed=randint(-(1<<63)-1,\
-    \ (1<<63)-1)\n\n    def get(self, key, default=None):\n        return self.table.get(key^self.seed,\
-    \ default)\n\n    def __len__(self):\n        return len(self.table)\n\n    def\
-    \ __getitem__(self, key):\n        h=key^self.seed\n        if h in self.table:\n\
-    \            return self.table[h]\n        else:\n            raise KeyError(key)\n\
-    \n    def __setitem__(self, key, value):\n        self.table[key^self.seed]=value\n\
-    \n    def __iter__(self):\n        return self.keys()\n\n    def __contains__(self,\
-    \ key):\n        return key^self.seed in self.table\n\n    def clear(self):\n\
-    \        self.table.clear()\n\n    def keys(self):\n        for alpha in self.table:\n\
-    \            yield alpha^self.seed\n\n    def values(self):\n        return self.table.values()\n\
-    \n    def items(self):\n        for alpha in self.table:\n            yield (alpha^self.seed,\
-    \ self.table[alpha])\n\nclass Hash_Set:\n    def __init__(self):\n        from\
-    \ random import randint\n        self.set=set()\n        self.seed=randint(-(1<<63)-1,\
-    \ (1<<63)-1)\n\n    def add(self, value):\n        self.set.add(value^self.seed)\n\
-    \n    def __contains__(self, value):\n        return value^self.seed in self.set\n"
+  code: "from random import randint\nfrom typing import TypeVar, Generic, Optional,\
+    \ Hashable\n\nV = TypeVar('V')\nclass Hash_Table(Generic[V]):\n    __slots__ =\
+    \ (\"__table\", \"__seed\")\n\n    def __init__(self):\n        self.__table:\
+    \ dict[Hashable, V] = {}\n        self.__seed = randint(-(1 << 63) - 1, (1 <<\
+    \ 63) - 1)\n\n    @property\n    def seed(self) -> int:\n        return self.__seed\n\
+    \n    def get(self, key: Hashable, default: V = None) -> Optional[V]:\n      \
+    \  return self.__table.get(key^self.seed, default)\n\n    def __len__(self) ->\
+    \ int:\n        return len(self.__table)\n\n    def __getitem__(self, key: Hashable)\
+    \ -> V:\n        k = hash(key) ^ self.seed\n        if k in self.__table:\n  \
+    \          return self.__table[k]\n        else:\n            raise KeyError(key)\n\
+    \n    def __setitem__(self, key: Hashable, value: V):\n        self.__table[hash(key)\
+    \ ^ self.seed] = value\n\n    def __iter__(self):\n        return self.keys()\n\
+    \n    def __contains__(self, key: Hashable) -> bool:\n        return hash(key)\
+    \ ^ self.seed in self.__table\n\n    def clear(self):\n        self.__table.clear()\n\
+    \n    def keys(self):\n        for alpha in self.__table:\n            yield alpha\
+    \ ^ self.seed\n\n    def values(self):\n        return self.__table.values()\n\
+    \n    def items(self):\n        for alpha in self.__table:\n            yield\
+    \ (alpha ^ self.seed, self.__table[alpha])\n\nclass Hash_Set:\n    def __init__(self):\n\
+    \        self.__set: set[int] = set()\n        self.__seed = randint(-(1 << 63)\
+    \ - 1, (1 << 63) - 1)\n\n    @property\n    def seed(self) -> int:\n        return\
+    \ self.__seed\n\n    def add(self, value: Hashable):\n        self.__set.add(hash(value)\
+    \ ^ self.seed)\n\n    def __contains__(self, value: Hashable) -> bool:\n     \
+    \   return hash(value) ^ self.seed in self.set\n"
   dependsOn: []
   isVerificationFile: false
   path: Hash_Table.py
   requiredBy: []
-  timestamp: '2022-11-24 23:18:10+09:00'
+  timestamp: '2025-06-22 01:08:49+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Data_Structure/Associative_Array.test.py
