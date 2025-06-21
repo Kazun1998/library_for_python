@@ -556,27 +556,37 @@ def Determinant_Arbitrary_Mod(A: Modulo_Matrix) -> int:
     Returns:
         int: 行列式 (mod 任意)
     """
-    N=A.row
-    A=deepcopy(A.ele)
-    det=1
 
-    for i in range(N):
-        Ai=A[i]
-        for j in range(i+1, N):
-            Aj=A[j]
-            while Aj[i]:
-                alpha=Ai[i]//Aj[i]
-                if alpha:
-                    for k in range(i, N):
-                        Ai[k]-=alpha*Aj[k]
-                        Ai[k]%=Mod
-                A[i], A[j]=A[j], A[i]
-                Ai=A[i]; Aj=A[j]
-                det*=-1
-        det*=Ai[i]
-        det%=Mod
-        if det==0:
+    n = A.row
+    S = deepcopy(A.ele)
+    det = 1
+
+    def reduction(i: int, j: int):
+        nonlocal det
+
+        while S[j][i]:
+            Si, Sj = S[i], S[j]
+            if (alpha := Si[i] // Sj[i]) == 0:
+                S[i], S[j] = S[j], S[i]
+                det *= -1
+                continue
+
+            for k in range(i, n):
+                Si[k] -= alpha * Sj[k]
+                Si[k] %= Mod
+
+            S[i], S[j] = S[j], S[i]
+            det *= -1
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            reduction(i, j)
+
+        det *= S[i][i]
+        det %= Mod
+        if det == 0:
             break
+
     return det
 
 def Characteristic_Polynomial(M: Modulo_Matrix) -> list[int]:
