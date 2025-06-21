@@ -724,6 +724,9 @@ data:
       path: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.test.py
       title: test_verify/yosupo_library_checker/Math/Gcd_of_Gaussian_Integers.test.py
     - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Math/Min_of_Mod_of_Linear.test.py
+      title: test_verify/yosupo_library_checker/Math/Min_of_Mod_of_Linear.test.py
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
       title: test_verify/yosupo_library_checker/Math/Montmort_Number.test.py
     - icon: ':heavy_check_mark:'

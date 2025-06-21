@@ -6,6 +6,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
     title: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
+  - icon: ':heavy_check_mark:'
+    path: test_verify/yosupo_library_checker/Math/Min_of_Mod_of_Linear.test.py
+    title: test_verify/yosupo_library_checker/Math/Min_of_Mod_of_Linear.test.py
   _isVerificationFailed: false
   _pathExtension: py
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -26,19 +29,27 @@ data:
     \     total += N * (B // M)\n            B %= M\n\n            y = (A * N + B)\
     \ // M\n            x = B - y * M\n\n            if y == 0:\n                return\
     \ total\n\n            total += (N + x // A) * y\n            A, B, M, N = M,\
-    \ x%A, A, y\n\n    @classmethod\n    def floor_sum_interval(cls, A: int, B: int,\
-    \ M: int, L: int, R: int) -> int:\n        \"\"\" sum_{i=L}^R floor((A * i + B)\
-    \ / M) \u3092\u6C42\u3081\u308B\n\n        Args:\n            A (int)\n      \
-    \      B (int)\n            M (int)\n            L (int)\n            R (int)\n\
-    \n        Returns:\n            int\n        \"\"\"\n\n        return cls.floor_sum(A,\
-    \ A * L + B, M, R - L + 1)\n"
+    \ x % A, A, y\n\n    @classmethod\n    def floor_sum_interval(cls, A: int, B:\
+    \ int, M: int, L: int, R: int) -> int:\n        \"\"\" sum_{i=L}^R floor((A *\
+    \ i + B) / M) \u3092\u6C42\u3081\u308B\n\n        Args:\n            A (int)\n\
+    \            B (int)\n            M (int)\n            L (int)\n            R\
+    \ (int)\n\n        Returns:\n            int\n        \"\"\"\n\n        return\
+    \ cls.floor_sum(A, A * L + B, M, R - L + 1)\n\ndef Min_of_Mod_of_Linear(A: int,\
+    \ B: int, M: int, N: int) -> int:\n    \"\"\" min { (A x + B) mod M | 0 <= x <\
+    \ N } \u3092\u6C42\u3081\u308B.\n\n    Args:\n        A (int):\n        B (int):\n\
+    \        M (int):\n        N (int):\n\n    Returns:\n        int: min { (A x +\
+    \ B) mod M | 0 <= x < N }\n    \"\"\"\n\n    L = 0\n    R = M\n\n    target =\
+    \ Floor_Sum.floor_sum(A, B, M, N)\n    while R - L > 1:\n        X = (L + R) //\
+    \ 2\n        if target == Floor_Sum.floor_sum(A, B - X, M, N):\n            L\
+    \ = X\n        else:\n            R = X\n    return L\n"
   dependsOn: []
   isVerificationFile: false
   path: Summation/Floor_Sum.py
   requiredBy: []
-  timestamp: '2024-12-22 15:18:10+09:00'
+  timestamp: '2025-04-22 00:52:03+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - test_verify/yosupo_library_checker/Math/Min_of_Mod_of_Linear.test.py
   - test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
 documentation_of: Summation/Floor_Sum.py
 layout: document
