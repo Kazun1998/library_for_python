@@ -1,54 +1,84 @@
-class Partial_Persistent_List:
-    def __init__(self, A, manual_mode=False):
-        """ A を半永続リスト化する.
+from bisect import bisect_left
 
-        manual_mode: False ならば代入すると自動的に時刻が進み, True ならば時刻は self.forward_time() で進めなければならない.
+class Partial_Persistent_List:
+    def __init__(self, A: list, auto_commit = False):
+        """ リスト A を半永続リストにする.
+
+        Args:
+            A (list): 元となるリスト
+            auto_commit (bool, optional): True ならば代入すると自動的に時刻が進み, False ならば時刻は self.forward_time() で進めなければならない. Defaults to False.
         """
 
-        from bisect import bisect_left
+        self.__N = N = len(A)
+        self.__auto_commit = auto_commit
 
-        self.__N=N=len(A)
-        self.mode=manual_mode
+        self.__set_time = [[-1] for _ in range(N)]
+        self.__set_value = [[a] for a in A]
+        self.__time = 0
 
-        self.__bis=bisect_left
-        self.__set_time=[[-1] for _ in range(N)]
-        self.__set_value=[[a] for a in A]
-        self.__time=0
+    @property
+    def auto_commit(self) -> bool:
+        return self.__auto_commit
 
-    def get_time(self):
+    @property
+    def get_time(self) -> int:
         return self.__time
 
-    def get_value(self, index, time=-1):
-        if time>=0:
-            j=self.__bis(self.__set_time[index], time)-1
+    def get_value(self, index: int, time: int = -1):
+        """ 時刻 time の第 index 要素を取得する.
+
+        Args:
+            index (int): 要素番号
+            time (int, optional): 時刻. ただし, time = -1 にすると, 最新の第 index 要素を取得する. Defaults to -1.
+
+        Returns:
+            _type_: _description_
+        """
+        if time >= 0:
+            j = bisect_left(self.__set_time[index], time) - 1
         else:
-            j=len(self.__set_time[index])-1
+            j = len(self.__set_time[index]) - 1
+
         return self.__set_value[index][j]
 
-    def set_value(self, index, value):
-        T=self.__set_time[index]
-        V=self.__set_value[index]
+    def set_value(self, index: int, value):
+        """ 第 index 要素を value に変更する.
 
-        if T[-1]==self.__time:
-            V[-1]=value
+        Args:
+            index (int): 要素番号
+            value : 要素
+        """
+
+        times = self.__set_time[index]
+        values = self.__set_value[index]
+
+        if times[-1] == self.time:
+            values[-1] = value
         else:
-            T.append(self.__time)
-            V.append(value)
+            times.append(self.time)
+            values.append(value)
 
-        if not self.mode:
-            self.__time+=1
+        if self.auto_commit:
+            self.commit()
 
-    def forward_time(self):
-        self.__time+=1
+    def commit(self) -> int:
+        """ 時刻を 1 つすすめる.
 
-    def __len__(self):
-        return self.__N
+        Returns:
+            int: 進めた後の時刻
+        """
+
+        self.__time += 1
+        return self.time
+
+    def __len__(self) -> int:
+        return len(self.__set_value)
 
     def __str__(self):
         return str([self[i] for i in range(self.__N)])
 
     def __repr__(self):
-        return repr([self[i] for i in range(self.__N)])
+        return f"{self.__class__.__name__}(A={repr([self[i] for i in range(len(self))])}, auto_commit={self.auto_commit})"
 
     def __iter__(self):
         for i in range(self.__N):
@@ -57,5 +87,5 @@ class Partial_Persistent_List:
     def __setitem__(self, index, value):
         self.set_value(index, value)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int):
         return self.__set_value[index][-1]

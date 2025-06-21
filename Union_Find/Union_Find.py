@@ -14,6 +14,32 @@ class Union_Find:
         self.edges=[0]*N
         self.__group_number = N
 
+    def add_vertex(self) -> int:
+        """ 頂点を 1 個追加する.
+
+        Returns:
+            int: 追加された頂点の番号
+        """
+
+        self.__n += 1
+        self.parents.append(-1)
+        self.rank.append(0)
+        self.edges.append(0)
+        self.__group_number += 1
+        return self.__n - 1
+
+    def add_vertices(self, k: int = 1) -> list[int]:
+        """ 頂点を k 個追加する.
+
+        Args:
+            k (int, optional): 追加する頂点の個数. Defaults to 1.
+
+        Returns:
+            list[int]: 追加された頂点の番号からなる k 要素のリスト
+        """
+
+        return [self.add_vertex() for _ in range(k)]
+
     def find(self, x: int) -> int:
         """ 要素 x が属している族を調べる
 
