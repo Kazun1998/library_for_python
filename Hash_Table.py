@@ -51,12 +51,15 @@ class Hash_Table(Generic[V]):
 
 class Hash_Set:
     def __init__(self):
-        from random import randint
-        self.set=set()
-        self.seed=randint(-(1<<63)-1, (1<<63)-1)
+        self.__set: set[int] = set()
+        self.__seed = randint(-(1 << 63) - 1, (1 << 63) - 1)
 
-    def add(self, value):
-        self.set.add(value^self.seed)
+    @property
+    def seed(self) -> int:
+        return self.__seed
 
-    def __contains__(self, value):
-        return value^self.seed in self.set
+    def add(self, value: Hashable):
+        self.__set.add(hash(value) ^ self.seed)
+
+    def __contains__(self, value: Hashable) -> bool:
+        return hash(value) ^ self.seed in self.set
