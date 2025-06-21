@@ -169,7 +169,7 @@ class Modulo_Matrix():
 
         return inverse
 
-    def inverse_with_determinant(self) -> tuple["Modulo_Matrix", int] | tuple[None, int]:
+    def inverse_with_determinant(self):
         """ self の逆行列と self の行列式を求める.
 
         Returns:
