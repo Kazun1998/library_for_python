@@ -1,29 +1,39 @@
-class Potentilized_Union_Find():
-    def __init__(self, N, op, zero, neg):
-        """ 0,1,...,N-1 を要素として初期化する.
+from typing import TypeVar, Generic, Callable
 
-        N: 要素数
-        """
-        self.n=N
-        self.parents=[-1]*N
-        self.rank=[0]*N
-        self.edges=[0]*N
-        self.pot=[zero]*N
-        self.valid=[True]*N
-        self.__group_number=N
+G = TypeVar('G')
+class Potentilized_Union_Find(Generic[G]):
+    def __init__(self, N: int, op: Callable[[G, G], G], zero: G, neg: Callable[[G], G]):
+        """ 0, 1, ..., N - 1 を要素としたポテンシャル付き Union_Find を実装する.
 
-        self.op=op
-        self.diff=lambda u,v:self.op(u, self.neg(v)) # diff(u,v)=U(u)-U(v)
-        self.zero=zero
-        self.neg=neg
-
-
-    def find(self, x):
-        """ 要素 x の属している族を調べる.
-
-        x: 要素
+        Args:
+            N (int): 要素数
+            op (Callable[[G, G], G]): 群演算
+            zero (G): 群 G 上の単位元
+            neg (Callable[[G], G]): 群 G の逆元を求める関数
         """
 
+        self.n = N
+        self.parents = [-1] * N
+        self.rank = [0] * N
+        self.edges = [0] * N
+        self.pot = [zero] * N
+        self.valid = [True] * N
+        self.__group_number = N
+
+        self.op = op
+        self.diff : Callable[[G, G], G] = lambda u, v: self.op(u, self.neg(v)) # diff(u, v) = U(u) - U(v)
+        self.zero = zero
+        self.neg = neg
+
+    def find(self, x: int) -> int:
+        """ 要素 x が属している族を調べる
+
+        Args:
+            x (int): 要素
+
+        Returns:
+            int: x が属している族
+        """
 
         if self.parents[x]<0:
             return x
@@ -42,10 +52,13 @@ class Potentilized_Union_Find():
 
         return r
 
-    def union(self, x, y, u):
-        """ 要素 x,y を同一視し, U(y)-U(x)=u という情報を加える.
+    def union(self, x: int, y: int, u: G) -> None:
+        """ 要素 x, y を同一視し, U(y) - U(x) = u という情報を加える.
 
-        x,y: 要素
+        Args:
+            x (int): 基準点
+            y (int): 対象点
+            u (G): ポテンシャルの差
         """
 
         a=self.find(x); b=self.find(y)
@@ -77,51 +90,111 @@ class Potentilized_Union_Find():
 
         return
 
-    def size(self, x):
-        """ 要素 x の属している族の要素の数.
+    def size(self, x: int) -> int:
+        """ 要素 x が属している族のサイズを求める
 
-        x: 要素
+        Args:
+            x (int): 要素
+
+        Returns:
+            int: 要素 x が属している族のサイズ
         """
+
         return -self.parents[self.find(x)]
 
-    def potential_energy(self, x, y):
-        """ x を基準にした y のポテンシャルエネルギー"""
+    def potential_energy(self, x: int, y: int) -> G | None:
+        """ x を基準にした y のポテンシャルエネルギー
+
+        Args:
+            x (int): 基準点
+            y (int): ポテンシャルを求める点
+
+        Returns:
+            G | None: 不明な場合や非妥当である場合は None
+        """
 
         if self.same(x,y) and self.is_valid(x):
             return self.diff(self.pot[y], self.pot[x])
         else:
             return None
 
-    def same(self, x, y):
-        """ 要素 x,y は同一視されているか?
+    def same(self, x: int, y: int) -> bool:
+        """ 要素 x, y は同一視されているか?
 
-        x,y: 要素
+        Args:
+            x (int): 要素
+            y (int): 要素
+
+        Returns:
+            bool: x, y が同一視されていれば True, そうでなければ False
         """
+
         return self.find(x) == self.find(y)
 
-    def members(self, x):
-        """ 要素 x が属している族の要素.
-        ※族の要素の個数が欲しいときは size を使うこと!!
+    def is_possible(self, x: int, y: int, a: G) -> bool:
+        """ U(y) - U(x) = a となり得るか?
+        (x, y の属する族のポテンシャルが矛盾していたら確定 False)
 
-        x: 要素
+        Args:
+            x (int):
+            y (int):
+            a (G):
+
+        Returns:
+            bool: なり得るならば True, そうでなければ False
         """
+
+        if not(self.is_valid(x) and self.is_valid(y)):
+            return False
+
+        if not self.same(x, y):
+            return True
+
+        return self.diff(self.pot[y], self.pot[x]) == a
+
+    def members(self, x: int) -> list[int]:
+        """ 要素 x と同一視されている要素のリスト
+
+        Args:
+            x (int): 要素
+
+        Returns:
+            list[int]: 要素 x と同一視されている要素のリスト
+        """
+
         root = self.find(x)
         return [i for i in range(self.n) if self.find(i) == root]
 
-    def edge_count(self, x):
-        """ 要素 x が属する族の辺の本数を求める.
+    def edge_count(self, x: int) -> int:
+        """ 要素 x が属している族における辺の数を求める.
 
-        x: 要素
+        Args:
+            x (int): 要素
+
+        Returns:
+            int: 要素 x が属している族における辺の数を求める
         """
+
         return self.edges[self.find(x)]
 
-    def is_valid(self, x):
-        """ x が属している族のポテンシャルが妥当かどうかを判定する. """
+    def is_valid(self, x: int) -> bool:
+        """ x が属している族のポテンシャルが妥当かどうかを判定する.
+
+        Args:
+            x (int): 点
+
+        Returns:
+            bool: 妥当ならば True, そうでなければ False
+        """
 
         return self.valid[self.find(x)]
 
-    def is_well_defined(self):
-        """ この系全体のポテンシャルが妥当かどうかを判定する. """
+    def is_well_defined(self) -> bool:
+        """ この系全体のポテンシャルが妥当かどうかを判定する.
+
+        Returns:
+            bool: 妥当ならば True, そうでなければ False
+        """
 
         return all(self.is_valid(x) for x in range(self.n))
 
@@ -132,35 +205,59 @@ class Potentilized_Union_Find():
         """
         return self.size(x)==self.edges[self.find(x)]+1
 
-    def tree_count(self):
-        """ 森になっている属の個数を求める.
+    def tree_count(self) -> int:
+        """ 木になっている族の数を計上する
+
+        Returns:
+            int: 木になっている族の数
         """
 
         return sum(self.is_tree(g) for g in self.representative())
 
-    def representative(self):
-        """ 代表元の名前のリスト
+    def representative(self) -> list[int]:
+        """ 代表元のリストを出力する
+
+        Returns:
+            list[int]: 代表元のリスト
         """
         return [i for i, x in enumerate(self.parents) if x < 0]
 
-    def group_count(self):
-        """ 族の個数
+    def group_count(self) -> int:
+        """ 族の個数を出力する.
+
+        Returns:
+            int: 族の個数
         """
+
         return self.__group_number
 
-    def all_group_members(self):
+    def all_group_members(self) -> dict[int, list[int]]:
         """ 全ての族の出力
         """
-        X={r:[] for r in self.roots()}
-        for k in range(self.n):
-            X[self.find(k)].append(k)
-        return X
+
+        groups: dict[int, list[int]] = { r: [] for r in self.representative() }
+        for x in range(self.n):
+            groups[self.find(x)].append(x)
+        return groups
+
+    def group_list(self) -> list[int]:
+        """ 各要素について, その要素が属する族の代表元からなるリストを求める.
+
+        Returns:
+            list[int]: 第 x 要素は x が属する族の代表元.
+        """
+
+        return [self.find(x) for x in range(self.n)]
 
     def refresh(self):
+        """ Union Find の情報を簡潔にする.
+        """
+
         for i in range(self.n):
-            _=self.find(i)
+            self.find(i)
 
     def __str__(self):
-        return '\n'.join('{}: {}'.format(r, self.members(r)) for r in self.roots())
+        return ', '.join(f'{r}: {self.members(r)}' for r in self.representative())
 
-    __repr__=__str__
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.n}, {self.op}, {self.zero}, {self.neg})"

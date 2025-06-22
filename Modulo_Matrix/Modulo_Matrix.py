@@ -1,25 +1,37 @@
 from copy import deepcopy
 
+class SingularMatrixError(Exception):
+    def __str__(self):
+        return "非正則行列の逆行列を求めようとしました."
+
 class Modulo_Matrix():
-    __slots__=("ele","row","col","size")
+    __slots__ = ("ele", "__row", "__col")
+
+    # property
+    @property
+    def row(self):
+        return self.__row
+
+    @property
+    def col(self):
+        return self.__col
+
+    @property
+    def size(self):
+        return (self.row, self.col)
 
     #入力
-    def __init__(self,M):
-        """ 行列 M の定義
-
-        M: 行列
+    def __init__(self, M: list[list[int]]):
+        """ 行列 M を生成する.
         ※ Mod: 法はグローバル変数から指定
+
+        Args:
+            M (list[int]): 行列
         """
 
         self.ele=[[x%Mod for x in X] for X in M]
-        R=len(M)
-        if R!=0:
-            C=len(M[0])
-        else:
-            C=0
-        self.row=R
-        self.col=C
-        self.size=(R,C)
+        self.__row = len(M)
+        self.__col = len(M[0]) if self.row > 0 else 0
 
     #出力
     def __str__(self):
@@ -30,11 +42,30 @@ class Modulo_Matrix():
 
     # 零行列, 単位行列
     @classmethod
-    def Zero_Matrix(cls, row, col):
+    def Zero_Matrix(cls, row: int, col: int) -> "Modulo_Matrix":
+        """ row 行 col 列のゼロ行列を生成する.
+
+        Args:
+            row (int): 行
+            col (int): 列
+
+        Returns:
+            Modulo_Matrix: row 行 col 列のゼロ行列
+        """
+
         return Modulo_Matrix([[0] * col for _ in range(row)])
 
     @classmethod
-    def Identity_Matrix(cls, N):
+    def Identity_Matrix(cls, N: int) -> "Modulo_Matrix":
+        """ N 次の単位行列を生成する.
+
+        Args:
+            N (int): 次数
+
+        Returns:
+            Modulo_Matrix: N 次単位行列
+        """
+
         return Modulo_Matrix([[1 if i==j else 0 for j in range(N)] for i in range(N)])
 
     #+,-
@@ -104,40 +135,83 @@ class Modulo_Matrix():
         if isinstance(other,int):
             return self.__scale__(other)
 
-    def inverse(self):
-        assert self.row==self.col,"正方行列ではありません."
+    def inverse(self) -> "Modulo_Matrix":
+        """ 逆行列を求める
 
-        M=self
-        N=M.row
-        R=[[1 if i==j else 0 for j in range(N)] for i in range(N)]
-        T=deepcopy(M.ele)
+        Raises:
+            SingularMatrixError: 非正則行列の逆行列を求めようとしたときに発生
+
+        Returns:
+            Modulo_Matrix: 逆行列
+        """
+
+        inverse, _ = self.inverse_with_determinant()
+        if inverse is None:
+            raise SingularMatrixError()
+
+        return inverse
+
+    def inverse_with_determinant(self) -> tuple["Modulo_Matrix", int] | tuple[None, int]:
+        """ self の逆行列と self の行列式を求める.
+
+        Returns:
+            tuple["Modulo_Matrix", int] | tuple[None, int]: (逆行列 (非正則の場合は None), 行列式)
+        """
+
+        assert self.row == self.col,"正方行列ではありません."
+
+        M = self
+        N = M.row
+        R = [[1 if i == j else 0 for j in range(N)] for i in range(N)]
+        T = deepcopy(M.ele)
+        det = 1
 
         for j in range(N):
-            if T[j][j]==0:
+            if T[j][j] == 0:
                 for i in range(j+1,N):
                     if T[i][j]:
                         break
                 else:
-                    assert 0, "正則行列ではありません"
+                    return None, 0
 
-                T[j],T[i]=T[i],T[j]
-                R[j],R[i]=R[i],R[j]
-            Tj,Rj=T[j],R[j]
-            inv=pow(Tj[j], -1, Mod)
+                T[j], T[i] = T[i], T[j]
+                R[j], R[i] = R[i], R[j]
+                det = -det % Mod
+
+            Tj, Rj = T[j] ,R[j]
+            inv = pow(Tj[j], -1, Mod)
+            det = (Tj[j] * det) % Mod
+
             for k in range(N):
-                Tj[k]*=inv; Tj[k]%=Mod
-                Rj[k]*=inv; Rj[k]%=Mod
+                Tj[k] *=inv; Tj[k] %= Mod
+                Rj[k] *=inv; Rj[k] %= Mod
+
             for i in range(N):
-                if i==j: continue
-                c=T[i][j]
-                Ti,Ri=T[i],R[i]
+                if i == j:
+                    continue
+
+                c = T[i][j]
+                Ti, Ri = T[i], R[i]
                 for k in range(N):
-                    Ti[k]-=Tj[k]*c; Ti[k]%=Mod
-                    Ri[k]-=Rj[k]*c; Ri[k]%=Mod
-        return Modulo_Matrix(R)
+                    Ti[k] -= Tj[k] * c; Ti[k] %= Mod
+                    Ri[k] -= Rj[k] * c; Ri[k] %= Mod
+
+        for i in range(N):
+            det = (T[i][i] * det) % Mod
+
+        return Modulo_Matrix(R), det
 
     #スカラー倍
-    def __scale__(self, r):
+    def __scale__(self, r: int) -> "Modulo_Matrix":
+        """ r 倍する
+
+        Args:
+            r (int): スカラー倍
+
+        Returns:
+            Modulo_Matrix: r 倍
+        """
+
         r %= Mod
         return Modulo_Matrix([[r * m_ij for m_ij in Mi] for Mi in self.ele])
 
@@ -167,11 +241,23 @@ class Modulo_Matrix():
         return not(self==other)
 
     #転置
-    def transpose(self):
+    def transpose(self) -> "Modulo_Matrix":
+        """ 転置行列を求める.
+
+        Returns:
+            Modulo_Matrix: 転置行列
+        """
+
         return Modulo_Matrix(list(map(list,zip(*self.ele))))
 
     #行基本変形
-    def row_reduce(self):
+    def row_reduce(self) -> "Modulo_Matrix":
+        """ 行基本変形をできるだけ施した後の行列を求める.
+
+        Returns:
+            Modulo_Matrix: 行基本変形をできるだけ施した後の行列
+        """
+
         (row, col) = self.size
 
         T = deepcopy(self.ele)
@@ -207,7 +293,13 @@ class Modulo_Matrix():
         return Modulo_Matrix(T)
 
     #列基本変形
-    def column_reduce(self):
+    def column_reduce(self) -> "Modulo_Matrix":
+        """ 列基本変形をできるだけ施した後の行列を求める.
+
+        Returns:
+            Modulo_Matrix: 列基本変形をできるだけ施した後の行列
+        """
+
         (row, col) = self.size
 
         T = deepcopy(self.ele)
@@ -242,7 +334,13 @@ class Modulo_Matrix():
         return Modulo_Matrix(T)
 
     #行列の階数
-    def rank(self):
+    def rank(self) -> int:
+        """ 行列のランクを求める
+
+        Returns:
+            int: ランク
+        """
+
         row_reduced = self.row_reduce()
         (row, col) = row_reduced.size
 
@@ -255,15 +353,33 @@ class Modulo_Matrix():
         return rnk
 
     # 単射 ?
-    def is_injection(self):
+    def is_injection(self) -> bool:
+        """ 行列が表す線形写像は単射?
+
+        Returns:
+            bool: 単射 ?
+        """
+
         return self.rank() == self.col
 
     # 全射 ?
-    def is_surjective(self):
+    def is_surjective(self) -> bool:
+        """ 行列が表す線形写像は全射?
+
+        Returns:
+            bool: 全射 ?
+        """
+
         return self.rank() == self.row
 
     # 全単射 ?
-    def is_bijection(self):
+    def is_bijection(self) -> bool:
+        """ 行列が表す線形写像は全単射?
+
+        Returns:
+            bool: 全単射 ?
+        """
+
         return self.col == self.row == self.rank()
 
     #行の結合
@@ -290,14 +406,27 @@ class Modulo_Matrix():
 
 #=================================================
 #正方行列?
-def Is_Square(M):
-    return M.row==M.col
+def Is_Square(M: Modulo_Matrix) -> bool:
+    """ M は正方行列か?
+
+    Args:
+        M (Modulo_Matrix): 行列
+
+    Returns:
+        bool: 正方行列 ?
+    """
+
+    return M.row == M.col
 
 #対角行列
-def Diagonal_Matrix(D):
-    """ D の第 i 要素が (i,i) 成分である対角行列を生成する.
+def Diagonal_Matrix(D: list[int]) -> Modulo_Matrix:
+    """ D の第 i 成分が (i, i) 成分になる対角行列を生成する.
 
-    D: リスト
+    Args:
+        D (list[int]): 対角成分のリスト
+
+    Returns:
+        Modulo_Matrix: 対角行列
     """
 
     N=len(D)
@@ -341,19 +470,28 @@ def Kronecker_Sum(*X):
     return A
 
 #跡
-def Trace(M):
-    """ 正方行列 M の跡 (=対角成分の和) を求める. """
+def Trace(M: Modulo_Matrix) -> int:
+    """ 正方行列 M の跡 (対角成分の和) を求める.
+
+    Args:
+        M (Modulo_Matrix): 正方行列
+
+    Returns:
+        int: 跡
+    """
 
     assert Is_Square(M)
+    return sum(M.ele[i][i] for i in range(M.row)) % Mod
 
-    T=0
-    for i in range(M.row):
-        T+=M.ele[i][i]
-        T%=Mod
-    return T
+def Determinant(M: Modulo_Matrix) -> int:
+    """ 正方行列 M の行列式 (素数 mod) を求める.
 
-def Determinant(M):
-    """ 正方行列 M の行列式 (素数 mod) を求める."""
+    Args:
+        M (Modulo_Matrix): 正方行列
+
+    Returns:
+        int: 行列式 (mod 素数)
+    """
 
     assert Is_Square(M)
 
@@ -384,9 +522,15 @@ def Determinant(M):
         det%=Mod
     return det
 
-def Determinant_Arbitrary_Mod(A):
-    """ 正方行列 M の行列式 (任意 mod) を求める."""
+def Determinant_Arbitrary_Mod(A: Modulo_Matrix) -> int:
+    """ 正方行列 M の行列式 (任意 mod) を求める.
 
+    Args:
+        M (Modulo_Matrix): 正方行列
+
+    Returns:
+        int: 行列式 (mod 任意)
+    """
     N=A.row
     A=deepcopy(A.ele)
     det=1
@@ -410,10 +554,14 @@ def Determinant_Arbitrary_Mod(A):
             break
     return det
 
-def Characteristic_Polynomial(M):
-    """ M の固有多項式を sum(P[i] X^i) としたとき, P を求める.
+def Characteristic_Polynomial(M: Modulo_Matrix) -> list[int]:
+    """ 正方行列 M の固有多項式を sum(P[i] X^i) としたとき, P を求める.
 
-    M: Modulo Matrix
+    Args:
+        M (Modulo_Matrix): 正方行列
+
+    Returns:
+        list[int]: 固有多項式を sum(P[i] X^i) としたときの P を求める.
     """
 
     T=deepcopy(M.ele)
@@ -465,6 +613,35 @@ def Characteristic_Polynomial(M):
         if i%2:
             P[~i]*=-1; P[~i]%=Mod
     return P
+
+def Adjugate_Matrix(A: Modulo_Matrix) -> Modulo_Matrix:
+    """ 正方行列 A の余因子行列 adj A := ((-1)^(i+j) det A_{i,j}) を求める.
+
+    Args:
+        A (Modulo_Matrix): 正方行列
+
+    Returns:
+        Modulo_Matrix: 余因子行列
+    """
+
+    from random import randint
+
+    N = A.row
+    A_ext = [[0] * (N + 1) for _ in range(N + 1)]
+    for i in range(N):
+        for j in range(N):
+            A_ext[i][j] = A[i][j]
+
+    for i in range(N):
+        A_ext[i][N] = A_ext[N][i] = randint(0, Mod - 1)
+
+    A_ext_inv, det = Modulo_Matrix(A_ext).inverse_with_determinant()
+
+    if A_ext_inv is None:
+        return Modulo_Matrix.Zero_Matrix(N, N)
+
+    adj = [[det * ((A_ext_inv[N][N] * A_ext_inv[i][j] - A_ext_inv[i][N] * A_ext_inv[N][j]) % Mod) for j in range(N)] for i in range(N)]
+    return Modulo_Matrix(adj)
 
 #===
 Mod=998244353

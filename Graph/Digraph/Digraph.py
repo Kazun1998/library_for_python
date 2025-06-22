@@ -4,94 +4,66 @@ class Digraph:
     """
 
     #入力定義
-    def __init__(self, N=0):
-        """ N 頂点の空グラフを生成する. """
+    def __init__(self, N = 0):
+        """ N 頂点の有向空グラフを生成する. """
 
-
-        self.arc_number=0
-        self.adjacent_out=[set() for v in range(N)]#出近傍(vが始点)
-        self.adjacent_in=[set() for v in range(N)] #入近傍(vが終点)
+        self.adjacent_out = [[] for _ in range(N)] #出近傍 (v が始点)
+        self.adjacent_in = [[] for _ in range(N)] #入近傍 (v が終点)
+        self.__size = 0
 
     #頂点の追加
     def add_vertex(self):
         """ 頂点を追加する.
 
         """
-        self.adjacent_out.append(set())
-        self.adjacent_in.append(set())
-        return self.order()-1
+        self.adjacent_out.append([])
+        self.adjacent_in.append([])
+        return self.order() - 1
 
-    def add_vertices(self, k=1):
+    def add_vertices(self, k = 1):
         """ 頂点を k 個追加する.
 
         k: int
         """
-        n=self.order()
-        self.adjacent_out.extend([set() for _ in range(k)])
-        self.adjacent_in.extend([set() for _ in range(k)])
-        return list(range(n,n+k))
+        n = self.order()
+        self.adjacent_out.extend([[] for _ in range(k)])
+        self.adjacent_in.extend([[] for _ in range(k)])
+        return list(range(n, n + k))
 
     #辺の追加
-    def add_arc(self, source, target, mode=0):
-        if target not in self.adjacent_out[source]:
-            self.adjacent_out[source].add(target)
-            self.adjacent_in[target].add(source)
-            self.arc_number+=1
-            if mode:
-                return self.arc_number-1
-        else:
-            if mode:
-                return -1
-    #辺を除く
-    def remove_arc(self, source, target):
-        if target in self.adjacent_out[source]:
-            self.adjacent_out[source].discard(target)
-            self.adjacent_in[target].discard(source)
-            self.arc_number-=1
-
-    def reset_vertex(self, u):
-        """ 頂点 u に接続している辺を全て消す."""
-
-        X=self.adjacent_out[u].copy()
-        for v in X:
-            self.remove_arc(u,v)
-
-        X=self.adjacent_in[u].copy()
-        for w in X:
-            self.remove_arc(w,u)
-
+    def add_arc(self, source, target, label = None):
+        self.adjacent_out[source].append((target, label))
+        self.adjacent_in[target].append((source, label))
+        self.__size += 1
 
     #Walkの追加
     def add_walk(self,*walk):
         """ 有向歩道 walk=(w[0], ..., w[n-1]) を追加する. """
 
-        N=len(walk)
-        for k in range(N-1):
-            self.add_arc(walk[k],walk[k+1])
+        for i in range(len(walk) - 1):
+            self.add_arc(walk[i], walk[i + 1])
 
     #Cycleの追加
     def add_cycle(self,*cycle):
         """ 有向サイクル cycle=(c[0] ..., c[n-1]) を追加する. """
 
         self.add_walk(*cycle)
-        self.add_arc(cycle[-1],cycle[0])
-
-    #グラフに辺が存在するか否か
-    def arc_exist(self, u, v):
-        """ 有向辺 u -> v は存在するか? """
-        return (v in self.adjacent_out[u])
+        self.add_arc(cycle[-1], cycle[0])
 
     #近傍
-    def neighbohood(self,v):
-        """vの出近傍, 入近傍を出力する.
+    def out_partner_yield(self, v):
+        for w, _ in self.adjacent_out[v]:
+            yield w
 
-        Input:
-        v:頂点
+    def out_partner_with_label_yield(self, v):
+        yield from self.adjacent_out[v]
 
-        Output:
-        (出近傍, 入近傍)
-        """
-        return (self.adjacent_out[v],self.adjacent_in[v])
+    def in_partner_yield(self, v):
+        for w, _ in self.adjacent_in[v]:
+            yield w
+
+    def in_partner_with_label_yield(self, v):
+        yield from self.adjacent_in[v]
 
     #出次数
     def out_degree(self,v):
@@ -103,11 +75,11 @@ class Digraph:
 
     #次数
     def degree(self,v):
-        return (self.out_degree(v),self.in_degree(v))
+        return (self.out_degree(v), self.in_degree(v))
 
     #相対次数
-    def relative_degree(self,v):
-        return self.out_degree(v)-self.in_degree(v)
+    def relative_degree(self, v):
+        return self.out_degree(v) - self.in_degree(v)
 
     #頂点数
     def vertex_count(self):
@@ -121,131 +93,126 @@ class Digraph:
     #辺数
     def arc_count(self):
         """ グラフの辺数 (サイズ) を求める."""
-        return self.arc_number
+        return self.__size
 
     def size(self):
         """ グラフのサイズ (辺数) を求める. """
-        return self.arc_number
+        return self.__size
 
     #頂点vに到達可能な頂点
-    def reachable_to(self,v):
+    def reachable_to(self, v):
         """ 頂点 v に到達可能な頂点を求める. """
-        from collections import deque
+        N = self.order()
 
-        N=self.vertex_count()
-        T=[0]*N; T[v]=1
-        Q=deque([v])
-        while Q:
-            x=Q.pop()
-            for y in self.adjacent_in[x]:
-                if not T[y]:
-                    T[y]=1
-                    Q.append(y)
-        return [x for x in range(N) if T[x]]
+        reach = [0] * N; reach[v] = 1
+        stack = [v]
+        while stack:
+            x = stack.pop()
+            for y in self.in_partner_yield(x):
+                if reach[y]:
+                    continue
+
+                reach[y] = 1
+                stack.append(y)
+
+        return [x for x in range(N) if reach[x]]
 
     #頂点vから到達可能な頂点
-    def reachable_from(self,v):
-        """ 頂点 v へ到達可能な頂点を求める. """
-        from collections import deque
+    def reachable_from(self, v):
+        """ 頂点 v から到達可能な頂点を求める. """
+        N = self.order()
 
-        N=self.vertex_count()
-        T=[0]*N; T[v]=1
-        Q=deque([v])
-        while Q:
-            x=Q.pop()
-            for y in self.adjacent_out[x]:
-                if not T[y]:
-                    T[y]=1
-                    Q.append(y)
-        return [x for x in range(N) if T[x]]
+        reach = [0] * N; reach[v] = 1
+        stack = [v]
+        while stack:
+            x = stack.pop()
+            for y in self.out_partner_yield(x):
+                if reach[y]:
+                    continue
+
+                reach[y] = 1
+                stack.append(y)
+
+        return [x for x in range(N) if reach[x]]
 
     #頂点 u,v の距離を求める.
-    def distance(self,u,v):
-        if u==v:
-            return 0
-
+    def distance(self, u, v, default = -1):
         from collections import deque
-        inf=float("inf")
-        N=self.vertex_count()
-        adj_out=self.adjacent_out
-        T=[inf]*N; T[u]=0
 
-        Q=deque([u])
+        dist = [-1] * self.vertex_count()
+        dist[u] = 0
+
+        Q = deque([u])
         while Q:
-            w=Q.popleft()
-            for x in adj_out[w]:
-                if T[x]==inf:
-                    T[x]=T[w]+1
-                    Q.append(x)
-                    if x==v:
-                        return T[x]
-        return inf
+            x = Q.popleft()
+            for y in self.in_partner_yield(x):
+                if dist[y] != -1:
+                    continue
+
+                dist[y] = dist[x] + 1
+                Q.append(y)
+
+                if y == v:
+                    return dist[y]
+
+        return default
 
     #ある1点からの距離
-    def distance_all(self,u):
-        """ 頂点 u からの距離を求める."""
+    def distance_all(self, u, default):
+        """ 頂点 u からの距離をそれぞれの頂点について求める."""
 
         from collections import deque
-        inf=float("inf")
-        adj_out=self.adjacent_out
-        T=[inf]*self.vertex_count(); T[u]=0
 
-        Q=deque([u])
+        dist = [-1] * self.vertex_count()
+        dist[u] = 0
+
+        Q = deque([u])
         while Q:
-            w=Q.popleft()
-            for x in adj_out[w]:
-                if T[x]==inf:
-                    T[x]=T[w]+1
-                    Q.append(x)
-        return T
+            x = Q.popleft()
+            for y in self.in_partner_yield(x):
+                if dist[y] != -1:
+                    continue
 
-    def shortest_path(self,u,v, dist=False):
+                dist[y] = dist[x] + 1
+                Q.append(y)
+
+        return [d if d != -1 else default for d in dist]
+
+    def shortest_path(self, u, v):
         """ u から v への最短路を求める (存在しない場合は None).
 
-        dist: False → shortest_path のみ, True → (dist, shortest_path)"""
+        """
 
-        if u==v:
-            if dist:
-                return (0,[u])
-            else:
-                return [u]
+        if u == v:
+            return u
 
         from collections import deque
-        inf=float("inf")
 
-        adj_in=self.adjacent_in
-        T=[-1]*self.vertex_count()
+        prev = [None] * self.order()
 
-        Q=deque([v]); T[v]=v
-        while Q:
-            w=Q.popleft()
-            for x in adj_in[w]:
-                if T[x]==-1:
-                    T[x]=w
-                    Q.append(x)
-                    if x==u:
-                        P=[u]
-                        a=u
-                        while a!=v:
-                            a=T[a]
-                            P.append(a)
-                        if dist:
-                            return (len(P)-1,P)
-                        else:
-                            return P
-        if dist:
-            return (inf,None)
+        Q = deque([u])
+
+        while Q and (prev[v] is None):
+            x = Q.popleft()
+            for y, j in self.out_partner_with_label_yield(x):
+                if prev[y] is not None:
+                    continue
+
+                prev[y] = (x, j)
+                Q.append(y)
+
+        if prev[v] is not None:
+            vertex = [v]
+            arc = []
+            while v != u:
+                v, i = prev[v]
+                vertex.append(v)
+                arc.append(i)
+
+            vertex.reverse(); arc.reverse()
+            return { 'vertex': vertex, 'arc': arc }
         else:
-            return None
-
-    #深いコピー
-    def deepcopy(self):
-        from copy import deepcopy
-        D=Digraph(self.vertex_count())
-        D.arc_number=self.arc_count()
-        D.adjacent_out=deepcopy(self.adjacent_out)
-        D.adjacent_in=deepcopy(self.adjacent_in)
-        return D
+            return { 'vertex': None, 'arc': None }
 
 #================================================
 #Dijkstra

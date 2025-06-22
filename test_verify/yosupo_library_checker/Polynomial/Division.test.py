@@ -19,8 +19,8 @@ def verify():
     Q,R=divmod(F,G)
 
     Q.reduce(); R.reduce()
-    Q=Q.Poly if Q.Poly!=[0] else []
-    R=R.Poly if R.Poly!=[0] else []
+    Q=Q.poly if Q.poly!=[0] else []
+    R=R.poly if R.poly!=[0] else []
 
     print(len(Q), len(R))
     write(" ".join(map(str,Q))); print()

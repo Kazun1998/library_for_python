@@ -1,43 +1,41 @@
-def Longest_Increasing_Subsequence(A, mode=False, equal=False):
-    """ 列 L における LIS の長さを求める.
+def Longest_Increasing_Subsequence(A, equal = False):
+    """ A に対する LIS (最大狭義単調増加列) を求める
 
-    Mode=False のとき ... LIS の長さ, True のとき ... (長さ, 一例, 一例の各要素の場所)
-    equal: False のとき ... 狭義単調増加, True のとき... 広義単調増加
+    Args:
+        A (list): 列
+        equal (bool, optional): True にすると, LIS の条件が最大広義単調増加列になる. Defaults to False.
+
+    Returns:
+        dict:
+            length: 最大単調増加列の長さ
+            example: 最大単調増加列の例
+            index: example においてそれぞれの項を持ってきたインデックス
     """
-
     if equal:
         from bisect import bisect_right as bis
     else:
         from bisect import bisect_left as bis
 
-    if mode:
-        L=[]
-        Ind=[0]*len(A)
-        for i in range(len(A)):
-            a=A[i]
-            k=bis(L,a)
-            if k==len(L):
-                L.append(a)
-            else:
-                L[k]=a
-            Ind[i]=k
+    L = []
+    ind = [0] * len(A)
 
-        X=[]
-        I=[]
-        j=len(L)-1
-        for i in range(len(A)-1,-1,-1):
-            if Ind[i]==j:
-                j-=1
-                X.append(A[i])
-                I.append(i)
+    for i, a in enumerate(A):
+        k = bis(L,a)
+        if k == len(L):
+            L.append(a)
+        else:
+            L[k] = a
 
-        return len(L), X[::-1], I[::-1]
-    else:
-        L=[]
-        for a in A:
-            k=bis(L,a)
-            if k==len(L):
-                L.append(a)
-            else:
-                L[k]=a
-        return len(L)
+        ind[i]=k
+
+    X = []
+    I = []
+    j = len(L)-1
+    for i in range(len(A) - 1, -1, -1):
+        if ind[i] == j:
+            j -= 1
+            X.append(A[i])
+            I.append(i)
+
+    X.reverse(); I.reverse()
+    return { 'length': len(X), 'example': X, 'index': I }

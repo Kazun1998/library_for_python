@@ -1,91 +1,35 @@
-class Triple:
-    __slot__=("first", "second", "third")
+from typing import TypeVar, Generic
 
-    def __init__(self, first, second, third):
-        self.first=first
-        self.second=second
-        self.third=third
+S = TypeVar('S')
+T = TypeVar('T')
+U = TypeVar('U')
+class Triple(tuple, Generic[S, T, U]):
+    def __new__(cls, first: S, second: T, third: U):
+        return super().__new__(cls, (first, second, third))
 
-    def __str__(self):
-        return "({}, {}, {})".format(self.first, self.second, self.third)
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.first}, {self.second}, {self.third})"
 
-    def __repr__(self):
-        return "[Triple] : "+str(self)
+    @property
+    def first(self) -> S:
+        return self[0]
 
-    def __iter__(self):
-        yield from [self.first, self.second, self.third]
+    @property
+    def second(self) -> T:
+        return self[1]
 
-    def __eq__(self, other):
-        return (self.first==other.first) and (self.second==other.second) and (self.thrid==other.third)
+    @property
+    def third(self) -> U:
+        return self[2]
 
-    def __neq__(self, other):
-        return not (self==other)
+    def __add__(self, other: "Triple[S, T, U]") -> "Triple[S, T, U]":
+        return Triple(self.first + other.first, self.second + other.second, self.third + other.third)
 
-    def __le__(self, other):
-        f=(self.first<other.first)
-        g=(self.first==other.first and self.second<other.second)
-        h=(self.first==other.first and self.second==self.second and self.third<=other.third)
-        return  f or g or h
+    def __sub__(self, other: "Triple[S, T, U]") -> "Triple[S, T, U]":
+        return Triple(self.first - other.first, self.second - other.second, self.third - other.third)
 
-    def __lt__(self, other):
-        f=(self.first<other.first)
-        g=(self.first==other.first and self.second<other.second)
-        h=(self.first==other.first and self.second==self.second and self.third<other.third)
-        return  f or g or h
+    def __mul__(self, other: "Triple[S, T, U]") -> "Triple[S, T, U]":
+        return Triple(self.first * other.first, self.second * other.second, self.third * other.third)
 
-    def __ge__(self, other):
-        f=(self.first>other.first)
-        g=(self.first==other.first and self.second>other.second)
-        h=(self.first==other.first and self.second==self.second and self.third>=other.third)
-        return  f or g or h
-
-    def __gt__(self, other):
-        f=(self.first>other.first)
-        g=(self.first==other.first and self.second>other.second)
-        h=(self.first==other.first and self.second==self.second and self.third>other.third)
-        return  f or g or h
-
-    def __add__(self, other):
-        return Triple(self.first+other.first, self.second+other.second, self.third+other.third)
-
-    def __radd__(self, other):
-        self.first+=other.first
-        self.second+=other.second
-        self.third+=other.third
-        return self
-
-    def __sub__(self, other):
-        return Triple(self.first-other.first, self.second-other.second, self.third-other.third)
-
-    def __rsub__(self, other):
-        self.first-=other.first
-        self.second-=other.second
-        self.third-=other.third
-        return self
-
-    def __mul__(self, other):
-        return Triple(self.first*other.first, self.second*other.second, self.third*other.third)
-
-    def __rmul__(self, other):
-        self.first*=other.first
-        self.second*=other.second
-        self.third*=other.third
-        return self
-
-    def __floordiv__(self, other):
-        return Triple(self.first//other.first, self.second//other.second, self.third//other.third)
-
-    def __rfloordiv__(self, other):
-        self.first//=other.first
-        self.second//=other.second
-        self.third//=other.third
-        return self
-
-    def __truediv__(self, other):
-        return Triple(self.first/other.first, self.second/other.second, self.third/other.third)
-
-    def __rtruediv__(self, other):
-        self.first/=other.first
-        self.second/=other.second
-        self.third/=other.third
-        return self
+    def __xor__(self, other: "Triple[S, T, U]") -> "Triple[S, T, U]":
+        return Triple(self.first ^ other.first, self.second ^ other.second, self.third ^ other.third)

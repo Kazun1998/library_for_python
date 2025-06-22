@@ -9,14 +9,14 @@ write=sys.stdout.write
 
 #==================================================
 def verify():
-    T=int(input())
+    T = int(input())
 
-    Ans=[0]*T
+    ans = [0]*T
     for t in range(T):
-        N,M,A,B=map(int,input().split())
-        Ans[t]=floor_sum(A,B,M,N)
+        N, M, A, B = map(int ,input().split())
+        ans[t] = Floor_Sum.floor_sum(A, B, M, N)
 
-    write("\n".join(map(str,Ans)))
+    write("\n".join(map(str, ans)))
 
 #==================================================
 verify()
