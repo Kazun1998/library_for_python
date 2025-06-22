@@ -15,6 +15,7 @@ class Binary_Indexed_Tree(Generic[Group]):
         self.op=op
         self.zero=zero
         self.neg=neg
+        self.sub: Callable[[Group, Group], Group] = lambda x, y: self.op(x, self.neg(y))
         self.N=N=len(L)
         self.log=N.bit_length()-1
 
@@ -62,7 +63,7 @@ class Binary_Indexed_Tree(Generic[Group]):
         """
 
         a=self.get(k)
-        y=self.op(self.neg(a), x)
+        y = self.sub(x, a)
 
         self.add(k,y)
 
@@ -85,7 +86,7 @@ class Binary_Indexed_Tree(Generic[Group]):
         elif l==1:
             return self.__section(r)
         else:
-            return self.op(self.neg(self.__section(l-1)), self.__section(r))
+            return self.sub(self.__section(r), self.__section(l - 1))
 
     def __section(self, x: int) -> Group:
         """ B[0] + B[1] + ... + B[x] を求める.
