@@ -34,7 +34,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py
   requiredBy: []
-  timestamp: '2025-02-22 10:39:13+09:00'
+  timestamp: '2025-06-22 18:31:18+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Binary_Indexed_Tree.test.py

@@ -23,19 +23,20 @@ data:
     \n#==================================================\nfrom Binary_Indexed_Tree.Sparse_Binary_Indexed_Tree\
     \ import Sparse_Binary_Indexed_Tree\n\nimport sys\ninput=sys.stdin.readline\n\
     write=sys.stdout.write\n#==================================================\n\
-    def verify():\n    from operator import add,neg\n\n    N,Q=map(int,input().split())\n\
-    \    A=list(map(int,input().split()))\n    B=Sparse_Binary_Indexed_Tree(N,add,0,neg)\n\
-    \n    for i in range(N):\n        B.update(i,A[i])\n\n    Ans=[]\n    for q in\
-    \ range(Q):\n        mode,*query=map(int,input().split())\n\n        if mode==0:\n\
-    \            p,x=query\n            B.add(p,x)\n        else:\n            l,r=query\n\
-    \            Ans.append(B.sum(l,r-1))\n\n    write(\"\\n\".join(map(str,Ans)))\n\
-    \n#==================================================\nverify()\n"
+    def verify():\n    from operator import add, neg\n\n    N, Q = map(int, input().split())\n\
+    \    a = list(map(int, input().split()))\n    B = Sparse_Binary_Indexed_Tree[int](N,\
+    \ add, 0, neg)\n\n    for i in range(N):\n        B.update(i, a[i])\n\n    ans\
+    \ = []\n    for _ in range(Q):\n        mode, *query = map(int, input().split())\n\
+    \n        if mode == 0:\n            p, x = query\n            B.add(p, x)\n \
+    \       else:\n            l, r = query\n            ans.append(B.sum(l, r - 1))\n\
+    \n    write(\"\\n\".join(map(str, ans)))\n\n#==================================================\n\
+    verify()\n"
   dependsOn:
   - Binary_Indexed_Tree/Sparse_Binary_Indexed_Tree.py
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Sparse_Binary_Indexed_Tree.test.py
   requiredBy: []
-  timestamp: '2023-03-20 03:47:37+09:00'
+  timestamp: '2025-06-18 00:14:50+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Sparse_Binary_Indexed_Tree.test.py
