@@ -1,37 +1,54 @@
-from heapq import heappop,heappush
-class Heap_Point:
-        def __init__(self,x,d):
-            self.d=d
-            self.x=x
+from heapq import heappop, heappush
 
-        def __str__(self):
-            return "(point:{}, dist:{})".format(self.x,self.d)
+class Dijkstra_Point:
+    __slots__ = ("__point", "__dist")
 
-        def __repr__(self):
-            return str(self)
+    def __init__(self, point: int, dist: int):
+        self.__dist = dist
+        self.__point = point
 
-        def __lt__(self,other):
-            return self.d<other.d
+    @property
+    def dist(self) -> int:
+        return self.__dist
 
-        def __iter__(self):
-            yield from (self.x,self.d)
+    @property
+    def point(self) -> int:
+        return self.__point
+
+    def __str__(self) -> str:
+        return f"(point: {self.point}, dist: {self.dist})"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(point={self.point}, dist={self.dist})"
+
+    def __lt__(self, other: "Dijkstra_Point") -> bool:
+        return self.dist < other.dist
+
+    def __iter__(self):
+        yield from (self.point, self.dist)
 
 class Dijkstra_Heap:
     def __init__(self):
-        self.heap=[]
+        self.__heap: list[Dijkstra_Point] = []
 
-    def __str__(self):
-        return str(self.heap)
+    def __bool__(self) -> bool:
+        return bool(self.__heap)
 
-    def __repr__(self):
-        return repr(self.heap)
+    def push(self, point: int, dist: int):
+        """ 頂点 point までの距離が dist である情報をヒープに追加する.
 
-    def __bool__(self):
-        return bool(self.heap)
+        Args:
+            point (int): 頂点
+            dist (int): 距離
+        """
 
-    def push(self,point,dist):
-        heappush(self.heap,Heap_Point(point,dist))
+        heappush(self.__heap, Dijkstra_Point(point, dist))
 
-    def pop(self):
-        assert self.heap
-        return heappop(self.heap)
+    def pop(self) -> Dijkstra_Point:
+        """ 次に確定させるべき頂点と距離の情報を pop する.
+
+        Returns:
+            Dijkstra_Point: 次に確定させるべき頂点と距離の情報
+        """
+        assert self.__heap
+        return heappop(self.__heap)
