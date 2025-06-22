@@ -32,7 +32,7 @@ class Dijkstra_Heap:
         self.__heap: list[Dijkstra_Point] = []
 
     def __bool__(self) -> bool:
-        return bool(self.heap)
+        return bool(self.__heap)
 
     def push(self, point: int, dist: int):
         """ 頂点 point までの距離が dist である情報をヒープに追加する.
@@ -50,5 +50,5 @@ class Dijkstra_Heap:
         Returns:
             Dijkstra_Point: 次に確定させるべき頂点と距離の情報
         """
-        assert self.heap
+        assert self.__heap
         return heappop(self.__heap)
