@@ -159,7 +159,7 @@ data:
     - icon: ':warning:'
       path: Special_Input.py
       title: Special_Input.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Stern_Brocot_Tree.py
       title: Stern_Brocot_Tree.py
     - icon: ':heavy_check_mark:'
@@ -733,8 +733,14 @@ data:
       path: test_verify/yosupo_library_checker/Math/Nimber.test.py
       title: test_verify/yosupo_library_checker/Math/Nimber.test.py
     - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Math/Rational_Approximation.test.py
+      title: test_verify/yosupo_library_checker/Math/Rational_Approximation.test.py
+    - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
       title: test_verify/yosupo_library_checker/Math/Sqrt_Mod.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Math/Stern_Brocot_Tree.test.py
+      title: test_verify/yosupo_library_checker/Math/Stern_Brocot_Tree.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Two_Sat.test.py
       title: test_verify/yosupo_library_checker/Math/Two_Sat.test.py
