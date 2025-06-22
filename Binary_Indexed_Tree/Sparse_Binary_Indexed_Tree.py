@@ -1,101 +1,151 @@
-class Sparse_Binary_Indexed_Tree():
-    def __init__(self, N, op, zero, neg):
-        """ calc を演算とする最高の添字が N になるような Sparse Binary Indexed Tree を作成
-        calc: 演算 (2変数関数, 可換群)
-        zero: 群 calc の単位元 (x+e=e+x=xを満たすe)
-        neg : 群 calc の逆元 (1変数関数, x+neg(x)=neg(x)+x=e をみたす neg(x))
-        """
-        self.op=op
-        self.zero=zero
-        self.neg=neg
-        self.N=N
-        self.log=max(N.bit_length()-1, 1)
-        self.data={}
+from typing import TypeVar, Generic, Callable
 
-    def get(self, k):
+G = TypeVar('G')
+class Sparse_Binary_Indexed_Tree(Generic[G]):
+    def __init__(self, N: int, op: Callable[[G, G], G], zero: G, neg: Callable[[G], G]):
+        """ op を群 G の演算とつする N 要素を持つ疎 Binary Indexed Tree を生成する.
+
+        Args:
+            N (int): 要素数
+            op (Callable[[G, G], G]): 群演算
+            zero (G): 群 G における単位元 (任意の x in G に対して, x + e = e + x = x となる e in G)
+            neg (Callable[[G], G]): x in G における逆元 (x + y = y + x = e となる y) を求める関数
+        """
+
+        self.op = op
+        self.zero = zero
+        self.neg = neg
+        self.__N = N
+        self.__log = max(N.bit_length() - 1, 1)
+        self.data: dict[int, G] = {}
+
+    @property
+    def N(self) -> int:
+        return self.__N
+
+    @property
+    def log(self) -> int:
+        return self.__log
+
+    def get(self, k: int) -> G:
         """ 第 k 要素の値を出力する.
-        k    : 数列の要素
-        index: 先頭の要素の番号
-        """
-        return self.sum(k,k)
 
-    def add(self, k, x):
+        Args:
+            k (int): 要素番号
+
+        Returns:
+            G: 第 k 要素
+        """
+        return self.sum(k, k)
+
+    def add(self, k: int, x: G):
         """ 第 k 要素に x を加え, 更新を行う.
-        k    : 数列の要素
-        x    : 加える値
+
+        Args:
+            k (int): 要素番号
+            x (G): 加算する要素
         """
 
-        data=self.data; op=self.op
-        p=k+1
-        while p<=self.N:
-            data[p]=op(data.get(p, self.zero), x)
-            p+=p&(-p)
+        data = self.data
+        op = self.op
 
-    def update(self, k, x):
+        p = k + 1
+        while p <= self.N:
+            data[p] = op(data.get(p, self.zero), x)
+            p += p & (-p)
+
+    def update(self, k: int, x: G):
         """ 第 k 要素を x に変え, 更新を行う.
-        k: 数列の要素
-        x: 更新後の値
+
+        Args:
+            k (int): 要素番号
+            x (G): 変更後の値
         """
 
-        a=self.get(k)
-        y=self.op(self.neg(a), x)
+        a = self.get(k)
+        y = self.op(self.neg(a), x)
 
-        self.add(k,y)
+        self.add(k, y)
 
-    def sum(self, l, r):
-        """ 第 l 要素から第 r 要素までの総和を求める.
-        ※ l != 0 を使うならば, 群でなくてはならない.
-        l: 始まり
-        r: 終わり
+    def sum(self, l: int, r: int) -> G:
+        """ 第 l 項から第 r 項までの総和を求める (ただし, l != 0 のときは G が群でなくてはならない).
+
+        Args:
+            l (int): 左端
+            r (int): 右端
+
+        Returns:
+            G: 総和
         """
 
-        l=l+1 if 0<=l else 1
-        r=r+1 if r<self.N else self.N
+        l = l + 1 if 0 <= l else 1
+        r = r + 1 if r < self.N else self.N
 
-        if l>r:
+        if l > r:
             return self.zero
-        elif l==1:
+        elif l == 1:
             return self.__section(r)
         else:
-            return self.op(self.neg(self.__section(l-1)), self.__section(r))
+            return self.op(self.neg(self.__section(l - 1)), self.__section(r))
 
-    def __section(self, x):
-        """ B[0]+...+B[x] を求める. """
-        data=self.data; op=self.op
-        S=self.zero
-        while x>0:
-            S=op(data.get(x, self.zero), S)
-            x-=x&(-x)
-        return S
+    def __section(self, x: int) -> G:
+        """ B[0] + B[1] + ... + B[x] を求める.
 
-    def all_sum(self):
-        return self.sum(0, self.N-1)
+        Args:
+            x (int): 右端
 
-    def binary_search(self, cond):
-        """ cond(B[0]+...+B[k]) が True となるような最小の k を返す.
+        Returns:
+            G: 総和
+        """
 
-        cond: 単調増加
+        data = self.data
+        op = self.op
 
-        ※ cond(zero)=True の場合の返り値は -1 とする.
-        ※ cond(B[0]+...+B[k]) なる k が (0<=k<N に) 存在しない場合の返り値は N とする.
+        total = self.zero
+        while x > 0:
+            total = op(data.get(x, self.zero), total)
+            x -= x & (-x)
+        return total
+
+    def all_sum(self) -> G:
+        """ B[0] + B[1] + ... + B[len(B) - 1] を求める.
+
+        Returns:
+            G: 総和
+        """
+
+        return self.sum(0, self.N - 1)
+
+    def binary_search(self, cond: Callable[[int], bool]) -> int:
+        """ cond(B[0] + B[1] + ... + B[k]) が True になる最小の k を止める.
+
+        ※ G は順序群である必要がある.
+        ※ cond(zero) = True のとき, 返り値は -1 とする.
+        ※ cond(B[0] + ... + B[k]) なる k が (0 <= k < N に) 存在しない場合, 返り値は N とする.
+
+        Args:
+            cond (Callable[[int], bool]): 単調増加な条件
+
+        Returns:
+            int: cond(B[0] + B[1] + ... + B[k]) が True になる最小の k
         """
 
         if cond(self.zero):
             return -1
 
-        j=0
-        r=self.N
-        t=1<<self.log
-        data=self.data; op=self.op
-        alpha=self.zero
+        j = 0
+        t = 1 << self.log
+        data = self.data
+        op = self.op
+        alpha = self.zero
 
-        while t>0:
-            if j+t<=self.N:
-                beta=op(alpha, data.get(j+t, self.zero))
+        while t > 0:
+            if j + t <= self.N:
+                beta = op(alpha, data.get(j + t, self.zero))
                 if not cond(beta):
-                    alpha=beta
-                    j+=t
-            t>>=1
+                    alpha = beta
+                    j += t
+            t >>= 1
 
         return j
 
@@ -105,7 +155,7 @@ class Sparse_Binary_Indexed_Tree():
         else:
             return [self.get(t) for t in index]
 
-    def __setitem__(self, index, val):
+    def __setitem__(self, index: int, val: G):
         self.update(index, val)
 
     def __iter__(self):
