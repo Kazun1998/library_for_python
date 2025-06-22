@@ -1,6 +1,6 @@
 class Stern_Brocot_Tree:
     @staticmethod
-    def encode(a: int, b: int, left = 'L', right = 'R'):
+    def encode(a: int, b: int, left = 'L', right = 'R') -> list[tuple]:
         path = []
         q, r = divmod(a, b)
         if q > 0:
@@ -20,7 +20,7 @@ class Stern_Brocot_Tree:
         return path
 
     @staticmethod
-    def decode_interval(code, left = 'L', right = 'R'):
+    def decode_interval(code, left = 'L', right = 'R') -> tuple[int, int, int, int]:
         p, q, r, s = 0, 1, 1, 0
         for direction, k in code:
             if direction == left:
@@ -33,12 +33,12 @@ class Stern_Brocot_Tree:
 
 
     @classmethod
-    def decode(cls, code, left = 'L', right = 'R'):
+    def decode(cls, code, left = 'L', right = 'R') -> tuple[int, int]:
         p, q, r, s = cls.decode_interval(code, left, right)
         return (p + r, q + s)
 
     @classmethod
-    def lowest_common_ancestor(cls, a: int, b: int, c:int, d:int):
+    def lowest_common_ancestor(cls, a: int, b: int, c:int, d:int) -> tuple[int, int]:
         if (a, b) == (1, 1) or (c, d) == (1, 1):
             return (1, 1)
 
@@ -55,12 +55,12 @@ class Stern_Brocot_Tree:
         return cls.decode(lca_code)
 
     @classmethod
-    def depth(cls, a: int, b: int):
+    def depth(cls, a: int, b: int) -> int:
         code = cls.encode(a, b)
         return sum(k for _, k in code)
 
     @classmethod
-    def ancestor(cls, a: int, b: int, k: int, default = None):
+    def ancestor(cls, a: int, b: int, k: int, default = None) -> tuple[int, int]:
         code = []
         for direction, l in cls.encode(a, b):
             l = min(k, l)
@@ -76,14 +76,20 @@ class Stern_Brocot_Tree:
         return cls.decode_interval(cls.encode(a, b))
 
     @classmethod
-    def binary_search_range_increase(cls, N, cond):
+    def binary_search_range_increase(cls, N: int, cond) -> tuple[int, int, int, int]:
         """ 単調増加な check において, cond(x) = T がとなる最小の x を挟む分子と分母が N 以下の有理数を求める.
 
         Args:
+            N (int): 分子と分母の上限
             cond: 2 変数関数で, cond(a, b) は cond(a / b) を意味する.
+
+        Returns:
+            tuple[int, int, int, int]: 整数の組 (p, q, r, s) は以下を意味する.
+                p, q: cond(x) = F を満たす x で分子と分母が共に N 以下である有理数のうち, 最大の有理数を x としたとき, x = p / q である.
+                r, s :cond(x) = T を満たす x で分子と分母が共に N 以下である有理数のうち, 最小の有理数を x としたとき, x = r / s である.
         """
 
-        def right_search(p, q, r, s):
+        def right_search(p: int, q: int, r: int, s: int) -> int:
             lower = 0
             upper = (N - p) // r + 1
 
@@ -95,7 +101,7 @@ class Stern_Brocot_Tree:
                     upper = d
             return lower
 
-        def left_search(p, q, r, s):
+        def left_search(p: int, q: int, r: int, s: int) -> int:
             lower = 0
             upper = (N - p) // r + 1
 
