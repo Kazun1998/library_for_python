@@ -25,7 +25,7 @@ data:
     \        return self.dist < other.dist\n\n    def __iter__(self):\n        yield\
     \ from (self.point, self.dist)\n\nclass Dijkstra_Heap:\n    def __init__(self):\n\
     \        self.__heap: list[Dijkstra_Point] = []\n\n    def __bool__(self) -> bool:\n\
-    \        return bool(self.heap)\n\n    def push(self, point: int, dist: int):\n\
+    \        return bool(self.__heap)\n\n    def push(self, point: int, dist: int):\n\
     \        \"\"\" \u9802\u70B9 point \u307E\u3067\u306E\u8DDD\u96E2\u304C dist \u3067\
     \u3042\u308B\u60C5\u5831\u3092\u30D2\u30FC\u30D7\u306B\u8FFD\u52A0\u3059\u308B\
     .\n\n        Args:\n            point (int): \u9802\u70B9\n            dist (int):\
@@ -34,13 +34,13 @@ data:
     \u5B9A\u3055\u305B\u308B\u3079\u304D\u9802\u70B9\u3068\u8DDD\u96E2\u306E\u60C5\
     \u5831\u3092 pop \u3059\u308B.\n\n        Returns:\n            Dijkstra_Point:\
     \ \u6B21\u306B\u78BA\u5B9A\u3055\u305B\u308B\u3079\u304D\u9802\u70B9\u3068\u8DDD\
-    \u96E2\u306E\u60C5\u5831\n        \"\"\"\n        assert self.heap\n        return\
-    \ heappop(self.__heap)\n"
+    \u96E2\u306E\u60C5\u5831\n        \"\"\"\n        assert self.__heap\n       \
+    \ return heappop(self.__heap)\n"
   dependsOn: []
   isVerificationFile: false
   path: Dijkstra_Heap.py
   requiredBy: []
-  timestamp: '2025-06-22 10:08:48+09:00'
+  timestamp: '2025-06-22 10:21:17+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Dijkstra_Heap.py
