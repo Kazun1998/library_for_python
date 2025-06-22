@@ -1,7 +1,7 @@
 from heapq import heappop, heappush
 
 class Dijkstra_Point:
-    __slots__ = ("point", "dist")
+    __slots__ = ("__point", "__dist")
 
     def __init__(self, point: int, dist: int):
         self.__dist = dist
