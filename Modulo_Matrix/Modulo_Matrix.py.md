@@ -26,11 +26,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.13.5/x64/lib/python3.13/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.13.5/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "from copy import deepcopy\n\nclass SingularMatrixError(Exception):\n    def\
     \ __str__(self):\n        return \"\u975E\u6B63\u5247\u884C\u5217\u306E\u9006\u884C\
@@ -271,12 +271,12 @@ data:
   timestamp: '2025-02-24 11:37:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/yosupo_library_checker/Matrix/Inverse.test.py
-  - test_verify/yosupo_library_checker/Matrix/Adjugate_Matrix.test.py
   - test_verify/yosupo_library_checker/Matrix/Power.test.py
   - test_verify/yosupo_library_checker/Matrix/Matrix_Rank.test.py
-  - test_verify/yosupo_library_checker/Matrix/Product.test.py
   - test_verify/yosupo_library_checker/Matrix/Determinant.test.py
+  - test_verify/yosupo_library_checker/Matrix/Product.test.py
+  - test_verify/yosupo_library_checker/Matrix/Inverse.test.py
+  - test_verify/yosupo_library_checker/Matrix/Adjugate_Matrix.test.py
 documentation_of: Modulo_Matrix/Modulo_Matrix.py
 layout: document
 title: Modulo_Matrix

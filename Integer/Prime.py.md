@@ -2,19 +2,22 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: test_verify/yosupo_library_checker/Math/Factorize.test.py
+    title: test_verify/yosupo_library_checker/Math/Factorize.test.py
   _isVerificationFailed: false
   _pathExtension: py
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links:
     - https://judge.yosupo.jp/submission/31819
     - https://judge.yosupo.jp/submission/6131
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.13.5/x64/lib/python3.13/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.13.5/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "class Prime:\n    class Pseudo_Prime_Generator:\n        def __init__(self):\n\
     \            self.prime = 1\n            self.step = None\n\n        def __iter__(self):\n\
@@ -120,81 +123,91 @@ data:
     \ = True\n        for _1 in range(k):\n            if (y + 1) % N == 0:\n    \
     \            flag=False\n                break\n\n            y *= y\n       \
     \     y %= N\n\n        if flag:\n            return False\n\n    return True\n\
-    \n#\u30DD\u30E9\u30FC\u30C9\u30FB\u30ED\u30FC\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\
-    \u306B\u3088\u3063\u3066\u7D20\u56E0\u6570\u3092\u767A\u898B\u3059\u308B\n#\u53C2\
-    \u8003\u5143:https://judge.yosupo.jp/submission/6131\ndef Find_Factor_Rho(N):\n\
-    \    if N==1:\n        return 1\n    from math import gcd\n    m=1<<(N.bit_length()//8+1)\n\
-    \n    for c in range(1,99):\n        f=lambda x:(x*x+c)%N\n        y,r,q,g=2,1,1,1\n\
-    \        while g==1:\n            x=y\n            for i in range(r):\n      \
-    \          y=f(y)\n            k=0\n            while k<r and g==1:\n        \
-    \        for i in range(min(m, r - k)):\n                    y=f(y)\n        \
-    \            q=q*abs(x - y)%N\n                g=gcd(q,N)\n                k+=m\n\
-    \            r <<=1\n\n        if g<N:\n            if Miller_Rabin_Primality_Test(g):\n\
-    \                return g\n            elif Miller_Rabin_Primality_Test(N//g):\n\
-    \                return N//g\n    return N\n\n#\u30DD\u30E9\u30FC\u30C9\u30FB\u30ED\
-    \u30FC\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u306B\u3088\u308B\u7D20\u56E0\u6570\
-    \u5206\u89E3\n#\u53C2\u8003\u5143:https://judge.yosupo.jp/submission/6131\ndef\
-    \ Pollard_Rho_Prime_Factorization(N):\n    I=2\n    res=[]\n    while I*I<=N:\n\
-    \        if N%I==0:\n            k=0\n            while N%I==0:\n            \
-    \    k+=1\n                N//=I\n            res.append([I,k])\n\n        I+=1+(I%2)\n\
-    \n        if I!=101 or N<2**20:\n            continue\n\n        while N>1:\n\
-    \            if Miller_Rabin_Primality_Test(N):\n                res.append([N,1])\n\
-    \                N=1\n            else:\n                j=Find_Factor_Rho(N)\n\
-    \                k=0\n                while N%j==0:\n                    N//=j\n\
-    \                    k+=1\n                res.append([j,k])\n    if N>1:\n  \
-    \      res.append([N,1])\n    res.sort(key=lambda x:x[0])\n    return res\n\n\
-    class Sieve_of_Eratosthenes:\n    @staticmethod\n    def list(N: int):\n     \
-    \   \"\"\" N \u4EE5\u4E0B\u306E\u975E\u8CA0\u6574\u6570\u306B\u5BFE\u3059\u308B\
-    \ Eratosthenes \u306E\u7BE9\u3092\u5B9F\u884C\u3059\u308B.\n\n        Args:\n\
-    \            N (int): \u4E0A\u9650\n\n        Returns:\n            list[int]:\
-    \ \u7B2C k \u9805\u306B\u3064\u3044\u3066, k \u304C\u7D20\u6570\u306A\u3089\u3070\
-    , \u7B2C k \u9805\u304C 1, k \u304C\u7D20\u6570\u3067\u306A\u3044\u306A\u3089\u3070\
-    , \u7B2C k \u9805\u304C 0 \u3067\u3042\u308B\u5217.\n        \"\"\"\n\n      \
-    \  if N == 0:\n            return [0]\n\n        sieve = [1] * (N + 1)\n     \
-    \   sieve[0] = sieve[1] = 0\n\n        for x in range(2 * 2, N + 1, 2):\n    \
-    \        sieve[x] = 0\n\n        for x in range(3 * 3, N + 1, 6):\n          \
-    \  sieve[x] = 0\n\n        p = 5\n        parity = 0\n        while p * p <= N:\n\
-    \            if sieve[p]:\n                pointer = p * p\n                while\
-    \ pointer <= N:\n                    sieve[pointer] = 0\n                    pointer\
-    \ += 2 * p\n\n            p += 4 if parity else 2\n            parity ^= 1\n \
-    \       return sieve\n\n    @staticmethod\n    def smallest_prime_factor(N: int):\n\
-    \        \"\"\" 0, 1, ..., N \u306B\u3064\u3044\u3066\u6700\u5C0F\u306E\u7D20\u56E0\
-    \u6570\u306E\u30EA\u30B9\u30C8\u3092\u6C42\u3081\u308B\n\n        Args:\n    \
-    \        N (int): \u4E0A\u9650\n\n        Returns:\n            list[int]: \u7B2C\
-    \ k \u9805\u306F k \u306E\u6700\u5C0F\u306E\u7D20\u56E0\u6570\u3067\u3042\u308B\
-    \u30EA\u30B9\u30C8 (k = 0, 1 \u306E\u5834\u5408\u306F 1 \u3068\u3059\u308B)\n\
-    \        \"\"\"\n\n        if N <= 1:\n            return [1] * (N + 1)\n\n  \
-    \      # spf: smallest prime factor\n        spf = [0] * (N + 1); spf[0] = spf[1]\
-    \ = 1\n\n        for x in range(2, N + 1, 2):\n            spf[x] = 2\n\n    \
-    \    for x in range(3, N + 1, 6):\n            spf[x] = 3\n\n        primes =\
-    \ [2, 3]\n        parity = 0\n        x = 5\n        while x <= N:\n         \
-    \   if spf[x] == 0:\n                spf[x] = x\n                primes.append(x)\n\
-    \n            for p in primes:\n                if x * p <= N:\n             \
-    \       spf[x * p] = p\n                else:\n                    break\n\n \
-    \               if p == spf[x]:\n                    break\n\n            x +=\
-    \ 4 if parity else 2\n            parity ^= 1\n\n        return spf\n\n    @staticmethod\n\
-    \    def faster_prime_factorization(N: int, spf: list) -> list:\n        \"\"\"\
-    \ smallest_prime_factor \u3067\u6C42\u3081\u305F\u6700\u5C0F\u306E\u7D20\u56E0\
-    \u6570\u30EA\u30B9\u30C8\u3092\u5229\u7528\u3057\u3066, N \u3092\u9AD8\u901F\u3067\
-    \u7D20\u56E0\u6570\u5206\u89E3\u3059\u308B.\n\n        Args:\n            N (int):\
-    \ \u7D20\u56E0\u6570\u5206\u89E3\u306E\u5BFE\u8C61\n            spf (list[int]):\
-    \ smallest_prime_factor \u3067\u6C42\u3081\u305F\u6700\u5C0F\u306E\u7D20\u56E0\
-    \u6570\u30EA\u30B9\u30C8\n\n        Returns:\n            list[list[int]]: \u7D20\
-    \u56E0\u6570\u5206\u89E3\u306E\u7D50\u679C\n        \"\"\"\n\n        if N ==\
-    \ 0:\n            return [[0, 1]]\n\n        factors = []\n        if N < 0:\n\
-    \            factors.append([-1, 1])\n            N = abs(N)\n\n        while\
-    \ N > 1:\n            p = spf[N]\n            e = 0\n            while spf[N]\
-    \ == p:\n                e += 1\n                N //= p\n\n            factors.append([p,\
-    \ e])\n\n        return factors\n\n#\u7D20\u6570\u306E\u500B\u6570\n#Thanks for\
-    \ pyranine\n#URL: https://judge.yosupo.jp/submission/31819\ndef Prime_Pi(N):\n\
-    \    \"\"\" N \u4EE5\u4E0B\u306E\u7D20\u6570\u306E\u500B\u6570\n\n    N: int\n\
-    \    \"\"\"\n\n    if N<2: return 0\n    v = int(N ** 0.5) + 1\n    smalls = [i\
-    \ // 2 for i in range(1, v + 1)]\n    smalls[1] = 0\n    s = v // 2\n    roughs\
-    \ = [2 * i + 1 for i in range(s)]\n    larges = [(N // roughs[i] + 1) // 2 for\
-    \ i in range(s)]\n    skip = [False] * v\n\n    pc = 0\n    for p in range(3,\
-    \ v):\n        if smalls[p] <= smalls[p - 1]:\n            continue\n\n      \
-    \  q = p * p\n        pc += 1\n        if q * q > N:\n            break\n    \
-    \    skip[p] = True\n        for i in range(q, v, 2 * p):\n            skip[i]\
+    \ndef Find_Factor_Rho(N: int) -> int:\n    \"\"\" \u6B63\u306E\u6574\u6570 N \u306B\
+    \u5BFE\u3057\u3066, N \u306E\u7D20\u56E0\u6570\u3092\u30DD\u30E9\u30FC\u30C9\u30FB\
+    \u30ED\u30FC\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u3067\u6C42\u3081\u308B.\n\n\
+    \    Args:\n        N (int): \u6B63\u306E\u6574\u6570\n\n    Returns:\n      \
+    \  int: N \u306E\u7D20\u56E0\u6570\n\n    Reference:\n        https://judge.yosupo.jp/submission/6131\n\
+    \    \"\"\"\n    if N == 1:\n        return 1\n\n    from math import gcd\n  \
+    \  m = 1 << (N.bit_length() // 8 + 1)\n\n    for c in range(1, 99):\n        f\
+    \ = lambda x: (x * x + c) % N\n\n        y, r, q, g = 2, 1, 1, 1\n        while\
+    \ g == 1:\n            x = y\n            for _ in range(r):\n               \
+    \ y = f(y)\n\n            k = 0\n            while k < r and g == 1:\n       \
+    \         for _ in range(min(m, r - k)):\n                    y = f(y)\n     \
+    \               q = q * abs(x - y) % N\n                g = gcd(q, N)\n      \
+    \          k += m\n            r <<= 1\n\n        if g < N:\n            if Miller_Rabin_Primality_Test(g):\n\
+    \                return g\n            elif Miller_Rabin_Primality_Test(N // g):\n\
+    \                return N // g\n    return N\n\ndef Pollard_Rho_Prime_Factorization(N:\
+    \ int) -> list[tuple[int, int]]:\n    \"\"\" \u6B63\u306E\u6574\u6570 N \u306B\
+    \u5BFE\u3057\u3066, N \u306E\u7D20\u56E0\u6570\u5206\u89E3\u3092\u30DD\u30E9\u30FC\
+    \u30C9\u30FB\u30ED\u30FC\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u3092\u7528\u3044\
+    \u3066\u6C42\u3081\u308B.\n\n    Args:\n        N (int): \u6B63\u306E\u6574\u6570\
+    \n\n    Returns:\n        list[tuple[int, int]]: (p, e) \u3068\u3044\u3046\u5F62\
+    \u306E\u30EA\u30B9\u30C8\n            p: \u7D20\u6570\n            e: \u6307\u6570\
+    \n        [(p0, e0), (p1, e1), ..., (pk, ek)] \u3067\u3042\u308B\u3068\u304D,\
+    \ N = p0^e0 * p1^e1 * ... * pk^ek \u3067\u3042\u308B.\n\n    Reference:\n    \
+    \    https://judge.yosupo.jp/submission/6131\n    \"\"\"\n    def exponents(n:\
+    \ int, p: int) -> tuple[int, int]:\n        k = 0\n        while n % p == 0:\n\
+    \            k += 1\n            n //= p\n        return n, k\n\n    prime = 2\n\
+    \    res: list[tuple[int, int]] = []\n\n    while prime * prime <= N:\n      \
+    \  if N % prime == 0:\n            N, k = exponents(N, prime)\n            res.append((prime,\
+    \ k))\n\n        prime += 1 + (prime % 2)\n\n        if prime != 101 or N < 2\
+    \ ** 20:\n            continue\n\n        while N > 1:\n            if Miller_Rabin_Primality_Test(N):\n\
+    \                res.append((N, 1))\n                N = 1\n            else:\n\
+    \                p = Find_Factor_Rho(N)\n                N, k = exponents(N, p)\n\
+    \                res.append((p, k))\n    if N > 1:\n        res.append((N, 1))\n\
+    \n    res.sort(key = lambda prime_power: prime_power[0])\n    return res\n\nclass\
+    \ Sieve_of_Eratosthenes:\n    @staticmethod\n    def list(N: int):\n        \"\
+    \"\" N \u4EE5\u4E0B\u306E\u975E\u8CA0\u6574\u6570\u306B\u5BFE\u3059\u308B Eratosthenes\
+    \ \u306E\u7BE9\u3092\u5B9F\u884C\u3059\u308B.\n\n        Args:\n            N\
+    \ (int): \u4E0A\u9650\n\n        Returns:\n            list[int]: \u7B2C k \u9805\
+    \u306B\u3064\u3044\u3066, k \u304C\u7D20\u6570\u306A\u3089\u3070, \u7B2C k \u9805\
+    \u304C 1, k \u304C\u7D20\u6570\u3067\u306A\u3044\u306A\u3089\u3070, \u7B2C k \u9805\
+    \u304C 0 \u3067\u3042\u308B\u5217.\n        \"\"\"\n\n        if N == 0:\n   \
+    \         return [0]\n\n        sieve = [1] * (N + 1)\n        sieve[0] = sieve[1]\
+    \ = 0\n\n        for x in range(2 * 2, N + 1, 2):\n            sieve[x] = 0\n\n\
+    \        for x in range(3 * 3, N + 1, 6):\n            sieve[x] = 0\n\n      \
+    \  p = 5\n        parity = 0\n        while p * p <= N:\n            if sieve[p]:\n\
+    \                pointer = p * p\n                while pointer <= N:\n      \
+    \              sieve[pointer] = 0\n                    pointer += 2 * p\n\n  \
+    \          p += 4 if parity else 2\n            parity ^= 1\n        return sieve\n\
+    \n    @staticmethod\n    def smallest_prime_factor(N: int):\n        \"\"\" 0,\
+    \ 1, ..., N \u306B\u3064\u3044\u3066\u6700\u5C0F\u306E\u7D20\u56E0\u6570\u306E\
+    \u30EA\u30B9\u30C8\u3092\u6C42\u3081\u308B\n\n        Args:\n            N (int):\
+    \ \u4E0A\u9650\n\n        Returns:\n            list[int]: \u7B2C k \u9805\u306F\
+    \ k \u306E\u6700\u5C0F\u306E\u7D20\u56E0\u6570\u3067\u3042\u308B\u30EA\u30B9\u30C8\
+    \ (k = 0, 1 \u306E\u5834\u5408\u306F 1 \u3068\u3059\u308B)\n        \"\"\"\n\n\
+    \        if N <= 1:\n            return [1] * (N + 1)\n\n        # spf: smallest\
+    \ prime factor\n        spf = [0] * (N + 1); spf[0] = spf[1] = 1\n\n        for\
+    \ x in range(2, N + 1, 2):\n            spf[x] = 2\n\n        for x in range(3,\
+    \ N + 1, 6):\n            spf[x] = 3\n\n        primes = [2, 3]\n        parity\
+    \ = 0\n        x = 5\n        while x <= N:\n            if spf[x] == 0:\n   \
+    \             spf[x] = x\n                primes.append(x)\n\n            for\
+    \ p in primes:\n                if x * p <= N:\n                    spf[x * p]\
+    \ = p\n                else:\n                    break\n\n                if\
+    \ p == spf[x]:\n                    break\n\n            x += 4 if parity else\
+    \ 2\n            parity ^= 1\n\n        return spf\n\n    @staticmethod\n    def\
+    \ faster_prime_factorization(N: int, spf: list) -> list:\n        \"\"\" smallest_prime_factor\
+    \ \u3067\u6C42\u3081\u305F\u6700\u5C0F\u306E\u7D20\u56E0\u6570\u30EA\u30B9\u30C8\
+    \u3092\u5229\u7528\u3057\u3066, N \u3092\u9AD8\u901F\u3067\u7D20\u56E0\u6570\u5206\
+    \u89E3\u3059\u308B.\n\n        Args:\n            N (int): \u7D20\u56E0\u6570\u5206\
+    \u89E3\u306E\u5BFE\u8C61\n            spf (list[int]): smallest_prime_factor \u3067\
+    \u6C42\u3081\u305F\u6700\u5C0F\u306E\u7D20\u56E0\u6570\u30EA\u30B9\u30C8\n\n \
+    \       Returns:\n            list[list[int]]: \u7D20\u56E0\u6570\u5206\u89E3\u306E\
+    \u7D50\u679C\n        \"\"\"\n\n        if N == 0:\n            return [[0, 1]]\n\
+    \n        factors = []\n        if N < 0:\n            factors.append([-1, 1])\n\
+    \            N = abs(N)\n\n        while N > 1:\n            p = spf[N]\n    \
+    \        e = 0\n            while spf[N] == p:\n                e += 1\n     \
+    \           N //= p\n\n            factors.append([p, e])\n\n        return factors\n\
+    \n#\u7D20\u6570\u306E\u500B\u6570\n#Thanks for pyranine\n#URL: https://judge.yosupo.jp/submission/31819\n\
+    def Prime_Pi(N):\n    \"\"\" N \u4EE5\u4E0B\u306E\u7D20\u6570\u306E\u500B\u6570\
+    \n\n    N: int\n    \"\"\"\n\n    if N<2: return 0\n    v = int(N ** 0.5) + 1\n\
+    \    smalls = [i // 2 for i in range(1, v + 1)]\n    smalls[1] = 0\n    s = v\
+    \ // 2\n    roughs = [2 * i + 1 for i in range(s)]\n    larges = [(N // roughs[i]\
+    \ + 1) // 2 for i in range(s)]\n    skip = [False] * v\n\n    pc = 0\n    for\
+    \ p in range(3, v):\n        if smalls[p] <= smalls[p - 1]:\n            continue\n\
+    \n        q = p * p\n        pc += 1\n        if q * q > N:\n            break\n\
+    \        skip[p] = True\n        for i in range(q, v, 2 * p):\n            skip[i]\
     \ = True\n\n        ns = 0\n        for k in range(s):\n            i = roughs[k]\n\
     \            if skip[i]:\n                continue\n            d = i * p\n  \
     \          larges[ns] = larges[k] - (larges[smalls[d] - pc] if d < v else smalls[N\
@@ -220,9 +233,10 @@ data:
   isVerificationFile: false
   path: Integer/Prime.py
   requiredBy: []
-  timestamp: '2025-05-11 20:18:40+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  timestamp: '2025-06-29 02:08:42+09:00'
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - test_verify/yosupo_library_checker/Math/Factorize.test.py
 documentation_of: Integer/Prime.py
 layout: document
 redirect_from:

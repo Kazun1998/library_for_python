@@ -408,7 +408,7 @@ data:
     - icon: ':warning:'
       path: Integer/Modulo.py
       title: Integer/Modulo.py
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: Integer/Prime.py
       title: Integer/Prime.py
     - icon: ':warning:'
@@ -717,6 +717,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
       title: test_verify/yosupo_library_checker/Math/Discrete_Log.test.py
+    - icon: ':heavy_check_mark:'
+      path: test_verify/yosupo_library_checker/Math/Factorize.test.py
+      title: test_verify/yosupo_library_checker/Math/Factorize.test.py
     - icon: ':heavy_check_mark:'
       path: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
       title: test_verify/yosupo_library_checker/Math/Floor_Sum.test.py
