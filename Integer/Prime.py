@@ -289,35 +289,47 @@ def Miller_Rabin_Primality_Test(N, trial = 20):
 
     return True
 
-#ポラード・ローアルゴリズムによって素因数を発見する
-#参考元:https://judge.yosupo.jp/submission/6131
-def Find_Factor_Rho(N):
-    if N==1:
+def Find_Factor_Rho(N: int) -> int:
+    """ 正の整数 N に対して, N の素因数をポラード・ローアルゴリズムで求める.
+
+    Args:
+        N (int): 正の整数
+
+    Returns:
+        int: N の素因数
+
+    Reference:
+        https://judge.yosupo.jp/submission/6131
+    """
+    if N == 1:
         return 1
+
     from math import gcd
-    m=1<<(N.bit_length()//8+1)
+    m = 1 << (N.bit_length() // 8 + 1)
 
-    for c in range(1,99):
-        f=lambda x:(x*x+c)%N
-        y,r,q,g=2,1,1,1
-        while g==1:
-            x=y
-            for i in range(r):
-                y=f(y)
-            k=0
-            while k<r and g==1:
-                for i in range(min(m, r - k)):
-                    y=f(y)
-                    q=q*abs(x - y)%N
-                g=gcd(q,N)
-                k+=m
-            r <<=1
+    for c in range(1, 99):
+        f = lambda x: (x * x + c) % N
 
-        if g<N:
+        y, r, q, g = 2, 1, 1, 1
+        while g == 1:
+            x = y
+            for _ in range(r):
+                y = f(y)
+
+            k = 0
+            while k < r and g == 1:
+                for _ in range(min(m, r - k)):
+                    y = f(y)
+                    q = q * abs(x - y) % N
+                g = gcd(q, N)
+                k += m
+            r <<= 1
+
+        if g < N:
             if Miller_Rabin_Primality_Test(g):
                 return g
-            elif Miller_Rabin_Primality_Test(N//g):
-                return N//g
+            elif Miller_Rabin_Primality_Test(N // g):
+                return N // g
     return N
 
 #ポラード・ローアルゴリズムによる素因数分解
