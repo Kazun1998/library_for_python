@@ -332,38 +332,53 @@ def Find_Factor_Rho(N: int) -> int:
                 return N // g
     return N
 
-#ポラード・ローアルゴリズムによる素因数分解
-#参考元:https://judge.yosupo.jp/submission/6131
-def Pollard_Rho_Prime_Factorization(N):
-    I=2
-    res=[]
-    while I*I<=N:
-        if N%I==0:
-            k=0
-            while N%I==0:
-                k+=1
-                N//=I
-            res.append([I,k])
+def Pollard_Rho_Prime_Factorization(N: int) -> list[tuple[int, int]]:
+    """ 正の整数 N に対して, N の素因数分解をポラード・ローアルゴリズムを用いて求める.
 
-        I+=1+(I%2)
+    Args:
+        N (int): 正の整数
 
-        if I!=101 or N<2**20:
+    Returns:
+        list[tuple[int, int]]: (p, e) という形のリスト
+            p: 素数
+            e: 指数
+        [(p0, e0), (p1, e1), ..., (pk, ek)] であるとき, N = p0^e0 * p1^e1 * ... * pk^ek である.
+
+    Reference:
+        https://judge.yosupo.jp/submission/6131
+    """
+    def exponents(n: int, p: int) -> tuple[int, int]:
+        k = 0
+        while n % p == 0:
+            k += 1
+            n //= p
+        return n, k
+
+    prime = 2
+    res: list[tuple[int, int]] = []
+
+    while prime * prime <= N:
+        if N % prime == 0:
+            N, k = exponents(N, prime)
+            res.append((prime, k))
+
+        prime += 1 + (prime % 2)
+
+        if prime != 101 or N < 2 ** 20:
             continue
 
-        while N>1:
+        while N > 1:
             if Miller_Rabin_Primality_Test(N):
-                res.append([N,1])
-                N=1
+                res.append((N, 1))
+                N = 1
             else:
-                j=Find_Factor_Rho(N)
-                k=0
-                while N%j==0:
-                    N//=j
-                    k+=1
-                res.append([j,k])
-    if N>1:
-        res.append([N,1])
-    res.sort(key=lambda x:x[0])
+                p = Find_Factor_Rho(N)
+                N, k = exponents(N, p)
+                res.append((p, k))
+    if N > 1:
+        res.append((N, 1))
+
+    res.sort(key = lambda prime_power: prime_power[0])
     return res
 
 class Sieve_of_Eratosthenes:
