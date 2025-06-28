@@ -289,69 +289,96 @@ def Miller_Rabin_Primality_Test(N, trial = 20):
 
     return True
 
-#ポラード・ローアルゴリズムによって素因数を発見する
-#参考元:https://judge.yosupo.jp/submission/6131
-def Find_Factor_Rho(N):
-    if N==1:
+def Find_Factor_Rho(N: int) -> int:
+    """ 正の整数 N に対して, N の素因数をポラード・ローアルゴリズムで求める.
+
+    Args:
+        N (int): 正の整数
+
+    Returns:
+        int: N の素因数
+
+    Reference:
+        https://judge.yosupo.jp/submission/6131
+    """
+    if N == 1:
         return 1
+
     from math import gcd
-    m=1<<(N.bit_length()//8+1)
+    m = 1 << (N.bit_length() // 8 + 1)
 
-    for c in range(1,99):
-        f=lambda x:(x*x+c)%N
-        y,r,q,g=2,1,1,1
-        while g==1:
-            x=y
-            for i in range(r):
-                y=f(y)
-            k=0
-            while k<r and g==1:
-                for i in range(min(m, r - k)):
-                    y=f(y)
-                    q=q*abs(x - y)%N
-                g=gcd(q,N)
-                k+=m
-            r <<=1
+    for c in range(1, 99):
+        f = lambda x: (x * x + c) % N
 
-        if g<N:
+        y, r, q, g = 2, 1, 1, 1
+        while g == 1:
+            x = y
+            for _ in range(r):
+                y = f(y)
+
+            k = 0
+            while k < r and g == 1:
+                for _ in range(min(m, r - k)):
+                    y = f(y)
+                    q = q * abs(x - y) % N
+                g = gcd(q, N)
+                k += m
+            r <<= 1
+
+        if g < N:
             if Miller_Rabin_Primality_Test(g):
                 return g
-            elif Miller_Rabin_Primality_Test(N//g):
-                return N//g
+            elif Miller_Rabin_Primality_Test(N // g):
+                return N // g
     return N
 
-#ポラード・ローアルゴリズムによる素因数分解
-#参考元:https://judge.yosupo.jp/submission/6131
-def Pollard_Rho_Prime_Factorization(N):
-    I=2
-    res=[]
-    while I*I<=N:
-        if N%I==0:
-            k=0
-            while N%I==0:
-                k+=1
-                N//=I
-            res.append([I,k])
+def Pollard_Rho_Prime_Factorization(N: int) -> list[tuple[int, int]]:
+    """ 正の整数 N に対して, N の素因数分解をポラード・ローアルゴリズムを用いて求める.
 
-        I+=1+(I%2)
+    Args:
+        N (int): 正の整数
 
-        if I!=101 or N<2**20:
+    Returns:
+        list[tuple[int, int]]: (p, e) という形のリスト
+            p: 素数
+            e: 指数
+        [(p0, e0), (p1, e1), ..., (pk, ek)] であるとき, N = p0^e0 * p1^e1 * ... * pk^ek である.
+
+    Reference:
+        https://judge.yosupo.jp/submission/6131
+    """
+    def exponents(n: int, p: int) -> tuple[int, int]:
+        k = 0
+        while n % p == 0:
+            k += 1
+            n //= p
+        return n, k
+
+    prime = 2
+    res: list[tuple[int, int]] = []
+
+    while prime * prime <= N:
+        if N % prime == 0:
+            N, k = exponents(N, prime)
+            res.append((prime, k))
+
+        prime += 1 + (prime % 2)
+
+        if prime != 101 or N < 2 ** 20:
             continue
 
-        while N>1:
+        while N > 1:
             if Miller_Rabin_Primality_Test(N):
-                res.append([N,1])
-                N=1
+                res.append((N, 1))
+                N = 1
             else:
-                j=Find_Factor_Rho(N)
-                k=0
-                while N%j==0:
-                    N//=j
-                    k+=1
-                res.append([j,k])
-    if N>1:
-        res.append([N,1])
-    res.sort(key=lambda x:x[0])
+                p = Find_Factor_Rho(N)
+                N, k = exponents(N, p)
+                res.append((p, k))
+    if N > 1:
+        res.append((N, 1))
+
+    res.sort(key = lambda prime_power: prime_power[0])
     return res
 
 class Sieve_of_Eratosthenes:
