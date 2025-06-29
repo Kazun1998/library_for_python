@@ -383,39 +383,38 @@ def Pollard_Rho_Prime_Factorization(N: int) -> list[tuple[int, int]]:
 
 class Sieve_of_Eratosthenes:
     @staticmethod
-    def list(N: int):
+    def list(N: int) -> list[bool]:
         """ N 以下の非負整数に対する Eratosthenes の篩を実行する.
 
         Args:
             N (int): 上限
 
         Returns:
-            list[int]: 第 k 項について, k が素数ならば, 第 k 項が 1, k が素数でないならば, 第 k 項が 0 である列.
+            list[bool]: 第 k 項について, k が素数ならば, 第 k 項が True, k が素数でないならば, 第 k 項が False である列.
         """
 
         if N == 0:
-            return [0]
+            return [False]
 
-        sieve = [1] * (N + 1)
-        sieve[0] = sieve[1] = 0
+        sieve = [True] * (N + 1)
+        sieve[0] = sieve[1] = False
 
         for x in range(2 * 2, N + 1, 2):
-            sieve[x] = 0
+            sieve[x] = False
 
         for x in range(3 * 3, N + 1, 6):
-            sieve[x] = 0
+            sieve[x] = False
 
         p = 5
         parity = 0
         while p * p <= N:
             if sieve[p]:
-                pointer = p * p
-                while pointer <= N:
-                    sieve[pointer] = 0
-                    pointer += 2 * p
+                for pointer in range(p * p, N + 1, 2 * p):
+                    sieve[pointer] = False
 
             p += 4 if parity else 2
             parity ^= 1
+
         return sieve
 
     @staticmethod
