@@ -289,106 +289,132 @@ def Miller_Rabin_Primality_Test(N, trial = 20):
 
     return True
 
-#ポラード・ローアルゴリズムによって素因数を発見する
-#参考元:https://judge.yosupo.jp/submission/6131
-def Find_Factor_Rho(N):
-    if N==1:
+def Find_Factor_Rho(N: int) -> int:
+    """ 正の整数 N に対して, N の素因数をポラード・ローアルゴリズムで求める.
+
+    Args:
+        N (int): 正の整数
+
+    Returns:
+        int: N の素因数
+
+    Reference:
+        https://judge.yosupo.jp/submission/6131
+    """
+    if N == 1:
         return 1
+
     from math import gcd
-    m=1<<(N.bit_length()//8+1)
+    m = 1 << (N.bit_length() // 8 + 1)
 
-    for c in range(1,99):
-        f=lambda x:(x*x+c)%N
-        y,r,q,g=2,1,1,1
-        while g==1:
-            x=y
-            for i in range(r):
-                y=f(y)
-            k=0
-            while k<r and g==1:
-                for i in range(min(m, r - k)):
-                    y=f(y)
-                    q=q*abs(x - y)%N
-                g=gcd(q,N)
-                k+=m
-            r <<=1
+    for c in range(1, 99):
+        f = lambda x: (x * x + c) % N
 
-        if g<N:
+        y, r, q, g = 2, 1, 1, 1
+        while g == 1:
+            x = y
+            for _ in range(r):
+                y = f(y)
+
+            k = 0
+            while k < r and g == 1:
+                for _ in range(min(m, r - k)):
+                    y = f(y)
+                    q = q * abs(x - y) % N
+                g = gcd(q, N)
+                k += m
+            r <<= 1
+
+        if g < N:
             if Miller_Rabin_Primality_Test(g):
                 return g
-            elif Miller_Rabin_Primality_Test(N//g):
-                return N//g
+            elif Miller_Rabin_Primality_Test(N // g):
+                return N // g
     return N
 
-#ポラード・ローアルゴリズムによる素因数分解
-#参考元:https://judge.yosupo.jp/submission/6131
-def Pollard_Rho_Prime_Factorization(N):
-    I=2
-    res=[]
-    while I*I<=N:
-        if N%I==0:
-            k=0
-            while N%I==0:
-                k+=1
-                N//=I
-            res.append([I,k])
+def Pollard_Rho_Prime_Factorization(N: int) -> list[tuple[int, int]]:
+    """ 正の整数 N に対して, N の素因数分解をポラード・ローアルゴリズムを用いて求める.
 
-        I+=1+(I%2)
+    Args:
+        N (int): 正の整数
 
-        if I!=101 or N<2**20:
+    Returns:
+        list[tuple[int, int]]: (p, e) という形のリスト
+            p: 素数
+            e: 指数
+        [(p0, e0), (p1, e1), ..., (pk, ek)] であるとき, N = p0^e0 * p1^e1 * ... * pk^ek である.
+
+    Reference:
+        https://judge.yosupo.jp/submission/6131
+    """
+    def exponents(n: int, p: int) -> tuple[int, int]:
+        k = 0
+        while n % p == 0:
+            k += 1
+            n //= p
+        return n, k
+
+    prime = 2
+    res: list[tuple[int, int]] = []
+
+    while prime * prime <= N:
+        if N % prime == 0:
+            N, k = exponents(N, prime)
+            res.append((prime, k))
+
+        prime += 1 + (prime % 2)
+
+        if prime != 101 or N < 2 ** 20:
             continue
 
-        while N>1:
+        while N > 1:
             if Miller_Rabin_Primality_Test(N):
-                res.append([N,1])
-                N=1
+                res.append((N, 1))
+                N = 1
             else:
-                j=Find_Factor_Rho(N)
-                k=0
-                while N%j==0:
-                    N//=j
-                    k+=1
-                res.append([j,k])
-    if N>1:
-        res.append([N,1])
-    res.sort(key=lambda x:x[0])
+                p = Find_Factor_Rho(N)
+                N, k = exponents(N, p)
+                res.append((p, k))
+    if N > 1:
+        res.append((N, 1))
+
+    res.sort(key = lambda prime_power: prime_power[0])
     return res
 
 class Sieve_of_Eratosthenes:
     @staticmethod
-    def list(N: int):
+    def list(N: int) -> list[bool]:
         """ N 以下の非負整数に対する Eratosthenes の篩を実行する.
 
         Args:
             N (int): 上限
 
         Returns:
-            list[int]: 第 k 項について, k が素数ならば, 第 k 項が 1, k が素数でないならば, 第 k 項が 0 である列.
+            list[bool]: 第 k 項について, k が素数ならば, 第 k 項が True, k が素数でないならば, 第 k 項が False である列.
         """
 
         if N == 0:
-            return [0]
+            return [False]
 
-        sieve = [1] * (N + 1)
-        sieve[0] = sieve[1] = 0
+        sieve = [True] * (N + 1)
+        sieve[0] = sieve[1] = False
 
         for x in range(2 * 2, N + 1, 2):
-            sieve[x] = 0
+            sieve[x] = False
 
         for x in range(3 * 3, N + 1, 6):
-            sieve[x] = 0
+            sieve[x] = False
 
         p = 5
         parity = 0
         while p * p <= N:
             if sieve[p]:
-                pointer = p * p
-                while pointer <= N:
-                    sieve[pointer] = 0
-                    pointer += 2 * p
+                for pointer in range(p * p, N + 1, 2 * p):
+                    sieve[pointer] = False
 
             p += 4 if parity else 2
             parity ^= 1
+
         return sieve
 
     @staticmethod
@@ -436,8 +462,8 @@ class Sieve_of_Eratosthenes:
 
         return spf
 
-    @staticmethod
-    def faster_prime_factorization(N: int, spf: list) -> list:
+    @classmethod
+    def faster_prime_factorization(_, N: int, spf: list) -> list:
         """ smallest_prime_factor で求めた最小の素因数リストを利用して, N を高速で素因数分解する.
 
         Args:
@@ -445,15 +471,15 @@ class Sieve_of_Eratosthenes:
             spf (list[int]): smallest_prime_factor で求めた最小の素因数リスト
 
         Returns:
-            list[list[int]]: 素因数分解の結果
+            list[tuple[int, int]]: 第 x 項が [(p0, e0), (p1, e1), ...] であるとき, x = p0^e0 * p1^e1 * ... が素因数分解になる
         """
 
         if N == 0:
-            return [[0, 1]]
+            return [(0, 1)]
 
-        factors = []
+        factors: list[tuple[int, int]] = []
         if N < 0:
-            factors.append([-1, 1])
+            factors.append((-1, 1))
             N = abs(N)
 
         while N > 1:
@@ -463,20 +489,29 @@ class Sieve_of_Eratosthenes:
                 e += 1
                 N //= p
 
-            factors.append([p, e])
+            factors.append((p, e))
 
         return factors
 
-#素数の個数
-#Thanks for pyranine
-#URL: https://judge.yosupo.jp/submission/31819
-def Prime_Pi(N):
-    """ N 以下の素数の個数
+def Prime_Pi(N: int) -> int:
+    """ N 以下の素数の個数 pi(N)を求める.
 
-    N: int
+    Args:
+        N (int): 上限
+
+    Returns:
+        int: N 以下の素数の個数 pi(N).
+
+    Thanks:
+        pyranine
+
+    Reference:
+        https://judge.yosupo.jp/submission/31819
     """
 
-    if N<2: return 0
+    if N < 2:
+        return 0
+
     v = int(N ** 0.5) + 1
     smalls = [i // 2 for i in range(1, v + 1)]
     smalls[1] = 0
@@ -494,6 +529,7 @@ def Prime_Pi(N):
         pc += 1
         if q * q > N:
             break
+
         skip[p] = True
         for i in range(q, v, 2 * p):
             skip[i] = True
@@ -503,10 +539,12 @@ def Prime_Pi(N):
             i = roughs[k]
             if skip[i]:
                 continue
+
             d = i * p
             larges[ns] = larges[k] - (larges[smalls[d] - pc] if d < v else smalls[N // d]) + pc
             roughs[ns] = i
             ns += 1
+
         s = ns
         for j in range((v - 1) // p, p - 1, -1):
             c = smalls[j] - pc
@@ -521,7 +559,9 @@ def Prime_Pi(N):
             p = roughs[l]
             if p * p > m:
                 break
+
             s -= smalls[m // p] - (pc + l - 1)
+
         larges[0] -= s
 
     return larges[0]

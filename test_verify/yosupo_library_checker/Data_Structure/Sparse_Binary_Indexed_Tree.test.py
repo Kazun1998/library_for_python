@@ -8,27 +8,27 @@ input=sys.stdin.readline
 write=sys.stdout.write
 #==================================================
 def verify():
-    from operator import add,neg
+    from operator import add, neg
 
-    N,Q=map(int,input().split())
-    A=list(map(int,input().split()))
-    B=Sparse_Binary_Indexed_Tree(N,add,0,neg)
+    N, Q = map(int, input().split())
+    a = list(map(int, input().split()))
+    B = Sparse_Binary_Indexed_Tree[int](N, add, 0, neg)
 
     for i in range(N):
-        B.update(i,A[i])
+        B.update(i, a[i])
 
-    Ans=[]
-    for q in range(Q):
-        mode,*query=map(int,input().split())
+    ans = []
+    for _ in range(Q):
+        mode, *query = map(int, input().split())
 
-        if mode==0:
-            p,x=query
-            B.add(p,x)
+        if mode == 0:
+            p, x = query
+            B.add(p, x)
         else:
-            l,r=query
-            Ans.append(B.sum(l,r-1))
+            l, r = query
+            ans.append(B.sum(l, r - 1))
 
-    write("\n".join(map(str,Ans)))
+    write("\n".join(map(str, ans)))
 
 #==================================================
 verify()

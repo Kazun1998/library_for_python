@@ -1,25 +1,28 @@
 from typing import TypeVar, Generic, Callable
 
-S = TypeVar('S')
-class Disjoint_Sparse_Table(Generic[S]):
+SemiGroup = TypeVar('SemiGroup')
+class Disjoint_Sparse_Table(Generic[SemiGroup]):
     # 参考: https://ei1333.github.io/library/structure/others/disjoint-sparse-table.cpp.html
 
-    def __init__(self, A: list[S], op: Callable[[S, S], S]):
-        """ 半群 S 上の列 A に対する Disjoint Sparse Table を生成する.
+    def __init__(self, A: list[SemiGroup], op: Callable[[SemiGroup, SemiGroup], SemiGroup]):
+        """ 半群 (SemiGroup, op) 上の列 A に関する Sparse Table を構築する.
 
         Args:
-            A (list[S]): S 上の列
-            op (Callable[[S, S], S]): S の演算 (x, y) → xy
+            A (list[SemiGroup]): 半群 (SemiGroup, op) 上の列
+            op (Callable[[SemiGroup, SemiGroup], SemiGroup]): 半群上の演算 (x, y) -> xy
+
+        Remark:
+            半群 (SemiGroup, op) は結合則, 可換則, 冪等則を満たしていることを要求する.
         """
 
         self.__op = op
-        self.__size = N = len(A)
-        height = max(1, (N - 1).bit_length())
+        n = len(A)
+        height = max(1, (n - 1).bit_length())
 
-        self.table: list[list[S]] = [[None] * self.size for _ in range(height)]
+        self.table: list[list[SemiGroup]] = [[None] * n for _ in range(height)]
 
         row = self.table[0]
-        for i in range(self.size):
+        for i in range(n):
             row[i] = A[i]
 
         shift = 1
@@ -27,43 +30,43 @@ class Disjoint_Sparse_Table(Generic[S]):
             shift <<= 1
             row = self.table[i]
 
-            for j in range(0, N, 2 * shift):
-                t = min(j + shift, N)
+            for j in range(0, n, 2 * shift):
+                t = min(j + shift, n)
                 row[t - 1] = A[t-1]
 
                 for k in range(t - 2, j - 1, -1):
                     row[k] = op(A[k], row[k + 1])
 
-                if N <= t:
+                if n <= t:
                     break
 
                 row[t] = A[t]
-                r = min(t + shift, N)
+                r = min(t + shift, n)
 
                 for k in range(t + 1, r):
                     row[k] = op(row[k - 1], A[k])
 
     @property
-    def op(self) -> Callable[[S, S], S]:
+    def op(self) -> Callable[[SemiGroup, SemiGroup], SemiGroup]:
         return self.__op
 
-    @property
-    def size(self) -> int:
-        return self.__size
+    def __len__(self) -> int:
+        return len(self.table[0])
 
-    def product(self, l: int, r: int, left_close: bool = True, right_close: bool = True, default: bool = None) -> S:
-        """ 積 A_l A_{l+1} ... A_r を求める.
+    def product(self, l: int, r: int, left_close: bool = True, right_close: bool = True, default: bool = None) -> SemiGroup:
+        """ 総積 A_l A_{l+1} ... A_r を求める. ただし, 空積は default とする.
 
         Args:
             l (int): 左端
             r (int): 右端
-            left_close (bool, optional): False にすると, 左端が開区間になる. Defaults to True.
-            right_close (bool, optional): False にすると, 右端が開区間になる. Defaults to True.
-            default (bool, optional): 区間が空の場合の返り値. Defaults to None.
+            left_close (bool, optional): False にすると, 左端が開になる. Defaults to True.
+            right_close (bool, optional): False にすると, 右端が開になる. Defaults to True.
+            default (SemiGroup, optional): 空積のときの返り値. Defaults to None.
 
         Returns:
-            S: 積 A_l A_{l+1} ... A_r
+            SemiGroup: 総積
         """
+
         if not left_close:
             l += 1
 
