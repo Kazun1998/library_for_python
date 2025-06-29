@@ -463,7 +463,7 @@ class Sieve_of_Eratosthenes:
         return spf
 
     @staticmethod
-    def faster_prime_factorization(N: int, spf: list) -> list:
+    def faster_prime_factorization(N: int, spf: list) -> list[tuple[int, int]]:
         """ smallest_prime_factor で求めた最小の素因数リストを利用して, N を高速で素因数分解する.
 
         Args:
@@ -471,15 +471,15 @@ class Sieve_of_Eratosthenes:
             spf (list[int]): smallest_prime_factor で求めた最小の素因数リスト
 
         Returns:
-            list[list[int]]: 素因数分解の結果
+            list[tuple[int, int]]: 第 x 項が [(p0, e0), (p1, e1), ...] であるとき, x = p0^e0 * p1^e1 * ... が素因数分解になる
         """
 
         if N == 0:
-            return [[0, 1]]
+            return [(0, 1)]
 
         factors = []
         if N < 0:
-            factors.append([-1, 1])
+            factors.append((-1, 1))
             N = abs(N)
 
         while N > 1:
@@ -489,7 +489,7 @@ class Sieve_of_Eratosthenes:
                 e += 1
                 N //= p
 
-            factors.append([p, e])
+            factors.append((p, e))
 
         return factors
 
