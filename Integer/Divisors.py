@@ -28,21 +28,30 @@ def Divisors(N: int) -> list[int]:
     small.extend(reversed(large))
     return small
 
-#素因数分解の結果から, 約数を全て求める.
-def Divisors_from_Prime_Factor(P, sorting=False):
-    X=[1]
-    for p,e in P:
-        q=1
-        n=len(X)
+def Divisors_from_Prime_Factor(prime_factors: list[tuple[int, int]], sort: bool = False) -> list[int]:
+    """prime_factors = [(p0, e0), (p1, e1), ...] に対して, N = p0^e0 * p1^e1 * ... としたときの N の正の約数を求める.
+
+    Args:
+        prime_factors (list[tuple[int, int]]): 素因数分解
+        sort (bool, optional): True にすると, 出力される約数のリストがソート済みになる. Defaults to False.
+
+    Returns:
+        list[int]: N = p0^e0 * p1^e1 * ... の正の約数
+    """
+
+    divisors = [1]
+    for p, e in prime_factors:
+        q = 1
+        n = len(divisors)
         for _ in range(e):
-            q*=p
+            q *= p
             for j in range(n):
-                X.append(X[j]*q)
+                divisors.append(divisors[j] * q)
 
-    if sorting:
-        X.sort()
+    if sort:
+        divisors.sort()
 
-    return X
+    return divisors
 
 #高度合成数
 #参考元:https://qiita.com/convexineq/items/e3d599cb9f91a73f936d
