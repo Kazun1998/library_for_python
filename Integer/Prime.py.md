@@ -157,83 +157,88 @@ data:
     \                p = Find_Factor_Rho(N)\n                N, k = exponents(N, p)\n\
     \                res.append((p, k))\n    if N > 1:\n        res.append((N, 1))\n\
     \n    res.sort(key = lambda prime_power: prime_power[0])\n    return res\n\nclass\
-    \ Sieve_of_Eratosthenes:\n    @staticmethod\n    def list(N: int):\n        \"\
-    \"\" N \u4EE5\u4E0B\u306E\u975E\u8CA0\u6574\u6570\u306B\u5BFE\u3059\u308B Eratosthenes\
-    \ \u306E\u7BE9\u3092\u5B9F\u884C\u3059\u308B.\n\n        Args:\n            N\
-    \ (int): \u4E0A\u9650\n\n        Returns:\n            list[int]: \u7B2C k \u9805\
-    \u306B\u3064\u3044\u3066, k \u304C\u7D20\u6570\u306A\u3089\u3070, \u7B2C k \u9805\
-    \u304C 1, k \u304C\u7D20\u6570\u3067\u306A\u3044\u306A\u3089\u3070, \u7B2C k \u9805\
-    \u304C 0 \u3067\u3042\u308B\u5217.\n        \"\"\"\n\n        if N == 0:\n   \
-    \         return [0]\n\n        sieve = [1] * (N + 1)\n        sieve[0] = sieve[1]\
-    \ = 0\n\n        for x in range(2 * 2, N + 1, 2):\n            sieve[x] = 0\n\n\
-    \        for x in range(3 * 3, N + 1, 6):\n            sieve[x] = 0\n\n      \
-    \  p = 5\n        parity = 0\n        while p * p <= N:\n            if sieve[p]:\n\
-    \                pointer = p * p\n                while pointer <= N:\n      \
-    \              sieve[pointer] = 0\n                    pointer += 2 * p\n\n  \
-    \          p += 4 if parity else 2\n            parity ^= 1\n        return sieve\n\
-    \n    @staticmethod\n    def smallest_prime_factor(N: int):\n        \"\"\" 0,\
-    \ 1, ..., N \u306B\u3064\u3044\u3066\u6700\u5C0F\u306E\u7D20\u56E0\u6570\u306E\
-    \u30EA\u30B9\u30C8\u3092\u6C42\u3081\u308B\n\n        Args:\n            N (int):\
-    \ \u4E0A\u9650\n\n        Returns:\n            list[int]: \u7B2C k \u9805\u306F\
-    \ k \u306E\u6700\u5C0F\u306E\u7D20\u56E0\u6570\u3067\u3042\u308B\u30EA\u30B9\u30C8\
-    \ (k = 0, 1 \u306E\u5834\u5408\u306F 1 \u3068\u3059\u308B)\n        \"\"\"\n\n\
-    \        if N <= 1:\n            return [1] * (N + 1)\n\n        # spf: smallest\
-    \ prime factor\n        spf = [0] * (N + 1); spf[0] = spf[1] = 1\n\n        for\
-    \ x in range(2, N + 1, 2):\n            spf[x] = 2\n\n        for x in range(3,\
-    \ N + 1, 6):\n            spf[x] = 3\n\n        primes = [2, 3]\n        parity\
-    \ = 0\n        x = 5\n        while x <= N:\n            if spf[x] == 0:\n   \
-    \             spf[x] = x\n                primes.append(x)\n\n            for\
-    \ p in primes:\n                if x * p <= N:\n                    spf[x * p]\
-    \ = p\n                else:\n                    break\n\n                if\
-    \ p == spf[x]:\n                    break\n\n            x += 4 if parity else\
-    \ 2\n            parity ^= 1\n\n        return spf\n\n    @staticmethod\n    def\
-    \ faster_prime_factorization(N: int, spf: list) -> list:\n        \"\"\" smallest_prime_factor\
-    \ \u3067\u6C42\u3081\u305F\u6700\u5C0F\u306E\u7D20\u56E0\u6570\u30EA\u30B9\u30C8\
-    \u3092\u5229\u7528\u3057\u3066, N \u3092\u9AD8\u901F\u3067\u7D20\u56E0\u6570\u5206\
-    \u89E3\u3059\u308B.\n\n        Args:\n            N (int): \u7D20\u56E0\u6570\u5206\
-    \u89E3\u306E\u5BFE\u8C61\n            spf (list[int]): smallest_prime_factor \u3067\
-    \u6C42\u3081\u305F\u6700\u5C0F\u306E\u7D20\u56E0\u6570\u30EA\u30B9\u30C8\n\n \
-    \       Returns:\n            list[list[int]]: \u7D20\u56E0\u6570\u5206\u89E3\u306E\
-    \u7D50\u679C\n        \"\"\"\n\n        if N == 0:\n            return [[0, 1]]\n\
-    \n        factors = []\n        if N < 0:\n            factors.append([-1, 1])\n\
-    \            N = abs(N)\n\n        while N > 1:\n            p = spf[N]\n    \
-    \        e = 0\n            while spf[N] == p:\n                e += 1\n     \
-    \           N //= p\n\n            factors.append([p, e])\n\n        return factors\n\
-    \n#\u7D20\u6570\u306E\u500B\u6570\n#Thanks for pyranine\n#URL: https://judge.yosupo.jp/submission/31819\n\
-    def Prime_Pi(N):\n    \"\"\" N \u4EE5\u4E0B\u306E\u7D20\u6570\u306E\u500B\u6570\
-    \n\n    N: int\n    \"\"\"\n\n    if N<2: return 0\n    v = int(N ** 0.5) + 1\n\
-    \    smalls = [i // 2 for i in range(1, v + 1)]\n    smalls[1] = 0\n    s = v\
-    \ // 2\n    roughs = [2 * i + 1 for i in range(s)]\n    larges = [(N // roughs[i]\
-    \ + 1) // 2 for i in range(s)]\n    skip = [False] * v\n\n    pc = 0\n    for\
-    \ p in range(3, v):\n        if smalls[p] <= smalls[p - 1]:\n            continue\n\
-    \n        q = p * p\n        pc += 1\n        if q * q > N:\n            break\n\
-    \        skip[p] = True\n        for i in range(q, v, 2 * p):\n            skip[i]\
-    \ = True\n\n        ns = 0\n        for k in range(s):\n            i = roughs[k]\n\
-    \            if skip[i]:\n                continue\n            d = i * p\n  \
-    \          larges[ns] = larges[k] - (larges[smalls[d] - pc] if d < v else smalls[N\
-    \ // d]) + pc\n            roughs[ns] = i\n            ns += 1\n        s = ns\n\
-    \        for j in range((v - 1) // p, p - 1, -1):\n            c = smalls[j] -\
-    \ pc\n            e = min((j + 1) * p, v)\n            for i in range(j * p, e):\n\
-    \                smalls[i] -= c\n\n    for k in range(1, s):\n        m = N //\
-    \ roughs[k]\n        s = larges[k] - (pc + k - 1)\n        for l in range(1, k):\n\
-    \            p = roughs[l]\n            if p * p > m:\n                break\n\
-    \            s -= smalls[m // p] - (pc + l - 1)\n        larges[0] -= s\n\n  \
-    \  return larges[0]\n\n#K\u4E57\u30EA\u30B9\u30C8\ndef Power_List(N: int, K: int,\
-    \ M: int) -> list[int]:\n    \"\"\" x = 0, 1, ..., N \u306B\u5BFE\u3059\u308B\
-    \ x^K mod M \u3092\u6C42\u3081\u308B.\n\n    \u8A08\u7B97\u91CF: O(N log log N\
-    \ + (log K) pi(N))\n\n    Args:\n        N (int): \u5E95\u306E\u4E0A\u9650\n \
-    \       K (int): \u6307\u6570\n        M (int): \u9664\u6570\n\n    Returns:\n\
-    \        list[int]: \u7B2C x \u9805\u306F x^K mod M \u306E\u5024\u304C\u8A18\u9332\
-    \u3055\u308C\u308B.\n    \"\"\"\n\n    if N == 0:\n        return [pow(0, K, M)]\n\
-    \n    spf = Sieve_of_Eratosthenes.smallest_prime_factor(N)\n\n    A = [0] * (N\
-    \ + 1)\n    A[0] = pow(0, K, M); A[1] = pow(1, K, M)\n\n    for x in range(2,\
-    \ N + 1):\n        if spf[x] == x:\n            A[x] = pow(x, K, M)\n        else:\n\
-    \            A[x] = A[spf[x]] * A[x // spf[x]] % M\n\n    return A\n"
+    \ Sieve_of_Eratosthenes:\n    @staticmethod\n    def list(N: int) -> list[bool]:\n\
+    \        \"\"\" N \u4EE5\u4E0B\u306E\u975E\u8CA0\u6574\u6570\u306B\u5BFE\u3059\
+    \u308B Eratosthenes \u306E\u7BE9\u3092\u5B9F\u884C\u3059\u308B.\n\n        Args:\n\
+    \            N (int): \u4E0A\u9650\n\n        Returns:\n            list[bool]:\
+    \ \u7B2C k \u9805\u306B\u3064\u3044\u3066, k \u304C\u7D20\u6570\u306A\u3089\u3070\
+    , \u7B2C k \u9805\u304C True, k \u304C\u7D20\u6570\u3067\u306A\u3044\u306A\u3089\
+    \u3070, \u7B2C k \u9805\u304C False \u3067\u3042\u308B\u5217.\n        \"\"\"\n\
+    \n        if N == 0:\n            return [False]\n\n        sieve = [True] * (N\
+    \ + 1)\n        sieve[0] = sieve[1] = False\n\n        for x in range(2 * 2, N\
+    \ + 1, 2):\n            sieve[x] = False\n\n        for x in range(3 * 3, N +\
+    \ 1, 6):\n            sieve[x] = False\n\n        p = 5\n        parity = 0\n\
+    \        while p * p <= N:\n            if sieve[p]:\n                for pointer\
+    \ in range(p * p, N + 1, 2 * p):\n                    sieve[pointer] = False\n\
+    \n            p += 4 if parity else 2\n            parity ^= 1\n\n        return\
+    \ sieve\n\n    @staticmethod\n    def smallest_prime_factor(N: int):\n       \
+    \ \"\"\" 0, 1, ..., N \u306B\u3064\u3044\u3066\u6700\u5C0F\u306E\u7D20\u56E0\u6570\
+    \u306E\u30EA\u30B9\u30C8\u3092\u6C42\u3081\u308B\n\n        Args:\n          \
+    \  N (int): \u4E0A\u9650\n\n        Returns:\n            list[int]: \u7B2C k\
+    \ \u9805\u306F k \u306E\u6700\u5C0F\u306E\u7D20\u56E0\u6570\u3067\u3042\u308B\u30EA\
+    \u30B9\u30C8 (k = 0, 1 \u306E\u5834\u5408\u306F 1 \u3068\u3059\u308B)\n      \
+    \  \"\"\"\n\n        if N <= 1:\n            return [1] * (N + 1)\n\n        #\
+    \ spf: smallest prime factor\n        spf = [0] * (N + 1); spf[0] = spf[1] = 1\n\
+    \n        for x in range(2, N + 1, 2):\n            spf[x] = 2\n\n        for\
+    \ x in range(3, N + 1, 6):\n            spf[x] = 3\n\n        primes = [2, 3]\n\
+    \        parity = 0\n        x = 5\n        while x <= N:\n            if spf[x]\
+    \ == 0:\n                spf[x] = x\n                primes.append(x)\n\n    \
+    \        for p in primes:\n                if x * p <= N:\n                  \
+    \  spf[x * p] = p\n                else:\n                    break\n\n      \
+    \          if p == spf[x]:\n                    break\n\n            x += 4 if\
+    \ parity else 2\n            parity ^= 1\n\n        return spf\n\n    @classmethod\n\
+    \    def faster_prime_factorization(_, N: int, spf: list) -> list:\n        \"\
+    \"\" smallest_prime_factor \u3067\u6C42\u3081\u305F\u6700\u5C0F\u306E\u7D20\u56E0\
+    \u6570\u30EA\u30B9\u30C8\u3092\u5229\u7528\u3057\u3066, N \u3092\u9AD8\u901F\u3067\
+    \u7D20\u56E0\u6570\u5206\u89E3\u3059\u308B.\n\n        Args:\n            N (int):\
+    \ \u7D20\u56E0\u6570\u5206\u89E3\u306E\u5BFE\u8C61\n            spf (list[int]):\
+    \ smallest_prime_factor \u3067\u6C42\u3081\u305F\u6700\u5C0F\u306E\u7D20\u56E0\
+    \u6570\u30EA\u30B9\u30C8\n\n        Returns:\n            list[tuple[int, int]]:\
+    \ \u7B2C x \u9805\u304C [(p0, e0), (p1, e1), ...] \u3067\u3042\u308B\u3068\u304D\
+    , x = p0^e0 * p1^e1 * ... \u304C\u7D20\u56E0\u6570\u5206\u89E3\u306B\u306A\u308B\
+    \n        \"\"\"\n\n        if N == 0:\n            return [(0, 1)]\n\n      \
+    \  factors: list[tuple[int, int]] = []\n        if N < 0:\n            factors.append((-1,\
+    \ 1))\n            N = abs(N)\n\n        while N > 1:\n            p = spf[N]\n\
+    \            e = 0\n            while spf[N] == p:\n                e += 1\n \
+    \               N //= p\n\n            factors.append((p, e))\n\n        return\
+    \ factors\n\ndef Prime_Pi(N: int) -> int:\n    \"\"\" N \u4EE5\u4E0B\u306E\u7D20\
+    \u6570\u306E\u500B\u6570 pi(N)\u3092\u6C42\u3081\u308B.\n\n    Args:\n       \
+    \ N (int): \u4E0A\u9650\n\n    Returns:\n        int: N \u4EE5\u4E0B\u306E\u7D20\
+    \u6570\u306E\u500B\u6570 pi(N).\n\n    Thanks:\n        pyranine\n\n    Reference:\n\
+    \        https://judge.yosupo.jp/submission/31819\n    \"\"\"\n\n    if N < 2:\n\
+    \        return 0\n\n    v = int(N ** 0.5) + 1\n    smalls = [i // 2 for i in\
+    \ range(1, v + 1)]\n    smalls[1] = 0\n    s = v // 2\n    roughs = [2 * i + 1\
+    \ for i in range(s)]\n    larges = [(N // roughs[i] + 1) // 2 for i in range(s)]\n\
+    \    skip = [False] * v\n\n    pc = 0\n    for p in range(3, v):\n        if smalls[p]\
+    \ <= smalls[p - 1]:\n            continue\n\n        q = p * p\n        pc +=\
+    \ 1\n        if q * q > N:\n            break\n\n        skip[p] = True\n    \
+    \    for i in range(q, v, 2 * p):\n            skip[i] = True\n\n        ns =\
+    \ 0\n        for k in range(s):\n            i = roughs[k]\n            if skip[i]:\n\
+    \                continue\n\n            d = i * p\n            larges[ns] = larges[k]\
+    \ - (larges[smalls[d] - pc] if d < v else smalls[N // d]) + pc\n            roughs[ns]\
+    \ = i\n            ns += 1\n\n        s = ns\n        for j in range((v - 1) //\
+    \ p, p - 1, -1):\n            c = smalls[j] - pc\n            e = min((j + 1)\
+    \ * p, v)\n            for i in range(j * p, e):\n                smalls[i] -=\
+    \ c\n\n    for k in range(1, s):\n        m = N // roughs[k]\n        s = larges[k]\
+    \ - (pc + k - 1)\n        for l in range(1, k):\n            p = roughs[l]\n \
+    \           if p * p > m:\n                break\n\n            s -= smalls[m\
+    \ // p] - (pc + l - 1)\n\n        larges[0] -= s\n\n    return larges[0]\n\n#K\u4E57\
+    \u30EA\u30B9\u30C8\ndef Power_List(N: int, K: int, M: int) -> list[int]:\n   \
+    \ \"\"\" x = 0, 1, ..., N \u306B\u5BFE\u3059\u308B x^K mod M \u3092\u6C42\u3081\
+    \u308B.\n\n    \u8A08\u7B97\u91CF: O(N log log N + (log K) pi(N))\n\n    Args:\n\
+    \        N (int): \u5E95\u306E\u4E0A\u9650\n        K (int): \u6307\u6570\n  \
+    \      M (int): \u9664\u6570\n\n    Returns:\n        list[int]: \u7B2C x \u9805\
+    \u306F x^K mod M \u306E\u5024\u304C\u8A18\u9332\u3055\u308C\u308B.\n    \"\"\"\
+    \n\n    if N == 0:\n        return [pow(0, K, M)]\n\n    spf = Sieve_of_Eratosthenes.smallest_prime_factor(N)\n\
+    \n    A = [0] * (N + 1)\n    A[0] = pow(0, K, M); A[1] = pow(1, K, M)\n\n    for\
+    \ x in range(2, N + 1):\n        if spf[x] == x:\n            A[x] = pow(x, K,\
+    \ M)\n        else:\n            A[x] = A[spf[x]] * A[x // spf[x]] % M\n\n   \
+    \ return A\n"
   dependsOn: []
   isVerificationFile: false
   path: Integer/Prime.py
   requiredBy: []
-  timestamp: '2025-06-29 02:08:42+09:00'
+  timestamp: '2025-06-29 11:20:13+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test_verify/yosupo_library_checker/Math/Factorize.test.py

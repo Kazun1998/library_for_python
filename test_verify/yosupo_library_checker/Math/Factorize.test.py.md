@@ -32,7 +32,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Math/Factorize.test.py
   requiredBy: []
-  timestamp: '2025-06-29 02:14:52+09:00'
+  timestamp: '2025-06-29 11:20:13+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Math/Factorize.test.py
