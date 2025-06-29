@@ -28,7 +28,7 @@ class Floor_Sum:
                 return total
 
             total += (N + x // A) * y
-            A, B, M, N = M, x%A, A, y
+            A, B, M, N = M, x % A, A, y
 
     @classmethod
     def floor_sum_interval(cls, A: int, B: int, M: int, L: int, R: int) -> int:
@@ -46,3 +46,28 @@ class Floor_Sum:
         """
 
         return cls.floor_sum(A, A * L + B, M, R - L + 1)
+
+def Min_of_Mod_of_Linear(A: int, B: int, M: int, N: int) -> int:
+    """ min { (A x + B) mod M | 0 <= x < N } を求める.
+
+    Args:
+        A (int):
+        B (int):
+        M (int):
+        N (int):
+
+    Returns:
+        int: min { (A x + B) mod M | 0 <= x < N }
+    """
+
+    L = 0
+    R = M
+
+    target = Floor_Sum.floor_sum(A, B, M, N)
+    while R - L > 1:
+        X = (L + R) // 2
+        if target == Floor_Sum.floor_sum(A, B - X, M, N):
+            L = X
+        else:
+            R = X
+    return L
