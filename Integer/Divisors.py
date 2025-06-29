@@ -1,15 +1,32 @@
-#約数全部
-def Divisors(N):
-    N=abs(N)
-    L,U=[],[]
-    k=1
-    while k*k <=N:
-        if N%k== 0:
-            L.append(k)
-            if k*k!=N:
-                U.append(N//k)
+def Divisors(N: int) -> list[int]:
+    """ N の約数全体
+
+    Args:
+        N (int): 0 ではない整数
+
+    Returns:
+        list[int]: N の「正の」約数を昇順に並べた列
+    """
+
+    assert N != 0
+
+    N = abs(N)
+
+    small, large = [], []
+    k = 1
+    while k * k <= N:
+        if N % k== 0:
+            small.append(k)
+            large.append(N // k)
+
         k+=1
-    return L+U[::-1]
+
+    # 平方数のとき, small[-1] と large[-1] が重複する値になるので, 一方から削除する.
+    if small[-1] == large[-1]:
+        large.pop()
+
+    small.extend(reversed(large))
+    return small
 
 #素因数分解の結果から, 約数を全て求める.
 def Divisors_from_Prime_Factor(P, sorting=False):
