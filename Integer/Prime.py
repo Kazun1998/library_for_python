@@ -493,16 +493,25 @@ class Sieve_of_Eratosthenes:
 
         return factors
 
-#素数の個数
-#Thanks for pyranine
-#URL: https://judge.yosupo.jp/submission/31819
-def Prime_Pi(N):
-    """ N 以下の素数の個数
+def Prime_Pi(N: int) -> int:
+    """ N 以下の素数の個数 pi(N)を求める.
 
-    N: int
+    Args:
+        N (int): 上限
+
+    Returns:
+        int: N 以下の素数の個数 pi(N).
+
+    Thanks:
+        pyranine
+
+    Reference:
+        https://judge.yosupo.jp/submission/31819
     """
 
-    if N<2: return 0
+    if N < 2:
+        return 0
+
     v = int(N ** 0.5) + 1
     smalls = [i // 2 for i in range(1, v + 1)]
     smalls[1] = 0
@@ -520,6 +529,7 @@ def Prime_Pi(N):
         pc += 1
         if q * q > N:
             break
+
         skip[p] = True
         for i in range(q, v, 2 * p):
             skip[i] = True
@@ -529,10 +539,12 @@ def Prime_Pi(N):
             i = roughs[k]
             if skip[i]:
                 continue
+
             d = i * p
             larges[ns] = larges[k] - (larges[smalls[d] - pc] if d < v else smalls[N // d]) + pc
             roughs[ns] = i
             ns += 1
+
         s = ns
         for j in range((v - 1) // p, p - 1, -1):
             c = smalls[j] - pc
@@ -547,7 +559,9 @@ def Prime_Pi(N):
             p = roughs[l]
             if p * p > m:
                 break
+
             s -= smalls[m // p] - (pc + l - 1)
+
         larges[0] -= s
 
     return larges[0]
