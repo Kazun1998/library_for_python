@@ -33,7 +33,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py
   requiredBy: []
-  timestamp: '2025-05-23 00:20:04+09:00'
+  timestamp: '2025-06-22 19:58:15+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Disjoint_Sparse_Table.test.py

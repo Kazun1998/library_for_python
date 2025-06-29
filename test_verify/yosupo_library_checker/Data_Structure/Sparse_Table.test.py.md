@@ -32,7 +32,7 @@ data:
   isVerificationFile: true
   path: test_verify/yosupo_library_checker/Data_Structure/Sparse_Table.test.py
   requiredBy: []
-  timestamp: '2022-12-18 03:53:02+09:00'
+  timestamp: '2025-06-22 19:54:08+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test_verify/yosupo_library_checker/Data_Structure/Sparse_Table.test.py
