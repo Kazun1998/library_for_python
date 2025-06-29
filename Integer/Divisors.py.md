@@ -15,15 +15,30 @@ data:
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/opt/hostedtoolcache/Python/3.13.5/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
-  code: "#\u7D04\u6570\u5168\u90E8\ndef Divisors(N):\n    N=abs(N)\n    L,U=[],[]\n\
-    \    k=1\n    while k*k <=N:\n        if N%k== 0:\n            L.append(k)\n \
-    \           if k*k!=N:\n                U.append(N//k)\n        k+=1\n    return\
-    \ L+U[::-1]\n\n#\u7D20\u56E0\u6570\u5206\u89E3\u306E\u7D50\u679C\u304B\u3089,\
-    \ \u7D04\u6570\u3092\u5168\u3066\u6C42\u3081\u308B.\ndef Divisors_from_Prime_Factor(P,\
-    \ sorting=False):\n    X=[1]\n    for p,e in P:\n        q=1\n        n=len(X)\n\
-    \        for _ in range(e):\n            q*=p\n            for j in range(n):\n\
-    \                X.append(X[j]*q)\n\n    if sorting:\n        X.sort()\n\n   \
-    \ return X\n\n#\u9AD8\u5EA6\u5408\u6210\u6570\n#\u53C2\u8003\u5143:https://qiita.com/convexineq/items/e3d599cb9f91a73f936d\n\
+  code: "def Divisors(N: int) -> list[int]:\n    \"\"\" N \u306E\u7D04\u6570\u5168\
+    \u4F53\n\n    Args:\n        N (int): 0 \u3067\u306F\u306A\u3044\u6574\u6570\n\
+    \n    Returns:\n        list[int]: N \u306E\u300C\u6B63\u306E\u300D\u7D04\u6570\
+    \u3092\u6607\u9806\u306B\u4E26\u3079\u305F\u5217\n    \"\"\"\n\n    assert N !=\
+    \ 0\n\n    N = abs(N)\n\n    small, large = [], []\n    k = 1\n    while k * k\
+    \ <= N:\n        if N % k== 0:\n            small.append(k)\n            large.append(N\
+    \ // k)\n\n        k+=1\n\n    # \u5E73\u65B9\u6570\u306E\u3068\u304D, small[-1]\
+    \ \u3068 large[-1] \u304C\u91CD\u8907\u3059\u308B\u5024\u306B\u306A\u308B\u306E\
+    \u3067, \u4E00\u65B9\u304B\u3089\u524A\u9664\u3059\u308B.\n    if small[-1] ==\
+    \ large[-1]:\n        large.pop()\n\n    small.extend(reversed(large))\n    return\
+    \ small\n\ndef Divisors_from_Prime_Factor(prime_factors: list[tuple[int, int]],\
+    \ sort: bool = False) -> list[int]:\n    \"\"\"prime_factors = [(p0, e0), (p1,\
+    \ e1), ...] \u306B\u5BFE\u3057\u3066, N = p0^e0 * p1^e1 * ... \u3068\u3057\u305F\
+    \u3068\u304D\u306E N \u306E\u6B63\u306E\u7D04\u6570\u3092\u6C42\u3081\u308B.\n\
+    \n    Args:\n        prime_factors (list[tuple[int, int]]): \u7D20\u56E0\u6570\
+    \u5206\u89E3\n        sort (bool, optional): True \u306B\u3059\u308B\u3068, \u51FA\
+    \u529B\u3055\u308C\u308B\u7D04\u6570\u306E\u30EA\u30B9\u30C8\u304C\u30BD\u30FC\
+    \u30C8\u6E08\u307F\u306B\u306A\u308B. Defaults to False.\n\n    Returns:\n   \
+    \     list[int]: N = p0^e0 * p1^e1 * ... \u306E\u6B63\u306E\u7D04\u6570\n    \"\
+    \"\"\n\n    divisors = [1]\n    for p, e in prime_factors:\n        q = 1\n  \
+    \      n = len(divisors)\n        for _ in range(e):\n            q *= p\n   \
+    \         for j in range(n):\n                divisors.append(divisors[j] * q)\n\
+    \n    if sort:\n        divisors.sort()\n\n    return divisors\n\n#\u9AD8\u5EA6\
+    \u5408\u6210\u6570\n#\u53C2\u8003\u5143:https://qiita.com/convexineq/items/e3d599cb9f91a73f936d\n\
     def Highly_Composite_Number(N):\n    \"\"\" N \u4EE5\u4E0B\u306E\u9AD8\u5EA6\u5408\
     \u6210\u6570\u3092\u6C42\u3081\u308B.\n    \"\"\"\n\n    from heapq import heappop,heappush\n\
     \    from math import log\n    prime = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263]\n\
@@ -47,7 +62,7 @@ data:
   isVerificationFile: false
   path: Integer/Divisors.py
   requiredBy: []
-  timestamp: '2023-03-18 02:55:12+09:00'
+  timestamp: '2025-06-29 13:02:45+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Integer/Divisors.py
