@@ -1,34 +1,38 @@
-def Lagrange_Interpolation_Point(L,X,P):
-    """ 法が P の下でのLagrange 補間を行い, x=X での値を返す.
+def Lagrange_Interpolation_Point(F: list[tuple[int, int]], X: int, P: int) -> int:
+    """ F の情報から, 多項式 f に関する P を法とする Lagrange 補完を行い, f(X) を求める.
 
-    [Input]
-    L: [(x_0,y_0), ..., (x_N, y_N)]: F(x_i)=y_i (mod P)
-    X: F(X) を返す.
-    P: 法
+    Args:
+        F (list[tuple[int, int]]): [(x0, y0), ..., (xN,yN)] の形のリスト, i 番目の要素は, f が f(x[i]) = y[i] であることを意味する.
+        X (int): 求める X の値
+        P (int): 法
 
-    [Output]
-    F(X)
+    Returns:
+        int: f(X) mod P
 
-    [Complexity]
-    O(N^2+log P)
+    Complexity:
+        O(N^2 + log P)
     """
 
-    N=len(L)-1
+    N = len(F) - 1
 
-    x=[p[0] for p in L]
-    y=[p[1] for p in L]
+    x = [p[0] for p in F]
+    y = [p[1] for p in F]
 
-    X%=P
-    Y=0
-    for i in range(N+1):
-        a=b=1
-        for j in range(N+1):
-            if i==j: continue
-            a*=X-x[j]; a%=P
-            b*=x[i]-x[j]; b%=P
-        c = (a * pow(b, -1 ,P)) % P
-        Y+=y[i]*c; Y%=P
-    return Y
+    X %= P
+    z = 0
+    for i in range(N + 1):
+        a = b = 1
+        for j in range(N + 1):
+            if i == j:
+                continue
+
+            a *= X - x[j]; a %= P
+            b *= x[i] - x[j]; b %= P
+
+        c = a * pow(b, -1, P) % P
+        z += y[i] * c % P
+
+    return z % P
 
 def Lagrange_Interpolation_Polynomial(T,P):
     """ 法が P の下でのLagrange 補間を行い, 多項式の係数リストを返す.
