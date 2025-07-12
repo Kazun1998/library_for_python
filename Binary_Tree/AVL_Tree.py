@@ -432,14 +432,19 @@ class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey, AVLValue]):
             self.delete(key)
         return key
 
-    def keys(self):
-        def dfs(node):
+    def keys(self) -> list[OrderedKey]:
+        """ この AVL 木に保存されているキーを昇順に出力する.
+
+        Returns:
+            list[OrderedKey]: 保存されているキー
+        """
+
+        def dfs(node: AVL_Node):
             if node is None:
                 return
-            dfs(node.left)
-            X.append(node.key)
-            dfs(node.right)
 
-        X=[]
-        dfs(self.root)
-        return X
+            yield from dfs(node.left)
+            yield node.key
+            yield from dfs(node.right)
+
+        return list(dfs(self.root))
