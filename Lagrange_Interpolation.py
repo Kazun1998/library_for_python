@@ -80,59 +80,66 @@ def Lagrange_Interpolation_Polynomial(T,P):
             tmp[j-1]=(tmp[j-1]+tmp[j]*x)%P
     return res
 
-def Lagrange_Interpolation_Point_Arithmetic(L,a,b,X,P):
-    """ 法が P の下でのLagrange 補間を行い, x=X での値を返す. ただし, x_i=ai+b
+def Lagrange_Interpolation_Point_Arithmetic(a: int, b: int, Y: list[int], X: int, P: int) -> int:
+    """ 法が P の下での Lagrange 補間を行い, x = X での値を返す. ただし, x_i = a i + b
 
-    [Input]
-    L: [y_0, ..., y_n]: F(x_i)=y_i (mod P)
-    X: F(X) を返す.
-    P: 法
+    Args:
+        a (int): x の値の傾き
+        b (int): x の値の切片
+        Y (list[int]): f(a * i + b) = Y[i] となる Y
+        X (int): 求める X の値
+        P (int): 剰余
 
-    [Output]
-    F(X)
+    Returns:
+        int: f(X) mod P
 
-    [Complexity]
-    O(N+log P)
+    Complexity:
+        O(N + log P)
     """
 
-    d=len(L)-1
+    d = len(Y) - 1
 
-    X%=P
-    Left=[1]*(d+1)
-    for i in range(d+1):
-        if i:
-            Left[i]=(Left[i-1]*(X-(a*i+b)))%P
+    X %= P
+    left = [1] * (d + 1)
+    for i in range(d + 1):
+        alpha = X - a * i + b
+        if i > 0:
+            left[i] = left[i - 1] * alpha % P
         else:
-            Left[i]=(X-(a*i+b))%P
+            left[i] = alpha % P
 
-    Right=[1]*(d+1)
-    for i in range(d,-1,-1):
-        if i<d:
-            Right[i]=(Right[i+1]*(X-(a*i+b)))%P
+    right = [1] * (d + 1)
+    for i in range(d, -1, -1):
+        alpha = X - a * i + b
+        if i < d:
+            right[i] = right[i + 1] * alpha % P
         else:
-            Right[i]=(X-(a*i+b))%P
+            right[i] = alpha % P
 
-    fact=1
-    for i in range(1,d+1): fact=(fact*i)%P
+    fact = 1
+    for i in range(1, d + 1):
+        fact = (fact * i) % P
 
-    Fact_inv=[1]*(d+1); Fact_inv[-1]=pow(fact, -1, P)
-    for i in range(d-1,-1,-1):
-        Fact_inv[i]=(Fact_inv[i+1]*(i+1))%P
+    fact_inv = [1] * (d + 1)
+    fact_inv[-1] = pow(fact, -1, P)
+    for i in range(d - 1, -1, -1):
+        fact_inv[i] = fact_inv[i + 1] * (i + 1) % P
 
-    Y=0
-    coef=pow(-a, -d, P)
+    y = 0
+    coef = pow(-a, -d, P)
 
-    for i in range(d+1):
-        V_inv=(Fact_inv[i]*Fact_inv[d-i])%P
-        if i==0:
-            S=(Right[i+1]*V_inv)%P
-        elif i==d:
-            S=(Left[i-1]*V_inv)%P
+    for i in range(d + 1):
+        alpha = fact_inv[i] * fact_inv[d - i] % P
+        if i == 0:
+            eta = right[i + 1]
+        elif i == d:
+            eta = left[i - 1]
         else:
-            u=(Left[i-1]*Right[i+1])%P
-            S=(u*V_inv)%P
+            eta = left[i - 1] * right[i + 1] % P
 
-        M=L[i]*S%P
-        Y=(Y+coef*M)%P
-        coef=-coef
-    return Y
+        beta = eta * alpha % P
+        gamma = Y[i] * beta % P
+        y += coef * gamma % P
+        coef = -coef
+
+    return y % P
