@@ -3,18 +3,22 @@
 
 class AVL_Node:
     def __init__(self, key, value):
-        self.key=key
-        self.value=value
-        self.left=None
-        self.right=None
-        self.height=1
-        self.size=1
+        self.__key = key
+        self.value = value
+        self.left: AVL_Node = None
+        self.right: AVL_Node = None
+        self.height = 1
+        self.size = 1
 
-    def __str__(self):
-        return "key: {}, value: {}".format(self.key, self.value)
+    @property
+    def key(self):
+        return self.__key
 
-    def __repr__(self):
-        return "[AVL Node]: "+str(self)
+    def __str__(self) -> str:
+        return f"key: {self.key}, value: {self.value}"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(key={self.key}, value={self.value})"
 
 class Adelson_Velsky_and_Landis_Tree:
     def __init__(self):
