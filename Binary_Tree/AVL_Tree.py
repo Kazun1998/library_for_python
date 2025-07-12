@@ -171,20 +171,13 @@ class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey, AVLValue]):
         return y
 
     def get_height(self, root: AVL_Node[OrderedKey, AVLValue]) -> int:
-        if not root:
-            return 0
-        return root.height
+        return root.height if root else 0
 
     def get_bias(self, root: AVL_Node[OrderedKey, AVLValue]) -> int:
-        if not root:
-            return 0
-        return self.get_height(root.left)-self.get_height(root.right)
+        return self.get_height(root.left) - self.get_height(root.right) if root else 0
 
     def get_size(self, node: AVL_Node[OrderedKey, AVLValue]) -> int:
-        if not node:
-            return 0
-        else:
-            return node.size
+        return node.size if node else 0
 
     def next(self, key: OrderedKey, equal=True, default=None) -> OrderedKey:
         """ この AVL 木に保存されている key 以上であるキーのうち, 最小のキーを求める.
