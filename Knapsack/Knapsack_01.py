@@ -1,4 +1,4 @@
-class Knapsack_item:
+class Knapsack_Item:
     def __init__(self, value, weight):
         self.value = value
         self.weight = weight
@@ -30,11 +30,11 @@ class Knapsack_01:
             return cls.solve_value(items, capacity)
 
     @classmethod
-    def solve_weight(_, items: list[Knapsack_item], capacity: int):
+    def solve_weight(_, items: list[Knapsack_Item], capacity: int):
         """ 各アイテムの重さが軽い場合の 01-Knapsack 問題を解く.
 
         Args:
-            items (list[Knapsack_item]): アイテムのリスト
+            items (list[Knapsack_Item]): アイテムのリスト
             weight (int): ナップサックの容量
         """
 
@@ -60,11 +60,11 @@ class Knapsack_01:
         return { 'value': packed_value, 'packed': knapsack }
 
     @classmethod
-    def solve_value(_, items: list[Knapsack_item], capacity: int):
+    def solve_value(_, items: list[Knapsack_Item], capacity: int):
         """ 各アイテムの価値が小さい 01-Knapsack 問題を解く.
 
         Args:
-            items (list[Knapsack_item]): アイテムのリスト
+            items (list[Knapsack_Item]): アイテムのリスト
             weight (int): ナップサックの容量
         """
 
@@ -92,7 +92,7 @@ class Knapsack_01:
         return { 'value': value, 'packed': knapsack }
 
     @classmethod
-    def __subset_sum(_, items: list[Knapsack_item], capacity: int):
+    def __subset_sum(_, items: list[Knapsack_Item], capacity: int):
         def bit(x, k):
             return (x >> k) & 1
 
@@ -152,11 +152,11 @@ class Knapsack_01:
         return t, E0, F0
 
     @classmethod
-    def solve_small(cls, items: list[Knapsack_item], capacity: int):
+    def solve_small(cls, items: list[Knapsack_Item], capacity: int):
         """ アイテムの個数が小さい 01-Knapsack 問題を解く.
 
         Args:
-            items (list[Knapsack_item]): アイテムのリスト
+            items (list[Knapsack_Item]): アイテムのリスト
             capacity (int): ナップサックの容量
 
         Reference:
