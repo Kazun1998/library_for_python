@@ -23,18 +23,18 @@ class AVL_Node(Generic[OrderedKey]):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(key={self.key}, value={self.value})"
 
-class Adelson_Velsky_and_Landis_Tree:
+class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey]):
     def __init__(self):
-        self.root=None
+        self.root: AVL_Node[OrderedKey] = None
         self.__length=0
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.__length
 
-    def insert(self, key, value=None):
+    def insert(self, key: OrderedKey, value = None):
         self.root=self.__insert(self.root, key, value)
 
-    def __insert(self, root, key, value):
+    def __insert(self, root: AVL_Node[OrderedKey], key: OrderedKey, value) -> AVL_Node[OrderedKey]:
         if not root:
             self.__length+=1
             return AVL_Node(key, value)
@@ -71,10 +71,10 @@ class Adelson_Velsky_and_Landis_Tree:
 
         return root
 
-    def delete(self, key):
+    def delete(self, key: OrderedKey):
         self.root=self.__delete(self.root, key)
 
-    def __delete(self, root, key, mode=1):
+    def __delete(self, root: AVL_Node[OrderedKey], key, mode=1) -> AVL_Node[OrderedKey]:
         if not root:
             return root
         elif key<root.key:
@@ -126,7 +126,7 @@ class Adelson_Velsky_and_Landis_Tree:
             return self.left_rotation(root)
         return root
 
-    def left_rotation(self, x):
+    def left_rotation(self, x: AVL_Node[OrderedKey]) -> AVL_Node[OrderedKey]:
         y=x.right
         z=y.left
 
@@ -141,7 +141,7 @@ class Adelson_Velsky_and_Landis_Tree:
 
         return y
 
-    def right_rotation(self, x):
+    def right_rotation(self, x: AVL_Node[OrderedKey]) -> AVL_Node[OrderedKey]:
         y=x.left
         z=y.right
 
@@ -156,23 +156,23 @@ class Adelson_Velsky_and_Landis_Tree:
 
         return y
 
-    def get_height(self, root):
+    def get_height(self, root: AVL_Node[OrderedKey]) -> int:
         if not root:
             return 0
         return root.height
 
-    def get_bias(self, root):
+    def get_bias(self, root: AVL_Node[OrderedKey]) -> int:
         if not root:
             return 0
         return self.get_height(root.left)-self.get_height(root.right)
 
-    def get_size(self, node):
+    def get_size(self, node: AVL_Node[OrderedKey]) -> int:
         if not node:
             return 0
         else:
             return node.size
 
-    def next(self, key, equal=True, default=None):
+    def next(self, key, equal=True, default=None) -> OrderedKey:
         """ key 以上で最小のキーを探す. """
 
         if self.root is None:
@@ -195,7 +195,7 @@ class Adelson_Velsky_and_Landis_Tree:
                 node=node.right
         return x
 
-    def previous(self, key, equal=True, default=None):
+    def previous(self, key, equal=True, default=None) -> OrderedKey:
         """ key 以下で最大のキーを探す. """
 
         if self.root is None:
@@ -218,7 +218,7 @@ class Adelson_Velsky_and_Landis_Tree:
                 node=node.left
         return x
 
-    def kth_element(self, k):
+    def kth_element(self, k) -> OrderedKey:
         """ k (0-indexed) 番目に小さいキー (k<0 のときは (-k)-1 番目に大きいキー (リストのインデックスと同様))"""
 
         if k<0:
@@ -237,10 +237,10 @@ class Adelson_Velsky_and_Landis_Tree:
                 k-=t+1
                 node=node.right
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: OrderedKey, value):
         self.insert(key, value)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: OrderedKey):
         node=self.root
         while node:
             if key==node.key:
@@ -251,7 +251,7 @@ class Adelson_Velsky_and_Landis_Tree:
                 node=node.right
         raise KeyError(key)
 
-    def get(self, key, default=None):
+    def get(self, key: OrderedKey, default=None):
         node=self.root
         while node:
             if key==node.key:
@@ -262,7 +262,7 @@ class Adelson_Velsky_and_Landis_Tree:
                 node=node.right
         return default
 
-    def __contains__(self, key):
+    def __contains__(self, key: OrderedKey) -> bool:
         node=self.root
         while node:
             if key==node.key:
@@ -273,7 +273,7 @@ class Adelson_Velsky_and_Landis_Tree:
                 node=node.right
         return False
 
-    def get_min(self, default=None):
+    def get_min(self, default=None) -> OrderedKey:
         if self.root is None:
             return default
 
@@ -282,7 +282,7 @@ class Adelson_Velsky_and_Landis_Tree:
             node=node.left
         return node.key
 
-    def get_max(self, default=None):
+    def get_max(self, default=None) -> OrderedKey:
         if self.root is None:
             return default
 
@@ -291,13 +291,13 @@ class Adelson_Velsky_and_Landis_Tree:
             node=node.right
         return node.key
 
-    def pop_min(self):
+    def pop_min(self) -> OrderedKey:
         key=self.get_min()
         if key is not None:
             self.delete(key)
         return key
 
-    def pop_max(self):
+    def pop_max(self) -> OrderedKey:
         key=self.get_max()
         if key is not None:
             self.delete(key)
