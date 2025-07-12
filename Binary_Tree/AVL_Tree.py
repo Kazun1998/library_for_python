@@ -1,8 +1,11 @@
 # Reference:
 # https://yottagin.com/?p=4157
 
-class AVL_Node:
-    def __init__(self, key, value):
+from typing import TypeVar, Generic
+
+OrderedKey = TypeVar("OrderedKey")
+class AVL_Node(Generic[OrderedKey]):
+    def __init__(self, key: OrderedKey, value):
         self.__key = key
         self.value = value
         self.left: AVL_Node = None
@@ -11,7 +14,7 @@ class AVL_Node:
         self.size = 1
 
     @property
-    def key(self):
+    def key(self) -> OrderedKey:
         return self.__key
 
     def __str__(self) -> str:
