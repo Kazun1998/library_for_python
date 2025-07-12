@@ -1,17 +1,35 @@
-class Knapsack_item:
-    def __init__(self, value, weight):
-        self.value = value
-        self.weight = weight
+class Knapsack_Item:
+    def __init__(self, value: int, weight: int):
+        self.__value = value
+        self.__weight = weight
 
-    def __repr__(self):
+    @property
+    def value(self) -> int:
+        return self.__value
+
+    @property
+    def weight(self) -> int:
+        return self.__weight
+
+    def __repr__(self) -> str:
         return f"value: {self.value}, weight: {self.weight}"
 
-    __str__ = __repr__
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}(value={self.value}, weight={self.weight})"
 
 class Knapsack_01:
     @classmethod
-    def solve(cls, items, capacity):
-        """ 01-Knapsack 問題を解く
+    def solve(cls, items: list[Knapsack_Item], capacity: int) -> dict[str]:
+        """ 01-Knapsack 問題を解く. 解き方は最適なものを自動的に判断する.
+
+        Args:
+            items (list[Knapsack_Item]): アイテムのリスト
+            capacity (int): ナップサックの容量
+
+        Returns:
+            dict[str]: value と packed をキーに持つ辞書
+                value: ナップサックに詰められる価値の合計の最大値
+                packed: ナップサックに詰められる価値の合計の最大値を達成するアイテムの詰め方の一例 (各要素は items の配列の番号)
         """
 
         from math import log2
@@ -30,11 +48,11 @@ class Knapsack_01:
             return cls.solve_value(items, capacity)
 
     @classmethod
-    def solve_weight(_, items: list[Knapsack_item], capacity: int):
+    def solve_weight(_, items: list[Knapsack_Item], capacity: int) -> dict[str]:
         """ 各アイテムの重さが軽い場合の 01-Knapsack 問題を解く.
 
         Args:
-            items (list[Knapsack_item]): アイテムのリスト
+            items (list[Knapsack_Item]): アイテムのリスト
             weight (int): ナップサックの容量
         """
 
@@ -60,11 +78,11 @@ class Knapsack_01:
         return { 'value': packed_value, 'packed': knapsack }
 
     @classmethod
-    def solve_value(_, items: list[Knapsack_item], capacity: int):
+    def solve_value(_, items: list[Knapsack_Item], capacity: int) -> dict[str]:
         """ 各アイテムの価値が小さい 01-Knapsack 問題を解く.
 
         Args:
-            items (list[Knapsack_item]): アイテムのリスト
+            items (list[Knapsack_Item]): アイテムのリスト
             weight (int): ナップサックの容量
         """
 
@@ -92,7 +110,7 @@ class Knapsack_01:
         return { 'value': value, 'packed': knapsack }
 
     @classmethod
-    def __subset_sum(_, items: list[Knapsack_item], capacity: int):
+    def __subset_sum(_, items: list[Knapsack_Item], capacity: int):
         def bit(x, k):
             return (x >> k) & 1
 
@@ -152,11 +170,11 @@ class Knapsack_01:
         return t, E0, F0
 
     @classmethod
-    def solve_small(cls, items: list[Knapsack_item], capacity: int):
+    def solve_small(cls, items: list[Knapsack_Item], capacity: int) -> dict[str]:
         """ アイテムの個数が小さい 01-Knapsack 問題を解く.
 
         Args:
-            items (list[Knapsack_item]): アイテムのリスト
+            items (list[Knapsack_Item]): アイテムのリスト
             capacity (int): ナップサックの容量
 
         Reference:
