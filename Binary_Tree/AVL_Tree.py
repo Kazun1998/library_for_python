@@ -33,6 +33,13 @@ class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey, AVLValue]):
         return self.__length
 
     def insert(self, key: OrderedKey, value: AVLValue = None):
+        """ キー key の値を value に upsert する.
+
+        Args:
+            key (OrderedKey): キー
+            value (AVLValue, optional): 値. Defaults to None.
+        """
+
         self.root=self.__insert(self.root, key, value)
 
     def __insert(self, root: AVL_Node[OrderedKey, AVLValue], key: OrderedKey, value: AVLValue) -> AVL_Node[OrderedKey, AVLValue]:
@@ -73,6 +80,12 @@ class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey, AVLValue]):
         return root
 
     def delete(self, key: OrderedKey):
+        """ キー key に保存されていた情報を削除する (元から存在しない場合は不変になる).
+
+        Args:
+            key (OrderedKey): 削除するキー
+        """
+
         self.root=self.__delete(self.root, key)
 
     def __delete(self, root: AVL_Node[OrderedKey, AVLValue], key: OrderedKey, mode=1) -> AVL_Node[OrderedKey, AVLValue]:
@@ -174,7 +187,16 @@ class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey, AVLValue]):
             return node.size
 
     def next(self, key: OrderedKey, equal=True, default=None) -> OrderedKey:
-        """ key 以上で最小のキーを探す. """
+        """ この AVL 木に保存されている key 以上であるキーのうち, 最小のキーを求める.
+
+        Args:
+            key (OrderedKey): 探索するキー
+            equal (bool, optional): False にすると, "以上" が "より大きい" になる. Defaults to True.
+            default (optional): key 以下のキーが存在しない場合の返り値. Defaults to None.
+
+        Returns:
+            OrderedKey: key 以上の最小のキー
+        """
 
         if self.root is None:
             return default
@@ -196,8 +218,17 @@ class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey, AVLValue]):
                 node=node.right
         return x
 
-    def previous(self, key: OrderedKey, equal=True, default=None) -> OrderedKey:
-        """ key 以下で最大のキーを探す. """
+    def previous(self, key: OrderedKey, equal: bool =True, default = None) -> OrderedKey:
+        """ この AVL 木に保存されている key 以下であるキーのうち, 最大のキーを求める.
+
+        Args:
+            key (OrderedKey): 探索するキー
+            equal (bool, optional): False にすると, "以下" が "未満" になる. Defaults to True.
+            default (optional): key 以下のキーが存在しない場合の返り値. Defaults to None.
+
+        Returns:
+            OrderedKey: key 以下の最大のキー
+        """
 
         if self.root is None:
             return default
@@ -220,7 +251,14 @@ class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey, AVLValue]):
         return x
 
     def kth_element(self, k: OrderedKey) -> OrderedKey:
-        """ k (0-indexed) 番目に小さいキー (k<0 のときは (-k)-1 番目に大きいキー (リストのインデックスと同様))"""
+        """ k (0-indexed) 番目に小さいキー (k<0 のときは abs(-k)-1 番目に大きいキー (リストのインデックスと同様))
+
+        Args:
+            k (OrderedKey): キーの順番
+
+        Returns:
+            OrderedKey: k 番目に小さいキー
+        """
 
         if k<0:
             k+=len(self)
@@ -253,6 +291,16 @@ class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey, AVLValue]):
         raise KeyError(key)
 
     def get(self, key: OrderedKey, default=None) -> AVLValue:
+        """ キー key に保存されている値を求める (存在しない場合は default).
+
+        Args:
+            key (OrderedKey): 探索するキー
+            default (optional): キー key が存在しない場合の返り値. Defaults to None.
+
+        Returns:
+            AVLValue: キー key に保存されてい値
+        """
+
         node=self.root
         while node:
             if key==node.key:
@@ -275,6 +323,15 @@ class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey, AVLValue]):
         return False
 
     def get_min(self, default=None) -> OrderedKey:
+        """ キーの最小値を取得する.
+
+        Args:
+            default (optional): 木が空であるときの返り値. Defaults to None.
+
+        Returns:
+            OrderedKey: 最小のキー
+        """
+
         if self.root is None:
             return default
 
@@ -284,6 +341,15 @@ class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey, AVLValue]):
         return node.key
 
     def get_max(self, default=None) -> OrderedKey:
+        """ キーの最大値を取得する.
+
+        Args:
+            default (optional): 木が空であるときの返り値. Defaults to None.
+
+        Returns:
+            OrderedKey: 最大のキー
+        """
+
         if self.root is None:
             return default
 
@@ -293,12 +359,24 @@ class Adelson_Velsky_and_Landis_Tree(Generic[OrderedKey, AVLValue]):
         return node.key
 
     def pop_min(self) -> OrderedKey:
+        """ キーの最小値を出力し, その最小のキーが持っていた情報を削除する..
+
+        Returns:
+            OrderedKey: 最小のキー
+        """
+
         key=self.get_min()
         if key is not None:
             self.delete(key)
         return key
 
     def pop_max(self) -> OrderedKey:
+        """ キーの最大値を出力し, その最大のキーが持っていた情報を削除する..
+
+        Returns:
+            OrderedKey: 最大のキー
+        """
+
         key=self.get_max()
         if key is not None:
             self.delete(key)
