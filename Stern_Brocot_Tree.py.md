@@ -88,8 +88,8 @@ data:
   timestamp: '2025-06-22 15:19:00+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test_verify/yosupo_library_checker/Math/Stern_Brocot_Tree.test.py
   - test_verify/yosupo_library_checker/Math/Rational_Approximation.test.py
+  - test_verify/yosupo_library_checker/Math/Stern_Brocot_Tree.test.py
 documentation_of: Stern_Brocot_Tree.py
 layout: document
 redirect_from:
