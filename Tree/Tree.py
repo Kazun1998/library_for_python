@@ -1,4 +1,4 @@
-from typing import Generator, Callable, Any
+from typing import Generator, Callable
 
 class Tree:
     __slots__=("__N", "__index", "parent", "__mutable",
