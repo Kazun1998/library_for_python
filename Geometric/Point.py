@@ -396,6 +396,15 @@ def Argument_Sort_by_Index(L):
     L: 点のリスト
     """
 
+    def position(P):
+        m=compare(P.y,0,epsilon)
+        if m==-1:
+            return -1
+        elif m==0 and compare(P.x,0,epsilon)>=0:
+            return 0
+        else:
+            return 1
+
     def merge(a,b):
         I=[]
 
@@ -410,18 +419,25 @@ def Argument_Sort_by_Index(L):
                 I.append(b[ib])
                 ib+=1
 
-        for i in range(ia,la):
-            I.append(a[i])
-
-        for i in range(ib,lb):
-            I.append(b[i])
+        I.extend(a[ia:])
+        I.extend(b[ib:])
 
         return I
 
     def sorting(a):
-        if len(a)==1:
+        if len(a)<=1:
             return a
         else:
             return merge(sorting(a[:len(a)//2]),sorting(a[len(a)//2:]))
 
-    return sorting(list(range(len(L))))
+    I=[]; J=[]; K=[]
+    for i in range(len(L)):
+        t=position(L[i])
+        if t==1:
+            I.append(i)
+        elif t==0:
+            J.append(i)
+        else:
+            K.append(i)
+
+    return sorting(K)+J+sorting(I)
