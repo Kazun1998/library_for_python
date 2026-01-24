@@ -8,11 +8,11 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.13.5/x64/lib/python3.13/site-packages/onlinejudge_verify/documentation/build.py\"\
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.14.2/x64/lib/python3.14/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
     \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
     \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/opt/hostedtoolcache/Python/3.13.5/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/python.py\"\
+    \  File \"/opt/hostedtoolcache/Python/3.14.2/x64/lib/python3.14/site-packages/onlinejudge_verify/languages/python.py\"\
     , line 96, in bundle\n    raise NotImplementedError\nNotImplementedError\n"
   code: "from math import sqrt,sin,cos,tan,asin,acos,atan2,pi,floor,gcd\n\nepsilon\
     \ = 1e-8\ndef compare(x: float, y: float, ep: float = epsilon) -> int:\n    \"\
@@ -155,19 +155,23 @@ data:
     \n    L.sort(key=cmp_to_key(cmp))\n\ndef Argument_Sort_by_Index(L):\n    \"\"\"\
     \ \u70B9\u3092\u504F\u89D2\u30BD\u30FC\u30C8\u3059\u308B (\u8FD4\u308A\u5024\u306F\
     \u6DFB\u5B57).\n\n    L: \u70B9\u306E\u30EA\u30B9\u30C8\n    \"\"\"\n\n    def\
-    \ merge(a,b):\n        I=[]\n\n        la=len(a); lb=len(b)\n        ia=0; ib=0\n\
-    \n        while (ia<la) and (ib<lb):\n            if Argument_Compare(L[a[ia]],L[b[ib]])<=0:\n\
+    \ position(P):\n        m=compare(P.y,0,epsilon)\n        if m==-1:\n        \
+    \    return -1\n        elif m==0 and compare(P.x,0,epsilon)>=0:\n           \
+    \ return 0\n        else:\n            return 1\n\n    def merge(a,b):\n     \
+    \   I=[]\n\n        la=len(a); lb=len(b)\n        ia=0; ib=0\n\n        while\
+    \ (ia<la) and (ib<lb):\n            if Argument_Compare(L[a[ia]],L[b[ib]])<=0:\n\
     \                I.append(a[ia])\n                ia+=1\n            else:\n \
-    \               I.append(b[ib])\n                ib+=1\n\n        for i in range(ia,la):\n\
-    \            I.append(a[i])\n\n        for i in range(ib,lb):\n            I.append(b[i])\n\
-    \n        return I\n\n    def sorting(a):\n        if len(a)==1:\n           \
-    \ return a\n        else:\n            return merge(sorting(a[:len(a)//2]),sorting(a[len(a)//2:]))\n\
-    \n    return sorting(list(range(len(L))))\n"
+    \               I.append(b[ib])\n                ib+=1\n\n        I.extend(a[ia:])\n\
+    \        I.extend(b[ib:])\n\n        return I\n\n    def sorting(a):\n       \
+    \ if len(a)<=1:\n            return a\n        else:\n            return merge(sorting(a[:len(a)//2]),sorting(a[len(a)//2:]))\n\
+    \n    I=[]; J=[]; K=[]\n    for i in range(len(L)):\n        t=position(L[i])\n\
+    \        if t==1:\n            I.append(i)\n        elif t==0:\n            J.append(i)\n\
+    \        else:\n            K.append(i)\n\n    return sorting(K)+J+sorting(I)\n"
   dependsOn: []
   isVerificationFile: false
   path: Geometric/Point.py
   requiredBy: []
-  timestamp: '2025-03-01 16:16:33+09:00'
+  timestamp: '2026-01-24 22:51:37+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: Geometric/Point.py
