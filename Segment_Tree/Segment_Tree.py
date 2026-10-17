@@ -1,14 +1,14 @@
 from typing import TypeVar, Generic, Callable, Iterator
 
-M = TypeVar('M')
-class Segment_Tree(Generic[M]):
-    def __init__(self, L: list[M], op: Callable[[M, M], M], unit: M):
+Monoid = TypeVar('Monoid')
+class Segment_Tree(Generic[Monoid]):
+    def __init__(self, L: list[Monoid], op: Callable[[Monoid, Monoid], Monoid], unit: Monoid):
         """ op を演算とする初期状態 L の Segment Tree を生成する.
 
         Args:
-            L (list[M]): 初期状態
-            op (Callable[[M, M], M]): 演算
-            unit (M): M の単位元
+            L (list[Monoid]): 初期状態
+            op (Callable[[Monoid, Monoid], Monoid]): 演算
+            unit (Monoid): Monoid の単位元
         """
         self.op=op
         self.unit=unit
@@ -24,24 +24,24 @@ class Segment_Tree(Generic[M]):
         for i in range(k-1,0,-1):
             data[i]=op(data[i<<1], data[i<<1|1])
 
-    def get(self, k: int) -> M:
+    def get(self, k: int) -> Monoid:
         """ 第 k 要素を取得する.
 
         Args:
             k (int): 要素の場所
 
         Returns:
-            M: 第 k 要素
+            Monoid: 第 k 要素
         """
         assert 0<=k<self.N,"添字が範囲外"
         return self.data[k+self.N]
 
-    def update(self, k: int, x: M) -> None:
+    def update(self, k: int, x: Monoid) -> None:
         """ 第 k 要素を x に変え, 更新する.
 
         Args:
             k (int): 要素の場所
-            x (M): 更新後の第 k 要素
+            x (Monoid): 更新後の第 k 要素
         """
 
         assert 0<=k<self.N,"添字が範囲外"
@@ -54,7 +54,7 @@ class Segment_Tree(Generic[M]):
             m>>=1
             data[m]=op(data[m<<1], data[m<<1|1])
 
-    def product(self, l: int, r: int, left_closed: bool = True, right_closed: bool = True) -> M:
+    def product(self, l: int, r: int, left_closed: bool = True, right_closed: bool = True) -> Monoid:
         """ 第 l 要素から第 r 要素までの総積を求める.
 
         Args:
@@ -64,7 +64,7 @@ class Segment_Tree(Generic[M]):
             right_closed (bool, optional): False にすると, 右端が開区間になる. Defaults to True.
 
         Returns:
-            M: 第 l 要素から第 r 要素までの積
+            Monoid: 第 l 要素から第 r 要素までの積
         """
 
         L=l+self.N+(not left_closed)
@@ -88,10 +88,15 @@ class Segment_Tree(Generic[M]):
 
         return op(vL,vR)
 
-    def all_product(self) -> M:
+    def all_product(self) -> Monoid:
+        """ 全ての要素の総積を求める.
+
+        Returns:
+            Monoid: 全ての要素の総積
+        """
         return self.data[1]
 
-    def max_right(self, left: int, cond: Callable[[int], bool]) -> int:
+    def max_right(self, left: int, cond: Callable[[Monoid], bool]) -> int:
         """ 以下の2つをともに満たす r の1つを返す.\n
         (1) r=left or cond(data[left]*data[left+1]*...*data[r-1]): True\n
         (2) r=N or cond(data[left]*data[left+1]*...*data[r]): False\n
@@ -101,7 +106,7 @@ class Segment_Tree(Generic[M]):
 
         Args:
             left (int): 左端
-            cond (Callable[[int], bool]): 条件
+            cond (Callable[[Monoid], bool]): 条件
 
         Returns:
             int: r
@@ -134,7 +139,7 @@ class Segment_Tree(Generic[M]):
             left+=1
         return self.N
 
-    def min_left(self, right: int, cond: Callable[[int], bool]) -> int:
+    def min_left(self, right: int, cond: Callable[[Monoid], bool]) -> int:
         """ 以下の 2 つをともに満たす l の1つを返す.\n
         (1) l=right or cond(data[l]*data[l+1]*...*data[right-1]): True\n
         (2) l=0 or cond(data[l-1]*data[l]*...*data[right-1]): False\n
@@ -144,7 +149,7 @@ class Segment_Tree(Generic[M]):
 
         Args:
             right (int): 右端
-            cond (Callable[[int], bool]): 条件
+            cond (Callable[[Monoidh]], bool]): 条件
 
         Returns:
             int: l
@@ -177,12 +182,12 @@ class Segment_Tree(Generic[M]):
             sm=op(data[right], sm)
         return 0
 
-    def __getitem__(self, k: int) -> M:
+    def __getitem__(self, k: int) -> Monoid:
         return self.get(k)
 
-    def __setitem__(self, k: int, x: M) -> None:
+    def __setitem__(self, k: int, x: Monoid) -> None:
         return self.update(k,x)
 
-    def __iter__(self) -> Iterator[M]:
+    def __iter__(self) -> Iterator[Monoid]:
         for i in range(self.n):
             yield self.get(i)
