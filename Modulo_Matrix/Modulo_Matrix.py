@@ -9,15 +9,30 @@ class Modulo_Matrix():
 
     # property
     @property
-    def row(self):
+    def row(self) -> int:
+        """ 行列の行数
+
+        Returns:
+            int: 行数
+        """
         return self.__row
 
     @property
-    def col(self):
+    def col(self) -> int:
+        """ 行列の列数
+
+        Returns:
+            int: 列数
+        """
         return self.__col
 
     @property
-    def size(self):
+    def size(self) -> tuple[int, int]:
+        """ 行列のサイズ
+
+        Returns:
+            tuple[int, int]: (行数, 列数)
+        """
         return (self.row, self.col)
 
     #入力
@@ -29,7 +44,10 @@ class Modulo_Matrix():
             M (list[int]): 行列
         """
 
-        self.ele=[[x%Mod for x in X] for X in M]
+        if len(M) > 0 and not all(len(M_row) == len(M[0]) for M_row in M):
+            raise ValueError
+
+        self.ele = [[x % Mod for x in M_row] for M_row in M]
         self.__row = len(M)
         self.__col = len(M[0]) if self.row > 0 else 0
 
@@ -38,7 +56,7 @@ class Modulo_Matrix():
         return "["+"\n".join(map(str,self.ele))+"]"
 
     def __repr__(self):
-        return str(self)
+        return f"{self.__class__.__name__}({self.ele})"
 
     # 零行列, 単位行列
     @classmethod
@@ -76,14 +94,14 @@ class Modulo_Matrix():
         return self.__scale__(-1)
 
     #加法
-    def __add__(self, other):
+    def __add__(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
         C = [None] * self.row
         for i, (Ai, Bi) in enumerate(zip(self.ele, other.ele)):
             C[i] = [Ai[j] + Bi[j] for j in range(self.col)]
 
         return Modulo_Matrix(C)
 
-    def __iadd__(self,other):
+    def __iadd__(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
         M=self.ele; N=other.ele
 
         for i in range(self.row):
@@ -94,14 +112,14 @@ class Modulo_Matrix():
         return self
 
     #減法
-    def __sub__(self,other):
+    def __sub__(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
         C = [None] * self.row
         for i, (Ai, Bi) in enumerate(zip(self.ele, other.ele)):
             C[i] = [Ai[j] - Bi[j] for j in range(self.col)]
 
         return Modulo_Matrix(C)
 
-    def __isub__(self,other):
+    def __isub__(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
         M=self.ele; N=other.ele
 
         for i in range(self.row):
@@ -112,7 +130,7 @@ class Modulo_Matrix():
         return self
 
     #乗法
-    def __mul__(self, other):
+    def __mul__(self, other) -> "Modulo_Matrix":
         if isinstance(other, int):
             return self.__scale__(other)
 
@@ -131,7 +149,7 @@ class Modulo_Matrix():
 
         return Modulo_Matrix(C)
 
-    def __rmul__(self,other):
+    def __rmul__(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
         if isinstance(other,int):
             return self.__scale__(other)
 
@@ -151,7 +169,7 @@ class Modulo_Matrix():
 
         return inverse
 
-    def inverse_with_determinant(self) -> tuple["Modulo_Matrix", int] | tuple[None, int]:
+    def inverse_with_determinant(self):
         """ self の逆行列と self の行列式を求める.
 
         Returns:
@@ -216,7 +234,7 @@ class Modulo_Matrix():
         return Modulo_Matrix([[r * m_ij for m_ij in Mi] for Mi in self.ele])
 
     #累乗
-    def __pow__(self, n):
+    def __pow__(self, n: int) -> "Modulo_Matrix":
         assert self.row==self.col, "正方行列ではありません."
 
         sgn = 1 if n >= 0 else -1
@@ -233,12 +251,12 @@ class Modulo_Matrix():
         return C if sgn == 1 else C.inverse()
 
     #等号
-    def __eq__(self,other):
-        return self.ele==other.ele
+    def __eq__(self, other: "Modulo_Matrix") -> bool:
+        return self.ele == other.ele
 
     #不等号
-    def __neq__(self,other):
-        return not(self==other)
+    def __neq__(self, other: "Modulo_Matrix") -> bool:
+        return not self == other
 
     #転置
     def transpose(self) -> "Modulo_Matrix":
@@ -383,26 +401,26 @@ class Modulo_Matrix():
         return self.col == self.row == self.rank()
 
     #行の結合
-    def row_union(self,other):
-        return Modulo_Matrix(self.ele+other.ele)
+    def row_union(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
+        return Modulo_Matrix(self.ele + other.ele)
 
     #列の結合
-    def column_union(self,other):
-        E=[]
+    def column_union(self, other: "Modulo_Matrix") -> "Modulo_Matrix":
+        ele = []
         for i in range(self.row):
-            E.append(self.ele[i]+other.ele[i])
+            ele.append(self.ele[i] + other.ele[i])
 
-        return Modulo_Matrix(E)
+        return Modulo_Matrix(ele)
 
-    def __getitem__(self,index):
+    def __getitem__(self, index):
         if isinstance(index, int):
             return self.ele[index]
         else:
             return self.ele[index[0]][index[1]]
 
-    def __setitem__(self,index,val):
-        assert isinstance(index,tuple) and len(index)==2
-        self.ele[index[0]][index[1]]=val
+    def __setitem__(self, index: tuple[int, int], val: int):
+        assert isinstance(index, tuple) and len(index) == 2
+        self.ele[index[0]][index[1]] = val % Mod
 
 #=================================================
 #正方行列?
@@ -495,31 +513,38 @@ def Determinant(M: Modulo_Matrix) -> int:
 
     assert Is_Square(M)
 
-    N=M.row
-    T=deepcopy(M.ele)
-    det=1
+    n = M.row
+    T = deepcopy(M.ele)
+    det = 1
 
-    for j in range(N):
-        if T[j][j]==0:
-            for i in range(j+1,N):
-                if T[i][j]:
-                    break
-            else:
+    def swap(j: int) -> bool:
+        for i in range(j + 1, n):
+            if T[i][j] == 0:
+                continue
+
+            T[j], T[i] = T[i], T[j]
+            det = -det
+            return True
+        return False
+
+    for j in range(n):
+        if T[j][j] == 0:
+            # 第 (j, j) 成分が 0 であるため, 第 (j + 1) 行目以降の第 i 行目で, 第 (i, j) 成分が 0 でないものを探す.
+            if not swap(j):
+                # 第 j 列目について, 第 j 行目以降が全て 0 であるため, 行列式が 0 確定
                 return 0
-            T[j],T[i]=T[i],T[j]
-            det=-det
-        Tj=T[j]
-        inv=pow(Tj[j], -1, Mod)
-        for i in range(j+1,N):
-            Ti=T[i]
-            c=-inv*Ti[j]%Mod
-            for k in range(N):
-                Ti[k]+=c*Tj[k]
-                Ti[k]%=Mod
 
-    for i in range(N):
-        det*=T[i][i]
-        det%=Mod
+        Tj = T[j]
+        inv = pow(Tj[j], -1, Mod)
+        for Ti in T[j + 1:]:
+            c = -inv * Ti[j] % Mod
+            for k in range(n):
+                Ti[k] += c * Tj[k]
+                Ti[k] %= Mod
+
+    for i in range(n):
+        det *= T[i][i]
+        det %= Mod
     return det
 
 def Determinant_Arbitrary_Mod(A: Modulo_Matrix) -> int:
@@ -531,27 +556,37 @@ def Determinant_Arbitrary_Mod(A: Modulo_Matrix) -> int:
     Returns:
         int: 行列式 (mod 任意)
     """
-    N=A.row
-    A=deepcopy(A.ele)
-    det=1
 
-    for i in range(N):
-        Ai=A[i]
-        for j in range(i+1, N):
-            Aj=A[j]
-            while Aj[i]:
-                alpha=Ai[i]//Aj[i]
-                if alpha:
-                    for k in range(i, N):
-                        Ai[k]-=alpha*Aj[k]
-                        Ai[k]%=Mod
-                A[i], A[j]=A[j], A[i]
-                Ai=A[i]; Aj=A[j]
-                det*=-1
-        det*=Ai[i]
-        det%=Mod
-        if det==0:
+    n = A.row
+    S = deepcopy(A.ele)
+    det = 1
+
+    def reduction(i: int, j: int):
+        nonlocal det
+
+        while S[j][i]:
+            Si, Sj = S[i], S[j]
+            if (alpha := Si[i] // Sj[i]) == 0:
+                S[i], S[j] = S[j], S[i]
+                det *= -1
+                continue
+
+            for k in range(i, n):
+                Si[k] -= alpha * Sj[k]
+                Si[k] %= Mod
+
+            S[i], S[j] = S[j], S[i]
+            det *= -1
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            reduction(i, j)
+
+        det *= S[i][i]
+        det %= Mod
+        if det == 0:
             break
+
     return det
 
 def Characteristic_Polynomial(M: Modulo_Matrix) -> list[int]:
