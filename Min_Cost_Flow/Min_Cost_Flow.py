@@ -23,73 +23,105 @@ class Min_Cost_Flow:
             else:
                 return "id: {}, {} <- {}, {} / {}, cost: {}".format(self.id, self.target, self.source, self.cap, self.base, self.cost)
 
-    def __init__(self, N=0, objective=1):
-        """ 頂点数 N の Min Cost Flow 場を生成する.
+    def __init__(self, N: int = 0, objective: int = 1):
+        """ 頂点数 N の最小費用流の場を用意する.
 
-        N: int
-        objective: -1 のとき, 最大値になる.
+        Args:
+            N (int, optional): 頂点数. Defaults to 0.
+            objective (int, optional): -1 にすると, 最大費用流になる. Defaults to 1.
         """
-        self.arc=[[] for _ in range(N)]
+
+        self.arc: list[list] = [[] for _ in range(N)]
         self.__arc_list=[]
         self.__objective=objective
         self.__is_DAG=None
-        self.__has_negative=False
 
-    def add_vertex(self):
-        self.arc.append([])
-        return self.vertex_count()-1
+    def add_vertex(self) -> int:
+        """ 頂点を 1 個追加する.
 
-    def add_vertices(self, k):
-        n=self.vertex_count()
-        self.arc.extend([[] for _ in range(k)])
-        return list(range(n,n+k))
-
-    def add_arc(self, v, w, cap, cost):
-        """ 頂点  v から頂点 w へ容量 cap, 費用 cost の有向辺を加える (返り値: 加えた辺の番号).
-
-        v: 始点
-        w: 終点
-        cap: 容量
-        cost: 費用
+        Returns:
+            int: 追加した頂点の番号
         """
 
-        m=len(self.__arc_list)
-        a=self.Arc(v, w, cap, cap, self.__objective*cost, 1, m)
-        b=self.Arc(w, v, 0, cap, -self.__objective*cost, -1, m)
-        a.rev=b
-        b.rev=a
+        self.arc.append([])
+        return self.vertex_count - 1
+
+    def add_vertices(self, k: int) -> list[int]:
+        """ 頂点を k 個追加する.
+
+        Args:
+            k (int): 追加する頂点の個数
+
+        Returns:
+            list[int]: 追加した頂点の番号からなるリスト
+        """
+
+        n = self.vertex_count
+        self.arc.extend([[] for _ in range(k)])
+        return list(range(n, n + k))
+
+    @property
+    def order(self) -> int:
+        return len(self.arc)
+
+    @property
+    def vertex_count(self) -> int:
+        return len(self.arc)
+
+    @property
+    def size(self) -> int:
+        return len(self.__arc_list)
+
+    @property
+    def arc_count(self) -> int:
+        return len(self.__arc_list)
+
+    def add_arc(self, v: int, w: int, cap: int, cost: int) -> int:
+        """ 頂点 v から頂点 w への伸びる容量 cap, 1 単位あたりの費用が cost の弧を貼る.
+
+        Args:
+            v (int): 始点
+            w (int): 終点
+            cap (int): 容量
+            cost (int): 1 単位当たりの費用
+
+        Returns:
+            int: 追加した弧の番号
+        """
+
+        m = self.size
+        a = self.Arc(v, w, cap, cap, self.__objective * cost, 1, m)
+        b = self.Arc(w, v, 0, cap, -self.__objective * cost, -1, m)
+        a.rev = b
+        b.rev = a
         self.arc[v].append(a)
         self.arc[w].append(b)
         self.__arc_list.append(a)
 
         return m
 
-    def get_arc(self, i, mode=0):
-        """ i 番目の辺の情報を得る.
+    def get_arc(self, i: int) -> Arc:
+        """ i 番目の辺を得る.
 
+        Args:
+            i (int): 辺の番号
+
+        Returns:
+            Arc: i 番目の辺
         """
-        assert 0<=i<len(self.__arc_list)
-        a=self.__arc_list[i]
-        if mode:
-            return a,a.rev
-        else:
-            return a
+
+        assert 0 <= i < self.size
+        return self.__arc_list[i]
 
     def get_all_arcs(self):
-        return [self.get_arc(i) for i in range(len(self.__arc_list))]
-
-    def vertex_count(self):
-        return len(self.arc)
-
-    def arc_count(self):
-        return len(self.__arc_list)
+        return [self.get_arc(i) for i in range(self.size)]
 
     def change_arc(self, i, new_cap, new_flow, new_cost):
         """ i 番目の辺の情報を変更する.
 
         """
 
-        assert 0<=i<len(self.__arc_list)
+        assert 0<=i<self.size
         assert 0<=new_flow<=new_cap
 
         a=self.__arc_list[i]
@@ -103,7 +135,7 @@ class Min_Cost_Flow:
         """
 
         inf=Min_Cost_Flow.inf
-        N=self.vertex_count()
+        N=self.vertex_count
         self.__pre_v=[-1]*N
         self.__pre_e=[None]*N
         self.__dist=[inf]*N; self.__dist[s]=0
@@ -131,7 +163,7 @@ class Min_Cost_Flow:
         """
 
         inf=Min_Cost_Flow.inf
-        N=self.vertex_count()
+        N=self.vertex_count
 
         self.__pre_v=[-1]*N
         self.__pre_e=[None]*N
@@ -146,9 +178,9 @@ class Min_Cost_Flow:
                     self.__pre_e[w]=a
 
     def __topological_sort(self):
-        N=self.vertex_count()
+        N=self.vertex_count
         in_deg=[0]*N
-        for i in range(self.arc_count()):
+        for i in range(self.arc_count):
             in_deg[self.__arc_list[i].target]+=1
 
         Q=[v for v in range(N) if in_deg[v]==0]
@@ -187,30 +219,40 @@ class Min_Cost_Flow:
             self.__potential_by_Dijkstra(s)
         return
 
-    def flow(self, source, target, flow):
-        """ 頂点 s から頂点 t へ新たに流量 f を流す際の最小費用を求める.
+    def flow(self, source: int, target: int, flow: int) -> int:
+        """ 頂点 source から頂点 target へ流用 flow だけ流したときの最小費用を求める
 
-        source: 始点
-        target: 終点
-        flow: 流量
+        Args:
+            source (int): 始点
+            target (int): 終点
+            flow (int): 流量
+
+        Returns:
+            int: 最小費用
         """
+
         assert 0<=flow
         return self.slope(source, target, flow)[-1]
 
-    def slope(self, source, target, flow=-1):
-        """ 流量と最小コストの関係図折れ線を出力する.
+    def slope(self, source: int, target: int, flow: int = -1) -> list[int]:
+        """ f = 0, 1, 2, ..., flow に対して, 頂点 source から頂点 target へ流用 f だけ流したときの最小費用を求める.
 
-        source: 始点
-        target: 終点
-        flow: 流量
+        Args:
+            source (int): 始点
+            target (int): 終点
+            flow (int, optional): 調べる流用の最大値. -1 にすると, 流せるだけ流す.. Defaults to -1.
+
+        Returns:
+            list[int]: 最大流を F として, f = 0, 1, ..., min(F, flow) に対して, 第 f 要素は流用 f だけ流したときの最小費用.
         """
 
-        assert 0<=source<self.vertex_count()
-        assert 0<=target<self.vertex_count()
+        assert 0<=source<self.vertex_count
+        assert 0<=target<self.vertex_count
         assert source!=target
 
 
-        N=self.vertex_count(); inf=Min_Cost_Flow.inf
+        N=self.vertex_count
+        inf=Min_Cost_Flow.inf
         self.__pot=[0]*N
 
         g=[0]
@@ -248,7 +290,7 @@ class Min_Cost_Flow:
         if mode==0:
             return [a.base-a.cap for a in self.__arc_list]
         else:
-            F=[[] for _ in range(self.vertex_count())]
+            F=[[] for _ in range(self.vertex_count)]
             for i,a in enumerate(self.__arc_list):
                 F[a.source].append((i,a.target,a.base-a.cap))
             return F

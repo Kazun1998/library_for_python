@@ -2,18 +2,27 @@ from Min_Cost_Flow import *
 
 class Bipartite_Weighted_Matching:
     inf=float("inf")
-    def __init__(self, M, N):
+    def __init__(self, M: int, N: int):
+        """ 位数が M (A 側) と N (B 側) の部集合からなる二部グラフの最大重み付きマッチングの場を作成する.
+
+        Args:
+            M (int): A 側の頂点数
+            N (int): B 側の頂点数
         """
 
-        """
         self.M=M; self.N=N
         self.__max_weight=-Bipartite_Weighted_Matching.inf
-        self.edge=[[] for _ in range(M)]
+        self.edge: list[list[tuple[int, int]]] =[ [] for _ in range(M)]
 
-    def add_vertex(self, side, k=1):
+    def add_vertex(self, side: int, k: int = 1) -> list[int]:
         """ side 側に k 個の頂点を追加する.
 
-        side: 0 or 1, 0 のときは A 側, 1 の時は B 側
+        Args:
+            side (int): 0 だと A 側, 1 だと B 側
+            k (int, optional): 追加する頂点数. Defaults to 1.
+
+        Returns:
+            list[int]: 追加した頂点の追加した側での頂点番号
         """
 
         if side==0:
@@ -24,9 +33,13 @@ class Bipartite_Weighted_Matching:
             self.N+=k
             return list(range(self.N-k, self.N))
 
-    def add_edge(self, a, b, w):
-        """ 重さ w の 辺 Aa Bb を加える.
+    def add_edge(self, a: int, b: int, w: int):
+        """ 重さ w の辺 Aa Bb を追加する.
 
+        Args:
+            a (int): A 側の頂点番号
+            b (int): B 側の頂点番号
+            w (int): 辺の重み
         """
 
         assert 0<=a<self.M and 0<=b<self.N
@@ -99,7 +112,7 @@ class Bipartite_Weighted_Matching:
             return gain
 
         X=[[] for _ in range(M)]; Y=[[] for _ in range(N)]
-        for i in range(G.arc_count()):
+        for i in range(G.arc_count):
             arc=G.get_arc(i)
             if arc.source!=source and arc.target!=target:
                 if arc.cap==0:
