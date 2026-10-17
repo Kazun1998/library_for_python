@@ -218,28 +218,6 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
 
         return self.product(0, self.N - 1)
 
-    def max_right(self, left: int, cond: Callable[[int], bool]) -> int:
-        """ 以下の2つをともに満たす r の1つを返す.\n
-        (1) r = left or cond(data[left] * data[left + 1] * ... * data[r - 1]): True
-        (2) r = N or cond(data[left] * data[left + 1] * ... * data[r]): False
-        ※ cond が単調減少の時, cond(data[left] * ... * data[r - 1]): True を満たす最大の r となる.
-
-        Args:
-            left (int): 左端
-            cond: 条件式 (cond(unit) = True を要求)
-
-        Returns:
-            int: 条件を満たす r.
-        """
-
-        assert 0 <= left <= self.N
-        assert cond(self.unit)
-
-        if left == self.N:
-            return self.N
-
-        left += self.N
-
     def max_right(self, left: int, cond) -> int:
         """ 以下の (1), (2) を満たす整数 r を求める.
         (1) r=left or cond(data[left] data[left+1] ... data[r-1]): True
@@ -272,7 +250,7 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
             while left % 2 == 0:
                 left >>= 1
 
-            if not cond(op(sm, data[left])):
+            if not cond(op(sm, self._eval_at(left))):
                 while left < self.N:
                     self._propagate_at(left)
                     left <<= 1
@@ -281,7 +259,7 @@ class Lazy_Evaluation_Tree(Generic[M, F]):
                         sm = op(sm, data[left])
                         left += 1
                 return left - self.N
-            sm = op(sm, data[left])
+            sm = op(sm, self._eval_at(left))
             left += 1
 
         return self.N
