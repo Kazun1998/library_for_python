@@ -402,7 +402,7 @@ class Tree:
             while Q:
                 x=Q.popleft()
 
-                if X[pa[x]]==-1:
+                if (not self.is_root(x)) and  X[pa[x]]==-1:
                     Q.append(pa[x])
                     X[pa[x]]=X[x]+1
 
